@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "allowJs": true,
+    "strict": false,
+    // "moduleResolution": "node",
+    "incremental": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./src/",
+    "outDir": "./build/",
+    "jsx": "react",
+    "sourceMap": true,
+    "paths": {
+      "@prisma-client": ["../generated/client"],
+      "@application/use-cases": ["./application/use-cases/index.ts"],
+      "@application/infrastructure": ["./application/infrastructure/index.ts"],
+      "@application/interfaces": ["./application/interfaces/index.ts"],
+      "@application/domain": ["./application/domain/index.ts"],
+      "@application/test": ["./application/test/index.ts"],
+      "@presentation/controllers": ["./controllers/index.ts"],
+      "@presentation/test": ["./test/index.ts"],
+      "@presentation/interfaces": ["./interfaces/index.ts"],
+      "@main": ["./main/index.ts"],
+      "@common/errors": ["../../common/errors/index.ts"],
+      "@common/test": ["../../common/test/index.ts"],
+      "@common/domain": ["../../common/domain/index.ts"],
+      "@/*": ["*"]
+    }
+  },
+  "exclude": ["src/presentation/app", "src/**/*.spec.ts", "src/**/test"],
+  "include": ["src/**/*.ts", "node_modules/**/*.d.ts"],
+  // "include": ["./src/**/*.tsx", "./src/**/*.ts", "../common/src/", "../../application/src/interfaces/services.ts", "../../application/src/infrastructure/services/aws-s3.ts"]
+}
