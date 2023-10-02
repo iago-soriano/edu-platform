@@ -1,0 +1,11 @@
+{
+    "name": "@edu-platform/tsconfig",
+    "version": "0.0.0",
+    "private": true,
+    "files": [
+      "base.json",
+      "web-app.json",
+      "api.json"
+    ]
+  }
+  

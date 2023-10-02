@@ -1,0 +1,22 @@
+{
+  "name": "edu-platform",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@edu-platform/eslint-config-custom": "*",
+    "prettier": "latest",
+    "turbo": "1.10.4"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "npm@8.19.3"
+}
