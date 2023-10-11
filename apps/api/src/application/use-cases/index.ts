@@ -3,6 +3,8 @@ import SignUpUseCase, { ISignUpUseCase } from "./sign-up";
 import SignOutUseCase, { ISignOutUseCase } from "./sign-out";
 import ProviderSignInUseCase, { IProviderSignInUseCase } from './provider-sign-in';
 import ProviderSignUpUseCase, { IProviderSignUpUseCase } from './provider-sign-up';
+import VerifyAccountUseCase, { IVerifyAccountUseCase } from "./verify-account";
+import ChangePasswordRequestUseCase, { IChangePasswordRequestUseCase } from "./change-password-request";
 
 export {
     SignInUseCase,
@@ -14,5 +16,9 @@ export {
     ProviderSignInUseCase,
     IProviderSignInUseCase,
     ProviderSignUpUseCase,
-    IProviderSignUpUseCase
+    IProviderSignUpUseCase,
+    VerifyAccountUseCase,
+    IVerifyAccountUseCase,
+    ChangePasswordRequestUseCase,
+    IChangePasswordRequestUseCase
 };

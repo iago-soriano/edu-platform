@@ -6,7 +6,8 @@ import {
   IEmailService,
   IAssetRepository,
   UserDTO,
-  IUseCase
+  IUseCase,
+  TokenType
 } from "@interfaces";
 import { User } from "@domain";
 import {
@@ -52,7 +53,7 @@ class UseCase implements ISignUpUseCase {
       email: user.email,
       name: user.name,
       image: this.assetRepository.getGenericImageUrl(),
-      emailVerified: true,
+      emailVerified: false,
       hashedPassword: await this.encryptionService.encrypt(user.password),
       tokenVersion: 0,
     };
@@ -61,12 +62,12 @@ class UseCase implements ISignUpUseCase {
       destination: email,
       url: `${process.env.WEB_APP_URL}/verify-account?verificationToken=${token}`,
     });
-
+    
     await this.userRepository.insertUser(userDTO);
     await this.tokenRepository.insertToken({
-      token,
-      userId,
-      type: "VerifyAccount"
+      token, 
+      userId, 
+      type: TokenType.VerifyAccount 
     });
   }
 }

@@ -13,12 +13,14 @@ export class NeDBCollection<P> implements IBaseCollection<P> {
     }
 
     async getFirstWhere({ conditions, page, pageSize = 25 }: { conditions: { [field: string]: any }} & IPaginatedParams) {
-        return (await this._table.find(conditions).skip(page * pageSize).limit(pageSize) as P[])[0];
+        const res = await this._table.find(conditions).skip(page * pageSize).limit(pageSize);
+        return (res as P[])[0];
     }
 
     async getManyWhere?({ conditions, page, pageSize = 25 }: { conditions: { [field: string]: any }} & IPaginatedParams) {
         return await this._table.find(conditions).skip(page * pageSize).limit(pageSize) as P[]
     }
+    
     getManyByIds?: (ids: string[]) => Promise<P[]>;
     async insertOne (entity: P) {
         return await this._table.insert(entity) as P

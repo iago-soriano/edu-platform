@@ -19,19 +19,19 @@ export abstract class Server {
   }
 
   setupServer(app: RequestListener) {
-    try {
-      this._localHostSSL = {
-        key: fs.readFileSync("./certificates/key.pem"),
-        cert: fs.readFileSync("./certificates/cert.pem"),
-      };
-      this._server = https.createServer(this._localHostSSL, app);
-      this._hasHTTPS = true;
-      this._logger.info("Successfully created HTTPS server");
-    } catch {
+    // try {
+    //   this._localHostSSL = {
+    //     key: fs.readFileSync("./certificates/key.pem"),
+    //     cert: fs.readFileSync("./certificates/cert.pem"),
+    //   };
+    //   this._server = https.createServer(this._localHostSSL, app);
+    //   this._hasHTTPS = true;
+    //   this._logger.info("Successfully created HTTPS server");
+    // } catch {
       this._server = http.createServer(app);
-      this._logger.error("Failed to create HTTPS server");
+      // this._logger.error("Failed to create HTTPS server");
       this._hasHTTPS = false;
-    }
+    // }
   }
 
   async start() {

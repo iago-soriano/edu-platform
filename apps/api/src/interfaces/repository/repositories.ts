@@ -1,6 +1,7 @@
 import {
   UserDTO,
-  TokenDTO
+  TokenDTO,
+  TokenType
 } from "..";
 
 export interface IUserRepository {
@@ -14,7 +15,7 @@ export interface IUserRepository {
 export interface ITokenRepository {
   getTokenByTokenValue: (
     token: string,
-    type: string
+    type: TokenType
   ) => Promise<TokenDTO | null>;
   insertToken: (
     token: TokenDTO

@@ -17,6 +17,7 @@ type InputParams = {
 };
 type Return = {
   token: string;
+  user: UserDTO;
 };
 
 export type ISignInUseCase = IUseCase<InputParams, Return>;
@@ -33,8 +34,10 @@ class UseCase implements ISignInUseCase {
 
     if (email && password) {
       userDTO = await this.userRepository.getUserByEmail(email);
-
       if (!userDTO) throw new InvalidCredentialsError();
+
+      if (userDTO.provider) throw new InvalidCredentialsError();
+
       if (!userDTO.emailVerified) throw new UserNotVerifiedError({ email });
 
       const passwordValid = await this.encryptionService.compare(
@@ -52,7 +55,8 @@ class UseCase implements ISignInUseCase {
     });
 
     return {
-      token
+      token,
+      user: userDTO
     };
   }
 }

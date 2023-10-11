@@ -10,13 +10,18 @@ export interface UserDTO {
   provider?: string;
 }
 
+export enum TokenType {
+  VerifyAccount,
+  ChangePasswordRequest
+}
+
 export interface TokenDTO {
   id?: string;
   token: string;
   createdAt?: Date;
   expiresAt?: Date;
   userId?: string;
-  type: string;
+  type: TokenType;
 }
 
 

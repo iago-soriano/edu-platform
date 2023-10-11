@@ -8,8 +8,8 @@ export class TokenRepository implements ITokenRepository {
         this._db = baseDb.Tokens;
     }
 
-    getTokenByTokenValue (value: string, type: string) {
-        return this._db.getFirstWhere({ conditions: { value, type }});
+    getTokenByTokenValue (token: string, type: string) {
+        return this._db.getFirstWhere({ conditions: { token, type }});
     }
 
     insertToken (token: TokenDTO) {

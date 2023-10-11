@@ -5,3 +5,5 @@ export * from './provider-sign-up';
 export * from './sign-out';
 export * from './middleware/auth-middleware';
 export * from './middleware/error-handler';
+export * from './verify-account';
+export * from './change-password-request';
