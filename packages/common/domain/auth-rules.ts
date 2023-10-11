@@ -4,6 +4,7 @@ export const AuthRules = {
         MAX_LENGTH: 70,
     },
     // PASSWORD_REGEX: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/
-    PASSWORD_REGEX: /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/,
+    PASSWORD_REGEX: /^(?=.*[A-Za-z])(?=.*\d).{8,}$/,
+    PASSWORD_INSTRUCTION: 'Senha deve conter pelo menos 8 caracteres, com letras e números'
   };
   

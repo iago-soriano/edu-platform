@@ -1,4 +1,5 @@
 import { CustomError } from './custom-error';
+import { AuthRules } from '@edu-platform/common/domain';
 
 export class PasswordsDontMatchError extends CustomError {
   HTTPstatusCode = 400;
@@ -17,7 +18,7 @@ export class InvalidRoleError extends CustomError {
 export class InvalidPasswordError extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
-    super('Senha inválida');
+    super(AuthRules.PASSWORD_INSTRUCTION);
   }
 }
 

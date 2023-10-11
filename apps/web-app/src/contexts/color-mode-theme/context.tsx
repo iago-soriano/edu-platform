@@ -5,7 +5,7 @@ import { getTheme } from "./theme";
 import { LocalStorageHelper } from "@infrastructure";
 
 type ColorModeContextType = {
-  mode: "dark" | "light";
+  mode: Modes;
   theme: Theme;
   setMode: (args?: string) => void;
 };
@@ -20,14 +20,15 @@ const storage = new LocalStorageHelper();
 
 interface MyComponentProps {
   children: ReactNode;
+  defaultTheme?: Modes;
 }
 
-export const ThemeProvider: React.FC<MyComponentProps> = ({ children }) => {
-  const [mode, setModeState] = useState<Modes>("dark");
+export const ThemeProvider: React.FC<MyComponentProps> = ({ children, defaultTheme }) => {
+  const [mode, setModeState] = useState<Modes>(defaultTheme || "dark");
 
   const setMode = (args?: string) => {
 
-    const colorMode = args || storage.getMode(mode);
+    let colorMode = defaultTheme || args || storage.getMode(mode);    
 
     if (isModeValid(colorMode)) {
       setModeState(colorMode as Modes);
@@ -37,7 +38,7 @@ export const ThemeProvider: React.FC<MyComponentProps> = ({ children }) => {
 
   useEffect(() => {
     setMode();
-  }, []);
+  }, [defaultTheme]);
 
   return (
     <StyledThemeProvider theme={getTheme(mode)}>

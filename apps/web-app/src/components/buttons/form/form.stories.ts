@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ThemeStorybookDecorator } from '@styles';
+import { useTheme } from 'styled-components';
 
 import { FormButton } from './index';
 

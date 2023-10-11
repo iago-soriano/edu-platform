@@ -1,7 +1,7 @@
 import { useMediaQuery } from "react-responsive";
 import { useState, useEffect } from 'react';
 import { useColorTheme, useAuth } from "@contexts";
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { SmallScreenNavbar } from "./small-screen";
 import { BigScreenNavbar } from './big-screen';
 import { ModeToggle } from "./components";
@@ -13,8 +13,7 @@ export const Navbar = () => {
     setMode,
     theme: { responsiveBreakpoint },
   } = useColorTheme();
-  const isBigScreen = useMediaQuery({ minWidth: responsiveBreakpoint });
-  const pathName = usePathname();
+  const isBigScreen = useMediaQuery({ minWidth: 900 });
   const router = useRouter();
   const { user, isAuthenticated, signOut } = useAuth();
   const [hasMounted, setHasMounted] = useState(false);
@@ -25,13 +24,13 @@ export const Navbar = () => {
 
   const handleSignOut = () => {
     signOut.mutate({});
-    router.push("/");
+    // router.push("/");
   };
 
   if(hasMounted) {
     if(isBigScreen) return (
       <BigScreenNavbar 
-        currentPath={pathName}
+        currentPath={router.pathname}
         modeToggle={<ModeToggle setMode={setMode} mode={mode}/>}
         user={user}
         isAuthenticated={isAuthenticated}
@@ -40,7 +39,7 @@ export const Navbar = () => {
     );
     return (
       <SmallScreenNavbar 
-        currentPath={pathName}
+        currentPath={router.pathname}
         modeToggle={<ModeToggle setMode={setMode} mode={mode}/>}
         user={user}
         isAuthenticated={isAuthenticated}

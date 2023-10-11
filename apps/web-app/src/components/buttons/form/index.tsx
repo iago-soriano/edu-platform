@@ -1,3 +1,4 @@
+import { Spinner } from '@components';
 import { ButtonStyled } from "./styles";
 
 interface IFormButtonProps {
@@ -16,9 +17,7 @@ export const FormButton = ({
   return (
     <ButtonStyled type="submit" {...rest} disabled={loading || disabled}>
       {loading ? (
-        <div className="spinner-border" role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
+        <Spinner/>
       ) : (
         <>{label}</>
       )}

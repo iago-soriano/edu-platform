@@ -14,7 +14,7 @@ export class AxiosFetcher implements IHTTPClient {
   }
 
   private _errorHandler(e) {
-    console.error({e});
+    // console.error({e});
     // if(e instanceof AxiosError) {
     //   throw {
     //     status: 500,

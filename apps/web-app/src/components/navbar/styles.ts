@@ -1,14 +1,7 @@
 import styled from "styled-components";
 
-export const FlexCentered = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-`;
-
 export const Container = styled.nav`
-  width: 100%;
+  width: 100vw;
   background-color: ${(p) => p.theme.colors.primary};
   display: flex;
   flex-direction: row;

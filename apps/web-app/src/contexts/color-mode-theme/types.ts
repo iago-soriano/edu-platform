@@ -10,6 +10,7 @@ export interface Colors {
   accent: string; // 10%,
   text: string;
   error?: string;
+  backgroundAccent?: string;
 }
 
 export interface Theme {

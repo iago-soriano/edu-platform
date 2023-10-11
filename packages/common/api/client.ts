@@ -34,9 +34,9 @@ export class ApiClient implements IApiClient {
     constructor(private _httpClient: IHTTPClient) {}
 
     async SignIn (args: SignInRequestBody) {        
-        const { token } = await (this._httpClient.post(SignInHTTPDefinition.path, args) as Promise<SignInResponseBody>);
+        return (this._httpClient.post(SignInHTTPDefinition.path, args) as Promise<SignInResponseBody>);
         // this._httpClient.setHeader("edu-platform.auth", token);
-        return { token };
+        // return { token };
     }
 
     SignUp (args: SignUpRequestBody) {

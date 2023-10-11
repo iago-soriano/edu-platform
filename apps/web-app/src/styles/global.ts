@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -14,18 +14,18 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${(props) => props.theme.colors.primary};
   }
 
-  a {
+  /* a {
     text-decoration: none;
     color: inherit;
     &:hover {
       color: inherit;
     }
-  }
+  } */
 `;
 
-// export const Theme = {
-//   primary: "#16213E",
-//   secondary: "#0F3460",
-//   accent: "#E94560",
-//   text: "#fff",
-// };
+export const FlexCentered = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;

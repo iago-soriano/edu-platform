@@ -5,7 +5,7 @@ import { HamburguerButton } from './index';
 
 const meta = {
   title: 'Core/Buttons/Hamburguer',
-  component: HamburguerButton,
+  component: (args) => <div style={{ position: 'relative', height: 90, width: 100 }}><HamburguerButton {...args} /></div>,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',

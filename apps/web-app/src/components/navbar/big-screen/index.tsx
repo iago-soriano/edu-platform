@@ -1,10 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Container,
   AuthenticatedSectionContainer,
   Button
 } from "./styles";
-import { SignInButton, SignUpButton, HomeButton, Logo } from "../components";
+import { 
+  HowItWorksButton,
+  DashboardButton,
+  NewActivityButton,
+  SignInButton, 
+  SignUpButton, 
+  HomeButton, 
+  Logo 
+} from "../components";
+import { ProfileImageButton } from './user-dropdown';
 
 export const BigScreenNavbar = ({ currentPath, modeToggle, user, isAuthenticated, signOut }) => {
 
@@ -20,25 +29,45 @@ export const BigScreenNavbar = ({ currentPath, modeToggle, user, isAuthenticated
             currentPath={currentPath}
             Component={Button}
           />
-          <button onClick={signOut}>Sair</button>
+          <ProfileImageButton
+            user={user}
+            currentPath={currentPath}
+            signOut={signOut}
+          />
         </AuthenticatedSectionContainer>
       );
     return (
       <AuthenticatedSectionContainer>
-        <HomeButton
+        <DashboardButton
           currentPath={currentPath}
           Component={Button}
         />
-          <button onClick={signOut}>Sair</button>
-
+        {/* <button onClick={signOut}>Sair</button> */}
       </AuthenticatedSectionContainer>
     );
   };
 
   return(
     <Container>
-      {modeToggle}
-      {getAuthenticatedSection()}
+      <Logo />
+      <div>
+        <HomeButton
+          currentPath={currentPath}
+          Component={Button}
+        />
+        <HowItWorksButton
+          currentPath={currentPath}
+          Component={Button}
+        />
+        <NewActivityButton
+          currentPath={currentPath}
+          Component={Button}
+        />
+      </div>
+      <div style={{ display: 'flex'}}>
+        {modeToggle}
+        {getAuthenticatedSection()}
+      </div>
     </Container>
   )
 /*

@@ -2,17 +2,18 @@ import React, { useEffect, useContext, useState, useCallback } from "react";
 import {
   useSession,
   signOut as nextAuthSignOut,
-  signIn as nextAuthSignIn,
+  // signIn as nextAuthSignIn,
 } from "next-auth/react";
+import { nextAuthSignIn } from "./next-auth-wraper";
 import {
   useQuery,
   useMutation,
   UseMutationResult,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
 } from '@tanstack/react-query';
 import { LocalStorageHelper, api, axios } from "@infrastructure";
+import { errorToast } from '@components';
+import { ServerError } from '@edu-platform/common';
+import { useRouter } from 'next/router'
 
 
 interface IAuthContext {
@@ -26,8 +27,8 @@ interface IAuthContext {
   userError?: any;
   // refreshUser?: () => void;
   // googleSignIn?: () => Promise<any>;
-  credentialsSignIn?: UseMutationResult<unknown, unknown, unknown, unknown>;
-  credentialsSignUp?: UseMutationResult<unknown, unknown, unknown, unknown>;
+  credentialsSignIn?: UseMutationResult<unknown, ServerError, unknown, unknown>;
+  credentialsSignUp?: UseMutationResult<unknown, ServerError, unknown, unknown>;
   // credentialsSignUp?: SignUp;
   signOut?: UseMutationResult<unknown, unknown, unknown, unknown>;
   googleSignIn?: UseMutationResult<unknown, unknown, unknown, unknown>;
@@ -55,18 +56,25 @@ export function AuthProvider({ children }) {
   const session = useSession();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [tokenHeaderSet, setTokenHeaderSet] = React.useState(false);
+  const router = useRouter();
 
-  const credentialsSignIn = useMutation(() => nextAuthSignIn("credentials"), {
-    onSuccess: () => {
-      // axios.setHeader("edu-platform.auth", token)
+  const credentialsSignIn = useMutation(async ({ email, password }: { email: string, password: string }) => await nextAuthSignIn("credentials", {redirect: false}, { email, password }), {
+    onSuccess: (e) => {
+      console.log(e)
       setIsAuthenticated(true);
-    }
+      router.push("/");
+    },
+    // onError: (e: ServerError) => {
+    //   errorToast(e.message);
+    // }
   });
 
-  const credentialsSignUp = useMutation(() => nextAuthSignIn("credentials"), {
+  const credentialsSignUp = useMutation((args: { email: string, password: string, confirmPassword: string, name: string }) => api.SignUp(args), {
     onSuccess: () => {
-      // axios.setHeader("edu-platform.auth", token)
-      setIsAuthenticated(true);
+      router.push("verify-account");
+    },
+    onError: (e: ServerError) => {
+      errorToast(e.message);
     }
   });
 
@@ -80,15 +88,15 @@ export function AuthProvider({ children }) {
   });
 
   const getSignOutFunction = useCallback(() => {
-    console.log("session data", session.data)
-    if(!session.data) return () => {};
-    if(session.data.provider) return () => new Promise(r => r(""));
+    if(!session.data || !session.data.provider) return () => {};
     return api.SignOut.bind(api);
   }, [session]);
+
   const signOut = useMutation(getSignOutFunction(), {
     onSuccess: async () => {
       const { url } = await nextAuthSignOut({redirect: false, callbackUrl: "/"});
       console.log({ signOutUrl: url });
+      router.push("/");
       // axios.setHeader("edu-platform.auth", "");
       setIsAuthenticated(false);
     },
@@ -99,7 +107,11 @@ export function AuthProvider({ children }) {
     if(session) {
       console.log({session});
       if(session.status == "authenticated") {
-        setIsAuthenticated(true)
+        setIsAuthenticated(true);
+        axios.setHeader("authorization", `Bearer ${session.data.token}`);
+      } else {
+        setIsAuthenticated(false);
+        axios.setHeader("authorization", null);
       }
     }
   }, [session]);

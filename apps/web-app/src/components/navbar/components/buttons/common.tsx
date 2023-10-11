@@ -15,7 +15,6 @@ export const AbstractNavbarButton = ({
   path,
   currentPath,
   label,
-  // onClick,
   Component
 }: NavbarButtonProps & ButtonDefinition) => {
 

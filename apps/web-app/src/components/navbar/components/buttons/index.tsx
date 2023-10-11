@@ -1,4 +1,6 @@
-import { AbstractNavbarButton, NavbarButtonProps } from "./abstract-button"
+import { Icons } from "components/icons";
+import { AbstractNavbarButton, NavbarButtonProps } from "./common"
+import { NavButtonStyled, SignOutButtonStyled } from './styles';
 
 export const HomeButton = ({
   currentPath,
@@ -7,6 +9,54 @@ export const HomeButton = ({
   <AbstractNavbarButton 
     path="/"
     label="Home"
+    currentPath={currentPath}
+    Component={Component}
+  />
+);
+
+export const DashboardButton = ({
+  currentPath,
+  Component
+}: NavbarButtonProps) => (
+  <AbstractNavbarButton 
+    path="/dashboard"
+    label="Minha Área"
+    currentPath={currentPath}
+    Component={Component}
+  />
+);
+
+export const NewActivityButton = ({
+  currentPath,
+  Component
+}: NavbarButtonProps) => (
+  <AbstractNavbarButton 
+    path="/activity/new"
+    label="Nova Atividade"
+    currentPath={currentPath}
+    Component={Component}
+  />
+);
+
+export const HowItWorksButton = ({
+  currentPath,
+  Component
+}: NavbarButtonProps) => (
+  <AbstractNavbarButton 
+    path="/how-it-works"
+    label="Como funciona"
+    currentPath={currentPath}
+    Component={Component}
+  />
+);
+
+export const MyProfileButton = ({
+  currentPath,
+  Component
+}: NavbarButtonProps) => (
+  <AbstractNavbarButton 
+    path="/my-profile"
+    label="Minha conta"
     currentPath={currentPath}
     Component={Component}
   />
@@ -36,30 +86,11 @@ export const SignUpButton = ({
   />
 );
 
-// export const buttonDefinitions: { [key: string]: ButtonDefinition } = {
-//   home: {
-//     path: '/',
-//     label: 'Home',
-//   },
-//   howItWorks: {
-//     path: '/howItWorks',
-//     label: 'Como funciona',
-//   },
-//   createActivity: {
-//     path: '/createActivity',
-//     label: 'Criar atividade',
-//   },
-//   signUp: {
-//     path: '/signUp',
-//     label: 'Cadastrar',
-//   },
-//   signIn: {
-//     path: '/signin',
-//     label: 'Entrar',
-//   },
-//   dashboard: {
-//     path: '/dashboard',
-//     label: 'Minha área',
-//   }
-// }
+export const SignOutButton = ({ signOut }) => (
+  <SignOutButtonStyled onClick={signOut}>
+    <Icons.EXIT />
+    <span>Sair</span>
+  </SignOutButtonStyled>
+);
 
+export { NavButtonStyled };

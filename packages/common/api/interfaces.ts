@@ -11,3 +11,8 @@ export interface HTTPControllerDefinition {
     method: HTTPMethod;
     path: string;
 }
+
+export type ServerError = {
+    status: number,
+    message: string
+}

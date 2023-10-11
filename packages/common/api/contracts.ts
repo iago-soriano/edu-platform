@@ -2,7 +2,7 @@ import { HTTPControllerDefinition } from "./interfaces";
 
 // sign-in
 export interface SignInRequestBody { email: string, password: string }
-export interface SignInResponseBody { token: string }
+export interface SignInResponseBody { token: string, user: { email: string, name?: string, image?: string } }
 export const SignInHTTPDefinition: HTTPControllerDefinition = {
     method: 'post',
     path: 'sign-in'
@@ -38,3 +38,18 @@ export const SignOutHTTPDefinition: HTTPControllerDefinition = {
     path: 'sign-out'
 }
 
+// verify account
+export interface VerifyAccountRequestBody { verifyAccountToken: string }
+export interface VerifyAccountResponseBody { }
+export const VerifyAccountHTTPDefinition: HTTPControllerDefinition = {
+    method: 'patch',
+    path: 'verify-account'
+}
+
+// change password reques 
+export interface ChangePasswordRequestBody { email: string }
+export interface ChangePasswordResponseBody { }
+export const ChangePasswordRequestHTTPDefinition: HTTPControllerDefinition ={ 
+    method: 'post',
+    path: 'change-password'
+}
