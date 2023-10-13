@@ -24,19 +24,14 @@ export class ProviderSignUpController implements HTTPController {
   async execute(req: Request, res: Response) {
     const { email, id, provider, image, name } = req.body;
 
-    try {
-      await this.providerSignUpUseCase.execute({
-        email,
-        name,
-        id,
-        provider,
-        image
-      });
-    } catch (ex) {
-      console.error(ex);
-    }
+    await this.providerSignUpUseCase.execute({
+      email,
+      name,
+      id,
+      provider,
+      image
+    });
 
-
-    res.status(201).json({});
+    res.status(201).json();
   }
 }

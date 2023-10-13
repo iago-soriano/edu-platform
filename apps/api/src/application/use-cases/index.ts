@@ -5,6 +5,7 @@ import ProviderSignInUseCase, { IProviderSignInUseCase } from './provider-sign-i
 import ProviderSignUpUseCase, { IProviderSignUpUseCase } from './provider-sign-up';
 import VerifyAccountUseCase, { IVerifyAccountUseCase } from "./verify-account";
 import ChangePasswordRequestUseCase, { IChangePasswordRequestUseCase } from "./change-password-request";
+import ChangePasswordUseCase, { IChangePasswordUseCase } from "./change-password";
 
 export {
     SignInUseCase,
@@ -20,5 +21,7 @@ export {
     VerifyAccountUseCase,
     IVerifyAccountUseCase,
     ChangePasswordRequestUseCase,
-    IChangePasswordRequestUseCase
+    IChangePasswordRequestUseCase,
+    ChangePasswordUseCase,
+    IChangePasswordUseCase
 };

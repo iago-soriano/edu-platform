@@ -6,14 +6,14 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import {
-    ChangePasswordRequestBody,
-    ChangePasswordResponseBody,
+  ChangePasswordRequestRequestBody,
+    ChangePasswordRequestResponseBody,
     ChangePasswordRequestHTTPDefinition
 } from '@edu-platform/common/api';
 
 
-type Request = TypedRequest<{}, {}, ChangePasswordRequestBody>;
-type Response = TypedResponse<ChangePasswordResponseBody>
+type Request = TypedRequest<{}, {}, ChangePasswordRequestRequestBody>;
+type Response = TypedResponse<ChangePasswordRequestResponseBody>
 
 export class ChangePasswordRequestController implements HTTPController {
 

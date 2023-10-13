@@ -16,7 +16,8 @@ type InputParams = {
   provider: string;
 };
 type Return = {
-  // token: string;
+  token: string;
+  user: UserDTO
 };
 
 export type IProviderSignInUseCase = IUseCase<InputParams, Return>;
@@ -33,13 +34,14 @@ class UseCase implements IProviderSignInUseCase {
     userDTO = await this.userRepository.getUserByEmailAndProvider(email, provider);
     if (!userDTO) throw new InvalidCredentialsError();
 
-    // const token = this.tokenService.generate({
-    //   id: userDTO.id || "",
-    //   tokenVersion: userDTO.tokenVersion,
-    // });
+    const token = this.tokenService.generate({
+      id: userDTO.id || "",
+      tokenVersion: userDTO.tokenVersion,
+    });
 
     return {
-      // token,
+      token,
+      user: userDTO
     };
   }
 }

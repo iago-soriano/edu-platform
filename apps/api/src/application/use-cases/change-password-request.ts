@@ -39,8 +39,8 @@ import {
         token: changePasswordToken,
         userId: user.id,
         type: TokenType.ChangePasswordRequest,
-        createdAt: new Date(Date.now()),
-        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 3),
+        createdAt: Date.now(),
+        expiresAt: Date.now() + 1000 * 60 * 60 * 3,
       })
 
       await this.emailService.sendForgotPasswordEmail({

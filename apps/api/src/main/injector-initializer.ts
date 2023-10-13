@@ -6,7 +6,8 @@ import {
   ProviderSignInController,
   ProviderSignUpController,
   VerifyAccountController,
-  ChangePasswordRequestController
+  ChangePasswordRequestController,
+  ChangePasswordController
 } from '@controllers';
 import {
   SignInUseCase,
@@ -15,7 +16,8 @@ import {
   ProviderSignInUseCase,
   ProviderSignUpUseCase,
   VerifyAccountUseCase,
-  ChangePasswordRequestUseCase
+  ChangePasswordRequestUseCase,
+  ChangePasswordUseCase
 } from '@use-cases';
 import { 
   BCryptEncryptionService,
@@ -38,6 +40,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     providerSignInController: awilix.asClass(ProviderSignInController).classic(),
     verifyAccountController: awilix.asClass(VerifyAccountController).classic(),
     changePasswordRequestController: awilix.asClass(ChangePasswordRequestController).classic(),
+    changePasswordController: awilix.asClass(ChangePasswordController).classic(),
 
     // services
     encryptionService: awilix.asClass(BCryptEncryptionService),
@@ -54,6 +57,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     providerSignInUseCase: awilix.asClass(ProviderSignInUseCase).classic(),
     verifyAccountUseCase: awilix.asClass(VerifyAccountUseCase).classic(),
     changePasswordRequestUseCase: awilix.asClass(ChangePasswordRequestUseCase).classic(),
+    changePasswordUseCase: awilix.asClass(ChangePasswordUseCase).classic(),
 
     // repositories
     baseDb: awilix.asValue(nedDb),

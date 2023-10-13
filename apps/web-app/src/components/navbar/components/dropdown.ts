@@ -17,6 +17,7 @@ export const Dropdown = styled.div<{ open: boolean }>`
   'max-height: 0' };
 
   overflow-y: hidden;
+  z-index: 99;
 `;
 
 export const DrawerMenuItemStyled = styled(NavButtonStyled)`

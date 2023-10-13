@@ -26,7 +26,6 @@ export function Input(args: IInputProps) {
         placeholder={placeholder}
         error={errors && errors[name]}
       />
-      <input/>
       <InputIconContainer>
         {icon}
       </InputIconContainer>

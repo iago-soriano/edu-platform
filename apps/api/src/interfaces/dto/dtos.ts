@@ -18,8 +18,8 @@ export enum TokenType {
 export interface TokenDTO {
   id?: string;
   token: string;
-  createdAt?: Date;
-  expiresAt?: Date;
+  createdAt?: number;
+  expiresAt?: number;
   userId?: string;
   type: TokenType;
 }

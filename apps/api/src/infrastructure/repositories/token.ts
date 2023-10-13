@@ -1,4 +1,4 @@
-import { IBaseCollection, ITokenRepository, TokenDTO } from "@interfaces";
+import { IBaseCollection, ITokenRepository, TokenDTO, TokenType } from "@interfaces";
 
 export class TokenRepository implements ITokenRepository {
 
@@ -8,7 +8,7 @@ export class TokenRepository implements ITokenRepository {
         this._db = baseDb.Tokens;
     }
 
-    getTokenByTokenValue (token: string, type: string) {
+    getTokenByTokenValue (token: string, type: TokenType) {
         return this._db.getFirstWhere({ conditions: { token, type }});
     }
 

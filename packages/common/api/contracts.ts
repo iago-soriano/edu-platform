@@ -9,7 +9,7 @@ export const SignInHTTPDefinition: HTTPControllerDefinition = {
 }
 
 export type ProviderSignInRequestBody = { email: string, provider: string }
-export type ProviderSignInResponseBody = { }
+export type ProviderSignInResponseBody = { token: string, user: { email: string, name?: string, image?: string } }
 export const ProviderSignInHTTPDefinition: HTTPControllerDefinition = {
     method: 'post',
     path: 'sign-in/provider'
@@ -46,10 +46,18 @@ export const VerifyAccountHTTPDefinition: HTTPControllerDefinition = {
     path: 'verify-account'
 }
 
-// change password reques 
-export interface ChangePasswordRequestBody { email: string }
-export interface ChangePasswordResponseBody { }
+// change password request 
+export interface ChangePasswordRequestRequestBody { email: string }
+export interface ChangePasswordRequestResponseBody { }
 export const ChangePasswordRequestHTTPDefinition: HTTPControllerDefinition ={ 
     method: 'post',
-    path: 'change-password'
+    path: 'change-password-request' 
+}
+
+// change password 
+export interface ChangePasswordRequestBody { changePasswordToken: string, newPassword: string, confirmNewPassword: string }
+export interface ChangePasswordResponseBody { }
+export const ChangePasswordHTTPDefinition: HTTPControllerDefinition ={ 
+    method: 'put',
+    path: 'change-password' 
 }

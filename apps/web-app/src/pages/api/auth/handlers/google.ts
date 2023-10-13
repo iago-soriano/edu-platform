@@ -6,29 +6,29 @@ export const api = new ApiClient(axios);
 
 export const googleHandlers = {
   signUp: async (email: string, id: string, name: string, image: string) => {
-    try {
-      await api.ProviderSignUp({
+    // try {
+      return api.ProviderSignUp({
         email,
         id,
         name,
         image,
         provider: "google",
       });
-      return true;
-    } catch (e) {
-      return `/sign-up?error=Error Message${e.message}`;
-    }
+    //   return true;
+    // } catch (e) {
+    //   return `/sign-up?error=Error Message${e.message}`;
+    // }
   },
   signIn: async (email: string) => {
     // try {
-    //   const { token } = await api.ProviderSignIn({
-    //     email,
-    //     provider: "google",
-    //   });
-    //   return token;
+      const resp = await api.ProviderSignIn({
+        email,
+        provider: "google",
+      });
+      return resp;
+    //   return resp;
     // } catch (e) {
-    //   console.log({ e });
-    //   return;
+    //   return `/sign-up?error=Error Message${e.message}`;
     // }
   },
   session: () => {},

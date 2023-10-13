@@ -88,7 +88,8 @@ export function AuthProvider({ children }) {
   });
 
   const getSignOutFunction = useCallback(() => {
-    if(!session.data || !session.data.provider) return () => {};
+    console.log({session})
+    if(!session.data || session.data.user.provider) return () => {};
     return api.SignOut.bind(api);
   }, [session]);
 
@@ -105,7 +106,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if(session) {
-      console.log({session});
+      // console.log({session});
       if(session.status == "authenticated") {
         setIsAuthenticated(true);
         axios.setHeader("authorization", `Bearer ${session.data.token}`);

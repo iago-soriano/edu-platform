@@ -29,11 +29,6 @@ export const BigScreenNavbar = ({ currentPath, modeToggle, user, isAuthenticated
             currentPath={currentPath}
             Component={Button}
           />
-          <ProfileImageButton
-            user={user}
-            currentPath={currentPath}
-            signOut={signOut}
-          />
         </AuthenticatedSectionContainer>
       );
     return (
@@ -41,6 +36,11 @@ export const BigScreenNavbar = ({ currentPath, modeToggle, user, isAuthenticated
         <DashboardButton
           currentPath={currentPath}
           Component={Button}
+        />
+        <ProfileImageButton
+          user={user}
+          currentPath={currentPath}
+          signOut={signOut}
         />
         {/* <button onClick={signOut}>Sair</button> */}
       </AuthenticatedSectionContainer>

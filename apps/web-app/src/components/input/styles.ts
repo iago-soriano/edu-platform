@@ -8,8 +8,9 @@ export const LabelStyled = styled.span`
 
 export const InputStyled = styled.input<{ error: any }>`
   display: block;
-  padding: 10px;
+  padding: 15px;
   border-radius: 3px;
+  width: 100%;
   border: ${(p) => (p.error ? `3px solid ${p.theme.colors.error}` : "1px solid gray")};
   background-color: ${(p) => p.theme.colors.primary};
   color: ${(p) => p.theme.colors.text};
@@ -22,7 +23,7 @@ export const InputStyled = styled.input<{ error: any }>`
 
 export const InputIconContainer = styled.span`
   position: absolute;
-  top: 36px;
+  top: 42px;
   right: 10px;
 `;
 

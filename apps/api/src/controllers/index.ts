@@ -7,3 +7,4 @@ export * from './middleware/auth-middleware';
 export * from './middleware/error-handler';
 export * from './verify-account';
 export * from './change-password-request';
+export * from './change-password';

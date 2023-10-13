@@ -19,5 +19,6 @@
   "author": "",
   "license": "ISC",
   "packageManager": "npm@8.19.3",
-  "dependencies": {}
+  "dependencies": {
+  }
 }

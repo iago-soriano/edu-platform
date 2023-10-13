@@ -6,9 +6,9 @@ export const ButtonStyled = styled.button`
   display: block;
   color: ${({ theme }) => theme.colors.text};
   background-color: ${({ theme }) => theme.colors.secondary};
-  height: 40px;
+  /* height: 40px; */
   border-radius: 5px;
-  padding: 7px;
+  padding: 16px;
   cursor: pointer;
   border: none;
   :active {

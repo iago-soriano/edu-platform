@@ -43,8 +43,8 @@ export class ApiClient implements IApiClient {
         return this._httpClient.post(SignUpHTTPDefinition.path, args) as Promise<SignUpResponseBody>;
     }
 
-    async SignOut (args: SignOutRequestBody) {
-        await this._httpClient.post(SignOutHTTPDefinition.path, args) as Promise<SignOutResponseBody>;
+    async SignOut () {
+        await this._httpClient.post(SignOutHTTPDefinition.path, {}) as Promise<SignOutResponseBody>;
         this._httpClient.setHeader("edu-platform.auth", "");
         return {};
     }
