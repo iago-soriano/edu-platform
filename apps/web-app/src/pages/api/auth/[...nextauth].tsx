@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { googleHandlers } from "./handlers/google";
 import { AxiosFetcher } from "@infrastructure";
 import { ApiClient } from "@edu-platform/common/api";
 
@@ -30,36 +29,37 @@ export default NextAuth({
   session: {
     strategy: "jwt",
   },
-  debug: true,
   callbacks: {
     // after signin, REDIRECT -> JWT -> SESSION at every page refocus
     async signIn({ user, account, profile, email, credentials }) {
       // happens on sign-in of existing and of new users
-      console.log('SIGN IN');
-      console.log({ user, account, profile, email, credentials });
+      // console.log('SIGN IN');
+      // console.log({ user, account, profile, email, credentials });
       if(account.provider == "google") {
-        // TODO: Do I need to persist provider's user?
-        await googleHandlers.signUp(user.email, user.id, user.name, user.image);
+        await api.ProviderSignUp({
+          email: user.email, 
+          id: user.id, 
+          name: user.name, 
+          image: user.image,
+          provider: 'google'
+        });
       } else if (account.provider == 'credentials') {
         return true;
       }
+
       return true;
     },
     async redirect({ url, baseUrl }) {
-      console.log('REDIRECT');
-      console.log({ url, baseUrl });
+      // console.log('REDIRECT');
+      // console.log({ url, baseUrl });
       return baseUrl;
     },
     async jwt({ token, account, profile, user }) {
       // happens whenever application mounts or page refocuses
       // account, user and profile only on signin. on refocus, only token.
-      console.log('JWT');
-      console.log({ token, account, profile, user });
-      // if (account) {
-      //   console.log({account})
-      //   
+      // console.log('JWT');
+      // console.log({ token, account, profile, user });
 
-      // }
       if(user) {
         if(account.provider == 'google') {
           token.provider = account.provider;
@@ -68,21 +68,20 @@ export default NextAuth({
             provider: 'google',
             jwt: account.id_token
           }
-          // const resp = await googleHandlers.signIn(user.email);
         }
 
-        // const { token: jwt, user } = user;
         return {
           jwt: user.token,
           ...user.user
         }
       }
+
       return token;
     },
     async session({ session, token, user /** only for database */ }) {
       // happens whenever application mounts or page refocuses
-      console.log("SESSION");
-      console.log({ session, token, user });
+      // console.log("SESSION");
+      // console.log({ session, token, user });
       // whatever property is added here goes to session.data in FE
       const { jwt, ...rest } = token;
       (session as any).token = jwt;

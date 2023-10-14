@@ -19,6 +19,10 @@ import {
     ProviderSignUpHTTPDefinition,
     ProviderSignUpRequestBody,
     ProviderSignUpResponseBody,
+    // verify account
+    VerifyAccountHTTPDefinition,
+    VerifyAccountRequestBody,
+    VerifyAccountResponseBody
 } from './contracts';
 import { IHTTPClient } from './interfaces';
 
@@ -43,17 +47,19 @@ export class ApiClient implements IApiClient {
         return this._httpClient.post(SignUpHTTPDefinition.path, args) as Promise<SignUpResponseBody>;
     }
 
-    async SignOut () {
-        await this._httpClient.post(SignOutHTTPDefinition.path, {}) as Promise<SignOutResponseBody>;
-        this._httpClient.setHeader("edu-platform.auth", "");
-        return {};
+    SignOut () {
+        return this._httpClient.post(SignOutHTTPDefinition.path, {}) as Promise<SignOutResponseBody>;
     }
 
-    async ProviderSignIn (args: ProviderSignInRequestBody) {        
+    ProviderSignIn (args: ProviderSignInRequestBody) {        
         return (this._httpClient.post(ProviderSignInHTTPDefinition.path, args) as Promise<ProviderSignInResponseBody>);
     }
 
     ProviderSignUp (args: ProviderSignUpRequestBody) {
         return this._httpClient.post(ProviderSignUpHTTPDefinition.path, args) as Promise<ProviderSignUpResponseBody>;
+    }
+
+    VerifyAccount (args: VerifyAccountRequestBody) {
+        return (this._httpClient.patch(VerifyAccountHTTPDefinition.path, args) as Promise<VerifyAccountResponseBody>);
     }
 }

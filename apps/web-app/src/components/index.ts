@@ -12,3 +12,4 @@ export * from './footer';
 export * from './spinner';
 export * from './error-alert';
 export * from './typography';
+export * from './sign-in-up-pages';

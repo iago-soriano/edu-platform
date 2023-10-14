@@ -1,6 +1,10 @@
 import * as yup from "yup";
 import { AuthRules } from "@edu-platform/common";
 
+export const nameValidation = yup
+    .string()
+    .required('Favor inserir um nome');
+
 export const emailValidation = yup
     .string()
     .required('Favor inserir um e-mail')
@@ -21,6 +25,7 @@ export const signInSchema = yup.object().shape({
 });
 
 export const signUpSchema = yup.object().shape({
+    name: nameValidation,
     email: emailValidation,
     password: passwordValidation,
     confirmPassword: confirmPasswordValidation

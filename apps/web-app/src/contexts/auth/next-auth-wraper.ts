@@ -1,3 +1,4 @@
+import { ServerError } from "@edu-platform/common";
 import {
     useSession,
     signOut,
@@ -5,12 +6,20 @@ import {
   } from "next-auth/react";
 
 export const nextAuthSignIn = async (provider, options = {}, args = {}) => {
-    const resp = await signIn(provider, options, args);
-    if(!resp.ok) {
-        throw {
-            status: resp.status,
-            message: resp.error            
+    try {
+        const resp = await signIn(provider, options, args);
+        if(resp && !resp.ok) {
+            throw {
+                status: resp.status,
+                message: resp.error            
+            }
         }
+        return resp;
+    } catch (e) {
+        throw {
+            status: 500,
+            message: e.message as string
+        } 
     }
-    return resp;
+
 }

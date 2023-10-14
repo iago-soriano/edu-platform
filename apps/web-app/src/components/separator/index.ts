@@ -1,17 +1,18 @@
 import styled from "styled-components";
 
-export const Separator = styled.div<{ margins?: string }>`
+export const Separator = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
-  width: 80%;
-  margin: 10px ${({ margins }) => (margins ? margins : "10%")};
+  width: 100%;
+  margin: 20px 0;
+  color: ${({ theme }) => theme.colors.text};
 
   :before,
   :after {
     content: "";
     flex: 1;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.accent};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.text};
   }
 
   :not(:empty)::before {

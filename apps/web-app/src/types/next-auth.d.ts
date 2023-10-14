@@ -15,6 +15,7 @@ declare module "next-auth" {
   }
 
   interface User {
+    // make these properties not mandatory, so that I can have them inside user object
     id?: string;
     name?: string;
     email?: string;

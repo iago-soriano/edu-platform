@@ -1,7 +1,18 @@
 import styled from 'styled-components';
+import Image from 'next/image';
 
 const imageDisplayNoneBreakpoint = '968px';
-export const PageContainer = styled.main`
+
+export const ImageContainer = styled.div`
+    padding: 50px;
+    margin: 0 auto;
+
+    @media (max-width: ${imageDisplayNoneBreakpoint}) {
+        display: none;
+    }
+`;
+
+export const SignInUpPageContainer = styled.main`
     background-color: ${(p) => p.theme.colors.primary};
     /* display: flex;
     flex-direction: row;
@@ -18,18 +29,15 @@ export const PageContainer = styled.main`
     }
 `;
 
-export const FormContainer = styled.div`
-    /* display: inline-block; */
+export const SignInUpFormContainer = styled.div`
     padding: 20px;
-    /* max-width: 70%;
-    width: 50%; */
     width: 40%;
     margin: 0 auto;
 
     @media (max-width: 1375px) {
         width: 80%;
     }
-    @media (max-width: ${imageDisplayNoneBreakpoint}) {
+    @media (max-width: 968px) {
         width: 70%;
     }
     @media (max-width: 600px) {
@@ -40,11 +48,15 @@ export const FormContainer = styled.div`
     }
 `;
 
-export const ImageContainer = styled.div`
-    padding: 50px;
-    margin: 0 auto;
-
-    @media (max-width: ${imageDisplayNoneBreakpoint}) {
-        display: none;
-    }
-`;
+export const SignInUpPageImage = () => {
+    return (
+        <ImageContainer>
+            <Image
+                src="https://picsum.photos/400/600"
+                width={400}
+                height={600}
+                alt="Picture of the author"
+            />
+        </ImageContainer>
+    );
+}

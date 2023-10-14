@@ -36,6 +36,8 @@ class UseCase implements IVerifyAccountUseCase {
     );
     if (!user) throw new UserNotFoundError();
 
+    if(user.emailVerified) return;
+
     await this.userRepository.updateUser(user.id, { emailVerified: true });
   }
 }

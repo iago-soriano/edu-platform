@@ -2,7 +2,6 @@ import React, { useEffect, useContext, useState, useCallback } from "react";
 import {
   useSession,
   signOut as nextAuthSignOut,
-  // signIn as nextAuthSignIn,
 } from "next-auth/react";
 import { nextAuthSignIn } from "./next-auth-wraper";
 import {
@@ -10,7 +9,7 @@ import {
   useMutation,
   UseMutationResult,
 } from '@tanstack/react-query';
-import { LocalStorageHelper, api, axios } from "@infrastructure";
+import { api, axios } from "@infrastructure";
 import { errorToast } from '@components';
 import { ServerError } from '@edu-platform/common';
 import { useRouter } from 'next/router'
@@ -25,70 +24,48 @@ interface IAuthContext {
   };
   isUserLoading?: boolean;
   userError?: any;
-  // refreshUser?: () => void;
-  // googleSignIn?: () => Promise<any>;
   credentialsSignIn?: UseMutationResult<unknown, ServerError, unknown, unknown>;
   credentialsSignUp?: UseMutationResult<unknown, ServerError, unknown, unknown>;
-  // credentialsSignUp?: SignUp;
   signOut?: UseMutationResult<unknown, unknown, unknown, unknown>;
   googleSignIn?: UseMutationResult<unknown, unknown, unknown, unknown>;
-  // updateUser?: () => void;
-  // tokenHeaderSet: boolean;
 }
-
-// export const handleAuthToken = (token: string) => {
-//   setCommonHeaders("authorization", `Bearer ${token}`);
-//   if (token) localStorage.setRefreshToken(token);
-//   else localStorage.deleteRefreshToken();
-//   // setCookie(undefined, "language-app.token", token, {
-//   //   maxAge: 60 * 60 * 1, // 1 hour
-//   // });
-// };
 
 const AuthContext = React.createContext<IAuthContext>({
   user: undefined
-  // tokenHeaderSet: false,
 });
-
-const localStorage = new LocalStorageHelper();
 
 export function AuthProvider({ children }) {
   const session = useSession();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [tokenHeaderSet, setTokenHeaderSet] = React.useState(false);
   const router = useRouter();
 
-  const credentialsSignIn = useMutation(async ({ email, password }: { email: string, password: string }) => await nextAuthSignIn("credentials", {redirect: false}, { email, password }), {
+  const credentialsSignIn = useMutation(({ email, password }: { email: string, password: string }) => nextAuthSignIn("credentials", {redirect: false}, { email, password }), {
     onSuccess: (e) => {
       console.log(e)
       setIsAuthenticated(true);
       router.push("/");
     },
-    // onError: (e: ServerError) => {
-    //   errorToast(e.message);
-    // }
+    onError: (e: ServerError) => {}
   });
 
   const credentialsSignUp = useMutation((args: { email: string, password: string, confirmPassword: string, name: string }) => api.SignUp(args), {
     onSuccess: () => {
       router.push("verify-account");
     },
-    onError: (e: ServerError) => {
-      errorToast(e.message);
+    onError: (e: ServerError) => {}
+  });
+
+  const googleSignIn = useMutation(() => nextAuthSignIn("google", {redirect: false}), {
+    onSuccess: () => {
+      setIsAuthenticated(true);
+    },
+    onError: (googleSignInError) => {
+      console.error({ googleSignInError })
+      errorToast("Algo deu errado na autenticação com o Google");
     }
   });
 
-  const googleSignIn = useMutation(() => nextAuthSignIn("google"), {
-    onSuccess: (googleSignUpResp) => {
-      console.log({googleSignUpResp})
-      // axios.setHeader("edu-platform.auth", token)
-      setIsAuthenticated(true);
-    },
-    onError: (error) => console.log(error)
-  });
-
   const getSignOutFunction = useCallback(() => {
-    console.log({session})
     if(!session.data || session.data.user.provider) return () => {};
     return api.SignOut.bind(api);
   }, [session]);
@@ -98,7 +75,6 @@ export function AuthProvider({ children }) {
       const { url } = await nextAuthSignOut({redirect: false, callbackUrl: "/"});
       console.log({ signOutUrl: url });
       router.push("/");
-      // axios.setHeader("edu-platform.auth", "");
       setIsAuthenticated(false);
     },
     onError: (error) => console.log("sign out failed:", error)
