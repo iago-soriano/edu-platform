@@ -42,7 +42,7 @@ import {
 
             
       const user = await this.userRepository.getUserById(
-        changePasswordToken
+        token.userId
       );
 
       if (!user) throw new UserNotFoundError();
