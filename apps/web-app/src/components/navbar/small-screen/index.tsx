@@ -1,88 +1,101 @@
 import { Separator } from "@components";
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  DrawerMenuStyled,
-} from "./styles";
+import { Container, DrawerMenuStyled, ActionButton } from "./styles";
 import { HamburguerButton } from "./hamburguer";
-import { 
+import {
   HowItWorksButton,
   MyProfileButton,
   DashboardButton,
   NewActivityButton,
-  SignInButton, 
-  SignUpButton, 
-  HomeButton, 
+  SignInButton,
+  SignUpButton,
+  ProductButton,
+  SignOutButton,
   Logo,
-  DrawerMenuItemStyled
+  DrawerMenuItemStyled,
 } from "../components";
 
-export const SmallScreenNavbar = ({ currentPath, modeToggle, user, isAuthenticated }) => {
+export const SmallScreenNavbar = ({
+  currentPath,
+  modeToggle,
+  user,
+  isAuthenticated,
+  signOut,
+}) => {
   const [burguerOpen, setBurguerOpen] = useState(false);
   useEffect(() => {
     setBurguerOpen(false);
   }, [currentPath]);
 
   return (
-    <Container>
-      <Logo />  
-      <div style={{ display: 'flex', flexDirection: 'row'}}>
-        {modeToggle}
-        <HamburguerButton open={burguerOpen} onClick={() => setBurguerOpen(o => !o)}/>
+    <>
+      <Container>
+        <Logo />
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          {modeToggle}
+          <HamburguerButton
+            open={burguerOpen}
+            onClick={() => setBurguerOpen((o) => !o)}
+          />
+        </div>
+      </Container>
+      <div>
+        <DrawerMenuStyled open={burguerOpen}>
+          {isAuthenticated ? (
+            <>
+              <DashboardButton
+                currentPath={currentPath}
+                Component={DrawerMenuItemStyled}
+              />
+              <NewActivityButton
+                currentPath={currentPath}
+                Component={DrawerMenuItemStyled}
+              />
+              <hr />
+              <ProductButton
+                currentPath={currentPath}
+                Component={DrawerMenuItemStyled}
+              />
+              <HowItWorksButton
+                currentPath={currentPath}
+                Component={DrawerMenuItemStyled}
+              />
+              <hr />
+              <MyProfileButton
+                currentPath={currentPath}
+                Component={DrawerMenuItemStyled}
+              />
+              <SignOutButton signOut={signOut} />
+            </>
+          ) : (
+            <>
+              <ProductButton
+                currentPath={currentPath}
+                Component={DrawerMenuItemStyled}
+              />
+              <HowItWorksButton
+                currentPath={currentPath}
+                Component={DrawerMenuItemStyled}
+              />
+              <NewActivityButton
+                currentPath={currentPath}
+                Component={DrawerMenuItemStyled}
+              />
+              <hr />
+              <div className="flex flex-row justify-center my-2 hover:opacity-80">
+                <SignUpButton
+                  currentPath={currentPath}
+                  Component={ActionButton}
+                />
+              </div>
+              <SignInButton
+                currentPath={currentPath}
+                Component={DrawerMenuItemStyled}
+              />
+            </>
+          )}
+        </DrawerMenuStyled>
       </div>
-      <DrawerMenuStyled open={burguerOpen}> 
-        {isAuthenticated ?    
-          <>  
-            <DashboardButton
-              currentPath={currentPath}
-              Component={DrawerMenuItemStyled}
-            />     
-            <NewActivityButton
-              currentPath={currentPath}
-              Component={DrawerMenuItemStyled}
-            />
-            <hr />
-            <HomeButton
-              currentPath={currentPath}
-              Component={DrawerMenuItemStyled}
-            />
-            <HowItWorksButton
-              currentPath={currentPath}
-              Component={DrawerMenuItemStyled}
-            />
-            <hr/>
-            <MyProfileButton
-              currentPath={currentPath}
-              Component={DrawerMenuItemStyled}
-            />
-            <button>Sair</button>
-          </> : 
-          <>
-            <HomeButton
-              currentPath={currentPath}
-              Component={DrawerMenuItemStyled}
-            />
-            <HowItWorksButton
-              currentPath={currentPath}
-              Component={DrawerMenuItemStyled}
-            />
-            <NewActivityButton
-              currentPath={currentPath}
-              Component={DrawerMenuItemStyled}
-            />
-            <hr/>
-            <SignUpButton
-              currentPath={currentPath}
-              Component={DrawerMenuItemStyled}
-            />
-            <SignInButton
-              currentPath={currentPath}
-              Component={DrawerMenuItemStyled}
-            />
-          </>
-        }
-              
-      </DrawerMenuStyled>
-    </Container>
-  )
-}
+    </>
+  );
+};

@@ -20,7 +20,7 @@ export const Heading = styled.h1.attrs<HeadingProps>(({ level }) => ({
     color,
   }) => css`
     color: ${color || theme.colors.text};
-    size: ${TypographySizes[size] || TypographySizes.medium};
+    font-size: ${TypographySizes[size] || TypographySizes.medium};
     font-weight: ${TypographyWeights[fontWeight] || TypographyWeights.bold};
   `}
 `;

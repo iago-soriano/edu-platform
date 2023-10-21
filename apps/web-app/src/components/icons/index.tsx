@@ -16,7 +16,9 @@ import {
   faUserPlus,
   faFolderOpen,
   faStar,
-  faArrowRightFromBracket
+  faArrowRightFromBracket,
+  faUser,
+  faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
 // import { FaRegHeart, FaHeart } from "react-icons/fa";
 
@@ -46,7 +48,9 @@ export const Icons = {
   USER_PLUS: () => <FontAwesomeIcon icon={faUserPlus} />,
   FOLDER: () => <FontAwesomeIcon icon={faFolderOpen} />,
   STAR: () => <FontAwesomeIcon icon={faStar} />,
-  EXIT: () => <FontAwesomeIcon icon={faArrowRightFromBracket} />
+  EXIT: () => <FontAwesomeIcon icon={faArrowRightFromBracket} />,
+  USER: () => <FontAwesomeIcon icon={faUser} />,
+  EMAIL: () => <FontAwesomeIcon icon={faEnvelope} />,
   // EMPTY_HEART: () => <FaRegHeart />,
   // FULL_HEART: () => <FaHeart />,
 };

@@ -7,7 +7,7 @@ import {
   IAssetRepository,
   UserDTO,
   IUseCase,
-  TokenType
+  TokenType,
 } from "@interfaces";
 import { User } from "@domain";
 import {
@@ -20,7 +20,7 @@ type InputParams = {
   name: string;
   password: string;
   confirmPassword: string;
-}
+};
 type Return = void;
 
 export type ISignUpUseCase = IUseCase<InputParams, Return>;
@@ -42,7 +42,7 @@ class UseCase implements ISignUpUseCase {
 
     if (existingUser) throw new EmailAlreadySignedupError();
 
-    if(!password || !confirmPassword) throw new PasswordsDontMatchError()
+    if (!password || !confirmPassword) throw new PasswordsDontMatchError();
     if (password !== confirmPassword) throw new PasswordsDontMatchError();
 
     const token = this.idService.getId();
@@ -52,7 +52,7 @@ class UseCase implements ISignUpUseCase {
       id: userId,
       email: user.email,
       name: user.name,
-      image: this.assetRepository.getGenericImageUrl(),
+      // image: this.assetRepository.getGenericImageUrl(),
       emailVerified: false,
       hashedPassword: await this.encryptionService.encrypt(user.password),
       tokenVersion: 0,
@@ -62,12 +62,12 @@ class UseCase implements ISignUpUseCase {
       destination: email,
       url: `${process.env.WEB_APP_URL}/verify-account?verificationToken=${token}`,
     });
-    
+
     await this.userRepository.insertUser(userDTO);
     await this.tokenRepository.insertToken({
-      token, 
-      userId, 
-      type: TokenType.VerifyAccount 
+      token,
+      userId,
+      type: TokenType.VerifyAccount,
     });
   }
 }

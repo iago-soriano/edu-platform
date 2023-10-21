@@ -1,28 +1,29 @@
 import styled from "styled-components";
-import { FlexCentered } from '@styles';
+import { FlexCentered } from "@styles";
 
 export const StyledBurger = styled.button<{ open: boolean }>`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-evenly;
   /* width: 2rem; */
+  width: 55px;
   height: 100%;
   background: transparent;
   border: none;
-  padding: 0;
-  z-index: 10;
+  //padding: 0;
+  //z-index: 10;
   cursor: pointer;
-  overflow-x: hidden;  
-  padding: 25px 15px;
+  overflow-x: hidden;
+  padding: 25px 6px 25px 15px;
 
   &:focus {
     outline: none;
   }
 
   div {
-    background-color: ${({theme}) => theme.colors.text};
+    background-color: ${({ theme }) => theme.colors.text};
 
-    width: 2rem;
+    width: 100%; //2rem
     height: 0.25rem;
     border-radius: 10px;
     transition: all 0.3s linear;
@@ -31,11 +32,14 @@ export const StyledBurger = styled.button<{ open: boolean }>`
 
     :first-child {
       /* transform: ${({ open }) => (open ? "rotate(45deg)" : "rotate(0)")}; */
-      transform: ${({ open }) => (open ? `
+      transform: ${({ open }) =>
+        open
+          ? `
         rotate(45deg) translate(3px, 3px);        
-      ` : `
+      `
+          : `
         rotate(0);
-      `)};
+      `};
     }
 
     :nth-child(2) {
@@ -44,17 +48,20 @@ export const StyledBurger = styled.button<{ open: boolean }>`
     }
 
     :nth-child(3) {
-      transform: ${({ open }) => (open ? `
+      transform: ${({ open }) =>
+        open
+          ? `
         rotate(-45deg);
-      ` : `
+      `
+          : `
         rotate(0);
-      `)};
+      `};
     }
   }
 `;
 
 const HamburguerButtonContainer = styled(FlexCentered)`
-  width: 55px;
+  width: 60px;
   height: 100%;
   cursor: pointer;
 `;

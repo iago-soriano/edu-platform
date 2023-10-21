@@ -11,7 +11,7 @@ interface IForm {
   };
   children: any;
   onSubmit: (args: any) => any;
-  schema: any;
+  schema?: any;
   error?: any;
 }
 export function Form({
@@ -21,7 +21,6 @@ export function Form({
   schema,
   error,
 }: IForm) {
-
   // useEffect(() => {
   //   if (error) reset();
   // }, [error]);
@@ -38,7 +37,11 @@ export function Form({
   });
 
   return (
-    <FormStyled onSubmit={handleSubmit(onSubmit, () => errorToast("Favor inserir valores válidos"))}>
+    <FormStyled
+      onSubmit={handleSubmit(onSubmit, () =>
+        errorToast("Favor inserir valores válidos")
+      )}
+    >
       {React.Children.map(children, (child) => {
         return child.props.name
           ? React.createElement(child.type, {

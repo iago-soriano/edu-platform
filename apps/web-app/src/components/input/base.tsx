@@ -1,24 +1,42 @@
 import React from "react";
 import { Tooltip, QuestionTooltip } from "@components";
-import { 
-  InputStyled, 
-  ErrorMessageContainer, 
-  InputLabelStyled, 
+import {
+  InputStyled,
+  ErrorMessageContainer,
+  InputLabelStyled,
   InstructionsContainer,
   InputIconContainer,
-  LabelStyled
+  LabelStyled,
 } from "./styles";
 import { IInputProps } from "./interface";
 
 export function Input(args: IInputProps) {
-  const { register, name, errors, inputLabel, icon, placeholder, instructions, tooltipExplanation, ...rest } = args;
-  const mandatoryTooltip = <Tooltip content={"É preciso preencher para continuar"}>{"("}<span style={{ color: 'red'}}>&#10033;</span>{")"}</Tooltip>;
-  const explanationTooltip = <QuestionTooltip content={tooltipExplanation} />
+  const {
+    register,
+    name,
+    errors,
+    inputLabel,
+    icon,
+    placeholder,
+    instructions,
+    tooltipExplanation,
+    hidden,
+    ...rest
+  } = args;
+  const mandatoryTooltip = (
+    <Tooltip content={"É preciso preencher para continuar"}>
+      {"("}
+      <span style={{ color: "red" }}>&#10033;</span>
+      {")"}
+    </Tooltip>
+  );
+  const explanationTooltip = <QuestionTooltip content={tooltipExplanation} />;
 
   return (
-    <InputLabelStyled>
+    <InputLabelStyled style={{ display: hidden ? "none" : "block" }}>
       <LabelStyled>
-        {inputLabel.text} {inputLabel.mandatory && mandatoryTooltip} {tooltipExplanation && explanationTooltip}
+        {inputLabel?.text} {inputLabel?.mandatory && mandatoryTooltip}{" "}
+        {tooltipExplanation && explanationTooltip}
       </LabelStyled>
       <InputStyled
         {...(register && register(name))}
@@ -26,14 +44,10 @@ export function Input(args: IInputProps) {
         placeholder={placeholder}
         error={errors && errors[name]}
       />
-      <InputIconContainer>
-        {icon}
-      </InputIconContainer>
-      {instructions && 
-        <InstructionsContainer>
-          {instructions}
-        </InstructionsContainer>
-      }
+      <InputIconContainer>{icon}</InputIconContainer>
+      {instructions && (
+        <InstructionsContainer>{instructions}</InstructionsContainer>
+      )}
       {errors && (
         <ErrorMessageContainer>
           {errors && errors[name]?.message}

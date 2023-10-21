@@ -1,10 +1,18 @@
-import styled from 'styled-components';
-import { Dropdown } from '../../components';
+import styled from "styled-components";
+import { NavbarImageContainer } from "../../components/image-container";
 
-export const ProfileDropdown = styled(Dropdown)`
-    width: 200px;
-    margin: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
+export const ProfileImageContainer = styled(NavbarImageContainer)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 5px;
+  max-width: 150px;
+  img {
+    border-radius: 50px;
+    border: 3px solid ${({ theme }) => theme.colors.accent};
+  }
+  p {
+    padding: 0;
+  }
 `;
