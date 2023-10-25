@@ -3,7 +3,7 @@ import {
   IEncryptionService,
   ITokenService,
   UserDTO,
-  IUseCase
+  IUseCase,
 } from "@interfaces";
 import {
   CredentialsNotProvidedError,
@@ -17,7 +17,11 @@ type InputParams = {
 };
 type Return = {
   token: string;
-  user: UserDTO;
+  user: {
+    email: string;
+    name: string;
+    image: string;
+  };
 };
 
 export type ISignInUseCase = IUseCase<InputParams, Return>;
@@ -56,7 +60,7 @@ class UseCase implements ISignInUseCase {
 
     return {
       token,
-      user: userDTO
+      user: { email: userDTO.email, name: userDTO.name, image: userDTO.image },
     };
   }
 }

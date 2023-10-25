@@ -16,7 +16,7 @@ export class JWTTokenService implements ITokenService {
   generate(args: any) {
     try {
       const resp = jwt.sign({ data: args }, this._privateKey, {
-        issuer: "",
+        issuer: process.env.HOSTNAME,
         algorithm: "RS256",
       });
       return resp;
@@ -26,6 +26,8 @@ export class JWTTokenService implements ITokenService {
   }
 
   verify(token: string) {
+    const decoded = jwt.decode(token, { complete: true });
+
     try {
       const payload = jwt.verify(token, this._publicKey) as any;
       return payload.data;

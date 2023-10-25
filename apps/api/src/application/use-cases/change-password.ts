@@ -55,6 +55,8 @@ class UseCase implements IChangePasswordUseCase {
       hashedPassword: newHashedPassword,
       tokenVersion: user.tokenVersion + 1,
     });
+
+    // mudar o expiredAt do token para agora
   }
 }
 

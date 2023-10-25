@@ -91,9 +91,9 @@ export const ChangePasswordHTTPDefinition: HTTPControllerDefinition = {
 };
 
 // check change password token
-export interface CheckChangePasswordTokenRequestQueryParams {
+export type CheckChangePasswordTokenRequestQueryParams = {
   token: string;
-}
+};
 export interface CheckChangePasswordTokenResponseBody {
   isValid: boolean;
 }

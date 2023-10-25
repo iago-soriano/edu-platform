@@ -1,27 +1,40 @@
 import SignInUseCase, { ISignInUseCase } from "./sign-in";
 import SignUpUseCase, { ISignUpUseCase } from "./sign-up";
 import SignOutUseCase, { ISignOutUseCase } from "./sign-out";
-import ProviderSignInUseCase, { IProviderSignInUseCase } from './provider-sign-in';
-import ProviderSignUpUseCase, { IProviderSignUpUseCase } from './provider-sign-up';
+import ProviderSignInUseCase, {
+  IProviderSignInUseCase,
+} from "./provider-sign-in";
+import ProviderSignUpUseCase, {
+  IProviderSignUpUseCase,
+} from "./provider-sign-up";
 import VerifyAccountUseCase, { IVerifyAccountUseCase } from "./verify-account";
-import ChangePasswordRequestUseCase, { IChangePasswordRequestUseCase } from "./change-password-request";
-import ChangePasswordUseCase, { IChangePasswordUseCase } from "./change-password";
+import ChangePasswordRequestUseCase, {
+  IChangePasswordRequestUseCase,
+} from "./change-password-request";
+import ChangePasswordUseCase, {
+  IChangePasswordUseCase,
+} from "./change-password";
+import CheckChangePasswordTokenRequestUseCase, {
+  ICheckChangePasswordTokenRequestUseCase,
+} from "./check-change-password-token-request";
 
 export {
-    SignInUseCase,
-    ISignInUseCase,
-    SignUpUseCase,
-    ISignUpUseCase,
-    SignOutUseCase,
-    ISignOutUseCase,
-    ProviderSignInUseCase,
-    IProviderSignInUseCase,
-    ProviderSignUpUseCase,
-    IProviderSignUpUseCase,
-    VerifyAccountUseCase,
-    IVerifyAccountUseCase,
-    ChangePasswordRequestUseCase,
-    IChangePasswordRequestUseCase,
-    ChangePasswordUseCase,
-    IChangePasswordUseCase
+  SignInUseCase,
+  ISignInUseCase,
+  SignUpUseCase,
+  ISignUpUseCase,
+  SignOutUseCase,
+  ISignOutUseCase,
+  ProviderSignInUseCase,
+  IProviderSignInUseCase,
+  ProviderSignUpUseCase,
+  IProviderSignUpUseCase,
+  VerifyAccountUseCase,
+  IVerifyAccountUseCase,
+  ChangePasswordRequestUseCase,
+  IChangePasswordRequestUseCase,
+  ChangePasswordUseCase,
+  IChangePasswordUseCase,
+  CheckChangePasswordTokenRequestUseCase,
+  ICheckChangePasswordTokenRequestUseCase,
 };

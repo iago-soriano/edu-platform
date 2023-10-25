@@ -6,7 +6,10 @@ import {
   IEmailService,
   TokenType,
 } from "@interfaces";
-import { UserNotFoundError } from "@edu-platform/common/errors";
+import {
+  ChangePasswordRequestTokenExist,
+  UserNotFoundError,
+} from "@edu-platform/common/errors";
 
 type InputParams = {
   email: string;
@@ -33,6 +36,16 @@ class UseCase implements IChangePasswordRequestUseCase {
       throw new Error(
         `Por favor, utilize sua conta do ${user.provider} para entrar`
       );
+
+    const activeTokens = await this.tokenRepository.getTokenByUserId(
+      user.id,
+      TokenType.ChangePasswordRequest
+    );
+
+    // checar se existe algum válido. usar um reduce
+    // if (activeToken && activeToken.expiresAt > Date.now()) {
+    //   throw new ChangePasswordRequestTokenExist();
+    // }
 
     const changePasswordToken = this.idService.getId();
 

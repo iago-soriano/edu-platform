@@ -7,8 +7,9 @@ import {
   ProviderSignUpController,
   VerifyAccountController,
   ChangePasswordRequestController,
-  ChangePasswordController
-} from '@controllers';
+  ChangePasswordController,
+  CheckChangePasswordTokenRequestController,
+} from "@controllers";
 import {
   SignInUseCase,
   SignOutUseCase,
@@ -17,9 +18,10 @@ import {
   ProviderSignUpUseCase,
   VerifyAccountUseCase,
   ChangePasswordRequestUseCase,
-  ChangePasswordUseCase
-} from '@use-cases';
-import { 
+  ChangePasswordUseCase,
+  CheckChangePasswordTokenRequestUseCase,
+} from "@use-cases";
+import {
   BCryptEncryptionService,
   EmailService,
   JWTTokenService,
@@ -27,8 +29,8 @@ import {
   UserRepository,
   TokenRepository,
   AssetRepository,
-  nedDb
-} from '@infrastructure';
+  nedDb,
+} from "@infrastructure";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
@@ -36,11 +38,22 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     signInController: awilix.asClass(SignInController).classic(),
     signOutController: awilix.asClass(SignOutController).classic(),
     signUpController: awilix.asClass(SignUpController).classic(),
-    providerSignUpController: awilix.asClass(ProviderSignUpController).classic(),
-    providerSignInController: awilix.asClass(ProviderSignInController).classic(),
+    providerSignUpController: awilix
+      .asClass(ProviderSignUpController)
+      .classic(),
+    providerSignInController: awilix
+      .asClass(ProviderSignInController)
+      .classic(),
     verifyAccountController: awilix.asClass(VerifyAccountController).classic(),
-    changePasswordRequestController: awilix.asClass(ChangePasswordRequestController).classic(),
-    changePasswordController: awilix.asClass(ChangePasswordController).classic(),
+    changePasswordRequestController: awilix
+      .asClass(ChangePasswordRequestController)
+      .classic(),
+    changePasswordController: awilix
+      .asClass(ChangePasswordController)
+      .classic(),
+    checkChangePasswordTokenRequestController: awilix
+      .asClass(CheckChangePasswordTokenRequestController)
+      .classic(),
 
     // services
     encryptionService: awilix.asClass(BCryptEncryptionService),
@@ -56,8 +69,13 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     providerSignUpUseCase: awilix.asClass(ProviderSignUpUseCase).classic(),
     providerSignInUseCase: awilix.asClass(ProviderSignInUseCase).classic(),
     verifyAccountUseCase: awilix.asClass(VerifyAccountUseCase).classic(),
-    changePasswordRequestUseCase: awilix.asClass(ChangePasswordRequestUseCase).classic(),
+    changePasswordRequestUseCase: awilix
+      .asClass(ChangePasswordRequestUseCase)
+      .classic(),
     changePasswordUseCase: awilix.asClass(ChangePasswordUseCase).classic(),
+    checkChangePasswordTokenRequestUseCase: awilix
+      .asClass(CheckChangePasswordTokenRequestUseCase)
+      .classic(),
 
     // repositories
     baseDb: awilix.asValue(nedDb),
