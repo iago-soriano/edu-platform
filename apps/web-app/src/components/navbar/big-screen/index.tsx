@@ -56,13 +56,7 @@ export const BigScreenNavbar = ({
     <>
       <Container>
         <Logo />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
-        >
+        <div className="flex flex-row justify-center">
           {isAuthenticated ? (
             <DashboardButton currentPath={currentPath} Component={Button} />
           ) : (

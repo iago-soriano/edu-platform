@@ -1,14 +1,14 @@
+"use client";
 import Switch from "react-switch";
-import { ToggleContainer } from "./styles";
 import { useColorTheme } from "@contexts";
 
 export const Toggle = ({ checked, onChange, label }) => {
   const { theme } = useColorTheme();
 
   return (
-    <ToggleContainer>
-      <label>
-        <span>{label}</span>
+    <>
+      <label className="flex flex-col">
+        <span className="pb-3">{label}</span>
         <Switch
           onChange={onChange}
           checked={checked}
@@ -20,6 +20,6 @@ export const Toggle = ({ checked, onChange, label }) => {
           uncheckedIcon={false}
         />
       </label>
-    </ToggleContainer>
+    </>
   );
 };

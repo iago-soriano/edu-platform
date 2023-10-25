@@ -1,6 +1,7 @@
+// "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { Heading, Icons } from "@components";
+import { Icons } from "@components";
 import { useAuth } from "@contexts";
 
 const FooterLink = ({ href, children }) => (

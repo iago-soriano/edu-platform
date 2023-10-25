@@ -1,8 +1,7 @@
 export * from "./buttons";
 export * from "./navbar";
-export * from "./globalstyles";
 export * from "./toggle";
-export * from "./separator";
+// export * from "./separator";
 export * from "./toast";
 export * from "./input";
 export * from "./form";
@@ -11,5 +10,3 @@ export * from "./tooltip";
 export * from "./footer";
 export * from "./spinner";
 export * from "./fixed-alerts";
-export * from "./typography";
-export * from "./sign-in-up-pages";

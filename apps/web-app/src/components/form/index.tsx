@@ -1,9 +1,8 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { errorToast } from "components/toast";
-
-import { FormStyled } from "./styles";
 
 interface IForm {
   defaultValues?: {
@@ -37,7 +36,7 @@ export function Form({
   });
 
   return (
-    <FormStyled
+    <form
       onSubmit={handleSubmit(onSubmit, () =>
         errorToast("Favor inserir valores válidos")
       )}
@@ -54,6 +53,6 @@ export function Form({
             })
           : child;
       })}
-    </FormStyled>
+    </form>
   );
 }

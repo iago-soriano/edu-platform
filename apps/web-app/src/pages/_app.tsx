@@ -1,5 +1,5 @@
 import type { AppProps } from "next/app";
-import { Navbar, GlobalStyle, Toast } from "@components";
+import { Navbar, Toast } from "@components";
 import { ThemeProvider, AuthProvider } from "@contexts";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -17,7 +17,7 @@ export default function App({
       <SessionProvider session={session}>
         <AuthProvider>
           <ThemeProvider>
-            <GlobalStyle />
+            {/* <GlobalStyle /> */}
             <Navbar />
             <Component {...pageProps} />
           </ThemeProvider>

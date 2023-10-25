@@ -1,3 +1,4 @@
+"use client";
 import { ToastContainer, toast as toastifyToast } from "react-toastify";
 import { useColorTheme } from "@contexts";
 

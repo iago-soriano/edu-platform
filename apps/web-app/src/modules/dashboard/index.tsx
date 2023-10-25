@@ -1,5 +1,3 @@
-import { Heading } from "@components";
-
 export const Page = () => {
-  return <Heading>Dashboard</Heading>;
+  return <h2>Dashboard</h2>;
 };

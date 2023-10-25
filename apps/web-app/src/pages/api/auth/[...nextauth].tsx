@@ -16,7 +16,7 @@ export default NextAuth({
     CredentialsProvider({
       credentials: {
         email: {},
-        password: {}
+        password: {},
       },
       id: "credentials",
       async authorize(_, req) {
@@ -24,7 +24,8 @@ export default NextAuth({
           email: req.query?.email,
           password: req.query?.password,
         });
-    }})
+      },
+    }),
   ],
   session: {
     strategy: "jwt",
@@ -35,15 +36,15 @@ export default NextAuth({
       // happens on sign-in of existing and of new users
       // console.log('SIGN IN');
       // console.log({ user, account, profile, email, credentials });
-      if(account.provider == "google") {
+      if (account.provider == "google") {
         await api.ProviderSignUp({
-          email: user.email, 
-          id: user.id, 
-          name: user.name, 
+          email: user.email,
+          id: user.id,
+          name: user.name,
           image: user.image,
-          provider: 'google'
+          provider: "google",
         });
-      } else if (account.provider == 'credentials') {
+      } else if (account.provider == "credentials") {
         return true;
       }
 
@@ -60,20 +61,20 @@ export default NextAuth({
       // console.log('JWT');
       // console.log({ token, account, profile, user });
 
-      if(user) {
-        if(account.provider == 'google') {
+      if (user) {
+        if (account.provider == "google") {
           token.provider = account.provider;
           return {
             ...user,
-            provider: 'google',
-            jwt: account.id_token
-          }
+            provider: "google",
+            jwt: account.id_token,
+          };
         }
 
         return {
           jwt: user.token,
-          ...user.user
-        }
+          ...user.user,
+        };
       }
 
       return token;
@@ -81,7 +82,7 @@ export default NextAuth({
     async session({ session, token, user /** only for database */ }) {
       // happens whenever application mounts or page refocuses
       // console.log("SESSION");
-      // console.log({ session, token, user });
+      console.log({ session, token, user });
       // whatever property is added here goes to session.data in FE
       const { jwt, ...rest } = token;
       (session as any).token = jwt;
@@ -89,5 +90,5 @@ export default NextAuth({
       return session;
     },
   },
-  secret: process.env.AUTH_SECRET
+  secret: process.env.AUTH_SECRET,
 });

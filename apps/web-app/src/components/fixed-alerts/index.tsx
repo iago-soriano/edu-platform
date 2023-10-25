@@ -1,19 +1,10 @@
-import styled from "styled-components";
-
-export const ErrorAlert = styled.div`
-  width: 100%;
-  border: 2px solid red;
-  color: red;
-  padding: 15px;
-  margin: 10px 0;
-  font-weight: bold;
-`;
-
-export const SuccessAlert = styled.div`
-  width: 100%;
-  border: 2px solid green;
-  color: green;
-  padding: 15px;
-  margin: 10px 0;
-  font-weight: bold;
-`;
+export const ErrorAlert = ({ children }) => (
+  <div className="w-full border-red-500 border-2 text-red-500 p-4 my-3 mx-0 font-bold">
+    {children}
+  </div>
+);
+export const SuccessAlert = ({ children }) => (
+  <div className="w-full border-green-500 border-2 text-green-500 p-4 my-3 mx-0 font-bold">
+    {children}
+  </div>
+);

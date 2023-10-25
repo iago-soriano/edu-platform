@@ -5,6 +5,9 @@ export const StyledBurger = styled.button<{ open: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  /* width: 60px;
+  height: 100%;
+  cursor: pointer; */
   /* width: 2rem; */
   width: 55px;
   height: 100%;
@@ -60,20 +63,12 @@ export const StyledBurger = styled.button<{ open: boolean }>`
   }
 `;
 
-const HamburguerButtonContainer = styled(FlexCentered)`
-  width: 60px;
-  height: 100%;
-  cursor: pointer;
-`;
-
 export const HamburguerButton = ({ open, onClick }) => {
   return (
-    <HamburguerButtonContainer>
-      <StyledBurger open={open} onClick={onClick}>
-        <div />
-        <div />
-        <div />
-      </StyledBurger>
-    </HamburguerButtonContainer>
+    <StyledBurger open={open} onClick={onClick}>
+      <div />
+      <div />
+      <div />
+    </StyledBurger>
   );
 };
