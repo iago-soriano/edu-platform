@@ -56,7 +56,9 @@ class UseCase implements IChangePasswordUseCase {
       tokenVersion: user.tokenVersion + 1,
     });
 
-    // mudar o expiredAt do token para agora
+    await this.tokenRepository.updateTokenByValue(token.token, {
+      expiresAt: Date.now(),
+    });
   }
 }
 

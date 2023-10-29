@@ -22,4 +22,8 @@ export interface ITokenRepository {
   ) => Promise<TokenDTO[] | null>;
   insertToken: (token: TokenDTO) => Promise<TokenDTO>;
   updateToken: (id: string, data: Partial<TokenDTO>) => Promise<boolean>;
+  updateTokenByValue: (
+    value: string,
+    data: Partial<TokenDTO>
+  ) => Promise<boolean>;
 }

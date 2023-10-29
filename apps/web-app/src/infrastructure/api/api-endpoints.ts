@@ -1,44 +1,36 @@
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import {
   // sign-in
-  SignInHTTPDefinition,
   SignInRequestBody,
   SignInResponseBody,
   // sign-up
-  SignUpHTTPDefinition,
   SignUpRequestBody,
   SignUpResponseBody,
   //sign-out
-  SignOutHTTPDefinition,
   SignOutRequestBody,
   SignOutResponseBody,
   // provider sign-in
-  ProviderSignInHTTPDefinition,
   ProviderSignInRequestBody,
   ProviderSignInResponseBody,
   // provider sign-up
-  ProviderSignUpHTTPDefinition,
   ProviderSignUpRequestBody,
   ProviderSignUpResponseBody,
   // verify account
-  VerifyAccountHTTPDefinition,
   VerifyAccountRequestBody,
   VerifyAccountResponseBody,
   // change password request
-  ChangePasswordRequestHTTPDefinition,
   ChangePasswordRequestRequestBody,
   ChangePasswordRequestResponseBody,
   // change password
-  ChangePasswordHTTPDefinition,
   ChangePasswordRequestBody,
   ChangePasswordResponseBody,
   // check change password token
-  CheckChangePasswordTokenHTTPDefinition,
   CheckChangePasswordTokenRequestQueryParams,
   CheckChangePasswordTokenResponseBody,
 } from "@edu-platform/common/api";
 import { ServerError } from "@edu-platform/common";
 import { axios } from "@infrastructure";
+import { nextAuthSignIn } from "./next-auth-wraper";
 
 type ErrorCallback<V> = (
   e: ServerError,
@@ -64,7 +56,7 @@ export const useChangePasswordRequestMutation = (
     ChangePasswordRequestRequestBody
   >(
     (args: ChangePasswordRequestRequestBody) =>
-      axios.post.bind(axios)(ChangePasswordRequestHTTPDefinition.path, args),
+      axios.post.bind(axios)("change-password-request", args),
     {
       onError,
       onSuccess,
@@ -89,7 +81,7 @@ export const useChangePasswordMutation = (
     ChangePasswordRequestBody
   >(
     (args: ChangePasswordRequestBody) =>
-      axios.put.bind(axios)(ChangePasswordHTTPDefinition.path, args),
+      axios.put.bind(axios)("change-password", args),
     {
       onError,
       onSuccess,
@@ -110,7 +102,7 @@ export const useVerifyAccountMutation = (
 ) =>
   useMutation<VerifyAccountResponseBody, ServerError, VerifyAccountRequestBody>(
     (args: VerifyAccountResponseBody) =>
-      axios.post.bind(axios)(VerifyAccountHTTPDefinition.path, args),
+      axios.patch.bind(axios)("verify-account", args),
     {
       onError,
       onSuccess,
@@ -142,6 +134,87 @@ export const useCheckChangePasswordTokenMutation = (
       new Promise((resolve) =>
         setTimeout(() => resolve({ isValid: true }), 1000)
       ),
+    {
+      onError,
+      onSuccess,
+    }
+  );
+
+export const useCredentialsSignInMutation = (
+  {
+    onError,
+    onSuccess,
+  }: Partial<{
+    onError: ErrorCallback<SignInRequestBody>;
+    onSuccess: () => unknown;
+  }> = {
+    onError: () => {},
+    onSuccess: () => {},
+  }
+) =>
+  useMutation<void, ServerError, SignInRequestBody>(
+    ({ email, password }: SignInRequestBody) =>
+      nextAuthSignIn("credentials", { redirect: false }, { email, password }),
+    {
+      onError,
+      onSuccess,
+    }
+  );
+
+export const useSignOutMutation = (
+  {
+    onError,
+    onSuccess,
+  }: Partial<{
+    onError: ErrorCallback<SignOutRequestBody>;
+    onSuccess: () => unknown;
+  }> = {
+    onError: () => {},
+    onSuccess: () => {},
+  }
+) =>
+  useMutation<SignOutResponseBody, ServerError, SignOutRequestBody>(
+    () => axios.post.bind(axios)("sign-out"),
+    {
+      onError,
+      onSuccess,
+    }
+  );
+
+export const useGoogleSignInMutation = (
+  {
+    onError,
+    onSuccess,
+  }: Partial<{
+    onError: ErrorCallback<void>;
+    onSuccess: () => unknown;
+  }> = {
+    onError: () => {},
+    onSuccess: () => {},
+  }
+) =>
+  useMutation<void, ServerError, void>(
+    () => nextAuthSignIn("google", { redirect: false }),
+    {
+      onError,
+      onSuccess,
+    }
+  );
+
+export const useCredentialsSignUpMutation = (
+  {
+    onError,
+    onSuccess,
+  }: Partial<{
+    onError: ErrorCallback<SignUpRequestBody>;
+    onSuccess: () => unknown;
+  }> = {
+    onError: () => {},
+    onSuccess: () => {},
+  }
+) =>
+  useMutation<void, ServerError, SignUpRequestBody>(
+    (args: SignUpRequestBody) => axios.post.bind(axios)("sign-out", args),
     {
       onError,
       onSuccess,

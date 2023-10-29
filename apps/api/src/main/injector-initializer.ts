@@ -59,7 +59,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     encryptionService: awilix.asClass(BCryptEncryptionService),
     emailService: awilix.asClass(EmailService),
     idService: awilix.asClass(IdGeneratorService),
-    tokenService: awilix.asClass(JWTTokenService),
+    tokenService: awilix.asClass(JWTTokenService).singleton(),
     assetRepository: awilix.asClass(AssetRepository),
 
     // use cases

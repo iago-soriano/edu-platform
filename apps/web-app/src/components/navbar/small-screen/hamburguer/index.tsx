@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FlexCentered } from "@styles";
+import { forwardRef } from "react";
 
 export const StyledBurger = styled.button<{ open: boolean }>`
   display: flex;
@@ -9,7 +9,7 @@ export const StyledBurger = styled.button<{ open: boolean }>`
   height: 100%;
   cursor: pointer; */
   /* width: 2rem; */
-  width: 55px;
+  width: 4rem;
   height: 100%;
   background: transparent;
   border: none;
@@ -17,10 +17,14 @@ export const StyledBurger = styled.button<{ open: boolean }>`
   //z-index: 10;
   cursor: pointer;
   overflow-x: hidden;
-  padding: 25px 6px 25px 15px;
+  padding: 1rem 0.5rem 0.5rem 1rem;
+  height: 100%;
 
+  transition: opacity ease-in-out 150ms;
+  &:hover,
   &:focus {
-    outline: none;
+    opacity: 0.8;
+    /* outline: none; */
   }
 
   div {
@@ -38,7 +42,7 @@ export const StyledBurger = styled.button<{ open: boolean }>`
       transform: ${({ open }) =>
         open
           ? `
-        rotate(45deg) translate(3px, 3px);        
+        rotate(45deg);        
       `
           : `
         rotate(0);
@@ -63,12 +67,15 @@ export const StyledBurger = styled.button<{ open: boolean }>`
   }
 `;
 
-export const HamburguerButton = ({ open, onClick }) => {
+export const HamburguerButton = forwardRef<
+  HTMLButtonElement,
+  { open: boolean; onClick: () => void }
+>(({ open, onClick }, ref) => {
   return (
-    <StyledBurger open={open} onClick={onClick}>
+    <StyledBurger ref={ref} open={open} onClick={onClick}>
       <div />
       <div />
       <div />
     </StyledBurger>
   );
-};
+});

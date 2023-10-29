@@ -1,10 +1,11 @@
 import type { AppProps } from "next/app";
 import { Navbar, Toast } from "@components";
 import { ThemeProvider, AuthProvider } from "@contexts";
-import { SessionProvider } from "next-auth/react";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/global.css";
+import { SessionProvider } from "next-auth/react";
 
 const queryClient = new QueryClient();
 

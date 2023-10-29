@@ -1,6 +1,33 @@
 import { Icons } from "@components";
 import { AbstractNavbarButton, NavbarButtonProps } from "./common";
-import { NavButtonStyled, SignOutButtonStyled } from "./styles";
+import Link from "next/link";
+import { twMerge } from "tailwind-merge";
+
+export const NavButton = ({
+  highlighted,
+  href,
+  children,
+  className,
+}: {
+  highlighted?: boolean;
+  href?: string;
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  const hStyles = highlighted ? "border-b-4 border-acc text-acc font-bold" : "";
+  return (
+    <Link
+      href={href}
+      className={twMerge(
+        "my-0 mx-auto flex h-full items-center text-center justify-center cursor-pointer hover:bg-slate-400 focus:bg-slate-400",
+        hStyles,
+        className
+      )}
+    >
+      {children}
+    </Link>
+  );
+};
 
 export const ProductButton = ({
   currentPath,
@@ -82,10 +109,11 @@ export const SignUpButton = ({ currentPath, Component }: NavbarButtonProps) => (
 );
 
 export const SignOutButton = ({ signOut }) => (
-  <SignOutButtonStyled onClick={signOut}>
-    <Icons.EXIT />
-    <span>Sair</span>
-  </SignOutButtonStyled>
+  <button
+    onClick={signOut}
+    className="hover:underline hover:cursor-pointer flex flex-row items-center mx-auto w-full justify-center"
+  >
+    <Icons.EXIT className="py-3" />
+    <span className="p-3 inline-block">Sair</span>
+  </button>
 );
-
-export { NavButtonStyled };

@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth from "next-auth";
 
 declare module "next-auth" {
   /**
@@ -9,8 +9,8 @@ declare module "next-auth" {
       email: string;
       name: string;
       image: string;
-      provider: string
-    }
+      provider: string;
+    };
     token: string;
   }
 
@@ -26,10 +26,12 @@ declare module "next-auth" {
       email: string;
       name: string;
       image: string;
-    }
+    };
   }
 
-  interface UserCredentialsConfig {
-
+  interface Profile {
+    given_name: string;
   }
+
+  interface UserCredentialsConfig {}
 }

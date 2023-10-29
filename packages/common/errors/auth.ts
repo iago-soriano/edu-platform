@@ -81,6 +81,8 @@ export class InvalidEmailError extends CustomError {
 export class ChangePasswordRequestTokenExist extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
-    super("Uma requisição para troca de senha já foi feita");
+    super(
+      "Uma requisição para troca de senha já foi feita. Verifique sua caixa de e-mail."
+    );
   }
 }

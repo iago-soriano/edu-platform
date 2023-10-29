@@ -1,4 +1,3 @@
-import { useAuth } from "@contexts";
 import {
   PasswordInput,
   Input,
@@ -9,22 +8,26 @@ import {
   GoogleSignInButton,
   errorToast,
 } from "@components";
-import { signUpSchema } from "@infrastructure";
+import {
+  signUpSchema,
+  useCredentialsSignUpMutation,
+  useGoogleSignInMutation,
+} from "@infrastructure";
 import { useEffect } from "react";
 
 export const Page = () => {
-  const { googleSignIn } = useAuth();
-
-  const { credentialError, credentialOnSubmit, credentialLoading } =
-    useCredentialSignUp();
+  const { googleSignInMutation, credentialsSignUpMutation, errorAlert } =
+    useSignUpPage();
 
   return (
-    <>
-      <h2>Criar conta</h2>
-      <GoogleSignInButton onClick={googleSignIn.mutate} />
-      {/* <Separator>Ou</Separator> */}
-      {credentialError && <ErrorAlert>{credentialError}</ErrorAlert>}
-      <Form onSubmit={credentialOnSubmit} schema={signUpSchema}>
+    <div className="min-h-[80vh] flex flex-col justify-evenly">
+      <h2 className="text-txt">Criar conta</h2>
+      <GoogleSignInButton
+        onClick={googleSignInMutation.mutate}
+        isLoading={googleSignInMutation.isLoading}
+      />
+      {errorAlert}
+      <Form onSubmit={credentialsSignUpMutation.mutate} schema={signUpSchema}>
         <Input
           name="name"
           inputLabel={{ text: "Nome", mandatory: true }}
@@ -47,31 +50,27 @@ export const Page = () => {
           inputLabel={{ text: "Confirmação de Senha", mandatory: true }}
           placeholder="Digite novamente sua senha"
         />
-        <FormButton label="Criar conta" loading={credentialLoading} />
+        <FormButton
+          label="Criar conta"
+          loading={credentialsSignUpMutation.isLoading}
+        />
       </Form>
-    </>
+    </div>
   );
 };
 
-const useCredentialSignUp = () => {
-  const { credentialsSignUp } = useAuth();
-  const onSubmit = async ({ name, email, password, confirmPassword }) => {
-    try {
-      credentialsSignUp.mutate({ name, email, password, confirmPassword });
-    } catch (e) {
-      console.error({ e });
-    }
+const useSignUpPage = () => {
+  const credentialsSignUpMutation = useCredentialsSignUpMutation();
+  const googleSignInMutation = useGoogleSignInMutation();
+
+  const getErrorAlert = () => {
+    const error = googleSignInMutation.error || credentialsSignUpMutation.error;
+    return error && <ErrorAlert>{error?.message}</ErrorAlert>;
   };
 
-  useEffect(() => {
-    if (credentialsSignUp.error) {
-      errorToast("Houve um erro");
-    }
-  }, [credentialsSignUp]);
-
   return {
-    credentialError: credentialsSignUp.error?.message,
-    credentialOnSubmit: onSubmit,
-    credentialLoading: credentialsSignUp.isLoading,
+    credentialsSignUpMutation,
+    googleSignInMutation,
+    errorAlert: getErrorAlert(),
   };
 };

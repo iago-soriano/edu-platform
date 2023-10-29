@@ -1,6 +1,5 @@
-import { Separator } from "@components";
 import React, { useEffect, useState } from "react";
-import { Container, DrawerMenuStyled, ActionButton } from "./styles";
+import { ActionLink } from "@components";
 import { HamburguerButton } from "./hamburguer";
 import {
   HowItWorksButton,
@@ -12,58 +11,77 @@ import {
   ProductButton,
   SignOutButton,
   Logo,
-  DrawerMenuItemStyled,
+  NavButton,
+  Dropdown,
 } from "../components";
+import { useClickOutside } from "@infrastructure";
+
+export const DrawerMenuItem = ({ children, ...rest }) => (
+  <NavButton {...rest} className={"w-full p-4"}>
+    {children}
+  </NavButton>
+);
 
 export const SmallScreenNavbar = ({
   currentPath,
   modeToggle,
-  user,
   isAuthenticated,
   signOut,
 }) => {
   const [burguerOpen, setBurguerOpen] = useState(false);
+  const addRef = useClickOutside(() => {
+    console.log("nav");
+    setBurguerOpen(false);
+  });
+
   useEffect(() => {
     setBurguerOpen(false);
   }, [currentPath]);
 
   return (
     <>
-      <Container>
-        <Logo />
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          {modeToggle}
-          <HamburguerButton
-            open={burguerOpen}
-            onClick={() => setBurguerOpen((o) => !o)}
-          />
-        </div>
-      </Container>
-      <div>
-        <DrawerMenuStyled open={burguerOpen}>
+      <nav className="justify-between max-w-fullmin-h-[60px] bg-bkg">
+        <ul className="flex flex-row justify-between overflow-hidden">
+          <li>
+            <Logo />
+          </li>
+          <li>
+            <div className="flex flex-row h-full">
+              {modeToggle}
+              <HamburguerButton
+                ref={addRef}
+                open={burguerOpen}
+                onClick={() => setBurguerOpen((o) => !o)}
+              />
+            </div>
+          </li>
+        </ul>
+      </nav>
+      <div ref={addRef}>
+        <Dropdown className="w-full" open={burguerOpen}>
           {isAuthenticated ? (
             <>
               <DashboardButton
                 currentPath={currentPath}
-                Component={DrawerMenuItemStyled}
+                Component={DrawerMenuItem}
               />
               <NewActivityButton
                 currentPath={currentPath}
-                Component={DrawerMenuItemStyled}
+                Component={DrawerMenuItem}
               />
               <hr />
               <ProductButton
                 currentPath={currentPath}
-                Component={DrawerMenuItemStyled}
+                Component={DrawerMenuItem}
               />
               <HowItWorksButton
                 currentPath={currentPath}
-                Component={DrawerMenuItemStyled}
+                Component={DrawerMenuItem}
               />
               <hr />
               <MyProfileButton
                 currentPath={currentPath}
-                Component={DrawerMenuItemStyled}
+                Component={DrawerMenuItem}
               />
               <SignOutButton signOut={signOut} />
             </>
@@ -71,30 +89,30 @@ export const SmallScreenNavbar = ({
             <>
               <ProductButton
                 currentPath={currentPath}
-                Component={DrawerMenuItemStyled}
+                Component={DrawerMenuItem}
               />
               <HowItWorksButton
                 currentPath={currentPath}
-                Component={DrawerMenuItemStyled}
+                Component={DrawerMenuItem}
               />
               <NewActivityButton
                 currentPath={currentPath}
-                Component={DrawerMenuItemStyled}
+                Component={DrawerMenuItem}
               />
               <hr />
               <div className="flex flex-row justify-center my-2 hover:opacity-80">
                 <SignUpButton
                   currentPath={currentPath}
-                  Component={ActionButton}
+                  Component={ActionLink}
                 />
               </div>
               <SignInButton
                 currentPath={currentPath}
-                Component={DrawerMenuItemStyled}
+                Component={DrawerMenuItem}
               />
             </>
           )}
-        </DrawerMenuStyled>
+        </Dropdown>
       </div>
     </>
   );

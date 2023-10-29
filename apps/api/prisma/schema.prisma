@@ -49,10 +49,10 @@ model Token {
   @@unique([id, token])
 }
 
-enum Topic {
-  LEGAL
-  SUPER
-  MASSA
+enum ActivityStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }
 
 model Activity {
@@ -62,26 +62,15 @@ model Activity {
 
   title       String
   description String?
-  topics      Topic
+  status      ActivityStatus @default(DRAFT)
+  topics      Int[]
 
-  versions ActivityVersioned[]
-
-  author   User   @relation(fields: [authorId], references: [id])
-  authorId String
-}
-
-model ActivityVersioned {
-  id        Int      @id @unique @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  version   Int               @default(0)
   contents  ActivityContent[]
   questions Question[]
   outputs   StudentOutput[]
 
-  Activity   Activity? @relation(fields: [activityId], references: [id])
-  activityId Int?
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
 }
 
 model Choice {
@@ -112,9 +101,9 @@ model Question {
   answerKey String? //label of choice or free text
   type      QuestionType
 
-  answers             OutputAnswer[]
-  ActivityVersioned   ActivityVersioned? @relation(fields: [activityVersionedId], references: [id])
-  activityVersionedId Int?
+  answers    OutputAnswer[]
+  Activity   Activity?      @relation(fields: [activityId], references: [id])
+  activityId Int?
 }
 
 enum ContentType {
@@ -134,8 +123,8 @@ model ActivityContent {
   content String // url ou texto
   title   String?
 
-  ActivityVersion   ActivityVersioned? @relation(fields: [activityVersionId], references: [id])
-  activityVersionId Int?
+  Activity   Activity? @relation(fields: [activityId], references: [id])
+  activityId Int?
 }
 
 model StudentOutput {
@@ -148,8 +137,8 @@ model StudentOutput {
 
   answers OutputAnswer[]
 
-  ActivityVersion   ActivityVersioned? @relation(fields: [activityVersionId], references: [id])
-  activityVersionId Int?
+  Activity   Activity? @relation(fields: [activityId], references: [id])
+  activityId Int?
 }
 
 model OutputAnswer {

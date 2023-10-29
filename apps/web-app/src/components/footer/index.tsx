@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Icons } from "@components";
-import { useAuth } from "@contexts";
+import { useSession } from "next-auth/react";
 
 const FooterLink = ({ href, children }) => (
   <Link className="text-gray-500 hover:text-gray-400 p-1 w-max" href={href}>
@@ -13,7 +13,8 @@ const FooterHeading = ({ children }) => (
   <h6 className="text-gray-400 p-1 font-bold">{children}</h6>
 );
 export const Footer = () => {
-  const { isAuthenticated } = useAuth();
+  const session = useSession();
+  const isAuthenticated = session.status == "authenticated";
 
   return (
     <footer className="">

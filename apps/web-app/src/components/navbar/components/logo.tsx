@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const Logo = () => (
   <Link
-    className="flex flex-col justify-center h-full transition-opacity hover:opacity-80 focus-visible:opacity-80"
+    className="p-3 flex flex-col justify-center h-full transition-opacity hover:opacity-80 focus-visible:opacity-80"
     href={"/"}
   >
     <Image

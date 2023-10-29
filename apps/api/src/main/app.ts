@@ -1,7 +1,7 @@
 import express, { Express, RequestHandler } from "express";
 import "express-async-errors";
 import { RouteNotFoundError } from "@edu-platform/common/errors";
-import { HTTPController, HTTPErrorController } from '@interfaces';
+import { HTTPController, HTTPErrorController } from "@interfaces";
 import helmet from "helmet";
 import cors from "cors";
 import { json } from "body-parser";

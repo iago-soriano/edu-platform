@@ -37,15 +37,17 @@ class UseCase implements IChangePasswordRequestUseCase {
         `Por favor, utilize sua conta do ${user.provider} para entrar`
       );
 
-    const activeTokens = await this.tokenRepository.getTokenByUserId(
+    const tokens = await this.tokenRepository.getTokenByUserId(
       user.id,
       TokenType.ChangePasswordRequest
     );
 
-    // checar se existe algum válido. usar um reduce
-    // if (activeToken && activeToken.expiresAt > Date.now()) {
-    //   throw new ChangePasswordRequestTokenExist();
-    // }
+    if (
+      tokens &&
+      tokens.filter((token) => token.expiresAt > Date.now()).length != 0
+    ) {
+      throw new ChangePasswordRequestTokenExist();
+    }
 
     const changePasswordToken = this.idService.getId();
 

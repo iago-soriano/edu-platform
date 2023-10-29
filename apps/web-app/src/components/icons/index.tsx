@@ -48,7 +48,9 @@ export const Icons = {
   USER_PLUS: () => <FontAwesomeIcon icon={faUserPlus} />,
   FOLDER: () => <FontAwesomeIcon icon={faFolderOpen} />,
   STAR: () => <FontAwesomeIcon icon={faStar} />,
-  EXIT: () => <FontAwesomeIcon icon={faArrowRightFromBracket} />,
+  EXIT: (props) => (
+    <FontAwesomeIcon icon={faArrowRightFromBracket} {...props} />
+  ),
   USER: () => <FontAwesomeIcon icon={faUser} />,
   EMAIL: () => <FontAwesomeIcon icon={faEnvelope} />,
   // EMPTY_HEART: () => <FaRegHeart />,

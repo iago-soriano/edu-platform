@@ -1,4 +1,3 @@
-import { useAuth } from "@contexts";
 import {
   PasswordInput,
   Input,
@@ -9,22 +8,26 @@ import {
   GoogleSignInButton,
   errorToast,
 } from "@components";
-import { signInSchema } from "@infrastructure";
-import { useEffect } from "react";
+import {
+  signInSchema,
+  useCredentialsSignInMutation,
+  useGoogleSignInMutation,
+} from "@infrastructure";
 import Link from "next/link";
 
 export const Page = () => {
-  const { googleSignIn } = useAuth();
-
-  const { credentialError, credentialOnSubmit, credentialLoading } =
-    useCredentialSignIn();
+  const { googleSignInMutation, credentialsSignInMutation, errorAlert } =
+    useSignInPage();
 
   return (
-    <>
-      <h2>Entrar</h2>
-      <GoogleSignInButton onClick={googleSignIn.mutate} />
-      {credentialError && <ErrorAlert>{credentialError}</ErrorAlert>}
-      <Form onSubmit={credentialOnSubmit} schema={signInSchema}>
+    <div>
+      <h2 className="text-txt">Entrar</h2>
+      <GoogleSignInButton
+        isLoading={googleSignInMutation.isLoading}
+        onClick={googleSignInMutation.mutate}
+      />
+      {errorAlert}
+      <Form onSubmit={credentialsSignInMutation.mutate} schema={signInSchema}>
         <Input
           name="email"
           inputLabel={{ text: "E-mail", mandatory: true }}
@@ -37,37 +40,33 @@ export const Page = () => {
           placeholder="Digite aqui sua senha"
         />
         <Link
-          className="inline-block py-3 px-1 text-accent-1 underline mb-4 hover:text-accent-2"
+          className="hover:opacity-70 inline-block py-3 px-1 text-accent-1 underline mb-4 hover:text-accent-2"
           href="/auth/change-password-request"
         >
           Esqueceu sua senha?
         </Link>
-        <FormButton label="Entrar" loading={credentialLoading} />
+        <FormButton
+          label="Entrar"
+          loading={credentialsSignInMutation.isLoading}
+        />
       </Form>
       <Footer />
-    </>
+    </div>
   );
 };
 
-const useCredentialSignIn = () => {
-  const { credentialsSignIn } = useAuth();
-  const onSubmit = async ({ email, password }) => {
-    try {
-      credentialsSignIn.mutate({ email, password });
-    } catch (e) {
-      console.error({ e });
-    }
+const useSignInPage = () => {
+  const credentialsSignInMutation = useCredentialsSignInMutation();
+  const googleSignInMutation = useGoogleSignInMutation();
+
+  const getErrorAlert = () => {
+    const error = googleSignInMutation.error || credentialsSignInMutation.error;
+    return error && <ErrorAlert>{error?.message}</ErrorAlert>;
   };
 
-  useEffect(() => {
-    if (credentialsSignIn.error) {
-      errorToast("Houve um erro");
-    }
-  }, [credentialsSignIn]);
-
   return {
-    credentialError: credentialsSignIn.error?.message,
-    credentialOnSubmit: onSubmit,
-    credentialLoading: credentialsSignIn.isLoading,
+    credentialsSignInMutation,
+    googleSignInMutation,
+    errorAlert: getErrorAlert(),
   };
 };

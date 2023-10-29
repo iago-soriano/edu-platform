@@ -1,22 +1,24 @@
-import SignInUseCase, { ISignInUseCase } from "./sign-in";
-import SignUpUseCase, { ISignUpUseCase } from "./sign-up";
-import SignOutUseCase, { ISignOutUseCase } from "./sign-out";
+import SignInUseCase, { ISignInUseCase } from "./auth/sign-in";
+import SignUpUseCase, { ISignUpUseCase } from "./auth/sign-up";
+import SignOutUseCase, { ISignOutUseCase } from "./auth/sign-out";
 import ProviderSignInUseCase, {
   IProviderSignInUseCase,
-} from "./provider-sign-in";
+} from "./auth/provider-sign-in";
 import ProviderSignUpUseCase, {
   IProviderSignUpUseCase,
-} from "./provider-sign-up";
-import VerifyAccountUseCase, { IVerifyAccountUseCase } from "./verify-account";
+} from "./auth/provider-sign-up";
+import VerifyAccountUseCase, {
+  IVerifyAccountUseCase,
+} from "./auth/verify-account";
 import ChangePasswordRequestUseCase, {
   IChangePasswordRequestUseCase,
-} from "./change-password-request";
+} from "./auth/change-password-request";
 import ChangePasswordUseCase, {
   IChangePasswordUseCase,
-} from "./change-password";
+} from "./auth/change-password";
 import CheckChangePasswordTokenRequestUseCase, {
   ICheckChangePasswordTokenRequestUseCase,
-} from "./check-change-password-token-request";
+} from "./auth/check-change-password-token-request";
 
 export {
   SignInUseCase,

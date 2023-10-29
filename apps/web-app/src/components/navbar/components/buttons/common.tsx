@@ -1,5 +1,5 @@
 import { ReactNode, FC, MouseEventHandler, AnchorHTMLAttributes } from "react";
-import { StyledComponent } from "styled-components";
+
 interface ButtonDefinition {
   label: string;
   path: string;

@@ -6,10 +6,16 @@ import {
 } from "express";
 import { UserDTO } from "@interfaces";
 
-export type HTTPMethod = "post" | "get" | "put" | "patch" | "delete";
+export enum HttpMethod {
+  GET = "get",
+  POST = "post",
+  PATCH = "patch",
+  PUT = "put",
+  DELETE = "delete",
+}
 
 export interface HTTPController {
-  method: HTTPMethod;
+  method: HttpMethod;
   path: string;
   middlewares?: string[];
   execute: RequestHandler;
@@ -26,8 +32,3 @@ export type Request<Params = {}, Query = {}, Body = {}> = ExpressRequest<
   Query
 > & { user: UserDTO };
 export type Response<Body> = ExpressResponse<Body>;
-
-export interface HTTPControllerDefinition {
-  method: HTTPMethod;
-  path: string;
-}

@@ -14,5 +14,9 @@ export interface IBaseCollection<P> {
   getManyByIds?: (ids: string[]) => Promise<P[]>;
   insertOne: (entity: any) => Promise<P>;
   partiallyUpdateOne: (id: string, entity: Partial<P>) => Promise<boolean>;
+  partiallyUpdateOneWhere: (
+    conditions: { [field: string]: any },
+    entity: Partial<P>
+  ) => Promise<boolean>;
   insertMany: (entities: P[]) => Promise<boolean>;
 }

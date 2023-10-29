@@ -1,14 +1,13 @@
 import { ICheckChangePasswordTokenRequestUseCase } from "@use-cases";
 import {
   HTTPController,
-  HTTPMethod,
+  HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
 import {
   CheckChangePasswordTokenRequestQueryParams,
   CheckChangePasswordTokenResponseBody,
-  CheckChangePasswordTokenHTTPDefinition,
 } from "@edu-platform/common/api";
 
 type Request = TypedRequest<{}, CheckChangePasswordTokenRequestQueryParams, {}>;
@@ -17,8 +16,8 @@ type Response = TypedResponse<CheckChangePasswordTokenResponseBody>;
 export class CheckChangePasswordTokenRequestController
   implements HTTPController
 {
-  method: HTTPMethod = CheckChangePasswordTokenHTTPDefinition.method;
-  path: string = CheckChangePasswordTokenHTTPDefinition.path;
+  method = HttpMethod.GET;
+  path: string = "check-token-validity";
 
   constructor(
     private checkChangePasswordTokenRequestUseCase: ICheckChangePasswordTokenRequestUseCase

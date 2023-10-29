@@ -1,26 +1,28 @@
 import { useMediaQuery } from "react-responsive";
-import { useState, useEffect } from "react";
-import { useColorTheme, useAuth } from "@contexts";
 import { useRouter } from "next/router";
 import { SmallScreenNavbar } from "./small-screen";
 import { BigScreenNavbar } from "./big-screen";
 import { ModeToggle } from "./components";
-import { Container } from "./styles";
+import { useHasMounted, useSignOutMutation } from "@infrastructure";
+import { useSession, signOut as nextAuthSignOut } from "next-auth/react";
 
 export const Navbar = () => {
-  const { mode, setMode } = useColorTheme();
   const isBigScreen = useMediaQuery({ minWidth: 900 });
   const router = useRouter();
-  const { user, isAuthenticated, signOut } = useAuth();
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
+  const hasMounted = useHasMounted();
+  const session = useSession();
+  const isAuthenticated = session.status == "authenticated";
+  const user = session.data?.user;
+  const credentialsSignOut = useSignOutMutation();
 
   const handleSignOut = () => {
-    signOut.mutate({});
-    // router.push("/");
+    nextAuthSignOut({
+      redirect: false,
+      callbackUrl: "/",
+    });
+    router.replace("/product");
+    if (session.data && !session.data.user.provider)
+      credentialsSignOut.mutate({});
   };
 
   if (hasMounted) {
@@ -28,7 +30,7 @@ export const Navbar = () => {
       return (
         <BigScreenNavbar
           currentPath={router.pathname}
-          modeToggle={<ModeToggle setMode={setMode} mode={mode} />}
+          modeToggle={<ModeToggle />}
           user={user}
           isAuthenticated={isAuthenticated}
           signOut={handleSignOut}
@@ -37,13 +39,12 @@ export const Navbar = () => {
     return (
       <SmallScreenNavbar
         currentPath={router.pathname}
-        modeToggle={<ModeToggle setMode={setMode} mode={mode} />}
-        user={user}
+        modeToggle={<ModeToggle />}
         isAuthenticated={isAuthenticated}
         signOut={handleSignOut}
       />
     );
   }
 
-  return <Container />;
+  return <nav />;
 };

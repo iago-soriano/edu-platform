@@ -23,3 +23,26 @@
   }
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bkg: 210deg 40% 98%;
+    --color-txt: 224deg 48% 10%;
+    --color-acc: 350deg 79% 59%;
+    --color-error: 349deg 100% 35%;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bkg: 224deg 48% 16%;
+      --color-txt: 224deg 33% 87%;
+      --color-acc: 350deg 79% 59%;
+      --color-error: 349deg 100% 35%;
+    }
+  }
+  :root[data-theme="dark"] {
+    --color-bkg: 224deg 48% 16%;
+    --color-txt: 224deg 33% 87%;
+    --color-acc: 350deg 79% 59%;
+    --color-error: 349deg 100% 35%;
+  }
+}

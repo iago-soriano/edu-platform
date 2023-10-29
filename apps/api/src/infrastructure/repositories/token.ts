@@ -27,4 +27,8 @@ export class TokenRepository implements ITokenRepository {
   updateToken(id: string, data: Partial<TokenDTO>) {
     return this._db.partiallyUpdateOne(id, data);
   }
+
+  updateTokenByValue(token: string, data: Partial<TokenDTO>) {
+    return this._db.partiallyUpdateOneWhere({ token }, data);
+  }
 }

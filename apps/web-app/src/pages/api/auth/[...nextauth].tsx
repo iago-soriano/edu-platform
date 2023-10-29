@@ -20,7 +20,7 @@ export default NextAuth({
       },
       id: "credentials",
       async authorize(_, req) {
-        return api.SignIn({
+        return axios.post.bind(axios)("sign-in", {
           email: req.query?.email,
           password: req.query?.password,
         });
@@ -37,7 +37,7 @@ export default NextAuth({
       // console.log('SIGN IN');
       // console.log({ user, account, profile, email, credentials });
       if (account.provider == "google") {
-        await api.ProviderSignUp({
+        await axios.post.bind(axios)("sign-up/provider", {
           email: user.email,
           id: user.id,
           name: user.name,
@@ -67,6 +67,7 @@ export default NextAuth({
           return {
             ...user,
             provider: "google",
+            name: profile.given_name,
             jwt: account.id_token,
           };
         }
@@ -82,7 +83,7 @@ export default NextAuth({
     async session({ session, token, user /** only for database */ }) {
       // happens whenever application mounts or page refocuses
       // console.log("SESSION");
-      console.log({ session, token, user });
+      // console.log({ session, token });
       // whatever property is added here goes to session.data in FE
       const { jwt, ...rest } = token;
       (session as any).token = jwt;

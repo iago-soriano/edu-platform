@@ -9,14 +9,12 @@ import {
 } from "@edu-platform/common/errors";
 
 export class AuthenticationMiddlewareController {
-
   constructor(
     private tokenService: ITokenService,
     private userRepository: IUserRepository
-  ){}
+  ) {}
 
-  async execute(req: Request<{},{},{}>, headers: Record<string, string>) {
-
+  async execute(req: Request<{}, {}, {}>, headers: Record<string, string>) {
     if (!headers.authorization) throw new MissingTokenError();
 
     const [header, token] = headers.authorization.split(" ");
@@ -24,7 +22,7 @@ export class AuthenticationMiddlewareController {
 
     let tokenPayload;
     try {
-      tokenPayload = this.tokenService.verify(token);
+      tokenPayload = await this.tokenService.verify(token);
     } catch (e) {
       console.log("token verification error:", e);
       throw new CouldNotVerifyTokenError();
@@ -45,5 +43,5 @@ export class AuthenticationMiddlewareController {
       throw new Forbidden();
 
     req.user = userDTO;
-  };
-};
+  }
+}

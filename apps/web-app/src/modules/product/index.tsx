@@ -1,3 +1,10 @@
+import { Footer } from "@components";
+
 export const Page = () => {
-  return <h2>Product</h2>;
+  return (
+    <>
+      <section className="min-h-[70vh] bg-bkg">Hero</section>
+      <Footer />
+    </>
+  );
 };

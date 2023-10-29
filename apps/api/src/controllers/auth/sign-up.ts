@@ -1,23 +1,21 @@
 import { ISignUpUseCase } from "@use-cases";
-import { 
-  HTTPController, 
-  HTTPMethod, 
-  Request as TypedRequest, 
+import {
+  HTTPController,
+  HttpMethod,
+  Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
 import {
   SignUpRequestBody,
   SignUpResponseBody,
-  SignUpHTTPDefinition
-} from '@edu-platform/common/api';
+} from "@edu-platform/common/api";
 
 type Request = TypedRequest<{}, {}, SignUpRequestBody>;
-type Response = TypedResponse<SignUpResponseBody>
+type Response = TypedResponse<SignUpResponseBody>;
 
 export class SignUpController implements HTTPController {
-
-  method: HTTPMethod = SignUpHTTPDefinition.method;
-  path: string = SignUpHTTPDefinition.path;
+  method = HttpMethod.POST;
+  path: string = "sign-up";
 
   constructor(private signUpUseCase: ISignUpUseCase) {}
 

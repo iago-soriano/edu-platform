@@ -1,27 +1,32 @@
 import React, { useState } from "react";
-import {
-  Container,
-  AuthenticatedSectionContainer,
-  Button,
-  ActionButton,
-  ProfileDropdown,
-  ProfileDropdownContainer,
-} from "./styles";
+// import { ActionButton } from "./styles";
 import {
   HowItWorksButton,
   DashboardButton,
-  NewActivityButton,
   SignInButton,
   SignUpButton,
   ProductButton,
-  Logo,
-} from "../components";
-import { ProfileImageButton } from "./user-dropdown";
-import {
-  MyProfileButton,
-  DrawerMenuItemStyled,
   SignOutButton,
+  MyProfileButton,
+  Logo,
+  NavButton,
 } from "../components";
+import { ActionLink } from "@components";
+import { ProfileImageButton } from "./profile-image-button";
+import { ProfileDropDown } from "./profile-dropdown";
+import { useClickOutside } from "@infrastructure";
+
+const AuthenticatedSectionContainer = ({ children }) => (
+  <div className="min-w-[100px] flex flex-row my-0 mx-2 justify-center">
+    {children}
+  </div>
+);
+
+export const Button = ({ children, ...rest }) => (
+  <NavButton {...rest} className={"mx-3 w-20"}>
+    {children}
+  </NavButton>
+);
 
 export const BigScreenNavbar = ({
   currentPath,
@@ -35,50 +40,70 @@ export const BigScreenNavbar = ({
     signOut();
     setIsDropdownOpen(false);
   };
-
+  const addRef = useClickOutside(() => {
+    console.log("nav");
+    setIsDropdownOpen(false);
+  });
+  // console.log({ isDropdownOpen });
   const getAuthenticatedSection = () => {
     if (!isAuthenticated)
       return (
         <AuthenticatedSectionContainer>
-          <SignInButton currentPath={currentPath} Component={Button} />
-          <SignUpButton currentPath={currentPath} Component={ActionButton} />
+          <li>
+            <SignInButton currentPath={currentPath} Component={Button} />
+          </li>
+          <li className="flex items-center">
+            <SignUpButton currentPath={currentPath} Component={ActionLink} />
+          </li>
         </AuthenticatedSectionContainer>
       );
     return (
       <AuthenticatedSectionContainer>
-        {/* <DashboardButton currentPath={currentPath} Component={Button} /> */}
-        <ProfileImageButton user={user} setIsDropdownOpen={setIsDropdownOpen} />
+        <li>
+          <ProfileImageButton
+            user={user}
+            ref={addRef}
+            setIsDropdownOpen={setIsDropdownOpen}
+          />
+        </li>
       </AuthenticatedSectionContainer>
     );
   };
 
   return (
     <>
-      <Container>
-        <Logo />
-        <div className="flex flex-row justify-center">
-          {isAuthenticated ? (
-            <DashboardButton currentPath={currentPath} Component={Button} />
-          ) : (
-            <ProductButton currentPath={currentPath} Component={Button} />
-          )}
-          <HowItWorksButton currentPath={currentPath} Component={Button} />
-          {/* <NewActivityButton currentPath={currentPath} Component={Button} /> */}
-        </div>
-        <div style={{ display: "flex" }}>
-          {modeToggle}
-          {getAuthenticatedSection()}
-        </div>
-      </Container>
-      <ProfileDropdownContainer>
-        <ProfileDropdown open={isDropdownOpen}>
-          <MyProfileButton
-            currentPath={currentPath}
-            Component={DrawerMenuItemStyled}
-          />
-          <SignOutButton signOut={handleSignOut} />
-        </ProfileDropdown>
-      </ProfileDropdownContainer>
+      <nav className="max-w-full min-h-[60px] bg-bkg">
+        <ul className="flex flex-row justify-between overflow-x-hidden">
+          <li>
+            <Logo />
+          </li>
+          <div className="flex flex-row justify-center">
+            {isAuthenticated ? (
+              <li>
+                <DashboardButton currentPath={currentPath} Component={Button} />
+              </li>
+            ) : (
+              <li>
+                <ProductButton currentPath={currentPath} Component={Button} />
+              </li>
+            )}
+            <li>
+              <HowItWorksButton currentPath={currentPath} Component={Button} />
+            </li>
+            {/* <NewActivityButton currentPath={currentPath} Component={Button} /> */}
+          </div>
+          <div className="flex">
+            {modeToggle}
+            {getAuthenticatedSection()}
+          </div>
+        </ul>
+      </nav>
+      <ProfileDropDown
+        isDropdownOpen={isDropdownOpen}
+        addClickOutsideRef={addRef}
+        handleSignOut={handleSignOut}
+        currentPath={currentPath}
+      />
     </>
   );
 };
