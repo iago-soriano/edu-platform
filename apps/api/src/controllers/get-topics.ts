@@ -1,6 +1,5 @@
 import {
   HTTPController,
-  HTTPMethod,
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,

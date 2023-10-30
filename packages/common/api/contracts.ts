@@ -83,6 +83,16 @@ export type GetTopicsResponseBody = {
   topics: string[];
 };
 
+// Create New Activity [POST activities]
+export type CreateNewActivityRequestBody = {
+  title: string;
+  description: string;
+  topics: string[];
+};
+export type CreateNewActivityResponseBody = {
+  activityId: number;
+};
+
 /* 
 --- CRIAR E EDITAR ATIVIDADE ---
 GetTopics [GET topics]
