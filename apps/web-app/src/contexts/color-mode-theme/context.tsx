@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState, useContext, ReactNode } from "react";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { isModeValid, Modes, Theme } from "./types";
@@ -23,12 +25,14 @@ interface MyComponentProps {
   defaultTheme?: Modes;
 }
 
-export const ThemeProvider: React.FC<MyComponentProps> = ({ children, defaultTheme }) => {
+export const ThemeProvider: React.FC<MyComponentProps> = ({
+  children,
+  defaultTheme,
+}) => {
   const [mode, setModeState] = useState<Modes>(defaultTheme || "dark");
 
   const setMode = (args?: string) => {
-
-    let colorMode = defaultTheme || args || storage.getMode(mode);    
+    let colorMode = defaultTheme || args || storage.getMode(mode);
 
     if (isModeValid(colorMode)) {
       setModeState(colorMode as Modes);

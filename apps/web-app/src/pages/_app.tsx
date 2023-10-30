@@ -1,3 +1,4 @@
+"use client";
 import type { AppProps } from "next/app";
 import { Navbar, Toast } from "@components";
 import { ThemeProvider, AuthProvider } from "@contexts";

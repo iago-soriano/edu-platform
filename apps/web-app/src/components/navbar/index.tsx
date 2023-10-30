@@ -1,5 +1,5 @@
 import { useMediaQuery } from "react-responsive";
-import { useRouter } from "next/router";
+import { useRouter, usePathname } from "next/navigation";
 import { SmallScreenNavbar } from "./small-screen";
 import { BigScreenNavbar } from "./big-screen";
 import { ModeToggle } from "./components";
@@ -9,6 +9,7 @@ import { useSession, signOut as nextAuthSignOut } from "next-auth/react";
 export const Navbar = () => {
   const isBigScreen = useMediaQuery({ minWidth: 900 });
   const router = useRouter();
+  const pathName = usePathname();
   const hasMounted = useHasMounted();
   const session = useSession();
   const isAuthenticated = session.status == "authenticated";
@@ -29,7 +30,7 @@ export const Navbar = () => {
     if (isBigScreen)
       return (
         <BigScreenNavbar
-          currentPath={router.pathname}
+          currentPath={pathName}
           modeToggle={<ModeToggle />}
           user={user}
           isAuthenticated={isAuthenticated}
@@ -38,7 +39,7 @@ export const Navbar = () => {
       );
     return (
       <SmallScreenNavbar
-        currentPath={router.pathname}
+        currentPath={pathName}
         modeToggle={<ModeToggle />}
         isAuthenticated={isAuthenticated}
         signOut={handleSignOut}

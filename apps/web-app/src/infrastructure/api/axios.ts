@@ -1,12 +1,12 @@
-import axios, { AxiosInstance, AxiosError } from "axios";
-import { IHTTPClient } from '@edu-platform/common/api';
+import axiosClient, { AxiosInstance } from "axios";
+import { IHTTPClient } from "@edu-platform/common/api";
 
 // export class Fetch implements Fetcher
 export class AxiosFetcher implements IHTTPClient {
   private _instance: AxiosInstance;
 
   constructor(baseURL: string) {
-    this._instance = axios.create({ baseURL });
+    this._instance = axiosClient.create({ baseURL });
   }
 
   private _successHandler(res) {
@@ -21,7 +21,7 @@ export class AxiosFetcher implements IHTTPClient {
     //     message: e.cause
     //   }
     // }
-    if(e.response) {
+    if (e.response) {
       throw {
         status: e.response.status,
         message: e.response.data || e.message,
@@ -29,8 +29,8 @@ export class AxiosFetcher implements IHTTPClient {
     } else {
       throw {
         status: 500,
-        message: e.message
-      }
+        message: e.message,
+      };
     }
   }
 
@@ -77,3 +77,5 @@ export class AxiosFetcher implements IHTTPClient {
     this._instance.interceptors.response.use(response);
   }
 }
+
+export const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST);
