@@ -72,7 +72,7 @@ export const BigScreenNavbar = ({
 
   return (
     <>
-      <nav className="max-w-full min-h-[60px] bg-bkg">
+      <nav className="max-w-full min-h-[3rem] bg-bkg">
         <ul className="flex flex-row justify-between overflow-x-hidden">
           <li>
             <Logo />

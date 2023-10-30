@@ -1,3 +1,5 @@
+"use client";
+
 export * from "./buttons";
 export * from "./navbar";
 export * from "./toggle";
