@@ -93,6 +93,12 @@ export type CreateNewActivityResponseBody = {
   activityId: number;
 };
 
+//InsertQuestion [PUT activities/{activityId}/elements]
+/* export type InsertQuestionRequestBody = {
+  question: string || 
+};
+export type InsertQuestionResponseBody = {} */
+
 /* 
 --- CRIAR E EDITAR ATIVIDADE ---
 GetTopics [GET topics]

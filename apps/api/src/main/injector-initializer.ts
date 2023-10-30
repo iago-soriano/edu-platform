@@ -9,6 +9,9 @@ import {
   ChangePasswordRequestController,
   ChangePasswordController,
   CheckChangePasswordTokenRequestController,
+  InsertActivityController,
+  GetTopicsController,
+  CreateNewActivityController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -20,6 +23,9 @@ import {
   ChangePasswordRequestUseCase,
   ChangePasswordUseCase,
   CheckChangePasswordTokenRequestUseCase,
+  InsertActivityUseCase,
+  GetTopicsUseCase,
+  CreateNewActivityUseCase,
 } from "@use-cases";
 import {
   BCryptEncryptionService,
@@ -54,6 +60,13 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     checkChangePasswordTokenRequestController: awilix
       .asClass(CheckChangePasswordTokenRequestController)
       .classic(),
+    insertActivityController: awilix
+      .asClass(InsertActivityController)
+      .classic(),
+    getTopicsController: awilix.asClass(GetTopicsController).classic(),
+    createNewActivityController: awilix
+      .asClass(CreateNewActivityController)
+      .classic(),
 
     // services
     encryptionService: awilix.asClass(BCryptEncryptionService),
@@ -75,6 +88,11 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     changePasswordUseCase: awilix.asClass(ChangePasswordUseCase).classic(),
     checkChangePasswordTokenRequestUseCase: awilix
       .asClass(CheckChangePasswordTokenRequestUseCase)
+      .classic(),
+    insertActivityUseCase: awilix.asClass(InsertActivityUseCase).classic(),
+    getTopicsUseCase: awilix.asClass(GetTopicsUseCase).classic(),
+    createNewActivityUseCase: awilix
+      .asClass(CreateNewActivityUseCase)
       .classic(),
 
     // repositories
