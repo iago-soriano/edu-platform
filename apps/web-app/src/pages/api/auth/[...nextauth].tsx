@@ -2,10 +2,8 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { AxiosFetcher } from "@infrastructure";
-import { ApiClient } from "@edu-platform/common/api";
 
 export const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST);
-export const api = new ApiClient(axios);
 
 export default NextAuth({
   providers: [

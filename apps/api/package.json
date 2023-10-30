@@ -4,7 +4,7 @@
   "description": "API",
   "scripts": {
     "gen-env": "gen-env-types .env -o src/env.d.ts -e .",
-    "build": "npx prisma generate && tsc",
+    "build": "tsc",
     "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn  --exit-child --ignore-watch node_modules src/index.ts",
     "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./build/index.js",
     "test": "cross-env NODE_ENV=test jest --watchAll",
