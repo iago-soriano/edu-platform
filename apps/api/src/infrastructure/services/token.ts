@@ -1,7 +1,7 @@
 import { ITokenService } from "@interfaces";
 import { TokenGenerationError } from "@edu-platform/common/errors";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import fs from "fs";
+import fs from "fs/promises";
 import { OAuth2Client } from "google-auth-library";
 
 export class JWTTokenService implements ITokenService {
@@ -11,8 +11,8 @@ export class JWTTokenService implements ITokenService {
   client: OAuth2Client;
 
   constructor() {
-    this._privateKey = fs.readFileSync("./credentials/private.pem").toString();
-    this._publicKey = fs.readFileSync("./credentials/public.pem").toString();
+    this._privateKey = fs.readFile("./credentials/private.pem").toString();
+    this._publicKey = fs.readFile("./credentials/public.pem").toString();
     this.client = new OAuth2Client();
   }
 
@@ -50,10 +50,16 @@ export class JWTTokenService implements ITokenService {
           idToken: token,
           audience: process.env.GOOGLE_CLIENT_ID,
         });
-        const payload = ticket.getPayload();
-        const userid = payload["sub"];
-      } catch (ex) {
-        throw new Error(`Google verify JWT: ${ex}`);
+
+        if (!ticket || !ticket.getPayload() || !ticket.getUserId())
+          throw new TokenGenerationError({ error: "Unespecified JWT error" });
+
+        return {
+          id: ticket.getUserId(),
+          tokenVersion: 0,
+        };
+      } catch (e) {
+        throw new TokenGenerationError({ error: e.message });
       }
     }
   }
