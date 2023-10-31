@@ -1,18 +1,21 @@
-export interface UserDTO {
-  id: string;
-  name?: string;
-  email: string;
-  role?: string;
-  hashedPassword?: string;
-  tokenVersion: number;
-  image?: string;
-  emailVerified: boolean;
-  provider?: string;
-}
+import { users } from "@infrastructure";
+
+export type UserDTO = typeof users.$inferSelect;
+// export interface UserDTO {
+//   id: string;
+//   name?: string;
+//   email: string;
+//   role?: string;
+//   hashedPassword?: string;
+//   tokenVersion: number;
+//   image?: string;
+//   emailVerified: boolean;
+//   provider?: string;
+// }
 
 export enum TokenType {
   VerifyAccount,
-  ChangePasswordRequest
+  ChangePasswordRequest,
 }
 
 export interface TokenDTO {
@@ -23,7 +26,6 @@ export interface TokenDTO {
   userId?: string;
   type: TokenType;
 }
-
 
 // export interface StudentOutputDTO {
 //   activityId: number;
