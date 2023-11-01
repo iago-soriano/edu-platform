@@ -11,8 +11,10 @@ export class JWTTokenService implements ITokenService {
   client: OAuth2Client;
 
   constructor() {
-    this._privateKey = fs.readFile("./credentials/private.pem").toString();
-    this._publicKey = fs.readFile("./credentials/public.pem").toString();
+    // this._privateKey = fs.readFile("./credentials/private.pem").toString();
+    // this._publicKey = fs.readFile("./credentials/public.pem").toString();
+    this._privateKey = process.env.PRIVATE_KEY;
+    this._publicKey = process.env.PUBLIC_KEY;
     this.client = new OAuth2Client();
   }
 

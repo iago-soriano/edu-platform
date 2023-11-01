@@ -1,30 +1,32 @@
-import {
-  IBaseCollection,
-  ITokenRepository,
-  TokenDTO,
-  TokenType,
-} from "@interfaces";
+import { ITokenRepository, TokenInsertDTO, TokenType } from "@interfaces";
+import { db, tokens } from "@infrastructure";
+import { eq, and } from "drizzle-orm";
 
 export class TokenRepository implements ITokenRepository {
-  _db: IBaseCollection<TokenDTO>;
-
-  constructor(baseDb: { [tableName: string]: IBaseCollection<TokenDTO> }) {
-    this._db = baseDb.Tokens;
+  async getTokenByTokenValue(token: string, type: TokenType) {
+    return (
+      await db
+        .select()
+        .from(tokens)
+        .where(and(eq(tokens.type, type), eq(tokens.value, token)))
+    )[0];
   }
 
-  getTokenByTokenValue(token: string, type: TokenType) {
-    return this._db.getFirstWhere({ conditions: { token, type } });
-  } //
+  getTokensByUserId(userId: number, type: TokenType) {
+    return db
+      .select()
+      .from(tokens)
+      .where(and(eq(tokens.type, type), eq(tokens.userId, userId)));
+  }
 
-  getTokenByUserId(userId: string, type: TokenType) {
-    return this._db.getManyWhere({ conditions: { userId, type }, page: 0 });
-  } //
+  insertToken(token: TokenInsertDTO) {
+    return db.insert(tokens).values(token);
+  }
 
-  insertToken(token: TokenDTO) {
-    return this._db.insertOne(token);
-  } //
-
-  updateTokenByValue(token: string, data: Partial<TokenDTO>) {
-    return this._db.partiallyUpdateOneWhere({ token }, data);
-  } //
+  updateTokenByValue(token: string, data: TokenInsertDTO) {
+    return db
+      .update(tokens)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(tokens.value, token));
+  }
 }

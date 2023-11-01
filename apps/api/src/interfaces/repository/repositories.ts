@@ -1,28 +1,34 @@
-import { UserDTO, TokenDTO, TokenType } from "..";
+import {
+  UserInsertDTO,
+  UserSelectDTO,
+  TokenSelectDTO,
+  TokenInsertDTO,
+  TokenType,
+} from "..";
 
 export interface IUserRepository {
-  getUserById: (id: string) => Promise<UserDTO | null>;
-  getUserByEmail: (email: string) => Promise<UserDTO | null>;
+  getUserById: (id: number) => Promise<UserSelectDTO | null>;
+  getUserByEmail: (email: string) => Promise<UserSelectDTO | null>;
   getUserByEmailAndProvider: (
     email: string,
     provider: string
-  ) => Promise<UserDTO | null>;
-  insertUser: (user: UserDTO) => Promise<UserDTO>;
-  updateUser: (id: string, user: Partial<UserDTO>) => Promise<boolean>;
+  ) => Promise<UserSelectDTO | null>;
+  insertUser: (user: UserInsertDTO) => Promise<{ userId: number }>;
+  updateUser: (id: number, user: Partial<UserSelectDTO>) => Promise<boolean>;
 }
 
 export interface ITokenRepository {
   getTokenByTokenValue: (
     token: string,
     type: TokenType
-  ) => Promise<TokenDTO | null>;
-  getTokenByUserId: (
-    userId: string,
+  ) => Promise<TokenSelectDTO | null>;
+  getTokensByUserId: (
+    userId: number,
     type: TokenType
-  ) => Promise<TokenDTO[] | null>;
-  insertToken: (token: TokenDTO) => Promise<TokenDTO>;
+  ) => Promise<TokenSelectDTO[] | null>;
+  insertToken: (token: TokenInsertDTO) => Promise<unknown>;
   updateTokenByValue: (
     value: string,
-    data: Partial<TokenDTO>
-  ) => Promise<boolean>;
+    data: Partial<TokenInsertDTO>
+  ) => Promise<unknown>;
 }

@@ -2,7 +2,7 @@ import {
   IUserRepository,
   IEncryptionService,
   ITokenService,
-  UserDTO,
+  UserSelectDTO,
   IUseCase,
 } from "@interfaces";
 import {
@@ -34,7 +34,7 @@ class UseCase implements ISignInUseCase {
   ) {}
 
   async execute({ email, password }: InputParams) {
-    let userDTO: UserDTO;
+    let userDTO: UserSelectDTO;
 
     if (email && password) {
       userDTO = await this.userRepository.getUserByEmail(email);
@@ -54,7 +54,7 @@ class UseCase implements ISignInUseCase {
     }
 
     const token = this.tokenService.generate({
-      id: userDTO.id || "",
+      id: userDTO.id,
       tokenVersion: userDTO.tokenVersion,
     });
 

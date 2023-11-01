@@ -3,7 +3,7 @@
     "configurations": [
       {
         "command": "cd apps/api && npm run dev", 
-        "name": "Run npm dev", 
+        "name": "Backend", 
         "request": "launch", 
         "type": "node-terminal",
         "outFiles":["${workspaceFolder}/apps/api/build/**/*.js"],
@@ -13,19 +13,7 @@
           ],
       },
       {
-        "name": "Next.js: debug server-side",
-        "type": "node-terminal",
-        "request": "launch",
-        "command": "npm run dev"
-      },
-      {
-        "name": "Next.js: debug client-side",
-        "type": "chrome",
-        "request": "launch",
-        "url": "http://localhost:3000"
-      },
-      {
-        "name": "Next.js: debug full stack",
+        "name": "Frontend + Backend",
         "type": "node-terminal",
         "request": "launch",
         "command": "npm run dev",

@@ -1,10 +1,7 @@
-import {
-  IUserRepository,
-  IUseCase
-} from "@interfaces";
+import { IUserRepository, IUseCase } from "@interfaces";
 
 type InputParams = {
-  id: string;
+  id: number;
   tokenVersion: number;
 };
 type Return = void;
@@ -12,9 +9,7 @@ type Return = void;
 export type ISignOutUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ISignOutUseCase {
-  constructor(
-    private userRepository: IUserRepository,
-  ) {}
+  constructor(private userRepository: IUserRepository) {}
 
   async execute({ id, tokenVersion }) {
     const userDTO = await this.userRepository.getUserById(id);

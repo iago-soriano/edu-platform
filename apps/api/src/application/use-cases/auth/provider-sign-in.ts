@@ -2,8 +2,8 @@ import {
   IUserRepository,
   IEncryptionService,
   ITokenService,
-  UserDTO,
-  IUseCase
+  UserSelectDTO,
+  IUseCase,
 } from "@interfaces";
 import {
   CredentialsNotProvidedError,
@@ -17,7 +17,7 @@ type InputParams = {
 };
 type Return = {
   token: string;
-  user: UserDTO
+  user: UserSelectDTO;
 };
 
 export type IProviderSignInUseCase = IUseCase<InputParams, Return>;
@@ -29,9 +29,12 @@ class UseCase implements IProviderSignInUseCase {
   ) {}
 
   async execute({ email, provider }) {
-    let userDTO: UserDTO;
+    let userDTO: UserSelectDTO;
 
-    userDTO = await this.userRepository.getUserByEmailAndProvider(email, provider);
+    userDTO = await this.userRepository.getUserByEmailAndProvider(
+      email,
+      provider
+    );
     if (!userDTO) throw new InvalidCredentialsError();
 
     const token = this.tokenService.generate({
@@ -41,7 +44,7 @@ class UseCase implements IProviderSignInUseCase {
 
     return {
       token,
-      user: userDTO
+      user: userDTO,
     };
   }
 }

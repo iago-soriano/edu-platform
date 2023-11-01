@@ -35,7 +35,7 @@ class UseCase implements IChangePasswordUseCase {
   }: InputParams) {
     const token = await this.tokenRepository.getTokenByTokenValue(
       changePasswordToken,
-      TokenType.ChangePasswordRequest
+      "ChangePasswordRequest"
     );
 
     if (!token) throw new InvalidValidationTokenError();
@@ -56,7 +56,7 @@ class UseCase implements IChangePasswordUseCase {
       tokenVersion: user.tokenVersion + 1,
     });
 
-    await this.tokenRepository.updateTokenByValue(token.token, {
+    await this.tokenRepository.updateTokenByValue(token.value, {
       expiresAt: Date.now(),
     });
   }

@@ -1,30 +1,38 @@
-import { IBaseCollection, IUserRepository, UserDTO } from "@interfaces";
+import { IUserRepository, UserInsertDTO } from "@interfaces";
 import { db, users } from "@infrastructure";
+import { eq, and } from "drizzle-orm";
 
 export class UserRepository implements IUserRepository {
-  _db: IBaseCollection<UserDTO>;
-
-  constructor(baseDb: { [tableName: string]: IBaseCollection<UserDTO> }) {
-    this._db = baseDb.Users;
+  async getUserById(id: number) {
+    return (await db.select().from(users).where(eq(users.id, id)))[0];
   }
 
-  getUserById(id: string) {
-    return this._db.getOneById(id);
+  async getUserByEmail(email: string) {
+    return (await db.select().from(users).where(eq(users.email, email)))[0];
   }
 
-  getUserByEmail(email: string) {
-    return this._db.getFirstWhere({ conditions: { email } });
+  async getUserByEmailAndProvider(email: string, provider: string) {
+    return (
+      await db
+        .select()
+        .from(users)
+        .where(and(eq(users.email, email), eq(users.provider, provider)))
+    )[0];
   }
 
-  getUserByEmailAndProvider(email: string, provider: string) {
-    return this._db.getFirstWhere({ conditions: { email, provider } });
+  async insertUser(user: UserInsertDTO) {
+    return (
+      await db.insert(users).values(user).returning({ userId: users.id })
+    )[0];
   }
 
-  insertUser(user: UserDTO) {
-    const resp = db.insert(users).values(user);
-  }
-
-  updateUser(id: string, user: Partial<UserDTO>) {
-    return this._db.partiallyUpdateOne(id, user);
+  async updateUser(id: number, user: UserInsertDTO) {
+    return !!(
+      await db
+        .update(users)
+        .set({ ...user, updatedAt: new Date() })
+        .where(eq(users.id, id))
+        .returning({ userId: users.id })
+    )[0];
   }
 }

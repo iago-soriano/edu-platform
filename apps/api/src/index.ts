@@ -1,8 +1,8 @@
 import * as awilix from "awilix";
 import dotenv from "dotenv";
-import { registerServer, registerDependencies } from "@main";
+dotenv.config(); // call this before importing main, because that will use env variables
 
-dotenv.config();
+import { registerServer, registerDependencies } from "@main";
 
 const container = awilix.createContainer();
 

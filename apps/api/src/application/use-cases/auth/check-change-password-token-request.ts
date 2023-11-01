@@ -18,7 +18,7 @@ class UseCase implements ICheckChangePasswordTokenRequestUseCase {
     const changePasswordRequestToken =
       await this.tokenRepository.getTokenByTokenValue(
         token,
-        TokenType.ChangePasswordRequest
+        "ChangePasswordRequest"
       );
 
     if (
