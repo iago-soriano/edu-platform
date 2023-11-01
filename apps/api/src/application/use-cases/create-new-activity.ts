@@ -1,9 +1,9 @@
-import { IUseCase, UserDTO } from "@interfaces";
+import { IUseCase, UserDTO, TopicDTO } from "@interfaces";
 
 type InputParams = {
   title: string;
   description: string;
-  topics: string[];
+  topics: TopicDTO[];
   user: UserDTO;
 };
 

@@ -5,13 +5,13 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import {
-  CreateNewActivityRequestBody,
-  CreateNewActivityResponseBody,
+  UpsertActivityRequestBody,
+  UpsertActivityResponseBody,
 } from "@edu-platform/common/api";
 import { ICreateNewActivityUseCase } from "application/use-cases/create-new-activity";
 
-type Request = TypedRequest<{}, {}, CreateNewActivityRequestBody>;
-type Response = TypedResponse<CreateNewActivityResponseBody>;
+type Request = TypedRequest<{}, {}, UpsertActivityRequestBody>;
+type Response = TypedResponse<UpsertActivityResponseBody>;
 
 export class CreateNewActivityController implements HTTPController {
   method = HttpMethod.POST;

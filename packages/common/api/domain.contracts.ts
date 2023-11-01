@@ -1,117 +1,65 @@
-import { HTTPControllerDefinition } from "./interfaces";
-
-// sign-in
-export interface SignInRequestBody {
-  email: string;
-  password: string;
-}
-export interface SignInResponseBody {
-  token: string;
-  user: { email: string; name?: string; image?: string };
-}
-
-export type ProviderSignInRequestBody = { email: string; provider: string };
-export type ProviderSignInResponseBody = {
-  token: string;
-  user: { email: string; name?: string; image?: string };
-};
-
-// sign-up
-export interface SignUpRequestBody {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  name: string;
-}
-export interface SignUpResponseBody {}
-
-export interface ProviderSignUpRequestBody {
-  email: string;
-  id: string;
-  image: string;
-  provider: string;
-  name: string;
-}
-export interface ProviderSignUpResponseBody {}
-
-// sign-out
-export interface SignOutRequestBody {}
-export interface SignOutResponseBody {}
-
-// verify account
-export interface VerifyAccountRequestBody {
-  verifyAccountToken: string;
-}
-export interface VerifyAccountResponseBody {}
-
-// change password request
-export interface ChangePasswordRequestRequestBody {
-  email: string;
-}
-export interface ChangePasswordRequestResponseBody {}
-
-// change password
-export interface ChangePasswordRequestBody {
-  changePasswordToken: string;
-  newPassword: string;
-  confirmNewPassword: string;
-}
-export interface ChangePasswordResponseBody {}
-
-// check change password token
-export type CheckChangePasswordTokenRequestQueryParams = {
-  token: string;
-};
-export interface CheckChangePasswordTokenResponseBody {
-  isValid: boolean;
-}
-
-// InsertActivity [POST activities]
-// pego o user pelo jwt, crio uma activity com status draft
-export type InsertActivityRequestBody = {
-  title: string;
-  description: string;
-  topics: string[];
-};
-export type InsertActivityResponseBody = {
-  activityId: number;
-};
-
 // GetTopics [GET topics]
+// devolve todos os topics do bd
 export type GetTopicsRequestBody = {};
 export type GetTopicsResponseBody = {
-  topics: string[];
+  topicIds: string[];
 };
 
-// Create New Activity [POST activities]
-export type CreateNewActivityRequestBody = {
+// UpsertActivity [POST activities]
+/*
+(Obs: no front, apertar botão de criar atividade e entrar na página de criação com os defaults
+ para title, descr e topics. Esse botão chama este endpoint. 
+Obs2: no front, no onBlur de cada alteração)
+ /* 
+- se for informado um activityId, obter a activity
+- obtenho do db os topics informados pelo id
+- crio uma activity a partir do objeto de domínio
+- insiro activity no db
+*/
+export type UpsertActivityRequestBody = {
   title: string;
   description: string;
-  topics: string[];
+  topicIds: string[];
+  activityId?: number;
 };
-export type CreateNewActivityResponseBody = {
+export type UpsertActivityResponseBody = {
   activityId: number;
 };
 
-//InsertQuestion [PUT activities/{activityId}/elements]
-/* export type InsertQuestionRequestBody = {
-  question: string || 
+//InsertQuestion [PUT activities/{activityId}/questions]
+/**
+  pegar a activity do bd
+  criar objeto da question
+  inserir a question na activity
+ */
+export type InsertQuestionRequestBody = {
+  text: string;
+  answerKey: string;
+  type: string;
+  choices?: {
+    text: string;
+    comment: string;
+    label: string;
+  }[];
 };
-export type InsertQuestionResponseBody = {} */
+export type InsertQuestionResponseBody = {
+  questionId: number;
+};
 
+// Insert Content [PUT activities/{activityId}/contents]
+export type InsertContentRequestBody = {
+  title: string;
+  content: string;
+  description: string;
+  type: string;
+};
+
+export type InsertContentResponseBody = {
+  contentId: number;
+};
 /* 
 --- CRIAR E EDITAR ATIVIDADE ---
-GetTopics [GET topics]
-  devolve todos os topics do bd (ou de um enum estático no backend)
-  <- {topics[]}
 
-(Obs: no front, apertar botão de criar atividade e entrar na página de criação com os defaults
- para title, descr e topics. Só deixar inserir elements depois de alterar esses valores e 
- apertar em salvar. Esse botão chama este endpoint.)
-CreateNewActivity [POST activities]
-  -> { title, description, topics }
-  cria uma activity 
-  <- { activityId }
 
 (Ao inserir um element, usar este endpoint com optimistic update)
 InsertElement [PUT activities/{activityId}/elements]

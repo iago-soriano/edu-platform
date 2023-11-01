@@ -1,2 +1,2 @@
 export * from "./interfaces";
-export * from "./contracts";
+export * from "./domain.contracts";

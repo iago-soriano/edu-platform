@@ -12,7 +12,7 @@ export interface UserDTO {
 
 export enum TokenType {
   VerifyAccount,
-  ChangePasswordRequest
+  ChangePasswordRequest,
 }
 
 export interface TokenDTO {
@@ -24,6 +24,10 @@ export interface TokenDTO {
   type: TokenType;
 }
 
+export interface TopicDTO {
+  id: number;
+  label: string;
+}
 
 // export interface StudentOutputDTO {
 //   activityId: number;

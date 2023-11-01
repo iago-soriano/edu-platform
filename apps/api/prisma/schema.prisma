@@ -120,8 +120,9 @@ model ActivityContent {
 
   type ContentType
 
-  content String // url ou texto
-  title   String?
+  content     String // url ou texto
+  description String
+  title       String?
 
   Activity   Activity? @relation(fields: [activityId], references: [id])
   activityId Int?
