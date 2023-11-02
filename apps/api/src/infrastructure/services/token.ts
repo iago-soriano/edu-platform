@@ -1,7 +1,6 @@
 import { ITokenService } from "@interfaces";
 import { TokenGenerationError } from "@edu-platform/common/errors";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import fs from "fs/promises";
 import { OAuth2Client } from "google-auth-library";
 
 export class JWTTokenService implements ITokenService {

@@ -19,14 +19,8 @@ export const tokenType = pgEnum("tokenType", [
 
 export const tokens = pgTable("token", {
   id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at", {
-    withTimezone: true,
-    precision: 0,
-  }).defaultNow(),
-  updatedAt: timestamp("updated_at", {
-    withTimezone: true,
-    precision: 0,
-  }).defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
   value: varchar("value", { length: 256 }),
   type: tokenType("token_type"),
   userId: integer("user_id").references(() => users.id),
@@ -42,14 +36,8 @@ export const tokensRelations = relations(tokens, ({ one }) => ({
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at", {
-    withTimezone: true,
-    precision: 0,
-  }).defaultNow(),
-  updatedAt: timestamp("updated_at", {
-    withTimezone: true,
-    precision: 0,
-  }).defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   name: varchar("name", { length: 50 }),
   email: varchar("email", { length: 256 }),
   hashedPassword: varchar("hashed_password", { length: 256 }),
@@ -68,15 +56,9 @@ export type NewUser = typeof users.$inferInsert; // insert type
 
 export const topics = pgTable("topics", {
   id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at", {
-    withTimezone: true,
-    precision: 0,
-  }).defaultNow(),
-  updatedAt: timestamp("updated_at", {
-    withTimezone: true,
-    precision: 0,
-  }).defaultNow(),
-  label: varchar("title", { length: 50 }),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  label: varchar("label", { length: 50 }),
 });
 
 export const topicsRelations = relations(topics, ({ many }) => ({
@@ -91,14 +73,8 @@ export const activityStatus = pgEnum("activityStatus", [
 
 export const activities = pgTable("activities", {
   id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at", {
-    withTimezone: true,
-    precision: 0,
-  }).defaultNow(),
-  updatedAt: timestamp("updated_at", {
-    withTimezone: true,
-    precision: 0,
-  }).defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
   title: varchar("title", { length: 256 }),
   description: varchar("description", { length: 256 }),
   status: activityStatus("activity_status"),
