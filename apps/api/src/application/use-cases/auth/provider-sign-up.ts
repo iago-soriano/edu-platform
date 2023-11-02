@@ -2,8 +2,8 @@ import {
   IUserRepository,
   IEncryptionService,
   ITokenService,
-  UserDTO,
-  IUseCase
+  UserInsertDTO,
+  IUseCase,
 } from "@interfaces";
 
 type InputParams = {
@@ -11,7 +11,7 @@ type InputParams = {
   email: string;
   name: string;
   image: string;
-  provider: string
+  provider: string;
 };
 type Return = void;
 
@@ -19,16 +19,16 @@ export type IProviderSignUpUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IProviderSignUpUseCase {
   constructor(
-    private userRepository: IUserRepository,
-    // private profileImageRepository: IProfileImageRepository
-  ) {}
+    private userRepository: IUserRepository
+  ) // private profileImageRepository: IProfileImageRepository
+  {}
 
   async execute({ id, email, name, image, provider }) {
     const existingUser = await this.userRepository.getUserByEmail(email);
 
     if (existingUser) return;
 
-    const userDTO: UserDTO = {
+    const userDTO: UserInsertDTO = {
       id,
       email,
       name,

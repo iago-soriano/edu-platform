@@ -37,9 +37,9 @@ class UseCase implements IChangePasswordRequestUseCase {
         `Por favor, utilize sua conta do ${user.provider} para entrar`
       );
 
-    const tokens = await this.tokenRepository.getTokenByUserId(
+    const tokens = await this.tokenRepository.getTokensByUserId(
       user.id,
-      TokenType.ChangePasswordRequest
+      "ChangePasswordRequest"
     );
 
     if (
@@ -52,10 +52,10 @@ class UseCase implements IChangePasswordRequestUseCase {
     const changePasswordToken = this.idService.getId();
 
     await this.tokenRepository.insertToken({
-      token: changePasswordToken,
+      value: changePasswordToken,
       userId: user.id,
-      type: TokenType.ChangePasswordRequest,
-      createdAt: Date.now(),
+      type: "ChangePasswordRequest",
+      // createdAt: Date.now(),
       expiresAt: Date.now() + 1000 * 60 * 60 * 3,
     });
 

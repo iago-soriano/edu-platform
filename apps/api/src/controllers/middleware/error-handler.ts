@@ -1,16 +1,14 @@
 import { CustomError } from "@edu-platform/common/errors";
 import { Request, Response, HTTPErrorController } from "@interfaces";
-// import { handlePrismaError } from "./prisma-error-handler";
 
-export class ErrorHandlerController implements HTTPErrorController{
+export class ErrorHandlerController implements HTTPErrorController {
   execute(error: Error, _: Request, res: Response<{}>) {
-
-      if (error instanceof CustomError) {
-        res.status(error.HTTPstatusCode || 500).json(error.message);
-        return;
-      }
-
-      console.error(error);      
-      res.status(500).json(error.toString());
+    if (error instanceof CustomError) {
+      res.status(error.HTTPstatusCode || 500).json(error.message);
+      return;
     }
-  };
+
+    console.error(error);
+    res.status(500).json(error.toString());
+  }
+}

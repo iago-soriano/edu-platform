@@ -4,7 +4,7 @@ import {
   ErrorRequestHandler,
   RequestHandler,
 } from "express";
-import { UserDTO } from "@interfaces";
+import { UserSelectDTO } from "@interfaces";
 
 export enum HttpMethod {
   GET = "get",
@@ -30,5 +30,5 @@ export type Request<Params = {}, Query = {}, Body = {}> = ExpressRequest<
   {},
   Body,
   Query
-> & { user: UserDTO };
+> & { user: UserSelectDTO };
 export type Response<Body> = ExpressResponse<Body>;

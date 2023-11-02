@@ -35,7 +35,6 @@ import {
   UserRepository,
   TokenRepository,
   AssetRepository,
-  nedDb,
 } from "@infrastructure";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
@@ -96,7 +95,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
 
     // repositories
-    baseDb: awilix.asValue(nedDb),
     userRepository: awilix.asClass(UserRepository).classic(),
     tokenRepository: awilix.asClass(TokenRepository).classic(),
   });

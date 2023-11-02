@@ -2,7 +2,7 @@ import {
   IUserRepository,
   ITokenRepository,
   IUseCase,
-  TokenType
+  TokenType,
 } from "@interfaces";
 import {
   InvalidValidationTokenError,
@@ -26,7 +26,7 @@ class UseCase implements IVerifyAccountUseCase {
   async execute({ verifyAccountToken }: InputParams) {
     const verificationToken = await this.tokenRepository.getTokenByTokenValue(
       verifyAccountToken,
-      TokenType.VerifyAccount
+      "VerifyAccount"
     );
 
     if (!verificationToken) throw new InvalidValidationTokenError();
@@ -36,7 +36,7 @@ class UseCase implements IVerifyAccountUseCase {
     );
     if (!user) throw new UserNotFoundError();
 
-    if(user.emailVerified) return;
+    if (user.emailVerified) return;
 
     await this.userRepository.updateUser(user.id, { emailVerified: true });
   }

@@ -5,7 +5,7 @@ import {
   IIdGenerator,
   IEmailService,
   IAssetRepository,
-  UserDTO,
+  UserInsertDTO,
   IUseCase,
   TokenType,
 } from "@interfaces";
@@ -46,28 +46,25 @@ class UseCase implements ISignUpUseCase {
     if (password !== confirmPassword) throw new PasswordsDontMatchError();
 
     const token = this.idService.getId();
-    const userId = this.idService.getId();
 
-    const userDTO: UserDTO = {
-      id: userId,
+    const userDTO: UserInsertDTO = {
       email: user.email,
       name: user.name,
-      // image: this.assetRepository.getGenericImageUrl(),
       emailVerified: false,
       hashedPassword: await this.encryptionService.encrypt(user.password),
       tokenVersion: 0,
     };
 
+    const { userId } = await this.userRepository.insertUser(userDTO);
+    await this.tokenRepository.insertToken({
+      value: token,
+      userId,
+      type: "VerifyAccount",
+    });
+
     await this.emailService.sendVerifyAccountEmail({
       destination: email,
       url: `${process.env.WEB_APP_URL}/verify-account?verificationToken=${token}`,
-    });
-
-    await this.userRepository.insertUser(userDTO);
-    await this.tokenRepository.insertToken({
-      token,
-      userId,
-      type: TokenType.VerifyAccount,
     });
   }
 }

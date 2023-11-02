@@ -1,104 +1,12 @@
-export interface UserDTO {
-  id: string;
-  name?: string;
-  email: string;
-  role?: string;
-  hashedPassword?: string;
-  tokenVersion: number;
-  image?: string;
-  emailVerified: boolean;
-  provider?: string;
-}
+import { users, tokens, tokenType } from "@infrastructure";
 
-export enum TokenType {
-  VerifyAccount,
-  ChangePasswordRequest,
-}
+export type UserSelectDTO = typeof users.$inferSelect;
+export type UserInsertDTO = typeof users.$inferInsert;
 
-export interface TokenDTO {
-  id?: string;
-  token: string;
-  createdAt?: number;
-  expiresAt?: number;
-  userId?: string;
-  type: TokenType;
-}
+export type TokenType =
+  | (typeof tokenType.enumValues)[0]
+  | (typeof tokenType.enumValues)[1]
+  | (typeof tokenType.enumValues)[2];
 
-export interface TopicDTO {
-  id: number;
-  label: string;
-}
-
-// export interface StudentOutputDTO {
-//   activityId: number;
-//   studentId: string;
-//   outputs: InstructionStudentOutputDTO[];
-//   feedbackGiven: boolean;
-// }
-
-// export interface FeedbackToInstructionStudentOutputDTO {
-//   message: string;
-// }
-
-// export interface InstructorDTO {
-//   id: string;
-//   userId: string;
-//   user?: UserDTO;
-// }
-
-// export interface StudentDTO {
-//   id: string;
-//   userId: string;
-//   cefr: CEFR;
-//   user?: UserDTO;
-// }
-
-// export interface InstructionStudentOutputDTO {
-//   id?: string;
-//   optionsSelectionsIds?: ActivityInstructionOptionDTO[];
-//   textOutput?: string;
-//   feedback?: FeedbackToInstructionStudentOutputDTO;
-// }
-
-// export interface ActivityInstructionOptionDTO {
-//   id: string;
-//   text: string;
-// }
-
-// export interface ActivityInstructionDTO {
-//   id?: string;
-//   text: string;
-//   optionsAnswers?: { id: string }[];
-//   isMultiCorrect?: boolean;
-//   textAnswer?: string;
-//   options?: ActivityInstructionOptionDTO[];
-//   type: INSTRUCTIONTYPE;
-// }
-
-// export type CEFR = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
-// export type CONTENTTYPE = "TEXT" | "VIDEO";
-// export type INSTRUCTIONTYPE = "TEXT" | "OPTIONS";
-
-// export interface ActivityDTO {
-//   id?: number;
-//   instructorId: string;
-//   title: string;
-//   contentType: CONTENTTYPE;
-//   content: string;
-//   startTime?: number;
-//   endTime?: number;
-//   cefr: CEFR;
-//   topics: string[];
-//   instructions?: ActivityInstructionDTO[];
-//   timeToComplete: number;
-//   createdAt?: Date;
-//   description?: string;
-// }
-
-// export interface AssociationInvitationTokenDTO {
-//   id?: string;
-//   studentId: string;
-//   instructorId: string;
-//   accepted: boolean;
-//   token: string;
-// }
+export type TokenSelectDTO = typeof tokens.$inferSelect;
+export type TokenInsertDTO = typeof tokens.$inferInsert;
