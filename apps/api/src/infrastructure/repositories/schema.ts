@@ -23,7 +23,7 @@ export const tokens = pgTable("token", {
     withTimezone: true,
     precision: 0,
   }).defaultNow(),
-  updated: timestamp("updated_at", {
+  updatedAt: timestamp("updated_at", {
     withTimezone: true,
     precision: 0,
   }).defaultNow(),
@@ -72,7 +72,7 @@ export const topics = pgTable("topics", {
     withTimezone: true,
     precision: 0,
   }).defaultNow(),
-  updated: timestamp("updated_at", {
+  updatedAt: timestamp("updated_at", {
     withTimezone: true,
     precision: 0,
   }).defaultNow(),
@@ -95,7 +95,7 @@ export const activities = pgTable("activities", {
     withTimezone: true,
     precision: 0,
   }).defaultNow(),
-  updated: timestamp("updated_at", {
+  updatedAt: timestamp("updated_at", {
     withTimezone: true,
     precision: 0,
   }).defaultNow(),
