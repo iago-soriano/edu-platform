@@ -2,10 +2,10 @@
 // devolve todos os topics do bd
 export type GetTopicsRequestBody = {};
 export type GetTopicsResponseBody = {
-  topicIds: string[];
+  topics: { id: number; label: string }[];
 };
 
-// UpsertActivity [POST activities]
+// SaveActivity [POST activities]
 /*
 (Obs: no front, apertar botão de criar atividade e entrar na página de criação com os defaults
  para title, descr e topics. Esse botão chama este endpoint. 
@@ -16,13 +16,13 @@ Obs2: no front, no onBlur de cada alteração)
 - crio uma activity a partir do objeto de domínio
 - insiro activity no db
 */
-export type UpsertActivityRequestBody = {
+export type SaveActivityRequestBody = {
   title: string;
   description: string;
   topicIds: string[];
   activityId?: number;
 };
-export type UpsertActivityResponseBody = {
+export type SaveActivityResponseBody = {
   activityId: number;
 };
 

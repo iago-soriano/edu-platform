@@ -9,6 +9,6 @@ export * from "./auth/verify-account";
 export * from "./auth/change-password-request";
 export * from "./auth/change-password";
 export * from "./auth/check-change-password-token-request";
-export * from "./insert-activity";
+export * from "./save-activity";
 export * from "./get-topics";
-export * from "./create-new-activity";
+export * from "./save-activity";

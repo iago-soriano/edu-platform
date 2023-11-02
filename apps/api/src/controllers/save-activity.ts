@@ -5,29 +5,29 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import {
-  InsertActivityRequestBody,
-  InsertActivityResponseBody,
+  SaveActivityRequestBody,
+  SaveActivityResponseBody,
 } from "@edu-platform/common/api";
-import { IInsertActivityUseCase } from "application/use-cases/insert-activity";
+import { ISaveActivityUseCase } from "@use-cases";
 
-type Request = TypedRequest<{}, {}, InsertActivityRequestBody>;
-type Response = TypedResponse<InsertActivityResponseBody>;
+type Request = TypedRequest<{}, {}, SaveActivityRequestBody>;
+type Response = TypedResponse<SaveActivityResponseBody>;
 
-export class InsertActivityController implements HTTPController {
+export class SaveActivityController implements HTTPController {
   method = HttpMethod.POST;
   path: string = "activities";
   middlewares: string[] = ["auth"];
 
-  constructor(private insertActivityUseCase: IInsertActivityUseCase) {}
+  constructor(private insertActivityUseCase: ISaveActivityUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { title, description, topics } = req.body;
+    const { title, description, topicIds } = req.body;
     const { user } = req;
 
     const { activityId } = await this.insertActivityUseCase.execute({
       title,
       description,
-      topics,
+      topicIds,
       user,
     });
 

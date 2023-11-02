@@ -19,13 +19,8 @@ import ChangePasswordUseCase, {
 import CheckChangePasswordTokenRequestUseCase, {
   ICheckChangePasswordTokenRequestUseCase,
 } from "./auth/check-change-password-token-request";
-import InsertActivityUseCase, {
-  IInsertActivityUseCase,
-} from "./insert-activity";
 import GetTopicsUseCase, { IGetTopicsUseCase } from "./get-topics";
-import CreateNewActivityUseCase, {
-  ICreateNewActivityUseCase,
-} from "./create-new-activity";
+import SaveActivityUseCase, { ISaveActivityUseCase } from "./save-activity";
 
 export {
   SignInUseCase,
@@ -46,10 +41,8 @@ export {
   IChangePasswordUseCase,
   CheckChangePasswordTokenRequestUseCase,
   ICheckChangePasswordTokenRequestUseCase,
-  InsertActivityUseCase,
-  IInsertActivityUseCase,
   GetTopicsUseCase,
   IGetTopicsUseCase,
-  CreateNewActivityUseCase,
-  ICreateNewActivityUseCase,
+  SaveActivityUseCase,
+  ISaveActivityUseCase,
 };

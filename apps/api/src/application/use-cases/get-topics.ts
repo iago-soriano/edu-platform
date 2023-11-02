@@ -1,9 +1,9 @@
-import { IUseCase, UserDTO } from "@interfaces";
+import { IUseCase } from "@interfaces";
 
 type InputParams = void;
 
 type Return = {
-  topics: string[];
+  topics: { id: number; label: string }[];
 };
 
 export type IGetTopicsUseCase = IUseCase<InputParams, Return>;
@@ -12,7 +12,7 @@ class UseCase implements IGetTopicsUseCase {
   constructor() {}
 
   async execute() {
-    return { topics: ["top", "massa"] };
+    return { topics: [{ id: 1, label: "massa" }] };
   }
 }
 
