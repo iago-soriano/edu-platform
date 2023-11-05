@@ -33,6 +33,8 @@ import {
   UserRepository,
   TokenRepository,
   AssetRepository,
+  TopicsRepository,
+  ActivityRepository,
 } from "@infrastructure";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
@@ -81,11 +83,13 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     checkChangePasswordTokenRequestUseCase: awilix
       .asClass(CheckChangePasswordTokenRequestUseCase)
       .classic(),
-    insertActivityUseCase: awilix.asClass(SaveActivityUseCase).classic(),
+    saveActivityUseCase: awilix.asClass(SaveActivityUseCase).classic(),
     getTopicsUseCase: awilix.asClass(GetTopicsUseCase).classic(),
 
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),
     tokenRepository: awilix.asClass(TokenRepository).classic(),
+    topicsRepository: awilix.asClass(TopicsRepository).classic(),
+    activitiesRepository: awilix.asClass(ActivityRepository).classic(),
   });
 };

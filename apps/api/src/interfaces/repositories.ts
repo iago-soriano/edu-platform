@@ -4,7 +4,10 @@ import {
   TokenSelectDTO,
   TokenInsertDTO,
   TokenType,
-} from "..";
+  ActivityInsertDTO,
+  ActivitySelectDTO,
+  TopicDTO,
+} from "./dtos";
 
 export interface IUserRepository {
   getUserById: (id: number) => Promise<UserSelectDTO | null>;
@@ -31,4 +34,21 @@ export interface ITokenRepository {
     value: string,
     data: Partial<TokenInsertDTO>
   ) => Promise<unknown>;
+}
+
+export interface IActivitiesRepository {
+  insertActivityAndNewVersion: (
+    args: ActivityInsertDTO,
+    topicIds: number[]
+  ) => Promise<{ activityId: number; versionId: number }>;
+  getActivityById: (activityId: number) => Promise<ActivitySelectDTO>;
+  updateActivity: (
+    activityId: number,
+    args: ActivityInsertDTO,
+    topicIds: number[]
+  ) => Promise<void>;
+}
+
+export interface ITopicsRepository {
+  findAllOrThrow: (ids: number[]) => Promise<TopicDTO[]>;
 }

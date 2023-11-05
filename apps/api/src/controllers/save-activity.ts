@@ -18,19 +18,25 @@ export class SaveActivityController implements HTTPController {
   path: string = "activities";
   middlewares: string[] = ["auth"];
 
-  constructor(private insertActivityUseCase: ISaveActivityUseCase) {}
+  constructor(private saveActivityUseCase: ISaveActivityUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { title, description, topicIds } = req.body;
-    const { user } = req;
-
-    const { activityId } = await this.insertActivityUseCase.execute({
+    const {
       title,
       description,
+      topicIds,
+      activityId: requestActivityId,
+    } = req.body;
+    const { user } = req;
+
+    const { activityId, versionId } = await this.saveActivityUseCase.execute({
+      title,
+      description,
+      activityId: requestActivityId,
       topicIds,
       user,
     });
 
-    res.status(200).json({ activityId });
+    res.status(200).json({ activityId, versionId });
   }
 }

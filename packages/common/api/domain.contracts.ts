@@ -19,11 +19,12 @@ Obs2: no front, no onBlur de cada alteração)
 export type SaveActivityRequestBody = {
   title: string;
   description: string;
-  topicIds: string[];
+  topicIds: number[];
   activityId?: number;
 };
 export type SaveActivityResponseBody = {
-  activityId: number;
+  activityId?: number;
+  versionId?: number;
 };
 
 //InsertQuestion [PUT activities/{activityId}/questions]

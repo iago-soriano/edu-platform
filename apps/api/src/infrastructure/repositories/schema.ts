@@ -10,8 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
-// declaring enum in database
-export const tokenType = pgEnum("tokenType", [
+export const tokenTypeEnum = pgEnum("tokenType", [
   "VerifyAccount",
   "ForgotPassword",
   "ChangePasswordRequest",
@@ -19,10 +18,10 @@ export const tokenType = pgEnum("tokenType", [
 
 export const tokens = pgTable("token", {
   id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   value: varchar("value", { length: 256 }),
-  type: tokenType("token_type"),
+  type: tokenTypeEnum("token_type"),
   userId: integer("user_id").references(() => users.id),
   expiresAt: integer("expires_at"),
 });
@@ -39,7 +38,7 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   name: varchar("name", { length: 50 }),
-  email: varchar("email", { length: 256 }),
+  email: varchar("email", { length: 256 }).unique(),
   hashedPassword: varchar("hashed_password", { length: 256 }),
   tokenVersion: integer("token_version"),
   image: varchar("image", { length: 256 }),
@@ -52,12 +51,10 @@ export const usersRelations = relations(users, ({ many }) => ({
   tokens: many(tokens),
 }));
 
-export type NewUser = typeof users.$inferInsert; // insert type
-
 export const topics = pgTable("topics", {
   id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   label: varchar("label", { length: 50 }),
 });
 
@@ -65,7 +62,7 @@ export const topicsRelations = relations(topics, ({ many }) => ({
   activityTopics: many(activityHasTopicsRelationTable),
 }));
 
-export const activityStatus = pgEnum("activityStatus", [
+export const activityStatusEnum = pgEnum("activityStatus", [
   "Draft",
   "Archived",
   "Published",
@@ -73,13 +70,14 @@ export const activityStatus = pgEnum("activityStatus", [
 
 export const activities = pgTable("activities", {
   id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   title: varchar("title", { length: 256 }),
   description: varchar("description", { length: 256 }),
-  status: activityStatus("activity_status"),
+  status: activityStatusEnum("activity_status").default("Draft"),
 
   authorId: integer("author_id").references(() => users.id),
+  lastVersionId: integer("last_version_id"),
 });
 
 export const activitiesRelations = relations(activities, ({ many, one }) => ({
@@ -88,6 +86,11 @@ export const activitiesRelations = relations(activities, ({ many, one }) => ({
     fields: [activities.authorId],
     references: [users.id],
   }),
+  lastVersion: one(activityVersions, {
+    fields: [activities.lastVersionId],
+    references: [activityVersions.id],
+  }),
+  activityVersions: many(activityVersions),
 }));
 
 export const activityHasTopicsRelationTable = pgTable(
@@ -116,6 +119,28 @@ export const activityHasTopicsRelations = relations(
       fields: [activityHasTopicsRelationTable.topicId],
       references: [topics.id],
     }),
+  })
+);
+
+export const activityVersions = pgTable("activity_version", {
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+
+  version: integer("version").default(0),
+  activityId: integer("activity_id").references(() => activities.id),
+});
+
+export const activityVersionsRelations = relations(
+  activityVersions,
+  ({ one }) => ({
+    activity: one(activities, {
+      fields: [activityVersions.activityId],
+      references: [activities.id],
+      relationName: "allVersions",
+    }),
+    // questions: many(),
+    // contents: many()
   })
 );
 

@@ -1,16 +1,11 @@
-import { 
-  InvalidPasswordError, 
+import {
+  InvalidPasswordError,
   InvalidRoleError,
   InvalidNameError,
-  InvalidEmailError
+  InvalidEmailError,
 } from "@edu-platform/common/errors";
-import {
-  validateEmail,
-} from '@infrastructure';
-import {
-  AuthRules,
-  DomainRules
-} from "@edu-platform/common/domain";
+import { validateEmail } from "@infrastructure";
+import { AuthRules, DomainRules } from "@edu-platform/common/domain";
 
 interface UserConstructorParams {
   name?: string;
@@ -27,7 +22,6 @@ export class User {
 
   constructor(args: UserConstructorParams) {
     if (args.email) this.setEmail(args.email);
-    if (args.role) this.setRole(args.role);
     if (args.password) this.setPassword(args.password);
   }
 
@@ -44,11 +38,6 @@ export class User {
       throw new InvalidNameError();
     }
     this.name = name;
-  }
-
-  setRole(role: string) {
-    if (!DomainRules.USER.ROLES.includes(role)) throw new InvalidRoleError();
-    this.role = role;
   }
 
   setPassword(password: string) {
