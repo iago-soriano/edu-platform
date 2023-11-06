@@ -8,6 +8,7 @@ import {
 
 export interface IUserRepository {
   getUserById: (id: number) => Promise<UserSelectDTO | null>;
+  getUserByProviderId: (id: string) => Promise<UserSelectDTO | null>;
   getUserByEmail: (email: string) => Promise<UserSelectDTO | null>;
   getUserByEmailAndProvider: (
     email: string,

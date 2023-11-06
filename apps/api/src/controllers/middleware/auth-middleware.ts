@@ -1,4 +1,10 @@
-import { ITokenService, IUserRepository, Request } from "@interfaces";
+import {
+  ITokenService,
+  IUserRepository,
+  JWTPayload,
+  Request,
+  UserSelectDTO,
+} from "@interfaces";
 import {
   MissingTokenError,
   MalformedTokenError,
@@ -20,7 +26,7 @@ export class AuthenticationMiddlewareController {
     const [header, token] = headers.authorization.split(" ");
     if (header !== "Bearer") throw new MalformedTokenError();
 
-    let tokenPayload;
+    let tokenPayload: JWTPayload;
     try {
       tokenPayload = await this.tokenService.verify(token);
     } catch (e) {
@@ -35,7 +41,11 @@ export class AuthenticationMiddlewareController {
     )
       throw new InsufficientTokenError();
 
-    const userDTO = await this.userRepository.getUserById(tokenPayload.id);
+    let userDTO: UserSelectDTO;
+    if (tokenPayload.id)
+      userDTO = await this.userRepository.getUserById(tokenPayload.id);
+    else if (tokenPayload.providerId)
+      await this.userRepository.getUserByProviderId(tokenPayload.providerId);
 
     if (!userDTO) throw new UserNotFoundError();
 

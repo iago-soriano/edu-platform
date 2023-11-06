@@ -3,7 +3,6 @@ import {
   SignInController,
   SignOutController,
   SignUpController,
-  ProviderSignInController,
   ProviderSignUpController,
   VerifyAccountController,
   ChangePasswordRequestController,
@@ -14,7 +13,6 @@ import {
   SignInUseCase,
   SignOutUseCase,
   SignUpUseCase,
-  ProviderSignInUseCase,
   ProviderSignUpUseCase,
   VerifyAccountUseCase,
   ChangePasswordRequestUseCase,
@@ -40,9 +38,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     providerSignUpController: awilix
       .asClass(ProviderSignUpController)
       .classic(),
-    providerSignInController: awilix
-      .asClass(ProviderSignInController)
-      .classic(),
     verifyAccountController: awilix.asClass(VerifyAccountController).classic(),
     changePasswordRequestController: awilix
       .asClass(ChangePasswordRequestController)
@@ -66,7 +61,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     signOutUseCase: awilix.asClass(SignOutUseCase).classic(),
     signUpUseCase: awilix.asClass(SignUpUseCase).classic(),
     providerSignUpUseCase: awilix.asClass(ProviderSignUpUseCase).classic(),
-    providerSignInUseCase: awilix.asClass(ProviderSignInUseCase).classic(),
     verifyAccountUseCase: awilix.asClass(VerifyAccountUseCase).classic(),
     changePasswordRequestUseCase: awilix
       .asClass(ChangePasswordRequestUseCase)

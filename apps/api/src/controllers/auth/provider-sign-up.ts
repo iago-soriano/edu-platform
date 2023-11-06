@@ -25,7 +25,7 @@ export class ProviderSignUpController implements HTTPController {
     await this.providerSignUpUseCase.execute({
       email,
       name,
-      id,
+      providerId: id,
       provider,
       image,
     });

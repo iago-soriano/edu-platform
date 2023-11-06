@@ -45,6 +45,7 @@ export const users = pgTable("users", {
   image: varchar("image", { length: 256 }),
   emailVerified: boolean("email_verified"),
   provider: varchar("provider", { length: 50 }),
+  providerId: varchar("provider_id", { length: 50 }),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({

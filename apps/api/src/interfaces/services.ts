@@ -1,6 +1,12 @@
+export type JWTPayload = {
+  tokenVersion: number;
+  id?: number;
+  providerId?: string;
+};
+
 export interface ITokenService {
-  generate: (payload: any) => string;
-  verify: (token: string) => Promise<any>;
+  generate: (payload: JWTPayload) => string;
+  verify: (token: string) => Promise<JWTPayload>;
 }
 
 export interface IIdGenerator {
