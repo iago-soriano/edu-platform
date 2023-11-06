@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Heading } from "@components";
 import { PageStyled } from "./styles";
 import {
   useVerifyAccountMutation,
@@ -28,18 +27,16 @@ export const Page = () => {
     if (!verified)
       return (
         <>
-          <Heading level={1}>
+          <h1>
             Um e-mail de verificação de conta foi enviado para o seu e-mail.
-          </Heading>
-          <Heading level={3}>
-            Clique no botão enviado no e-mail para entrar.
-          </Heading>
+          </h1>
+          <h3>Clique no botão enviado no e-mail para entrar.</h3>
         </>
       );
     if (verified)
       return (
         <>
-          <Heading>Bem-vindo(a)!</Heading>
+          <h1>Bem-vindo(a)!</h1>
           <a href="/sign-in">Entrar</a>
         </>
       );

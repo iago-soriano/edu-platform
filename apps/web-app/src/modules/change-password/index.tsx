@@ -5,7 +5,6 @@ import {
   Footer,
   FormButton,
   ErrorAlert,
-  Heading,
   errorToast,
   successToast,
   Input,
@@ -48,7 +47,7 @@ export const Page = () => {
       );
     return (
       <FormContainer>
-        <Heading>Redefinir senha</Heading>
+        <h1>Redefinir senha</h1>
         {error && (
           <>
             <ErrorAlert>{error}</ErrorAlert>

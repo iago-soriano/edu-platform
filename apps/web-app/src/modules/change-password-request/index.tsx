@@ -6,7 +6,6 @@ import {
   FormButton,
   ErrorAlert,
   SuccessAlert,
-  Heading,
   errorToast,
   successToast,
 } from "@components";
