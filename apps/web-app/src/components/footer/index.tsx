@@ -55,7 +55,7 @@ export const Footer = () => {
         <div className="[&>a]:block lg:col-span-3 md:col-span-7 md:col-start-10 col-span-8">
           <FooterHeading>Contato</FooterHeading>
           <p className="text-gray-500">
-            <Icons.EMAIL />
+            <Icons.EMAIL style={{ display: "inline" }} />
             <span className="px-2 inline-block">iago.srm.is@gmail.com</span>
           </p>
         </div>

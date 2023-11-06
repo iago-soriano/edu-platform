@@ -1,6 +1,6 @@
-import { ITokenService } from "@interfaces";
+import { ITokenService, JWTPayload } from "@interfaces";
 import { TokenGenerationError } from "@edu-platform/common/errors";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt, { JwtPayload as LibJWTPayload } from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 
 export class JWTTokenService implements ITokenService {
@@ -17,7 +17,7 @@ export class JWTTokenService implements ITokenService {
     this.client = new OAuth2Client();
   }
 
-  generate(args: any) {
+  generate(args: JWTPayload) {
     try {
       const resp = jwt.sign({ data: args }, this._privateKey, {
         issuer: process.env.HOST_NAME,
@@ -31,14 +31,14 @@ export class JWTTokenService implements ITokenService {
 
   async verify(token: string) {
     const { payload } = jwt.decode(token, { complete: true });
-    const issuer = (payload as JwtPayload)?.iss;
+    const issuer = (payload as LibJWTPayload)?.iss;
 
     if (!issuer) throw new Error(`JWT issuer not found: ${payload}`);
 
     if (issuer === process.env.HOST_NAME) {
       try {
-        const payload = jwt.verify(token, this._publicKey) as any;
-        return payload.data;
+        const payload = jwt.verify(token, this._publicKey) as LibJWTPayload;
+        return payload.data as JWTPayload;
       } catch (e) {
         console.error(e.message);
       }
@@ -56,7 +56,7 @@ export class JWTTokenService implements ITokenService {
           throw new TokenGenerationError({ error: "Unespecified JWT error" });
 
         return {
-          id: ticket.getUserId(),
+          providerId: ticket.getUserId(),
           tokenVersion: 0,
         };
       } catch (e) {

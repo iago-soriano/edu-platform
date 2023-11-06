@@ -21,8 +21,8 @@ export default () => {
     useSignInPage();
 
   return (
-    <div>
-      <h2 className="">Entrar</h2>
+    <>
+      <h3 className="py-3 inline-block">Entrar</h3>
       <GoogleSignInButton
         isLoading={googleSignInMutation.isLoading}
         onClick={googleSignInMutation.mutate}
@@ -51,7 +51,7 @@ export default () => {
           loading={credentialsSignInMutation.isLoading}
         />
       </Form>
-    </div>
+    </>
   );
 };
 

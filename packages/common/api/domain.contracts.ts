@@ -27,13 +27,8 @@ export type SaveActivityResponseBody = {
   versionId?: number;
 };
 
-//InsertQuestion [PUT activities/{activityId}/questions]
-/**
-  pegar a activity do bd
-  criar objeto da question
-  inserir a question na activity
- */
-export type InsertQuestionRequestBody = {
+//SaveQuestion [PUT activities/{activityId}/questions]
+export type SaveQuestionRequestBody = {
   text: string;
   answerKey: string;
   type: string;
@@ -42,46 +37,32 @@ export type InsertQuestionRequestBody = {
     comment: string;
     label: string;
   }[];
+  questionId?: number;
 };
 export type InsertQuestionResponseBody = {
-  questionId: number;
+  questionId?: number;
 };
 
-// Insert Content [PUT activities/{activityId}/contents]
-export type InsertContentRequestBody = {
+// Save Content [PUT activities/{activityId}/contents]
+export type SaveContentRequestBody = {
   title: string;
   content: string;
   description: string;
   type: string;
+  contentId?: number;
 };
 
-export type InsertContentResponseBody = {
+export type SaveContentResponseBody = {
   contentId: number;
 };
+
 /* 
 --- CRIAR E EDITAR ATIVIDADE ---
-
-
-(Ao inserir um element, usar este endpoint com optimistic update)
-InsertElement [PUT activities/{activityId}/elements]
-  -> { element }
-  pegar a activity do bd
-  criar objetos de domínio do element (content ou question)
-  - pensar nas validações dos elements
-  inserir o element na activity
-  <- ok
-
 (Para a página de realizar atividade)
 GetActivity [GET activities/{activityId}]
   vê se existe student-output deste user nesta atividade. Se houver, retornar. 
   pega activity e todos os seus contents
   <- { activity, studentOutput? (lista de answers com seus feedbacks associados) }
-
-ChangeActivityStatus [PATCH activities/{activityId}/status]
-  -> {status }
-  pega activity, valida se ela pertence ao user que está fazendo a requisição
-  muda seu status se validações (a determinar) passarem
-  <- ok
 
 GetAuthoredActivities [GET activities]
   pega todas as atividades de que esse usuário é autor

@@ -34,7 +34,6 @@ class UseCase implements ISaveActivityUseCase {
     user,
   }: InputParams) {
     const topics = await this.topicsRepository.findAllOrThrow(topicIds);
-
     const activity = new Activity(title, description, topics);
 
     if (requestActivityId) {

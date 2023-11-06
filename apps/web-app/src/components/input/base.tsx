@@ -1,5 +1,5 @@
 import React from "react";
-import { Tooltip, QuestionTooltip } from "@components";
+import { Tooltip, Icons } from "@components";
 import {
   InputStyled,
   ErrorMessageContainer,
@@ -26,11 +26,17 @@ export function Input(args: IInputProps) {
   const mandatoryTooltip = (
     <Tooltip content={"É preciso preencher para continuar"}>
       {"("}
-      <span style={{ color: "red" }}>&#10033;</span>
+      <span className="text-red-500">&#10033;</span>
       {")"}
     </Tooltip>
   );
-  const explanationTooltip = <QuestionTooltip content={tooltipExplanation} />;
+  const explanationTooltip = (
+    <Tooltip content={tooltipExplanation}>
+      <span>
+        <Icons.QUESTION_CIRCLE weight="fill" />
+      </span>
+    </Tooltip>
+  );
 
   return (
     <InputLabelStyled style={{ display: hidden ? "none" : "block" }}>

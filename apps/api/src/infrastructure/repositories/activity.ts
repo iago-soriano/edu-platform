@@ -53,27 +53,29 @@ export class ActivityRepository implements IActivitiesRepository {
   async updateActivity(
     activityId: number,
     activity: ActivityInsertDTO,
-    topicIds: number[]
+    topicIds?: number[]
   ) {
     await db.transaction(async (tx) => {
       await tx
         .update(activities)
-        .set(activity)
+        .set({ ...activity, updatedAt: new Date() })
         .where(eq(activities.id, activityId));
 
-      await tx
-        .delete(activityHasTopicsRelationTable)
-        .where(eq(activityHasTopicsRelationTable.activityId, activityId));
+      if (topicIds) {
+        await tx
+          .delete(activityHasTopicsRelationTable)
+          .where(eq(activityHasTopicsRelationTable.activityId, activityId));
 
-      const topicRelationInserts = topicIds.map(
-        async (topicId) =>
-          await tx.insert(activityHasTopicsRelationTable).values({
-            activityId,
-            topicId,
-          })
-      );
+        const topicRelationInserts = topicIds.map(
+          async (topicId) =>
+            await tx.insert(activityHasTopicsRelationTable).values({
+              activityId,
+              topicId,
+            })
+        );
 
-      await Promise.all(topicRelationInserts);
+        await Promise.all(topicRelationInserts);
+      }
     });
   }
 }

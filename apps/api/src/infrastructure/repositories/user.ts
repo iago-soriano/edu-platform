@@ -7,6 +7,10 @@ export class UserRepository implements IUserRepository {
     return (await db.select().from(users).where(eq(users.id, id)))[0];
   }
 
+  async getUserByProviderId(id: string) {
+    return (await db.select().from(users).where(eq(users.providerId, id)))[0];
+  }
+
   async getUserByEmail(email: string) {
     return (await db.select().from(users).where(eq(users.email, email)))[0];
   }

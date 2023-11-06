@@ -1,9 +1,6 @@
 import SignInUseCase, { ISignInUseCase } from "./auth/sign-in";
 import SignUpUseCase, { ISignUpUseCase } from "./auth/sign-up";
 import SignOutUseCase, { ISignOutUseCase } from "./auth/sign-out";
-import ProviderSignInUseCase, {
-  IProviderSignInUseCase,
-} from "./auth/provider-sign-in";
 import ProviderSignUpUseCase, {
   IProviderSignUpUseCase,
 } from "./auth/provider-sign-up";
@@ -29,8 +26,6 @@ export {
   ISignUpUseCase,
   SignOutUseCase,
   ISignOutUseCase,
-  ProviderSignInUseCase,
-  IProviderSignInUseCase,
   ProviderSignUpUseCase,
   IProviderSignUpUseCase,
   VerifyAccountUseCase,

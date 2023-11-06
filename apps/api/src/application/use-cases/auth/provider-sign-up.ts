@@ -7,11 +7,11 @@ import {
 } from "@interfaces";
 
 type InputParams = {
-  id: string;
   email: string;
   name: string;
   image: string;
   provider: string;
+  providerId: string;
 };
 type Return = void;
 
@@ -19,17 +19,16 @@ export type IProviderSignUpUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IProviderSignUpUseCase {
   constructor(
-    private userRepository: IUserRepository
-  ) // private profileImageRepository: IProfileImageRepository
-  {}
+    private userRepository: IUserRepository // private profileImageRepository: IProfileImageRepository
+  ) {}
 
-  async execute({ id, email, name, image, provider }) {
+  async execute({ providerId, email, name, image, provider }) {
     const existingUser = await this.userRepository.getUserByEmail(email);
 
     if (existingUser) return;
 
     const userDTO: UserInsertDTO = {
-      id,
+      providerId,
       email,
       name,
       image,
