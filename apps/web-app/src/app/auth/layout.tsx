@@ -13,7 +13,7 @@ export default ({ children }) => {
             alt="Picture of the author"
           />
         </div>
-        <div className="p-5 my-0 mx-auto xl:w-[50%] w-[90%] lg:w-[70%]">
+        <div className="flex flex-col justify-between h-full lg:py-20 py-5 my-0 mx-auto xl:w-[50%] w-[90%] lg:w-[70%]">
           {children}
         </div>
       </div>

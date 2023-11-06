@@ -47,5 +47,12 @@ export const Navbar = () => {
     );
   }
 
-  return <nav />;
+  return (
+    <SmallScreenNavbar
+      currentPath={pathName}
+      modeToggle={<ModeToggle />}
+      isAuthenticated={isAuthenticated}
+      signOut={handleSignOut}
+    />
+  );
 };

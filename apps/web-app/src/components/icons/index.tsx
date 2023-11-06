@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Envelope, Question } from "@phosphor-icons/react";
 import {
   faPen,
   faTimes,
@@ -38,7 +39,9 @@ export const Icons = {
   CHEVRON_DOWN: ({ onClick }: any) => (
     <FontAwesomeIcon icon={faAngleDown} onClick={onClick} />
   ),
-  QUESTION_CIRCLE: () => <FontAwesomeIcon icon={faQuestionCircle} />,
+  QUESTION_CIRCLE: (props) => (
+    <Question size={16} style={{ display: "inline" }} {...props} />
+  ),
   GLOBE: () => <FontAwesomeIcon icon={faGlobe} />,
   SEARCH: () => <FontAwesomeIcon icon={faSearch} />,
   CHECK: () => <FontAwesomeIcon icon={faCheck} />,
@@ -52,7 +55,7 @@ export const Icons = {
     <FontAwesomeIcon icon={faArrowRightFromBracket} {...props} />
   ),
   USER: () => <FontAwesomeIcon icon={faUser} />,
-  EMAIL: () => <FontAwesomeIcon icon={faEnvelope} />,
+  EMAIL: (props) => <Envelope size={16} {...props} />,
   // EMPTY_HEART: () => <FaRegHeart />,
   // FULL_HEART: () => <FaHeart />,
 };
