@@ -2,7 +2,7 @@
 // devolve todos os topics do bd
 export type GetTopicsRequestBody = {};
 export type GetTopicsResponseBody = {
-  topics: { id: number; label: string }[];
+  topics: { id: number; createdAt: Date; updatedAt: Date; label: string }[];
 };
 
 // SaveActivity [POST activities]

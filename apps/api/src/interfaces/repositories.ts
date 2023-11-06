@@ -52,4 +52,5 @@ export interface IActivitiesRepository {
 
 export interface ITopicsRepository {
   findAllOrThrow: (ids: number[]) => Promise<TopicDTO[]>;
+  getAllTopics: () => Promise<TopicDTO[]>;
 }

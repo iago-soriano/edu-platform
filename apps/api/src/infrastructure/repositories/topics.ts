@@ -28,4 +28,8 @@ export class TopicsRepository implements ITopicsRepository {
       throw new DatabaseError(ex);
     }
   }
+
+  async getAllTopics() {
+    return await db.select().from(topicsTable);
+  }
 }

@@ -1,18 +1,19 @@
-import { IUseCase } from "@interfaces";
+import { ITopicsRepository, IUseCase } from "@interfaces";
 
 type InputParams = void;
 
 type Return = {
-  topics: { id: number; label: string }[];
+  topics: { id: number; createdAt: Date; updatedAt: Date; label: string }[];
 };
 
 export type IGetTopicsUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IGetTopicsUseCase {
-  constructor() {}
+  constructor(private topicsRepository: ITopicsRepository) {}
 
   async execute() {
-    return { topics: [{ id: 1, label: "massa" }] };
+    const topics = await this.topicsRepository.getAllTopics();
+    return { topics };
   }
 }
 
