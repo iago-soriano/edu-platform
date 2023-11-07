@@ -1,10 +1,10 @@
 module "vpc" {
-  source = "../network"
+  source = "./network"
   tags        = var.tags
 }
 
 module "db" {
-  source = "../db"
+  source = "./db"
 
   tags        = var.tags
 
