@@ -1,8 +1,8 @@
+"use client";
 import {
   PasswordInput,
   Input,
   Form,
-  Footer,
   FormButton,
   ErrorAlert,
   GoogleSignInButton,
@@ -13,15 +13,14 @@ import {
   useCredentialsSignUpMutation,
   useGoogleSignInMutation,
 } from "@infrastructure";
-import { useEffect } from "react";
 
-export const Page = () => {
+export default () => {
   const { googleSignInMutation, credentialsSignUpMutation, errorAlert } =
     useSignUpPage();
 
   return (
-    <div className="min-h-[80vh] flex flex-col justify-evenly">
-      <h2 className="text-txt">Criar conta</h2>
+    <>
+      <h3 className="py-3 inline-block">Criar conta</h3>
       <GoogleSignInButton
         onClick={googleSignInMutation.mutate}
         isLoading={googleSignInMutation.isLoading}
@@ -55,7 +54,7 @@ export const Page = () => {
           loading={credentialsSignUpMutation.isLoading}
         />
       </Form>
-    </div>
+    </>
   );
 };
 

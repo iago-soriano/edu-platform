@@ -5,26 +5,20 @@ export const StyledBurger = styled.button<{ open: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  /* width: 60px;
-  height: 100%;
-  cursor: pointer; */
-  /* width: 2rem; */
+
   width: 4rem;
-  height: 100%;
   background: transparent;
   border: none;
-  //padding: 0;
-  //z-index: 10;
+  height: 4.7rem;
+
   cursor: pointer;
   overflow-x: hidden;
   padding: 1rem 0.5rem 0.5rem 1rem;
-  height: 100%;
 
   transition: opacity ease-in-out 150ms;
   &:hover,
   &:focus {
     opacity: 0.8;
-    /* outline: none; */
   }
 
   div {
@@ -38,7 +32,6 @@ export const StyledBurger = styled.button<{ open: boolean }>`
     transform-origin: 1px;
 
     :first-child {
-      /* transform: ${({ open }) => (open ? "rotate(45deg)" : "rotate(0)")}; */
       transform: ${({ open }) =>
         open
           ? `

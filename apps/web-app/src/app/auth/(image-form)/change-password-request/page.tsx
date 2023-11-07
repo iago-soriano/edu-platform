@@ -1,8 +1,8 @@
+"use client";
 import { useEffect } from "react";
 import {
   Input,
   Form,
-  Footer,
   FormButton,
   ErrorAlert,
   SuccessAlert,
@@ -13,15 +13,12 @@ import {
   useChangePasswordRequestMutation,
   changePasswordRequestSchema,
 } from "@infrastructure";
-import { PageContainer, FormContainer } from "./styles";
 
 export const Page = () => {
   const { error, onSubmit, loading, isSuccess } = useRequest();
 
   return (
-    // <>
-    //   <PageContainer>
-    <FormContainer>
+    <>
       <h1 className="my-20">Trocar senha</h1>
       {error && <ErrorAlert>{error}</ErrorAlert>}
       {isSuccess && (
@@ -38,10 +35,7 @@ export const Page = () => {
         />
         <FormButton label="Enviar" loading={loading} disabled={isSuccess} />
       </Form>
-    </FormContainer>
-    //   </PageContainer>
-    //   <Footer />
-    // </>
+    </>
   );
 };
 

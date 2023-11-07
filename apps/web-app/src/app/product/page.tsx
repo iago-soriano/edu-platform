@@ -1,6 +1,6 @@
 import { Footer } from "@components";
 
-export const Page = () => {
+export default () => {
   return (
     <>
       <section className="min-h-[70vh] bg-bkg">Hero</section>

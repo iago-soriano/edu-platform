@@ -1,4 +1,4 @@
-import { NextRouter } from "next/router";
+import { NextRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 
 export const useQueryParam = (paramName: string, router: NextRouter) => {
