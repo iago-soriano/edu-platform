@@ -22,6 +22,7 @@ export type ActivityInsertDTO = typeof activities.$inferInsert;
 export type ActivitySelectDTO = typeof activities.$inferSelect;
 
 export type ActivityStatusType = (typeof activityStatusEnum.enumValues)[number];
+export const ActivityStatusEnum = activityStatusEnum.enumValues;
 
 export type ActivityVersionInsertDTO = typeof activityVersions.$inferSelect;
 export type ActivityVersionSelectDTO = typeof activityVersions.$inferInsert;
