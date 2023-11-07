@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { PageStyled } from "./styles";
+import { useRouter } from "next/navigation";
 import {
   useVerifyAccountMutation,
   LocalStorageHelper,
@@ -30,19 +29,27 @@ export const Page = () => {
           <h1>
             Um e-mail de verificação de conta foi enviado para o seu e-mail.
           </h1>
-          <h3>Clique no botão enviado no e-mail para entrar.</h3>
+          <h3 className="text-txt opacity-80">
+            Clique no botão enviado no e-mail para entrar.
+          </h3>
         </>
       );
     if (verified)
       return (
         <>
           <h1>Bem-vindo(a)!</h1>
-          <a href="/sign-in">Entrar</a>
+          <a className="text-txt" href="auth/sign-in">
+            Entrar
+          </a>
         </>
       );
   };
 
-  return <PageStyled>{renderPage()}</PageStyled>;
+  return (
+    <div className="flex h-[80vh] justify-center items-center flex-col text-center">
+      {renderPage()}
+    </div>
+  );
 };
 
 const useVerifyAccount = () => {

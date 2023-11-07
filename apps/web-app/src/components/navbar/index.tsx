@@ -16,6 +16,7 @@ export const Navbar = () => {
   const user = session.data?.user;
   const credentialsSignOut = useSignOutMutation();
 
+  // console.log({ session, user, isAuthenticated });
   const handleSignOut = () => {
     nextAuthSignOut({
       redirect: false,

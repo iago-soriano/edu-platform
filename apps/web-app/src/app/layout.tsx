@@ -23,7 +23,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const serverSession = await getServerSession();
-  console.log({ serverSession });
   return (
     <StyledJsxRegistry>
       <ThemeProvider>

@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import {
   PasswordInput,
@@ -15,7 +16,6 @@ import {
   changePasswordSchema,
   useQueryParam,
 } from "@infrastructure";
-import { PageContainer, FormContainer } from "./styles";
 import { useRouter } from "next/router";
 import { Spinner } from "@components";
 
@@ -23,62 +23,47 @@ export const Page = () => {
   const { token, isVerifying, isValid } = useVerifyToken();
   const { error, onSubmit, loading, isSuccess } = useChangePassword();
 
-  const renderContent = () => {
-    if (isVerifying && !isValid)
-      return (
-        <div
-          style={{
-            width: "200",
-            height: "200",
-            maxWidth: "200",
-          }}
-        >
-          <Spinner />
-        </div>
-      );
-    if (!isValid)
-      return (
-        <div id="invalid-token">
-          <h1>O token não é válido.</h1>
-          <a href="/change-password-request">
+  if (isVerifying && !isValid)
+    return (
+      <div className="w-52 h-52 max-w-[200px]">
+        <Spinner />
+      </div>
+    );
+  if (!isValid)
+    return (
+      <div id="invalid-token">
+        <h1>O token não é válido.</h1>
+        <a href="auth/change-password-request">
+          Solicite uma nova troca de senha
+        </a>
+      </div>
+    );
+  return (
+    <>
+      <h1>Redefinir senha</h1>
+      {error && (
+        <>
+          <ErrorAlert>{error}</ErrorAlert>
+          <a href="auth/change-password-request">
             Solicite uma nova troca de senha
           </a>
-        </div>
-      );
-    return (
-      <FormContainer>
-        <h1>Redefinir senha</h1>
-        {error && (
-          <>
-            <ErrorAlert>{error}</ErrorAlert>
-            <a href="/change-password-request">
-              Solicite uma nova troca de senha
-            </a>
-          </>
-        )}
-        <Form onSubmit={onSubmit} schema={changePasswordSchema}>
-          <Input hidden value={token} readOnly name="token" />
-          <PasswordInput
-            name="password"
-            inputLabel={{ text: "Senha", mandatory: true }}
-            placeholder="Digite aqui sua senha"
-          />
-          <PasswordInput
-            name="confirmPassword"
-            inputLabel={{ text: "Confirmação de Senha", mandatory: true }}
-            placeholder="Digite novamente sua senha"
-          />
-          <FormButton label="Enviar" loading={loading} disabled={isSuccess} />
-        </Form>
-      </FormContainer>
-    );
-  };
-
-  return (
-    <PageContainer>
-      {renderContent()}
-      <Footer />
-    </PageContainer>
+        </>
+      )}
+      <Form onSubmit={onSubmit} schema={changePasswordSchema}>
+        <Input hidden value={token} readOnly name="token" />
+        <PasswordInput
+          name="password"
+          inputLabel={{ text: "Senha", mandatory: true }}
+          placeholder="Digite aqui sua senha"
+        />
+        <PasswordInput
+          name="confirmPassword"
+          inputLabel={{ text: "Confirmação de Senha", mandatory: true }}
+          placeholder="Digite novamente sua senha"
+        />
+        <FormButton label="Enviar" loading={loading} disabled={isSuccess} />
+      </Form>
+    </>
   );
 };
 
@@ -110,7 +95,7 @@ const useChangePassword = () => {
     },
     onSuccess: () => {
       successToast("Troca de senha realizada com sucesso");
-      router.push("/sign-in");
+      router.push("auth/sign-in");
     },
   });
 

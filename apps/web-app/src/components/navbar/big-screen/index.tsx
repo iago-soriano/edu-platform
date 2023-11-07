@@ -44,7 +44,7 @@ export const BigScreenNavbar = ({
     console.log("nav");
     setIsDropdownOpen(false);
   });
-  // console.log({ isDropdownOpen });
+  console.log({ user, isAuthenticated });
   const getAuthenticatedSection = () => {
     if (!isAuthenticated)
       return (

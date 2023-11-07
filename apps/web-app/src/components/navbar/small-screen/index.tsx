@@ -40,13 +40,13 @@ export const SmallScreenNavbar = ({
 
   return (
     <>
-      <nav className="justify-between max-w-fullmin-h-[60px] bg-bkg">
-        <ul className="flex flex-row justify-between overflow-hidden">
+      <nav className="justify-between max-w-full h-[6.7rem] bg-bkg">
+        <ul className="flex flex-row justify-between overflow-hidden h-full">
           <li>
             <Logo />
           </li>
           <li>
-            <div className="flex flex-row h-full">
+            <div className="flex flex-row h-full items-center">
               {modeToggle}
               <HamburguerButton
                 ref={addRef}

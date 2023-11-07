@@ -91,7 +91,7 @@ export const MyProfileButton = ({
 
 export const SignInButton = ({ currentPath, Component }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/sign-in"
+    path="/auth/sign-in"
     label="Entrar"
     currentPath={currentPath}
     Component={Component}
@@ -101,7 +101,7 @@ export const SignInButton = ({ currentPath, Component }: NavbarButtonProps) => (
 
 export const SignUpButton = ({ currentPath, Component }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/sign-up"
+    path="/auth/sign-up"
     label="Cadastrar"
     currentPath={currentPath}
     Component={Component}

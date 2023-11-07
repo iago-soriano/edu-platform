@@ -3,9 +3,9 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { AxiosFetcher } from "@infrastructure";
 
-export const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST);
+const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST);
 
-export default NextAuth({
+const handler = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -57,7 +57,7 @@ export default NextAuth({
       // happens whenever application mounts or page refocuses
       // account, user and profile only on signin. on refocus, only token.
       // console.log('JWT');
-      // console.log({ token, account, profile, user });
+      console.log({ token, account, profile, user });
 
       if (user) {
         if (account.provider == "google") {
@@ -91,3 +91,5 @@ export default NextAuth({
   },
   secret: process.env.AUTH_SECRET,
 });
+
+export { handler as GET, handler as POST };
