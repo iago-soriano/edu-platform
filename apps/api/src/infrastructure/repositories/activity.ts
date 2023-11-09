@@ -1,9 +1,14 @@
-import { IActivitiesRepository, ActivityInsertDTO } from "@interfaces";
+import {
+  IActivitiesRepository,
+  ActivityInsertDTO,
+  ActivityContentInsertDTO,
+} from "@interfaces";
 import {
   db,
   activities,
   activityVersions,
   activityHasTopicsRelationTable,
+  activityContents,
 } from "@infrastructure";
 import { eq, and } from "drizzle-orm";
 
@@ -77,5 +82,14 @@ export class ActivityRepository implements IActivitiesRepository {
         await Promise.all(topicRelationInserts);
       }
     });
+  }
+
+  async insertContent(content: ActivityContentInsertDTO) {
+    return (
+      await db
+        .insert(activityContents)
+        .values(content)
+        .returning({ contentId: activityContents.id })
+    )[0];
   }
 }

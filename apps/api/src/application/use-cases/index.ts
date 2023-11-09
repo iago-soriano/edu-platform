@@ -21,6 +21,8 @@ import SaveActivityUseCase, { ISaveActivityUseCase } from "./save-activity";
 import UpdateActivityStatusUseCase, {
   IUpdateActivityStatusUseCase,
 } from "./update-activity-status";
+import SaveQuestionUseCase, { ISaveQuestionUseCase } from "./save-question";
+import SaveContentUseCase, { ISaveContentUseCase } from "./save-content";
 
 export {
   SignInUseCase,
@@ -45,4 +47,8 @@ export {
   ISaveActivityUseCase,
   UpdateActivityStatusUseCase,
   IUpdateActivityStatusUseCase,
+  SaveQuestionUseCase,
+  ISaveQuestionUseCase,
+  SaveContentUseCase,
+  ISaveContentUseCase,
 };

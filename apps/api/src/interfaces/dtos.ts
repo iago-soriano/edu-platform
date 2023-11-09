@@ -6,6 +6,8 @@ import {
   activities,
   activityStatusEnum,
   activityVersions,
+  activityContents,
+  contentTypeEnum,
 } from "@infrastructure";
 
 export type UserSelectDTO = typeof users.$inferSelect;
@@ -26,3 +28,7 @@ export const ActivityStatusEnum = activityStatusEnum.enumValues;
 
 export type ActivityVersionInsertDTO = typeof activityVersions.$inferSelect;
 export type ActivityVersionSelectDTO = typeof activityVersions.$inferInsert;
+
+export const ActivityContentEnum = contentTypeEnum.enumValues;
+export type ActivityContentInsertDTO = typeof activityContents.$inferSelect;
+export type ActivityContentSelectDTO = typeof activityContents.$inferInsert;

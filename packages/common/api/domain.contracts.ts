@@ -42,7 +42,7 @@ export type SaveQuestionRequestBody = {
   }[];
   questionId?: number;
 };
-export type InsertQuestionResponseBody = {
+export type SaveQuestionResponseBody = {
   questionId?: number;
 };
 
@@ -53,6 +53,7 @@ export type SaveContentRequestBody = {
   description: string;
   type: string;
   contentId?: number;
+  activityVersionId: number;
 };
 
 export type SaveContentResponseBody = {

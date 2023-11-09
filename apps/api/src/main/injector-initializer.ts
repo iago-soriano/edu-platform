@@ -11,6 +11,8 @@ import {
   GetTopicsController,
   SaveActivityController,
   UpdateActivityStatusController,
+  SaveQuestionController,
+  SaveContentController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -24,6 +26,8 @@ import {
   SaveActivityUseCase,
   GetTopicsUseCase,
   UpdateActivityStatusUseCase,
+  SaveQuestionUseCase,
+  SaveContentUseCase,
 } from "@use-cases";
 import {
   BCryptEncryptionService,
@@ -61,6 +65,8 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     updateActivityStatusController: awilix
       .asClass(UpdateActivityStatusController)
       .classic(),
+    saveQuestionController: awilix.asClass(SaveQuestionController).classic(),
+    saveContentController: awilix.asClass(SaveContentController).classic(),
 
     // services
     encryptionService: awilix.asClass(BCryptEncryptionService),
@@ -87,6 +93,8 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     updateActivityStatusUseCase: awilix
       .asClass(UpdateActivityStatusUseCase)
       .classic(),
+    saveQuestionUseCase: awilix.asClass(SaveQuestionUseCase).classic(),
+    saveContentUseCase: awilix.asClass(SaveContentUseCase).classic(),
 
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),

@@ -134,19 +134,42 @@ export const activityVersions = pgTable("activity_version", {
 
 export const activityVersionsRelations = relations(
   activityVersions,
-  ({ one }) => ({
+  ({ one, many }) => ({
     activity: one(activities, {
       fields: [activityVersions.activityId],
       references: [activities.id],
       relationName: "allVersions",
     }),
-    // questions: many(),
-    // contents: many()
+    activityContents: many(activityContents),
   })
 );
 
-// export const activityContent = pgTable("activityContent", {
-//   id: serial("id").primaryKey(),
-//   createdAt: integer("created_at"),
-//   updatedAt: integer("updated_at"),
-// });
+export const contentTypeEnum = pgEnum("contentType", [
+  "Video",
+  "Image",
+  "Audio",
+  "Text",
+]);
+
+export const activityContents = pgTable("activity_contents", {
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  type: contentTypeEnum("type"),
+  content: varchar("content", { length: 500 }),
+  description: varchar("description", { length: 500 }),
+  title: varchar("title", { length: 50 }),
+  activityVersionId: integer("activity_version_id").references(
+    () => activityVersions.id
+  ),
+});
+
+export const activityContentsRelations = relations(
+  activityContents,
+  ({ one }) => ({
+    activityVersion: one(activityVersions, {
+      fields: [activityContents.activityVersionId],
+      references: [activityVersions.id],
+    }),
+  })
+);

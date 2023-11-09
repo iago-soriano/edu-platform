@@ -12,3 +12,5 @@ export * from "./save-activity";
 export * from "./get-topics";
 export * from "./save-activity";
 export * from "./update-activity-status";
+export * from "./save-question";
+export * from "./save-content";
