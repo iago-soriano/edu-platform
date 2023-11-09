@@ -5,9 +5,8 @@ variable "tags" {
 variable "vpc_id" {
   type = string
 }
-variable "public_subnet_ids" {
-  type = list(string)
-  default = [""]
+variable "public_subnet_id" {
+  type = string
 }
 
 variable "private_subnet_ids" {
@@ -20,5 +19,5 @@ variable "db_password" {
 
 variable "db_user" {
   type = string
-  default = "postgres"
+  default = "isrm"
 }
