@@ -46,7 +46,7 @@ export interface IActivitiesRepository {
   updateActivity: (
     activityId: number,
     args: ActivityInsertDTO,
-    topicIds: number[]
+    topicIds?: number[]
   ) => Promise<void>;
 }
 

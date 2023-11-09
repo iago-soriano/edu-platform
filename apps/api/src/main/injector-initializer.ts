@@ -10,6 +10,7 @@ import {
   CheckChangePasswordTokenRequestController,
   GetTopicsController,
   SaveActivityController,
+  UpdateActivityStatusController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -22,6 +23,7 @@ import {
   CheckChangePasswordTokenRequestUseCase,
   SaveActivityUseCase,
   GetTopicsUseCase,
+  UpdateActivityStatusUseCase,
 } from "@use-cases";
 import {
   BCryptEncryptionService,
@@ -56,6 +58,9 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     saveActivityController: awilix.asClass(SaveActivityController).classic(),
     getTopicsController: awilix.asClass(GetTopicsController).classic(),
+    updateActivityStatusController: awilix
+      .asClass(UpdateActivityStatusController)
+      .classic(),
 
     // services
     encryptionService: awilix.asClass(BCryptEncryptionService),
@@ -79,6 +84,9 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     saveActivityUseCase: awilix.asClass(SaveActivityUseCase).classic(),
     getTopicsUseCase: awilix.asClass(GetTopicsUseCase).classic(),
+    updateActivityStatusUseCase: awilix
+      .asClass(UpdateActivityStatusUseCase)
+      .classic(),
 
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),

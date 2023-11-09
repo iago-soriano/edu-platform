@@ -11,3 +11,4 @@ export * from "./auth/check-change-password-token-request";
 export * from "./save-activity";
 export * from "./get-topics";
 export * from "./save-activity";
+export * from "./update-activity-status";

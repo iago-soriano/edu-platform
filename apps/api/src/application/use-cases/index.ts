@@ -18,6 +18,9 @@ import CheckChangePasswordTokenRequestUseCase, {
 } from "./auth/check-change-password-token-request";
 import GetTopicsUseCase, { IGetTopicsUseCase } from "./get-topics";
 import SaveActivityUseCase, { ISaveActivityUseCase } from "./save-activity";
+import UpdateActivityStatusUseCase, {
+  IUpdateActivityStatusUseCase,
+} from "./update-activity-status";
 
 export {
   SignInUseCase,
@@ -40,4 +43,6 @@ export {
   IGetTopicsUseCase,
   SaveActivityUseCase,
   ISaveActivityUseCase,
+  UpdateActivityStatusUseCase,
+  IUpdateActivityStatusUseCase,
 };

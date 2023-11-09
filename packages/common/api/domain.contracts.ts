@@ -1,4 +1,7 @@
 // GetTopics [GET topics]
+
+import { ActivityInsertDTO } from "@interfaces";
+
 // devolve todos os topics do bd
 export type GetTopicsRequestBody = {};
 export type GetTopicsResponseBody = {
@@ -55,6 +58,12 @@ export type SaveContentRequestBody = {
 export type SaveContentResponseBody = {
   contentId: number;
 };
+
+// Update Activity Status
+export type UpdateActivityStatusRequestBody = {
+  activityStatus: string;
+};
+export type UpdateActivityStatusResponseBody = {};
 
 /* 
 --- CRIAR E EDITAR ATIVIDADE ---
