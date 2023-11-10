@@ -7,22 +7,15 @@ import {
 import { validateEmail } from "@infrastructure";
 import { AuthRules, DomainRules } from "@edu-platform/common/domain";
 
-interface UserConstructorParams {
-  name?: string;
-  role?: string;
-  email?: string;
-  password?: string;
-}
-
 export class User {
-  email?: string;
-  name?: string;
-  role: string;
-  password: string;
-
-  constructor(args: UserConstructorParams) {
-    if (args.email) this.setEmail(args.email);
-    if (args.password) this.setPassword(args.password);
+   constructor(
+    public name: string,
+    public role: string,
+    public email: string,
+    public password: string
+  ) {
+    if (email) this.setEmail(email);
+    if (password) this.setPassword(password);
   }
 
   setEmail(email: string) {

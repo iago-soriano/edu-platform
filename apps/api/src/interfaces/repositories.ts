@@ -8,6 +8,8 @@ import {
   ActivitySelectDTO,
   TopicDTO,
   ActivityContentInsertDTO,
+  ActivityVersionSelectDTO,
+  ActivityContentSelectDTO,
 } from "./dtos";
 
 export interface IUserRepository {
@@ -52,6 +54,12 @@ export interface IActivitiesRepository {
   insertContent: (
     content: ActivityContentInsertDTO
   ) => Promise<{ contentId: number }>;
+  getActivityByVersionId: (
+    versionId: number
+  ) => Promise<ActivityVersionSelectDTO[]>;
+  getActivityContentByContentId: (
+    contentId: number
+  ) => Promise<ActivityContentSelectDTO[]>;
 }
 
 export interface ITopicsRepository {
