@@ -40,7 +40,7 @@ export const SmallScreenNavbar = ({
 
   return (
     <>
-      <nav className="justify-between max-w-full h-[6.7rem] bg-bkg">
+      <nav className="justify-between max-w-full h-[6.7rem]">
         <ul className="flex flex-row justify-between overflow-hidden h-full">
           <li>
             <Logo />

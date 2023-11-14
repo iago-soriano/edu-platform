@@ -27,7 +27,7 @@ export default async function RootLayout({
     <StyledJsxRegistry>
       <ThemeProvider>
         <ThemedHtml>
-          <body suppressHydrationWarning>
+          <body suppressHydrationWarning className="bg-bkg">
             <TanstackQueryProvider>
               <NextAuthProvider session={serverSession}>
                 <AuthProvider>

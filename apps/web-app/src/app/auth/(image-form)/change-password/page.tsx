@@ -19,7 +19,7 @@ import {
 import { useRouter } from "next/router";
 import { Spinner } from "@components";
 
-export const Page = () => {
+const Page = () => {
   const { token, isVerifying, isValid } = useVerifyToken();
   const { error, onSubmit, loading, isSuccess } = useChangePassword();
 
@@ -114,3 +114,5 @@ const useChangePassword = () => {
     isSuccess: mutation.isSuccess,
   };
 };
+
+export default Page;

@@ -1,9 +1,8 @@
 "use client";
-
 export * from "./buttons";
 export * from "./navbar";
 export * from "./toggle";
-// export * from "./separator";
+export * from "./separator";
 export * from "./toast";
 export * from "./input";
 export * from "./form";

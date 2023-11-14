@@ -8,6 +8,7 @@ import {
   ErrorAlert,
   GoogleSignInButton,
   errorToast,
+  Separator,
 } from "@components";
 import {
   signInSchema,
@@ -16,18 +17,20 @@ import {
 } from "@infrastructure";
 import Link from "next/link";
 
-export default () => {
+const Page = () => {
   const { googleSignInMutation, credentialsSignInMutation, errorAlert } =
     useSignInPage();
 
   return (
     <>
-      <h3 className="py-3 inline-block">Entrar</h3>
+      <h3 className="py-3 my-5 inline-block">Entrar</h3>
       <GoogleSignInButton
         isLoading={googleSignInMutation.isLoading}
         onClick={googleSignInMutation.mutate}
       />
+      <Separator> Ou </Separator>
       {errorAlert}
+      <br />
       <Form onSubmit={credentialsSignInMutation.mutate} schema={signInSchema}>
         <Input
           name="email"
@@ -35,17 +38,20 @@ export default () => {
           placeholder="Digite aqui seu e-mail"
           type="email"
         />
+        <br />
         <PasswordInput
           name="password"
           inputLabel={{ text: "Senha", mandatory: true }}
           placeholder="Digite aqui sua senha"
         />
+        <br />
         <Link
           className="hover:opacity-70 inline-block py-3 px-1 text-accent-1 underline mb-4 hover:text-accent-2"
           href="/auth/change-password-request"
         >
           Esqueceu sua senha?
         </Link>
+        <br />
         <FormButton
           label="Entrar"
           loading={credentialsSignInMutation.isLoading}
@@ -70,3 +76,5 @@ const useSignInPage = () => {
     errorAlert: getErrorAlert(),
   };
 };
+
+export default Page;

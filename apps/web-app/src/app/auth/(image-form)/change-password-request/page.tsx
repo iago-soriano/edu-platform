@@ -14,18 +14,20 @@ import {
   changePasswordRequestSchema,
 } from "@infrastructure";
 
-export const Page = () => {
+const Page = () => {
   const { error, onSubmit, loading, isSuccess } = useRequest();
 
   return (
     <>
-      <h1 className="my-20">Trocar senha</h1>
+      <h3 className="my-5">Trocar senha</h3>
       {error && <ErrorAlert>{error}</ErrorAlert>}
       {isSuccess && (
         <SuccessAlert>
           Confira seu e-mail para acessar o link de troca de senha
         </SuccessAlert>
       )}
+      <br />
+
       <Form onSubmit={onSubmit} schema={changePasswordRequestSchema}>
         <Input
           name="email"
@@ -33,6 +35,8 @@ export const Page = () => {
           placeholder="Digite aqui seu e-mail"
           type="email"
         />
+        <br />
+
         <FormButton label="Enviar" loading={loading} disabled={isSuccess} />
       </Form>
     </>
@@ -63,3 +67,5 @@ const useRequest = () => {
     isSuccess: mutation.isSuccess,
   };
 };
+
+export default Page;

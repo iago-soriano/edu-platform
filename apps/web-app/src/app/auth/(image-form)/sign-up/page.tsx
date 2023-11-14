@@ -6,7 +6,7 @@ import {
   FormButton,
   ErrorAlert,
   GoogleSignInButton,
-  errorToast,
+  Separator,
 } from "@components";
 import {
   signUpSchema,
@@ -14,18 +14,20 @@ import {
   useGoogleSignInMutation,
 } from "@infrastructure";
 
-export default () => {
+const Page = () => {
   const { googleSignInMutation, credentialsSignUpMutation, errorAlert } =
     useSignUpPage();
 
   return (
-    <>
-      <h3 className="py-3 inline-block">Criar conta</h3>
+    <div>
+      <h3 className="py-3 my-5 inline-block">Criar conta</h3>
       <GoogleSignInButton
         onClick={googleSignInMutation.mutate}
         isLoading={googleSignInMutation.isLoading}
       />
+      <Separator> Ou </Separator>
       {errorAlert}
+      <br />
       <Form onSubmit={credentialsSignUpMutation.mutate} schema={signUpSchema}>
         <Input
           name="name"
@@ -33,28 +35,32 @@ export default () => {
           placeholder="Digite como gostaria de ser chamado"
           type="text"
         />
+        <br />
         <Input
           name="email"
           inputLabel={{ text: "E-mail", mandatory: true }}
           placeholder="Digite aqui seu e-mail"
           type="email"
         />
+        <br />
         <PasswordInput
           name="password"
           inputLabel={{ text: "Senha", mandatory: true }}
           placeholder="Digite aqui sua senha"
         />
+        <br />
         <PasswordInput
           name="confirmPassword"
           inputLabel={{ text: "Confirmação de Senha", mandatory: true }}
           placeholder="Digite novamente sua senha"
         />
+        <br />
         <FormButton
           label="Criar conta"
           loading={credentialsSignUpMutation.isLoading}
         />
       </Form>
-    </>
+    </div>
   );
 };
 
@@ -73,3 +79,5 @@ const useSignUpPage = () => {
     errorAlert: getErrorAlert(),
   };
 };
+
+export default Page;

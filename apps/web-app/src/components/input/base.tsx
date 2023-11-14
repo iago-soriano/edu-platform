@@ -4,9 +4,7 @@ import {
   InputStyled,
   ErrorMessageContainer,
   InputLabelStyled,
-  InstructionsContainer,
   InputIconContainer,
-  LabelStyled,
 } from "./styles";
 import { IInputProps } from "./interface";
 
@@ -40,20 +38,20 @@ export function Input(args: IInputProps) {
 
   return (
     <InputLabelStyled style={{ display: hidden ? "none" : "block" }}>
-      <LabelStyled>
-        {inputLabel?.text} {inputLabel?.mandatory && mandatoryTooltip}{" "}
-        {tooltipExplanation && explanationTooltip}
-      </LabelStyled>
+      <span className="font-bold flex flex-row mb-4">
+        {inputLabel?.text}{" "}
+        <div className="mx-2">{inputLabel?.mandatory && mandatoryTooltip} </div>
+        <div className="mx-2 flex items-center">
+          {tooltipExplanation && explanationTooltip}
+        </div>
+      </span>
       <InputStyled
         {...(register && register(name))}
         {...rest}
         placeholder={placeholder}
         error={errors && errors[name]}
       />
-      <InputIconContainer>{icon}</InputIconContainer>
-      {instructions && (
-        <InstructionsContainer>{instructions}</InstructionsContainer>
-      )}
+      <span className="absolute top-14 right-3">{icon}</span>
       {errors && (
         <ErrorMessageContainer>
           {errors && errors[name]?.message}
