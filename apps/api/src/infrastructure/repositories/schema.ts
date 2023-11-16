@@ -9,6 +9,8 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
+import { activityPossibleStatus } from "application/domain/activity";
+import { contentPossibleType } from "@domain";
 
 export const tokenTypeEnum = pgEnum("tokenType", [
   "VerifyAccount",
@@ -63,11 +65,10 @@ export const topicsRelations = relations(topics, ({ many }) => ({
   activityTopics: many(activityHasTopicsRelationTable),
 }));
 
-export const activityStatusEnum = pgEnum("activityStatus", [
-  "Draft",
-  "Archived",
-  "Published",
-]);
+export const activityStatusEnum = pgEnum(
+  "activityStatus",
+  activityPossibleStatus
+);
 
 export const activities = pgTable("activities", {
   id: serial("id").primaryKey(),
@@ -144,12 +145,7 @@ export const activityVersionsRelations = relations(
   })
 );
 
-export const contentTypeEnum = pgEnum("contentType", [
-  "Video",
-  "Image",
-  "Audio",
-  "Text",
-]);
+export const contentTypeEnum = pgEnum("contentType", contentPossibleType);
 
 export const activityContents = pgTable("activity_contents", {
   id: serial("id").primaryKey(),

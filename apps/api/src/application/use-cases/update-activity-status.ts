@@ -1,6 +1,5 @@
-import { ActivityStatusNotFound } from "@edu-platform/common";
-import { ActivityStatusEnum } from "@interfaces";
 import { IActivitiesRepository, IUseCase } from "@interfaces";
+import { Activity } from "application/domain/activity";
 
 type InputParams = {
   activityId: number;
@@ -15,16 +14,13 @@ class UseCase implements IUpdateActivityStatusUseCase {
   constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({ activityId, activityStatus }: InputParams) {
-    for (let status of ActivityStatusEnum) {
-      if (status === activityStatus) {
-        await this.activitiesRepository.updateActivity(activityId, {
-          status: activityStatus,
-        });
-        return;
-      }
-    }
+    const validStatus = Activity.validateStatus(activityStatus);
 
-    throw new ActivityStatusNotFound();
+    if (validStatus) {
+      await this.activitiesRepository.updateActivity(activityId, {
+        status: validStatus,
+      });
+    }
   }
 }
 

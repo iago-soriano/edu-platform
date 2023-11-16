@@ -27,3 +27,5 @@ export class SaveContentController implements HTTPController {
     res.status(200).json();
   }
 }
+
+// VERIFICAR O TIPO COM UM SWITCH E CHAMAR USE CASE DIFERENTE

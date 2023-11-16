@@ -8,7 +8,7 @@ import { validateEmail } from "@infrastructure";
 import { AuthRules, DomainRules } from "@edu-platform/common/domain";
 
 export class User {
-   constructor(
+  constructor(
     public name: string,
     public role: string,
     public email: string,

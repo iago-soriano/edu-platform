@@ -1,4 +1,12 @@
-import { DomainRules } from "@edu-platform/common";
+import { ActivityStatusNotFound, DomainRules } from "@edu-platform/common";
+
+export const activityPossibleStatus = [
+  "Draft",
+  "Archived",
+  "Published",
+] as const;
+
+export type ActivityStatusType = (typeof activityPossibleStatus)[number];
 
 export class Activity {
   constructor(
@@ -43,5 +51,15 @@ export class Activity {
         `Favor escolher até ${DomainRules.ACTIVITY.TOPICS.MAX_COUNT} tópicos.`
       );
     }
+  }
+
+  static validateStatus(activityStatus: string) {
+    for (let status of activityPossibleStatus) {
+      if (activityStatus === status) {
+        return status;
+      }
+    }
+
+    throw new ActivityStatusNotFound();
   }
 }

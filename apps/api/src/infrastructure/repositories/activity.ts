@@ -92,16 +92,24 @@ export class ActivityRepository implements IActivitiesRepository {
         .returning({ contentId: activityContents.id })
     )[0];
   }
+  async updateContent(contentId: number, content: ActivityContentInsertDTO) {
+    await db
+      .update(activityContents)
+      .set({ ...content, updatedAt: new Date() })
+      .where(eq(activityContents.id, contentId));
+  }
 
   async getActivityByVersionId(versionId: number) {
-    return (
-      await db.select().from(activityVersions).where(eq(activityVersions.version, versionId))
-    )
+    return await db
+      .select()
+      .from(activityVersions)
+      .where(eq(activityVersions.version, versionId));
   }
 
   async getActivityContentByContentId(contentId: number) {
-    return (
-      await db.select().from(activityContents).where(eq(activityContents.id, contentId))
-    )
+    return await db
+      .select()
+      .from(activityContents)
+      .where(eq(activityContents.id, contentId));
   }
 }

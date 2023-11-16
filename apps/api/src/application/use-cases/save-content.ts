@@ -1,14 +1,11 @@
-import {
-  ITopicsRepository,
-  IActivitiesRepository,
-} from "./../../interfaces/repositories";
-import { IUseCase, UserSelectDTO } from "@interfaces";
+import { ContentTypeType, Content } from "@domain";
+import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
 
 type InputParams = {
   title: string;
   content: string;
   description: string;
-  type: number[];
+  type: ContentTypeType;
   contentId?: number;
   user: UserSelectDTO;
   activityVersionId: number;
@@ -21,10 +18,7 @@ type Return = {
 export type ISaveContentUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ISaveContentUseCase {
-  constructor(
-    private topicsRepository: ITopicsRepository,
-    private activitiesRepository: IActivitiesRepository
-  ) {}
+  constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({
     title,
@@ -33,7 +27,7 @@ class UseCase implements ISaveContentUseCase {
     type,
     contentId,
     user,
-    activityVersionId
+    activityVersionId,
   }: InputParams) {
     // obter o version id do banco de dados, jogar um erro se não existir
     // se tiver um contentId, é edição. Pegar o que já existe. Se não existir, erro
@@ -41,23 +35,35 @@ class UseCase implements ISaveContentUseCase {
     // criar um objeto Content no domain, que nem o Activity, e fazer validações (inclusive do type)
     // persistir (editar ou inserir)
 
-    const versionIdExists = await this.activitiesRepository.getActivityByVersionId(activityVersionId)
+    const versionIdExists =
+      await this.activitiesRepository.getActivityByVersionId(activityVersionId);
 
-    if (!versionIdExists) throw new Error("Activity Version not found")
+    if (!versionIdExists) throw new Error("Activity Version not found");
 
-    const contentAlredyExists = await this.activitiesRepository.getActivityContentByContentId(contentId)
+    Content.validateTitle(title); // por que reclamou quando os métodos não eram estáticos?
+    Content.validateDescription(description);
+    Content.validateContentType(type);
 
-    //const contentType = 
+    const contentAlredyExists =
+      await this.activitiesRepository.getActivityContentByContentId(contentId);
 
-    /* if (!contentAlredyExists) {
-      await this.activitiesRepository.insertContent({ 
+    if (!contentAlredyExists) {
+      return this.activitiesRepository.insertContent({
         title,
         content,
-        description
-      })
+        description,
+        type,
+        activityVersionId,
+      });
+    } else {
+      await this.activitiesRepository.updateContent(contentId, {
+        title,
+        content,
+        description,
+        type,
+        activityVersionId,
+      });
     }
- */
-    return { contentId: 2 };
   }
 }
 

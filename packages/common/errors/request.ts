@@ -83,3 +83,10 @@ export class ContentTypeNotFound extends CustomError {
     super("Tipo de conteúdo não encontrado");
   }
 }
+
+export class ActivityStatusNotFound extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super("Tipo de conteúdo não encontrado");
+  }
+}

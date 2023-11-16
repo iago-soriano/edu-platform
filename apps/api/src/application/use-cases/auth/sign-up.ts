@@ -36,7 +36,7 @@ class UseCase implements ISignUpUseCase {
   ) {}
 
   async execute({ email, password, name, confirmPassword }: InputParams) {
-    const user = new User({ email, name, password });
+    const user = new User(name, email, password, confirmPassword);
 
     const existingUser = await this.userRepository.getUserByEmail(email);
 

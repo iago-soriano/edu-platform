@@ -4,7 +4,6 @@ import {
   tokenTypeEnum,
   topics,
   activities,
-  activityStatusEnum,
   activityVersions,
   activityContents,
   contentTypeEnum,
@@ -23,12 +22,9 @@ export type TopicDTO = typeof topics.$inferSelect;
 export type ActivityInsertDTO = typeof activities.$inferInsert;
 export type ActivitySelectDTO = typeof activities.$inferSelect;
 
-export type ActivityStatusType = (typeof activityStatusEnum.enumValues)[number];
-export const ActivityStatusEnum = activityStatusEnum.enumValues;
-
 export type ActivityVersionInsertDTO = typeof activityVersions.$inferSelect;
 export type ActivityVersionSelectDTO = typeof activityVersions.$inferInsert;
 
-export const ActivityContentEnum = contentTypeEnum.enumValues;
-export type ActivityContentInsertDTO = typeof activityContents.$inferSelect;
-export type ActivityContentSelectDTO = typeof activityContents.$inferInsert;
+export const ActivityContentEnum = typeof contentTypeEnum.enumValues;
+export type ActivityContentInsertDTO = typeof activityContents.$inferInsert;
+export type ActivityContentSelectDTO = typeof activityContents.$inferSelect;

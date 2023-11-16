@@ -13,7 +13,7 @@
     "baseUrl": "./src/",
     "outDir": "./build/",
     "jsx": "react",
-    "sourceMap": true,
+    "sourceMap": false,
     "paths": {
       "@use-cases": ["./application/use-cases/index.ts"],
       "@domain": ["./application/domain/index.ts"],
@@ -21,11 +21,11 @@
       "@interfaces": ["./interfaces/index.ts"],
       "@test": ["./test/index.ts"],
       "@controllers": ["./controllers/index.ts"],
-      "@main": ["./main/index.ts"],
+      "@main": ["./main/index.ts"]
     }
   },
   "exclude": ["src/**/*.spec.ts", "src/**/test"],
-  "include": ["src/**/*.ts", "node_modules/**/*.d.ts"],
+  "include": ["src/**/*.ts", "node_modules/**/*.d.ts"]
   // "include": ["./src/**/*.tsx", "./src/**/*.ts", "../common/src/", "../../application/src/interfaces/services.ts", "../../application/src/infrastructure/services/aws-s3.ts"]
 }
 // {
