@@ -8,10 +8,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@edu-platform/eslint-config-custom": "*",
-    "prettier": "latest",    
-    "prettier-plugin-prisma": "^5.0.0",
-    "turbo": "1.10.4"
+
   },
   "workspaces": [
     "apps/*",

@@ -1,6 +1,5 @@
 resource "aws_db_subnet_group" "this" {
   name       = "main"
-  # subnet_ids = var.public_subnet_ids
   subnet_ids = var.private_subnet_ids
 
   tags = var.tags
@@ -29,6 +28,13 @@ resource "aws_security_group" "pgsecgrp" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
+  ingress {
+    security_groups = ["sg-0d942451bef0e2a6f"] //bastion host
+    from_port = 5432
+    to_port = 5432
+    protocol = "tcp"
+  }
+
   egress {
     from_port        = 0
     to_port          = 0
@@ -46,7 +52,7 @@ resource "aws_db_instance" "this" {
   apply_immediately = true
   allocated_storage      = 5
   engine                 = "postgres"
-  engine_version         = "13.7"
+  engine_version         = "13.10"
   username               = var.db_user
   password               = var.db_password
   db_subnet_group_name   = aws_db_subnet_group.this.name
@@ -54,6 +60,7 @@ resource "aws_db_instance" "this" {
   parameter_group_name   = aws_db_parameter_group.this.name
   publicly_accessible    = false
   skip_final_snapshot    = true
+  db_name = "eduplatform"
 
   tags = var.tags
 }

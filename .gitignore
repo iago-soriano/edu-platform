@@ -36,3 +36,11 @@ next-env.d.ts
 
 credentials
 .terraform
+build.zip
+prod.tf
+plan.tf
+nodejs
+*.zip
+*.tgz
+commands.sh
+.turbo

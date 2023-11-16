@@ -6,6 +6,7 @@ resource "aws_vpc" "main" {
   tags = var.tags
 }
 
+### subnets
 resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.1.0/24"
@@ -17,7 +18,7 @@ resource "aws_subnet" "public" {
 
 resource "aws_subnet" "private_a" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.3.0/24"
+  cidr_block        = "10.0.2.0/24"
   availability_zone = "us-east-1a"
 
   tags = var.tags
@@ -26,18 +27,19 @@ resource "aws_subnet" "private_a" {
 resource "aws_subnet" "private_b" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.3.0/24"
-  availability_zone = "us-east-1a"
+  availability_zone = "us-east-1b"
 
   tags = var.tags
 }
 
+### public subnets routing
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
   tags = var.tags
 }
 
 
-resource "aws_route_table" "rt" {
+resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
   route {
@@ -50,6 +52,31 @@ resource "aws_route_table" "rt" {
 
 resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public.id
-  route_table_id = aws_route_table.rt.id
+  route_table_id = aws_route_table.public.id
 }
 
+### private subnets routing
+
+# some data object to point to ec2 instance
+
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.main.id
+
+  tags = var.tags
+}
+
+# resource "aws_route" "private" {
+#   route_table_id         = aws_route_table.private.id
+#   destination_cidr_block = "0.0.0.0/0"
+#   nat_gateway_id         = aws_nat_gateway.main.id
+# }
+
+resource "aws_route_table_association" "private_a" {
+  subnet_id      = aws_subnet.private_a.id
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "private_b" {
+  subnet_id      = aws_subnet.private_b.id
+  route_table_id = aws_route_table.private.id
+}

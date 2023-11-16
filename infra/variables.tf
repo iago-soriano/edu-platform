@@ -1,10 +1,7 @@
-variable "tags" {
-  type = map(string)
-  default = {
-    project     = "edu-platform"
-  }
+variable app_version {
+    type=string
 }
 
-variable "db_password" {
-  type = string
+variable dependencies_version {
+    type=string
 }
