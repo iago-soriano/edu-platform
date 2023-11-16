@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "allowJs": true,
+    "strict": false,
+    // "moduleResolution": "node",
+    "incremental": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./build/",
+    "jsx": "react",
+    "sourceMap": false,
+    "paths": {}
+  },
+  "exclude": ["test"]
+  // "include": ["./src/**/*.tsx", "./src/**/*.ts", "../common/src/", "../../application/src/interfaces/services.ts", "../../application/src/infrastructure/services/aws-s3.ts"]
+}
+// {
+//   "extends": "@edu-platform/tsconfig/api.json",
+//   "include": ["**/*.ts", "**/*.tsx"],
+//   "exclude": ["node_modules"]
+// }

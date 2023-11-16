@@ -1,5 +1,5 @@
 import { CustomError } from "./custom-error";
-import { AuthRules } from "@edu-platform/common/domain";
+import { AuthRules } from "../domain";
 
 export class PasswordsDontMatchError extends CustomError {
   HTTPstatusCode = 400;

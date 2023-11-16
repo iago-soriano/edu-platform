@@ -34,12 +34,21 @@ export const DomainRules = {
       MAX_TIME_TO_COMPLETE: 30, // in minutes
       TOPICS: ["SCIENCE_&_TECHNOLOGY", "ARTS", "CURRENT_AFFAIRS", "SPORTS"],
     },
-    FEEDBACK: {
-      GRADES: [1, 2, 3, 4, 5],
-      MAX_LENGTH: 500, // in characters
+    MAX_VIDEO_LENGTH: 10 * 60, // in seconds. 10 min max
+    MAX_TEXT_LENGTH: 10000, // in characters
+  },
+  FEEDBACK: {
+    MAX_LENGTH: 500, // in characters
+  },
+  CONTENT: {
+    TITLE: {
+      MIN_LENGTH: 5,
+      MAX_LENGTH: 100,
     },
-    USER: {
-      ROLES: ["STUDENT", "INSTRUCTOR", "ADMIN"],
+    DESCRIPTION: {
+      MIN_LENGTH: 5,
+      MAX_LENGTH: 400,
     },
-  };
-  
+    MAX_VIDEO_LENGTH: 10 * 60,
+  },
+};

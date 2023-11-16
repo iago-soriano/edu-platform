@@ -1,4 +1,5 @@
 // GetTopics [GET topics]
+
 // devolve todos os topics do bd
 export type GetTopicsRequestBody = {};
 export type GetTopicsResponseBody = {

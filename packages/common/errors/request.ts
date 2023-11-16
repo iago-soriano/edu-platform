@@ -69,3 +69,10 @@ export class Forbidden extends CustomError {
     super('{ errorName: ErrorMessagesLabels.INVALID_TOKEN }');
   }
 }
+
+export class ContentTypeNotFound extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super("Tipo de conteúdo não encontrado");
+  }
+}
