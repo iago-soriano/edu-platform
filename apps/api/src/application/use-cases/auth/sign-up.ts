@@ -36,7 +36,7 @@ class UseCase implements ISignUpUseCase {
   ) {}
 
   async execute({ email, password, name, confirmPassword }: InputParams) {
-    const user = new User(name, email, password, confirmPassword);
+    const user = new User(name, email, password);
 
     const existingUser = await this.userRepository.getUserByEmail(email);
 
@@ -64,7 +64,7 @@ class UseCase implements ISignUpUseCase {
 
     await this.emailService.sendVerifyAccountEmail({
       destination: email,
-      url: `${process.env.WEB_APP_URL}/verify-account?verificationToken=${token}`,
+      url: `${process.env.WEB_APP_URL}/auth/verify-account?verificationToken=${token}`,
     });
   }
 }

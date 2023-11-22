@@ -23,7 +23,7 @@ class UseCase implements ICheckChangePasswordTokenRequestUseCase {
 
     if (
       changePasswordRequestToken &&
-      changePasswordRequestToken.expiresAt > Date.now()
+      changePasswordRequestToken.expiresAt.getTime() > Date.now()
     ) {
       return true;
     } else {

@@ -39,7 +39,8 @@ class UseCase implements IChangePasswordUseCase {
     );
 
     if (!token) throw new InvalidValidationTokenError();
-    if (token.expiresAt < Date.now()) throw new InvalidValidationTokenError();
+    if (token.expiresAt.getTime() < Date.now())
+      throw new InvalidValidationTokenError();
 
     if (!newPassword || !confirmNewPassword)
       throw new PasswordsDontMatchError();
@@ -57,7 +58,7 @@ class UseCase implements IChangePasswordUseCase {
     });
 
     await this.tokenRepository.updateTokenByValue(token.value, {
-      expiresAt: Date.now(),
+      expiresAt: new Date(),
     });
   }
 }

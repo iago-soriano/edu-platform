@@ -9,6 +9,7 @@ import {
 import {
   ChangePasswordRequestTokenExist,
   UserNotFoundError,
+  HasProviderAccountError,
 } from "@edu-platform/common/errors";
 
 type InputParams = {
@@ -33,9 +34,7 @@ class UseCase implements IChangePasswordRequestUseCase {
     if (!user) throw new UserNotFoundError();
 
     if (user.provider)
-      throw new Error(
-        `Por favor, utilize sua conta do ${user.provider} para entrar`
-      );
+      throw new HasProviderAccountError({ provider: user.provider });
 
     const tokens = await this.tokenRepository.getTokensByUserId(
       user.id,
@@ -44,7 +43,8 @@ class UseCase implements IChangePasswordRequestUseCase {
 
     if (
       tokens &&
-      tokens.filter((token) => token.expiresAt > Date.now()).length != 0
+      tokens.filter((token) => token.expiresAt.getTime() > Date.now()).length !=
+        0
     ) {
       throw new ChangePasswordRequestTokenExist();
     }
@@ -55,13 +55,12 @@ class UseCase implements IChangePasswordRequestUseCase {
       value: changePasswordToken,
       userId: user.id,
       type: "ChangePasswordRequest",
-      // createdAt: Date.now(),
-      expiresAt: Date.now() + 1000 * 60 * 60 * 3,
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 3),
     });
 
     await this.emailService.sendForgotPasswordEmail({
       destination: email,
-      url: `${process.env.WEB_APP_URL}/change-password?changePasswordToken=${changePasswordToken}`,
+      url: `${process.env.WEB_APP_URL}/auth/change-password?changePasswordToken=${changePasswordToken}`,
     });
   }
 }
