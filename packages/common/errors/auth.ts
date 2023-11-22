@@ -8,10 +8,10 @@ export class PasswordsDontMatchError extends CustomError {
   }
 }
 
-export class InvalidRoleError extends CustomError {
+export class HasProviderAccountError extends CustomError {
   HTTPstatusCode = 400;
-  constructor() {
-    super("{ errorName: ErrorMessagesLabels.INVALID_ROLE }");
+  constructor({ provider }) {
+    super(`Utilize o botão \"Entrar com a conta do ${provider}\" para entrar`);
   }
 }
 
@@ -25,35 +25,30 @@ export class InvalidPasswordError extends CustomError {
 export class EmailAlreadySignedupError extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
-    super("Email já em uso");
+    super("EMAIL_IN_USE");
   }
 }
-
-//   export class UserNotFoundError extends CustomError {
-//     HTTPstatusCode = 404;
-//     constructor() {
-//       super({ errorName: ErrorMessagesLabels.USER_NOT_FOUND });
-//     }
-//   }
 
 export class InvalidValidationTokenError extends CustomError {
   HTTPstatusCode = 403;
   constructor() {
-    super("Token inválido");
+    super("Algo deu errado: Invalid token");
   }
 }
 
 export class UserNotVerifiedError extends CustomError {
   HTTPstatusCode = 400;
   constructor({ email }) {
-    super("Usuário não verificado");
+    super(
+      "Favor verificar sua conta através do e-mail enviado antes de entrar"
+    );
   }
 }
 
 export class InvalidCredentialsError extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
-    super("Credenciais inválidas");
+    super("E-mail ou senha inseridos não são válidos");
   }
 }
 
