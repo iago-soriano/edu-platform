@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-// import { ActionButton } from "./styles";
 import {
   HowItWorksButton,
   DashboardButton,
   SignInButton,
   SignUpButton,
   ProductButton,
-  SignOutButton,
-  MyProfileButton,
   Logo,
   NavButton,
 } from "../components";
@@ -23,7 +20,7 @@ const AuthenticatedSectionContainer = ({ children }) => (
 );
 
 export const Button = ({ children, ...rest }) => (
-  <NavButton {...rest} className={"mx-3 w-20"}>
+  <NavButton {...rest} className={"mx-3 w-min-20"}>
     {children}
   </NavButton>
 );
@@ -41,10 +38,9 @@ export const BigScreenNavbar = ({
     setIsDropdownOpen(false);
   };
   const addRef = useClickOutside(() => {
-    console.log("nav");
     setIsDropdownOpen(false);
   });
-  console.log({ user, isAuthenticated });
+
   const getAuthenticatedSection = () => {
     if (!isAuthenticated)
       return (

@@ -14,12 +14,14 @@ export const NavButton = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  const hStyles = highlighted ? "border-b-4 border-acc text-acc font-bold" : "";
+  const hStyles = highlighted
+    ? "border-b-4 border-accent text-accent font-bold"
+    : "";
   return (
     <Link
       href={href}
       className={twMerge(
-        "my-0 mx-auto flex h-full items-center text-center justify-center cursor-pointer hover:bg-slate-400 focus:bg-slate-400",
+        "my-0 mx-auto flex h-full items-center text-center justify-center cursor-pointer hover:opacity-70 px-2",
         hStyles,
         className
       )}
@@ -82,7 +84,7 @@ export const MyProfileButton = ({
   Component,
 }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/my-profile"
+    path="/auth/my-profile"
     label="Minha conta"
     currentPath={currentPath}
     Component={Component}
