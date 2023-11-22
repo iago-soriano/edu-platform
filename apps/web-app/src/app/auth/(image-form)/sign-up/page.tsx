@@ -1,65 +1,35 @@
 "use client";
 import {
-  PasswordInput,
-  Input,
-  Form,
-  FormButton,
   ErrorAlert,
   GoogleSignInButton,
   Separator,
+  CredentialsSignInButton,
 } from "@components";
 import {
   signUpSchema,
   useCredentialsSignUpMutation,
   useGoogleSignInMutation,
 } from "@infrastructure";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const { googleSignInMutation, credentialsSignUpMutation, errorAlert } =
-    useSignUpPage();
+  const { googleSignInMutation } = useSignUpPage();
+  const router = useRouter();
 
   return (
     <div>
-      <h3 className="py-3 my-5 inline-block">Criar conta</h3>
+      <h4 className="py-3 my-5 inline-block">Criar conta</h4>
+      <br />
+      <br />
+
       <GoogleSignInButton
         onClick={googleSignInMutation.mutate}
         isLoading={googleSignInMutation.isLoading}
       />
       <Separator> Ou </Separator>
-      {errorAlert}
-      <br />
-      <Form onSubmit={credentialsSignUpMutation.mutate} schema={signUpSchema}>
-        <Input
-          name="name"
-          inputLabel={{ text: "Nome", mandatory: true }}
-          placeholder="Digite como gostaria de ser chamado"
-          type="text"
-        />
-        <br />
-        <Input
-          name="email"
-          inputLabel={{ text: "E-mail", mandatory: true }}
-          placeholder="Digite aqui seu e-mail"
-          type="email"
-        />
-        <br />
-        <PasswordInput
-          name="password"
-          inputLabel={{ text: "Senha", mandatory: true }}
-          placeholder="Digite aqui sua senha"
-        />
-        <br />
-        <PasswordInput
-          name="confirmPassword"
-          inputLabel={{ text: "Confirmação de Senha", mandatory: true }}
-          placeholder="Digite novamente sua senha"
-        />
-        <br />
-        <FormButton
-          label="Criar conta"
-          loading={credentialsSignUpMutation.isLoading}
-        />
-      </Form>
+      <CredentialsSignInButton
+        onClick={() => router.push("/auth/sign-up/credentials")}
+      />
     </div>
   );
 };

@@ -127,13 +127,10 @@ export const useCheckChangePasswordTokenMutation = (
     CheckChangePasswordTokenRequestQueryParams
   >(
     (args: CheckChangePasswordTokenRequestQueryParams) =>
-      // axios.get.bind(axios)(
-      //   `${CheckChangePasswordTokenHTTPDefinition.path}?token=${args.token}`,
-      //   args
-      // ),
-      new Promise((resolve) =>
-        setTimeout(() => resolve({ isValid: true }), 1000)
-      ),
+      axios.get.bind(axios)(`check-token-validity?token=${args.token}`, args),
+    // new Promise((resolve) =>
+    //   setTimeout(() => resolve({ isValid: true }), 1000)
+    // ),
     {
       onError,
       onSuccess,
@@ -214,7 +211,7 @@ export const useCredentialsSignUpMutation = (
   }
 ) =>
   useMutation<void, ServerError, SignUpRequestBody>(
-    (args: SignUpRequestBody) => axios.post.bind(axios)("sign-out", args),
+    (args: SignUpRequestBody) => axios.post.bind(axios)("sign-up", args),
     {
       onError,
       onSuccess,

@@ -1,5 +1,4 @@
-import { Spinner } from '@components';
-import { ButtonStyled } from "./styles";
+import { Spinner } from "@components";
 
 interface IFormButtonProps {
   loading?: boolean;
@@ -15,12 +14,13 @@ export const FormButton = ({
   ...rest
 }: IFormButtonProps) => {
   return (
-    <ButtonStyled type="submit" {...rest} disabled={loading || disabled}>
-      {loading ? (
-        <Spinner/>
-      ) : (
-        <>{label}</>
-      )}
-    </ButtonStyled>
+    <button
+      className="bg-accent text-text1 w-full min-w-[100px] block rounded p-4 cursor-pointer border-none hover:enabled:not(:active):bg-surface1 disabled:cursor-none disabled:bg-gray-400"
+      type="submit"
+      {...rest}
+      disabled={loading || disabled}
+    >
+      {loading ? <Spinner /> : <>{label}</>}
+    </button>
   );
 };

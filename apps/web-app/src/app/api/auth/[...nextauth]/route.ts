@@ -18,7 +18,7 @@ const handler = NextAuth({
       },
       id: "credentials",
       async authorize(_, req) {
-        return axios.post.bind(axios)("sign-in", {
+        return await axios.post.bind(axios)("sign-in", {
           email: req.query?.email,
           password: req.query?.password,
         });
@@ -32,7 +32,7 @@ const handler = NextAuth({
     // after signin, REDIRECT -> JWT -> SESSION at every page refocus
     async signIn({ user, account, profile, email, credentials }) {
       // happens on sign-in of existing and of new users
-      // console.log('SIGN IN');
+      // console.log("SIGN IN");
       // console.log({ user, account, profile, email, credentials });
       if (account.provider == "google") {
         await axios.post.bind(axios)("sign-up/provider", {
@@ -43,6 +43,7 @@ const handler = NextAuth({
           provider: "google",
         });
       } else if (account.provider == "credentials") {
+        // console.log({ user, account });
         return true;
       }
 

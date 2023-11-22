@@ -53,7 +53,7 @@ export const Icons = {
     <FontAwesomeIcon icon={faArrowRightFromBracket} {...props} />
   ),
   USER: () => <FontAwesomeIcon icon={faUser} />,
-  EMAIL: (props) => <Envelope size={16} {...props} />,
+  EMAIL: (props) => <Envelope {...props} />,
   // EMPTY_HEART: () => <FaRegHeart />,
   // FULL_HEART: () => <FaHeart />,
 };

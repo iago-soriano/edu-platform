@@ -4,9 +4,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        acc: "hsl(var(--color-acc) / <alpha-value>)",
-        bkg: "hsl(var(--color-bkg) / <alpha-value>)",
-        txt: "hsl(var(--color-txt) / <alpha-value>)",
+        text1: "hsl(var(--text1) / <alpha-value>)",
+        text2: "hsl(var(--text2) / <alpha-value>)",
+        surface1: "hsl(var(--surface1) / <alpha-value>)",
+        surface2: "hsl(var(--surface2) / <alpha-value>)",
+        surface3: "hsl(var(--surface3) / <alpha-value>)",
+        surface4: "hsl(var(--surface4) / <alpha-value>)",
+        accent: "hsl(var(--accent) / <alpha-value>)",
+        error: "hsl(var(--error) / <alpha-value>)",
+        clearest: "hsl(var(--clearest) / <alpha-value>)",
       },
       gridTemplateColumns: {
         // 16 column grid

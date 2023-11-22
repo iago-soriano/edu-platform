@@ -1,21 +1,5 @@
 import styled from "styled-components";
 
-export const InputStyled = styled.input<{ error: any }>`
-  display: block;
-  padding: 15px;
-  border-radius: 3px;
-  width: 100%;
-  border: ${(p) =>
-    p.error ? `3px solid ${p.theme.colors.error}` : "1px solid gray"};
-  background-color: ${(p) => p.theme.colors.primary};
-  color: ${(p) => p.theme.colors.text};
-  ::placeholder {
-    /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: ${(p) => p.theme.colors.text};
-    opacity: 0.5; /* Firefox */
-  }
-`;
-
 export const InputIconContainer = styled.span`
   position: absolute;
   top: 42px;
@@ -36,6 +20,5 @@ export const ErrorMessageContainer = styled(subInputP)`
 
 export const InputLabelStyled = styled.label`
   display: block;
-  color: ${(p) => p.theme.colors.text};
   position: relative;
 `;

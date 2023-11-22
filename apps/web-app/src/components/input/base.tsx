@@ -1,11 +1,5 @@
 import React from "react";
 import { Tooltip, Icons } from "@components";
-import {
-  InputStyled,
-  ErrorMessageContainer,
-  InputLabelStyled,
-  InputIconContainer,
-} from "./styles";
 import { IInputProps } from "./interface";
 
 export function Input(args: IInputProps) {
@@ -24,7 +18,7 @@ export function Input(args: IInputProps) {
   const mandatoryTooltip = (
     <Tooltip content={"É preciso preencher para continuar"}>
       {"("}
-      <span className="text-red-500">&#10033;</span>
+      <span className="text-accent">&#10033;</span>
       {")"}
     </Tooltip>
   );
@@ -37,26 +31,30 @@ export function Input(args: IInputProps) {
   );
 
   return (
-    <InputLabelStyled style={{ display: hidden ? "none" : "block" }}>
-      <span className="font-bold flex flex-row mb-4">
+    <label
+      className="block relative"
+      style={{ display: hidden ? "none" : "block" }}
+    >
+      <span className="flex flex-row mb-4">
         {inputLabel?.text}{" "}
         <div className="mx-2">{inputLabel?.mandatory && mandatoryTooltip} </div>
         <div className="mx-2 flex items-center">
           {tooltipExplanation && explanationTooltip}
         </div>
       </span>
-      <InputStyled
+      <input
+        className="block p-4 rounded w-full bg-surface3 placeholder:opacity-80 placeholder:text-text2 autofill:"
         {...(register && register(name))}
         {...rest}
         placeholder={placeholder}
         error={errors && errors[name]}
       />
-      <span className="absolute top-14 right-3">{icon}</span>
+      <span className="absolute top-14 right-3 text-text1">{icon}</span>
       {errors && (
-        <ErrorMessageContainer>
+        <p className="text-left py-1 mt-2 mb-0 text-error">
           {errors && errors[name]?.message}
-        </ErrorMessageContainer>
+        </p>
       )}
-    </InputLabelStyled>
+    </label>
   );
 }

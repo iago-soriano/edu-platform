@@ -11,3 +11,4 @@ export * from "./tooltip";
 export * from "./footer";
 export * from "./spinner";
 export * from "./fixed-alerts";
+export * from "./page-image";

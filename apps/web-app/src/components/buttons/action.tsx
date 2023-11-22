@@ -6,7 +6,7 @@ export const ActionLink = ({ children, highlighted, className, href }) => {
   return (
     <Link
       className={twMerge(
-        "cursor-pointer my-auto mx-0 p-2 rounded-md transition-opacity hover:opacity-80 focus-visible:opacity-80 bg-acc text-white",
+        "cursor-pointer my-auto mx-0 p-2 rounded-md transition-opacity hover:opacity-80 focus-visible:opacity-80 bg-accent text-white",
         highlightedStyles,
         className
       )}
@@ -39,7 +39,7 @@ export const FormButton = ({
   return (
     <button
       className={twMerge(
-        "h-12 block w-full min-w-[100px] cursor-pointer my-auto mx-0 p-2 rounded-md transition-opacity hover:opacity-80 focus-visible:opacity-80 bg-acc text-white",
+        "h-12 block w-full min-w-[100px] cursor-pointer my-auto mx-0 p-2 rounded-md transition-opacity hover:opacity-80 focus-visible:opacity-80 bg-accent text-white",
         disabledStyles,
         className
       )}

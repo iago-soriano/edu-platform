@@ -1,9 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   PasswordInput,
   Form,
-  Footer,
   FormButton,
   ErrorAlert,
   errorToast,
@@ -14,15 +13,16 @@ import {
   useChangePasswordMutation,
   useCheckChangePasswordTokenMutation,
   changePasswordSchema,
-  useQueryParam,
 } from "@infrastructure";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Spinner } from "@components";
+import Link from "next/link";
 
 const Page = () => {
   const { token, isVerifying, isValid } = useVerifyToken();
   const { error, onSubmit, loading, isSuccess } = useChangePassword();
 
+  console.log({ token, isVerifying, isValid });
   if (isVerifying && !isValid)
     return (
       <div className="w-52 h-52 max-w-[200px]">
@@ -32,21 +32,28 @@ const Page = () => {
   if (!isValid)
     return (
       <div id="invalid-token">
-        <h1>O token não é válido.</h1>
-        <a href="auth/change-password-request">
+        <h4>O token não é válido</h4>
+        <br />
+        <Link
+          className="hover:opacity-70 inline-block py-3 px-1 underline"
+          href="auth/change-password-request"
+        >
           Solicite uma nova troca de senha
-        </a>
+        </Link>
       </div>
     );
   return (
     <>
-      <h1>Redefinir senha</h1>
+      <h4 className="py-3 my-5 inline-block">Redefinir senha</h4>
       {error && (
         <>
           <ErrorAlert>{error}</ErrorAlert>
-          <a href="auth/change-password-request">
+          <Link
+            className="hover:opacity-70 inline-block py-3 px-1 underline"
+            href="auth/change-password-request"
+          >
             Solicite uma nova troca de senha
-          </a>
+          </Link>
         </>
       )}
       <Form onSubmit={onSubmit} schema={changePasswordSchema}>
@@ -56,11 +63,15 @@ const Page = () => {
           inputLabel={{ text: "Senha", mandatory: true }}
           placeholder="Digite aqui sua senha"
         />
+        <br />
+
         <PasswordInput
           name="confirmPassword"
           inputLabel={{ text: "Confirmação de Senha", mandatory: true }}
           placeholder="Digite novamente sua senha"
         />
+        <br />
+
         <FormButton label="Enviar" loading={loading} disabled={isSuccess} />
       </Form>
     </>
@@ -68,18 +79,20 @@ const Page = () => {
 };
 
 const useVerifyToken = () => {
-  const router = useRouter();
-  const token = useQueryParam("changePasswordToken", router);
+  const searchParams = useSearchParams();
+
+  const token = searchParams.get("changePasswordToken");
   const mutation = useCheckChangePasswordTokenMutation();
 
   useEffect(() => {
-    if (token && token.data) {
-      mutation.mutate({ token: token.data });
+    if (token) {
+      mutation.mutate({ token });
     }
-  }, [token?.data]);
+  }, [token]);
 
+  console.log(mutation.isError, mutation.data);
   return {
-    token: token?.data,
+    token: token,
     isVerifying: mutation.isLoading || mutation.isIdle,
     isValid: mutation.isError || (mutation.isSuccess && mutation.data?.isValid), //if this endpoint is off, don't keep user from trying to change their password
   };

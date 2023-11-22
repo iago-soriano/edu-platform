@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Icons, Input } from "@components";
-import { InputIcon } from './icon'; 
 import { IInputProps } from "./interface";
 
 export const PasswordInput = ({ label, placeholder, ...rest }: IInputProps) => {
@@ -14,11 +13,12 @@ export const PasswordInput = ({ label, placeholder, ...rest }: IInputProps) => {
       placeholder={placeholder}
       tooltipExplanation="Senha deve conter ao menos 8 caracteres, com ao menos um número, uma letra maiúscula e um caracter especial, como _?#"
       icon={
-        <InputIcon
+        <i
+          className="cursor-pointer"
           onClick={() => setPasswordVisible((c) => !c)}
-          icon={passwordVisible ? <Icons.CAN_SEE /> : <Icons.CANT_SEE />}
-          
-        />
+        >
+          {passwordVisible ? <Icons.CAN_SEE /> : <Icons.CANT_SEE />}
+        </i>
       }
     />
   );

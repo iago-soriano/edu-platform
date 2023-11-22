@@ -29,7 +29,7 @@ export const ThemeProvider: React.FC<MyComponentProps> = ({
   children,
   defaultTheme,
 }) => {
-  const [mode, setModeState] = useState<Modes>(defaultTheme || "dark");
+  const [mode, setModeState] = useState<Modes>(defaultTheme || "light");
 
   const setMode = (args?: string) => {
     let colorMode = defaultTheme || args || storage.getMode(mode);

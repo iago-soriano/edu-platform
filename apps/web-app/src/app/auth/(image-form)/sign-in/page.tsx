@@ -16,20 +16,25 @@ import {
   useGoogleSignInMutation,
 } from "@infrastructure";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const { googleSignInMutation, credentialsSignInMutation, errorAlert } =
-    useSignInPage();
+  const { googleSignInMutation, credentialsSignInMutation } = useSignInPage();
+  const hasError = () =>
+    googleSignInMutation.error || credentialsSignInMutation.error;
+  const getError = () =>
+    googleSignInMutation.error.message ||
+    credentialsSignInMutation.error.message;
 
   return (
     <>
-      <h3 className="py-3 my-5 inline-block">Entrar</h3>
+      <h4 className="py-3 my-5 inline-block">Entrar</h4>
       <GoogleSignInButton
         isLoading={googleSignInMutation.isLoading}
         onClick={googleSignInMutation.mutate}
       />
       <Separator> Ou </Separator>
-      {errorAlert}
+      {hasError() && <ErrorAlert>{getError()}</ErrorAlert>}
       <br />
       <Form onSubmit={credentialsSignInMutation.mutate} schema={signInSchema}>
         <Input
@@ -46,7 +51,7 @@ const Page = () => {
         />
         <br />
         <Link
-          className="hover:opacity-70 inline-block py-3 px-1 text-accent-1 underline mb-4 hover:text-accent-2"
+          className="hover:opacity-70 inline-block py-3 px-1 underline mb-4"
           href="/auth/change-password-request"
         >
           Esqueceu sua senha?
@@ -62,18 +67,21 @@ const Page = () => {
 };
 
 const useSignInPage = () => {
-  const credentialsSignInMutation = useCredentialsSignInMutation();
-  const googleSignInMutation = useGoogleSignInMutation();
+  const router = useRouter();
 
-  const getErrorAlert = () => {
-    const error = googleSignInMutation.error || credentialsSignInMutation.error;
-    return error && <ErrorAlert>{error?.message}</ErrorAlert>;
-  };
+  const credentialsSignInMutation = useCredentialsSignInMutation({
+    onError: (err) => {
+      errorToast("Ocorreu um erro :(");
+    },
+    onSuccess: () => {
+      router.push("/dashboard");
+    },
+  });
+  const googleSignInMutation = useGoogleSignInMutation();
 
   return {
     credentialsSignInMutation,
     googleSignInMutation,
-    errorAlert: getErrorAlert(),
   };
 };
 
