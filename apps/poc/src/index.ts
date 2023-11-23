@@ -10,6 +10,10 @@ import serverless from "serverless-http";
 const app = express();
 app.use(express.json());
 
+app.get("/hello", async (req, res) => {
+  return res.status(200).json(`${pathTest}`);
+});
+
 app.get("/ts-paths", async (req, res) => {
   return res.status(200).json(`${pathTest}`);
 });
