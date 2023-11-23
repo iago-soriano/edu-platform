@@ -1,5 +1,5 @@
-import { AuthRules } from "@edu-platform/common";
-import { pathTest } from "@main";
+// import { AuthRules } from "@edu-platform/common";
+// import { pathTest } from "@main";
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
@@ -11,12 +11,12 @@ const app = express();
 app.use(express.json());
 
 app.get("/hello", async (req, res) => {
-  return res.status(200).json(`${pathTest}`);
+  return res.status(200).json("Hello");
 });
 
-app.get("/ts-paths", async (req, res) => {
-  return res.status(200).json(`${pathTest}`);
-});
+// app.get("/ts-paths", async (req, res) => {
+//   return res.status(200).json(`${pathTest}`);
+// });
 
 app.get("/outside", async (req, res) => {
   const resp = await fetch("google.com");
@@ -35,9 +35,9 @@ app.get("/connect-db", async (req, res) => {
   }
 });
 
-app.get("/monorepo", (req, res) => {
-  return res.status(200).json(`${AuthRules.PASSWORD_INSTRUCTION}`);
-});
+// app.get("/monorepo", (req, res) => {
+//   return res.status(200).json(`${AuthRules.PASSWORD_INSTRUCTION}`);
+// });
 
 export const handler = serverless(app);
 
