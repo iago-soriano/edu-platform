@@ -4,7 +4,7 @@ import {
   ErrorRequestHandler,
   RequestHandler,
 } from "express";
-import { UserSelectDTO } from "./dtos";
+import { UserSelectDTO } from "./repository/dtos";
 
 export enum HttpMethod {
   GET = "get",

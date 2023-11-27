@@ -6,7 +6,7 @@ import {
   TokenType,
   ActivityInsertDTO,
   ActivitySelectDTO,
-  TopicDTO,
+  ActivityVersionInsertDTO,
   ActivityContentInsertDTO,
   ActivityVersionSelectDTO,
   ActivityContentSelectDTO,
@@ -42,14 +42,12 @@ export interface ITokenRepository {
 
 export interface IActivitiesRepository {
   insertActivityAndNewVersion: (
-    args: ActivityInsertDTO,
-    topicIds: number[]
+    authorId: number
   ) => Promise<{ activityId: number; versionId: number }>;
   getActivityById: (activityId: number) => Promise<ActivitySelectDTO>;
-  updateActivity: (
-    activityId: number,
-    args: ActivityInsertDTO,
-    topicIds?: number[]
+  updateActivityVersionMetadata: (
+    versionId: number,
+    args: ActivityVersionInsertDTO
   ) => Promise<void>;
   insertContent: (
     content: ActivityContentInsertDTO
@@ -64,9 +62,4 @@ export interface IActivitiesRepository {
   getActivityContentByContentId: (
     contentId: number
   ) => Promise<ActivityContentSelectDTO[]>;
-}
-
-export interface ITopicsRepository {
-  findAllOrThrow: (ids: number[]) => Promise<TopicDTO[]>;
-  getAllTopics: () => Promise<TopicDTO[]>;
 }
