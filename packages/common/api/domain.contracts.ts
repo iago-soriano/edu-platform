@@ -1,11 +1,9 @@
 // GetTopics [GET topics]
 
-import { ActivityInsertDTO } from "@interfaces";
-
 // devolve todos os topics do bd
 export type GetTopicsRequestBody = {};
 export type GetTopicsResponseBody = {
-  topics: { id: number; createdAt: Date; updatedAt: Date; label: string }[];
+  topics: { id: number; label: string }[];
 };
 
 // SaveActivity [POST activities]
@@ -22,7 +20,6 @@ Obs2: no front, no onBlur de cada alteração)
 export type SaveActivityRequestBody = {
   title: string;
   description: string;
-  topicIds: number[];
   activityId?: number;
 };
 export type SaveActivityResponseBody = {

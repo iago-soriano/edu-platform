@@ -8,12 +8,6 @@ export interface SignInResponseBody {
   user: { email: string; name?: string; image?: string };
 }
 
-export type ProviderSignInRequestBody = { email: string; provider: string };
-export type ProviderSignInResponseBody = {
-  token: string;
-  user: { email: string; name?: string; image?: string };
-};
-
 // sign-up
 export interface SignUpRequestBody {
   email: string;
