@@ -164,3 +164,21 @@ export class AnswerKeyTextQuestionIsTooSmall extends CustomError {
     );
   }
 }
+
+export class CommentIsTooLarge extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super(
+      `O comentário é longo demais. O tamanho máximo permitido é de ${DomainRules.QUESTION.ANSWERKEY_TEXT.MAX_LENGTH}`
+    );
+  }
+}
+
+export class CommentIsTooSmall extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super(
+      `O comentário é curto demais. O tamanho mínimo permitido é de ${DomainRules.QUESTION.ANSWERKEY_TEXT.MIN_LENGTH}`
+    );
+  }
+}

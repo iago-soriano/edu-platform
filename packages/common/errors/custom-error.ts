@@ -1,6 +1,9 @@
 export abstract class CustomError extends Error {
   abstract HTTPstatusCode?: number;
-  constructor(message: string) {
+  constructor(
+    message: string,
+    public realReason: string = undefined
+  ) {
     super(message);
   }
 }

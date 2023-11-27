@@ -15,6 +15,13 @@ export class HasProviderAccountError extends CustomError {
   }
 }
 
+export class ActivityNotFound extends CustomError {
+  HTTPstatusCode = 404;
+  constructor({ realReason }) {
+    super("Atividade não encontrada", realReason);
+  }
+}
+
 export class InvalidPasswordError extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
