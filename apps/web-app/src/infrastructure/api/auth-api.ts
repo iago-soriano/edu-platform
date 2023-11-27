@@ -9,12 +9,6 @@ import {
   //sign-out
   SignOutRequestBody,
   SignOutResponseBody,
-  // provider sign-in
-  ProviderSignInRequestBody,
-  ProviderSignInResponseBody,
-  // provider sign-up
-  ProviderSignUpRequestBody,
-  ProviderSignUpResponseBody,
   // verify account
   VerifyAccountRequestBody,
   VerifyAccountResponseBody,
@@ -31,25 +25,17 @@ import {
 import { ServerError } from "@edu-platform/common";
 import { axios } from "@infrastructure";
 import { nextAuthSignIn } from "./next-auth-wraper";
+import {
+  ErrorCallback,
+  MutationArgsType,
+  MutationArgsDefaultValue,
+} from "./types";
+// TODO: refactor to use the types above in all calls
 
-type ErrorCallback<V> = (
-  e: ServerError,
-  variables: V,
-  context: unknown
-) => unknown;
-
-export const useChangePasswordRequestMutation = (
-  {
-    onError,
-    onSuccess,
-  }: Partial<{
-    onError: ErrorCallback<ChangePasswordRequestRequestBody>;
-    onSuccess: () => unknown;
-  }> = {
-    onError: () => {},
-    onSuccess: () => {},
-  }
-) =>
+export const useChangePasswordRequestMutation = ({
+  onError,
+  onSuccess,
+}: MutationArgsType<ChangePasswordRequestRequestBody> = MutationArgsDefaultValue) =>
   useMutation<
     ChangePasswordRequestResponseBody,
     ServerError,
@@ -128,9 +114,6 @@ export const useCheckChangePasswordTokenMutation = (
   >(
     (args: CheckChangePasswordTokenRequestQueryParams) =>
       axios.get.bind(axios)(`check-token-validity?token=${args.token}`, args),
-    // new Promise((resolve) =>
-    //   setTimeout(() => resolve({ isValid: true }), 1000)
-    // ),
     {
       onError,
       onSuccess,
