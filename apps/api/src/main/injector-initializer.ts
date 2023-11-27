@@ -8,7 +8,6 @@ import {
   ChangePasswordRequestController,
   ChangePasswordController,
   CheckChangePasswordTokenRequestController,
-  GetTopicsController,
   SaveActivityController,
   UpdateActivityStatusController,
   SaveQuestionController,
@@ -24,7 +23,6 @@ import {
   ChangePasswordUseCase,
   CheckChangePasswordTokenRequestUseCase,
   SaveActivityUseCase,
-  GetTopicsUseCase,
   UpdateActivityStatusUseCase,
   SaveQuestionUseCase,
   SaveContentUseCase,
@@ -37,7 +35,6 @@ import {
   UserRepository,
   TokenRepository,
   AssetRepository,
-  TopicsRepository,
   ActivityRepository,
 } from "@infrastructure";
 
@@ -61,7 +58,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(CheckChangePasswordTokenRequestController)
       .classic(),
     saveActivityController: awilix.asClass(SaveActivityController).classic(),
-    getTopicsController: awilix.asClass(GetTopicsController).classic(),
     updateActivityStatusController: awilix
       .asClass(UpdateActivityStatusController)
       .classic(),
@@ -89,7 +85,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(CheckChangePasswordTokenRequestUseCase)
       .classic(),
     saveActivityUseCase: awilix.asClass(SaveActivityUseCase).classic(),
-    getTopicsUseCase: awilix.asClass(GetTopicsUseCase).classic(),
     updateActivityStatusUseCase: awilix
       .asClass(UpdateActivityStatusUseCase)
       .classic(),
@@ -99,7 +94,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),
     tokenRepository: awilix.asClass(TokenRepository).classic(),
-    topicsRepository: awilix.asClass(TopicsRepository).classic(),
     activitiesRepository: awilix.asClass(ActivityRepository).classic(),
   });
 };
