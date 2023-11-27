@@ -40,7 +40,7 @@ export const Footer = () => {
           {isAuthenticated && (
             <FooterLink href="/dashboard">Minha área</FooterLink>
           )}
-          <FooterLink href="/how-it-works">Como funciona</FooterLink>
+          <FooterLink href="/faq">Como funciona</FooterLink>
           {!isAuthenticated && (
             <>
               <FooterLink href="/auth/sign-in">Entrar</FooterLink>

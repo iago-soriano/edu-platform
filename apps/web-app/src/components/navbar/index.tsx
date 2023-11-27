@@ -16,13 +16,12 @@ export const Navbar = () => {
   const user = session.data?.user;
   const credentialsSignOut = useSignOutMutation();
 
-  // console.log({ session, user, isAuthenticated });
   const handleSignOut = () => {
     nextAuthSignOut({
       redirect: false,
       callbackUrl: "/",
     });
-    router.replace("/product");
+    router.replace("/");
     if (session.data && !session.data.user.provider)
       credentialsSignOut.mutate({});
   };

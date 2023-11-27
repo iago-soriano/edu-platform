@@ -72,7 +72,7 @@ export const HowItWorksButton = ({
   Component,
 }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/how-it-works"
+    path="/faq"
     label="Como funciona"
     currentPath={currentPath}
     Component={Component}

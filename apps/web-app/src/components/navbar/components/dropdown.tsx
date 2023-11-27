@@ -15,7 +15,7 @@ export const Dropdown = ({
   return (
     <div
       className={twMerge(
-        "shadow-lg absolute overflow-y-hidden z-50 bg-bkg transition-all text-txt",
+        "shadow-lg absolute overflow-y-hidden bg-surface2 z-50 transition-all",
         openClasses,
         className
       )}
