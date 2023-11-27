@@ -32,7 +32,7 @@ resource "aws_subnet" "private_b" {
   tags = var.tags
 }
 
-### public subnets routing
+### public subnet routing
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
   tags = var.tags
@@ -56,20 +56,33 @@ resource "aws_route_table_association" "public" {
 }
 
 ### private subnets routing
+data "aws_instance" "nat" {
+  instance_id = "i-041af7f63d0001881"
+}
+# data "aws_eip" "this" {
+#   id = "eipalloc-0a0446f93e6ba2fe7"
+# }
 
-# some data object to point to ec2 instance
+# resource "aws_nat_gateway" "main" {
+#   allocation_id = data.aws_eip.this.id
+#   subnet_id     = aws_subnet.public.id
+
+#   # To ensure proper ordering, it is recommended to add an explicit dependency
+#   # on the Internet Gateway for the VPC.
+#   depends_on = [aws_internet_gateway.igw]
+# }
 
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
+  route {
+    cidr_block = "0.0.0.0/0"
+    network_interface_id = data.aws_instance.nat.network_interface_id
+    # network_interface_id = data.aws_instance.bastion.network_interface_id
+  }
+
   tags = var.tags
 }
-
-# resource "aws_route" "private" {
-#   route_table_id         = aws_route_table.private.id
-#   destination_cidr_block = "0.0.0.0/0"
-#   nat_gateway_id         = aws_nat_gateway.main.id
-# }
 
 resource "aws_route_table_association" "private_a" {
   subnet_id      = aws_subnet.private_a.id
