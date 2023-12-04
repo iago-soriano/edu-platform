@@ -76,7 +76,11 @@ export const BigScreenNavbar = ({
           <div className="flex flex-row justify-center">
             {isAuthenticated ? (
               <li>
-                <DashboardButton currentPath={currentPath} Component={Button} />
+                <DashboardButton
+                  isHighlighted={(cp) => cp.startsWith("/dashboard")}
+                  currentPath={currentPath}
+                  Component={Button}
+                />
               </li>
             ) : (
               <li>

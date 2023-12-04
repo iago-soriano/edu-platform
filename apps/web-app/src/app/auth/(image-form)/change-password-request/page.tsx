@@ -67,7 +67,7 @@ const Page = () => {
 
         <FormButton
           label="Enviar"
-          loading={mutation.isLoading}
+          loading={mutation.isPending}
           disabled={mutation.isSuccess}
         />
       </Form>

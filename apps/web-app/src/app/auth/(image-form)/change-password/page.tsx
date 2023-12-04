@@ -93,7 +93,7 @@ const useVerifyToken = () => {
   console.log(mutation.isError, mutation.data);
   return {
     token: token,
-    isVerifying: mutation.isLoading || mutation.isIdle,
+    isVerifying: mutation.isPending || mutation.isIdle,
     isValid: mutation.isError || (mutation.isSuccess && mutation.data?.isValid), //if this endpoint is off, don't keep user from trying to change their password
   };
 };
@@ -123,7 +123,7 @@ const useChangePassword = () => {
   return {
     error: mutation.error?.message,
     onSubmit: onSubmit,
-    loading: mutation.isLoading,
+    loading: mutation.isPending,
     isSuccess: mutation.isSuccess,
   };
 };

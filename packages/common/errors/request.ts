@@ -36,10 +36,45 @@ export class UserNotFoundError extends CustomError {
   }
 }
 
-export class ActivityStatusNotFound extends CustomError {
+export class ActivityIsNotFound extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
-    super("Status não encontrado");
+    super("Atividade não encontrada");
+  }
+}
+
+export class ActivityStatusNotFound extends CustomError {
+  HTTPstatusCode = 400;
+  constructor({ status }) {
+    super(`Status ${status} não encontrado`);
+  }
+}
+
+export class ActivityContentNotFound extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super(`Content não encontrado`);
+  }
+}
+
+export class ActivityVersionNotFound extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super(`Essa versão da atividade não foi encontrada`);
+  }
+}
+
+export class UserNotActivityAuthor extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super("O usuário não é o autor desta atividade");
+  }
+}
+
+export class ActivityIsNotDraft extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super("A atividade não é um draft");
   }
 }
 

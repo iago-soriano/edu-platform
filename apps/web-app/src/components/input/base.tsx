@@ -47,7 +47,7 @@ export function Input(args: IInputProps) {
         {...(register && register(name))}
         {...rest}
         placeholder={placeholder}
-        error={errors && errors[name]}
+        // error={errors && errors[name]} // ??
       />
       <span className="absolute top-14 right-3 text-text1">{icon}</span>
       {errors && (

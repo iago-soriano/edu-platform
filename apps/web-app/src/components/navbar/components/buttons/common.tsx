@@ -15,6 +15,7 @@ export interface NavbarButtonProps {
   Component: any; // TODO: figure out this type
   currentPath: string;
   icon?: ReactNode;
+  isHighlighted?: (path: string) => boolean;
 }
 
 export const AbstractNavbarButton = ({
@@ -23,11 +24,14 @@ export const AbstractNavbarButton = ({
   label,
   Component,
   icon,
+  isHighlighted,
 }: NavbarButtonProps & ButtonDefinition) => {
   return (
     <Component
       href={path}
-      highlighted={currentPath === path} /*onClick={onClick}*/
+      highlighted={
+        isHighlighted ? isHighlighted(currentPath) : currentPath === path
+      } /*onClick={onClick}*/
     >
       {icon && <div style={{ paddingRight: 10 }}>{icon}</div>}
       {label}

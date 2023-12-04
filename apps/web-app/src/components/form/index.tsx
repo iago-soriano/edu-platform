@@ -20,10 +20,6 @@ export function Form({
   schema,
   error,
 }: IForm) {
-  // useEffect(() => {
-  //   if (error) reset();
-  // }, [error]);
-
   const defaults = defaultValues || {};
   const {
     register,
@@ -32,7 +28,7 @@ export function Form({
     reset,
   } = useForm({
     defaultValues: defaults,
-    resolver: yupResolver(schema),
+    resolver: schema ? yupResolver(schema) : undefined,
   });
 
   return (

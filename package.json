@@ -8,7 +8,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-
+    "@types/multer": "^1.4.11"
   },
   "workspaces": [
     "apps/*",
@@ -16,7 +16,5 @@
   ],
   "author": "",
   "license": "ISC",
-  "packageManager": "npm@8.19.3",
-  "dependencies": {
-  }
+  "packageManager": "npm@8.19.3"
 }

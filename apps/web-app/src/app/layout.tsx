@@ -6,23 +6,38 @@ import {
   NextAuthProvider,
   useColorTheme,
 } from "@contexts";
-import { getServerSession } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/global.css";
 import StyledJsxRegistry from "../styles/styled-components-registry";
 import { ThemedHtml } from "./_themed_html";
+import { cookies } from "next/headers";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import { axios, getServerSession } from "@infrastructure";
 
 export const metadata = {
   title: "Edu Platform",
   description: "Uma plataforma para professores de idiomas",
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout(
+  context
+  //   {
+  //   children,
+  // }: {
+  //   children: React.ReactNode;
+  // }
+) {
+  // console.log({ cookies: cookies().get("next-auth.session-token") });
   const serverSession = await getServerSession();
+
+  // if (serverSession?.user) {
+  //   axios.setHeader("authorization", `Bearer ${serverSession.token}`);
+  // } else {
+  //   axios.setHeader("authorization", null);
+  // }
+
+  // console.log("got jwt in root layout", !!serverSession?.token);
   return (
     <StyledJsxRegistry>
       <ThemeProvider>
@@ -32,7 +47,7 @@ export default async function RootLayout({
               <NextAuthProvider session={serverSession}>
                 <AuthProvider>
                   <Navbar />
-                  {children}
+                  {context.children}
                 </AuthProvider>
               </NextAuthProvider>
               <Toast />

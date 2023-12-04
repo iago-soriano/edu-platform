@@ -3,6 +3,9 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
+      boxShadow: {
+        outline: "0px -2px 0px #c40 inset",
+      },
       colors: {
         text1: "hsl(var(--text1) / <alpha-value>)",
         text2: "hsl(var(--text2) / <alpha-value>)",

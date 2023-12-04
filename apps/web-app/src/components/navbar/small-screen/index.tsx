@@ -30,7 +30,6 @@ export const SmallScreenNavbar = ({
 }) => {
   const [burguerOpen, setBurguerOpen] = useState(false);
   const addRef = useClickOutside(() => {
-    console.log("nav");
     setBurguerOpen(false);
   });
 

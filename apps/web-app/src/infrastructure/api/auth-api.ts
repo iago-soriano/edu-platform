@@ -35,19 +35,20 @@ import {
 export const useChangePasswordRequestMutation = ({
   onError,
   onSuccess,
-}: MutationArgsType<ChangePasswordRequestRequestBody> = MutationArgsDefaultValue) =>
+}: MutationArgsType<
+  ChangePasswordRequestRequestBody,
+  CheckChangePasswordTokenResponseBody
+> = MutationArgsDefaultValue) =>
   useMutation<
     ChangePasswordRequestResponseBody,
     ServerError,
     ChangePasswordRequestRequestBody
-  >(
-    (args: ChangePasswordRequestRequestBody) =>
+  >({
+    mutationFn: (args: ChangePasswordRequestRequestBody) =>
       axios.post.bind(axios)("change-password-request", args),
-    {
-      onError,
-      onSuccess,
-    }
-  );
+    onError,
+    onSuccess,
+  });
 
 export const useChangePasswordMutation = (
   {
@@ -65,14 +66,12 @@ export const useChangePasswordMutation = (
     ChangePasswordResponseBody,
     ServerError,
     ChangePasswordRequestBody
-  >(
-    (args: ChangePasswordRequestBody) =>
+  >({
+    mutationFn: (args: ChangePasswordRequestBody) =>
       axios.put.bind(axios)("change-password", args),
-    {
-      onError,
-      onSuccess,
-    }
-  );
+    onError,
+    onSuccess,
+  });
 
 export const useVerifyAccountMutation = (
   {
@@ -87,9 +86,9 @@ export const useVerifyAccountMutation = (
   }
 ) =>
   useMutation<VerifyAccountResponseBody, ServerError, VerifyAccountRequestBody>(
-    (args: VerifyAccountResponseBody) =>
-      axios.patch.bind(axios)("verify-account", args),
     {
+      mutationFn: (args: VerifyAccountResponseBody) =>
+        axios.patch.bind(axios)("verify-account", args),
       onError,
       onSuccess,
     }
@@ -111,14 +110,12 @@ export const useCheckChangePasswordTokenMutation = (
     CheckChangePasswordTokenResponseBody,
     ServerError,
     CheckChangePasswordTokenRequestQueryParams
-  >(
-    (args: CheckChangePasswordTokenRequestQueryParams) =>
+  >({
+    mutationFn: (args: CheckChangePasswordTokenRequestQueryParams) =>
       axios.get.bind(axios)(`check-token-validity?token=${args.token}`, args),
-    {
-      onError,
-      onSuccess,
-    }
-  );
+    onError,
+    onSuccess,
+  });
 
 export const useCredentialsSignInMutation = (
   {
@@ -132,14 +129,12 @@ export const useCredentialsSignInMutation = (
     onSuccess: () => {},
   }
 ) =>
-  useMutation<void, ServerError, SignInRequestBody>(
-    ({ email, password }: SignInRequestBody) =>
+  useMutation<void, ServerError, SignInRequestBody>({
+    mutationFn: ({ email, password }: SignInRequestBody) =>
       nextAuthSignIn("credentials", { redirect: false }, { email, password }),
-    {
-      onError,
-      onSuccess,
-    }
-  );
+    onError,
+    onSuccess,
+  });
 
 export const useSignOutMutation = (
   {
@@ -153,13 +148,11 @@ export const useSignOutMutation = (
     onSuccess: () => {},
   }
 ) =>
-  useMutation<SignOutResponseBody, ServerError, SignOutRequestBody>(
-    () => axios.post.bind(axios)("sign-out"),
-    {
-      onError,
-      onSuccess,
-    }
-  );
+  useMutation<SignOutResponseBody, ServerError, SignOutRequestBody>({
+    mutationFn: () => axios.post.bind(axios)("sign-out"),
+    onError,
+    onSuccess,
+  });
 
 export const useGoogleSignInMutation = (
   {
@@ -173,13 +166,11 @@ export const useGoogleSignInMutation = (
     onSuccess: () => {},
   }
 ) =>
-  useMutation<void, ServerError, void>(
-    () => nextAuthSignIn("google", { redirect: false }),
-    {
-      onError,
-      onSuccess,
-    }
-  );
+  useMutation<void, ServerError, void>({
+    mutationFn: () => nextAuthSignIn("google", { redirect: false }),
+    onError,
+    onSuccess,
+  });
 
 export const useCredentialsSignUpMutation = (
   {
@@ -193,10 +184,9 @@ export const useCredentialsSignUpMutation = (
     onSuccess: () => {},
   }
 ) =>
-  useMutation<void, ServerError, SignUpRequestBody>(
-    (args: SignUpRequestBody) => axios.post.bind(axios)("sign-up", args),
-    {
-      onError,
-      onSuccess,
-    }
-  );
+  useMutation<void, ServerError, SignUpRequestBody>({
+    mutationFn: (args: SignUpRequestBody) =>
+      axios.post.bind(axios)("sign-up", args),
+    onError,
+    onSuccess,
+  });

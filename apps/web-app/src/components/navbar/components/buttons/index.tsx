@@ -46,12 +46,14 @@ export const ProductButton = ({
 export const DashboardButton = ({
   currentPath,
   Component,
+  isHighlighted,
 }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/dashboard"
+    path="/dashboard/my-activities"
     label="Minha Área"
     currentPath={currentPath}
     Component={Component}
+    isHighlighted={isHighlighted}
   />
 );
 
@@ -113,7 +115,7 @@ export const SignUpButton = ({ currentPath, Component }: NavbarButtonProps) => (
 export const SignOutButton = ({ signOut }) => (
   <button
     onClick={signOut}
-    className="hover:underline hover:cursor-pointer flex flex-row items-center mx-auto w-full justify-center"
+    className="hover:underline hover:opacity-70 hover:cursor-pointer flex flex-row items-center mx-auto w-full justify-center"
   >
     <Icons.EXIT className="py-3" />
     <span className="p-3 inline-block">Sair</span>

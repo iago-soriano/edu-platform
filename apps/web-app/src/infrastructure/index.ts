@@ -4,3 +4,4 @@ export * from "./api/auth-api";
 export * from "./api/domain-api";
 export * from "./form-validations";
 export * from "./hooks";
+export * from "./auth/session";

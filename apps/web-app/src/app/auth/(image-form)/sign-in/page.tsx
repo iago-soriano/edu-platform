@@ -16,21 +16,25 @@ import {
   useGoogleSignInMutation,
 } from "@infrastructure";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Page = () => {
+  const searchParams = useSearchParams();
   const { googleSignInMutation, credentialsSignInMutation } = useSignInPage();
   const hasError = () =>
-    googleSignInMutation.error || credentialsSignInMutation.error;
+    googleSignInMutation.error ||
+    credentialsSignInMutation.error ||
+    !!searchParams.get("error");
   const getError = () =>
-    googleSignInMutation.error.message ||
-    credentialsSignInMutation.error.message;
+    googleSignInMutation.error?.message ||
+    credentialsSignInMutation.error?.message ||
+    searchParams.get("error");
 
   return (
     <>
       <h4 className="py-3 my-5 inline-block">Entrar</h4>
       <GoogleSignInButton
-        isLoading={googleSignInMutation.isLoading}
+        isLoading={googleSignInMutation.isPending}
         onClick={googleSignInMutation.mutate}
       />
       <Separator> Ou </Separator>
@@ -59,7 +63,7 @@ const Page = () => {
         <br />
         <FormButton
           label="Entrar"
-          loading={credentialsSignInMutation.isLoading}
+          loading={credentialsSignInMutation.isPending}
         />
       </Form>
     </>
@@ -74,7 +78,7 @@ const useSignInPage = () => {
       errorToast("Ocorreu um erro :(");
     },
     onSuccess: () => {
-      router.push("/dashboard");
+      router.push("/dashboard/my-activities");
     },
   });
   const googleSignInMutation = useGoogleSignInMutation();

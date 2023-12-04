@@ -1,5 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Envelope, Question, Eye, EyeSlash } from "@phosphor-icons/react";
+import {
+  Envelope,
+  Question,
+  Eye,
+  EyeSlash,
+  Check,
+} from "@phosphor-icons/react";
 import {
   faPen,
   faTimes,
@@ -10,7 +16,6 @@ import {
   faQuestionCircle,
   faGlobe,
   faSearch,
-  faCheck,
   faHourglassHalf,
   faPlus,
   faList,
@@ -42,7 +47,7 @@ export const Icons = {
   QUESTION_CIRCLE: (props) => <Question size={20} {...props} />,
   GLOBE: () => <FontAwesomeIcon icon={faGlobe} />,
   SEARCH: () => <FontAwesomeIcon icon={faSearch} />,
-  CHECK: () => <FontAwesomeIcon icon={faCheck} />,
+  CHECK: (props) => <Check {...props} />,
   IN_PROGRESS: () => <FontAwesomeIcon icon={faHourglassHalf} />,
   PLUS: () => <FontAwesomeIcon icon={faPlus} />,
   LIST: () => <FontAwesomeIcon icon={faList} />,

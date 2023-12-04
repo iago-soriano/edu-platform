@@ -14,6 +14,7 @@ const FooterHeading = ({ children }) => (
 );
 export const Footer = () => {
   const session = useSession();
+  // console.log(session);
   const isAuthenticated = session.status == "authenticated";
 
   return (
@@ -38,7 +39,7 @@ export const Footer = () => {
           <FooterHeading>Navegação</FooterHeading>
           <FooterLink href="/">Home</FooterLink>
           {isAuthenticated && (
-            <FooterLink href="/dashboard">Minha área</FooterLink>
+            <FooterLink href="/dashboard/my-activities">Minha área</FooterLink>
           )}
           <FooterLink href="/faq">Como funciona</FooterLink>
           {!isAuthenticated && (

@@ -1,30 +1,42 @@
-// GetTopics [GET topics]
+import { ContentTypeTypes } from "../../../apps/api/src/application/domain/activity-content/base";
+import {
+  ActivityContentSelectDTO,
+  QuestionSelectDTO,
+} from "./../../../apps/api/src/interfaces/repository/dtos";
 
-// devolve todos os topics do bd
-export type GetTopicsRequestBody = {};
-export type GetTopicsResponseBody = {
-  topics: { id: number; label: string }[];
-};
-
-// SaveActivity [POST activities]
-/*
-(Obs: no front, apertar botão de criar atividade e entrar na página de criação com os defaults
- para title, descr e topics. Esse botão chama este endpoint. 
-Obs2: no front, no onBlur de cada alteração)
- /* 
-- se for informado um activityId, obter a activity
-- obtenho do db os topics informados pelo id
-- crio uma activity a partir do objeto de domínio
-- insiro activity no db
-*/
-export type SaveActivityRequestBody = {
-  title: string;
-  description: string;
-  activityId?: number;
-};
-export type SaveActivityResponseBody = {
+// create new activity and version
+export type CreateNewActivityRequestBody = {};
+export type CreateNewActivityResponseBody = {
   activityId?: number;
   versionId?: number;
+};
+
+// get activity version full view
+export type GetActivityVersionParams = {
+  activityId: string;
+  versionId: string;
+};
+export type GetActivityVersionResponseBody = {
+  title: string;
+  description: string;
+  elements: (ActivityContentSelectDTO | QuestionSelectDTO)[];
+};
+
+// get all activities authored by the user by statuses
+export type GetActivitiesResponseBody = {
+  title: string;
+  description: string;
+  updatedAt: Date;
+}[];
+
+// UpdateActivityMetadata [POST update-activity-metadata/:versionId]
+export type UpdateActivityMetadataRequestBody = {
+  activityId: number;
+  title?: string;
+  description?: string;
+};
+export type UpdateActivityMetadataResponseBody = {
+  activityId: number;
 };
 
 //SaveQuestion [PUT activities/{activityId}/questions]
@@ -43,14 +55,14 @@ export type SaveQuestionResponseBody = {
   questionId?: number;
 };
 
-// Save Content [PUT activities/{activityId}/contents]
+// Save Content [POST activity/:activityId/version/:versionId/content]
 export type SaveContentRequestBody = {
   title: string;
-  content: string;
+  content?: string;
   description: string;
-  type: string;
+  type: ContentTypeTypes;
   contentId?: number;
-  activityVersionId: number;
+  image?: unknown;
 };
 
 export type SaveContentResponseBody = {

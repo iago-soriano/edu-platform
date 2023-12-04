@@ -24,7 +24,7 @@ const Page = () => {
 
       <GoogleSignInButton
         onClick={googleSignInMutation.mutate}
-        isLoading={googleSignInMutation.isLoading}
+        isLoading={googleSignInMutation.isPending}
       />
       <Separator> Ou </Separator>
       <CredentialsSignInButton

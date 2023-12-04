@@ -1,12 +1,29 @@
+import { getServerSession } from "@infrastructure";
 import axiosClient, { AxiosInstance } from "axios";
 import { IHTTPClient } from "@edu-platform/common/api";
 
-// export class Fetch implements Fetcher
 export class AxiosFetcher implements IHTTPClient {
   private _instance: AxiosInstance;
 
   constructor(baseURL: string) {
     this._instance = axiosClient.create({ baseURL });
+    this._instance.interceptors.request.use(async (config) => {
+      let token = "";
+      if (typeof window == "undefined") {
+        try {
+          const serverSession = await getServerSession();
+          token = serverSession.token;
+        } catch (e) {
+          console.error("Error getting server session", e);
+        }
+      }
+
+      if (token != "") {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+
+      return config;
+    });
   }
 
   private _successHandler(res) {
