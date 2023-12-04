@@ -1,11 +1,10 @@
 import * as awilix from "awilix";
+import { ExpressServer } from "./app";
+import { HTTPController } from "@interfaces";
 import {
-  ExpressServer
-} from "./app";
-import { HTTPController } from '@interfaces';
-import { 
   AuthenticationMiddlewareController,
-  ErrorHandlerController
+  ErrorHandlerController,
+  AcceptFileMiddleware,
 } from "@controllers";
 
 const getControllers = (container: awilix.AwilixContainer) => {
@@ -21,38 +20,43 @@ const getControllers = (container: awilix.AwilixContainer) => {
 
 export const registerServer = (
   container: awilix.AwilixContainer,
-  baseUrn: string,
+  baseUrn: string
 ) => {
-
   container.register({
-    authMiddleware: awilix.asClass(AuthenticationMiddlewareController).classic(),
+    authMiddleware: awilix
+      .asClass(AuthenticationMiddlewareController)
+      .classic(),
+    fileMiddleware: awilix.asValue(AcceptFileMiddleware), // objeto do multer
     errorHandler: awilix.asClass(ErrorHandlerController),
     server: awilix
       .asClass(ExpressServer)
       .singleton()
       .inject((container: awilix.AwilixContainer) => {
         const authMiddleware = container.resolve("authMiddleware");
+        const fileMiddleware = container.resolve("fileMiddleware");
         return {
-          controllers: getControllers(container).map(
-            (controller) => {
-              return {
-                middlewares: controller.middlewares,
-                method: controller.method,
-                execute: controller.execute.bind(controller),
-                path: controller.path,
-              } as HTTPController;
-            }
-          ),
+          controllers: getControllers(container).map((controller) => {
+            return {
+              middlewares: controller.middlewares,
+              method: controller.method,
+              execute: controller.execute.bind(controller),
+              path: controller.path,
+            } as HTTPController;
+          }),
           logger: { info: console.log, error: console.error },
           middlewares: {
             auth: async (req, _, next) => {
-              await authMiddleware.execute.bind(authMiddleware)(req, req.headers);
+              await authMiddleware.execute.bind(authMiddleware)(
+                req,
+                req.headers
+              );
               next();
             },
-            // file: container.resolve("fileMiddleware"),
+            file: fileMiddleware,
           },
           errorHandler: {
-            execute: (error: Error, _, res, __) => container.resolve("errorHandler").execute(error, _, res)
+            execute: (error: Error, _, res, __) =>
+              container.resolve("errorHandler").execute(error, _, res),
           },
           baseUrn,
         };

@@ -16,13 +16,26 @@ import ChangePasswordUseCase, {
 import CheckChangePasswordTokenRequestUseCase, {
   ICheckChangePasswordTokenRequestUseCase,
 } from "./auth/check-change-password-token-request";
-import GetTopicsUseCase, { IGetTopicsUseCase } from "./get-topics";
-import SaveActivityUseCase, { ISaveActivityUseCase } from "./save-activity";
+//import SaveActivityUseCase, { ISaveActivityUseCase } from "./save-activity";
 import UpdateActivityStatusUseCase, {
   IUpdateActivityStatusUseCase,
 } from "./update-activity-status";
 import SaveQuestionUseCase, { ISaveQuestionUseCase } from "./save-question";
-import SaveContentUseCase, { ISaveContentUseCase } from "./save-content";
+import CreateNewActivityUseCase, {
+  ICreateNewActivityUseCase,
+} from "./create-new-activity";
+import UpdateActivityMetadataUseCase, {
+  IUpdateActivityMetadataUseCase,
+} from "./update-activity-metadata";
+import GetActivitiesUseCase, { IGetActivitiesUseCase } from "./get-activities";
+import GetActivityVersionUseCase, {
+  IGetActivityVersionUseCase,
+} from "./get-activity-version";
+import CreateContentUseCase, { ICreateContentUseCase } from "./create-content";
+import CreateNewContentFromExistingUseCase, {
+  ICreateNewContentFromExistingUseCase,
+} from "./create-new-content-from-existing";
+import EditContentUseCase, { IEditContentUseCase } from "./edit-content";
 
 export {
   SignInUseCase,
@@ -41,14 +54,22 @@ export {
   IChangePasswordUseCase,
   CheckChangePasswordTokenRequestUseCase,
   ICheckChangePasswordTokenRequestUseCase,
-  GetTopicsUseCase,
-  IGetTopicsUseCase,
-  SaveActivityUseCase,
-  ISaveActivityUseCase,
   UpdateActivityStatusUseCase,
   IUpdateActivityStatusUseCase,
   SaveQuestionUseCase,
   ISaveQuestionUseCase,
-  SaveContentUseCase,
-  ISaveContentUseCase,
+  CreateNewActivityUseCase,
+  ICreateNewActivityUseCase,
+  UpdateActivityMetadataUseCase,
+  IUpdateActivityMetadataUseCase,
+  GetActivitiesUseCase,
+  IGetActivitiesUseCase,
+  GetActivityVersionUseCase,
+  IGetActivityVersionUseCase,
+  CreateContentUseCase,
+  ICreateContentUseCase,
+  CreateNewContentFromExistingUseCase,
+  ICreateNewContentFromExistingUseCase,
+  EditContentUseCase,
+  IEditContentUseCase,
 };

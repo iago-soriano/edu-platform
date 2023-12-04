@@ -1,10 +1,4 @@
-import {
-  IUserRepository,
-  IEncryptionService,
-  ITokenService,
-  UserInsertDTO,
-  IUseCase,
-} from "@interfaces";
+import { IUserRepository, UserInsertDTO, IUseCase } from "@interfaces";
 
 type InputParams = {
   email: string;
@@ -25,6 +19,8 @@ class UseCase implements IProviderSignUpUseCase {
   async execute({ providerId, email, name, image, provider }) {
     const existingUser = await this.userRepository.getUserByEmail(email);
 
+    if (existingUser && !existingUser.providerId)
+      throw new Error("Account already created with e-mail and password");
     if (existingUser) return;
 
     const userDTO: UserInsertDTO = {

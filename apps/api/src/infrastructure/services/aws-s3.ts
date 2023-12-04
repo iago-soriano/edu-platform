@@ -1,25 +1,34 @@
-// import { IStorageService } from "./interfaces/services";
-// import AWS, { S3 } from "aws-sdk";
-// import fs from "fs";
-// import { promisify } from "util";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { IStorageService, FileType } from "@interfaces";
+import fs from "fs";
 
-// export class S3Service implements IStorageService {
-//   private _s3: S3;
+export class S3Service implements IStorageService {
+  private _s3: S3Client;
 
-//   constructor() {
-//     AWS.config.update({ region: "us-east-1" });
-//     this._s3 = new AWS.S3({ apiVersion: "2006-03-01" });
-//   }
+  constructor() {
+    this._s3 = new S3Client({
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      },
+      region: process.env.AWS_REGION,
+    });
+  }
 
-//   async uploadFile(file: any, fileName: string, bucketName: string) {
-//     const upload = promisify(this._s3.upload.bind(this._s3));
+  async uploadFile(keyName: string, file: FileType) {
+    const command = new PutObjectCommand({
+      Bucket: process.env.BUCKET_NAME,
+      Key: keyName,
+      Body: fs.createReadStream(file.path),
+      ACL: "public-read",
+    });
 
-//     await upload({
-//       Bucket: bucketName,
-//       Key: fileName,
-//       Body: fs.createReadStream(file.path),
-//     });
+    await this._s3.send(command);
 
-//     return true;
-//   }
-// }
+    return this._getUrl(keyName);
+  }
+
+  _getUrl(keyName: string) {
+    return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${keyName}`;
+  }
+}

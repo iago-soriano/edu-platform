@@ -21,6 +21,8 @@ export interface HTTPController {
   execute: RequestHandler;
 }
 
+export type FileType = Express.Multer.File;
+
 export interface HTTPErrorController {
   execute: ErrorRequestHandler;
 }
@@ -30,5 +32,5 @@ export type Request<Params = {}, Query = {}, Body = {}> = ExpressRequest<
   {},
   Body,
   Query
-> & { user: UserSelectDTO };
+> & { user: UserSelectDTO; files?: { image?: FileType[]; audio?: FileType[] } };
 export type Response<Body> = ExpressResponse<Body>;

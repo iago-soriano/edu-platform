@@ -8,10 +8,13 @@ import {
   ChangePasswordRequestController,
   ChangePasswordController,
   CheckChangePasswordTokenRequestController,
-  SaveActivityController,
   UpdateActivityStatusController,
   SaveQuestionController,
   SaveContentController,
+  CreateNewActivityController,
+  UpdateActivityMetadataController,
+  GetActivityVersionController,
+  GetActivitiesController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -22,10 +25,15 @@ import {
   ChangePasswordRequestUseCase,
   ChangePasswordUseCase,
   CheckChangePasswordTokenRequestUseCase,
-  SaveActivityUseCase,
   UpdateActivityStatusUseCase,
   SaveQuestionUseCase,
-  SaveContentUseCase,
+  CreateNewActivityUseCase,
+  UpdateActivityMetadataUseCase,
+  GetActivityVersionUseCase,
+  GetActivitiesUseCase,
+  CreateNewContentFromExistingUseCase,
+  EditContentUseCase,
+  CreateContentUseCase,
 } from "@use-cases";
 import {
   BCryptEncryptionService,
@@ -37,6 +45,7 @@ import {
   AssetRepository,
   ActivityRepository,
 } from "@infrastructure";
+import { S3Service } from "infrastructure/services/aws-s3";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
@@ -57,12 +66,21 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     checkChangePasswordTokenRequestController: awilix
       .asClass(CheckChangePasswordTokenRequestController)
       .classic(),
-    saveActivityController: awilix.asClass(SaveActivityController).classic(),
     updateActivityStatusController: awilix
       .asClass(UpdateActivityStatusController)
       .classic(),
     saveQuestionController: awilix.asClass(SaveQuestionController).classic(),
     saveContentController: awilix.asClass(SaveContentController).classic(),
+    createNewActivityController: awilix
+      .asClass(CreateNewActivityController)
+      .classic(),
+    updateActivityMetadataController: awilix
+      .asClass(UpdateActivityMetadataController)
+      .classic(),
+    getActivityVersionController: awilix
+      .asClass(GetActivityVersionController)
+      .classic(),
+    getActivitiesController: awilix.asClass(GetActivitiesController).classic(),
 
     // services
     encryptionService: awilix.asClass(BCryptEncryptionService),
@@ -70,6 +88,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     idService: awilix.asClass(IdGeneratorService),
     tokenService: awilix.asClass(JWTTokenService).singleton(),
     assetRepository: awilix.asClass(AssetRepository),
+    storageService: awilix.asClass(S3Service),
 
     // use cases
     signInUseCase: awilix.asClass(SignInUseCase).classic(),
@@ -84,13 +103,25 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     checkChangePasswordTokenRequestUseCase: awilix
       .asClass(CheckChangePasswordTokenRequestUseCase)
       .classic(),
-    saveActivityUseCase: awilix.asClass(SaveActivityUseCase).classic(),
     updateActivityStatusUseCase: awilix
       .asClass(UpdateActivityStatusUseCase)
       .classic(),
     saveQuestionUseCase: awilix.asClass(SaveQuestionUseCase).classic(),
-    saveContentUseCase: awilix.asClass(SaveContentUseCase).classic(),
-
+    createNewActivityUseCase: awilix
+      .asClass(CreateNewActivityUseCase)
+      .classic(),
+    updateActivityMetadataUseCase: awilix
+      .asClass(UpdateActivityMetadataUseCase)
+      .classic(),
+    getActivityVersionUseCase: awilix
+      .asClass(GetActivityVersionUseCase)
+      .classic(),
+    getActivitiesUseCase: awilix.asClass(GetActivitiesUseCase).classic(),
+    createNewContentFromExistingUseCase: awilix
+      .asClass(CreateNewContentFromExistingUseCase)
+      .classic(),
+    editContentUseCase: awilix.asClass(EditContentUseCase).classic(),
+    createContentUseCase: awilix.asClass(CreateContentUseCase).classic(),
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),
     tokenRepository: awilix.asClass(TokenRepository).classic(),

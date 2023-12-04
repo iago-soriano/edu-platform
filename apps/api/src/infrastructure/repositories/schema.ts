@@ -10,8 +10,10 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 import { activityPossibleStatus } from "application/domain/activity";
-import { contentPossibleType } from "@domain";
+import { contentPossibleTypes } from "@domain";
+import { questionPossibleTypes } from "application/domain/question";
 
+/* #region Token */
 export const tokenTypeEnum = pgEnum("tokenType", [
   "VerifyAccount",
   "ForgotPassword",
@@ -25,7 +27,7 @@ export const tokens = pgTable("token", {
   value: varchar("value", { length: 256 }),
   type: tokenTypeEnum("token_type"),
   userId: integer("user_id").references(() => users.id),
-  expiresAt: integer("expires_at"),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).defaultNow(),
 });
 
 export const tokensRelations = relations(tokens, ({ one }) => ({
@@ -34,7 +36,9 @@ export const tokensRelations = relations(tokens, ({ one }) => ({
     references: [users.id],
   }),
 }));
+/* #endregion */
 
+/* #region Users */
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
@@ -53,37 +57,31 @@ export const usersRelations = relations(users, ({ many }) => ({
   activities: many(activities),
   tokens: many(tokens),
 }));
+/* #endregion */
 
-export const topics = pgTable("topics", {
-  id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-  label: varchar("label", { length: 50 }),
-});
+/* #region Activities */
+// export const topics = pgTable("topics", {
+//   id: serial("id").primaryKey(),
+//   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+//   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+//   label: varchar("label", { length: 50 }),
+// });
 
-export const topicsRelations = relations(topics, ({ many }) => ({
-  activityTopics: many(activityHasTopicsRelationTable),
-}));
-
-export const activityStatusEnum = pgEnum(
-  "activityStatus",
-  activityPossibleStatus
-);
+// export const topicsRelations = relations(topics, ({ many }) => ({
+//   activityTopics: many(activityHasTopicsRelationTable),
+// }));
 
 export const activities = pgTable("activities", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-  title: varchar("title", { length: 256 }),
-  description: varchar("description", { length: 256 }),
-  status: activityStatusEnum("activity_status").default("Draft"),
 
   authorId: integer("author_id").references(() => users.id),
   lastVersionId: integer("last_version_id"),
+  draftVersionId: integer("draft_version_id"),
 });
 
 export const activitiesRelations = relations(activities, ({ many, one }) => ({
-  activityTopics: many(activityHasTopicsRelationTable),
   author: one(users, {
     fields: [activities.authorId],
     references: [users.id],
@@ -91,37 +89,21 @@ export const activitiesRelations = relations(activities, ({ many, one }) => ({
   lastVersion: one(activityVersions, {
     fields: [activities.lastVersionId],
     references: [activityVersions.id],
+    relationName: "lastVersion",
+  }),
+  draftVersion: one(activityVersions, {
+    fields: [activities.draftVersionId],
+    references: [activityVersions.id],
+    relationName: "openDraft",
   }),
   activityVersions: many(activityVersions),
 }));
+/* #endregion */
 
-export const activityHasTopicsRelationTable = pgTable(
-  "topic_activity_relation",
-  {
-    activityId: integer("activity_id")
-      .notNull()
-      .references(() => activities.id),
-    topicId: integer("topic_id")
-      .notNull()
-      .references(() => topics.id),
-  },
-  (t) => ({
-    pk: primaryKey(t.activityId, t.topicId),
-  })
-);
-
-export const activityHasTopicsRelations = relations(
-  activityHasTopicsRelationTable,
-  ({ one }) => ({
-    activity: one(activities, {
-      fields: [activityHasTopicsRelationTable.activityId],
-      references: [activities.id],
-    }),
-    topic: one(topics, {
-      fields: [activityHasTopicsRelationTable.topicId],
-      references: [topics.id],
-    }),
-  })
+/* #region Activity Versions */
+export const activityStatusEnum = pgEnum(
+  "activityStatus",
+  activityPossibleStatus
 );
 
 export const activityVersions = pgTable("activity_version", {
@@ -129,7 +111,11 @@ export const activityVersions = pgTable("activity_version", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
+  title: varchar("title", { length: 256 }),
+  description: varchar("description", { length: 256 }),
+  status: activityStatusEnum("activity_status").default("Draft"),
   version: integer("version").default(0),
+
   activityId: integer("activity_id").references(() => activities.id),
 });
 
@@ -139,33 +125,140 @@ export const activityVersionsRelations = relations(
     activity: one(activities, {
       fields: [activityVersions.activityId],
       references: [activities.id],
-      relationName: "allVersions",
     }),
-    activityContents: many(activityContents),
+    lastVersionOf: one(activities, {
+      fields: [activityVersions.activityId],
+      references: [activities.lastVersionId],
+      relationName: "lastVersion",
+    }),
+    isDraftOf: one(activities, {
+      fields: [activityVersions.activityId],
+      references: [activities.draftVersionId],
+      relationName: "openDraft",
+    }),
+    elements: many(activityVersionHasElementsRelationTable),
   })
 );
+/* #endregion */
 
-export const contentTypeEnum = pgEnum("contentType", contentPossibleType);
+export const contentTypeEnum = pgEnum("contentType", contentPossibleTypes);
 
 export const activityContents = pgTable("activity_contents", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+
   type: contentTypeEnum("type"),
   content: varchar("content", { length: 500 }),
   description: varchar("description", { length: 500 }),
-  title: varchar("title", { length: 50 }),
-  activityVersionId: integer("activity_version_id").references(
+  title: varchar("title", { length: 100 }),
+
+  parentId: integer("parent_id"),
+  originatingVersionId: integer("originating_version_id").references(
     () => activityVersions.id
   ),
 });
 
 export const activityContentsRelations = relations(
   activityContents,
+  ({ one, many }) => ({
+    versions: many(activityVersionHasElementsRelationTable),
+    parent: one(activityQuestions, {
+      fields: [activityContents.parentId],
+      references: [activityQuestions.id],
+    }),
+    originatingVersion: one(activityVersions, {
+      fields: [activityContents.originatingVersionId],
+      references: [activityVersions.id],
+    }),
+  })
+);
+
+export const questionTypeEnum = pgEnum("questionType", questionPossibleTypes);
+
+export const activityQuestions = pgTable("questions", {
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+
+  type: questionTypeEnum("type"),
+  question: varchar("question", { length: 500 }),
+  answerKey: varchar("answer_key", { length: 500 }),
+  title: varchar("title", { length: 100 }),
+
+  parentId: integer("parent_id").references(() => activityContents.id),
+  originatingVersionId: integer("originating_version_id").references(
+    () => activityVersions.id
+  ),
+});
+
+export const questionsRelations = relations(
+  activityQuestions,
+  ({ one, many }) => ({
+    versions: many(activityVersionHasElementsRelationTable),
+    choices: many(choices),
+    parent: one(activityQuestions, {
+      fields: [activityQuestions.parentId],
+      references: [activityQuestions.id],
+    }),
+    originatingVersion: one(activityVersions, {
+      fields: [activityQuestions.originatingVersionId],
+      references: [activityVersions.id],
+    }),
+  })
+);
+
+export const choices = pgTable("choices", {
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+
+  text: varchar("text", { length: 500 }),
+  comment: varchar("comment", { length: 500 }),
+  label: varchar("label", { length: 2 }),
+
+  questionId: integer("question_id").references(() => activityQuestions.id),
+});
+
+export const choicesRelations = relations(choices, ({ one }) => ({
+  question: one(activityQuestions, {
+    fields: [choices.questionId],
+    references: [activityQuestions.id],
+  }),
+}));
+
+export const activityVersionHasElementsRelationTable = pgTable(
+  "version_element_relation",
+  {
+    contentId: integer("content_id")
+      .notNull()
+      .references(() => activityContents.id),
+    questionId: integer("question_id")
+      .notNull()
+      .references(() => activityQuestions.id),
+    versionId: integer("version_id")
+      .notNull()
+      .references(() => activityVersions.id),
+  },
+  (t) => ({
+    pk: primaryKey(t.contentId, t.questionId, t.versionId),
+  })
+);
+
+export const activityVersionHasElementsRelations = relations(
+  activityVersionHasElementsRelationTable,
   ({ one }) => ({
     activityVersion: one(activityVersions, {
-      fields: [activityContents.activityVersionId],
+      fields: [activityVersionHasElementsRelationTable.versionId],
       references: [activityVersions.id],
+    }),
+    activityQuestion: one(activityQuestions, {
+      fields: [activityVersionHasElementsRelationTable.questionId],
+      references: [activityQuestions.id],
+    }),
+    activityContent: one(activityContents, {
+      fields: [activityVersionHasElementsRelationTable.contentId],
+      references: [activityContents.id],
     }),
   })
 );

@@ -10,11 +10,12 @@ export const validateEmail = EmailValidator.validate;
 
 export class EmailService implements IEmailService {
   _transporter;
+  from = '"Iago Soriano" <iago.srm.is@gmail.com>';
 
   constructor() {
     this._transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
-      port: 465,
+      port: Number(process.env.EMAIL_PORT),
       secure: false,
       auth: {
         user: process.env.EMAIL_USER,
@@ -25,7 +26,7 @@ export class EmailService implements IEmailService {
 
   async sendForgotPasswordEmail({ destination, url }) {
     const resp = await this._transporter.sendMail({
-      from: '"Iago" <iago@example.com>', // sender address
+      from: this.from,
       to: destination, // list of receivers
       subject: "Altere sua senha", // Subject line
       //text: "Altere sua senha", // plain text body
@@ -35,7 +36,7 @@ export class EmailService implements IEmailService {
 
   async sendVerifyAccountEmail({ destination, url }) {
     const resp = await this._transporter.sendMail({
-      from: '"Iago" <iago@example.com>', // sender address
+      from: this.from,
       to: destination, // list of receivers
       subject: "Verifique sua conta", // Subject line
       html: VerifyAccountEmailTemplate({ url }), // html body

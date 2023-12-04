@@ -14,14 +14,14 @@ type Request = TypedRequest<{}, {}, SaveQuestionRequestBody>;
 type Response = TypedResponse<SaveQuestionResponseBody>;
 
 export class SaveQuestionController implements HTTPController {
-  method = HttpMethod.PUT;
-  path: string = "activities/:activityId/questions";
+  method = HttpMethod.POST;
+  path: string = "activity/:activityId/version/:versionId/question";
   middlewares: string[] = ["auth"];
 
   constructor(private saveQuestionUseCase: ISaveQuestionUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { text, answerKey, type, questionId } = req.body;
+    const { text, answerKey, type, choices, questionId } = req.body;
 
     res.status(200).json();
   }

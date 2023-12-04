@@ -4,6 +4,7 @@ import { Request, Response, HTTPErrorController } from "@interfaces";
 export class ErrorHandlerController implements HTTPErrorController {
   execute(error: Error, _: Request, res: Response<{}>) {
     if (error instanceof CustomError) {
+      console.log("ERRO NA APLICAÇÃO", error.realReason || error.message);
       res.status(error.HTTPstatusCode || 500).json(error.message);
       return;
     }

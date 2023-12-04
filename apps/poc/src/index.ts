@@ -19,8 +19,26 @@ app.get("/hello", async (req, res) => {
 // });
 
 app.get("/outside", async (req, res) => {
-  const resp = await fetch("google.com");
-  return res.status(200).json(`${resp}`);
+  // const http2 = require("http2");
+  // function isConnected() {
+  //   return new Promise((resolve) => {
+  //     const client = http2.connect("https://www.google.com");
+  //     client.on("connect", () => {
+  //       resolve(true);
+  //       client.destroy();
+  //     });
+  //     client.on("error", (e) => {
+  //       console.log("error", e);
+  //       resolve(false);
+  //       client.destroy();
+  //     });
+  //   });
+  // }
+  // try {
+  //   return res.status(200).json(await isConnected());
+  // } catch (ex) {
+  //   res.status(500).json(ex);
+  // }
 });
 
 app.get("/connect-db", async (req, res) => {

@@ -1,3 +1,5 @@
+import { FileType } from "./controller";
+
 export type JWTPayload = {
   tokenVersion: number;
   id?: number;
@@ -18,13 +20,10 @@ export interface IEncryptionService {
   compare: (plain: string, hash: string) => Promise<boolean>;
 }
 
-// export interface IStorageService {
-//   uploadFile: (
-//     file: any,
-//     fileName: string,
-//     bucketName: string
-//   ) => Promise<boolean>;
-// }
+export interface IStorageService {
+  uploadFile: (keyName: string, file: FileType) => Promise<string>;
+}
+
 export interface IAssetRepository {
   getGenericImageUrl: () => string;
 }

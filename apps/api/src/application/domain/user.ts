@@ -1,6 +1,5 @@
 import {
   InvalidPasswordError,
-  InvalidRoleError,
   InvalidNameError,
   InvalidEmailError,
 } from "@edu-platform/common/errors";
@@ -10,7 +9,6 @@ import { AuthRules, DomainRules } from "@edu-platform/common/domain";
 export class User {
   constructor(
     public name: string,
-    public role: string,
     public email: string,
     public password: string
   ) {

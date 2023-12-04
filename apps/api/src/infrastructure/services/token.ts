@@ -1,5 +1,8 @@
 import { ITokenService, JWTPayload } from "@interfaces";
-import { TokenGenerationError } from "@edu-platform/common/errors";
+import {
+  TokenGenerationError,
+  InvalidValidationTokenError,
+} from "@edu-platform/common/errors";
 import jwt, { JwtPayload as LibJWTPayload } from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 
@@ -42,10 +45,7 @@ export class JWTTokenService implements ITokenService {
       } catch (e) {
         console.error(e.message);
       }
-    } else if (
-      issuer === "accounts.google.com" ||
-      issuer === "https://accounts.google.com"
-    ) {
+    } else if (issuer.endsWith("accounts.google.com")) {
       try {
         const ticket = await this.client.verifyIdToken({
           idToken: token,
@@ -60,7 +60,7 @@ export class JWTTokenService implements ITokenService {
           tokenVersion: 0,
         };
       } catch (e) {
-        throw new TokenGenerationError({ error: e.message });
+        throw new InvalidValidationTokenError();
       }
     }
   }

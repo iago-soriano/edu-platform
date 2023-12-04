@@ -14,12 +14,15 @@ class UseCase implements IUpdateActivityStatusUseCase {
   constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({ activityId, activityStatus }: InputParams) {
-    const validStatus = Activity.validateStatus(activityStatus);
+    const validStatus = Activity.validateStatuses([activityStatus]);
 
     if (validStatus) {
-      await this.activitiesRepository.updateActivity(activityId, {
-        status: validStatus,
-      });
+      await this.activitiesRepository.updateActivityVersionMetadata(
+        activityId,
+        {
+          status: validStatus[0],
+        }
+      );
     }
   }
 }

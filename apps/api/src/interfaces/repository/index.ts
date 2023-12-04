@@ -1,10 +1,11 @@
+import { ActivityStatusType } from "@domain";
 import {
   UserInsertDTO,
   UserSelectDTO,
   TokenSelectDTO,
   TokenInsertDTO,
   TokenType,
-  ActivityInsertDTO,
+  QuestionSelectDTO,
   ActivitySelectDTO,
   ActivityVersionInsertDTO,
   ActivityContentInsertDTO,
@@ -56,10 +57,16 @@ export interface IActivitiesRepository {
     contentId: number,
     content: ActivityContentInsertDTO
   ) => Promise<void>;
-  getActivityByVersionId: (
-    versionId: number
-  ) => Promise<ActivityVersionSelectDTO[]>;
+  getVersionById: (versionId: number) => Promise<
+    ActivityVersionSelectDTO & {
+      elements: (ActivityContentSelectDTO | QuestionSelectDTO)[];
+    }
+  >;
   getActivityContentByContentId: (
     contentId: number
-  ) => Promise<ActivityContentSelectDTO[]>;
+  ) => Promise<ActivityContentSelectDTO>;
+  getActivityVersionsByAuthorIdAndStatuses: (
+    authorId: number,
+    statuses: ActivityStatusType[]
+  ) => Promise<ActivityVersionSelectDTO[]>;
 }

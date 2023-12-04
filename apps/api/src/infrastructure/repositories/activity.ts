@@ -1,52 +1,36 @@
 import {
   IActivitiesRepository,
-  ActivityInsertDTO,
+  ActivityVersionInsertDTO,
   ActivityContentInsertDTO,
 } from "@interfaces";
 import {
   db,
   activities,
   activityVersions,
-  activityHasTopicsRelationTable,
   activityContents,
+  activityQuestions,
+  activityVersionHasElementsRelationTable,
 } from "@infrastructure";
-import { eq, and } from "drizzle-orm";
+import { eq, inArray, and, desc } from "drizzle-orm";
+import { activityPossibleStatus, ActivityStatusType } from "@domain";
 
 export class ActivityRepository implements IActivitiesRepository {
-  async insertActivityAndNewVersion(
-    activity: ActivityInsertDTO,
-    topicIds: number[]
-  ) {
-    try {
-      return await db.transaction(async (tx) => {
-        const [{ activityId }] = await tx
-          .insert(activities)
-          .values(activity)
-          .returning({ activityId: activities.id });
-        const [{ versionId }] = await tx
-          .insert(activityVersions)
-          .values({ activityId })
-          .returning({ versionId: activityVersions.id });
-        await tx
-          .update(activities)
-          .set({ lastVersionId: versionId })
-          .where(eq(activities.id, activityId));
-
-        const topicRelationInserts = topicIds.map(
-          async (topicId) =>
-            await tx.insert(activityHasTopicsRelationTable).values({
-              activityId,
-              topicId,
-            })
-        );
-
-        await Promise.all(topicRelationInserts);
-
-        return { activityId, versionId };
-      });
-    } catch (ex) {
-      console.log(ex);
-    }
+  async insertActivityAndNewVersion(authorId: number) {
+    return await db.transaction(async (tx) => {
+      const [{ activityId }] = await tx
+        .insert(activities)
+        .values({ authorId })
+        .returning({ activityId: activities.id });
+      const [{ versionId }] = await tx
+        .insert(activityVersions)
+        .values({ activityId })
+        .returning({ versionId: activityVersions.id });
+      await tx
+        .update(activities)
+        .set({ draftVersionId: versionId })
+        .where(eq(activities.id, activityId));
+      return { activityId, versionId };
+    });
   }
 
   async getActivityById(activityId: number) {
@@ -55,32 +39,15 @@ export class ActivityRepository implements IActivitiesRepository {
     )[0];
   }
 
-  async updateActivity(
-    activityId: number,
-    activity: ActivityInsertDTO,
-    topicIds?: number[]
+  async updateActivityVersionMetadata(
+    activityVersionId: number,
+    { title, description, status }: ActivityVersionInsertDTO
   ) {
     await db.transaction(async (tx) => {
       await tx
-        .update(activities)
-        .set({ ...activity, updatedAt: new Date() })
-        .where(eq(activities.id, activityId));
-
-      if (topicIds) {
-        await tx
-          .delete(activityHasTopicsRelationTable)
-          .where(eq(activityHasTopicsRelationTable.activityId, activityId));
-
-        const topicRelationInserts = topicIds.map(
-          async (topicId) =>
-            await tx.insert(activityHasTopicsRelationTable).values({
-              activityId,
-              topicId,
-            })
-        );
-
-        await Promise.all(topicRelationInserts);
-      }
+        .update(activityVersions)
+        .set({ title, description, status, updatedAt: new Date() })
+        .where(eq(activityVersions.id, activityVersionId));
     });
   }
 
@@ -99,17 +66,78 @@ export class ActivityRepository implements IActivitiesRepository {
       .where(eq(activityContents.id, contentId));
   }
 
-  async getActivityByVersionId(versionId: number) {
-    return await db
+  async getVersionById(versionId: number) {
+    const version = (
+      await db
+        .select()
+        .from(activityVersions)
+        .where(eq(activityVersions.id, versionId))
+    )[0];
+
+    const thisVersionElements = await db
       .select()
-      .from(activityVersions)
-      .where(eq(activityVersions.version, versionId));
+      .from(activityVersionHasElementsRelationTable)
+      .where(eq(activityVersionHasElementsRelationTable.versionId, versionId));
+
+    const contentIds = thisVersionElements
+      .filter((relation) => !!relation.contentId)
+      .map((relation) => relation.contentId);
+    const questionIds = thisVersionElements
+      .filter((relation) => !!relation.questionId)
+      .map((relation) => relation.questionId);
+
+    const contents = contentIds.length
+      ? await db
+          .select()
+          .from(activityContents)
+          .where(inArray(activityContents.id, contentIds))
+      : [];
+
+    const questions = questionIds.length
+      ? await db
+          .select()
+          .from(activityQuestions)
+          .where(inArray(activityQuestions.id, questionIds))
+      : [];
+
+    return { ...version, elements: [...contents, ...questions] };
   }
 
   async getActivityContentByContentId(contentId: number) {
-    return await db
+    return (
+      await db
+        .select()
+        .from(activityContents)
+        .where(eq(activityContents.id, contentId))
+    )[0];
+  }
+
+  async getActivityVersionsByAuthorIdAndStatuses(
+    authorId: number,
+    statuses: ActivityStatusType[]
+  ) {
+    const activityIdsByAuthor = (
+      await db
+        .select({ id: activities.id })
+        .from(activities)
+        .where(eq(activities.authorId, authorId))
+    ).map(({ id }) => id);
+
+    if (!activityIdsByAuthor.length) return [];
+
+    const activitiesVersionsByAuthor = await db
       .select()
-      .from(activityContents)
-      .where(eq(activityContents.id, contentId));
+      .from(activityVersions)
+      .orderBy(desc(activityVersions.updatedAt))
+      .where(
+        and(
+          inArray(activityVersions.id, activityIdsByAuthor),
+          inArray(
+            activityVersions.status,
+            statuses.length ? statuses : ["Archived", "Draft", "Published"]
+          )
+        )
+      );
+    return activitiesVersionsByAuthor;
   }
 }

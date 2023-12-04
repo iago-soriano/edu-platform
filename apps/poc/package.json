@@ -17,7 +17,8 @@
     "express-async-errors": "^3.1.1",
     "pg": "^8.11.3",
     "serverless-http": "^3.2.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "google-auth-library": "^9.1.0"
   },
   "devDependencies": {
     "tsconfig-paths": "^4.2.0",

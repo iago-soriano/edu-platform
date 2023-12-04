@@ -19,7 +19,7 @@ type Response = TypedResponse<UpdateActivityStatusResponseBody>;
 
 export class UpdateActivityStatusController implements HTTPController {
   method = HttpMethod.PATCH;
-  path = "activities/:activityId/status"; // colocar o id no path?
+  path = "activities/:activityId/status";
   middlewares: string[] = ["auth"];
 
   constructor(

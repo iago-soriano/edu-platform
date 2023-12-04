@@ -35,7 +35,8 @@ export class AuthenticationMiddlewareController {
     }
 
     if (
-      !Object.keys(tokenPayload).includes("id") ||
+      (!Object.keys(tokenPayload).includes("id") &&
+        !Object.keys(tokenPayload).includes("providerId")) ||
       !Object.keys(tokenPayload).includes("tokenVersion") ||
       isNaN(Number(tokenPayload.tokenVersion))
     )
@@ -45,7 +46,9 @@ export class AuthenticationMiddlewareController {
     if (tokenPayload.id)
       userDTO = await this.userRepository.getUserById(tokenPayload.id);
     else if (tokenPayload.providerId)
-      await this.userRepository.getUserByProviderId(tokenPayload.providerId);
+      userDTO = await this.userRepository.getUserByProviderId(
+        tokenPayload.providerId
+      );
 
     if (!userDTO) throw new UserNotFoundError();
 

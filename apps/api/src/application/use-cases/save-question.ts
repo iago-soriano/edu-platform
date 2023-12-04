@@ -1,13 +1,12 @@
-import {
-  ITopicsRepository,
-  IActivitiesRepository,
-} from "./../../interfaces/repositories";
-import { IUseCase, UserSelectDTO } from "@interfaces";
+import { QuestionTypeNotFound } from "@edu-platform/common";
+import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
+import { Question } from "application/domain/question";
 
 type InputParams = {
   text: string;
   answerKey: string;
-  type: number[];
+  type: string;
+  //choices?: [] -> Como declarar o array de choices
   questionId?: number;
   user: UserSelectDTO;
 };
@@ -19,10 +18,7 @@ type Return = {
 export type ISaveQuestionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ISaveQuestionUseCase {
-  constructor(
-    private topicsRepository: ITopicsRepository,
-    private activitiesRepository: IActivitiesRepository
-  ) {}
+  constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({
     text,
@@ -31,6 +27,16 @@ class UseCase implements ISaveQuestionUseCase {
     questionId: requestActivityId,
     user,
   }: InputParams) {
+    const typeOfQuestion = Question.validateQuestionType(type);
+
+    switch (typeOfQuestion) {
+      case "Multiplechoice":
+        break;
+      case "Text":
+        break;
+      default:
+        throw new QuestionTypeNotFound();
+    }
     return { questionId: 2 };
   }
 }

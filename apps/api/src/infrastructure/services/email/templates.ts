@@ -11,7 +11,7 @@ h3 {
 a {
     color: white;
     font-weight: bold;
-    background-color: #222299;
+    background-color: #c40;
     padding: 15px;
     border-radius: 5px;
 }
