@@ -5,15 +5,13 @@ import {
   Eye,
   EyeSlash,
   Check,
+  Pencil,
+  CaretDown,
 } from "@phosphor-icons/react";
 import {
-  faPen,
   faTimes,
-  faEye,
-  faEyeSlash,
   faAngleRight,
   faAngleDown,
-  faQuestionCircle,
   faGlobe,
   faSearch,
   faHourglassHalf,
@@ -24,9 +22,7 @@ import {
   faStar,
   faArrowRightFromBracket,
   faUser,
-  faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
-// import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 export const Icons = {
   CLOSE: () => <FontAwesomeIcon icon={faTimes} />,
@@ -35,15 +31,13 @@ export const Icons = {
     <FontAwesomeIcon icon={faTimes} />
     // </div>
   ),
-  EDIT: () => <FontAwesomeIcon icon={faPen} />,
+  EDIT: (props) => <Pencil {...props} />,
   CAN_SEE: () => <Eye size={24} />,
   CANT_SEE: () => <EyeSlash size={24} />,
   CHEVRON_RIGHT: ({ onClick }: any) => {
     return <FontAwesomeIcon icon={faAngleRight} onClick={onClick} />;
   },
-  CHEVRON_DOWN: ({ onClick }: any) => (
-    <FontAwesomeIcon icon={faAngleDown} onClick={onClick} />
-  ),
+  CARET_DOWN: (props) => <CaretDown {...props} />,
   QUESTION_CIRCLE: (props) => <Question size={20} {...props} />,
   GLOBE: () => <FontAwesomeIcon icon={faGlobe} />,
   SEARCH: () => <FontAwesomeIcon icon={faSearch} />,

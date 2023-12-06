@@ -1,5 +1,5 @@
 "use client";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCreateActivityMutation } from "@infrastructure";
 import { Spinner, Tabs } from "@components";
 

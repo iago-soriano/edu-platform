@@ -12,8 +12,8 @@ import {
   SignOutButton,
   Logo,
   NavButton,
-  Dropdown,
 } from "../components";
+import { Dropdown } from "@components";
 import { useClickOutside } from "@infrastructure";
 
 export const DrawerMenuItem = ({ children, ...rest }) => (

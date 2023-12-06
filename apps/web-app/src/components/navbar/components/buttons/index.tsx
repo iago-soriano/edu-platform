@@ -14,9 +14,7 @@ export const NavButton = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  const hStyles = highlighted
-    ? "border-b-4 border-accent text-accent font-bold"
-    : "";
+  const hStyles = highlighted ? "text-accent font-bold" : "";
   return (
     <Link
       href={href}

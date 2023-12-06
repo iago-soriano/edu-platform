@@ -12,9 +12,10 @@ export default () => {
     console.log(selectedImg);
     const formData = new FormData();
     formData.append("image", selectedImg);
-    formData.append("title", "Novo título");
-    formData.append("type", "Audio");
-    formData.append("description", "Nova desc");
+    formData.append("title", "Novoaaaaaaaaaaaa");
+    formData.append("type", "Image");
+    formData.append("description", "tentando mudar esse trem de novo");
+    formData.append("contentId", "14");
 
     // mutation.mutate({
     //   title: "Novo título",

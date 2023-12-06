@@ -60,7 +60,7 @@ export const useUpdateVersionMetadataMutation = ({
 }: MutationArgsType<
   UpdateActivityMetadataRequestBody,
   UpdateActivityMetadataResponseBody
-> & { activityId?: string; versionId?: string } = MutationArgsDefaultValue) => {
+> & { activityId?: number; versionId?: number } = MutationArgsDefaultValue) => {
   const queryClient = useQueryClient();
 
   return useMutation<
@@ -74,7 +74,7 @@ export const useUpdateVersionMetadataMutation = ({
         args
       ),
     onSuccess: (d, v, c) => {
-      onSuccess(d, v, c);
+      onSuccess && onSuccess(d, v, c);
       queryClient.invalidateQueries({ queryKey: ["activities"] });
       queryClient.invalidateQueries({
         queryKey: ["version", activityId, versionId],

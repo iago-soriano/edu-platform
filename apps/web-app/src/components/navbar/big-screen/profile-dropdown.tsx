@@ -1,15 +1,5 @@
-import {
-  HowItWorksButton,
-  DashboardButton,
-  SignInButton,
-  SignUpButton,
-  ProductButton,
-  SignOutButton,
-  MyProfileButton,
-  Logo,
-  NavButton,
-  Dropdown,
-} from "../components";
+import { SignOutButton, MyProfileButton, NavButton } from "../components";
+import { Dropdown } from "@components";
 
 export const ProfileDropDown = ({
   isDropdownOpen,
