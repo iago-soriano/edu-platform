@@ -26,7 +26,10 @@ export type GetActivityVersionResponseBody = {
 export type GetActivitiesResponseBody = {
   title: string;
   description: string;
+  status: string;
   updatedAt: Date;
+  id: number;
+  activityId: number;
 }[];
 
 // UpdateActivityMetadata [POST update-activity-metadata/:versionId]

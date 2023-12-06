@@ -1,4 +1,4 @@
-import { DomainRules } from "../domain/domain-rules";
+import { DomainRules } from "../domain/domain/rules";
 import { CustomError } from "./custom-error";
 
 export class RouteNotFoundError extends CustomError {
