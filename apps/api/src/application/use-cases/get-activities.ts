@@ -1,9 +1,4 @@
 import { Activity } from "@domain";
-import {
-  ActivityIsNotDraft,
-  ActivityIsNotFound,
-  UserNotActivityAuthor,
-} from "@edu-platform/common";
 import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
 
 type InputParams = {
@@ -15,6 +10,9 @@ type Return = {
   title: string;
   description: string;
   updatedAt: Date;
+  id: number;
+  status: string;
+  activityId: number;
 }[];
 
 export type IGetActivitiesUseCase = IUseCase<InputParams, Return>;
@@ -36,6 +34,8 @@ class UseCase implements IGetActivitiesUseCase {
         description: ac.description,
         updatedAt: ac.updatedAt,
         status: ac.status,
+        id: ac.id,
+        activityId: ac.activityId,
       };
     });
 

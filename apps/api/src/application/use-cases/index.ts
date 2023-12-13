@@ -36,6 +36,7 @@ import CreateNewContentFromExistingUseCase, {
   ICreateNewContentFromExistingUseCase,
 } from "./create-new-content-from-existing";
 import EditContentUseCase, { IEditContentUseCase } from "./edit-content";
+import DeleteContentUseCase, { IDeleteContentUseCase } from "./delete-content";
 
 export {
   SignInUseCase,
@@ -72,4 +73,6 @@ export {
   ICreateNewContentFromExistingUseCase,
   EditContentUseCase,
   IEditContentUseCase,
+  DeleteContentUseCase,
+  IDeleteContentUseCase,
 };

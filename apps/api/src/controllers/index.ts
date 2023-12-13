@@ -16,3 +16,4 @@ export * from "./create-new-activity";
 export * from "./update-activity-metadata";
 export * from "./get-activities";
 export * from "./get-activity-version";
+export * from "./delete-content";

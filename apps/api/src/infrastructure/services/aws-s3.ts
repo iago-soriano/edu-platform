@@ -1,4 +1,8 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 import { IStorageService, FileType } from "@interfaces";
 import fs from "fs";
 
@@ -30,5 +34,21 @@ export class S3Service implements IStorageService {
 
   _getUrl(keyName: string) {
     return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${keyName}`;
+  }
+
+  async deleteFile(url: string) {
+    const keyName = url.split("/")[3].concat("/", url.split("/")[4]);
+
+    const command = new DeleteObjectCommand({
+      Bucket: process.env.BUCKET_NAME,
+      Key: keyName,
+    });
+
+    try {
+      const response = await this._s3.send(command);
+      console.log(response);
+    } catch (err) {
+      console.error(err);
+    }
   }
 }

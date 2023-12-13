@@ -1,28 +1,34 @@
-import { ContentTypeTypes, Content } from "@domain";
 import {
-  ActivityContentNotFound,
-  ContentTypeNotFound,
-} from "@edu-platform/common";
-import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
-import { AudioContent } from "application/domain/activity-content/audio";
-import { ImageContent } from "application/domain/activity-content/image";
-import { TextContent } from "application/domain/activity-content/text";
-import { VideoContent } from "application/domain/activity-content/video";
+  ContentTypesType,
+  AudioContent,
+  ImageContent,
+  VideoContent,
+  TextContent,
+} from "@domain";
+import { ContentTypeNotFound } from "@edu-platform/common";
+import {
+  IUseCase,
+  UserSelectDTO,
+  IActivitiesRepository,
+  IStorageService,
+  FileType,
+  IIdGenerator,
+  ActivityContentSelectDTO,
+} from "@interfaces";
 
 type InputParams = {
   title?: string;
   content?: string;
   description?: string;
-  type?: ContentTypeTypes;
   contentId: number;
   user: UserSelectDTO;
   activityId: number;
   versionId: number;
+  files?: { image?: FileType[]; audio?: FileType[] };
+  existingContent: ActivityContentSelectDTO;
 };
 
-type Return = {
-  contentId: number;
-};
+type Return = void;
 
 export type ICreateNewContentFromExistingUseCase = IUseCase<
   InputParams,
@@ -30,46 +36,86 @@ export type ICreateNewContentFromExistingUseCase = IUseCase<
 >;
 
 class UseCase implements ICreateNewContentFromExistingUseCase {
-  constructor(private activitiesRepository: IActivitiesRepository) {}
+  constructor(
+    private activitiesRepository: IActivitiesRepository,
+    private storageService: IStorageService,
+    private idService: IIdGenerator
+  ) {}
 
   async execute({
     title,
-    content,
+    content: requestContent,
     description,
-    type,
     contentId,
     user,
+    activityId,
     versionId,
+    files,
+    existingContent,
   }: InputParams) {
-    const typeOfContent = Content.validateContentType(type);
+    const newContentFromExisting =
+      await this.activitiesRepository.insertContent({
+        type: existingContent.type,
+        content: existingContent.content,
+        description: existingContent.description,
+        title: existingContent.title,
+        parentId: existingContent.id,
+        originatingVersionId: versionId,
+      });
 
-    switch (typeOfContent) {
+    let content = requestContent;
+
+    switch (existingContent.type) {
       case "Video":
-        VideoContent.validateVideo(content, title, description);
+        new VideoContent(content, title, description);
         break;
       case "Audio":
-        // AudioContent.validateAudio(content, title, description);
-        // SALVAR O CONTEÚDO NO S3 SE FOR UM CONTEÚDO NOVO
+        new AudioContent(content, title, description);
+        if (files) {
+          const audioFile = files.audio[0];
+          content = await this.storageService.uploadFile(
+            `${activityId}/${this.idService.getId()}.${
+              audioFile.mimetype.split("/")[1]
+            }`,
+            audioFile
+          );
+        }
         break;
       case "Image":
-        ImageContent.validateImage(content, title, description);
-        // SALVAR O CONTEÚDO NO S3 SE FOR UM CONTEÚDO NOVO
+        new ImageContent(content, title, description);
+        if (files) {
+          const imageFile = files.image[0];
+          content = await this.storageService.uploadFile(
+            `${activityId}/${this.idService.getId()}.${
+              imageFile.mimetype.split("/")[1]
+            }`,
+            imageFile
+          );
+        }
         break;
       case "Text":
-        TextContent.validateText(content, title, description);
+        new TextContent(content, title, description);
         break;
       default:
         throw new ContentTypeNotFound();
     }
 
-    return await this.activitiesRepository.insertContent({
-      title,
-      content,
-      description,
-      type,
-      originatingVersionId: versionId,
-    });
+    await this.activitiesRepository.updateContent(
+      newContentFromExisting.contentId,
+      {
+        title,
+        content,
+        description,
+        type: existingContent.type as ContentTypesType,
+        originatingVersionId: versionId,
+      },
+      versionId
+    );
+
+    await this.activitiesRepository.createRelationBetweenVersionAndElement(
+      versionId,
+      newContentFromExisting.contentId
+    );
   }
 }
-
 export default UseCase;

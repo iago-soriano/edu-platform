@@ -1,23 +1,33 @@
-import { ContentTypeTypes, Content } from "@domain";
+import { ContentTypeNotFound } from "@edu-platform/common";
 import {
-  ActivityContentNotFound,
-  ContentTypeNotFound,
-} from "@edu-platform/common";
-import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
-import { AudioContent } from "application/domain/activity-content/audio";
-import { ImageContent } from "application/domain/activity-content/image";
-import { TextContent } from "application/domain/activity-content/text";
-import { VideoContent } from "application/domain/activity-content/video";
+  IUseCase,
+  UserSelectDTO,
+  IActivitiesRepository,
+  IStorageService,
+  FileType,
+  IIdGenerator,
+} from "@interfaces";
+import {
+  ContentTypesType,
+  Content,
+  AudioContent,
+  ImageContent,
+  TextContent,
+  VideoContent,
+} from "@domain";
 
 type InputParams = {
   title?: string;
   content?: string;
   description?: string;
-  type?: ContentTypeTypes;
+  //type?: string;
   contentId: number;
   user: UserSelectDTO;
   activityId: number;
   versionId: number;
+  files?: { image?: FileType[]; audio?: FileType[] };
+  start?: number;
+  end?: number;
 };
 
 type Return = void;
@@ -25,51 +35,87 @@ type Return = void;
 export type IEditContentUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IEditContentUseCase {
-  constructor(private activitiesRepository: IActivitiesRepository) {}
+  constructor(
+    private activitiesRepository: IActivitiesRepository,
+    private storageService: IStorageService,
+    private idService: IIdGenerator
+  ) {}
 
   async execute({
     title,
-    content,
+    content: requestContent,
     description,
-    type,
+    //type,
     contentId,
     user,
+    activityId,
     versionId,
+    files,
+    start,
+    end,
   }: InputParams) {
-    const typeOfContent = Content.validateContentType(type);
+    const existingContent =
+      await this.activitiesRepository.getActivityContentByContentId(contentId); // colocando aqui consigo pegar o type ao invés de receber pelo body
 
-    switch (typeOfContent) {
+    //const typeOfContent = Content.validateContentType(type);
+
+    let content = requestContent;
+
+    switch (existingContent.type) {
       case "Video":
-        VideoContent.validateVideo(content, title, description);
+        new VideoContent(content, title, description);
         break;
       case "Audio":
-        // AudioContent.validateAudio(content, title, description);
+        new AudioContent(content, title, description);
+        if (files) {
+          const audioFile = files.audio[0];
+          content = await this.storageService.uploadFile(
+            `${activityId}/${this.idService.getId()}.${
+              audioFile.mimetype.split("/")[1]
+            }`,
+            audioFile
+          );
+        }
+
         break;
       case "Image":
-        ImageContent.validateImage(content, title, description);
+        new ImageContent(content, title, description);
+        if (files) {
+          const imageFile = files.image[0];
+          content = await this.storageService.uploadFile(
+            `${activityId}/${this.idService.getId()}.${
+              imageFile.mimetype.split("/")[1]
+            }`,
+            imageFile
+          );
+        }
+
         break;
       case "Text":
-        TextContent.validateText(content, title, description);
+        new TextContent(content, title, description);
         break;
       default:
         throw new ContentTypeNotFound();
     }
 
-    const existingContent =
-      await this.activitiesRepository.getActivityContentByContentId(contentId);
-
     if (
-      existingContent[0].type === "Audio" ||
-      existingContent[0].type === "Image"
+      existingContent.type === "Audio" ||
+      (existingContent.type === "Image" && existingContent.content && files)
     ) {
-      // VERIFICAR SE É IGUAL AO ANTERIOR.
+      this.storageService.deleteFile(existingContent.content);
     }
 
-    await this.activitiesRepository.updateContent(contentId, {
-      title,
-      content,
-      description,
-    });
+    await this.activitiesRepository.updateContent(
+      contentId,
+      {
+        title,
+        content,
+        description,
+        start,
+        end,
+      },
+      versionId
+    );
   }
 }
 

@@ -152,8 +152,11 @@ export const activityContents = pgTable("activity_contents", {
   content: varchar("content", { length: 500 }),
   description: varchar("description", { length: 500 }),
   title: varchar("title", { length: 100 }),
+  order: integer("order").default(0),
+  start: integer("start").default(0),
+  end: integer("end").default(0),
 
-  parentId: integer("parent_id"),
+  parentId: integer("parent_id"), // references this table
   originatingVersionId: integer("originating_version_id").references(
     () => activityVersions.id
   ),
@@ -185,6 +188,7 @@ export const activityQuestions = pgTable("questions", {
   question: varchar("question", { length: 500 }),
   answerKey: varchar("answer_key", { length: 500 }),
   title: varchar("title", { length: 100 }),
+  order: integer("order").default(0),
 
   parentId: integer("parent_id").references(() => activityContents.id),
   originatingVersionId: integer("originating_version_id").references(
@@ -230,19 +234,16 @@ export const choicesRelations = relations(choices, ({ one }) => ({
 export const activityVersionHasElementsRelationTable = pgTable(
   "version_element_relation",
   {
-    contentId: integer("content_id")
-      .notNull()
-      .references(() => activityContents.id),
-    questionId: integer("question_id")
-      .notNull()
-      .references(() => activityQuestions.id),
+    id: serial("id").primaryKey(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+
+    contentId: integer("content_id").references(() => activityContents.id),
+    questionId: integer("question_id").references(() => activityQuestions.id),
     versionId: integer("version_id")
       .notNull()
       .references(() => activityVersions.id),
-  },
-  (t) => ({
-    pk: primaryKey(t.contentId, t.questionId, t.versionId),
-  })
+  }
 );
 
 export const activityVersionHasElementsRelations = relations(

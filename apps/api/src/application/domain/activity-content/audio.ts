@@ -8,8 +8,4 @@ export class AudioContent extends Content {
   ) {
     super(title, description);
   }
-
-  getKeyName(base: string, key: string) {
-    return `${base}/audio/${key}`;
-  }
 }

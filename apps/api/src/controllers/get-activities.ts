@@ -4,11 +4,11 @@ import {
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
-import { GetActivitiesResponseBody } from "@edu-platform/common/api";
+import { GetActivityVersionsResponseBody } from "@edu-platform/common/api";
 import { IGetActivitiesUseCase } from "@use-cases";
 
 type Request = TypedRequest<{}, { statuses: string }, {}>;
-type Response = TypedResponse<GetActivitiesResponseBody>;
+type Response = TypedResponse<GetActivityVersionsResponseBody>;
 
 export class GetActivitiesController implements HTTPController {
   method = HttpMethod.GET;
@@ -21,7 +21,6 @@ export class GetActivitiesController implements HTTPController {
     const { statuses } = req.query;
     const { user } = req;
 
-    console.log("getting activities", user.email);
     const activitiesByAuthor = await this.getActivitiesUseCase.execute({
       user,
       statuses: statuses ? statuses.split(",") : [],

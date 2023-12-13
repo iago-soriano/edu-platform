@@ -39,12 +39,11 @@ class UseCase implements IUpdateActivityMetadataUseCase {
     if (existingActivity.draftVersionId != versionId)
       throw new ActivityIsNotFound();
 
-    const activityVersion =
+    const { version } =
       await this.activitiesRepository.getVersionById(versionId);
 
-    if (activityVersion.activityId != activityId)
-      throw new ActivityIsNotFound();
-    if (activityVersion.status !== "Draft") throw new ActivityIsNotDraft();
+    if (version.activityId != activityId) throw new ActivityIsNotFound();
+    if (version.status !== "Draft") throw new ActivityIsNotDraft();
 
     title && Activity.validateTitle(title);
     description && Activity.validateDescription(description);

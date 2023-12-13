@@ -1,4 +1,11 @@
-import { ContentTypeNotFound, DomainRules } from "@edu-platform/common";
+import {
+  ContentTypeNotFound,
+  TitleIsTooLong,
+  TitleIsTooShort,
+  DomainRules,
+  DescriptionIsTooLong,
+  DescriptionIsTooShort,
+} from "@edu-platform/common";
 
 export const contentPossibleTypes = [
   "Video",
@@ -7,15 +14,15 @@ export const contentPossibleTypes = [
   "Text",
 ] as const;
 
-export type ContentTypeTypes = (typeof contentPossibleTypes)[number];
+export type ContentTypesType = (typeof contentPossibleTypes)[number];
 
 export abstract class Content {
   constructor(
     public title: string,
     public description: string
   ) {
-    this.validateDescription();
-    this.validateTitle();
+    if (description) this.validateDescription();
+    if (title) this.validateTitle();
   }
 
   static validateContentType(contentType: string) {
@@ -30,27 +37,19 @@ export abstract class Content {
 
   validateTitle() {
     if (this.title.length > DomainRules.CONTENT.TITLE.MAX_LENGTH) {
-      throw new Error(
-        `Título da atividade é longo demais. Tamanho máximo permitido é de ${DomainRules.CONTENT.TITLE.MAX_LENGTH} caracteres`
-      );
+      throw new TitleIsTooLong();
     } else if (this.title.length < DomainRules.CONTENT.TITLE.MIN_LENGTH) {
-      throw new Error(
-        `Título da atividade é curto demais. Tamanho mínimo permitido é de ${DomainRules.CONTENT.TITLE.MAX_LENGTH} caracteres`
-      );
+      throw new TitleIsTooShort();
     }
   }
 
   validateDescription() {
     if (this.description.length > DomainRules.CONTENT.DESCRIPTION.MAX_LENGTH) {
-      throw new Error(
-        `Descrição da atividade é longa demais. Tamanho máximo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MAX_LENGTH} caracteres`
-      );
+      throw new DescriptionIsTooLong();
     } else if (
       this.description.length < DomainRules.CONTENT.DESCRIPTION.MIN_LENGTH
     ) {
-      throw new Error(
-        `Descrição da atividade é curta demais. Tamanho mínimo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MAX_LENGTH} caracteres`
-      );
+      throw new DescriptionIsTooShort();
     }
   }
 }

@@ -15,6 +15,7 @@ import {
   UpdateActivityMetadataController,
   GetActivityVersionController,
   GetActivitiesController,
+  DeleteContentController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -34,6 +35,7 @@ import {
   CreateNewContentFromExistingUseCase,
   EditContentUseCase,
   CreateContentUseCase,
+  DeleteContentUseCase,
 } from "@use-cases";
 import {
   BCryptEncryptionService,
@@ -81,6 +83,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(GetActivityVersionController)
       .classic(),
     getActivitiesController: awilix.asClass(GetActivitiesController).classic(),
+    deleteContentController: awilix.asClass(DeleteContentController).classic(),
 
     // services
     encryptionService: awilix.asClass(BCryptEncryptionService),
@@ -122,6 +125,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     editContentUseCase: awilix.asClass(EditContentUseCase).classic(),
     createContentUseCase: awilix.asClass(CreateContentUseCase).classic(),
+    deleteContentUseCase: awilix.asClass(DeleteContentUseCase).classic(),
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),
     tokenRepository: awilix.asClass(TokenRepository).classic(),

@@ -1,6 +1,7 @@
 import {
   HTTPController,
   HttpMethod,
+  IActivitiesRepository,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
@@ -24,18 +25,27 @@ export class GetActivityVersionController implements HTTPController {
     // const { activityId, versionId } = req.params;
     const { user } = req;
 
-    const activityId = req.params.activityId as unknown as number;
-    const versionId = req.params.versionId as unknown as number;
+    const activityId = parseInt(req.params.activityId);
+    const versionId = parseInt(req.params.versionId);
 
     if (!activityId || !versionId)
       throw new Error("activityId and versionId must be numbers");
 
-    const resp = await this.getActivityVersionUseCase.execute({
-      user,
-      activityId,
-      versionId,
-    });
+    const { title, description, elements } =
+      await this.getActivityVersionUseCase.execute({
+        user,
+        activityId,
+        versionId,
+      });
 
-    return res.status(200).json(resp);
+    return res.status(200).json({
+      title,
+      description,
+      elements,
+      // : [...elements.map(el => ({
+      //   ...el,
+      //   title: el.title || ""
+      // }))]
+    });
   }
 }

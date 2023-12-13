@@ -1,5 +1,5 @@
 import {
-  ContentTypeTypes,
+  ContentTypesType,
   Content,
   AudioContent,
   ImageContent,
@@ -9,20 +9,20 @@ import {
 import { ContentTypeNotFound } from "@edu-platform/common";
 import {
   IUseCase,
-  UserSelectDTO,
   IActivitiesRepository,
   IStorageService,
   FileType,
+  IIdGenerator,
 } from "@interfaces";
 
 type InputParams = {
-  title: string;
-  content: string;
-  description: string;
-  type: ContentTypeTypes;
-  user: UserSelectDTO;
+  title?: string;
+  content?: string;
+  description?: string;
+  type: string;
   activityId: number;
   versionId: number;
+  order: number;
   files?: { image?: FileType[]; audio?: FileType[] };
 };
 
@@ -35,7 +35,8 @@ export type ICreateContentUseCase = IUseCase<InputParams, Return>;
 class UseCase implements ICreateContentUseCase {
   constructor(
     private activitiesRepository: IActivitiesRepository,
-    private storageService: IStorageService
+    private storageService: IStorageService,
+    private idService: IIdGenerator
   ) {}
 
   async execute({
@@ -43,48 +44,65 @@ class UseCase implements ICreateContentUseCase {
     content: requestContent,
     description,
     type,
-    user,
     versionId,
     activityId,
     files,
+    order,
   }: InputParams) {
     const typeOfContent = Content.validateContentType(type);
 
     let content = requestContent;
-    const keyBaseName = `${activityId}/${versionId}`;
 
     switch (typeOfContent) {
       case "Video":
-        VideoContent.validateVideo(content, title, description);
+        new VideoContent(content, title, description);
         break;
       case "Audio":
-        const audioContent = new AudioContent(content, title, description);
-        const url = await this.storageService.uploadFile(
-          audioContent.getKeyName(keyBaseName, files.image[0].filename),
-          files.image[0]
-        );
-        content = url;
+        new AudioContent(content, title, description);
+        if (files) {
+          const audioFile = files.audio[0];
+          content = await this.storageService.uploadFile(
+            `${activityId}/${this.idService.getId()}.${
+              audioFile.mimetype.split("/")[1]
+            }`,
+            audioFile
+          );
+        }
         break;
-      // case "Image":
-      //   ImageContent.validateImage(content, title, description);
-      //   content = await this.storageService.uploadFile("Teste333", content);
-      //   break;
+      case "Image":
+        new ImageContent(content, title, description);
+        if (files) {
+          const imageFile = files.image[0];
+          content = await this.storageService.uploadFile(
+            `${activityId}/${this.idService.getId()}.${
+              imageFile.mimetype.split("/")[1]
+            }`,
+            imageFile
+          );
+        }
+        break;
       case "Text":
-        TextContent.validateText(content, title, description);
+        new TextContent(content, title, description);
         break;
       default:
         throw new ContentTypeNotFound();
     }
 
-    // this.storageService.uploadFile("Teste333", content);
-
-    return this.activitiesRepository.insertContent({
+    const createdContentId = await this.activitiesRepository.insertContent({
       title,
       content,
       description,
-      type,
+      type: type as ContentTypesType,
       originatingVersionId: versionId,
+      order,
     });
+
+    await this.activitiesRepository.createRelationBetweenVersionAndElement(
+      versionId,
+      createdContentId.contentId
+    );
+
+    return createdContentId;
   }
 }
 

@@ -11,8 +11,8 @@ import {
   activityQuestions,
   activityVersionHasElementsRelationTable,
 } from "@infrastructure";
-import { eq, inArray, and, desc } from "drizzle-orm";
-import { activityPossibleStatus, ActivityStatusType } from "@domain";
+import { eq, inArray, and, desc, asc } from "drizzle-orm";
+import { ActivityStatusType } from "@domain";
 
 export class ActivityRepository implements IActivitiesRepository {
   async insertActivityAndNewVersion(authorId: number) {
@@ -52,18 +52,31 @@ export class ActivityRepository implements IActivitiesRepository {
   }
 
   async insertContent(content: ActivityContentInsertDTO) {
-    return (
-      await db
-        .insert(activityContents)
-        .values(content)
-        .returning({ contentId: activityContents.id })
-    )[0];
+    return await db.transaction(async (tx) => {
+      const { contentId } = (
+        await tx
+          .insert(activityContents)
+          .values(content)
+          .returning({ contentId: activityContents.id })
+      )[0];
+
+      return { contentId };
+    });
   }
-  async updateContent(contentId: number, content: ActivityContentInsertDTO) {
+  async updateContent(
+    contentId: number,
+    content: ActivityContentInsertDTO,
+    versionId: number
+  ) {
     await db
       .update(activityContents)
       .set({ ...content, updatedAt: new Date() })
       .where(eq(activityContents.id, contentId));
+
+    await db
+      .update(activityVersions)
+      .set({ updatedAt: new Date() })
+      .where(eq(activityVersions.id, versionId));
   }
 
   async getVersionById(versionId: number) {
@@ -90,6 +103,7 @@ export class ActivityRepository implements IActivitiesRepository {
       ? await db
           .select()
           .from(activityContents)
+          .orderBy(asc(activityContents.id))
           .where(inArray(activityContents.id, contentIds))
       : [];
 
@@ -97,10 +111,11 @@ export class ActivityRepository implements IActivitiesRepository {
       ? await db
           .select()
           .from(activityQuestions)
+          .orderBy(asc(activityQuestions.id))
           .where(inArray(activityQuestions.id, questionIds))
       : [];
 
-    return { ...version, elements: [...contents, ...questions] };
+    return { version, contents, questions };
   }
 
   async getActivityContentByContentId(contentId: number) {
@@ -139,5 +154,33 @@ export class ActivityRepository implements IActivitiesRepository {
         )
       );
     return activitiesVersionsByAuthor;
+  }
+
+  async createRelationBetweenVersionAndElement(
+    versionId: number,
+    contentId?: number,
+    questionId?: number
+  ) {
+    return (
+      await db
+        .insert(activityVersionHasElementsRelationTable)
+        .values({ versionId, contentId, questionId })
+        .returning({ relationId: activityVersionHasElementsRelationTable.id })
+    )[0];
+  }
+
+  async deleteContent(contentId: number) {
+    await db.delete(activityContents).where(eq(activityContents.id, contentId));
+  }
+
+  async deleteContentAndVersionRelation(contentId: number, versionId: number) {
+    await db
+      .delete(activityVersionHasElementsRelationTable)
+      .where(
+        and(
+          eq(activityVersionHasElementsRelationTable.contentId, contentId),
+          eq(activityVersionHasElementsRelationTable.versionId, versionId)
+        )
+      );
   }
 }

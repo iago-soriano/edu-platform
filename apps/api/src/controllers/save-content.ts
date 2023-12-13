@@ -8,6 +8,7 @@ import {
 import {
   SaveContentRequestBody,
   SaveContentResponseBody,
+  SaveContentRequestParams,
 } from "@edu-platform/common/api";
 import {
   IEditContentUseCase,
@@ -17,12 +18,11 @@ import {
 import {
   ActivityContentNotFound,
   ActivityIsNotFound,
-  ActivityNotFound,
   ActivityVersionNotFound,
 } from "@edu-platform/common";
 
 type Request = TypedRequest<
-  { activityId; versionId },
+  SaveContentRequestParams,
   {},
   SaveContentRequestBody
 >;
@@ -41,17 +41,20 @@ export class SaveContentController implements HTTPController {
   ) {}
 
   async execute(req: Request, res: Response) {
-    const { title, content, description, type, contentId } = req.body;
-    const { activityId, versionId } = req.params;
+    const { title, content, description, type, contentId, order, start, end } =
+      req.body;
+    const { activityId: actvIdStr, versionId: vrsnIdStr } = req.params;
+    const activityId = parseInt(actvIdStr);
+    const versionId = parseInt(vrsnIdStr);
+
     const { user, files } = req;
 
-    const validateActivity =
-      await this.activitiesRepository.getActivityById(activityId); //rename
-    if (!validateActivity) throw new ActivityIsNotFound();
+    const activity =
+      await this.activitiesRepository.getActivityById(activityId);
+    if (!activity) throw new ActivityIsNotFound();
 
-    const validateVersion =
-      await this.activitiesRepository.getVersionById(versionId);
-    if (!validateVersion) throw new ActivityVersionNotFound(); //rename
+    const version = await this.activitiesRepository.getVersionById(versionId);
+    if (!version) throw new ActivityVersionNotFound();
 
     if (contentId) {
       const existingContent =
@@ -61,41 +64,43 @@ export class SaveContentController implements HTTPController {
       if (!existingContent) throw new ActivityContentNotFound();
 
       // This means the content being edited was created in this version
-      if (existingContent.originatingVersionId === versionId) {
+      if (existingContent.originatingVersionId == versionId) {
         await this.editContentUseCase.execute({
           title,
           content,
           description,
-          type,
           contentId,
           activityId,
           versionId,
           user,
+          start,
+          end,
+          files,
         });
         res.status(200).json();
       } else {
-        const newContentCreated =
-          await this.createNewContentFromExistingUseCase.execute({
-            title,
-            content,
-            description,
-            type,
-            contentId,
-            activityId,
-            versionId,
-            user,
-          });
-        res.status(200).json(newContentCreated);
+        await this.createNewContentFromExistingUseCase.execute({
+          title,
+          content,
+          description,
+          contentId,
+          activityId,
+          versionId,
+          user,
+          files,
+          existingContent,
+        });
+        res.status(200).json();
       }
     } else {
       const createContent = await this.createContentUseCase.execute({
         title,
-        content, // TEXT = stringzona. VIDEO = url do youtube. AUDIO/IMAGE = url do S3
+        content,
         description,
         type,
         activityId,
         versionId,
-        user,
+        order,
         files,
       });
       res.status(200).json(createContent);

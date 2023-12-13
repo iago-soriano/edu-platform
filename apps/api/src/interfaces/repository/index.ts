@@ -55,13 +55,14 @@ export interface IActivitiesRepository {
   ) => Promise<{ contentId: number }>;
   updateContent: (
     contentId: number,
-    content: ActivityContentInsertDTO
+    content: ActivityContentInsertDTO,
+    versionId: number
   ) => Promise<void>;
-  getVersionById: (versionId: number) => Promise<
-    ActivityVersionSelectDTO & {
-      elements: (ActivityContentSelectDTO | QuestionSelectDTO)[];
-    }
-  >;
+  getVersionById: (versionId: number) => Promise<{
+    version: ActivityVersionSelectDTO;
+    contents: ActivityContentSelectDTO[];
+    questions: QuestionSelectDTO[];
+  }>;
   getActivityContentByContentId: (
     contentId: number
   ) => Promise<ActivityContentSelectDTO>;
@@ -69,4 +70,14 @@ export interface IActivitiesRepository {
     authorId: number,
     statuses: ActivityStatusType[]
   ) => Promise<ActivityVersionSelectDTO[]>;
+  createRelationBetweenVersionAndElement: (
+    versionId: number,
+    contentId?: number,
+    questionId?: number
+  ) => Promise<{ relationId: number }>;
+  deleteContent: (contentId: number) => Promise<void>;
+  deleteContentAndVersionRelation: (
+    contentId: number,
+    versionId: number
+  ) => Promise<void>;
 }
