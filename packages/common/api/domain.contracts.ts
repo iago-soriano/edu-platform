@@ -1,4 +1,4 @@
-import { ContentTypeTypes } from "../../../apps/api/src/application/domain/activity-content/base";
+import { ContentTypesType } from "../../../apps/api/src/application/domain/activity-content/base";
 import {
   ActivityContentSelectDTO,
   QuestionSelectDTO,
@@ -16,14 +16,27 @@ export type GetActivityVersionParams = {
   activityId: string;
   versionId: string;
 };
+export type ElementResponse = {
+  title?: string;
+  description?: string;
+  id: number;
+  type: string;
+  content?: string;
+  elementType: string;
+  question?: string;
+  answerKey?: string;
+  order: number;
+  start?: number;
+  end?: number;
+};
 export type GetActivityVersionResponseBody = {
   title: string;
   description: string;
-  elements: (ActivityContentSelectDTO | QuestionSelectDTO)[];
+  elements: ElementResponse[];
 };
 
 // get all activities authored by the user by statuses
-export type GetActivitiesResponseBody = {
+export type GetActivityVersionsResponseBody = {
   title: string;
   description: string;
   status: string;
@@ -58,14 +71,25 @@ export type SaveQuestionResponseBody = {
   questionId?: number;
 };
 
+export type DeleteActivityContentParams = {
+  activityId: string;
+  versionId: string;
+  contentId: string;
+};
+export type SaveContentRequestParams = {
+  activityId: string;
+  versionId: string;
+};
 // Save Content [POST activity/:activityId/version/:versionId/content]
 export type SaveContentRequestBody = {
   title: string;
   content?: string;
   description: string;
-  type: ContentTypeTypes;
+  type: ContentTypesType;
   contentId?: number;
   image?: unknown;
+  tracks?: string;
+  order: number;
 };
 
 export type SaveContentResponseBody = {

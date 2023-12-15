@@ -41,7 +41,7 @@ export class SaveContentController implements HTTPController {
   ) {}
 
   async execute(req: Request, res: Response) {
-    const { title, content, description, type, contentId, order, start, end } =
+    const { title, content, description, type, contentId, order, tracks } =
       req.body;
     const { activityId: actvIdStr, versionId: vrsnIdStr } = req.params;
     const activityId = parseInt(actvIdStr);
@@ -73,8 +73,7 @@ export class SaveContentController implements HTTPController {
           activityId,
           versionId,
           user,
-          start,
-          end,
+          tracks,
           files,
         });
         res.status(200).json();
@@ -89,6 +88,7 @@ export class SaveContentController implements HTTPController {
           user,
           files,
           existingContent,
+          // tracks
         });
         res.status(200).json();
       }

@@ -153,8 +153,7 @@ export const activityContents = pgTable("activity_contents", {
   description: varchar("description", { length: 500 }),
   title: varchar("title", { length: 100 }),
   order: integer("order").default(0),
-  start: integer("start").default(0),
-  end: integer("end").default(0),
+  tracks: varchar("description", { length: 500 }),
 
   parentId: integer("parent_id"), // references this table
   originatingVersionId: integer("originating_version_id").references(

@@ -2,11 +2,11 @@ export const DomainRules = {
   ACTIVITY: {
     TITLE: {
       MIN_LENGTH: 5,
-      MAX_LENGTH: 100,
+      MAX_LENGTH: 50,
     },
     DESCRIPTION: {
       MIN_LENGTH: 5,
-      MAX_LENGTH: 400,
+      MAX_LENGTH: 200,
     },
     TOPICS: {
       MAX_COUNT: 5,
@@ -18,17 +18,13 @@ export const DomainRules = {
   CONTENT: {
     TITLE: {
       MIN_LENGTH: 5,
-      MAX_LENGTH: 100,
+      MAX_LENGTH: 50,
     },
     DESCRIPTION: {
       MIN_LENGTH: 5,
-      MAX_LENGTH: 400,
+      MAX_LENGTH: 200,
     },
     VIDEO: {
-      MIN_LENGTH: 5,
-      MAX_LENGTH: 10 * 60,
-    },
-    AUDIO: {
       MIN_LENGTH: 5,
       MAX_LENGTH: 10 * 60,
     },

@@ -26,8 +26,7 @@ type InputParams = {
   activityId: number;
   versionId: number;
   files?: { image?: FileType[]; audio?: FileType[] };
-  start?: number;
-  end?: number;
+  tracks?: string;
 };
 
 type Return = void;
@@ -51,8 +50,7 @@ class UseCase implements IEditContentUseCase {
     activityId,
     versionId,
     files,
-    start,
-    end,
+    tracks,
   }: InputParams) {
     const existingContent =
       await this.activitiesRepository.getActivityContentByContentId(contentId); // colocando aqui consigo pegar o type ao invés de receber pelo body
@@ -111,8 +109,7 @@ class UseCase implements IEditContentUseCase {
         title,
         content,
         description,
-        start,
-        end,
+        tracks,
       },
       versionId
     );
