@@ -18,6 +18,7 @@ import { axios, getServerSession } from "@infrastructure";
 export const metadata = {
   title: "Edu Platform",
   description: "Uma plataforma para professores de idiomas",
+  referrer: "no-referrer-when-downgrade",
 };
 
 export default async function RootLayout(

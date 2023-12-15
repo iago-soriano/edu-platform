@@ -4,15 +4,15 @@ import {
   ArchivedActivityCard,
   DraftActivityCard,
   PublishedActivityCard,
+  ErrorCard,
 } from "@components";
-import { useGetActivitiesQuery } from "@infrastructure";
+import { useGetActivityVersionsQuery } from "@infrastructure";
 import { ActivityConstants } from "@edu-platform/common";
 import { useRouter } from "next/navigation";
 
 export default function Activities() {
   const router = useRouter();
-
-  const { data } = useGetActivitiesQuery();
+  const query = useGetActivityVersionsQuery();
 
   const getActivityVersionCard = (version) => {
     const onClickActivityCard = () => {
@@ -34,19 +34,29 @@ export default function Activities() {
     );
   };
 
-  return (
-    (
-      <div className="p-10 [&>*]:my-2 grid grid-cols-10">
-        {data?.map((act) => (
-          <div className="lg:col-start-3 lg:col-span-6 col-span-10">
-            {getActivityVersionCard(act)}
-          </div>
-        ))}
+  if (query.error) {
+    let errorMessage = "Houve um erro de conexão com a internet";
+    if (query.error.message !== "Network Error")
+      errorMessage = "Houve um erro desconhecido";
+
+    return (
+      <div className="p-3 flex justify-center">
+        <ErrorCard message={errorMessage} />
       </div>
-    ) || (
-      <div className="p-3">
-        <Spinner />
-      </div>
-    )
+    );
+  }
+
+  return query.isPending ? (
+    <div className="h-[150px] my-10">
+      <Spinner />
+    </div>
+  ) : (
+    <div className="p-10 [&>*]:my-2 grid grid-cols-10">
+      {query.data?.map((act) => (
+        <div className="lg:col-start-3 lg:col-span-6 col-span-10">
+          {getActivityVersionCard(act)}
+        </div>
+      ))}
+    </div>
   );
 }

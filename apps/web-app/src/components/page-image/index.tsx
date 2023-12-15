@@ -11,10 +11,10 @@ export const PageImage = () => {
       return (
         <Image
           className="my-auto"
-          src={`/assets/images/doodles/${mode}/messy.svg`}
+          src={`/assets/images/doodles/${mode}/smartphone.svg`}
           width={600}
           height={800}
-          alt={"Man dropping papers"}
+          alt={"Girl using her smartphone"}
         />
       );
     case "/auth/change-password":
@@ -24,7 +24,7 @@ export const PageImage = () => {
           src={`/assets/images/doodles/${mode}/plant.svg`}
           width={600}
           height={800}
-          alt={"Man dropping papers"}
+          alt={"Woman holding a plant pot"}
         />
       );
     case "/auth/sign-up/credentials":
@@ -35,7 +35,7 @@ export const PageImage = () => {
           src={`/assets/images/doodles/${mode}/sitting-reading.svg`}
           width={600}
           height={800}
-          alt={"Man dropping papers"}
+          alt={"Woman sitting and reading a book"}
         />
       );
     case "/auth/verify-account":
@@ -45,7 +45,7 @@ export const PageImage = () => {
           src={`/assets/images/doodles/${mode}/reading-pajamas.svg`}
           width={600}
           height={800}
-          alt={"Man dropping papers"}
+          alt={"Woman reading in pajamas"}
         />
       );
     default:

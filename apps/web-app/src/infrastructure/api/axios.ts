@@ -38,10 +38,12 @@ export class AxiosFetcher implements IHTTPClient {
     //     message: e.cause
     //   }
     // }
+    console.log(e.response);
     if (e.response) {
       throw {
         status: e.response.status,
-        message: e.response.data || e.message,
+        message: e.response.data.message || e.message,
+        errors: e.response.data.errors,
       };
     } else {
       throw {

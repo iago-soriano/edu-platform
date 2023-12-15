@@ -19,3 +19,25 @@ export const getChildrenOnDisplayName = (children, displayName) => {
     child.type.displayName === displayName ? child : null
   );
 };
+
+export const parseTimeToNumber = (str: string) => {
+  return (
+    3600 * Number(str.split(":")[0]) +
+    60 * Number(str.split(":")[1]) +
+    Number(str.split(":")[2])
+  );
+};
+
+export const parseNumberToTimeLabel = (num: number) => {
+  const hours = Math.floor(num / 3600)
+    .toString()
+    .padStart(2, "0");
+  const mins = Math.floor(num / 60)
+    .toString()
+    .padStart(2, "0");
+  const secs = Math.floor(num % 60)
+    .toString()
+    .padStart(2, "0");
+
+  return `${hours}:${mins}:${secs}`;
+};

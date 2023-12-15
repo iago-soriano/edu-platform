@@ -20,6 +20,10 @@
   h5 {
     @apply text-2xl;
   }
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    background: none;
+    display: none;
+  }
 }
 @tailwind components;
 @tailwind utilities;

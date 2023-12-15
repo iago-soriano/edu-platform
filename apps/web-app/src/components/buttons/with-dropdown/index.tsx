@@ -1,37 +1,67 @@
 import { getChildrenOnDisplayName, useClickOutside } from "@infrastructure";
-import { useState } from "react";
+import { useState, cloneElement, ReactNode } from "react";
 import { Dropdown } from "@components";
+import { twMerge } from "tailwind-merge";
 
-export const ButtonWithDropdown = ({ children }) => {
+export const ButtonWithDropdown = ({
+  children,
+  up,
+  right,
+}: {
+  children: unknown;
+  up?: boolean;
+  right?: boolean;
+}) => {
+  const positionY = `${up ? "bottom-[100%]" : "top-[100%]"}`;
+  const positionX = `${right ? "" : "right-[0%]"}`;
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const addRef = useClickOutside(() => {
     setDrawerOpen(false);
   });
-  const buttonText = getChildrenOnDisplayName(children, "text");
+  const buttonText = getChildrenOnDisplayName(children, "text")[0];
   const drawerItems = getChildrenOnDisplayName(children, "drawerItem");
 
   return (
-    <div ref={addRef}>
-      <button
-        onClick={() => setDrawerOpen((c) => !c)}
-        className="flex bg-accent p-2 text-white rounded hover:bg-opacity-90"
+    <div className="relative">
+      <Dropdown
+        className={twMerge("absolute", positionX, positionY)}
+        open={drawerOpen}
       >
-        {buttonText}
-      </button>
-      <Dropdown open={drawerOpen}>
         <div className="flex flex-col">{drawerItems}</div>
       </Dropdown>
+      {cloneElement(buttonText, {
+        onClick: () => setDrawerOpen((c) => !c),
+      })}
     </div>
   );
 };
 
-const Text = ({ children }) => children;
+const Text = ({ children, className, ...rest }) => (
+  <button {...rest} className={className}>
+    {children}
+  </button>
+);
 Text.displayName = "text";
 ButtonWithDropdown.Text = Text;
 
-const DrawerItem = ({ children }) => {
+const DrawerItem = ({
+  children,
+  className,
+  ...rest
+}: {
+  children: ReactNode;
+  onClick?: (args: unknown) => unknown;
+  className?: string;
+}) => {
   return (
-    <button className="min-w-[200px] p-2 bg-surface2 hover:bg-surface3">
+    <button
+      {...rest}
+      className={twMerge(
+        "min-w-[200px] p-2 bg-surface2 hover:bg-surface3",
+        className
+      )}
+    >
       {children}
     </button>
   );

@@ -10,10 +10,10 @@ const Container = ({ children, onClick }) => (
 );
 
 const Title = ({ children }) => (
-  <h4 className="col-start-1 col-span-3">{children}</h4>
+  <h5 className="col-start-1 col-span-3 truncate">{children}</h5>
 );
 const EmptyTitle = () => (
-  <h4 className="text-text2 col-start-1 col-span-3">Sem título</h4>
+  <h6 className="text-text2 col-start-1 col-span-3">Sem título</h6>
 );
 
 const Description = ({ children }) => (

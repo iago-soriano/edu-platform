@@ -115,7 +115,7 @@ export const SignOutButton = ({ signOut }) => (
     onClick={signOut}
     className="hover:underline hover:opacity-70 hover:cursor-pointer flex flex-row items-center mx-auto w-full justify-center"
   >
-    <Icons.EXIT className="py-3" />
+    <Icons.SIGN_OUT className="py-3" />
     <span className="p-3 inline-block">Sair</span>
   </button>
 );
