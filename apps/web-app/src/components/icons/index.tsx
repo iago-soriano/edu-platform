@@ -11,6 +11,8 @@ import {
   DotsThreeVertical,
   SignOut,
   User,
+  X,
+  Plus,
 } from "@phosphor-icons/react";
 
 export const Icons = {
@@ -26,4 +28,6 @@ export const Icons = {
   SIGN_OUT: (props) => <SignOut {...props} />,
   USER: (props) => <User {...props} />,
   THREE_DOTS: (props) => <DotsThreeVertical {...props} />,
+  X: (props) => <X {...props} />,
+  PLUS: (props) => <Plus {...props} />,
 };

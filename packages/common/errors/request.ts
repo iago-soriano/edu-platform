@@ -57,6 +57,13 @@ export class ActivityContentNotFound extends CustomError {
   }
 }
 
+export class ActivityContentNotCreated extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super(`Não foi possível criar o novo conteúdo`);
+  }
+}
+
 export class ActivityVersionNotFound extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
@@ -85,6 +92,13 @@ export class ContentTypeNotFound extends CustomError {
   }
 }
 
+export class ContentPayloadUndefined extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super("Payload do content não pode ser undefined");
+  }
+}
+
 export class VideoContentIsTooLarge extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
@@ -99,24 +113,6 @@ export class VideoContentIsTooSmall extends CustomError {
   constructor() {
     super(
       `O vídeo é curto demais. O tamanho mínimo permitido é de ${DomainRules.CONTENT.VIDEO.MIN_LENGTH}`
-    );
-  }
-}
-
-export class AudioContentIsTooLarge extends CustomError {
-  HTTPstatusCode = 400;
-  constructor() {
-    super(
-      `O áudio é longo demais. O tamanho máximo permitido é de ${DomainRules.CONTENT.AUDIO.MAX_LENGTH}`
-    );
-  }
-}
-
-export class AudioContentIsTooSmall extends CustomError {
-  HTTPstatusCode = 400;
-  constructor() {
-    super(
-      `O áudio é curto demais. O tamanho mínimo permitido é de ${DomainRules.CONTENT.AUDIO.MIN_LENGTH}`
     );
   }
 }
@@ -142,18 +138,18 @@ export class ImageContentIsTooSmall extends CustomError {
 export class TextContentIsTooLarge extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
-    super(
-      `O texto é grande demais. O tamanho máximo permitido é de ${DomainRules.CONTENT.TEXT.MAX_LENGTH}`
-    );
+    super("", {
+      content: `O texto é grande demais. O tamanho máximo permitido é de ${DomainRules.CONTENT.TEXT.MAX_LENGTH} caracteres`,
+    });
   }
 }
 
 export class TextContentIsTooSmall extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
-    super(
-      `O texto é curto demais. O tamanho mínimo permitido é de ${DomainRules.CONTENT.TEXT.MIN_LENGTH}`
-    );
+    super("", {
+      content: `O texto é curto demais. O tamanho mínimo permitido é de ${DomainRules.CONTENT.TEXT.MIN_LENGTH} caracteres`,
+    });
   }
 }
 
@@ -215,5 +211,41 @@ export class CommentIsTooSmall extends CustomError {
     super(
       `O comentário é curto demais. O tamanho mínimo permitido é de ${DomainRules.QUESTION.ANSWERKEY_TEXT.MIN_LENGTH}`
     );
+  }
+}
+
+export class TitleIsTooShort extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super("", {
+      title: `Título é curto demais. Tamanho mínimo permitido é de ${DomainRules.CONTENT.TITLE.MIN_LENGTH} caracteres`,
+    });
+  }
+}
+
+export class TitleIsTooLong extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super("", {
+      title: `Título é longo demais. Tamanho máximo permitido é de ${DomainRules.CONTENT.TITLE.MAX_LENGTH} caracteres`,
+    });
+  }
+}
+
+export class DescriptionIsTooShort extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super("", {
+      description: `Descrição da atividade é curto demais. Tamanho mínimo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MIN_LENGTH} caracteres`,
+    });
+  }
+}
+
+export class DescriptionIsTooLong extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super("", {
+      description: `Descrição da atividade é longo demais. Tamanho máximo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MAX_LENGTH} caracteres`,
+    });
   }
 }

@@ -1,7 +1,11 @@
 import { parseTimeToNumber, parseNumberToTimeLabel } from "@infrastructure";
 import { useState } from "react";
+import { Icons } from "@components";
 
-const NowButton = ({ onClick, disabled }) => {
+const NowButton = ({
+  onClick,
+  disabled,
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <button
       disabled={disabled}
@@ -12,7 +16,14 @@ const NowButton = ({ onClick, disabled }) => {
     </button>
   );
 };
-const TimeInput = ({ max, onChange, onBlur, value, disabled }) => {
+
+const TimeInput = ({
+  max,
+  onChange,
+  onBlur,
+  value,
+  disabled,
+}: React.ButtonHTMLAttributes<HTMLInputElement> & { max: string }) => {
   return (
     <input
       className="p-2 bg-surface3 invalid:border invalid:border-error rounded"
@@ -29,6 +40,29 @@ const TimeInput = ({ max, onChange, onBlur, value, disabled }) => {
   );
 };
 
+const RemoveButton = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
+  <button className="text-error rounded border p-3 hover:bg-surface3 hover:opacity-50 hover:border-black hover:shadow-hover hover:font-bold">
+    <Icons.X />
+  </button>
+);
+
+export const AddTrackButton = (
+  props: React.ButtonHTMLAttributes<HTMLButtonElement>
+) => (
+  <button className="flex items-center p-3 rounded border" {...props}>
+    <Icons.PLUS /> Nova Faixa
+  </button>
+);
+
+const splitTracks = (tracks: string, index: number) => {
+  const tracksSplit = tracks.split(",");
+  const tracksBefore = tracksSplit.slice(0, index);
+  const tracksAfter = tracksSplit.slice(index + 1);
+  const thisTrack = tracksSplit[index];
+
+  return { tracksBefore, thisTrack, tracksAfter };
+};
+
 export const Track = ({
   tracks,
   disabled,
@@ -36,34 +70,36 @@ export const Track = ({
   setTracks,
   getPlayerCurrTime,
   videoDuration,
+  saveMutation,
 }) => {
-  // console.log(tracks);
-  const [start, setStart] = useState(tracks.split(",")[index].split("-")[0]);
-  const [end, setEnd] = useState(tracks.split(",")[index].split("-")[1]);
-  // console.log(start, end);
-  // const [start, end] = ;
+  const { tracksBefore, thisTrack, tracksAfter } = splitTracks(tracks, index);
+  const [start, setStart] = useState(thisTrack.split("-")[0]);
+  const [end, setEnd] = useState(thisTrack.split("-")[1]);
+
   const onNowClickEnd = async () => {
     const currTimeLabel = parseNumberToTimeLabel(getPlayerCurrTime());
     setEnd(currTimeLabel);
-    setTracks((tracks) => {
-      const tracksSplit = tracks.split(",");
-      const tracksBefore = tracksSplit.slice(0, index);
-      const tracksAfter = tracksSplit.slice(index + 1);
-      const thisTrack = `${tracksSplit[index].split("-")[0]}-${currTimeLabel}`;
-      return [...tracksBefore, thisTrack, ...tracksAfter].join(",");
-    });
+    const newTracks = [
+      ...tracksBefore,
+      `${thisTrack.split("-")[0]}-${currTimeLabel}`,
+      ...tracksAfter,
+    ].join(",");
+    setTracks(newTracks);
+    saveMutation(newTracks);
   };
+
   const onNowClickStart = () => {
     const currTimeLabel = parseNumberToTimeLabel(getPlayerCurrTime());
     setStart(currTimeLabel);
-    setTracks((tracks) => {
-      const tracksSplit = tracks.split(",");
-      const tracksBefore = tracksSplit.slice(0, index);
-      const tracksAfter = tracksSplit.slice(index + 1);
-      const thisTrack = `${currTimeLabel}-${tracksSplit[index].split("-")[1]}`;
-      return [...tracksBefore, thisTrack, ...tracksAfter].join(",");
-    });
+    const newTracks = [
+      ...tracksBefore,
+      `${currTimeLabel}-${thisTrack.split("-")[1]}`,
+      ...tracksAfter,
+    ].join(",");
+    setTracks(newTracks);
+    saveMutation(newTracks);
   };
+
   const onClickRemoveTrack = () => {
     console.log(index);
     console.log(
@@ -81,7 +117,7 @@ export const Track = ({
     );
   };
   return (
-    <div>
+    <div className="p-3 flex items-center">
       <label>
         Início{" "}
         <TimeInput
@@ -89,7 +125,7 @@ export const Track = ({
           value={start}
           // onChange={onChangeStart}
           // onBlur={onSaveStartTime}
-          onChange={(e) => setStart(e.target.value)}
+          onChange={(e) => setStart((e.target as any).value)}
           onBlur={() => {}}
           disabled={disabled}
         />
@@ -102,17 +138,13 @@ export const Track = ({
           value={end}
           // onChange={onChangeEnd}
           // onBlur={onSaveEndTime}
-          onChange={(e) => setEnd(e.target.value)}
+          onChange={(e) => setEnd((e.target as any).value)}
           onBlur={() => {}}
           disabled={disabled}
         />
         <NowButton disabled={disabled} onClick={onNowClickEnd} />
       </label>
-      <button onClick={onClickRemoveTrack}>X</button>
+      <RemoveButton onClick={onClickRemoveTrack} />
     </div>
   );
 };
-
-export const AddTrackButton = (
-  props: React.ButtonHTMLAttributes<HTMLButtonElement>
-) => <button {...props}>Adicionar Faixa</button>;

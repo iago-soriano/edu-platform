@@ -1,27 +1,27 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "command": "cd apps/api && npm run dev", 
-        "name": "Backend", 
-        "request": "launch", 
-        "type": "node-terminal",
-        "outFiles":["${workspaceFolder}/apps/api/build/**/*.js"],
-        "resolveSourceMapLocations": [
-            "${workspaceFolder}/**",
-            "!**/node_modules/**"
-          ],
-      },
-      {
-        "name": "Frontend + Backend",
-        "type": "node-terminal",
-        "request": "launch",
-        "command": "npm run dev",
-        "serverReadyAction": {
-          "pattern": "- Local:.+(https?://.+)",
-          "uriFormat": "%s",
-          "action": "debugWithChrome"
-        }
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "command": "cd apps/api && npm run dev",
+      "name": "Backend",
+      "request": "launch",
+      "type": "node-terminal",
+      "outFiles": ["${workspaceFolder}/apps/api/build/**/*.js"],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "name": "Frontend + Backend",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "serverReadyAction": {
+        "pattern": "- Local:.+(https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
       }
-    ]
-  }
+    }
+  ]
+}

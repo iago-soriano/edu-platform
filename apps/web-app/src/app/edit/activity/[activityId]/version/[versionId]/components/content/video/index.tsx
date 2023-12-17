@@ -3,7 +3,11 @@ import { useRef, useState, useEffect, useCallback } from "react";
 // import YouTube from "react-youtube";
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 import YoutubePlayer from "react-player/youtube";
-import { parseTimeToNumber, parseNumberToTimeLabel } from "@infrastructure";
+import {
+  parseTimeToNumber,
+  parseNumberToTimeLabel,
+  useMediaQuery,
+} from "@infrastructure";
 import { AddTrackButton, Track } from "./tracks";
 import dynamic from "next/dynamic";
 
@@ -24,34 +28,16 @@ export const VideoContent = ({
   // const [endLabel, setEndLabel] = useState(parseNumberToTimeLabel(end));
   const [videoUrl, setVideoUrl] = useState("");
 
-  const onSaveStartTime = (e) => {
-    if (hasChanges) {
-      saveContentMutation.mutate({
-        start: parseTimeToNumber(e.target.value),
-        type: "Video",
-        contentId,
-      });
-    }
-    onChange(false);
-  };
-  const onSaveEndTime = (e) => {
-    if (hasChanges) {
-      saveContentMutation.mutate({
-        end: parseTimeToNumber(e.target.value),
-        type: "Video",
-        contentId,
-      });
-    }
-    onChange(false);
-  };
   const onBlurUrl = (e) => {
     saveContentMutation.mutate({
       content: e.target.value,
-
       type: "Video",
       contentId,
     });
   };
+
+  const isMore900 = useMediaQuery("(min-width: 900px)");
+  const isMore590 = useMediaQuery("(min-width: 590px)");
 
   useEffect(() => {
     if (player) {
@@ -61,6 +47,14 @@ export const VideoContent = ({
       console.log(durationLabel);
     }
   }, [player]);
+
+  const saveTracks = useCallback(() => {
+    saveContentMutation.mutate({
+      tracks,
+      type: "Video",
+      contentId,
+    });
+  }, [tracks]);
 
   const getPlayerCurrTime = useCallback(() => {
     let currTime = 0;
@@ -89,7 +83,7 @@ export const VideoContent = ({
         placeholder="URL do Youtube"
         className=""
         defaultValue={content}
-        onBlur={onBlurContent}
+        onBlur={onBlurUrl}
         error={saveContentMutation.error?.errors?.["content"]}
         onChange={() => onChange(true)}
       />
@@ -102,19 +96,18 @@ export const VideoContent = ({
           disabled={false}
           getPlayerCurrTime={getPlayerCurrTime}
           videoDuration={videoDuration}
+          saveMutation={saveTracks}
         />
       ))}
-      <AddTrackButton
-        onClick={onClickAddTrack}
-        // disabled={tracks.split(",").slice(-1)[0] === videoDuration}
-      />
+      <AddTrackButton onClick={onClickAddTrack} />
       <div className="p-2 flex justify-center">
         <ReactPlayer
-          // ref={playerRef}
           onReady={(e) => setPlayer(e["player"])}
-          id={`youtube-player-${contentId}`}
           url={videoUrl}
-          // light
+          className="w-5"
+          style={{}}
+          width={isMore900 ? 800 : isMore590 ? 501 : 300}
+          height={isMore900 ? 450 : 282}
           config={{
             youtube: {
               playerVars: {
@@ -124,16 +117,6 @@ export const VideoContent = ({
             },
           }}
           controls
-          // onReady={onPlayerReady}
-          // onStateChange={onPlayerStateChanged}
-          // opts={{
-          //   height: "390",
-          //   width: "640",
-          //   playerVars: {
-          //     // https://developers.google.com/youtube/player_parameters
-          //     autoplay: 0,
-          //   },
-          // }}
         />
       </div>
     </div>

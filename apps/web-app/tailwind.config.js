@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       boxShadow: {
         outline: "0px -2px 0px #c40 inset",
+        hover: "0 0 5px #c40 inset",
       },
       colors: {
         text1: "hsl(var(--text1) / <alpha-value>)",
