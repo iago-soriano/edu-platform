@@ -29,7 +29,7 @@ export class InsufficientTokenError extends CustomError {
 }
 
 export class Forbidden extends CustomError {
-  HTTPstatusCode = 403;
+  HTTPstatusCode = 401;
   constructor() {
     super("{ errorName: ErrorMessagesLabels.INVALID_TOKEN }");
   }

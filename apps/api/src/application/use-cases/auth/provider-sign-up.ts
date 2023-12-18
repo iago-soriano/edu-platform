@@ -29,7 +29,6 @@ class UseCase implements IProviderSignUpUseCase {
       name,
       image,
       emailVerified: true,
-      tokenVersion: 0,
       provider,
     };
 

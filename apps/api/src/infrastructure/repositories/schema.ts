@@ -46,7 +46,7 @@ export const users = pgTable("users", {
   name: varchar("name", { length: 50 }),
   email: varchar("email", { length: 256 }).unique(),
   hashedPassword: varchar("hashed_password", { length: 256 }),
-  tokenVersion: integer("token_version"),
+  refreshToken: varchar("refresh_token", { length: 700 }),
   image: varchar("image", { length: 256 }),
   emailVerified: boolean("email_verified"),
   provider: varchar("provider", { length: 50 }),

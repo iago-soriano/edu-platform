@@ -52,7 +52,6 @@ class UseCase implements ISignUpUseCase {
       name: user.name,
       emailVerified: false,
       hashedPassword: await this.encryptionService.encrypt(user.password),
-      tokenVersion: 0,
     };
 
     const { userId } = await this.userRepository.insertUser(userDTO);

@@ -4,7 +4,8 @@ export interface SignInRequestBody {
   password: string;
 }
 export interface SignInResponseBody {
-  token: string;
+  accessToken: string;
+  refreshToken: string;
   user: { email: string; name?: string; image?: string };
 }
 

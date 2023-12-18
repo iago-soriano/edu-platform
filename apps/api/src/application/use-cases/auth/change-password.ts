@@ -54,7 +54,6 @@ class UseCase implements IChangePasswordUseCase {
 
     await this.userRepository.updateUser(user.id, {
       hashedPassword: newHashedPassword,
-      tokenVersion: user.tokenVersion + 1,
     });
 
     await this.tokenRepository.updateTokenByValue(token.value, {

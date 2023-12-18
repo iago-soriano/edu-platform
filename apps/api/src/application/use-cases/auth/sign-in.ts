@@ -16,7 +16,8 @@ type InputParams = {
   password: string;
 };
 type Return = {
-  token: string;
+  accessToken: string;
+  refreshToken: string;
   user: {
     email: string;
     name: string;
@@ -53,13 +54,19 @@ class UseCase implements ISignInUseCase {
       throw new CredentialsNotProvidedError();
     }
 
-    const token = this.tokenService.generate({
-      id: userDTO.id,
-      tokenVersion: userDTO.tokenVersion,
+    const accessToken = this.tokenService.generateAccessToken({
+      id: `${userDTO.id}`,
     });
 
+    const refreshToken = this.tokenService.generateRefreshToken({
+      id: `${userDTO.id}`,
+    });
+
+    await this.userRepository.updateUser(userDTO.id, { refreshToken });
+
     return {
-      token,
+      accessToken,
+      refreshToken,
       user: { email: userDTO.email, name: userDTO.name, image: userDTO.image },
     };
   }

@@ -13,6 +13,7 @@ import {
   InsufficientTokenError,
   UserNotFoundError,
 } from "@edu-platform/common/errors";
+import { TokenExpiredError, JsonWebTokenError } from "jsonwebtoken";
 
 export class AuthenticationMiddlewareController {
   constructor(
@@ -28,32 +29,19 @@ export class AuthenticationMiddlewareController {
 
     let tokenPayload: JWTPayload;
     try {
-      tokenPayload = await this.tokenService.verify(token);
+      tokenPayload = this.tokenService.verifyAccessToken(token);
     } catch (e) {
-      console.log("token verification error:", e);
-      throw new CouldNotVerifyTokenError();
+      if (e instanceof TokenExpiredError) throw new Forbidden();
+      if (e instanceof JsonWebTokenError) throw new Error(e.message);
+      throw e;
     }
 
-    if (
-      (!Object.keys(tokenPayload).includes("id") &&
-        !Object.keys(tokenPayload).includes("providerId")) ||
-      !Object.keys(tokenPayload).includes("tokenVersion") ||
-      isNaN(Number(tokenPayload.tokenVersion))
-    )
-      throw new InsufficientTokenError();
+    if (!tokenPayload.id) throw new InsufficientTokenError();
 
-    let userDTO: UserSelectDTO;
-    if (tokenPayload.id)
-      userDTO = await this.userRepository.getUserById(tokenPayload.id);
-    else if (tokenPayload.providerId)
-      userDTO = await this.userRepository.getUserByProviderId(
-        tokenPayload.providerId
-      );
-
+    const userDTO = await this.userRepository.getUserById(
+      Number(tokenPayload.id)
+    );
     if (!userDTO) throw new UserNotFoundError();
-
-    if (userDTO.tokenVersion !== tokenPayload.tokenVersion)
-      throw new Forbidden();
 
     req.user = userDTO;
   }

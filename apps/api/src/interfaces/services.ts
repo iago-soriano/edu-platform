@@ -1,14 +1,15 @@
 import { FileType } from "./controller";
 
 export type JWTPayload = {
-  tokenVersion: number;
-  id?: number;
+  id: string;
   providerId?: string;
 };
 
 export interface ITokenService {
-  generate: (payload: JWTPayload) => string;
-  verify: (token: string) => Promise<JWTPayload>;
+  generateRefreshToken: (payload: JWTPayload) => string;
+  generateAccessToken: (payload: JWTPayload) => string;
+  verifyAccessToken: (token: string) => { id: string };
+  verifyRefreshToken: (token: string) => void;
 }
 
 export interface IIdGenerator {

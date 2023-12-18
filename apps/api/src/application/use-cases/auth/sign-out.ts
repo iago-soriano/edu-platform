@@ -15,11 +15,11 @@ class UseCase implements ISignOutUseCase {
     const userDTO = await this.userRepository.getUserById(id);
 
     const newTokenVersion = tokenVersion + 1;
-    if (userDTO.tokenVersion === tokenVersion) {
-      await this.userRepository.updateUser(id, {
-        tokenVersion: newTokenVersion,
-      });
-    }
+    // if (userDTO.tokenVersion === tokenVersion) {
+    //   await this.userRepository.updateUser(id, {
+    //     tokenVersion: newTokenVersion,
+    //   });
+    // }
   }
 }
 
