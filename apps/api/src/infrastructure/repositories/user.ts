@@ -7,6 +7,15 @@ export class UserRepository implements IUserRepository {
     return (await db.select().from(users).where(eq(users.id, id)))[0];
   }
 
+  async getUserByIdAndRefreshToken(id: number, refreshToken: string) {
+    return (
+      await db
+        .select()
+        .from(users)
+        .where(and(eq(users.id, id), eq(users.refreshToken, refreshToken)))
+    )[0];
+  }
+
   async getUserByProviderId(id: string) {
     return (await db.select().from(users).where(eq(users.providerId, id)))[0];
   }

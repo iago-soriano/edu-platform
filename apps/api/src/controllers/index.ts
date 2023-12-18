@@ -2,6 +2,7 @@ export * from "./auth/sign-in";
 export * from "./auth/sign-up";
 export * from "./auth/provider-sign-up";
 export * from "./auth/sign-out";
+export * from "./auth/refresh-token";
 export * from "./middleware/auth-middleware";
 export * from "./middleware/error-handler";
 export * from "./middleware/accept-file-middleware";

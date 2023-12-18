@@ -1,38 +1,64 @@
-import { IUserRepository, UserInsertDTO, IUseCase } from "@interfaces";
+import {
+  IUserRepository,
+  ITokenService,
+  UserInsertDTO,
+  IUseCase,
+} from "@interfaces";
 
 type InputParams = {
   email: string;
   name: string;
   image: string;
   provider: string;
-  providerId: string;
 };
-type Return = void;
+type Return = {
+  accessToken: string;
+  refreshToken: string;
+};
 
 export type IProviderSignUpUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IProviderSignUpUseCase {
   constructor(
-    private userRepository: IUserRepository // private profileImageRepository: IProfileImageRepository
+    private userRepository: IUserRepository,
+    private tokenService: ITokenService
   ) {}
 
-  async execute({ providerId, email, name, image, provider }) {
-    const existingUser = await this.userRepository.getUserByEmail(email);
+  async execute({ email, name, image, provider }) {
+    let existingUser = await this.userRepository.getUserByEmail(email);
+    let userId;
 
-    if (existingUser && !existingUser.providerId)
+    if (existingUser && !existingUser.provider)
       throw new Error("Account already created with e-mail and password");
-    if (existingUser) return;
 
-    const userDTO: UserInsertDTO = {
-      providerId,
-      email,
-      name,
-      image,
-      emailVerified: true,
-      provider,
+    if (!existingUser) {
+      const userDTO: UserInsertDTO = {
+        email,
+        name,
+        image,
+        emailVerified: true,
+        provider,
+      };
+
+      userId = (await this.userRepository.insertUser(userDTO)).userId;
+    } else {
+      userId = existingUser.id;
+    }
+
+    const accessToken = this.tokenService.generateAccessToken({
+      id: `${userId}`,
+    });
+
+    const refreshToken = this.tokenService.generateRefreshToken({
+      id: `${userId}`,
+    });
+
+    await this.userRepository.updateUser(userId, { refreshToken });
+
+    return {
+      accessToken,
+      refreshToken,
     };
-
-    await this.userRepository.insertUser(userDTO);
   }
 }
 

@@ -1,25 +1,33 @@
-import { IUserRepository, IUseCase } from "@interfaces";
+import { IUserRepository, IUseCase, ITokenService } from "@interfaces";
+import {
+  UserNotFoundError,
+  InsufficientTokenError,
+  Forbidden,
+} from "@edu-platform/common/errors";
 
 type InputParams = {
-  id: number;
-  tokenVersion: number;
+  refreshToken: string;
 };
 type Return = void;
 
 export type ISignOutUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ISignOutUseCase {
-  constructor(private userRepository: IUserRepository) {}
+  constructor(
+    private userRepository: IUserRepository,
+    private tokenService: ITokenService
+  ) {}
 
-  async execute({ id, tokenVersion }) {
-    const userDTO = await this.userRepository.getUserById(id);
+  async execute({ refreshToken }) {
+    const tokenPayload = this.tokenService.verifyRefreshToken(refreshToken);
+    if (!tokenPayload.id) throw new InsufficientTokenError();
 
-    const newTokenVersion = tokenVersion + 1;
-    // if (userDTO.tokenVersion === tokenVersion) {
-    //   await this.userRepository.updateUser(id, {
-    //     tokenVersion: newTokenVersion,
-    //   });
-    // }
+    const userDTO = await this.userRepository.getUserById(
+      Number(tokenPayload.id)
+    );
+    if (!userDTO) throw new UserNotFoundError();
+
+    await this.userRepository.updateUser(userDTO.id, { refreshToken: "" });
   }
 }
 

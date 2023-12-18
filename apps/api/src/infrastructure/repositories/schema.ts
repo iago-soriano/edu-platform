@@ -43,11 +43,11 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-  name: varchar("name", { length: 50 }),
-  email: varchar("email", { length: 256 }).unique(),
-  hashedPassword: varchar("hashed_password", { length: 256 }),
-  refreshToken: varchar("refresh_token", { length: 700 }),
-  image: varchar("image", { length: 256 }),
+  name: varchar("name", { length: 30 }),
+  email: varchar("email", { length: 320 }).unique(),
+  hashedPassword: varchar("hashed_password", { length: 100 }),
+  refreshToken: varchar("refresh_token", { length: 500 }),
+  image: varchar("image", { length: 100 }),
   emailVerified: boolean("email_verified"),
   provider: varchar("provider", { length: 50 }),
   providerId: varchar("provider_id", { length: 50 }),
@@ -60,17 +60,6 @@ export const usersRelations = relations(users, ({ many }) => ({
 /* #endregion */
 
 /* #region Activities */
-// export const topics = pgTable("topics", {
-//   id: serial("id").primaryKey(),
-//   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-//   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-//   label: varchar("label", { length: 50 }),
-// });
-
-// export const topicsRelations = relations(topics, ({ many }) => ({
-//   activityTopics: many(activityHasTopicsRelationTable),
-// }));
-
 export const activities = pgTable("activities", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
@@ -111,8 +100,8 @@ export const activityVersions = pgTable("activity_version", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
-  title: varchar("title", { length: 256 }),
-  description: varchar("description", { length: 256 }),
+  title: varchar("title", { length: 50 }),
+  description: varchar("description", { length: 200 }),
   status: activityStatusEnum("activity_status").default("Draft"),
   version: integer("version").default(0),
 
@@ -184,7 +173,7 @@ export const activityQuestions = pgTable("questions", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
   type: questionTypeEnum("type"),
-  question: varchar("question", { length: 500 }),
+  question: varchar("question", { length: 100 }),
   answerKey: varchar("answer_key", { length: 500 }),
   title: varchar("title", { length: 100 }),
   order: integer("order").default(0),

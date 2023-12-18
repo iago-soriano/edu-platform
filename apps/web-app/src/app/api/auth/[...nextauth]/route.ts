@@ -2,6 +2,10 @@ import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { AxiosFetcher } from "@infrastructure";
+import {
+  ProviderSignUpRequestBody,
+  ProviderSignUpResponseBody,
+} from "@edu-platform/common";
 
 const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST);
 
@@ -42,17 +46,18 @@ export const authOptions: AuthOptions = {
       // console.log("SIGN IN");
       // console.log({ user, account, profile, email, credentials });
       if (account.provider == "google") {
-        await axios.post.bind(axios)("sign-up/provider", {
-          email: user.email,
-          id: user.id,
-          name: user.name,
-          image: user.image,
-          provider: "google",
-        });
-        return true;
-      } else if (account.provider == "credentials") {
-        // console.log({ user, account });
-        return true;
+        const { refreshToken, accessToken } = (await axios.post.bind(axios)(
+          "sign-up/provider",
+          {
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            provider: "google",
+          } as ProviderSignUpRequestBody
+        )) as ProviderSignUpResponseBody;
+
+        user.accessToken = accessToken;
+        user.refreshToken = refreshToken;
       }
 
       return true;
@@ -69,18 +74,19 @@ export const authOptions: AuthOptions = {
       // console.log({ token, account, profile, user });
 
       if (user) {
-        if (account.provider == "google") {
-          token.provider = account.provider;
-          return {
-            ...user,
-            provider: "google",
-            name: profile.given_name,
-            jwt: account.id_token,
-          };
-        }
+        // if (account.provider == "google") {
+        //   token.provider = account.provider;
+        //   return {
+        //     ...user,
+        //     provider: "google",
+        //     name: profile.given_name,
+        //     accessToken: account.id_token,
+        //   };
+        // }
 
         return {
-          jwt: user.token,
+          accessToken: user.accessToken,
+          refreshToken: user.refreshToken,
           ...user.user,
         };
       }

@@ -9,6 +9,14 @@ export interface SignInResponseBody {
   user: { email: string; name?: string; image?: string };
 }
 
+export interface RefreshTokenRequestBody {
+  refreshToken: string;
+}
+export interface RefreshTokenResponseBody {
+  accessToken: string;
+  refreshToken: string;
+}
+
 // sign-up
 export interface SignUpRequestBody {
   email: string;
@@ -20,15 +28,19 @@ export interface SignUpResponseBody {}
 
 export interface ProviderSignUpRequestBody {
   email: string;
-  id: string;
   image: string;
   provider: string;
   name: string;
 }
-export interface ProviderSignUpResponseBody {}
+export interface ProviderSignUpResponseBody {
+  accessToken: string;
+  refreshToken: string;
+}
 
 // sign-out
-export interface SignOutRequestBody {}
+export interface SignOutRequestBody {
+  refreshToken: string;
+}
 export interface SignOutResponseBody {}
 
 // verify account

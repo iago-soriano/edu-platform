@@ -12,7 +12,8 @@ declare module "next-auth" {
       provider: string;
       id: string;
     };
-    token: string;
+    accessToken: string;
+    refreshToken: string;
   }
 
   interface User {
@@ -22,7 +23,8 @@ declare module "next-auth" {
     email?: string;
     image?: string;
 
-    token: string;
+    accessToken: string;
+    refreshToken: string;
     user: {
       email: string;
       name: string;

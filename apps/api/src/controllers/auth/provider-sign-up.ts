@@ -20,12 +20,11 @@ export class ProviderSignUpController implements HTTPController {
   constructor(private providerSignUpUseCase: IProviderSignUpUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { email, id, provider, image, name } = req.body;
+    const { email, provider, image, name } = req.body;
 
     await this.providerSignUpUseCase.execute({
       email,
       name,
-      providerId: id,
       provider,
       image,
     });

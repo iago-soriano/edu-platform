@@ -32,7 +32,6 @@ export class AuthenticationMiddlewareController {
       tokenPayload = this.tokenService.verifyAccessToken(token);
     } catch (e) {
       if (e instanceof TokenExpiredError) throw new Forbidden();
-      if (e instanceof JsonWebTokenError) throw new Error(e.message);
       throw e;
     }
 

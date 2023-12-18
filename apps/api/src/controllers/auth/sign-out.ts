@@ -16,17 +16,16 @@ type Response = TypedResponse<SignOutResponseBody>;
 export class SignOutController implements HTTPController {
   method = HttpMethod.POST;
   path: string = "sign-out";
-  middlewares: string[] = ["auth"];
+  // middlewares: string[] = ["auth"];
 
   constructor(private signOutUseCase: ISignOutUseCase) {}
 
-  async execute(req: Request, res: Response) {
-    const { id, refreshToken } = req.user;
+  async execute({ body }: Request, res: Response) {
+    const { refreshToken } = body;
 
-    // await this.signOutUseCase.execute({
-    //   id,
-    //   tokenVersion,
-    // });
+    await this.signOutUseCase.execute({
+      refreshToken,
+    });
 
     res.status(200).json("");
   }

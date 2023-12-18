@@ -33,7 +33,7 @@ export class JWTTokenService implements ITokenService {
         issuer: process.env.HOST_NAME,
         algorithm: "RS256",
         expiresIn: "0.5y",
-        // subject: `${id}`,
+        subject: `${id}`,
       });
       return resp;
     } catch (e) {
@@ -55,7 +55,7 @@ export class JWTTokenService implements ITokenService {
     }
   }
 
-  verifyAccessToken(token: string) {
+  _verifyToken(token: string, secret: string) {
     const tokenPayload = jwt.verify(
       token,
       this._accessTokenPublicKey
@@ -73,20 +73,11 @@ export class JWTTokenService implements ITokenService {
       id: tokenPayload.sub,
     };
   }
+  verifyAccessToken(token: string) {
+    return this._verifyToken(token, this._accessTokenPublicKey);
+  }
 
-  async verifyRefreshToken(token: string) {
-    const { payload } = jwt.decode(token, { complete: true });
-    const issuer = (payload as LibJWTPayload)?.iss;
-
-    if (!issuer) throw new Error(`JWT issuer not found: ${payload}`);
-
-    if (issuer !== process.env.HOST_NAME)
-      throw new Error("Token not recognized");
-
-    try {
-      jwt.verify(token, this._refreshTokenPublicKey) as LibJWTPayload;
-    } catch (e) {
-      console.error(e.message);
-    }
+  verifyRefreshToken(token: string) {
+    return this._verifyToken(token, this._refreshTokenPublicKey);
   }
 }

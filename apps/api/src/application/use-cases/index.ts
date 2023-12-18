@@ -1,4 +1,7 @@
 import SignInUseCase, { ISignInUseCase } from "./auth/sign-in";
+import RefreshTokenUseCase, {
+  IRefreshTokenUseCase,
+} from "./auth/refresh-token";
 import SignUpUseCase, { ISignUpUseCase } from "./auth/sign-up";
 import SignOutUseCase, { ISignOutUseCase } from "./auth/sign-out";
 import ProviderSignUpUseCase, {
@@ -16,7 +19,6 @@ import ChangePasswordUseCase, {
 import CheckChangePasswordTokenRequestUseCase, {
   ICheckChangePasswordTokenRequestUseCase,
 } from "./auth/check-change-password-token-request";
-//import SaveActivityUseCase, { ISaveActivityUseCase } from "./save-activity";
 import UpdateActivityStatusUseCase, {
   IUpdateActivityStatusUseCase,
 } from "./update-activity-status";
@@ -75,4 +77,6 @@ export {
   IEditContentUseCase,
   DeleteContentUseCase,
   IDeleteContentUseCase,
+  RefreshTokenUseCase,
+  IRefreshTokenUseCase,
 };

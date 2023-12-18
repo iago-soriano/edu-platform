@@ -9,7 +9,7 @@ export interface ITokenService {
   generateRefreshToken: (payload: JWTPayload) => string;
   generateAccessToken: (payload: JWTPayload) => string;
   verifyAccessToken: (token: string) => { id: string };
-  verifyRefreshToken: (token: string) => void;
+  verifyRefreshToken: (token: string) => { id: string };
 }
 
 export interface IIdGenerator {
