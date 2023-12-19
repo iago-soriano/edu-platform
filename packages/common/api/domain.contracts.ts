@@ -12,19 +12,6 @@ export type CreateNewActivityResponseBody = {
 };
 
 // get activity version full view
-export type ElementResponse = {
-  title?: string;
-  description?: string;
-  id: number;
-  type: string;
-  content?: string;
-  elementType: string;
-  question?: string;
-  answerKey?: string;
-  order: number;
-  start?: number;
-  end?: number;
-};
 export type GetActivityVersionParams = {
   activityId: string;
   versionId: string;
@@ -85,15 +72,6 @@ export type SaveQuestionResponseBody = {
   questionId?: number;
 };
 
-export type DeleteActivityContentParams = {
-  activityId: string;
-  versionId: string;
-  contentId: string;
-};
-export type SaveContentRequestParams = {
-  activityId: string;
-  versionId: string;
-};
 // Save Content [POST activity/:activityId/version/:versionId/content]
 export type SaveContentRequestParams = {
   activityId: string;
