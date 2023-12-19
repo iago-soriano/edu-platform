@@ -9,9 +9,11 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
-import { activityPossibleStatus } from "application/domain/activity";
-import { contentPossibleTypes } from "@domain";
-import { questionPossibleTypes } from "application/domain/question";
+import {
+  contentPossibleTypes,
+  activityPossibleStatus,
+  questionPossibleTypes,
+} from "@domain";
 
 /* #region Token */
 export const tokenTypeEnum = pgEnum("tokenType", [

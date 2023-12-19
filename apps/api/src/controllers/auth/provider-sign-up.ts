@@ -22,13 +22,13 @@ export class ProviderSignUpController implements HTTPController {
   async execute(req: Request, res: Response) {
     const { email, provider, image, name } = req.body;
 
-    await this.providerSignUpUseCase.execute({
+    const result = await this.providerSignUpUseCase.execute({
       email,
       name,
       provider,
       image,
     });
 
-    res.status(201).json();
+    res.status(201).json(result);
   }
 }

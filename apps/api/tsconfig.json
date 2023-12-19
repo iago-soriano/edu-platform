@@ -23,10 +23,5 @@
       "@main": ["./main/index.ts"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "node_modules/**/*.d.ts",
-    "src/infrastructure/services/aws-s3.js",
-    "src/infrastructure/services/aws-s3.js"
-  ]
+  "include": ["src/**/*.ts", "node_modules/**/*.d.ts"]
 }
