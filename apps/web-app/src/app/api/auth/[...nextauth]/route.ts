@@ -85,9 +85,11 @@ export const authOptions: AuthOptions = {
         // }
 
         return {
+          ...user,
           accessToken: user.accessToken,
           refreshToken: user.refreshToken,
-          ...user.user,
+          name: profile?.given_name || user.name,
+          provider: account?.provider,
         };
       }
 
@@ -98,9 +100,12 @@ export const authOptions: AuthOptions = {
       // console.log("SESSION");
       // console.log({ session, token });
       // whatever property is added here goes to session.data in FE
-      const { jwt, ...rest } = token;
-      (session as any).token = jwt;
+      const { accessToken, refreshToken, ...rest } = token;
+
+      (session as any).accessToken = accessToken;
+      (session as any).refreshToken = refreshToken;
       (session as any).user = rest;
+
       return session;
     },
   },

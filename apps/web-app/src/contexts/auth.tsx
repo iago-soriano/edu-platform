@@ -11,23 +11,23 @@ const AuthContext = React.createContext({
 });
 
 export function AuthProvider({ children }) {
-  const session = useSession();
-  const [axiosIsAuthed, setAxiosIsAuthed] = useState(false);
+  // const session = useSession();
+  // const [axiosIsAuthed, setAxiosIsAuthed] = useState(false);
 
-  useEffect(() => {
-    if (session) {
-      if (session.status == "authenticated") {
-        axios.setHeader("authorization", `Bearer ${session.data.token}`);
-        setAxiosIsAuthed(true);
-      } else {
-        axios.setHeader("authorization", null);
-        setAxiosIsAuthed(false);
-      }
-    }
-  }, [session]);
+  // useEffect(() => {
+  //   if (session) {
+  //     if (session.status == "authenticated") {
+  //       axios.setHeader("authorization", `Bearer ${session.data.token}`);
+  //       setAxiosIsAuthed(true);
+  //     } else {
+  //       axios.setHeader("authorization", null);
+  //       setAxiosIsAuthed(false);
+  //     }
+  //   }
+  // }, [session]);
 
   return (
-    <AuthContext.Provider value={{ axiosIsAuthed }}>
+    <AuthContext.Provider value={{ axiosIsAuthed: true }}>
       {children}
     </AuthContext.Provider>
   );

@@ -23,7 +23,7 @@ export const Navbar = () => {
     });
     router.replace("/");
     if (session.data && !session.data.user.provider)
-      credentialsSignOut.mutate({});
+      credentialsSignOut.mutate({ refreshToken: session.data.refreshToken });
   };
 
   if (hasMounted) {

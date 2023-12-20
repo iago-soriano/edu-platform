@@ -46,10 +46,10 @@ class UseCase implements IRefreshTokenUseCase {
     if (!userDTO) throw new UserNotFoundError();
 
     // Time to rotate tokens. If this happens, refresh_token has been compromised
-    if (userDTO.refreshToken !== args.refreshToken) {
-      await this.userRepository.updateUser(userDTO.id, { refreshToken: "" });
-      throw new Forbidden();
-    }
+    // if (userDTO.refreshToken !== args.refreshToken) {
+    //   await this.userRepository.updateUser(userDTO.id, { refreshToken: "" });
+    //   throw new Forbidden();
+    // }
 
     const accessToken = this.tokenService.generateAccessToken({
       id: `${userDTO.id}`,

@@ -12,6 +12,7 @@ import {
   CouldNotVerifyTokenError,
   InsufficientTokenError,
   UserNotFoundError,
+  Unauthorized,
 } from "@edu-platform/common/errors";
 import { TokenExpiredError, JsonWebTokenError } from "jsonwebtoken";
 
@@ -31,7 +32,7 @@ export class AuthenticationMiddlewareController {
     try {
       tokenPayload = this.tokenService.verifyAccessToken(token);
     } catch (e) {
-      if (e instanceof TokenExpiredError) throw new Forbidden();
+      if (e instanceof TokenExpiredError) throw new Unauthorized();
       throw e;
     }
 

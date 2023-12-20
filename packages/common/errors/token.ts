@@ -1,14 +1,14 @@
 import { CustomError } from "./custom-error";
 
 export class MissingTokenError extends CustomError {
-  HTTPstatusCode = 403;
+  HTTPstatusCode = 400;
   constructor() {
     super("{ errorName: ErrorMessagesLabels.MISSING_TOKEN }");
   }
 }
 
 export class MalformedTokenError extends CustomError {
-  HTTPstatusCode = 403;
+  HTTPstatusCode = 400;
   constructor() {
     super("{ errorName: ErrorMessagesLabels.MALFORMED_TOKEN }");
   }
@@ -28,9 +28,16 @@ export class InsufficientTokenError extends CustomError {
   }
 }
 
-export class Forbidden extends CustomError {
+export class Unauthorized extends CustomError {
   HTTPstatusCode = 401;
   constructor() {
-    super("{ errorName: ErrorMessagesLabels.INVALID_TOKEN }");
+    super("Token de acesso inválido");
+  }
+}
+
+export class Forbidden extends CustomError {
+  HTTPstatusCode = 403;
+  constructor() {
+    super("Forbidden");
   }
 }

@@ -1,29 +1,84 @@
 import { getServerSession } from "@infrastructure";
 import axiosClient, { AxiosInstance } from "axios";
-import { IHTTPClient } from "@edu-platform/common/api";
+import {
+  IHTTPClient,
+  RefreshTokenRequestBody,
+  RefreshTokenResponseBody,
+} from "@edu-platform/common/api";
+
+const refreshToken = async (refreshToken: string) => {
+  const res: RefreshTokenResponseBody = await axios.post("/refresh-token", {
+    refreshToken,
+  } as RefreshTokenRequestBody);
+
+  console.log("refresh response", res);
+  return res.accessToken;
+};
 
 export class AxiosFetcher implements IHTTPClient {
-  private _instance: AxiosInstance;
+  public _instance: AxiosInstance;
 
   constructor(baseURL: string) {
     this._instance = axiosClient.create({ baseURL });
-    this._instance.interceptors.request.use(async (config) => {
-      let token = "";
-      if (typeof window == "undefined") {
-        try {
-          const serverSession = await getServerSession();
-          token = serverSession.token;
-        } catch (e) {
-          console.error("Error getting server session", e);
+    this._instance.interceptors.request.use(
+      async (config) => {
+        if (typeof window == "undefined") {
+          const session = await getServerSession();
+
+          if (!config.headers["Authorization"]) {
+            config.headers["Authorization"] = `Bearer ${session?.accessToken}`;
+          }
+
+          return config;
+        }
+      },
+      (error) => Promise.reject(error)
+    );
+
+    this._instance.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (typeof window == "undefined") {
+          const prevRequest = error?.config;
+          console.log(
+            "ssr",
+            "status",
+            error?.response?.status,
+            "prev Sent",
+            prevRequest?.sent
+          );
+          if (error?.response?.status === 401 && !prevRequest?.sent) {
+            const session = await getServerSession();
+            // console.log({ session });
+            prevRequest.sent = true;
+            const accessToken = await refreshToken(session.refreshToken);
+            console.log("refreshed");
+            prevRequest.headers["Authorization"] = `Bearer ${accessToken}`;
+            return this._instance(prevRequest);
+          }
+          console.log("no new call");
+          return Promise.reject(error);
         }
       }
+    );
 
-      if (token != "") {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+    // this._instance.interceptors.request.use(async (config) => {
+    //   let token = "";
+    //   if (typeof window == "undefined") {
+    //     try {
+    //       const serverSession = await getServerSession();
+    //       token = serverSession.token;
+    //     } catch (e) {
+    //       console.error("Error getting server session", e);
+    //     }
+    //   }
 
-      return config;
-    });
+    //   if (token != "") {
+    //     config.headers.Authorization = `Bearer ${token}`;
+    //   }
+
+    //   return config;
+    // });
   }
 
   private _successHandler(res) {
@@ -38,7 +93,7 @@ export class AxiosFetcher implements IHTTPClient {
     //     message: e.cause
     //   }
     // }
-    console.log(e.response);
+    console.log("axios error", e.message);
     if (e.response) {
       throw {
         status: e.response.status,
@@ -92,8 +147,16 @@ export class AxiosFetcher implements IHTTPClient {
     this._instance.defaults.headers.common[header] = value;
   }
 
-  setInterceptor(response: (args) => any) {
-    this._instance.interceptors.response.use(response);
+  setInterceptor(
+    side: "response" | "request",
+    onFulfilled: (args) => any,
+    onRejected: (error) => any
+  ) {
+    this._instance.interceptors[side].use(onFulfilled, onRejected);
+  }
+
+  ejectInterceptor(side: "response" | "request", interceptor: any) {
+    this._instance.interceptors[side].eject(interceptor);
   }
 }
 

@@ -12,7 +12,7 @@ import {
   DeleteActivityContentParams,
 } from "@edu-platform/common/api";
 import { ServerError } from "@edu-platform/common";
-import { axios } from "@infrastructure";
+import { axios, useAxiosAuth } from "@infrastructure";
 import {
   ErrorCallback,
   MutationArgsType,
@@ -88,13 +88,14 @@ export const useUpdateVersionMetadataMutation = ({
 };
 
 export const useGetActivityVersionsQuery = () => {
-  const { axiosIsAuthed } = useAuthContext();
+  // const { axiosIsAuthed } = useAuthContext();
+  const axios = useAxiosAuth();
   return useQuery<GetActivityVersionsResponseBody, ServerError>({
     queryKey: ["activities"],
     queryFn: () => {
       return axios.get.bind(axios)("activities");
     },
-    enabled: axiosIsAuthed,
+    // enabled: axiosIsAuthed,
   });
 };
 

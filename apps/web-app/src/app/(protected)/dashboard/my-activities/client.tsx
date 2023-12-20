@@ -29,9 +29,7 @@ export default function Activities() {
         break;
     }
 
-    return (
-      <Component key={version.id} {...version} onClick={onClickActivityCard} />
-    );
+    return <Component {...version} onClick={onClickActivityCard} />;
   };
 
   if (query.error) {
@@ -53,7 +51,7 @@ export default function Activities() {
   ) : (
     <div className="p-10 [&>*]:my-2 grid grid-cols-10">
       {query.data?.map((act) => (
-        <div className="lg:col-start-3 lg:col-span-6 col-span-10">
+        <div key={act.id} className="lg:col-start-3 lg:col-span-6 col-span-10">
           {getActivityVersionCard(act)}
         </div>
       ))}
