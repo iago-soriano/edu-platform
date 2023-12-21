@@ -5,15 +5,7 @@ import {
   Request,
   UserSelectDTO,
 } from "@interfaces";
-import {
-  MissingTokenError,
-  MalformedTokenError,
-  Forbidden,
-  CouldNotVerifyTokenError,
-  InsufficientTokenError,
-  UserNotFoundError,
-  Unauthorized,
-} from "@edu-platform/common/errors";
+import { Forbidden, Unauthorized } from "@edu-platform/common/errors";
 import { TokenExpiredError, JsonWebTokenError } from "jsonwebtoken";
 
 export class AuthenticationMiddlewareController {
@@ -23,10 +15,10 @@ export class AuthenticationMiddlewareController {
   ) {}
 
   async execute(req: Request<{}, {}, {}>, headers: Record<string, string>) {
-    if (!headers.authorization) throw new MissingTokenError();
+    if (!headers.authorization) throw new Forbidden();
 
     const [header, token] = headers.authorization.split(" ");
-    if (header !== "Bearer") throw new MalformedTokenError();
+    if (header !== "Bearer") throw new Forbidden();
 
     let tokenPayload: JWTPayload;
     try {
@@ -36,12 +28,12 @@ export class AuthenticationMiddlewareController {
       throw e;
     }
 
-    if (!tokenPayload.id) throw new InsufficientTokenError();
+    if (!tokenPayload.id) throw new Forbidden();
 
     const userDTO = await this.userRepository.getUserById(
       Number(tokenPayload.id)
     );
-    if (!userDTO) throw new UserNotFoundError();
+    if (!userDTO) throw new Forbidden();
 
     req.user = userDTO;
   }

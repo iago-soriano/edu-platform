@@ -32,7 +32,7 @@ export class JWTTokenService implements ITokenService {
       const resp = jwt.sign({}, this._refreshTokenPrivateKey, {
         issuer: process.env.HOST_NAME,
         algorithm: "RS256",
-        expiresIn: "0.5y",
+        expiresIn: "10s",
         subject: `${id}`,
       });
       return resp;
@@ -46,7 +46,7 @@ export class JWTTokenService implements ITokenService {
       const resp = jwt.sign({}, this._accessTokenPrivateKey, {
         issuer: process.env.HOST_NAME,
         algorithm: "RS256",
-        expiresIn: "10s",
+        expiresIn: "3s",
         subject: `${id}`,
       });
       return resp;
@@ -56,10 +56,7 @@ export class JWTTokenService implements ITokenService {
   }
 
   _verifyToken(token: string, secret: string) {
-    const tokenPayload = jwt.verify(
-      token,
-      this._accessTokenPublicKey
-    ) as LibJWTPayload;
+    const tokenPayload = jwt.verify(token, secret) as LibJWTPayload;
     const issuer = (tokenPayload as LibJWTPayload)?.iss;
     const userId = (tokenPayload as LibJWTPayload)?.sub;
 

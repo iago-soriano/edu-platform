@@ -1,22 +1,5 @@
-import {
-  IUserRepository,
-  IEncryptionService,
-  ITokenService,
-  UserSelectDTO,
-  IUseCase,
-  JWTPayload,
-} from "@interfaces";
-import {
-  Forbidden,
-  InsufficientTokenError,
-  UserNotFoundError,
-} from "@edu-platform/common/errors";
-import {
-  CredentialsNotProvidedError,
-  InvalidCredentialsError,
-  UserNotVerifiedError,
-} from "@edu-platform/common/errors";
-import { TokenExpiredError } from "jsonwebtoken";
+import { IUserRepository, ITokenService, IUseCase } from "@interfaces";
+import { Forbidden } from "@edu-platform/common/errors";
 
 type InputParams = {
   refreshToken: string;
@@ -35,21 +18,25 @@ class UseCase implements IRefreshTokenUseCase {
   ) {}
 
   async execute(args: InputParams) {
-    const tokenPayload = this.tokenService.verifyRefreshToken(
-      args.refreshToken
-    );
-    if (!tokenPayload.id) throw new InsufficientTokenError();
+    let tokenPayload;
+    try {
+      tokenPayload = this.tokenService.verifyRefreshToken(args.refreshToken);
+    } catch (ex) {
+      throw new Forbidden();
+    }
+
+    if (!tokenPayload.id) throw new Forbidden();
 
     const userDTO = await this.userRepository.getUserById(
       Number(tokenPayload.id)
     );
-    if (!userDTO) throw new UserNotFoundError();
+    if (!userDTO) throw new Forbidden();
 
     // Time to rotate tokens. If this happens, refresh_token has been compromised
-    // if (userDTO.refreshToken !== args.refreshToken) {
-    //   await this.userRepository.updateUser(userDTO.id, { refreshToken: "" });
-    //   throw new Forbidden();
-    // }
+    if (userDTO.refreshToken !== args.refreshToken) {
+      await this.userRepository.updateUser(userDTO.id, { refreshToken: "" });
+      throw new Forbidden();
+    }
 
     const accessToken = this.tokenService.generateAccessToken({
       id: `${userDTO.id}`,

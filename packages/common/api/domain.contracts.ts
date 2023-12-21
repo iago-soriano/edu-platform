@@ -81,11 +81,17 @@ export type SaveContentRequestParams = {
 export type SaveContentRequestBody = {
   title?: string;
   content?: string;
-  description: string;
+  description?: string;
   type: ContentTypesType;
   contentId?: number;
-  image?: unknown;
-  tracks?: string;
+  payload: {
+    //content de video
+    tracks?: string;
+    url?: string;
+    //content de texto
+    text?: string;
+  };
+  tracks: string;
   order: number;
 };
 
@@ -95,7 +101,7 @@ export type SaveContentResponseBody = {
 
 // Update Activity Status
 export type UpdateActivityStatusRequestBody = {
-  activityStatus: string;
+  newActivityStatus: string;
 };
 export type UpdateActivityStatusResponseBody = {};
 

@@ -34,8 +34,10 @@ export default function Activities() {
 
   if (query.error) {
     let errorMessage = "Houve um erro de conexão com a internet";
-    if (query.error.message !== "Network Error")
+    if (query.error.message !== "Network Error") {
+      console.log("query error", query.error);
       errorMessage = "Houve um erro desconhecido";
+    }
 
     return (
       <div className="p-3 flex justify-center">

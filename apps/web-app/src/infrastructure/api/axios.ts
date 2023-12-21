@@ -11,7 +11,6 @@ const refreshToken = async (refreshToken: string) => {
     refreshToken,
   } as RefreshTokenRequestBody);
 
-  console.log("refresh response", res);
   return res.accessToken;
 };
 
@@ -24,13 +23,11 @@ export class AxiosFetcher implements IHTTPClient {
       async (config) => {
         if (typeof window == "undefined") {
           const session = await getServerSession();
-
           if (!config.headers["Authorization"]) {
             config.headers["Authorization"] = `Bearer ${session?.accessToken}`;
           }
-
-          return config;
         }
+        return config;
       },
       (error) => Promise.reject(error)
     );
@@ -40,45 +37,18 @@ export class AxiosFetcher implements IHTTPClient {
       async (error) => {
         if (typeof window == "undefined") {
           const prevRequest = error?.config;
-          console.log(
-            "ssr",
-            "status",
-            error?.response?.status,
-            "prev Sent",
-            prevRequest?.sent
-          );
           if (error?.response?.status === 401 && !prevRequest?.sent) {
             const session = await getServerSession();
-            // console.log({ session });
             prevRequest.sent = true;
             const accessToken = await refreshToken(session.refreshToken);
-            console.log("refreshed");
             prevRequest.headers["Authorization"] = `Bearer ${accessToken}`;
             return this._instance(prevRequest);
           }
-          console.log("no new call");
-          return Promise.reject(error);
         }
+
+        return Promise.reject(error);
       }
     );
-
-    // this._instance.interceptors.request.use(async (config) => {
-    //   let token = "";
-    //   if (typeof window == "undefined") {
-    //     try {
-    //       const serverSession = await getServerSession();
-    //       token = serverSession.token;
-    //     } catch (e) {
-    //       console.error("Error getting server session", e);
-    //     }
-    //   }
-
-    //   if (token != "") {
-    //     config.headers.Authorization = `Bearer ${token}`;
-    //   }
-
-    //   return config;
-    // });
   }
 
   private _successHandler(res) {
@@ -86,13 +56,6 @@ export class AxiosFetcher implements IHTTPClient {
   }
 
   private _errorHandler(e) {
-    // console.error({e});
-    // if(e instanceof AxiosError) {
-    //   throw {
-    //     status: 500,
-    //     message: e.cause
-    //   }
-    // }
     console.log("axios error", e.message);
     if (e.response) {
       throw {

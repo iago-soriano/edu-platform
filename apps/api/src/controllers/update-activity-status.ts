@@ -28,10 +28,10 @@ export class UpdateActivityStatusController implements HTTPController {
 
   async execute(req: Request, res: Response) {
     const { activityId } = req.params;
-    const { activityStatus } = req.body;
+    const { newActivityStatus } = req.body;
     await this.updateActivityStatusUseCase.execute({
       activityId,
-      activityStatus,
+      newActivityStatus,
     });
 
     res.status(200).json();

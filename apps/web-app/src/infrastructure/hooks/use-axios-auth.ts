@@ -7,7 +7,7 @@ import { useRefreshToken } from "./use-refresh-token";
 export const useAxiosAuth = () => {
   const { data: session } = useSession();
   const refreshToken = useRefreshToken();
-  // console.log({ session });
+
   useEffect(() => {
     const requestIntercept = axios.setInterceptor(
       "request",
@@ -27,14 +27,13 @@ export const useAxiosAuth = () => {
         const prevRequest = error?.config;
         if (error?.response?.status === 401 && !prevRequest?.sent) {
           prevRequest.sent = true;
-          console.log("hook error", error);
-          // await refreshToken();
+          await refreshToken();
           prevRequest.headers[
             "Authorization"
           ] = `Bearer ${session?.accessToken}`;
           return axios._instance(prevRequest);
         }
-        return Promise.reject(error);
+        if (error?.response.status === 403) return Promise.reject(error);
       }
     );
 
