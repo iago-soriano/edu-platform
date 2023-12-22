@@ -9,7 +9,7 @@ export class Unauthorized extends CustomError {
 
 export class Forbidden extends CustomError {
   HTTPstatusCode = 403;
-  constructor() {
-    super();
+  constructor(realReason?: string) {
+    super("", {}, realReason);
   }
 }

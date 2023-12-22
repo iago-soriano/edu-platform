@@ -1,10 +1,6 @@
 import { ITokenService, JWTPayload } from "@interfaces";
-import {
-  TokenGenerationError,
-  InvalidValidationTokenError,
-} from "@edu-platform/common/errors";
+import { TokenGenerationError, Forbidden } from "@edu-platform/common/errors";
 import jwt, { JwtPayload as LibJWTPayload } from "jsonwebtoken";
-import { OAuth2Client } from "google-auth-library";
 
 export class JWTTokenService implements ITokenService {
   token_secret = process.env.TOKEN_SECRET;
@@ -14,8 +10,6 @@ export class JWTTokenService implements ITokenService {
   _refreshTokenPrivateKey: string;
   _refreshTokenPublicKey: string;
 
-  client: OAuth2Client;
-
   constructor() {
     // this._privateKey = fs.readFile("./credentials/private.pem").toString();
     // this._publicKey = fs.readFile("./credentials/public.pem").toString();
@@ -23,8 +17,6 @@ export class JWTTokenService implements ITokenService {
     this._accessTokenPublicKey = process.env.ACCESS_TOKEN_PUBLIC_KEY;
     this._refreshTokenPrivateKey = process.env.REFRESH_TOKEN_PRIVATE_KEY;
     this._refreshTokenPublicKey = process.env.REFRESH_TOKEN_PUBLIC_KEY;
-
-    this.client = new OAuth2Client();
   }
 
   generateRefreshToken({ id }: JWTPayload) {
@@ -32,7 +24,7 @@ export class JWTTokenService implements ITokenService {
       const resp = jwt.sign({}, this._refreshTokenPrivateKey, {
         issuer: process.env.HOST_NAME,
         algorithm: "RS256",
-        expiresIn: "10s",
+        expiresIn: "100s",
         subject: `${id}`,
       });
       return resp;
@@ -60,14 +52,14 @@ export class JWTTokenService implements ITokenService {
     const issuer = (tokenPayload as LibJWTPayload)?.iss;
     const userId = (tokenPayload as LibJWTPayload)?.sub;
 
-    if (!issuer) throw new Error(`JWT issuer not found: ${tokenPayload}`);
-    if (!userId) throw new Error(`JWT subject not found: ${tokenPayload}`);
+    if (!issuer) throw new Forbidden("No issuer in token");
+    if (!userId) throw new Forbidden("No subject in token");
 
     if (issuer !== process.env.HOST_NAME)
-      throw new Error("Token not recognized");
+      throw new Forbidden("Incorrect issuer in token");
 
     return {
-      id: tokenPayload.sub,
+      id: userId,
     };
   }
   verifyAccessToken(token: string) {

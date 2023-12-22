@@ -1,9 +1,5 @@
 import { IUserRepository, IUseCase, ITokenService } from "@interfaces";
-import {
-  UserNotFoundError,
-  InsufficientTokenError,
-  Forbidden,
-} from "@edu-platform/common/errors";
+import { UserNotFoundError, Forbidden } from "@edu-platform/common/errors";
 
 type InputParams = {
   refreshToken: string;
@@ -20,7 +16,6 @@ class UseCase implements ISignOutUseCase {
 
   async execute({ refreshToken }) {
     const tokenPayload = this.tokenService.verifyRefreshToken(refreshToken);
-    if (!tokenPayload.id) throw new InsufficientTokenError();
 
     const userDTO = await this.userRepository.getUserById(
       Number(tokenPayload.id)

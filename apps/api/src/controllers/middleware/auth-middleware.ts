@@ -3,10 +3,9 @@ import {
   IUserRepository,
   JWTPayload,
   Request,
-  UserSelectDTO,
 } from "@interfaces";
 import { Forbidden, Unauthorized } from "@edu-platform/common/errors";
-import { TokenExpiredError, JsonWebTokenError } from "jsonwebtoken";
+import { TokenExpiredError } from "jsonwebtoken";
 
 export class AuthenticationMiddlewareController {
   constructor(
@@ -15,10 +14,14 @@ export class AuthenticationMiddlewareController {
   ) {}
 
   async execute(req: Request<{}, {}, {}>, headers: Record<string, string>) {
-    if (!headers.authorization) throw new Forbidden();
+    if (!headers.authorization)
+      throw new Forbidden("No Authorization header present");
 
     const [header, token] = headers.authorization.split(" ");
-    if (header !== "Bearer") throw new Forbidden();
+    if (header !== "Bearer")
+      throw new Forbidden(
+        `Authorization header present but incorrect form: ${header}`
+      );
 
     let tokenPayload: JWTPayload;
     try {
@@ -28,12 +31,10 @@ export class AuthenticationMiddlewareController {
       throw e;
     }
 
-    if (!tokenPayload.id) throw new Forbidden();
-
     const userDTO = await this.userRepository.getUserById(
       Number(tokenPayload.id)
     );
-    if (!userDTO) throw new Forbidden();
+    if (!userDTO) throw new Forbidden("User id in token not found");
 
     req.user = userDTO;
   }

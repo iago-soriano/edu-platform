@@ -8,7 +8,8 @@ export class ErrorHandlerController implements HTTPErrorController {
         "ERRO NA APLICAÇÃO",
         error.errors,
         error.HTTPstatusCode,
-        error.message
+        error.message,
+        error.realReason
       );
       res
         .status(error.HTTPstatusCode || 500)

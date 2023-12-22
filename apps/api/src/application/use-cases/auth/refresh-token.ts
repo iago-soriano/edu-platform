@@ -1,5 +1,6 @@
 import { IUserRepository, ITokenService, IUseCase } from "@interfaces";
 import { Forbidden } from "@edu-platform/common/errors";
+import { TokenExpiredError } from "jsonwebtoken";
 
 type InputParams = {
   refreshToken: string;
@@ -22,20 +23,20 @@ class UseCase implements IRefreshTokenUseCase {
     try {
       tokenPayload = this.tokenService.verifyRefreshToken(args.refreshToken);
     } catch (ex) {
-      throw new Forbidden();
+      if (ex instanceof TokenExpiredError)
+        throw new Forbidden("Refresh token expirado");
+      throw new Forbidden(`Unexpected error verifying refresh_token: ${ex}`);
     }
-
-    if (!tokenPayload.id) throw new Forbidden();
 
     const userDTO = await this.userRepository.getUserById(
       Number(tokenPayload.id)
     );
-    if (!userDTO) throw new Forbidden();
+    if (!userDTO) throw new Forbidden("User in refresh_token id not found");
 
     // Time to rotate tokens. If this happens, refresh_token has been compromised
     if (userDTO.refreshToken !== args.refreshToken) {
       await this.userRepository.updateUser(userDTO.id, { refreshToken: "" });
-      throw new Forbidden();
+      throw new Forbidden("Refresh token persisted not equal to the one sent");
     }
 
     const accessToken = this.tokenService.generateAccessToken({

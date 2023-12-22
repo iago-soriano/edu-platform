@@ -4,7 +4,8 @@ export abstract class CustomError extends Error {
   abstract HTTPstatusCode?: number;
   constructor(
     message?: string,
-    public errors: FieldError = {}
+    public errors: FieldError = {},
+    public realReason: string = undefined
   ) {
     super(message);
   }
