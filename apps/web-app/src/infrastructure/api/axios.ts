@@ -56,7 +56,7 @@ export class AxiosFetcher implements IHTTPClient {
   }
 
   private _errorHandler(e) {
-    console.log("axios error", e.message);
+    // console.log("axios error", e.message);
     if (e.response) {
       throw {
         status: e.response.status,

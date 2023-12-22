@@ -16,7 +16,6 @@ type Response = TypedResponse<SignOutResponseBody>;
 export class SignOutController implements HTTPController {
   method = HttpMethod.POST;
   path: string = "sign-out";
-  // middlewares: string[] = ["auth"];
 
   constructor(private signOutUseCase: ISignOutUseCase) {}
 

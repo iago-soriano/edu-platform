@@ -31,6 +31,8 @@ export const useCreateActivityMutation = (
   >
 ) => {
   const queryClient = useQueryClient();
+  const axios = useAxiosAuth();
+
   return useMutation<
     CreateNewActivityResponseBody,
     ServerError,
@@ -46,12 +48,15 @@ export const useCreateActivityMutation = (
   });
 };
 
-export const useGetActivityVersionQuery = ({ activityId, versionId }) =>
-  useQuery<GetActivityVersionResponseBody, ServerError>({
+export const useGetActivityVersionQuery = ({ activityId, versionId }) => {
+  const axios = useAxiosAuth();
+
+  return useQuery<GetActivityVersionResponseBody, ServerError>({
     queryKey: ["version", activityId, versionId],
     queryFn: () =>
       axios.get.bind(axios)(`activity/${activityId}/version/${versionId}`),
   });
+};
 
 export const useUpdateVersionMetadataMutation = ({
   onError,
@@ -64,6 +69,7 @@ export const useUpdateVersionMetadataMutation = ({
   UpdateActivityMetadataResponseBody
 > & { activityId?: number; versionId?: number } = MutationArgsDefaultValue) => {
   const queryClient = useQueryClient();
+  const axios = useAxiosAuth();
 
   return useMutation<
     UpdateActivityMetadataResponseBody,
@@ -88,14 +94,13 @@ export const useUpdateVersionMetadataMutation = ({
 };
 
 export const useGetActivityVersionsQuery = () => {
-  // const { axiosIsAuthed } = useAuthContext();
   const axios = useAxiosAuth();
+
   return useQuery<GetActivityVersionsResponseBody, ServerError>({
     queryKey: ["activities"],
     queryFn: () => {
       return axios.get.bind(axios)("activities");
     },
-    // enabled: axiosIsAuthed,
   });
 };
 
@@ -104,13 +109,14 @@ export const useSaveContentMutation = ({
   activityId,
 }: SaveContentRequestParams) => {
   const queryClient = useQueryClient();
+  const axios = useAxiosAuth();
+
   return useMutation<
     SaveContentResponseBody,
     ServerError,
     SaveContentRequestBody
   >({
     mutationFn: (mutationArgs: SaveContentRequestBody) => {
-      // console.log({ mutationArgs });
       return axios.post.bind(axios)(
         `activity/${activityId}/version/${versionId}/content`,
         mutationArgs
@@ -131,6 +137,8 @@ export const useDeleteActivityContentMutation = ({
   contentId,
 }: DeleteActivityContentParams) => {
   const queryClient = useQueryClient();
+  const axios = useAxiosAuth();
+
   return useMutation<void, ServerError>({
     mutationFn: () =>
       axios.del.bind(axios)(

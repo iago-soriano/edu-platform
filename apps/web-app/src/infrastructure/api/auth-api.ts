@@ -149,7 +149,8 @@ export const useSignOutMutation = (
   }
 ) =>
   useMutation<SignOutResponseBody, ServerError, SignOutRequestBody>({
-    mutationFn: () => axios.post.bind(axios)("sign-out"),
+    mutationFn: (args: SignOutRequestBody) =>
+      axios.post.bind(axios)("sign-out", args),
     onError,
     onSuccess,
   });

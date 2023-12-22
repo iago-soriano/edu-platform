@@ -1,4 +1,5 @@
 import { FileType } from "./controller";
+import { JwtPayload as LibJWTPayload } from "jsonwebtoken";
 
 export type JWTPayload = {
   id: string;
@@ -10,6 +11,7 @@ export interface ITokenService {
   generateAccessToken: (payload: JWTPayload) => string;
   verifyAccessToken: (token: string) => { id: string };
   verifyRefreshToken: (token: string) => { id: string };
+  decode: (token: string) => LibJWTPayload;
 }
 
 export interface IIdGenerator {

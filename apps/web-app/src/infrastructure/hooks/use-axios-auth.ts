@@ -1,12 +1,14 @@
 "use client";
 import { axios } from "../api/axios";
-import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useRefreshToken } from "./use-refresh-token";
+import { useSignOut } from "@infrastructure";
+import { useSession, signOut as nextAuthSignOut } from "next-auth/react";
 
 export const useAxiosAuth = () => {
   const { data: session } = useSession();
   const refreshToken = useRefreshToken();
+  const signOut = useSignOut();
 
   useEffect(() => {
     const requestIntercept = axios.setInterceptor(
@@ -25,6 +27,7 @@ export const useAxiosAuth = () => {
       (response) => response,
       async (error) => {
         const prevRequest = error?.config;
+
         if (error?.response?.status === 401 && !prevRequest?.sent) {
           prevRequest.sent = true;
           await refreshToken();
@@ -33,7 +36,13 @@ export const useAxiosAuth = () => {
           ] = `Bearer ${session?.accessToken}`;
           return axios._instance(prevRequest);
         }
-        if (error?.response.status === 403) return Promise.reject(error);
+
+        if (error?.response.status === 403) {
+          signOut();
+          return;
+        }
+
+        return Promise.reject(error);
       }
     );
 

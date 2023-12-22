@@ -1,5 +1,6 @@
 import { IUserRepository, IUseCase, ITokenService } from "@interfaces";
 import { UserNotFoundError, Forbidden } from "@edu-platform/common/errors";
+import { TokenExpiredError } from "jsonwebtoken";
 
 type InputParams = {
   refreshToken: string;
@@ -15,14 +16,26 @@ class UseCase implements ISignOutUseCase {
   ) {}
 
   async execute({ refreshToken }) {
-    const tokenPayload = this.tokenService.verifyRefreshToken(refreshToken);
+    try {
+      this.tokenService.verifyRefreshToken(refreshToken);
+    } catch (ex) {
+      if (!(ex instanceof TokenExpiredError)) throw ex;
+    }
+
+    const tokenPayload = this.tokenService.decode(refreshToken);
 
     const userDTO = await this.userRepository.getUserById(
-      Number(tokenPayload.id)
+      Number(tokenPayload.sub)
     );
     if (!userDTO) throw new UserNotFoundError();
 
-    await this.userRepository.updateUser(userDTO.id, { refreshToken: "" });
+    console.log(
+      "can delete user session:",
+      refreshToken == userDTO.refreshToken
+    );
+    if (refreshToken == userDTO.refreshToken) {
+      await this.userRepository.updateUser(userDTO.id, { refreshToken: "" });
+    }
   }
 }
 
