@@ -5,12 +5,9 @@ export class ErrorHandlerController implements HTTPErrorController {
   execute(error: Error, _: Request, res: Response<{}>) {
     if (error instanceof CustomError) {
       console.log(
-        "ERRO NA APLICAÇÃO",
-        error.errors,
-        error.HTTPstatusCode,
-        error.message,
-        error.realReason
+        `ERRO ${error.errors} ${error.HTTPstatusCode} ${error.message} - ${error.realReason}`
       );
+
       res
         .status(error.HTTPstatusCode || 500)
         .json({ message: error.message, errors: error.errors });

@@ -62,7 +62,7 @@ class UseCase implements ISignInUseCase {
       id: `${userDTO.id}`,
     });
 
-    await this.userRepository.updateUser(userDTO.id, { refreshToken });
+    // await this.userRepository.updateUser(userDTO.id, { refreshToken });
 
     return {
       accessToken,

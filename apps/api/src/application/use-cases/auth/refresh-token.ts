@@ -33,11 +33,13 @@ class UseCase implements IRefreshTokenUseCase {
     );
     if (!userDTO) throw new Forbidden("User in refresh_token id not found");
 
+    // TODO
     // Time to rotate tokens. If this happens, refresh_token has been compromised
-    if (userDTO.refreshToken !== args.refreshToken) {
-      await this.userRepository.updateUser(userDTO.id, { refreshToken: "" });
-      throw new Forbidden("Refresh token persisted not equal to the one sent");
-    }
+    // if (userDTO.refreshToken !== args.refreshToken) {
+    //   console.log(userDTO.refreshToken, args.refreshToken);
+    //   await this.userRepository.updateUser(userDTO.id, { refreshToken: "" });
+    //   throw new Forbidden("Refresh token persisted not equal to the one sent");
+    // }
 
     const accessToken = this.tokenService.generateAccessToken({
       id: `${userDTO.id}`,
@@ -47,7 +49,7 @@ class UseCase implements IRefreshTokenUseCase {
       id: `${userDTO.id}`,
     });
 
-    await this.userRepository.updateUser(userDTO.id, { refreshToken });
+    // await this.userRepository.updateUser(userDTO.id, { refreshToken });
 
     return {
       accessToken,
