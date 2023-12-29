@@ -1,21 +1,32 @@
 "use client";
 import { axios } from "../api/axios";
 import { useEffect } from "react";
-import { useRefreshToken } from "./use-refresh-token";
-import { useSignOut } from "@infrastructure";
-import { useSession, signOut as nextAuthSignOut } from "next-auth/react";
+import { useSignOut, refreshToken } from "@infrastructure";
+import { useSession } from "next-auth/react";
+import {
+  RefreshTokenRequestBody,
+  RefreshTokenResponseBody,
+} from "@edu-platform/common/api";
+
+const useRefreshToken = () => {
+  const session = useSession();
+  return async () => await refreshToken(session);
+};
 
 export const useAxiosAuth = () => {
-  const { data: session } = useSession();
-  const refreshToken = useRefreshToken();
+  const session = useSession();
   const signOut = useSignOut();
+  const refresh = useRefreshToken();
 
   useEffect(() => {
+    // console.log("new use effect");
     const requestIntercept = axios.setInterceptor(
       "request",
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${session?.accessToken}`;
+          config.headers[
+            "Authorization"
+          ] = `Bearer ${session?.data?.user.accessToken}`;
         }
         return config;
       },
@@ -27,17 +38,16 @@ export const useAxiosAuth = () => {
       (response) => response,
       async (error) => {
         const prevRequest = error?.config;
-
         if (error?.response?.status === 401 && !prevRequest?.sent) {
           prevRequest.sent = true;
-          await refreshToken();
+          await refresh();
           prevRequest.headers[
             "Authorization"
-          ] = `Bearer ${session?.accessToken}`;
+          ] = `Bearer ${session?.data?.user.accessToken}`;
           return axios._instance(prevRequest);
         }
 
-        if (error?.response.status === 403) {
+        if (error?.response?.status === 403) {
           signOut();
           return;
         }
@@ -50,7 +60,7 @@ export const useAxiosAuth = () => {
       axios.ejectInterceptor("request", requestIntercept);
       axios.ejectInterceptor("response", responseIntercept);
     };
-  }, [session, refreshToken]);
+  }, [session.data, refresh]);
 
   return axios;
 };

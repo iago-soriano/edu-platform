@@ -1,18 +1,10 @@
-import { getServerSession } from "@infrastructure";
+import { getServerSession, refreshToken } from "@infrastructure";
 import axiosClient, { AxiosInstance } from "axios";
 import {
   IHTTPClient,
   RefreshTokenRequestBody,
   RefreshTokenResponseBody,
 } from "@edu-platform/common/api";
-
-const refreshToken = async (refreshToken: string) => {
-  const res: RefreshTokenResponseBody = await axios.post("/refresh-token", {
-    refreshToken,
-  } as RefreshTokenRequestBody);
-
-  return res.accessToken;
-};
 
 export class AxiosFetcher implements IHTTPClient {
   public _instance: AxiosInstance;
@@ -24,7 +16,9 @@ export class AxiosFetcher implements IHTTPClient {
         if (typeof window == "undefined") {
           const session = await getServerSession();
           if (!config.headers["Authorization"]) {
-            config.headers["Authorization"] = `Bearer ${session?.accessToken}`;
+            config.headers[
+              "Authorization"
+            ] = `Bearer ${session?.user.accessToken}`;
           }
         }
         return config;
@@ -40,8 +34,11 @@ export class AxiosFetcher implements IHTTPClient {
           if (error?.response?.status === 401 && !prevRequest?.sent) {
             const session = await getServerSession();
             prevRequest.sent = true;
-            const accessToken = await refreshToken(session.refreshToken);
-            prevRequest.headers["Authorization"] = `Bearer ${accessToken}`;
+            console.log("refresh server-side");
+            await refreshToken({ data: session });
+            prevRequest.headers[
+              "Authorization"
+            ] = `Bearer ${session.user.accessToken}`;
             return this._instance(prevRequest);
           }
         }
@@ -56,12 +53,12 @@ export class AxiosFetcher implements IHTTPClient {
   }
 
   private _errorHandler(e) {
-    // console.log("axios error", e.message);
+    console.log("axios error", e.message);
     if (e.response) {
       throw {
-        status: e.response.status,
-        message: e.response.data.message || e.message,
-        errors: e.response.data.errors,
+        status: e.response?.status,
+        message: e.response?.data?.message || e.message,
+        errors: e.response?.data?.errors,
       };
     } else {
       throw {
@@ -115,7 +112,7 @@ export class AxiosFetcher implements IHTTPClient {
     onFulfilled: (args) => any,
     onRejected: (error) => any
   ) {
-    this._instance.interceptors[side].use(onFulfilled, onRejected);
+    return this._instance.interceptors[side].use(onFulfilled, onRejected);
   }
 
   ejectInterceptor(side: "response" | "request", interceptor: any) {

@@ -9,10 +9,12 @@ import {
 import { useGetActivityVersionsQuery } from "@infrastructure";
 import { ActivityConstants } from "@edu-platform/common";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Activities() {
   const router = useRouter();
   const query = useGetActivityVersionsQuery();
+  const client = useQueryClient();
 
   const getActivityVersionCard = (version) => {
     const onClickActivityCard = () => {
@@ -52,6 +54,13 @@ export default function Activities() {
     </div>
   ) : (
     <div className="p-10 [&>*]:my-2 grid grid-cols-10">
+      <button
+        onClick={() => {
+          client.invalidateQueries({ queryKey: ["activities"] });
+        }}
+      >
+        Invalidate
+      </button>
       {query.data?.map((act) => (
         <div key={act.id} className="lg:col-start-3 lg:col-span-6 col-span-10">
           {getActivityVersionCard(act)}

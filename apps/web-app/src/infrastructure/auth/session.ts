@@ -1,7 +1,9 @@
 import { authOptions } from "app/api/auth/[...nextauth]/route";
 import { getServerSession as nextAuthGetServerSession } from "next-auth";
+import { getSession as nextAuthGetSession } from "next-auth/react";
 
 export const getServerSession = () => nextAuthGetServerSession(authOptions);
+// export const getSession = () => nextAuthGetSession(authOptions);
 
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -18,8 +20,8 @@ export const useSignOut = () => {
       callbackUrl: "/",
     });
     router.replace("/");
-    if (session.data)
-      signOutMutation.mutate({ refreshToken: session.data.refreshToken });
+    if (session?.data)
+      signOutMutation.mutate({ refreshToken: session.data.user.refreshToken });
   };
 
   return doSignOut;

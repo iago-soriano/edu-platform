@@ -4,7 +4,7 @@ import {
   AuthProvider,
   TanstackQueryProvider,
   NextAuthProvider,
-  useColorTheme,
+  PHProvider,
 } from "@contexts";
 import { getToken } from "next-auth/jwt";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,36 +21,23 @@ export const metadata = {
   referrer: "no-referrer-when-downgrade",
 };
 
-export default async function RootLayout(
-  context
-  //   {
-  //   children,
-  // }: {
-  //   children: React.ReactNode;
-  // }
-) {
-  // console.log({ cookies: cookies().get("next-auth.session-token") });
+export default async function RootLayout(context) {
   const serverSession = await getServerSession();
 
-  // if (serverSession?.user) {
-  //   axios.setHeader("authorization", `Bearer ${serverSession.token}`);
-  // } else {
-  //   axios.setHeader("authorization", null);
-  // }
-
-  // console.log("got jwt in root layout", !!serverSession?.token);
   return (
     <StyledJsxRegistry>
       <ThemeProvider>
         <ThemedHtml>
           <body suppressHydrationWarning className="bg-surface2 text-text1">
             <TanstackQueryProvider>
-              <NextAuthProvider session={serverSession}>
-                <AuthProvider>
-                  <Navbar />
-                  {context.children}
-                </AuthProvider>
-              </NextAuthProvider>
+              <PHProvider>
+                <NextAuthProvider session={serverSession}>
+                  <AuthProvider>
+                    <Navbar />
+                    {context.children}
+                  </AuthProvider>
+                </NextAuthProvider>
+              </PHProvider>
               <Toast />
             </TanstackQueryProvider>
           </body>

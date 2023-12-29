@@ -67,23 +67,17 @@ export const authOptions: AuthOptions = {
       // console.log({ url, baseUrl });
       return baseUrl;
     },
-    async jwt({ token, account, profile, user }) {
+    async jwt({ token, account, profile, user, trigger, session }) {
       // happens whenever application mounts or page refocuses
       // account, user and profile only on signin. on refocus, only token.
       // console.log('JWT');
       // console.log({ token, account, profile, user });
 
-      if (user) {
-        // if (account.provider == "google") {
-        //   token.provider = account.provider;
-        //   return {
-        //     ...user,
-        //     provider: "google",
-        //     name: profile.given_name,
-        //     accessToken: account.id_token,
-        //   };
-        // }
+      if (trigger === "update") {
+        return { ...token, ...session.user };
+      }
 
+      if (user) {
         return {
           ...user,
           accessToken: user.accessToken,
@@ -100,11 +94,11 @@ export const authOptions: AuthOptions = {
       // console.log("SESSION");
       // console.log({ session, token });
       // whatever property is added here goes to session.data in FE
-      const { accessToken, refreshToken, ...rest } = token;
+      // const { accessToken, refreshToken, ...rest } = token;
 
-      (session as any).accessToken = accessToken;
-      (session as any).refreshToken = refreshToken;
-      (session as any).user = rest;
+      // (session as any).accessToken = accessToken;
+      // (session as any).refreshToken = refreshToken;
+      (session as any).user = token;
 
       return session;
     },
