@@ -3,10 +3,6 @@ import { axios } from "../api/axios";
 import { useEffect } from "react";
 import { useSignOut, refreshToken } from "@infrastructure";
 import { useSession } from "next-auth/react";
-import {
-  RefreshTokenRequestBody,
-  RefreshTokenResponseBody,
-} from "@edu-platform/common/api";
 
 const useRefreshToken = () => {
   const session = useSession();
@@ -19,7 +15,6 @@ export const useAxiosAuth = () => {
   const refresh = useRefreshToken();
 
   useEffect(() => {
-    // console.log("new use effect");
     const requestIntercept = axios.setInterceptor(
       "request",
       (config) => {

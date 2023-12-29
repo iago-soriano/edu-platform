@@ -2,7 +2,7 @@ import { useMediaQuery } from "react-responsive";
 import { usePathname } from "next/navigation";
 import { SmallScreenNavbar } from "./small-screen";
 import { BigScreenNavbar } from "./big-screen";
-import { ModeToggle } from "./components";
+import { ModeToggle, Logo } from "./components";
 import { useHasMounted, useSignOut } from "@infrastructure";
 import { useSession } from "next-auth/react";
 
@@ -11,7 +11,8 @@ export const Navbar = () => {
   const pathName = usePathname();
   const hasMounted = useHasMounted();
   const session = useSession();
-  const isAuthenticated = session.status == "authenticated";
+  const isAuthenticated =
+    session.status == "authenticated" || session.status == "loading";
   const user = session.data?.user;
   const handleSignOut = useSignOut();
 
@@ -37,11 +38,13 @@ export const Navbar = () => {
   }
 
   return (
-    <SmallScreenNavbar
-      currentPath={pathName}
-      modeToggle={<ModeToggle />}
-      isAuthenticated={isAuthenticated}
-      signOut={handleSignOut}
-    />
+    <nav className="justify-between max-w-full h-[6.7rem]">
+      <ul className="flex flex-row justify-between overflow-hidden h-full">
+        <li>
+          <Logo />
+        </li>
+        <li />
+      </ul>
+    </nav>
   );
 };
