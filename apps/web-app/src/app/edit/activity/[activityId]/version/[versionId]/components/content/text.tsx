@@ -1,7 +1,7 @@
 import { GhostTextArea } from "@components";
 
 export const TextContent = ({
-  content,
+  text,
   saveContentMutation,
   onChange,
   hasChanges,
@@ -22,7 +22,7 @@ export const TextContent = ({
       name="content"
       placeholder="Conteúdo"
       className="min-h-[200px]"
-      defaultValue={content}
+      defaultValue={text}
       onBlur={onSaveContent}
       error={saveContentMutation.error?.errors?.["content"]}
       onChange={onChange}

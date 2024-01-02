@@ -1,11 +1,11 @@
 import {
   GhostInput,
   GhostTextArea,
-  errorToast,
+  ErrorCard,
   Icons,
   ButtonWithDropdown,
 } from "@components";
-import { TextContent, VideoContent } from ".";
+import { TextContent, VideoContent, ImageContent } from ".";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import {
   useSaveContentMutation,
@@ -16,21 +16,23 @@ import { twMerge } from "tailwind-merge";
 type BaseContentProps = {
   title?: string;
   description?: string;
-  content?: string;
   type: string;
-  id: number;
+  id: string;
   activityId: string;
   versionId: string;
-  start?: number;
-  end?: number;
+  videoUrl?: string;
+  tracks?: string;
+  imageUrl?: string;
+  text?: string;
   setSaveState: Dispatch<SetStateAction<string>>;
 };
 export const BaseContent = ({
   title,
   description,
-  content,
-  start,
-  end,
+  videoUrl,
+  imageUrl,
+  text,
+  tracks,
   type,
   id: contentId,
   setSaveState,
@@ -39,6 +41,7 @@ export const BaseContent = ({
 }: BaseContentProps) => {
   const [hasChanges, setHasChanges] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+
   const saveContentMutation = useSaveContentMutation({
     activityId,
     versionId,
@@ -84,7 +87,7 @@ export const BaseContent = ({
         return (
           <TextContent
             contentId={contentId}
-            content={content}
+            text={text}
             saveContentMutation={saveContentMutation}
             onChange={setHasChanges}
             hasChanges={hasChanges}
@@ -95,9 +98,18 @@ export const BaseContent = ({
           <VideoContent
             saveContentMutation={saveContentMutation}
             contentId={contentId}
-            content={content}
-            start={start}
-            end={end}
+            url={videoUrl}
+            tracks={tracks}
+            onChange={setHasChanges}
+            hasChanges={hasChanges}
+          />
+        );
+      case "Image":
+        return (
+          <ImageContent
+            saveContentMutation={saveContentMutation}
+            contentId={contentId}
+            url={imageUrl}
             onChange={setHasChanges}
             hasChanges={hasChanges}
           />

@@ -21,17 +21,30 @@ export const InsertButtons = ({ order }) => {
           Novo conteúdo <Icons.CARET_UP size={28} className="pl-1" />
         </ButtonWithDropdown.Text>
         <ButtonWithDropdown.DrawerItem
-          onClick={() => saveContentMutation.mutate({ type: "Text", order })}
+          onClick={() =>
+            saveContentMutation.mutate({ type: "Text", payload: {}, order })
+          }
         >
           Texto
         </ButtonWithDropdown.DrawerItem>
         <ButtonWithDropdown.DrawerItem
-          onClick={() => saveContentMutation.mutate({ type: "Video", order })}
+          onClick={() =>
+            saveContentMutation.mutate({
+              type: "Video",
+              payload: { tracks: "" },
+              order,
+            })
+          }
         >
           Vídeo
         </ButtonWithDropdown.DrawerItem>
-        <ButtonWithDropdown.DrawerItem>Imagem</ButtonWithDropdown.DrawerItem>
-        <ButtonWithDropdown.DrawerItem>Audio</ButtonWithDropdown.DrawerItem>
+        <ButtonWithDropdown.DrawerItem
+          onClick={() =>
+            saveContentMutation.mutate({ type: "Image", payload: {}, order })
+          }
+        >
+          Imagem
+        </ButtonWithDropdown.DrawerItem>
       </ButtonWithDropdown>
       <ButtonWithDropdown up right>
         <ButtonWithDropdown.Text className={classes}>

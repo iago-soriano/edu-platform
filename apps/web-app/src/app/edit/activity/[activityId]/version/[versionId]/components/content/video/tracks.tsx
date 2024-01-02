@@ -1,6 +1,6 @@
 import { parseTimeToNumber, parseNumberToTimeLabel } from "@infrastructure";
-import { useState } from "react";
-import { Icons } from "@components";
+import { useEffect, useState } from "react";
+import { Icons, errorToast } from "@components";
 
 const NowButton = ({
   onClick,
@@ -41,7 +41,10 @@ const TimeInput = ({
 };
 
 const RemoveButton = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
-  <button className="text-error rounded border p-3 hover:bg-surface3 hover:opacity-50 hover:border-black hover:shadow-hover hover:font-bold">
+  <button
+    {...props}
+    className="text-error rounded border p-3 hover:bg-surface3 hover:opacity-50 hover:border-black hover:shadow-hover hover:font-bold"
+  >
     <Icons.X />
   </button>
 );
@@ -70,52 +73,56 @@ export const Track = ({
   setTracks,
   getPlayerCurrTime,
   videoDuration,
-  saveMutation,
+  // saveMutation,
+  hasUrl,
 }) => {
   const { tracksBefore, thisTrack, tracksAfter } = splitTracks(tracks, index);
   const [start, setStart] = useState(thisTrack.split("-")[0]);
   const [end, setEnd] = useState(thisTrack.split("-")[1]);
 
-  const onNowClickEnd = async () => {
-    const currTimeLabel = parseNumberToTimeLabel(getPlayerCurrTime());
-    setEnd(currTimeLabel);
-    const newTracks = [
-      ...tracksBefore,
-      `${thisTrack.split("-")[0]}-${currTimeLabel}`,
-      ...tracksAfter,
-    ].join(",");
-    setTracks(newTracks);
-    saveMutation(newTracks);
+  const onNowClickEnd = () => {
+    if (!hasUrl) {
+      errorToast("Favor inserir uma URL");
+      return;
+    }
+
+    const currEnd = parseNumberToTimeLabel(getPlayerCurrTime());
+
+    setEnd(currEnd);
+    setCurrentTrackTo("", currEnd);
   };
 
   const onNowClickStart = () => {
-    const currTimeLabel = parseNumberToTimeLabel(getPlayerCurrTime());
-    setStart(currTimeLabel);
-    const newTracks = [
-      ...tracksBefore,
-      `${currTimeLabel}-${thisTrack.split("-")[1]}`,
-      ...tracksAfter,
-    ].join(",");
-    setTracks(newTracks);
-    saveMutation(newTracks);
+    if (!hasUrl) {
+      errorToast("Favor inserir uma URL");
+      return;
+    }
+
+    const currStart = parseNumberToTimeLabel(getPlayerCurrTime());
+
+    setStart(currStart);
+    setCurrentTrackTo(currStart, "");
   };
 
   const onClickRemoveTrack = () => {
-    console.log(index);
-    console.log(
-      tracks
-        .split(",")
-        .filter((_, i) => i !== index)
-        .join(",")
-    );
-    // const newTracks = tracks
-    setTracks((tracks) =>
-      tracks
-        .split(",")
-        .filter((_, i) => i !== index)
-        .join(",")
-    );
+    const newTracks = tracks
+      .split(",")
+      .filter((_, i) => i !== index)
+      .join(",");
+    if (newTracks !== tracks) {
+      setTracks(newTracks);
+    }
   };
+
+  const setCurrentTrackTo = (newStart: string, newEnd: string) => {
+    const newTracks = [
+      ...tracksBefore,
+      `${newStart || start}-${newEnd || end}`,
+      ...tracksAfter,
+    ].join(",");
+    setTracks(newTracks);
+  };
+
   return (
     <div className="p-3 flex items-center">
       <label>
@@ -123,10 +130,8 @@ export const Track = ({
         <TimeInput
           max={videoDuration}
           value={start}
-          // onChange={onChangeStart}
-          // onBlur={onSaveStartTime}
           onChange={(e) => setStart((e.target as any).value)}
-          onBlur={() => {}}
+          onBlur={() => setCurrentTrackTo("", "")}
           disabled={disabled}
         />
         <NowButton disabled={disabled} onClick={onNowClickStart} />
@@ -136,10 +141,8 @@ export const Track = ({
         <TimeInput
           max={videoDuration}
           value={end}
-          // onChange={onChangeEnd}
-          // onBlur={onSaveEndTime}
           onChange={(e) => setEnd((e.target as any).value)}
-          onBlur={() => {}}
+          onBlur={() => setCurrentTrackTo("", "")}
           disabled={disabled}
         />
         <NowButton disabled={disabled} onClick={onNowClickEnd} />

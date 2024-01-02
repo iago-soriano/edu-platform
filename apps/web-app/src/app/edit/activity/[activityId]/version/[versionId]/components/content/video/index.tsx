@@ -1,56 +1,52 @@
-import { GhostInput, errorToast } from "@components";
+import { GhostInput, Spinner, errorToast } from "@components";
 import { useRef, useState, useEffect, useCallback } from "react";
-// import YouTube from "react-youtube";
-const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
-import YoutubePlayer from "react-player/youtube";
+import { LibYoutubePlayer, YoutubePlayer } from "./player";
 import {
   parseTimeToNumber,
   parseNumberToTimeLabel,
   useMediaQuery,
 } from "@infrastructure";
 import { AddTrackButton, Track } from "./tracks";
-import dynamic from "next/dynamic";
 
-export const VideoContent = ({
-  contentId,
-  content,
-  start,
-  end,
-  saveContentMutation,
-  onChange,
-  hasChanges,
-}) => {
-  // const playerRef = useRef<YoutubePlayer>();
-  const [player, setPlayer] = useState<YoutubePlayer>(null);
-  const [videoDuration, setVideoDuration] = useState("01:00:00");
-  const [tracks, setTracks] = useState("00:00:00-00:00:00");
-  // const [startLabel, setStartLabel] = useState(parseNumberToTimeLabel(start));
-  // const [endLabel, setEndLabel] = useState(parseNumberToTimeLabel(end));
-  const [videoUrl, setVideoUrl] = useState("");
+export const VideoContent = (
+  {
+    contentId,
+    url,
+    tracks: tracksProps,
+    saveContentMutation,
+    onChange,
+    hasChanges,
+  }
+  // : {saveContentMutation: UseMutationResult<SaveContentResponseBody, ServerError, SaveContentRequestBody, unknown>}
+) => {
+  const [player, setPlayer] = useState<LibYoutubePlayer>(null);
+  const [videoDuration, setVideoDuration] = useState<string>();
+  const [tracks, setTracks] = useState(tracksProps || "-");
+  const [videoUrl, setVideoUrl] = useState(url);
 
   const onBlurUrl = (e) => {
+    const newUrl = e.target.value;
+    if (newUrl === url) return;
+
     saveContentMutation.mutate({
-      content: e.target.value,
+      payload: {
+        videoUrl: newUrl,
+      },
       type: "Video",
       contentId,
     });
   };
 
-  const isMore900 = useMediaQuery("(min-width: 900px)");
-  const isMore590 = useMediaQuery("(min-width: 590px)");
-
   useEffect(() => {
     if (player) {
       const durationLabel = parseNumberToTimeLabel(player?.getDuration());
       setVideoDuration(durationLabel);
-      setTracks(`00:00:00-${durationLabel}`);
-      console.log(durationLabel);
     }
   }, [player]);
 
-  const saveTracks = useCallback(() => {
+  useEffect(() => {
     saveContentMutation.mutate({
-      tracks,
+      payload: { tracks },
       type: "Video",
       contentId,
     });
@@ -69,11 +65,27 @@ export const VideoContent = ({
   }, [player]);
 
   useEffect(() => {
-    setVideoUrl(content.split("&")[0]);
-  }, [content]);
+    setVideoUrl(url?.split("&")[0]);
+  }, [url]);
+
+  useEffect(() => {
+    if (tracks === "-" && !!videoDuration) {
+      setTracks(`00:00:00-${videoDuration}`);
+    }
+  }, [videoDuration]);
 
   const onClickAddTrack = () => {
-    setTracks((tracks) => `${tracks},00:00:00-${videoDuration}`);
+    if (!videoUrl) {
+      errorToast("Favor inserir uma URL");
+      return;
+    }
+    const tracksArray = tracks.split(",");
+    if (tracksArray.length >= 10) {
+      errorToast("Não se pode adicionar mais de 10 faixas");
+      return;
+    }
+    const lastTrackEnd = tracksArray[tracksArray.length - 1].split("-")[1];
+    setTracks((tracks) => `${tracks},${lastTrackEnd}-${videoDuration}`);
   };
 
   return (
@@ -82,12 +94,12 @@ export const VideoContent = ({
         name="content"
         placeholder="URL do Youtube"
         className=""
-        defaultValue={content}
+        defaultValue={url}
         onBlur={onBlurUrl}
         error={saveContentMutation.error?.errors?.["content"]}
         onChange={() => onChange(true)}
       />
-      {tracks.split(",").map((track, i) => (
+      {tracks?.split(",").map((track, i) => (
         <Track
           key={`${i}-${track}`}
           index={i}
@@ -96,28 +108,23 @@ export const VideoContent = ({
           disabled={false}
           getPlayerCurrTime={getPlayerCurrTime}
           videoDuration={videoDuration}
-          saveMutation={saveTracks}
+          // saveMutation={saveTracks}
+          hasUrl={!!videoUrl}
         />
       ))}
       <AddTrackButton onClick={onClickAddTrack} />
       <div className="p-2 flex justify-center">
-        <ReactPlayer
-          onReady={(e) => setPlayer(e["player"])}
-          url={videoUrl}
-          className="w-5"
-          style={{}}
-          width={isMore900 ? 800 : isMore590 ? 501 : 300}
-          height={isMore900 ? 450 : 282}
-          config={{
-            youtube: {
-              playerVars: {
-                origin: "http://localhost:3000",
-                host: "https://www.youtube.com",
-              },
-            },
-          }}
-          controls
+        <YoutubePlayer
+          videoUrl={videoUrl}
+          player={player}
+          setPlayer={setPlayer}
         />
+        {/* {videoUrl ? (
+            
+          ) : (
+            <h6>Insira uma URL e o video aparecerá aqui</h6>
+          )}
+        </div>  */}
       </div>
     </div>
   );

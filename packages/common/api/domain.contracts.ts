@@ -21,13 +21,14 @@ export type ElementResponse = {
   description?: string;
   id: number;
   type: string;
-  content?: string;
   elementType: string;
   question?: string;
   answerKey?: string;
   order: number;
-  start?: number;
-  end?: number;
+  videoUrl?: string;
+  tracks?: string;
+  imageUrl?: string;
+  text?: string;
 };
 export type GetActivityVersionResponseBody = {
   title: string;
@@ -82,17 +83,16 @@ export type SaveContentRequestBody = {
   title?: string;
   content?: string;
   description?: string;
-  type: ContentTypesType;
-  contentId?: number;
-  payload: {
+  type: string;
+  contentId?: string;
+  payload?: {
     //content de video
     tracks?: string;
-    url?: string;
+    videoUrl?: string;
     //content de texto
     text?: string;
   };
-  tracks: string;
-  order: number;
+  order?: number;
 };
 
 export type SaveContentResponseBody = {
