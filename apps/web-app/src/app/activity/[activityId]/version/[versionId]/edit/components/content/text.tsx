@@ -10,7 +10,7 @@ export const TextContent = ({
   const onSaveContent = (e) => {
     if (hasChanges) {
       saveContentMutation.mutate({
-        content: e.target.value,
+        payload: { text: e.target.value },
         type: "Text",
         contentId,
       });

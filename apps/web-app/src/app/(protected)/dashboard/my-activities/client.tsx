@@ -18,7 +18,7 @@ export default function Activities() {
 
   const getActivityVersionCard = (version) => {
     const onClickActivityCard = () => {
-      router.push(`/edit/activity/${version.activityId}/version/${version.id}`);
+      router.push(`/activity/${version.activityId}/version/${version.id}/edit`);
     };
 
     let Component = PublishedActivityCard;

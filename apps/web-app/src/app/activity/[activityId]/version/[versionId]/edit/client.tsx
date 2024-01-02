@@ -1,18 +1,12 @@
 "use client";
-import {
-  useGetActivityVersionQuery,
-  useSaveContentMutation,
-  useUpdateVersionMetadataMutation,
-} from "@infrastructure";
+import { useGetActivityVersionQuery } from "@infrastructure";
 import {
   ActivityHeaderInput,
   InsertButtons,
   BaseContent,
   StickyHeader,
 } from "./components";
-import { errorToast } from "@components";
 import { useEffect, useState } from "react";
-import { ElementResponse } from "@edu-platform/common/api";
 
 const Page = ({ params: { activityId, versionId } }) => {
   const versionQuery = useGetActivityVersionQuery({ activityId, versionId });

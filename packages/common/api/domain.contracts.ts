@@ -19,7 +19,7 @@ export type GetActivityVersionParams = {
 export type ElementResponse = {
   title?: string;
   description?: string;
-  id: number;
+  id: unknown;
   type: string;
   elementType: string;
   question?: string;
