@@ -14,7 +14,7 @@ const Page = ({ params: { activityId, versionId } }) => {
   const [showAuxHeader, setShowAuxHeader] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const setSticky = () => {
       const el = document.getElementById("activity-header-input");
       if (window.scrollY > el.offsetTop + el.offsetHeight) {
         setShowAuxHeader(true);
@@ -22,6 +22,8 @@ const Page = ({ params: { activityId, versionId } }) => {
         setShowAuxHeader(false);
       }
     };
+    const handleScroll = setSticky;
+    setSticky();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
