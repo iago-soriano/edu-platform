@@ -22,9 +22,9 @@ export const ProfileImageButton = forwardRef<
         width={60}
         height={60}
       />
-      <p className="font-bold py-1 text-center text-text1 max-w-[120px] truncate">
+      {/* <p className="font-bold py-1 text-center text-text1 max-w-[120px] truncate">
         {!user?.name ? "Olá!" : user?.name}
-      </p>
+      </p> */}
     </button>
   );
 });
