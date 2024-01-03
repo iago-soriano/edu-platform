@@ -20,7 +20,7 @@ export class ImageContent extends Content {
     versionId: number,
     newContent: Partial<Content> & { file?: FileType; url?: string },
     uploadFunction: () => Promise<string>,
-    deleteFunction: () => Promise<void>
+    deleteFunction: (url) => Promise<void>
   ) {
     // altering a content that belongs to a different version
     if (this.originatingVersionId !== versionId) {
@@ -36,8 +36,8 @@ export class ImageContent extends Content {
     } else {
       this.title = newContent.title;
       this.description = newContent.description;
-      if (newContent.url) await deleteFunction();
       if (newContent.file) {
+        if (this.imageUrl) await deleteFunction(this.imageUrl);
         const uploadedImage = await uploadFunction();
         this.imageUrl = uploadedImage;
       }

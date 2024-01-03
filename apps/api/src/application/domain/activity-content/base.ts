@@ -60,6 +60,7 @@ export abstract class Content {
       imageFile?: FileType;
       tracks?: string;
       videoUrl?: string;
+      imageUrl?: string;
       text?: string;
     }
   ) {
@@ -88,7 +89,7 @@ export abstract class Content {
           content.title,
           content.description,
           content.imageFile,
-          content.videoUrl,
+          content.imageUrl,
           content.order,
           content.originatingVersionId,
           content.parentId

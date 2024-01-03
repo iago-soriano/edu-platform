@@ -46,7 +46,6 @@ export class S3Service implements IStorageService {
 
     try {
       const response = await this._s3.send(command);
-      console.log(response);
     } catch (err) {
       console.error(err);
     }

@@ -98,7 +98,7 @@ class UseCase implements ISaveContentUseCase {
       versionId,
       newContent,
       () => this.storageService.uploadFile(imageKeyName, payload.image),
-      () => this.storageService.deleteFile(imageKeyName)
+      (url) => this.storageService.deleteFile(url)
     );
 
     if (!existingContent.id) {

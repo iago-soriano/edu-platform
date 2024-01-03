@@ -110,6 +110,8 @@ export const BaseContent = ({
             saveContentMutation={saveContentMutation}
             contentId={contentId}
             url={imageUrl}
+            title={title}
+            description={description}
           />
         );
     }

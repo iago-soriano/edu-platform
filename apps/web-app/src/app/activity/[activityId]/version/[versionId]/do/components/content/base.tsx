@@ -47,7 +47,13 @@ export const BaseContent = ({
       case "Video":
         return <VideoContent url={videoUrl} tracks={tracks} />;
       case "Image":
-        return <img src={imageUrl} />;
+        return (
+          <div
+            className={`w-[550px] h-[550px] flex justify-center items-center mx-auto my-3`}
+          >
+            <img src={imageUrl} className="max-w-[550px] max-h-[550px]" />
+          </div>
+        );
     }
   };
 

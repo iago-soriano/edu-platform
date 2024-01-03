@@ -45,7 +45,7 @@ class UseCase implements IDeleteContentUseCase {
     }
 
     if (contentToBeDeleted.type === "Image" && contentToBeDeleted.imageUrl) {
-      this.storageService.deleteFile(contentToBeDeleted[0].content);
+      await this.storageService.deleteFile(contentToBeDeleted.imageUrl);
     }
 
     await this.activitiesRepository.deleteContentVersionRelation(
