@@ -27,7 +27,10 @@ export class AuthenticationMiddlewareController {
     try {
       tokenPayload = this.tokenService.verifyAccessToken(token);
     } catch (e) {
-      if (e instanceof TokenExpiredError) throw new Unauthorized();
+      if (e instanceof TokenExpiredError) {
+        // console.log(e.message, e.expiredAt);
+        throw new Unauthorized();
+      }
       throw e;
     }
 

@@ -1,4 +1,4 @@
-import Sut from "./create-content";
+import { Content } from "./base";
 import {
   IActivitiesRepository,
   IStorageService,
@@ -7,30 +7,7 @@ import {
 import { ContentTypesType } from "@domain";
 import { DomainRules } from "@edu-platform/common";
 
-describe("Unit tests for Create Content Use Case", () => {
-  let activitiesRepositoryMock;
-  let storageServiceMock: IStorageService;
-  let idServiceMock: IIdGenerator;
-
-  beforeAll(() => {
-    activitiesRepositoryMock = {
-      insertContent: jest.fn(),
-      insertActivityAndNewVersion: jest.fn(),
-      getActivityById: jest.fn(),
-      updateActivityVersionMetadata: jest.fn(),
-      updateContent: jest.fn(),
-      getVersionById: jest.fn(),
-      getActivityContentByContentId: jest.fn(),
-      getActivityVersionsByAuthorIdAndStatuses: jest.fn(),
-    };
-    storageServiceMock = {
-      uploadFile: jest.fn(),
-      deleteFile: jest.fn(),
-    };
-    idServiceMock = {
-      getId: jest.fn(),
-    };
-  });
+describe("Unit tests for Save Content Use Case", () => {
   it("Should not create content if title is too long", async () => {
     const response = new Sut(
       activitiesRepositoryMock,

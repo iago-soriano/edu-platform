@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseMutationResult,
+} from "@tanstack/react-query";
 import {
   UpdateActivityMetadataRequestBody,
   UpdateActivityMetadataResponseBody,
@@ -104,6 +109,12 @@ export const useGetActivityVersionsQuery = () => {
   });
 };
 
+export type SaveContentMutationType = UseMutationResult<
+  SaveContentResponseBody,
+  ServerError,
+  SaveContentRequestBody,
+  unknown
+>;
 export const useSaveContentMutation = ({
   versionId,
   activityId,

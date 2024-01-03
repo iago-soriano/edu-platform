@@ -29,13 +29,9 @@ class UseCase implements ISignOutUseCase {
     );
     if (!userDTO) throw new UserNotFoundError();
 
-    console.log(
-      "can delete user session:",
-      refreshToken == userDTO.refreshToken
-    );
-    if (refreshToken == userDTO.refreshToken) {
-      await this.userRepository.updateUser(userDTO.id, { refreshToken: "" });
-    }
+    // if (refreshToken == userDTO.refreshToken) {
+    //   await this.userRepository.updateUser(userDTO.id, { refreshToken: "" });
+    // }
   }
 }
 

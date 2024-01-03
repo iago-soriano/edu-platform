@@ -14,7 +14,6 @@ const storage = multer.diskStorage({
   },
 });
 
-export const AcceptFileMiddleware = multer({ storage: storage }).fields([
+export const AcceptFileMiddleware = multer({ storage }).fields([
   { name: "image", maxCount: 1 },
-  { name: "audio", maxCount: 1 },
 ]);

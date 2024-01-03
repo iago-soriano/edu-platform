@@ -26,36 +26,33 @@ class UseCase implements IDeleteContentUseCase {
     const contentId = parseInt(contentIdString);
     const versionId = parseInt(versionIdString);
 
-    const verifyingOriginatingVersion =
-      await this.activitiesRepository.getVersionById(versionId);
+    const version = await this.activitiesRepository.getVersionById(versionId);
 
-    if (!verifyingOriginatingVersion) throw new ActivityVersionNotFound();
+    if (!version) throw new ActivityVersionNotFound();
 
-    const contentToBeDeleted = verifyingOriginatingVersion.contents.filter(
+    const contentToBeDeleted = version.contents.filter(
       (ct) => ct.id === contentId
-    );
+    )[0];
 
-    if (contentToBeDeleted.length === 0) throw new ActivityContentNotFound();
+    if (!contentToBeDeleted) throw new ActivityContentNotFound();
 
-    if (contentToBeDeleted[0].originatingVersionId === versionId) {
-      if (
-        (contentToBeDeleted[0].type === "Audio" ||
-          contentToBeDeleted[0].type === "Image") &&
-        contentToBeDeleted[0].content
-      ) {
-        this.storageService.deleteFile(contentToBeDeleted[0].content);
-      }
-      await this.activitiesRepository.deleteContentAndVersionRelation(
+    if (contentToBeDeleted.originatingVersionId !== versionId) {
+      await this.activitiesRepository.deleteContentVersionRelation(
         contentId,
         versionId
       );
-      await this.activitiesRepository.deleteContent(contentId);
-    } else {
-      await this.activitiesRepository.deleteContentAndVersionRelation(
-        contentId,
-        versionId
-      );
+      return;
     }
+
+    if (contentToBeDeleted.type === "Image" && contentToBeDeleted.imageUrl) {
+      this.storageService.deleteFile(contentToBeDeleted[0].content);
+    }
+
+    await this.activitiesRepository.deleteContentVersionRelation(
+      contentId,
+      versionId
+    );
+    await this.activitiesRepository.deleteContent(contentId);
   }
 }
 

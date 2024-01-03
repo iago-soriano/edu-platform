@@ -24,7 +24,7 @@ export class JWTTokenService implements ITokenService {
       const resp = jwt.sign({}, this._refreshTokenPrivateKey, {
         issuer: process.env.HOST_NAME,
         algorithm: "RS256",
-        expiresIn: "1h",
+        expiresIn: "0.5y",
         subject: `${id}`,
       });
       return resp;
@@ -38,7 +38,7 @@ export class JWTTokenService implements ITokenService {
       const resp = jwt.sign({}, this._accessTokenPrivateKey, {
         issuer: process.env.HOST_NAME,
         algorithm: "RS256",
-        expiresIn: "30s",
+        expiresIn: "1h",
         subject: `${id}`,
       });
       return resp;

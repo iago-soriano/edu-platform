@@ -32,5 +32,5 @@ export type Request<Params = {}, Query = {}, Body = {}> = ExpressRequest<
   {},
   Body,
   Query
-> & { user: UserSelectDTO; files?: { image?: FileType[]; audio?: FileType[] } };
+> & { user: UserSelectDTO; files?: { image?: FileType[] } };
 export type Response<Body> = ExpressResponse<Body>;

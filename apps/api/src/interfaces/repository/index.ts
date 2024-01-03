@@ -11,6 +11,7 @@ import {
   ActivityContentInsertDTO,
   ActivityVersionSelectDTO,
   ActivityContentSelectDTO,
+  ActivityInsertDTO,
 } from "./dtos";
 
 export interface IUserRepository {
@@ -49,6 +50,10 @@ export interface IActivitiesRepository {
   insertActivityAndNewVersion: (
     authorId: number
   ) => Promise<{ activityId: number; versionId: number }>;
+  updateActivityMetadata: (
+    activityId: number,
+    args: ActivityInsertDTO
+  ) => Promise<void>;
   getActivityById: (activityId: number) => Promise<ActivitySelectDTO>;
   updateActivityVersionMetadata: (
     versionId: number,
@@ -74,13 +79,13 @@ export interface IActivitiesRepository {
     authorId: number,
     statuses: ActivityStatusType[]
   ) => Promise<ActivityVersionSelectDTO[]>;
-  createRelationBetweenVersionAndElement: (
+  insertRelationBetweenVersionAndElement: (
     versionId: number,
     contentId?: number,
     questionId?: number
   ) => Promise<{ relationId: number }>;
   deleteContent: (contentId: number) => Promise<void>;
-  deleteContentAndVersionRelation: (
+  deleteContentVersionRelation: (
     contentId: number,
     versionId: number
   ) => Promise<void>;

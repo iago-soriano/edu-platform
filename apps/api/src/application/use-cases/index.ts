@@ -33,12 +33,8 @@ import GetActivitiesUseCase, { IGetActivitiesUseCase } from "./get-activities";
 import GetActivityVersionUseCase, {
   IGetActivityVersionUseCase,
 } from "./get-activity-version";
-import CreateContentUseCase, { ICreateContentUseCase } from "./create-content";
-import CreateNewContentFromExistingUseCase, {
-  ICreateNewContentFromExistingUseCase,
-} from "./create-new-content-from-existing";
-import EditContentUseCase, { IEditContentUseCase } from "./edit-content";
 import DeleteContentUseCase, { IDeleteContentUseCase } from "./delete-content";
+import SaveContentUseCase, { ISaveContentUseCase } from "./save-content";
 
 export {
   SignInUseCase,
@@ -69,14 +65,10 @@ export {
   IGetActivitiesUseCase,
   GetActivityVersionUseCase,
   IGetActivityVersionUseCase,
-  CreateContentUseCase,
-  ICreateContentUseCase,
-  CreateNewContentFromExistingUseCase,
-  ICreateNewContentFromExistingUseCase,
-  EditContentUseCase,
-  IEditContentUseCase,
   DeleteContentUseCase,
   IDeleteContentUseCase,
+  SaveContentUseCase,
+  ISaveContentUseCase,
   RefreshTokenUseCase,
   IRefreshTokenUseCase,
 };

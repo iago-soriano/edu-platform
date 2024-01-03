@@ -1,24 +1,31 @@
-import { Content } from "./base";
-import {
-  TextContentIsTooLarge,
-  TextContentIsTooSmall,
-  DomainRules,
-} from "@edu-platform/common";
+import { Content, ContentTypesType } from "./base";
 
 export class TextContent extends Content {
-  public constructor(
-    public content: string,
+  constructor(
+    public type: ContentTypesType,
+    public id: number,
     public title: string,
-    public description: string
+    public description: string,
+    public text: string,
+    public order: number,
+    public originatingVersionId: number,
+    public parentId: number
   ) {
-    super(title, description);
-    if (content) this.validateContent();
+    super(type, id, title, description, order, originatingVersionId, parentId);
   }
-  validateContent() {
-    if (this.content.length > DomainRules.CONTENT.TEXT.MAX_LENGTH) {
-      throw new TextContentIsTooLarge();
-    } else if (this.content.length < DomainRules.CONTENT.TEXT.MIN_LENGTH) {
-      throw new TextContentIsTooSmall();
+
+  merge(versionId: number, content: Partial<Content> & { text?: string }) {
+    if (this.originatingVersionId !== versionId) {
+      this.id = undefined;
+      this.title = content.title;
+      this.description = content.description;
+      this.text = content.text;
+      this.parentId = content.id;
+      this.originatingVersionId = versionId;
+    } else {
+      this.title = content.title;
+      this.description = content.description;
+      this.text = content.text;
     }
   }
 }

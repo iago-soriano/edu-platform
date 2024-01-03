@@ -1,7 +1,6 @@
 import {
   HTTPController,
   HttpMethod,
-  IActivitiesRepository,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
@@ -10,16 +9,7 @@ import {
   SaveContentResponseBody,
   SaveContentRequestParams,
 } from "@edu-platform/common/api";
-import {
-  IEditContentUseCase,
-  ICreateContentUseCase,
-  ICreateNewContentFromExistingUseCase,
-} from "@use-cases";
-import {
-  ActivityContentNotFound,
-  ActivityIsNotFound,
-  ActivityVersionNotFound,
-} from "@edu-platform/common";
+import { ISaveContentUseCase } from "@use-cases";
 
 type Request = TypedRequest<
   SaveContentRequestParams,
@@ -33,77 +23,40 @@ export class SaveContentController implements HTTPController {
   path: string = "activity/:activityId/version/:versionId/content";
   middlewares: string[] = ["auth", "file"];
 
-  constructor(
-    private createContentUseCase: ICreateContentUseCase,
-    private editContentUseCase: IEditContentUseCase,
-    private createNewContentFromExistingUseCase: ICreateNewContentFromExistingUseCase,
-    private activitiesRepository: IActivitiesRepository
-  ) {}
+  constructor(private saveContentUseCase: ISaveContentUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { title, content, description, type, contentId, order, tracks } =
-      req.body;
+    const {
+      title,
+      description,
+      type,
+      contentId: cntntIdStr,
+      payload,
+      order,
+    } = req.body;
     const { activityId: actvIdStr, versionId: vrsnIdStr } = req.params;
+    const image = req.files?.image[0];
     const activityId = parseInt(actvIdStr);
     const versionId = parseInt(vrsnIdStr);
+    const contentId = cntntIdStr && parseInt(cntntIdStr);
 
-    const { user, files } = req;
+    const { user } = req;
 
-    const activity =
-      await this.activitiesRepository.getActivityById(activityId);
-    if (!activity) throw new ActivityIsNotFound();
+    await this.saveContentUseCase.execute({
+      title,
+      description,
+      type,
+      contentId,
+      order,
+      payload: {
+        ...payload,
+        image,
+      },
+      user,
+      activityId,
+      versionId,
+    });
 
-    const version = await this.activitiesRepository.getVersionById(versionId);
-    if (!version) throw new ActivityVersionNotFound();
-
-    if (contentId) {
-      const existingContent =
-        await this.activitiesRepository.getActivityContentByContentId(
-          contentId
-        );
-      if (!existingContent) throw new ActivityContentNotFound();
-
-      // This means the content being edited was created in this version
-      if (existingContent.originatingVersionId == versionId) {
-        await this.editContentUseCase.execute({
-          title,
-          content,
-          description,
-          contentId,
-          activityId,
-          versionId,
-          user,
-          tracks,
-          files,
-        });
-        res.status(200).json();
-      } else {
-        await this.createNewContentFromExistingUseCase.execute({
-          title,
-          content,
-          description,
-          contentId,
-          activityId,
-          versionId,
-          user,
-          files,
-          existingContent,
-          // tracks
-        });
-        res.status(200).json();
-      }
-    } else {
-      const createContent = await this.createContentUseCase.execute({
-        title,
-        content,
-        description,
-        type,
-        activityId,
-        versionId,
-        order,
-        files,
-      });
-      res.status(200).json(createContent);
-    }
+    res.status(200).json();
   }
 }

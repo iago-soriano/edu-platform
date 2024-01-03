@@ -1,22 +1,20 @@
-import { SignInUpInputBuilder } from "@common/test";
+import { SignInUpInputBuilder } from "./data-builders";
 import {
   IUserRepository,
+  ITokenRepository,
   IEncryptionService,
   ITokenService,
   IIdGenerator,
   IEmailService,
-  IProfileImageRepository,
-  IVerificationTokenRepository,
-  IForgotPasswordTokenRepository,
-} from "@application/interfaces";
+} from "@interfaces";
 import {
   ISignInUseCase,
   ISignOutUseCase,
   ISignUpUseCase,
   SignInUseCase,
   SignOutUseCase,
-  SignUpUseCase
-} from "@application/use-cases";
+  SignUpUseCase,
+} from "@use-cases";
 
 interface ConstructorParams {
   mockEncryptionService?: Partial<IEncryptionService>;
@@ -24,9 +22,7 @@ interface ConstructorParams {
   mockUserRepository?: Partial<IUserRepository>;
   mockTokenService?: Partial<ITokenService>;
   mockIdGenerator?: Partial<IIdGenerator>;
-  mockProfileImageRepository?: Partial<IProfileImageRepository>;
-  mockVerificationTokenRepository?: Partial<IVerificationTokenRepository>;
-  mockForgotPasswordTokenRepository?: Partial<IForgotPasswordTokenRepository>;
+  mockTokenRepository?: Partial<ITokenRepository>;
 }
 
 export class TestDataFacade {
@@ -35,11 +31,9 @@ export class TestDataFacade {
   public mockEncryptionService: IEncryptionService;
   public mockTokenService: ITokenService;
   public mockUserRepository: IUserRepository;
-  public mockVerificationTokenRepository: IVerificationTokenRepository;
   public mockIdGenerator: IIdGenerator;
   public mockEmailService: IEmailService;
-  public mockProfileImageRepository: IProfileImageRepository;
-  public mockForgotPasswordTokenRepository: IForgotPasswordTokenRepository;
+  public mockTokenRepository: ITokenRepository;
 
   public sut: {
     signIn: ISignInUseCase;
@@ -53,9 +47,7 @@ export class TestDataFacade {
     mockTokenService,
     mockIdGenerator,
     mockEmailService,
-    mockProfileImageRepository,
-    mockVerificationTokenRepository,
-    mockForgotPasswordTokenRepository,
+    mockTokenRepository,
   }: ConstructorParams) {
     this.mockUserRepository = {
       getUserByEmail: mockUserRepository?.getUserByEmail || jest.fn(),
@@ -80,29 +72,15 @@ export class TestDataFacade {
       getId: mockIdGenerator?.getId || jest.fn(),
     };
 
-    this.mockProfileImageRepository = {
-      uploadProfileImage:
-        mockProfileImageRepository?.uploadProfileImage || jest.fn(),
-      getGenericImageUrl:
-        mockProfileImageRepository?.getGenericImageUrl || jest.fn(),
-    };
-
     this.mockTokenService = {
       generate: mockTokenService?.generate || jest.fn(),
       verify: mockTokenService?.verify || jest.fn(),
     };
 
-    this.mockVerificationTokenRepository = {
+    this.mockTokenRepository = {
       getTokenByTokenValue:
         mockVerificationTokenRepository?.getTokenByTokenValue || jest.fn(),
       insertToken: mockVerificationTokenRepository?.insertToken || jest.fn(),
-    };
-
-    this.mockForgotPasswordTokenRepository = {
-      getTokenByTokenValue:
-        mockForgotPasswordTokenRepository?.getTokenByTokenValue || jest.fn(),
-      insertToken: mockForgotPasswordTokenRepository?.insertToken || jest.fn(),
-      updateToken: mockForgotPasswordTokenRepository?.updateToken || jest.fn(),
     };
 
     this.inputBuilder = new SignInUpInputBuilder();
@@ -121,33 +99,7 @@ export class TestDataFacade {
         this.mockVerificationTokenRepository,
         this.mockProfileImageRepository
       ),
-      signOut: new SignOutUseCase(
-        this.mockUserRepository,
-      ),
-      // updateUser: new UpdateUserUseCase(
-      //   this.mockUserRepository,
-      //   this.mockAuthEventQueue
-      // ),
-      // verifyAccount: new VerifyAccountUseCase(
-      //   this.mockUserRepository,
-      //   this.mockVerificationTokenRepository
-      // ),
-      // updateProfileImage: new UpdateProfileImageUseCase(
-      //   this.mockUserRepository,
-      //   this.mockProfileImageRepository,
-      //   this.mockAuthEventQueue
-      // ),
-      // resetPassword: new ResetPasswordUseCase(
-      //   this.mockUserRepository,
-      //   this.mockForgotPasswordTokenRepository,
-      //   this.mockEncryptionService
-      // ),
-      // forgotPasswordRequest: new ForgotPasswordRequestUseCase(
-      //   this.mockUserRepository,
-      //   this.mockForgotPasswordTokenRepository,
-      //   this.mockEmailService,
-      //   this.mockIdGenerator
-      // ),
+      signOut: new SignOutUseCase(this.mockUserRepository),
     };
   }
 }

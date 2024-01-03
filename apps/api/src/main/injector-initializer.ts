@@ -33,11 +33,9 @@ import {
   UpdateActivityMetadataUseCase,
   GetActivityVersionUseCase,
   GetActivitiesUseCase,
-  CreateNewContentFromExistingUseCase,
-  EditContentUseCase,
-  CreateContentUseCase,
   DeleteContentUseCase,
   RefreshTokenUseCase,
+  SaveContentUseCase,
 } from "@use-cases";
 import {
   BCryptEncryptionService,
@@ -123,11 +121,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(GetActivityVersionUseCase)
       .classic(),
     getActivitiesUseCase: awilix.asClass(GetActivitiesUseCase).classic(),
-    createNewContentFromExistingUseCase: awilix
-      .asClass(CreateNewContentFromExistingUseCase)
-      .classic(),
-    editContentUseCase: awilix.asClass(EditContentUseCase).classic(),
-    createContentUseCase: awilix.asClass(CreateContentUseCase).classic(),
+    saveContentUseCase: awilix.asClass(SaveContentUseCase).classic(),
     deleteContentUseCase: awilix.asClass(DeleteContentUseCase).classic(),
     refreshTokenUseCase: awilix.asClass(RefreshTokenUseCase).classic(),
 

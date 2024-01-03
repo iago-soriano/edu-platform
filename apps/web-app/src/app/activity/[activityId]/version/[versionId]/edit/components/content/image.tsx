@@ -1,22 +1,24 @@
-import { ImageInput } from "@components";
 import { useState } from "react";
+import Image from "next/image";
+import { SaveContentMutationType } from "@infrastructure";
+import { SaveContentRequestBody } from "@edu-platform/common";
 
 export const ImageContent = ({
   url,
   saveContentMutation,
-  onChange,
-  hasChanges,
   contentId,
+}: {
+  saveContentMutation: SaveContentMutationType;
+  url: string;
+  contentId: string;
 }) => {
   const [selectedImg, setSelectedImg] = useState<File>();
   const onFileUpload = async () => {
     console.log(selectedImg);
     const formData = new FormData();
     formData.append("image", selectedImg);
-    formData.append("title", "Novoaaaaaaaaaaaa");
+    formData.append("contentId", contentId);
     formData.append("type", "Image");
-    formData.append("description", "tentando mudar esse trem de novo");
-    formData.append("contentId", "14");
 
     // mutation.mutate({
     //   title: "Novo título",
@@ -24,21 +26,20 @@ export const ImageContent = ({
     //   type: "Audio",
     //   image: formData,
     // });
-    saveContentMutation.mutate(formData);
+    saveContentMutation.mutate(formData as unknown as SaveContentRequestBody);
   };
-  //   const onSaveContent = (e) => {
-  //     if (hasChanges) {
-  //       saveContentMutation.mutate({
-  //         content: e.target.value,
-  //         type: "Text",
-  //         contentId,
-  //       });
-  //     }
-  //     onChange(false);
-  //   };
   return (
     <div>
-      <ImageInput onChange={setSelectedImg} onSubmit={onFileUpload} />
+      <input
+        type="file"
+        onChange={(e) => setSelectedImg(e.target.files[0])}
+        accept="image/png, image/jpeg"
+        onSubmit={onFileUpload}
+      />
+      <img
+        src={(selectedImg && URL.createObjectURL(selectedImg)) || url}
+        alt="Imagem escolhida"
+      />
       <button type="submit" onClick={onFileUpload}>
         Enviar
       </button>

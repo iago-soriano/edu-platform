@@ -2,7 +2,6 @@ import {
   ActivityContentNotFound,
   ActivityIsNotFound,
   ActivityVersionNotFound,
-  ContentTypeNotFound,
 } from "@edu-platform/common";
 import {
   IUseCase,
@@ -11,37 +10,24 @@ import {
   IStorageService,
   FileType,
   IIdGenerator,
-  ActivityContentInsertDTO,
 } from "@interfaces";
-import {
-  ContentTypesType,
-  Content,
-  ImageContent,
-  TextContent,
-  VideoContent,
-} from "@domain";
+import { Content } from "@domain";
 
 type InputParams = {
   title: string;
-  content: string;
   description: string;
   type: string;
   contentId: number;
   order: number;
-  videoPayload?: {
-    url: string;
-    tracks: string;
-  };
-  textPayload?: {
-    text: string;
-  };
-  imagePayload?: {
-    image: string;
+  payload: {
+    image?: FileType;
+    tracks?: string;
+    videoUrl?: string;
+    text?: string;
   };
   user: UserSelectDTO;
   activityId: number;
   versionId: number;
-  files?: { image?: FileType[] };
 };
 
 type Return = void;
@@ -56,19 +42,15 @@ class UseCase implements ISaveContentUseCase {
   ) {}
 
   async execute({
-    title,
-    content,
-    description,
-    type,
     contentId,
+    title,
+    description,
+    payload,
+    type,
     order,
-    videoPayload,
-    textPayload,
-    imagePayload,
     user,
     activityId,
     versionId,
-    files,
   }: InputParams) {
     const activity =
       await this.activitiesRepository.getActivityById(activityId);
@@ -77,61 +59,62 @@ class UseCase implements ISaveContentUseCase {
     const version = await this.activitiesRepository.getVersionById(versionId);
     if (!version) throw new ActivityVersionNotFound();
 
-    if (contentId) {
-      const existingContent =
-        await this.activitiesRepository.getActivityContentByContentId(
-          contentId
-        );
-      if (!existingContent) throw new ActivityContentNotFound();
+    const newContent = Content.createContent({
+      type,
+      id: contentId,
+      title,
+      description,
+      imageFile: payload.image,
+      tracks: payload.tracks,
+      videoUrl: payload.videoUrl,
+      text: payload.text,
+      order,
+      originatingVersionId: versionId,
+    });
+
+    // new content
+    if (!contentId) {
+      const insertedNewContent = await this.activitiesRepository.insertContent({
+        ...newContent,
+      });
+      await this.activitiesRepository.insertRelationBetweenVersionAndElement(
+        versionId,
+        insertedNewContent.contentId
+      );
+      return;
     }
 
-    const newContent = Content.createContent(type, title, description);
+    const existingContentFromDB =
+      await this.activitiesRepository.getActivityContentByContentId(contentId);
+    if (!existingContentFromDB) throw new ActivityContentNotFound();
 
-    /*  let content = requestContent;
+    const existingContent = Content.createContent(existingContentFromDB); // melhorar
 
-      switch (existingContent.type) {
-        case "Video":
-          new VideoContent(content, title, description);
-          break;
-        case "Image":
-          new ImageContent(content, title, description);
-          if (files) {
-            const imageFile = files.image[0];
-            content = await this.storageService.uploadFile(
-              `${activityId}/${this.idService.getId()}.${
-                imageFile.mimetype.split("/")[1]
-              }`,
-              imageFile
-            );
-          }
+    const imageKeyName = `${activityId}/${this.idService.getId()}.${payload.image?.mimetype.split(
+      "/"
+    )[1]}`;
 
-          break;
-        case "Text":
-          new TextContent(content, title, description);
-          break;
-        default:
-          throw new ContentTypeNotFound();
-      }
+    await existingContent.merge(
+      versionId,
+      newContent,
+      () => this.storageService.uploadFile(imageKeyName, payload.image),
+      () => this.storageService.deleteFile(imageKeyName)
+    );
 
-      if (
-        (existingContent.type === "Image" && existingContent.content && files)
-      ) {
-        this.storageService.deleteFile(existingContent.content);
-      }
-
+    if (!existingContent.id) {
+      const insertedContentFromExisting =
+        await this.activitiesRepository.insertContent(existingContent);
+      await this.activitiesRepository.insertRelationBetweenVersionAndElement(
+        versionId,
+        insertedContentFromExisting.contentId
+      );
+    } else {
       await this.activitiesRepository.updateContent(
         contentId,
-        {
-          title,
-          content,
-          description,
-          start,
-          end,
-        },
+        existingContent,
         versionId
       );
     }
-  } */
   }
 }
 export default UseCase;

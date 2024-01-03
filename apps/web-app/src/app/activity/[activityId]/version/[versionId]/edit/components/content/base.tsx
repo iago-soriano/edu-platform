@@ -110,8 +110,6 @@ export const BaseContent = ({
             saveContentMutation={saveContentMutation}
             contentId={contentId}
             url={imageUrl}
-            onChange={setHasChanges}
-            hasChanges={hasChanges}
           />
         );
     }

@@ -9,13 +9,10 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
-import {
-  contentPossibleTypes,
-  activityPossibleStatus,
-  questionPossibleTypes,
-} from "@domain";
+import { activityPossibleStatus, questionPossibleTypes } from "@domain";
+import { ActivityConstants } from "@edu-platform/common";
 
-/* #region Token */
+/* #region Tokens */
 export const tokenTypeEnum = pgEnum("tokenType", [
   "VerifyAccount",
   "ForgotPassword",
@@ -49,7 +46,7 @@ export const users = pgTable("users", {
   email: varchar("email", { length: 320 }).unique(),
   hashedPassword: varchar("hashed_password", { length: 100 }),
   refreshToken: varchar("refresh_token", { length: 500 }),
-  image: varchar("image", { length: 100 }),
+  image: varchar("profile_image", { length: 150 }),
   emailVerified: boolean("email_verified"),
   provider: varchar("provider", { length: 50 }),
   providerId: varchar("provider_id", { length: 50 }),
@@ -132,7 +129,10 @@ export const activityVersionsRelations = relations(
 );
 /* #endregion */
 
-export const contentTypeEnum = pgEnum("contentType", contentPossibleTypes);
+export const contentTypeEnum = pgEnum(
+  "contentType",
+  ActivityConstants.contentPossibleTypes
+);
 
 export const activityContents = pgTable("activity_contents", {
   id: serial("id").primaryKey(),
@@ -140,11 +140,13 @@ export const activityContents = pgTable("activity_contents", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
   type: contentTypeEnum("type"),
-  content: varchar("content", { length: 500 }),
   description: varchar("description", { length: 500 }),
-  title: varchar("title", { length: 100 }),
+  title: varchar("title", { length: 50 }),
   order: integer("order").default(0),
-  tracks: varchar("description", { length: 500 }),
+  tracks: varchar("video_tracks", { length: 180 }), // 10 tracks max
+  videoUrl: varchar("video_url", { length: 100 }),
+  imageUrl: varchar("image_url", { length: 150 }),
+  text: varchar("text", { length: 1000 }),
 
   parentId: integer("parent_id"), // references this table
   originatingVersionId: integer("originating_version_id").references(
@@ -175,9 +177,9 @@ export const activityQuestions = pgTable("questions", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
   type: questionTypeEnum("type"),
-  question: varchar("question", { length: 100 }),
+  question: varchar("question", { length: 200 }),
   answerKey: varchar("answer_key", { length: 500 }),
-  title: varchar("title", { length: 100 }),
+  title: varchar("title", { length: 50 }),
   order: integer("order").default(0),
 
   parentId: integer("parent_id").references(() => activityContents.id),
@@ -207,7 +209,7 @@ export const choices = pgTable("choices", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
-  text: varchar("text", { length: 500 }),
+  text: varchar("text", { length: 200 }),
   comment: varchar("comment", { length: 500 }),
   label: varchar("label", { length: 2 }),
 

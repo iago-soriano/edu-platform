@@ -2,6 +2,7 @@ import {
   IActivitiesRepository,
   ActivityVersionInsertDTO,
   ActivityContentInsertDTO,
+  ActivityInsertDTO,
 } from "@interfaces";
 import {
   db,
@@ -30,6 +31,18 @@ export class ActivityRepository implements IActivitiesRepository {
         .set({ draftVersionId: versionId })
         .where(eq(activities.id, activityId));
       return { activityId, versionId };
+    });
+  }
+
+  async updateActivityMetadata(
+    activityId: number,
+    { lastVersionId, draftVersionId }: ActivityInsertDTO
+  ) {
+    await db.transaction(async (tx) => {
+      await tx
+        .update(activities)
+        .set({ lastVersionId, draftVersionId, updatedAt: new Date() })
+        .where(eq(activities.id, activityId));
     });
   }
 
@@ -156,7 +169,7 @@ export class ActivityRepository implements IActivitiesRepository {
     return activitiesVersionsByAuthor;
   }
 
-  async createRelationBetweenVersionAndElement(
+  async insertRelationBetweenVersionAndElement(
     versionId: number,
     contentId?: number,
     questionId?: number
@@ -173,7 +186,7 @@ export class ActivityRepository implements IActivitiesRepository {
     await db.delete(activityContents).where(eq(activityContents.id, contentId));
   }
 
-  async deleteContentAndVersionRelation(contentId: number, versionId: number) {
+  async deleteContentVersionRelation(contentId: number, versionId: number) {
     await db
       .delete(activityVersionHasElementsRelationTable)
       .where(

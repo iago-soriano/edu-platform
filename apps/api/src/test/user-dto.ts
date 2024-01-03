@@ -1,4 +1,8 @@
-import { AbstractBuilder, EmailGenerator, PasswordGenerator } from "@common/test";
+import {
+  AbstractBuilder,
+  EmailGenerator,
+  PasswordGenerator,
+} from "./data-builders";
 
 const emailGenerator = new EmailGenerator();
 const passwordGenerator = new PasswordGenerator();
