@@ -9,9 +9,11 @@ export const StickyHeader = ({ show, title, description, saveState }) => {
         show ? "opacity-100" : "opacity-0"
       )}
     >
-      <h5 className="w-[40%]">{title}</h5>
-      <div className="mx-2 flex items-center overflow-hidden">
-        <p className="text-ellipsis">{description}</p>
+      <div className="min-w-[90%] flex">
+        <h5 className="xl:w-[50%] w-[100%] overflow-hidden">{title}</h5>
+        <div className="mx-2 xl:flex items-center overflow-hidden hidden">
+          <p className="text-ellipsis">{description}</p>
+        </div>
       </div>
       <SavingIndicator
         hasChanges={saveState === "hasChanges"}
