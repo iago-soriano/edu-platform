@@ -99,42 +99,6 @@ export class ContentPayloadUndefined extends CustomError {
   }
 }
 
-export class VideoContentIsTooLarge extends CustomError {
-  HTTPstatusCode = 400;
-  constructor() {
-    super(
-      `O vídeo é longo demais. O tamanho máximo permitido é de ${DomainRules.CONTENT.VIDEO.MAX_LENGTH}`
-    );
-  }
-}
-
-export class VideoContentIsTooSmall extends CustomError {
-  HTTPstatusCode = 400;
-  constructor() {
-    super(
-      `O vídeo é curto demais. O tamanho mínimo permitido é de ${DomainRules.CONTENT.VIDEO.MIN_LENGTH}`
-    );
-  }
-}
-
-export class ImageContentIsTooLarge extends CustomError {
-  HTTPstatusCode = 400;
-  constructor() {
-    super(
-      `A imagem é grande demais. O tamanho máximo permitido é de ${DomainRules.CONTENT.IMAGE.MAX_LENGTH}`
-    );
-  }
-}
-
-export class ImageContentIsTooSmall extends CustomError {
-  HTTPstatusCode = 400;
-  constructor() {
-    super(
-      `A imagem é pequena demais. O tamanho mínimo permitido é de ${DomainRules.CONTENT.IMAGE.MIN_LENGTH}`
-    );
-  }
-}
-
 export class TextContentIsTooLarge extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
@@ -236,7 +200,7 @@ export class DescriptionIsTooShort extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
     super("", {
-      description: `Descrição da atividade é curto demais. Tamanho mínimo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MIN_LENGTH} caracteres`,
+      description: `Descrição é curta demais. Tamanho mínimo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MIN_LENGTH} caracteres`,
     });
   }
 }
@@ -245,7 +209,7 @@ export class DescriptionIsTooLong extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
     super("", {
-      description: `Descrição da atividade é longo demais. Tamanho máximo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MAX_LENGTH} caracteres`,
+      description: `Descrição é longa demais. Tamanho máximo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MAX_LENGTH} caracteres`,
     });
   }
 }

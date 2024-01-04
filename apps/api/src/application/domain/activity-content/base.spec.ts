@@ -1,121 +1,51 @@
-import { Content } from "./base";
-import {
-  IActivitiesRepository,
-  IStorageService,
-  IIdGenerator,
-} from "@interfaces";
-import { ContentTypesType } from "@domain";
+// import { toThrowFieldError } from './../../../test/jest/matchers/custom-error';
+import { Content } from ".";
 import { DomainRules } from "@edu-platform/common";
+import "../../../test/jest/matchers/custom-error";
+import { expect } from "@jest/globals";
 
 describe("Unit tests for Save Content Use Case", () => {
-  it("Should not create content if title is too long", async () => {
-    const response = new Sut(
-      activitiesRepositoryMock,
-      storageServiceMock,
-      idServiceMock
-    ).execute({
-      type: "Video",
-      title:
-        "Título muito enormeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-      versionId: 1,
-      activityId: 1,
-      order: 0,
-    });
-    await expect(response).rejects.toThrow(
-      `Título da atividade é longo demais. Tamanho máximo permitido é de ${DomainRules.CONTENT.TITLE.MAX_LENGTH} caracteres`
+  it("Should validate if title is too long", () => {
+    const title =
+      "Título muito enormeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+    expect(() => Content.validateTitle(title)).toThrowFieldError(
+      "title",
+      `Título é longo demais. Tamanho máximo permitido é de ${DomainRules.CONTENT.TITLE.MAX_LENGTH} caracteres`
     );
   });
-  it("Should not create content if title is too short", async () => {
-    const response = new Sut(
-      activitiesRepositoryMock,
-      storageServiceMock,
-      idServiceMock
-    ).execute({
-      type: "Video",
-      title: "Ai",
-      versionId: 1,
-      activityId: 1,
-      order: 0,
-    });
-    await expect(response).rejects.toThrow(
-      `Título da atividade é curto demais. Tamanho mínimo permitido é de ${DomainRules.CONTENT.TITLE.MIN_LENGTH} caracteres`
-    );
-  });
-  it("Should not create content if description is too long", async () => {
-    const response = new Sut(
-      activitiesRepositoryMock,
-      storageServiceMock,
-      idServiceMock
-    ).execute({
-      type: "Video",
-      description:
-        "descriçãoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
-      versionId: 1,
-      activityId: 1,
-      order: 0,
-    });
-    await expect(response).rejects.toThrow(
-      `Descrição da atividade é longa demais. Tamanho máximo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MAX_LENGTH} caracteres`
-    );
-  });
-  it("Should not create content if description is too short", async () => {
-    const response = new Sut(
-      activitiesRepositoryMock,
-      storageServiceMock,
-      idServiceMock
-    ).execute({
-      type: "Video",
-      description: "desc",
-      versionId: 1,
-      activityId: 1,
-      order: 0,
-    });
-    await expect(response).rejects.toThrow(
-      `Descrição da atividade é curta demais. Tamanho mínimo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MIN_LENGTH} caracteres`
-    );
-  });
-  it("Should not create content if content type is invalid", async () => {
-    // act
-    const response = new Sut(
-      activitiesRepositoryMock,
-      storageServiceMock,
-      idServiceMock
-    ).execute({
-      type: "fsdfsd" as ContentTypesType,
-      versionId: 1,
-      activityId: 1,
-      order: 0,
-    });
 
-    // assert / verify
-    await expect(response).rejects.toThrow("Tipo de conteúdo não encontrado");
+  it("Should validate if title is too short", () => {
+    const title = "Ai";
+    expect(() => Content.validateTitle(title)).toThrowFieldError(
+      "title",
+      `Título é curto demais. Tamanho mínimo permitido é de ${DomainRules.CONTENT.TITLE.MIN_LENGTH} caracteres`
+    );
   });
-  it("Should create content if all validations pass", async () => {
-    await new Sut(
-      activitiesRepositoryMock,
-      storageServiceMock,
-      idServiceMock
-    ).execute({
-      type: "Text",
-      title: "Título do content",
-      description:
-        "Testando se content será criado quando todas as validações passarem",
-      versionId: 1,
-      activityId: 1,
-      order: 7,
-    });
 
-    expect(activitiesRepositoryMock.insertContent.mock.calls).toHaveLength(1);
-    expect(
-      activitiesRepositoryMock.insertContent.mock.calls[0][0]
-    ).toStrictEqual({
-      type: "Text",
-      title: "Título do content",
-      description:
-        "Testando se content será criado quando todas as validações passarem",
-      order: 7,
-      originatingVersionId: 1,
-      content: undefined,
-    });
+  it("Should validate if description is too long", () => {
+    const description =
+      "descriçãoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo";
+
+    expect(() => Content.validateDescription(description)).toThrowFieldError(
+      "description",
+      `Descrição é longa demais. Tamanho máximo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MAX_LENGTH} caracteres`
+    );
+  });
+
+  it("Should validate if description is too short", () => {
+    const description = "desc";
+
+    expect(() => Content.validateDescription(description)).toThrowFieldError(
+      "description",
+      `Descrição é curta demais. Tamanho mínimo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MIN_LENGTH} caracteres`
+    );
+  });
+
+  it("Should validate if content type is invalid", () => {
+    const type = "fsdfsd";
+
+    expect(() => Content.validateContentType(type)).toThrow(
+      "Tipo de conteúdo não encontrado"
+    );
   });
 });

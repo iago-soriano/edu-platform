@@ -11,6 +11,7 @@ const config = {
   moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
     prefix: "<rootDir>/src",
   }),
+  setupFilesAfterEnv: ["<rootDir>/src/test/jest/matchers/setup.ts"],
 };
 
 module.exports = config;
