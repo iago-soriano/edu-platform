@@ -23,17 +23,13 @@ export class VideoContent extends Content {
   ) {
     if (this.originatingVersionId !== versionId) {
       this.id = undefined;
-      this.title = content.title;
-      this.description = content.description;
-      this.tracks = content.tracks;
-      this.videoUrl = content.videoUrl;
       this.parentId = content.id;
       this.originatingVersionId = versionId;
-    } else {
-      this.title = content.title;
-      this.description = content.description;
-      this.tracks = content.tracks;
-      this.videoUrl = content.videoUrl;
     }
+
+    this.title = content.title;
+    this.description = content.description;
+    this.tracks = content.tracks;
+    this.videoUrl = content.videoUrl;
   }
 }

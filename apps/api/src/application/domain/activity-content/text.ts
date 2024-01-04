@@ -17,15 +17,12 @@ export class TextContent extends Content {
   merge(versionId: number, content: Partial<Content> & { text?: string }) {
     if (this.originatingVersionId !== versionId) {
       this.id = undefined;
-      this.title = content.title;
-      this.description = content.description;
-      this.text = content.text;
       this.parentId = content.id;
       this.originatingVersionId = versionId;
-    } else {
-      this.title = content.title;
-      this.description = content.description;
-      this.text = content.text;
     }
+
+    this.title = content.title;
+    this.description = content.description;
+    this.text = content.text;
   }
 }

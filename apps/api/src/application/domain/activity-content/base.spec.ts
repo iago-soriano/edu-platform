@@ -4,7 +4,7 @@ import { DomainRules } from "@edu-platform/common";
 import "../../../test/jest/matchers/custom-error";
 import { expect } from "@jest/globals";
 
-describe("Unit tests for Save Content Use Case", () => {
+describe("Unit tests for base Content domain entity", () => {
   it("Should validate if title is too long", () => {
     const title =
       "Título muito enormeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
@@ -48,4 +48,9 @@ describe("Unit tests for Save Content Use Case", () => {
       "Tipo de conteúdo não encontrado"
     );
   });
+
+  it.todo(
+    "Should create content of correct type with its properties",
+    () => {}
+  );
 });

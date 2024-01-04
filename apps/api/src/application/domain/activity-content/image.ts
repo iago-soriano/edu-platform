@@ -22,25 +22,22 @@ export class ImageContent extends Content {
     uploadFunction: () => Promise<string>,
     deleteFunction: (url) => Promise<void>
   ) {
+    let uploadedImage;
+    if (newContent.file) {
+      uploadedImage = await uploadFunction(); //TODO: fazer isso lançar um erro se o upload não der certo
+    }
+
     // altering a content that belongs to a different version
     if (this.originatingVersionId !== versionId) {
-      if (newContent.file) {
-        const uploadedImage = await uploadFunction();
-        this.imageUrl = uploadedImage;
-      }
       this.id = undefined;
-      this.title = newContent.title;
-      this.description = newContent.description;
       this.parentId = newContent.id;
       this.originatingVersionId = versionId;
     } else {
-      this.title = newContent.title;
-      this.description = newContent.description;
-      if (newContent.file) {
-        if (this.imageUrl) await deleteFunction(this.imageUrl);
-        const uploadedImage = await uploadFunction();
-        this.imageUrl = uploadedImage;
-      }
+      if (this.imageUrl) await deleteFunction(this.imageUrl);
     }
+
+    this.imageUrl = uploadedImage;
+    this.title = newContent.title;
+    this.description = newContent.description;
   }
 }
