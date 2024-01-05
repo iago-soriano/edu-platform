@@ -2,6 +2,7 @@ import {
   ActivityContentNotFound,
   ActivityIsNotFound,
   ActivityVersionNotFound,
+  ActivityIsNotDraft,
 } from "@edu-platform/common";
 import {
   IUseCase,
@@ -58,6 +59,8 @@ class UseCase implements ISaveContentUseCase {
 
     const version = await this.activitiesRepository.getVersionById(versionId);
     if (!version) throw new ActivityVersionNotFound();
+
+    if (version.version.status !== "Draft") throw new ActivityIsNotDraft();
 
     const newContent = Content.createContent({
       type,

@@ -21,6 +21,7 @@ type InputParams = {
 type Return = {
   title: string;
   description: string;
+  status: string;
   elements: {
     id: number;
     title?: string;
@@ -61,6 +62,7 @@ class UseCase implements IGetActivityVersionUseCase {
       id: version.id,
       title: version.title,
       description: version.description,
+      status: version.status,
       elements,
     };
   }

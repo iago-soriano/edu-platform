@@ -31,7 +31,7 @@ export class GetActivityVersionController implements HTTPController {
     if (!activityId || !versionId)
       throw new Error("activityId and versionId must be numbers");
 
-    const { title, description, elements } =
+    const { title, description, elements, status } =
       await this.getActivityVersionUseCase.execute({
         user,
         activityId,
@@ -41,6 +41,7 @@ export class GetActivityVersionController implements HTTPController {
     return res.status(200).json({
       title,
       description,
+      status,
       elements,
       // : [...elements.map(el => ({
       //   ...el,

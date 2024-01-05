@@ -5,21 +5,22 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import {
+  UpdateActivityStatusRequestParams,
   UpdateActivityStatusRequestBody,
   UpdateActivityStatusResponseBody,
 } from "@edu-platform/common/api";
 import { IUpdateActivityStatusUseCase } from "application/use-cases/update-activity-status";
 
 type Request = TypedRequest<
-  { activityId },
+  UpdateActivityStatusRequestParams,
   {},
   UpdateActivityStatusRequestBody
 >;
 type Response = TypedResponse<UpdateActivityStatusResponseBody>;
 
 export class UpdateActivityStatusController implements HTTPController {
-  method = HttpMethod.PATCH;
-  path = "activities/:activityId/status";
+  method = HttpMethod.POST;
+  path = "update-activity/:activityId/version/:versionId/status";
   middlewares: string[] = ["auth"];
 
   constructor(
@@ -27,13 +28,16 @@ export class UpdateActivityStatusController implements HTTPController {
   ) {}
 
   async execute(req: Request, res: Response) {
-    const { activityId } = req.params;
+    const { activityId, versionId } = req.params;
     const { newActivityStatus } = req.body;
-    await this.updateActivityStatusUseCase.execute({
-      activityId,
-      newActivityStatus,
-    });
+    const lastPublishedVersion = await this.updateActivityStatusUseCase.execute(
+      {
+        activityId,
+        versionId,
+        newActivityStatus,
+      }
+    );
 
-    res.status(200).json();
+    res.status(200).json(lastPublishedVersion);
   }
 }

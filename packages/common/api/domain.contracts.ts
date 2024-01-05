@@ -33,6 +33,7 @@ export type ElementResponse = {
 export type GetActivityVersionResponseBody = {
   title: string;
   description: string;
+  status: string;
   elements: ElementResponse[];
 };
 
@@ -100,10 +101,16 @@ export type SaveContentResponseBody = {
 };
 
 // Update Activity Status
+export type UpdateActivityStatusRequestParams = {
+  activityId: string;
+  versionId: string;
+};
 export type UpdateActivityStatusRequestBody = {
   newActivityStatus: string;
 };
-export type UpdateActivityStatusResponseBody = {};
+export type UpdateActivityStatusResponseBody = {
+  lastPublishedVersion?: number;
+};
 
 export type DeleteActivityContentParams = {
   activityId: string;

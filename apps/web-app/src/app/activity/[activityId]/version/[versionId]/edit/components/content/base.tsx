@@ -17,7 +17,7 @@ type BaseContentProps = {
   title?: string;
   description?: string;
   type: string;
-  id: string;
+  id: any;
   activityId: string;
   versionId: string;
   videoUrl?: string;

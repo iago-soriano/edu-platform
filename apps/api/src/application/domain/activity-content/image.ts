@@ -40,4 +40,8 @@ export class ImageContent extends Content {
     this.title = newContent.title;
     this.description = newContent.description;
   }
+
+  isEmpty() {
+    !this.imageUrl;
+  }
 }

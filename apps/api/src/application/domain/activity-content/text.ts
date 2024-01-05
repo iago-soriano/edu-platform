@@ -25,4 +25,8 @@ export class TextContent extends Content {
     this.description = content.description;
     this.text = content.text;
   }
+
+  isEmpty() {
+    return !this.text;
+  }
 }

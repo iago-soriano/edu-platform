@@ -79,6 +79,7 @@ export const ActivityHeaderInput = ({
         />
       </div>
       <div className="lg:col-start-10 col-start-16 col-span-1 flex flex-row justify-end items-start">
+        <span>{versionQuery.data?.status}</span>
         <SavingIndicator
           hasChanges={saveState === "hasChanges"}
           isLoading={saveState === "isLoading"}

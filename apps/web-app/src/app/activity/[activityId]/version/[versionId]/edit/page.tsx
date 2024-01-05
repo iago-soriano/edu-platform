@@ -3,9 +3,11 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { axios } from "@infrastructure";
+import { axios, useGetActivityVersionQuery } from "@infrastructure";
+import { GetActivityVersionResponseBody } from "@edu-platform/common";
 import Version from "./client";
 import posthog from "posthog-js";
+import { redirect } from "next/navigation";
 
 const Page = async ({ params: { activityId, versionId } }) => {
   const queryClient = new QueryClient();
@@ -17,6 +19,13 @@ const Page = async ({ params: { activityId, versionId } }) => {
     queryFn: () =>
       axios.get.bind(axios)(`activity/${activityId}/version/${versionId}`),
   });
+
+  const versionQuery: GetActivityVersionResponseBody = queryClient.getQueryData(
+    ["version", activityId, versionId]
+  );
+
+  if (versionQuery?.status === "Published")
+    redirect(`/activity/${activityId}/version/${versionId}/do`);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

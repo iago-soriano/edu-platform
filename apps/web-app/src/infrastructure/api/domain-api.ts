@@ -15,6 +15,9 @@ import {
   SaveContentRequestParams,
   SaveContentResponseBody,
   DeleteActivityContentParams,
+  UpdateActivityStatusRequestParams,
+  UpdateActivityStatusRequestBody,
+  UpdateActivityStatusResponseBody,
 } from "@edu-platform/common/api";
 import { ServerError } from "@edu-platform/common";
 import { axios, useAxiosAuth } from "@infrastructure";
@@ -93,7 +96,7 @@ export const useUpdateVersionMetadataMutation = ({
         queryKey: ["version", activityId, versionId],
       });
     },
-    onError,
+    onError: (e) => errorToast(e.message),
     onSettled,
   });
 };
@@ -138,7 +141,7 @@ export const useSaveContentMutation = ({
         queryKey: ["version", activityId, versionId],
       });
     },
-    onError: () => errorToast("Algo deu errado :("),
+    onError: (e) => errorToast(e.message),
   });
 };
 
@@ -161,5 +164,31 @@ export const useDeleteActivityContentMutation = ({
       });
     },
     onError: () => errorToast("Algo deu errado :("),
+  });
+};
+
+export const useUpdateVersionStatusMutation = ({
+  activityId,
+  versionId,
+}: UpdateActivityStatusRequestParams) => {
+  const queryClient = useQueryClient();
+  const axios = useAxiosAuth();
+
+  return useMutation<
+    UpdateActivityStatusRequestBody,
+    ServerError,
+    UpdateActivityStatusRequestBody
+  >({
+    mutationFn: (mutationArgs: UpdateActivityStatusRequestBody) =>
+      axios.post.bind(axios)(
+        `update-activity/${activityId}/version/${versionId}/status`,
+        mutationArgs
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["version", activityId, versionId],
+      });
+    },
+    onError: (e) => errorToast(e.message),
   });
 };

@@ -32,4 +32,8 @@ export class VideoContent extends Content {
     this.tracks = content.tracks;
     this.videoUrl = content.videoUrl;
   }
+
+  isEmpty() {
+    return !this.tracks && !this.videoUrl;
+  }
 }
