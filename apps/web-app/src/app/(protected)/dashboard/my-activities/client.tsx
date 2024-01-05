@@ -1,11 +1,10 @@
 "use client";
 import {
-  Spinner,
   ArchivedActivityCard,
   DraftActivityCard,
   PublishedActivityCard,
-  ErrorCard,
-} from "@components";
+} from "../components";
+import { Spinner, ErrorCard } from "@components";
 import { useGetActivityVersionsQuery } from "@infrastructure";
 import { ActivityConstants } from "@edu-platform/common";
 import { useRouter } from "next/navigation";
@@ -54,13 +53,13 @@ export default function Activities() {
     </div>
   ) : (
     <div className="p-10 [&>*]:my-2 grid grid-cols-10">
-      <button
+      {/* <button
         onClick={() => {
           client.invalidateQueries({ queryKey: ["activities"] });
         }}
       >
         Invalidate
-      </button>
+      </button> */}
       {query.data?.map((act) => (
         <div key={act.id} className="lg:col-start-3 lg:col-span-6 col-span-10">
           {getActivityVersionCard(act)}

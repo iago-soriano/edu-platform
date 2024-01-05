@@ -14,7 +14,6 @@ export * from "./fixed-alerts";
 export * from "./page-image";
 export * from "./image-input";
 export * from "./tabs";
-export * from "./activities";
 export * from "./saving-indicator";
 export * from "./dropdown";
 export * from "./error";
