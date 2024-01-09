@@ -3,10 +3,12 @@ import {
   useQuery,
   useQueryClient,
   UseMutationResult,
+  UseQueryResult,
 } from "@tanstack/react-query";
 import {
-  UpdateActivityMetadataRequestBody,
-  UpdateActivityMetadataResponseBody,
+  UpdateActivityVersionMetadataRequestParams,
+  UpdateActivityVersionMetadataRequestBody,
+  UpdateActivityVersionMetadataResponseBody,
   GetActivityVersionResponseBody,
   CreateNewActivityRequestBody,
   CreateNewActivityResponseBody,
@@ -18,16 +20,12 @@ import {
   UpdateActivityStatusRequestParams,
   UpdateActivityStatusRequestBody,
   UpdateActivityStatusResponseBody,
+  DeleteDraftVersionParams,
 } from "@edu-platform/common/api";
 import { ServerError } from "@edu-platform/common";
-import { axios, useAxiosAuth } from "@infrastructure";
-import {
-  ErrorCallback,
-  MutationArgsType,
-  MutationArgsDefaultValue,
-} from "./types";
+import { useAxiosAuth } from "@infrastructure";
+import { MutationArgsType, MutationArgsDefaultValue } from "./types";
 import { errorToast } from "@components";
-import { useAuthContext } from "@contexts";
 
 const logMutation = ({ isLoading, isError, isIdle, isSuccess, isPaused }) =>
   console.log({ isLoading, isError, isIdle, isSuccess, isPaused });
@@ -50,12 +48,16 @@ export const useCreateActivityMutation = (
       axios.post.bind(axios)("create-new-activity", args),
     onSuccess: ({ activityId, versionId }, v, c) => {
       args.onSuccess({ activityId, versionId }, v, c);
-      queryClient.invalidateQueries({ queryKey: ["activities"] });
+      queryClient.invalidateQueries({ queryKey: ["Draft"] });
     },
     onError: () => errorToast("Algo deu errado :("),
   });
 };
 
+export type VersionQueryResultType = UseQueryResult<
+  GetActivityVersionResponseBody,
+  ServerError
+>;
 export const useGetActivityVersionQuery = ({ activityId, versionId }) => {
   const axios = useAxiosAuth();
 
@@ -66,25 +68,32 @@ export const useGetActivityVersionQuery = ({ activityId, versionId }) => {
   });
 };
 
-export const useUpdateVersionMetadataMutation = ({
-  onError,
-  onSuccess,
-  onSettled,
-  versionId,
-  activityId,
-}: MutationArgsType<
-  UpdateActivityMetadataRequestBody,
-  UpdateActivityMetadataResponseBody
-> & { activityId?: number; versionId?: number } = MutationArgsDefaultValue) => {
+export const useUpdateVersionMetadataMutation = (
+  {
+    onError,
+    onSuccess,
+    onSettled,
+    versionId,
+    activityId,
+  }: MutationArgsType<
+    UpdateActivityVersionMetadataRequestBody,
+    UpdateActivityVersionMetadataResponseBody
+  > &
+    UpdateActivityVersionMetadataRequestParams = {
+    ...MutationArgsDefaultValue,
+    activityId: "",
+    versionId: "",
+  }
+) => {
   const queryClient = useQueryClient();
   const axios = useAxiosAuth();
 
   return useMutation<
-    UpdateActivityMetadataResponseBody,
+    UpdateActivityVersionMetadataResponseBody,
     ServerError,
-    UpdateActivityMetadataRequestBody
+    UpdateActivityVersionMetadataRequestBody
   >({
-    mutationFn: (args: UpdateActivityMetadataRequestBody) =>
+    mutationFn: (args: UpdateActivityVersionMetadataRequestBody) =>
       axios.post.bind(axios)(
         `activity/${activityId}/update-activity-metadata/${versionId}`,
         args
@@ -101,13 +110,13 @@ export const useUpdateVersionMetadataMutation = ({
   });
 };
 
-export const useGetActivityVersionsQuery = () => {
+export const useGetActivityVersionsQuery = (status) => {
   const axios = useAxiosAuth();
 
   return useQuery<GetActivityVersionsResponseBody, ServerError>({
-    queryKey: ["activities"],
+    queryKey: [status],
     queryFn: () => {
-      return axios.get.bind(axios)("activities");
+      return axios.get.bind(axios)(`activities?statuses=${status}`);
     },
   });
 };
@@ -121,7 +130,9 @@ export type SaveContentMutationType = UseMutationResult<
 export const useSaveContentMutation = ({
   versionId,
   activityId,
-}: SaveContentRequestParams) => {
+  onSuccess,
+}: MutationArgsType<SaveContentRequestBody, SaveContentResponseBody> &
+  SaveContentRequestParams) => {
   const queryClient = useQueryClient();
   const axios = useAxiosAuth();
 
@@ -136,10 +147,11 @@ export const useSaveContentMutation = ({
         mutationArgs
       );
     },
-    onSuccess: (d, v, c) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["version", activityId, versionId],
       });
+      onSuccess && onSuccess();
     },
     onError: (e) => errorToast(e.message),
   });
@@ -163,14 +175,18 @@ export const useDeleteActivityContentMutation = ({
         queryKey: ["version", activityId, versionId],
       });
     },
-    onError: () => errorToast("Algo deu errado :("),
+    onError: (e) => errorToast(e.message),
   });
 };
 
 export const useUpdateVersionStatusMutation = ({
   activityId,
   versionId,
-}: UpdateActivityStatusRequestParams) => {
+}: MutationArgsType<
+  UpdateActivityStatusRequestBody,
+  UpdateActivityStatusResponseBody
+> &
+  UpdateActivityStatusRequestParams) => {
   const queryClient = useQueryClient();
   const axios = useAxiosAuth();
 
@@ -187,6 +203,27 @@ export const useUpdateVersionStatusMutation = ({
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["version", activityId, versionId],
+      });
+    },
+    onError: (e) => errorToast(e.message),
+  });
+};
+
+export const useDeleteDraftVersionMutation = ({
+  activityId,
+  versionId,
+  onSuccess,
+}: MutationArgsType<void, void> & DeleteDraftVersionParams) => {
+  const queryClient = useQueryClient();
+  const axios = useAxiosAuth();
+
+  return useMutation<void, ServerError>({
+    mutationFn: () =>
+      axios.del.bind(axios)(`activity/${activityId}/version/${versionId}`),
+    onSuccess: () => {
+      onSuccess && onSuccess();
+      queryClient.invalidateQueries({
+        queryKey: ["Draft"],
       });
     },
     onError: (e) => errorToast(e.message),

@@ -31,7 +31,7 @@ export const AbstractNavbarButton = ({
       href={path}
       highlighted={
         isHighlighted ? isHighlighted(currentPath) : currentPath === path
-      } /*onClick={onClick}*/
+      }
     >
       {icon && <div style={{ paddingRight: 10 }}>{icon}</div>}
       {label}

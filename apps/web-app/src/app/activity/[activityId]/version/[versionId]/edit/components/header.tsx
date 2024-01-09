@@ -1,13 +1,16 @@
 import {
   GhostInput,
   GhostTextArea,
-  errorToast,
   SavingIndicator,
+  Tooltip,
+  Icons,
 } from "@components";
+import { ConfirmDeleteModal, OptionsMenu } from ".";
 import { useState, useEffect } from "react";
 import {
   useGetActivityVersionQuery,
   useUpdateVersionMetadataMutation,
+  useDeleteDraftVersionMutation,
 } from "@infrastructure";
 
 export const ActivityHeaderInput = ({
@@ -17,13 +20,12 @@ export const ActivityHeaderInput = ({
   setSaveState,
 }) => {
   const versionQuery = useGetActivityVersionQuery({ activityId, versionId });
+  const [openOptionsMenu, setOpenOptionsMenu] = useState(false);
+
   const [hasChanges, setHasChanges] = useState(false);
   const metadataMutation = useUpdateVersionMetadataMutation({
     activityId,
     versionId,
-    onError: () => {
-      errorToast("Houve um erro ao salvar :(");
-    },
   });
 
   useEffect(() => {
@@ -78,13 +80,27 @@ export const ActivityHeaderInput = ({
           onChange={() => onChange(true)}
         />
       </div>
-      <div className="lg:col-start-10 col-start-16 col-span-1 flex flex-row justify-end items-start">
-        <span>{versionQuery.data?.status}</span>
-        <SavingIndicator
-          hasChanges={saveState === "hasChanges"}
-          isLoading={saveState === "isLoading"}
-        />
+      <div className="lg:col-start-10 col-start-16 col-span-1 flex flex-col justify-start items-end">
+        <div className="w-[40px]">
+          <SavingIndicator
+            hasChanges={saveState === "hasChanges"}
+            isLoading={saveState === "isLoading"}
+          />
+          <Icons.LIST
+            onClick={() => setOpenOptionsMenu(true)}
+            className="cursor-pointer mx-3 text-text2 text-opacity-50 p-1"
+            size={33}
+          />
+        </div>
       </div>
+      {openOptionsMenu && (
+        <OptionsMenu
+          onClose={() => setOpenOptionsMenu(false)}
+          activityId={activityId}
+          versionId={versionId}
+          version={versionQuery}
+        />
+      )}
     </div>
   );
 };

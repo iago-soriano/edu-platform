@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
-  HowItWorksButton,
-  DashboardButton,
+  StudentOutputsButton,
+  MyActivitiesButton,
   SignInButton,
   SignUpButton,
   ProductButton,
@@ -20,7 +20,7 @@ const AuthenticatedSectionContainer = ({ children }) => (
 );
 
 export const Button = ({ children, ...rest }) => (
-  <NavButton {...rest} className={"mx-3 w-min-20"}>
+  <NavButton {...rest} className={"mx-3 max-w-[100px]"}>
     {children}
   </NavButton>
 );
@@ -76,7 +76,7 @@ export const BigScreenNavbar = ({
           <div className="flex flex-row justify-center">
             {isAuthenticated ? (
               <li>
-                <DashboardButton
+                <MyActivitiesButton
                   isHighlighted={(cp) => cp.startsWith("/dashboard")}
                   currentPath={currentPath}
                   Component={Button}
@@ -88,7 +88,10 @@ export const BigScreenNavbar = ({
               </li>
             )}
             <li>
-              <HowItWorksButton currentPath={currentPath} Component={Button} />
+              <StudentOutputsButton
+                currentPath={currentPath}
+                Component={Button}
+              />
             </li>
             {/* <NewActivityButton currentPath={currentPath} Component={Button} /> */}
           </div>

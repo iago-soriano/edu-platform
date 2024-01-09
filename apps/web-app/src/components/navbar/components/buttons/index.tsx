@@ -41,29 +41,31 @@ export const ProductButton = ({
   />
 );
 
-export const DashboardButton = ({
+export const MyActivitiesButton = ({
   currentPath,
   Component,
   isHighlighted,
 }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/dashboard/my-activities"
-    label="Minha Área"
+    path="/dashboard/my-activities/draft"
+    label="Minhas atividades"
     currentPath={currentPath}
     Component={Component}
     isHighlighted={isHighlighted}
   />
 );
 
-export const NewActivityButton = ({
+export const StudentOutputsButton = ({
   currentPath,
   Component,
+  isHighlighted,
 }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/activity/new"
-    label="Nova Atividade"
+    path="/dashboard/student-outputs"
+    label="Produções dos Estudantes"
     currentPath={currentPath}
     Component={Component}
+    isHighlighted={isHighlighted}
   />
 );
 

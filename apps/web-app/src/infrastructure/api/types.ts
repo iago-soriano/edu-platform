@@ -7,9 +7,9 @@ export type ErrorCallback<V> = (
 ) => unknown;
 
 export type SuccessCallback<V, D> = (
-  data: D,
-  variables: V,
-  context: unknown
+  data?: D,
+  variables?: V,
+  context?: unknown
 ) => unknown;
 
 export type MutationArgsType<ReqBody, RespBody> = Partial<{
@@ -17,6 +17,7 @@ export type MutationArgsType<ReqBody, RespBody> = Partial<{
   onSuccess: SuccessCallback<ReqBody, RespBody>;
   onSettled: (args: unknown) => unknown;
 }>;
+
 export const MutationArgsDefaultValue = {
   onError: () => {},
   onSuccess: () => {},

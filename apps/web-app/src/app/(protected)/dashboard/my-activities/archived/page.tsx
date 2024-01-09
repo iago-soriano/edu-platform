@@ -10,8 +10,8 @@ const Page = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["activities"],
-    queryFn: () => axios.get.bind(axios)("activities"),
+    queryKey: ["Archived"],
+    queryFn: () => axios.get.bind(axios)("activities?statuses=Archived"),
   });
 
   return (

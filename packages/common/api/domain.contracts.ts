@@ -47,14 +47,18 @@ export type GetActivityVersionsResponseBody = {
   activityId: number;
 }[];
 
-// UpdateActivityMetadata [POST update-activity-metadata/:versionId]
-export type UpdateActivityMetadataRequestBody = {
+// UpdateActivityMetadata [POST activity/${activityId}/update-activity-metadata/${versionId}]
+export type UpdateActivityVersionMetadataRequestBody = {
   activityId: number;
   title?: string;
   description?: string;
 };
-export type UpdateActivityMetadataResponseBody = {
+export type UpdateActivityVersionMetadataResponseBody = {
   activityId: number;
+};
+export type UpdateActivityVersionMetadataRequestParams = {
+  activityId: string;
+  versionId: string;
 };
 
 //SaveQuestion [PUT activities/{activityId}/questions]
@@ -100,7 +104,7 @@ export type SaveContentResponseBody = {
   contentId: number;
 };
 
-// Update Activity Status
+// POST update-activity/${activityId}/version/${versionId}/status
 export type UpdateActivityStatusRequestParams = {
   activityId: string;
   versionId: string;
@@ -112,11 +116,19 @@ export type UpdateActivityStatusResponseBody = {
   lastPublishedVersion?: number;
 };
 
+// DELETE activity/${activityId}/version/${versionId}/content/${contentId}
 export type DeleteActivityContentParams = {
   activityId: string;
   versionId: string;
   contentId: string;
 };
+
+// DELETE activity/${activityId}/version/${versionId}
+export type DeleteDraftVersionParams = {
+  activityId: string;
+  versionId: string;
+};
+
 /* 
 --- CRIAR E EDITAR ATIVIDADE ---
 (Para a página de realizar atividade)

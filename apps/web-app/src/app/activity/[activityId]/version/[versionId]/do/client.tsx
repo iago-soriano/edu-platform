@@ -43,7 +43,7 @@ const Page = ({ params: { activityId, versionId } }) => {
       <div>
         {versionQuery.data?.elements.map((element) => (
           <BaseContent
-            key={element.id}
+            key={element.id as string}
             type={element.type}
             activityId={activityId}
             versionId={versionId}

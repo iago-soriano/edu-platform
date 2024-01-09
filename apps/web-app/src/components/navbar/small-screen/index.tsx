@@ -4,8 +4,8 @@ import { HamburguerButton } from "./hamburguer";
 import {
   HowItWorksButton,
   MyProfileButton,
-  DashboardButton,
-  NewActivityButton,
+  StudentOutputsButton,
+  MyActivitiesButton,
   SignInButton,
   SignUpButton,
   ProductButton,
@@ -60,11 +60,11 @@ export const SmallScreenNavbar = ({
         <Dropdown className="w-full" open={burguerOpen}>
           {isAuthenticated ? (
             <>
-              <DashboardButton
+              <MyActivitiesButton
                 currentPath={currentPath}
                 Component={DrawerMenuItem}
               />
-              <NewActivityButton
+              <StudentOutputsButton
                 currentPath={currentPath}
                 Component={DrawerMenuItem}
               />
@@ -91,10 +91,6 @@ export const SmallScreenNavbar = ({
                 Component={DrawerMenuItem}
               />
               <HowItWorksButton
-                currentPath={currentPath}
-                Component={DrawerMenuItem}
-              />
-              <NewActivityButton
                 currentPath={currentPath}
                 Component={DrawerMenuItem}
               />

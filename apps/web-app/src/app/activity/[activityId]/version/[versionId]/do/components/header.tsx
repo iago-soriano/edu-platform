@@ -7,7 +7,7 @@ export const ActivityHeader = ({ activityId, versionId, saveState }) => {
   return (
     <div
       id="activity-header-input"
-      className="grid sm:grid-cols-10 grid-cols-16 bg-surface3 p-2"
+      className="grid sm:grid-cols-10 grid-cols-16 bg-accent px-2 py-6 bg-opacity-60"
     >
       <div className="lg:col-start-3 lg:col-span-6 sm:col-start-2 sm:col-span-8 col-start-2 col-span-14">
         <h4 className="text-3xl leading-10 font-bold text-center">

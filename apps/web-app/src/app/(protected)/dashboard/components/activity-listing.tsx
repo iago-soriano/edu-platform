@@ -1,12 +1,24 @@
 import { getLocaleTimeFromISO } from "@infrastructure";
 import { twMerge } from "tailwind-merge";
 
-const Container = ({ children, onClick }) => (
-  <fieldset className="border-text2 rounded border transition-all hover:scale-[1.02]">
-    <legend>Status</legend>
+const Container = ({
+  children,
+  onClick,
+  status,
+  cardClasses,
+}: {
+  children: any;
+  onClick: () => any;
+  status: string;
+  cardClasses?: string;
+}) => (
+  <fieldset
+    onClick={onClick}
+    className="border-text2 rounded border transition-all hover:scale-[1.02] cursor-pointer"
+  >
+    <legend className="px-2">{status}</legend>
     <div
-      onClick={onClick}
-      className="bg-surface4 m-2 cursor-pointer  grid grid-cols-10 p-3 rounded"
+      className={twMerge("grid grid-cols-10 p-3 m-2 bg-surface4", cardClasses)}
     >
       {children}
     </div>
@@ -30,25 +42,22 @@ const EmptyDescription = () => (
   <p className={twMerge(descriptionClasses, "text-text2")}>Sem descrição</p>
 );
 
-const Status = ({ children }) => (
-  <div className="col-start-8 col-span-1">{children}</div>
-);
-
 const Date = ({ children }) => (
-  <div className="col-start-9 col-span-2 text-text2 flex items-center break-all">
-    Atualizado em {getLocaleTimeFromISO(children)}
+  <div className="col-start-9 col-span-2 text-text2 justify-self-center self-center lg:flex items-center break-all hidden">
+    Atualizado em
+    <br />
+    {getLocaleTimeFromISO(children)}
   </div>
 );
 
 export const DraftActivityCard = ({
   title,
   description,
-  status,
   updatedAt,
   onClick,
 }) => {
   return (
-    <Container onClick={onClick}>
+    <Container onClick={onClick} status={"Rascunho"}>
       <TitleAndDescriptionContainer>
         {title ? <Title>{title}</Title> : <EmptyTitle />}
         {description ? (
@@ -57,7 +66,6 @@ export const DraftActivityCard = ({
           <EmptyDescription />
         )}
       </TitleAndDescriptionContainer>
-      {/* <Status>{status}</Status> */}
       <Date>{updatedAt}</Date>
     </Container>
   );
@@ -66,18 +74,19 @@ export const DraftActivityCard = ({
 export const PublishedActivityCard = ({
   title,
   description,
-  status,
   updatedAt,
   onClick,
 }) => {
   return (
-    <Container onClick={onClick}>
+    <Container
+      onClick={onClick}
+      status={"Publicada"}
+      cardClasses="bg-accent bg-opacity-70"
+    >
       <TitleAndDescriptionContainer>
         <Title>{title}</Title>
         <Description>{description}</Description>
       </TitleAndDescriptionContainer>
-
-      {/* <Status>{status}</Status> */}
       <Date>{updatedAt}</Date>
     </Container>
   );
@@ -86,15 +95,13 @@ export const PublishedActivityCard = ({
 export const ArchivedActivityCard = ({
   title,
   description,
-  status,
   updatedAt,
   onClick,
 }) => {
   return (
-    <Container onClick={onClick}>
+    <Container onClick={onClick} status="Arquivada">
       <Title>{title}</Title>
       <Description>{description}</Description>
-      {/* <Status>{status}</Status> */}
       <Date>{updatedAt}</Date>
     </Container>
   );

@@ -13,6 +13,8 @@ import {
   User,
   X,
   Plus,
+  List,
+  ArrowFatLinesUp,
 } from "@phosphor-icons/react";
 
 export const Icons = {
@@ -30,4 +32,6 @@ export const Icons = {
   THREE_DOTS: (props) => <DotsThreeVertical {...props} />,
   X: (props) => <X {...props} />,
   PLUS: (props) => <Plus {...props} />,
+  LIST: (props) => <List {...props} />,
+  PUBLISH: (props) => <ArrowFatLinesUp {...props} />,
 };
