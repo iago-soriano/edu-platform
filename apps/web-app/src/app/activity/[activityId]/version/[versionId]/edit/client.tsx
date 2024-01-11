@@ -1,16 +1,30 @@
 "use client";
+import { useGetActivityVersionQuery } from "@infrastructure";
 import {
-  useGetActivityVersionQuery,
-  useUpdateVersionStatusMutation,
-} from "@infrastructure";
-import { ActivityHeaderInput, BaseContent, StickyHeader } from "./components";
-import { useEffect, useState } from "react";
+  ActivityHeaderInput,
+  BaseContent,
+  StickyHeader,
+  OptionsMenu,
+} from "./components";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 const Page = ({ params: { activityId, versionId } }) => {
   const versionQuery = useGetActivityVersionQuery({ activityId, versionId });
 
   const [saveState, setSaveState] = useState("");
   const [showAuxHeader, setShowAuxHeader] = useState(false);
+  const [openOptionsMenu, setOpenOptionsMenu] = useState(false);
+
+  const scrollRef = useRef<HTMLDivElement>();
+
+  // TODO: make this work
+  // const scrollToBottom = useCallback(() => {
+  //   if (!scrollRef.current) return;
+  //   scrollRef.current.scrollTo({
+  //     top: document.body.scrollHeight,
+  //     behavior: "smooth",
+  //   });
+  // }, [scrollRef, document.body.scrollHeight]);
 
   useEffect(() => {
     const setSticky = () => {
@@ -28,37 +42,52 @@ const Page = ({ params: { activityId, versionId } }) => {
   }, []);
 
   return (
-    <div>
+    <div ref={scrollRef}>
       <ActivityHeaderInput
         activityId={activityId}
         versionId={versionId}
         saveState={saveState}
         setSaveState={setSaveState}
+        onOpenOptionsMenu={() => setOpenOptionsMenu(true)}
       />
       <StickyHeader
         show={showAuxHeader}
         title={versionQuery.data?.title}
         description={versionQuery.data?.description}
         saveState={saveState}
+        onOpenOptionsMenu={() => setOpenOptionsMenu(true)}
       />
       <div>
         {versionQuery.data?.elements.length ? (
-          versionQuery.data?.elements.map((element) => (
-            <BaseContent
-              key={element.id as string}
-              type={element.type}
-              activityId={activityId}
-              versionId={versionId}
-              setSaveState={setSaveState}
-              {...element}
-            />
-          ))
+          <>
+            {versionQuery.data?.elements.map((element) => (
+              <BaseContent
+                key={element.id as string}
+                type={element.type}
+                activityId={activityId}
+                versionId={versionId}
+                setSaveState={setSaveState}
+                {...element}
+              />
+            ))}
+          </>
         ) : (
           <h5 className="text-center">
             Insira conteúdos para criar uma atividade!
           </h5>
         )}
       </div>
+      <br />
+      <OptionsMenu
+        isOpen={openOptionsMenu}
+        // scrollToBottom={scrollToBottom}
+        onClose={() => {
+          setOpenOptionsMenu(false);
+        }}
+        activityId={activityId}
+        versionId={versionId}
+        version={versionQuery}
+      />
     </div>
   );
 };

@@ -43,7 +43,7 @@ export const BaseContent = ({
   const getContent = (type: string) => {
     switch (type) {
       case "Text":
-        return <p className="min-h-[200px]">{text}</p>;
+        return <p className="">{text}</p>;
       case "Video":
         return <VideoContent url={videoUrl} tracks={tracks} />;
       case "Image":

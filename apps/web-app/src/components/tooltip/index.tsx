@@ -7,7 +7,7 @@ export const Tooltip = ({ content, children }) => {
     <div ref={ref}>{children}</div>
   ));
   return typeof window == "undefined" ? (
-    children
+    <div>{children}</div>
   ) : (
     <Tippy content={content}>
       <Child />

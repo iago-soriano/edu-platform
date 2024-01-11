@@ -13,7 +13,18 @@ export const ActivityHeader = ({ activityId, versionId, saveState }) => {
         <h4 className="text-3xl leading-10 font-bold text-center">
           {versionQuery.data?.title}
         </h4>
-        <br />
+        <div className="flex items-center justify-center">
+          {versionQuery.data?.topics?.length !== 0 &&
+            versionQuery.data?.topics?.split(",").map((topic, index) => (
+              <div
+                key={index}
+                className="flex rounded p-1 items-center bg-accent text-white w-fit h-fit  mx-1"
+              >
+                {topic}
+              </div>
+            ))}
+        </div>
+
         <p className="text-xl text-text2 text-center h-auto">
           {versionQuery.data?.description}
         </p>

@@ -9,7 +9,7 @@ export const DomainRules = {
       MAX_LENGTH: 200,
     },
     TOPICS: {
-      MAX_COUNT: 5,
+      MAX_COUNT: 10,
     },
   },
   FEEDBACK: {
@@ -25,8 +25,7 @@ export const DomainRules = {
       MAX_LENGTH: 200,
     },
     VIDEO: {
-      MIN_LENGTH: 5,
-      MAX_LENGTH: 10 * 60,
+      TRACKS_MAX_NUM: 10,
     },
     IMAGE: {
       MIN_LENGTH: 5,

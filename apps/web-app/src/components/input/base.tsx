@@ -43,7 +43,7 @@ export function Input(args: IInputProps) {
         </div>
       </span>
       <input
-        className="block p-4 rounded w-full bg-surface3 placeholder:opacity-80 placeholder:text-text2 autofill:"
+        className="block p-4 rounded w-full bg-surface3 placeholder:opacity-80 placeholder:text-text2"
         {...(register && register(name))}
         {...rest}
         placeholder={placeholder}

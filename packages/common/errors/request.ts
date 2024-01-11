@@ -213,3 +213,12 @@ export class DescriptionIsTooLong extends CustomError {
     });
   }
 }
+
+export class HasTooManyTopics extends CustomError {
+  HTTPstatusCode = 400;
+  constructor() {
+    super("", {
+      topics: `Há tópicos demais. Número máximo permitido é de ${DomainRules.ACTIVITY.TOPICS.MAX_COUNT}`,
+    });
+  }
+}

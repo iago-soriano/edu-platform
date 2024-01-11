@@ -41,6 +41,8 @@ interface OptionsMenuProps {
   onClose: () => void;
   activityId: any;
   versionId: any;
+  isOpen: boolean;
+  scrollToBottom?: () => void;
 }
 
 export const OptionsMenu = ({
@@ -48,6 +50,8 @@ export const OptionsMenu = ({
   activityId,
   versionId,
   version,
+  isOpen,
+  scrollToBottom,
 }: OptionsMenuProps) => {
   const deleteVersionMutation = useDeleteDraftVersionMutation({
     activityId,
@@ -64,7 +68,10 @@ export const OptionsMenu = ({
   const saveContentMutation = useSaveContentMutation({
     activityId,
     versionId,
-    onSuccess: onClose,
+    onSuccess: () => {
+      onClose();
+      // scrollToBottom();
+    },
   });
 
   const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState(false);
@@ -77,17 +84,27 @@ export const OptionsMenu = ({
   };
 
   const order = version.data.elements.length;
+  const openClasses = isOpen
+    ? "opacity-100 -translate-x-0"
+    : "translate-x-3 pointer-events-none opacity-0";
 
   return (
     // Backdrop
     <div
-      className="fixed top-0 left-0 h-[100vh] w-[100vw] flex justify-end z-10 bg-black/70"
+      className={twMerge(
+        "transition-all",
+        isOpen &&
+          "fixed top-0 left-0 h-[100vh] w-[100vw] flex justify-end z-10 bg-black/70"
+      )}
       id="outside-options-menu"
       onClick={handleOutsideClick}
     >
       {/* menu */}
       <div
-        className="rounded-lg border-black border p-2 h-full w-[90%] md:w-[50%] lg:w-[30%] bg-surface2 relative"
+        className={twMerge(
+          "rounded-lg border-black border p-2 h-full w-[90%] md:w-[50%] lg:w-[30%] bg-surface2 relative transition-all",
+          openClasses
+        )}
         role="dialog"
       >
         {/* Header */}

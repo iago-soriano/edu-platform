@@ -11,13 +11,13 @@ const splitTracks = (tracks: string, index: number) => {
   return { tracksBefore, thisTrack, tracksAfter };
 };
 
-export const Track = ({ tracks, index, getPlayerCurrTime, videoDuration }) => {
-  const { tracksBefore, thisTrack, tracksAfter } = splitTracks(tracks, index);
-  const [start, setStart] = useState(thisTrack.split("-")[0]);
-  const [end, setEnd] = useState(thisTrack.split("-")[1]);
+export const Track = ({ track, index, getPlayerCurrTime, videoDuration }) => {
+  const [start, setStart] = useState(track.split("-")[0]);
+  const [end, setEnd] = useState(track.split("-")[1]);
 
   return (
     <div className="p-3 flex items-center">
+      <Icons.PLAY size={25} className="text-accent mx-2" />
       Assistir de
       <span>{start}</span> até <span>{end}</span>
     </div>

@@ -35,25 +35,23 @@ export const VideoContent = (
     return currTime;
   }, [player]);
 
-  useEffect(() => {
-    if (tracks === "-" && !!videoDuration) {
-      setTracks(`00:00:00-${videoDuration}`);
-    }
-  }, [videoDuration]);
-
   return (
     <div>
-      {tracks
-        ?.split(",")
-        .map((track, i) => (
-          <Track
-            key={`${i}-${track}`}
-            index={i}
-            tracks={tracks}
-            getPlayerCurrTime={getPlayerCurrTime}
-            videoDuration={videoDuration}
-          />
-        ))}
+      {tracks.length > 0 ? (
+        tracks
+          ?.split(",")
+          .map((track, i) => (
+            <Track
+              key={`${i}-${track}`}
+              index={i}
+              track={tracks.split(",")[i]}
+              getPlayerCurrTime={getPlayerCurrTime}
+              videoDuration={videoDuration}
+            />
+          ))
+      ) : (
+        <p>Assistir ao vídeo inteiro</p>
+      )}
       <div className="p-2 flex justify-center">
         <YoutubePlayer videoUrl={url} player={player} setPlayer={setPlayer} />
       </div>

@@ -1,16 +1,18 @@
 import {
+  Input,
   GhostInput,
   GhostTextArea,
   SavingIndicator,
   Tooltip,
   Icons,
+  errorToast,
 } from "@components";
-import { ConfirmDeleteModal, OptionsMenu } from ".";
+import { DomainRules } from "@edu-platform/common";
 import { useState, useEffect } from "react";
 import {
   useGetActivityVersionQuery,
   useUpdateVersionMetadataMutation,
-  useDeleteDraftVersionMutation,
+  openInNewTab,
 } from "@infrastructure";
 
 export const ActivityHeaderInput = ({
@@ -18,9 +20,10 @@ export const ActivityHeaderInput = ({
   versionId,
   saveState,
   setSaveState,
+  onOpenOptionsMenu,
 }) => {
   const versionQuery = useGetActivityVersionQuery({ activityId, versionId });
-  const [openOptionsMenu, setOpenOptionsMenu] = useState(false);
+  const [currentTopic, setCurrentTopic] = useState("");
 
   const [hasChanges, setHasChanges] = useState(false);
   const metadataMutation = useUpdateVersionMetadataMutation({
@@ -43,6 +46,34 @@ export const ActivityHeaderInput = ({
       metadataMutation.mutate({ title: args.target.value, activityId });
     }
     onChange(false);
+  };
+
+  const onInsertTopic = () => {
+    if (
+      versionQuery.data?.topics?.split(",").length ===
+      DomainRules.ACTIVITY.TOPICS.MAX_COUNT
+    ) {
+      errorToast(
+        `Não é permitido mais de ${DomainRules.ACTIVITY.TOPICS.MAX_COUNT} tópicos`
+      );
+      return;
+    }
+
+    const newTopics = versionQuery.data?.topics?.length
+      ? `${versionQuery.data?.topics},${currentTopic}`
+      : currentTopic;
+
+    metadataMutation.mutate({ topics: newTopics, activityId });
+    onChange(false);
+    setCurrentTopic("");
+  };
+
+  const onDeleteTopic = (index) => {
+    const newTopics = versionQuery.data?.topics
+      ?.split(",")
+      .filter((_, i) => i !== index)
+      .join(",");
+    metadataMutation.mutate({ topics: newTopics, activityId });
   };
 
   const onChangeDescription = (args) => {
@@ -68,7 +99,43 @@ export const ActivityHeaderInput = ({
           error={metadataMutation.error?.errors?.title}
           onChange={() => onChange(true)}
         />
-        <br />
+        <div className="flex items-center justify-center">
+          {versionQuery.data?.topics?.length !== 0 &&
+            versionQuery.data?.topics?.split(",").map((topic, index) => (
+              <div
+                key={index}
+                className="flex rounded p-1 items-center bg-accent text-white w-fit h-fit  mx-1"
+              >
+                {topic}{" "}
+                <Icons.X
+                  className="cursor-pointer mx-2 hover:bg-opacity-70"
+                  onClick={() => onDeleteTopic(index)}
+                />
+              </div>
+            ))}
+          <div className="w-[160px] flex">
+            <input
+              name="topic"
+              placeholder="Novo tópico"
+              disabled={!versionQuery.data}
+              className="p-2 rounded w-full bg-surface1 placeholder:opacity-80 placeholder:text-text2"
+              onChange={(e) => {
+                setCurrentTopic((e.target as any).value);
+                onChange(true);
+              }}
+              onKeyDown={(e) => {
+                if (e.key.includes("Enter")) onInsertTopic();
+              }}
+              value={currentTopic}
+            />
+            <button
+              onClick={onInsertTopic}
+              className="text-error rounded border border-text1 p-3 hover:bg-surface3 hover:opacity-50 hover:border-black hover:shadow-hover hover:font-bold"
+            >
+              <Icons.CHECK />
+            </button>
+          </div>
+        </div>
         <GhostTextArea
           name="description"
           placeholder="Descrição da atividade"
@@ -81,26 +148,27 @@ export const ActivityHeaderInput = ({
         />
       </div>
       <div className="lg:col-start-10 col-start-16 col-span-1 flex flex-col justify-start items-end">
-        <div className="w-[40px]">
+        <div className="w-[43px]">
+          <Icons.LIST
+            onClick={onOpenOptionsMenu}
+            className="cursor-pointer mx-3 text-accent text-opacity p-1"
+            size={33}
+          />
           <SavingIndicator
             hasChanges={saveState === "hasChanges"}
             isLoading={saveState === "isLoading"}
           />
-          <Icons.LIST
-            onClick={() => setOpenOptionsMenu(true)}
-            className="cursor-pointer mx-3 text-text2 text-opacity-50 p-1"
-            size={33}
-          />
+          <Tooltip content="Pré-visualizar atividade. Abre uma nova aba">
+            <Icons.CAN_SEE
+              onClick={() =>
+                openInNewTab(`/activity/${activityId}/version/${versionId}/do`)
+              }
+              className="cursor-pointer mx-3 text-text2 text-opacity-50 p-1"
+              size={33}
+            />
+          </Tooltip>
         </div>
       </div>
-      {openOptionsMenu && (
-        <OptionsMenu
-          onClose={() => setOpenOptionsMenu(false)}
-          activityId={activityId}
-          versionId={versionId}
-          version={versionQuery}
-        />
-      )}
     </div>
   );
 };

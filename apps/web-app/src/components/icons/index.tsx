@@ -15,11 +15,12 @@ import {
   Plus,
   List,
   ArrowFatLinesUp,
+  Play,
 } from "@phosphor-icons/react";
 
 export const Icons = {
   EDIT: (props) => <PencilLine {...props} />,
-  CAN_SEE: () => <Eye size={24} />,
+  CAN_SEE: (props) => <Eye {...props} size={props.size || 24} />,
   CANT_SEE: () => <EyeSlash size={24} />,
   CARET_DOWN: (props) => <CaretDown {...props} />,
   CARET_UP: (props) => <CaretUp {...props} />,
@@ -34,4 +35,5 @@ export const Icons = {
   PLUS: (props) => <Plus {...props} />,
   LIST: (props) => <List {...props} />,
   PUBLISH: (props) => <ArrowFatLinesUp {...props} />,
+  PLAY: (props) => <Play {...props} />,
 };

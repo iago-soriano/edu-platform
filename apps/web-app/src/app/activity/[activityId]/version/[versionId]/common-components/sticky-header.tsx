@@ -1,7 +1,13 @@
 import { twMerge } from "tailwind-merge";
-import { SavingIndicator } from "@components";
+import { SavingIndicator, Icons } from "@components";
 
-export const StickyHeader = ({ show, title, description, saveState }) => {
+export const StickyHeader = ({
+  show,
+  title,
+  description,
+  saveState,
+  onOpenOptionsMenu,
+}) => {
   return (
     <div
       className={twMerge(
@@ -15,10 +21,17 @@ export const StickyHeader = ({ show, title, description, saveState }) => {
           <p className="text-ellipsis">{description}</p>
         </div>
       </div>
-      <SavingIndicator
-        hasChanges={saveState === "hasChanges"}
-        isLoading={saveState === "isLoading"}
-      />
+      <div className="flex">
+        <SavingIndicator
+          hasChanges={saveState === "hasChanges"}
+          isLoading={saveState === "isLoading"}
+        />
+        <Icons.LIST
+          onClick={onOpenOptionsMenu}
+          className="cursor-pointer mx-3 p-1 text-accent"
+          size={33}
+        />
+      </div>
     </div>
   );
 };
