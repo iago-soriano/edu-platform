@@ -1,12 +1,12 @@
 import { DomainRules, QuestionTypeNotFound } from "@edu-platform/common";
 
-export const questionPossibleTypes = ["Multiplechoice", "Text"] as const;
+export const QuestionPossibleTypes = ["Multiplechoice", "Text"] as const;
 
-export type QuestionTypeType = (typeof questionPossibleTypes)[number];
+export type QuestionTypeType = (typeof QuestionPossibleTypes)[number];
 
 export abstract class Question {
   static validateQuestionType(questionType: string) {
-    for (let type of questionPossibleTypes) {
+    for (let type of QuestionPossibleTypes) {
       if (questionType === type) {
         return type;
       }

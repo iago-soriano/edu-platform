@@ -41,7 +41,15 @@ export class ImageContent extends Content {
     this.description = newContent.description;
   }
 
+  hasContent() {
+    return !!this.imageUrl;
+  }
+
   isEmpty() {
-    !this.imageUrl;
+    return !this.title && !this.description && !this.hasContent();
+  }
+
+  isHalfCompleted() {
+    return (this.title || this.description) && !this.hasContent();
   }
 }

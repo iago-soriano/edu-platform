@@ -9,7 +9,11 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
-import { activityPossibleStatus, questionPossibleTypes } from "@domain";
+import {
+  ActivityPossibleStatus,
+  QuestionPossibleTypes,
+  UserTypes,
+} from "@domain";
 import { ActivityConstants } from "@edu-platform/common";
 
 /* #region Tokens */
@@ -38,6 +42,8 @@ export const tokensRelations = relations(tokens, ({ one }) => ({
 /* #endregion */
 
 /* #region Users */
+export const userTypeEnum = pgEnum("userType", UserTypes);
+
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
@@ -50,6 +56,7 @@ export const users = pgTable("users", {
   emailVerified: boolean("email_verified"),
   provider: varchar("provider", { length: 50 }),
   providerId: varchar("provider_id", { length: 50 }),
+  type: userTypeEnum("user_type"),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -91,7 +98,7 @@ export const activitiesRelations = relations(activities, ({ many, one }) => ({
 /* #region Activity Versions */
 export const activityStatusEnum = pgEnum(
   "activityStatus",
-  activityPossibleStatus
+  ActivityPossibleStatus
 );
 
 export const activityVersions = pgTable("activity_version", {
@@ -101,6 +108,7 @@ export const activityVersions = pgTable("activity_version", {
 
   title: varchar("title", { length: 50 }),
   description: varchar("description", { length: 200 }),
+  topics: varchar("topics", { length: 200 }),
   status: activityStatusEnum("activity_status").default("Draft"),
   version: integer("version").default(0),
 
@@ -169,7 +177,7 @@ export const activityContentsRelations = relations(
   })
 );
 
-export const questionTypeEnum = pgEnum("questionType", questionPossibleTypes);
+export const questionTypeEnum = pgEnum("questionType", QuestionPossibleTypes);
 
 export const activityQuestions = pgTable("questions", {
   id: serial("id").primaryKey(),

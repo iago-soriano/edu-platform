@@ -16,12 +16,20 @@ import { eq, inArray, and, desc, asc } from "drizzle-orm";
 import { ActivityStatusType } from "@domain";
 
 export class ActivityRepository implements IActivitiesRepository {
-  async insertActivityAndNewVersion(authorId: number) {
+  async insertActivity(authorId: number) {
     return await db.transaction(async (tx) => {
-      const [{ activityId }] = await tx
-        .insert(activities)
-        .values({ authorId })
-        .returning({ activityId: activities.id });
+      const { activityId } = (
+        await tx
+          .insert(activities)
+          .values({ authorId })
+          .returning({ activityId: activities.id })
+      )[0];
+
+      return { activityId };
+    });
+  }
+  async insertNewVersion(activityId: number) {
+    return await db.transaction(async (tx) => {
       const [{ versionId }] = await tx
         .insert(activityVersions)
         .values({ activityId })
@@ -30,7 +38,7 @@ export class ActivityRepository implements IActivitiesRepository {
         .update(activities)
         .set({ draftVersionId: versionId })
         .where(eq(activities.id, activityId));
-      return { activityId, versionId };
+      return { versionId };
     });
   }
 
@@ -54,12 +62,19 @@ export class ActivityRepository implements IActivitiesRepository {
 
   async updateActivityVersionMetadata(
     activityVersionId: number,
-    { title, description, status }: ActivityVersionInsertDTO
+    { title, description, status, topics, version }: ActivityVersionInsertDTO
   ) {
     await db.transaction(async (tx) => {
       await tx
         .update(activityVersions)
-        .set({ title, description, status, updatedAt: new Date() })
+        .set({
+          title,
+          description,
+          status,
+          topics,
+          version,
+          updatedAt: new Date(),
+        })
         .where(eq(activityVersions.id, activityVersionId));
     });
   }

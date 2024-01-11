@@ -22,6 +22,7 @@ type Return = {
   title: string;
   description: string;
   status: string;
+  topics: string;
   elements: {
     id: number;
     title?: string;
@@ -63,6 +64,7 @@ class UseCase implements IGetActivityVersionUseCase {
       title: version.title,
       description: version.description,
       status: version.status,
+      topics: version.topics,
       elements,
     };
   }

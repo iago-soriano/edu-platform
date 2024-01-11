@@ -33,7 +33,15 @@ export class VideoContent extends Content {
     this.videoUrl = content.videoUrl;
   }
 
+  hasContent() {
+    return !!this.tracks || !!this.videoUrl;
+  }
+
   isEmpty() {
-    return !this.tracks && !this.videoUrl;
+    return !this.title && !this.description && !this.hasContent();
+  }
+
+  isHalfCompleted() {
+    return (this.title || this.description) && !this.hasContent();
   }
 }

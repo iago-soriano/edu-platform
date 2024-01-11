@@ -47,9 +47,8 @@ export interface ITokenRepository {
 }
 
 export interface IActivitiesRepository {
-  insertActivityAndNewVersion: (
-    authorId: number
-  ) => Promise<{ activityId: number; versionId: number }>;
+  insertActivity: (authorId: number) => Promise<{ activityId: number }>;
+  insertNewVersion: (activityId: number) => Promise<{ versionId: number }>;
   updateActivityMetadata: (
     activityId: number,
     args: ActivityInsertDTO

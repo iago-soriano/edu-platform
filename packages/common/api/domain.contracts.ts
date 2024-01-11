@@ -34,6 +34,7 @@ export type GetActivityVersionResponseBody = {
   title: string;
   description: string;
   status: string;
+  topics: string;
   elements: ElementResponse[];
 };
 
@@ -52,6 +53,7 @@ export type UpdateActivityVersionMetadataRequestBody = {
   activityId: number;
   title?: string;
   description?: string;
+  topics?: string;
 };
 export type UpdateActivityVersionMetadataResponseBody = {
   activityId: number;
@@ -127,6 +129,15 @@ export type DeleteActivityContentParams = {
 export type DeleteDraftVersionParams = {
   activityId: string;
   versionId: string;
+};
+
+//POST  create-new-version/:activityId.  flag forceCreate
+export type CreateNewActivityVersionParams = {
+  activityId: string;
+};
+
+export type CreateNewActivityVersionResponseBody = {
+  versionId: number;
 };
 
 /* 

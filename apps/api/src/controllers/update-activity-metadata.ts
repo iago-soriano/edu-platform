@@ -5,17 +5,18 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import {
-  UpdateActivityMetadataRequestBody,
-  UpdateActivityMetadataResponseBody,
+  UpdateActivityVersionMetadataRequestParams,
+  UpdateActivityVersionMetadataRequestBody,
+  UpdateActivityVersionMetadataResponseBody,
 } from "@edu-platform/common/api";
 import { IUpdateActivityMetadataUseCase } from "@use-cases";
 
 type Request = TypedRequest<
-  { activityId; versionId },
+  UpdateActivityVersionMetadataRequestParams,
   {},
-  UpdateActivityMetadataRequestBody
+  UpdateActivityVersionMetadataRequestBody
 >;
-type Response = TypedResponse<UpdateActivityMetadataResponseBody>;
+type Response = TypedResponse<UpdateActivityVersionMetadataResponseBody>;
 
 export class UpdateActivityMetadataController implements HTTPController {
   method = HttpMethod.POST;
@@ -28,15 +29,16 @@ export class UpdateActivityMetadataController implements HTTPController {
 
   async execute(req: Request, res: Response) {
     const { activityId, versionId } = req.params;
-    const { title, description } = req.body;
+    const { title, description, topics } = req.body;
     const { user } = req;
 
     await this.updateActivityMetadataUseCase.execute({
       user,
-      activityId,
-      versionId,
+      activityId: parseInt(activityId),
+      versionId: parseInt(versionId),
       title,
       description,
+      topics,
     });
 
     res.status(200).json();

@@ -26,7 +26,15 @@ export class TextContent extends Content {
     this.text = content.text;
   }
 
+  hasContent() {
+    return !!this.text;
+  }
+
   isEmpty() {
-    return !this.text;
+    return !this.title && !this.description && !this.hasContent();
+  }
+
+  isHalfCompleted() {
+    return (this.title || this.description) && !this.hasContent();
   }
 }

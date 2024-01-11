@@ -12,6 +12,7 @@ type InputParams = {
   versionId: number;
   title?: string;
   description?: string;
+  topics?: string;
 };
 
 type Return = void;
@@ -27,6 +28,7 @@ class UseCase implements IUpdateActivityMetadataUseCase {
     versionId,
     title,
     description,
+    topics,
   }: InputParams) {
     const existingActivity =
       await this.activitiesRepository.getActivityById(activityId);
@@ -47,10 +49,12 @@ class UseCase implements IUpdateActivityMetadataUseCase {
 
     title && Activity.validateTitle(title);
     description && Activity.validateDescription(description);
+    topics && Activity.validateTopics(topics);
 
     await this.activitiesRepository.updateActivityVersionMetadata(versionId, {
-      title: title,
-      description: description,
+      title,
+      description,
+      topics,
     });
   }
 }

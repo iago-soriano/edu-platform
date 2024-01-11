@@ -1,3 +1,4 @@
+import { Tabs } from "./../../../../web-app/src/components/tabs/index";
 import { Content } from "@domain";
 import {
   ActivityIsNotFound,
@@ -36,7 +37,11 @@ class UseCase implements IUpdateActivityStatusUseCase {
   ) => {
     if (!contents || !contents.length) throw new Error("Não há conteúdos");
 
-    if (activityToBeUpdated.lastVersionId !== null) {
+    const activityHasPublishedVersion = Activity.hasPublishedVersion(
+      activityToBeUpdated.lastVersionId
+    );
+
+    if (activityHasPublishedVersion) {
       await this.activitiesRepository.updateActivityVersionMetadata(
         activityToBeUpdated.lastVersionId,
         {
@@ -47,6 +52,8 @@ class UseCase implements IUpdateActivityStatusUseCase {
 
     if (!version.title || !version.description)
       throw new Error("Deve haver título e descrição");
+
+    let contentCounter = 0;
 
     for (let content of contents) {
       const contentToBeVerified = Content.createContent({
@@ -62,28 +69,28 @@ class UseCase implements IUpdateActivityStatusUseCase {
         originatingVersionId: content.originatingVersionId,
       });
 
-      if (
-        (contentToBeVerified.title || contentToBeVerified.description) &&
-        contentToBeVerified.isEmpty() // isHalfCompleted
-      ) {
-        throw new Error("Conteúdo não tem imagem, nem vídeo, nem texto");
-      } else if (
-        !contentToBeVerified.title &&
-        !contentToBeVerified.description &&
-        contentToBeVerified.isEmpty() // trocar isEmpty por hasContent e chamar esta de isEmpty
-      ) {
+      if (contentToBeVerified.isHalfCompleted()) {
+        throw new Error(
+          `Conteúdo tem apenas título e/ou descrição. Título: ${contentToBeVerified.title}. Descrição: ${contentToBeVerified.description}`
+        );
+      } else if (contentToBeVerified.isEmpty()) {
         await this.activitiesRepository.deleteContentVersionRelation(
           content.id,
           versionId
         );
         await this.activitiesRepository.deleteContent(content.id);
+      } else {
+        contentCounter++;
       }
     }
+
+    if (contentCounter === 0) throw new Error("Não há conteúdos");
 
     await this.activitiesRepository.updateActivityVersionMetadata(
       activityToBeUpdated.draftVersionId,
       {
         status: "Published",
+        version: version.version + 1,
       }
     );
     await this.activitiesRepository.updateActivityMetadata(activityId, {
@@ -97,7 +104,11 @@ class UseCase implements IUpdateActivityStatusUseCase {
     versionId: number,
     activityId: number
   ) => {
-    if (activityToBeUpdated.lastVersionId !== null) {
+    const activityHasPublishedVersion = Activity.hasPublishedVersion(
+      activityToBeUpdated.lastVersionId
+    );
+
+    if (activityHasPublishedVersion) {
       return activityToBeUpdated.lastVersionId;
     } else {
       await this.activitiesRepository.updateActivityVersionMetadata(versionId, {

@@ -35,6 +35,10 @@ import GetActivityVersionUseCase, {
 } from "./get-activity-version";
 import DeleteContentUseCase, { IDeleteContentUseCase } from "./delete-content";
 import SaveContentUseCase, { ISaveContentUseCase } from "./save-content";
+import DeleteVersionUseCase, { IDeleteVersionUseCase } from "./delete-version";
+import CreateNewActivityVersionUseCase, {
+  ICreateNewActivityVersionUseCase,
+} from "./create-new-activity-version";
 
 export {
   SignInUseCase,
@@ -71,4 +75,8 @@ export {
   ISaveContentUseCase,
   RefreshTokenUseCase,
   IRefreshTokenUseCase,
+  DeleteVersionUseCase,
+  IDeleteVersionUseCase,
+  CreateNewActivityVersionUseCase,
+  ICreateNewActivityVersionUseCase,
 };

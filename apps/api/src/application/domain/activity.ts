@@ -4,16 +4,17 @@ import {
   TitleIsTooShort,
   DescriptionIsTooLong,
   DescriptionIsTooShort,
+  HasTooManyTopics,
   DomainRules,
 } from "@edu-platform/common";
 
-export const activityPossibleStatus = [
+export const ActivityPossibleStatus = [
   "Draft",
   "Archived",
   "Published",
 ] as const;
 
-export type ActivityStatusType = (typeof activityPossibleStatus)[number];
+export type ActivityStatusType = (typeof ActivityPossibleStatus)[number];
 
 export class Activity {
   static validateTitle(title: string) {
@@ -34,9 +35,16 @@ export class Activity {
     }
   }
 
+  static validateTopics(topics: string) {
+    const topicsArray = topics.split(",");
+    if (topicsArray.length > DomainRules.ACTIVITY.TOPICS.MAX_COUNT) {
+      throw new HasTooManyTopics();
+    }
+  }
+
   static validateStatuses(activityStatuses: string[]) {
     const resp = [];
-    const sanitizedDomain = activityPossibleStatus.map((st) =>
+    const sanitizedDomain = ActivityPossibleStatus.map((st) =>
       st.toLowerCase()
     );
 
@@ -49,5 +57,13 @@ export class Activity {
     }
 
     return resp;
+  }
+
+  static hasPublishedVersion(latestVersion: number) {
+    return !!latestVersion;
+  }
+
+  static hasDraft(draftVersion: number) {
+    return !!draftVersion;
   }
 }
