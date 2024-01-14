@@ -1,40 +1,46 @@
-import { Content, ContentTypesType } from "./base";
+import { ContentDTO } from "@dto";
+import { Content } from "./base";
+import { DomainRules } from "@edu-platform/common";
 
 export class TextContent extends Content {
-  constructor(
-    public type: ContentTypesType,
-    public id: number,
-    public title: string,
-    public description: string,
-    public text: string,
-    public order: number,
-    public originatingVersionId: number,
-    public parentId: number
-  ) {
-    super(type, id, title, description, order, originatingVersionId, parentId);
+  public text: string = "";
+
+  constructor() {
+    super("Text");
   }
 
-  merge(versionId: number, content: Partial<Content> & { text?: string }) {
-    if (this.originatingVersionId !== versionId) {
-      this.id = undefined;
-      this.parentId = content.id;
-      this.originatingVersionId = versionId;
-    }
+  mergePayload(newContent: TextContent) {
+    this.text = newContent.text;
+  }
 
-    this.title = content.title;
-    this.description = content.description;
-    this.text = content.text;
+  validatePayload() {
+    if (this.text.length > DomainRules.CONTENT.TEXT.MAX_LENGTH)
+      throw new Error("Text Content is too long");
+
+    if (this.text.length < DomainRules.CONTENT.TEXT.MIN_LENGTH)
+      throw new Error("Text Content is too short");
   }
 
   hasContent() {
     return !!this.text;
   }
 
-  isEmpty() {
-    return !this.title && !this.description && !this.hasContent();
+  shouldUploadFile(): boolean {
+    return false;
   }
 
-  isHalfCompleted() {
-    return (this.title || this.description) && !this.hasContent();
+  setFileUrl(_: string) {
+    throw new Error(`${this.type} type does not implement files`);
+  }
+
+  mapPayloadFromDto(dto: ContentDTO) {
+    this.text = dto.payload.text?.text || "";
+  }
+
+  mapToDatabaseDto() {
+    return {
+      ...super.mapToDatabaseDto(),
+      text: this.text,
+    };
   }
 }

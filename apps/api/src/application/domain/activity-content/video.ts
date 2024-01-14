@@ -1,47 +1,45 @@
-import { ContentTypesType } from "@domain";
+import { ContentDTO } from "@dto";
 import { Content } from "./base";
-import { FileType } from "@interfaces";
+import { DomainRules } from "@edu-platform/common";
 
 export class VideoContent extends Content {
-  constructor(
-    public type: ContentTypesType,
-    public id: number,
-    public title: string,
-    public description: string,
-    public tracks: string,
-    public videoUrl: string,
-    public order: number,
-    public originatingVersionId: number,
-    public parentId: number
-  ) {
-    super(type, id, title, description, order, originatingVersionId, parentId);
+  public tracks: string = "";
+  public url: string = "";
+
+  constructor() {
+    super("Video");
   }
 
-  merge(
-    versionId: number,
-    content: Partial<Content> & { tracks?: string; videoUrl?: string }
-  ) {
-    if (this.originatingVersionId !== versionId) {
-      this.id = undefined;
-      this.parentId = content.id;
-      this.originatingVersionId = versionId;
-    }
+  mergePayload(newContent: VideoContent) {
+    this.tracks = newContent.tracks;
+    this.url = newContent.url;
+  }
 
-    this.title = content.title;
-    this.description = content.description;
-    this.tracks = content.tracks;
-    this.videoUrl = content.videoUrl;
+  validatePayload() {
+    if (
+      this.tracks.split(",").length > DomainRules.CONTENT.VIDEO.TRACKS_MAX_NUM
+    )
+      throw new Error("Too many tracks");
   }
 
   hasContent() {
-    return !!this.tracks || !!this.videoUrl;
+    return !!this.tracks || !!this.url;
   }
 
-  isEmpty() {
-    return !this.title && !this.description && !this.hasContent();
+  setFileUrl(_: string) {
+    throw new Error(`${this.type} type does not implement files`);
   }
 
-  isHalfCompleted() {
-    return (this.title || this.description) && !this.hasContent();
+  mapPayloadFromDto(dto: ContentDTO) {
+    this.tracks = dto.payload.video?.tracks || "";
+    this.url = dto.payload.video?.videoUrl || "";
+  }
+
+  mapToDatabaseDto() {
+    return {
+      ...super.mapToDatabaseDto(),
+      tracks: this.tracks,
+      videoUrl: this.url,
+    };
   }
 }

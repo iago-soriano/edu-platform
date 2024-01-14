@@ -1,9 +1,4 @@
-import {
-  Request as ExpressRequest,
-  Response as ExpressResponse,
-  ErrorRequestHandler,
-  RequestHandler,
-} from "express";
+import { Response as ExpressResponse, ErrorRequestHandler } from "express";
 import { UserSelectDTO } from "./repository/dtos";
 
 export enum HttpMethod {
@@ -14,11 +9,20 @@ export enum HttpMethod {
   DELETE = "delete",
 }
 
-export interface HTTPController {
+export type Request<Params = {}, Query = {}, Body = {}> = {
+  params: Params;
+  query: Query;
+  body: Body;
+  user: UserSelectDTO;
+  files?: { image?: FileType[] };
+};
+export type Response<Body> = ExpressResponse<Body>;
+
+export interface HTTPController<Request = {}, Response = {}> {
   method: HttpMethod;
   path: string;
   middlewares?: string[];
-  execute: RequestHandler;
+  execute: (req: Request, res: Response) => {};
 }
 
 export type FileType = Express.Multer.File;
@@ -26,11 +30,3 @@ export type FileType = Express.Multer.File;
 export interface HTTPErrorController {
   execute: ErrorRequestHandler;
 }
-
-export type Request<Params = {}, Query = {}, Body = {}> = ExpressRequest<
-  Params,
-  {},
-  Body,
-  Query
-> & { user: UserSelectDTO; files?: { image?: FileType[] } };
-export type Response<Body> = ExpressResponse<Body>;

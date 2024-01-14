@@ -28,7 +28,7 @@ export class ActivityRepository implements IActivitiesRepository {
       return { activityId };
     });
   }
-  async insertNewVersion(activityId: number) {
+  async insertVersion(activityId: number) {
     return await db.transaction(async (tx) => {
       const [{ versionId }] = await tx
         .insert(activityVersions)
@@ -42,7 +42,7 @@ export class ActivityRepository implements IActivitiesRepository {
     });
   }
 
-  async updateActivityMetadata(
+  async updateActivity(
     activityId: number,
     { lastVersionId, draftVersionId }: ActivityInsertDTO
   ) {
@@ -54,13 +54,13 @@ export class ActivityRepository implements IActivitiesRepository {
     });
   }
 
-  async getActivityById(activityId: number) {
+  async findActivityById(activityId: number) {
     return (
       await db.select().from(activities).where(eq(activities.id, activityId))
     )[0];
   }
 
-  async updateActivityVersionMetadata(
+  async updateActivityVersion(
     activityVersionId: number,
     { title, description, status, topics, version }: ActivityVersionInsertDTO
   ) {
@@ -107,7 +107,8 @@ export class ActivityRepository implements IActivitiesRepository {
       .where(eq(activityVersions.id, versionId));
   }
 
-  async getVersionById(versionId: number) {
+  // refatorar para usar join
+  async findVersionById(versionId: number) {
     const version = (
       await db
         .select()
@@ -146,7 +147,7 @@ export class ActivityRepository implements IActivitiesRepository {
     return { version, contents, questions };
   }
 
-  async getActivityContentByContentId(contentId: number) {
+  async findActivityContentById(contentId: number) {
     return (
       await db
         .select()
@@ -155,7 +156,7 @@ export class ActivityRepository implements IActivitiesRepository {
     )[0];
   }
 
-  async getActivityVersionsByAuthorIdAndStatuses(
+  async findActivityVersionsByAuthorIdAndStatuses(
     authorId: number,
     statuses: ActivityStatusType[]
   ) {

@@ -5,7 +5,7 @@ import {
   TokenSelectDTO,
   TokenInsertDTO,
   TokenType,
-  QuestionSelectDTO,
+  CompleteVersionSelectDTO,
   ActivitySelectDTO,
   ActivityVersionInsertDTO,
   ActivityContentInsertDTO,
@@ -48,41 +48,40 @@ export interface ITokenRepository {
 
 export interface IActivitiesRepository {
   insertActivity: (authorId: number) => Promise<{ activityId: number }>;
-  insertNewVersion: (activityId: number) => Promise<{ versionId: number }>;
-  updateActivityMetadata: (
-    activityId: number,
-    args: ActivityInsertDTO
-  ) => Promise<void>;
-  getActivityById: (activityId: number) => Promise<ActivitySelectDTO>;
-  updateActivityVersionMetadata: (
-    versionId: number,
-    args: ActivityVersionInsertDTO
-  ) => Promise<void>;
+  insertVersion: (activityId: number) => Promise<{ versionId: number }>;
   insertContent: (
     content: ActivityContentInsertDTO
   ) => Promise<{ contentId: number }>;
-  updateContent: (
-    contentId: number,
-    content: ActivityContentInsertDTO,
-    versionId: number
-  ) => Promise<void>;
-  getVersionById: (versionId: number) => Promise<{
-    version: ActivityVersionSelectDTO;
-    contents: ActivityContentSelectDTO[];
-    questions: QuestionSelectDTO[];
-  }>;
-  getActivityContentByContentId: (
-    contentId: number
-  ) => Promise<ActivityContentSelectDTO>;
-  getActivityVersionsByAuthorIdAndStatuses: (
-    authorId: number,
-    statuses: ActivityStatusType[]
-  ) => Promise<ActivityVersionSelectDTO[]>;
   insertRelationBetweenVersionAndElement: (
     versionId: number,
     contentId?: number,
     questionId?: number
   ) => Promise<{ relationId: number }>;
+
+  updateActivity: (
+    activityId: number,
+    args: ActivityInsertDTO
+  ) => Promise<void>;
+  updateActivityVersion: (
+    versionId: number,
+    args: ActivityVersionInsertDTO
+  ) => Promise<void>;
+  updateContent: (
+    contentId: number,
+    content: ActivityContentInsertDTO,
+    versionId: number
+  ) => Promise<void>;
+
+  findActivityById: (activityId: number) => Promise<ActivitySelectDTO>;
+  findVersionById: (versionId: number) => Promise<CompleteVersionSelectDTO>;
+  findActivityContentById: (
+    contentId: number
+  ) => Promise<ActivityContentSelectDTO>;
+  findActivityVersionsByAuthorIdAndStatuses: (
+    authorId: number,
+    statuses: ActivityStatusType[]
+  ) => Promise<ActivityVersionSelectDTO[]>;
+
   deleteContent: (contentId: number) => Promise<void>;
   deleteContentVersionRelation: (
     contentId: number,

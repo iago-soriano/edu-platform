@@ -5,7 +5,7 @@ export abstract class CustomError extends Error {
   constructor(
     message?: string,
     public errors: FieldError = {},
-    public realReason: string = undefined
+    public realReason: string | undefined = undefined
   ) {
     super(message);
   }

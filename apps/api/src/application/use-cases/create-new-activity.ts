@@ -20,7 +20,7 @@ class UseCase implements ICreateNewActivityUseCase {
     );
 
     const { versionId } =
-      await this.activitiesRepository.insertNewVersion(activityId);
+      await this.activitiesRepository.insertVersion(activityId);
 
     return { activityId, versionId };
   }

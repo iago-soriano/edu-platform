@@ -24,8 +24,11 @@ export interface IEncryptionService {
 }
 
 export interface IStorageService {
-  uploadFile: (keyName: string, file: FileType) => Promise<string>;
-  deleteFile: (url: string) => Promise<void>;
+  uploadFile: (
+    keyName: string,
+    file: FileType | null
+  ) => Promise<string | undefined>;
+  deleteFileByUrl: (url: string) => Promise<void>;
 }
 
 export interface IAssetRepository {

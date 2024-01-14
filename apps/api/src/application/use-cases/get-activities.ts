@@ -24,7 +24,7 @@ class UseCase implements IGetActivitiesUseCase {
     const validStatuses = Activity.validateStatuses(statuses);
 
     const activitiesByAuthor = (
-      await this.activitiesRepository.getActivityVersionsByAuthorIdAndStatuses(
+      await this.activitiesRepository.findActivityVersionsByAuthorIdAndStatuses(
         user.id,
         validStatuses
       )

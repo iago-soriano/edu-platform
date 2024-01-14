@@ -12,14 +12,16 @@ export class S3Service implements IStorageService {
   constructor() {
     this._s3 = new S3Client({
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
       },
       region: process.env.AWS_REGION,
     });
   }
 
-  async uploadFile(keyName: string, file: FileType) {
+  async uploadFile(keyName: string, file: FileType | null) {
+    if (!file) return;
+
     const command = new PutObjectCommand({
       Bucket: process.env.BUCKET_NAME,
       Key: keyName,
@@ -36,7 +38,7 @@ export class S3Service implements IStorageService {
     return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${keyName}`;
   }
 
-  async deleteFile(url: string) {
+  async deleteFileByUrl(url: string) {
     const keyName = url.split("/")[3].concat("/", url.split("/")[4]);
 
     const command = new DeleteObjectCommand({

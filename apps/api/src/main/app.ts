@@ -36,7 +36,7 @@ export class ExpressServer extends AbstractServer {
 
     // CORS
     const allowlist = process.env.CORS_ALLOW?.split(" ");
-    const corsOptionsDelegate = function (req, callback) {
+    const corsOptionsDelegate = function (req: any, callback: any) {
       let corsOptions;
       if (process.env.CORS_ALLOW === "*") {
         callback(null, { origin: true });

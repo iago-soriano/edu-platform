@@ -43,14 +43,14 @@ export class Activity {
   }
 
   static validateStatuses(activityStatuses: string[]) {
-    const resp = [];
+    const resp: ActivityStatusType[] = [];
     const sanitizedDomain = ActivityPossibleStatus.map((st) =>
       st.toLowerCase()
     );
 
     for (let status of activityStatuses) {
       if (sanitizedDomain.includes(status.toLowerCase())) {
-        resp.push(status);
+        resp.push(status as ActivityStatusType);
       } else {
         throw new ActivityStatusNotFound({ status });
       }

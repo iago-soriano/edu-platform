@@ -42,7 +42,7 @@ class UseCase implements IUpdateActivityStatusUseCase {
     );
 
     if (activityHasPublishedVersion) {
-      await this.activitiesRepository.updateActivityVersionMetadata(
+      await this.activitiesRepository.updateActivityVersion(
         activityToBeUpdated.lastVersionId,
         {
           status: "Archived",
@@ -86,14 +86,14 @@ class UseCase implements IUpdateActivityStatusUseCase {
 
     if (contentCounter === 0) throw new Error("Não há conteúdos");
 
-    await this.activitiesRepository.updateActivityVersionMetadata(
+    await this.activitiesRepository.updateActivityVersion(
       activityToBeUpdated.draftVersionId,
       {
         status: "Published",
         version: version.version + 1,
       }
     );
-    await this.activitiesRepository.updateActivityMetadata(activityId, {
+    await this.activitiesRepository.updateActivity(activityId, {
       lastVersionId: activityToBeUpdated.draftVersionId,
       draftVersionId: null,
     });
@@ -111,10 +111,10 @@ class UseCase implements IUpdateActivityStatusUseCase {
     if (activityHasPublishedVersion) {
       return activityToBeUpdated.lastVersionId;
     } else {
-      await this.activitiesRepository.updateActivityVersionMetadata(versionId, {
+      await this.activitiesRepository.updateActivityVersion(versionId, {
         status: "Published",
       });
-      await this.activitiesRepository.updateActivityMetadata(activityId, {
+      await this.activitiesRepository.updateActivity(activityId, {
         lastVersionId: versionId,
       });
     }
@@ -124,11 +124,11 @@ class UseCase implements IUpdateActivityStatusUseCase {
     activityToBeUpdated: ActivitySelectDTO,
     activityId: number
   ) => {
-    await this.activitiesRepository.updateActivityVersionMetadata(
+    await this.activitiesRepository.updateActivityVersion(
       activityToBeUpdated.lastVersionId,
       { status: "Archived" }
     );
-    await this.activitiesRepository.updateActivityMetadata(activityId, {
+    await this.activitiesRepository.updateActivity(activityId, {
       lastVersionId: null,
     });
   };
@@ -144,12 +144,12 @@ class UseCase implements IUpdateActivityStatusUseCase {
     const validStatus = Activity.validateStatuses([newActivityStatus])[0];
 
     const activityToBeUpdated =
-      await this.activitiesRepository.getActivityById(activityId);
+      await this.activitiesRepository.findActivityById(activityId);
 
     if (!activityToBeUpdated) throw new ActivityIsNotFound();
 
     const activityVersionToBeUpdated =
-      await this.activitiesRepository.getVersionById(versionId);
+      await this.activitiesRepository.findVersionById(versionId);
 
     if (!activityVersionToBeUpdated) throw new ActivityVersionNotFound();
 

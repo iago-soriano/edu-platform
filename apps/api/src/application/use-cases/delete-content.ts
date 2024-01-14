@@ -26,7 +26,7 @@ class UseCase implements IDeleteContentUseCase {
     const contentId = parseInt(contentIdString);
     const versionId = parseInt(versionIdString);
 
-    const version = await this.activitiesRepository.getVersionById(versionId);
+    const version = await this.activitiesRepository.findVersionById(versionId);
 
     if (!version) throw new ActivityVersionNotFound();
 

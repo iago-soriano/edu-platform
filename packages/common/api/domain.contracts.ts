@@ -1,9 +1,3 @@
-import { ContentTypesType } from "../../../apps/api/src/application/domain/activity-content/base";
-import {
-  ActivityContentSelectDTO,
-  QuestionSelectDTO,
-} from "./../../../apps/api/src/interfaces/repository/dtos";
-
 // create new activity and version
 export type CreateNewActivityRequestBody = {};
 export type CreateNewActivityResponseBody = {
@@ -78,32 +72,6 @@ export type SaveQuestionRequestBody = {
 };
 export type SaveQuestionResponseBody = {
   questionId?: number;
-};
-
-// Save Content [POST activity/:activityId/version/:versionId/content]
-export type SaveContentRequestParams = {
-  activityId: string;
-  versionId: string;
-};
-
-export type SaveContentRequestBody = {
-  title?: string;
-  content?: string;
-  description?: string;
-  type: string;
-  contentId?: string;
-  payload?: {
-    //content de video
-    tracks?: string;
-    videoUrl?: string;
-    //content de texto
-    text?: string;
-  };
-  order?: number;
-};
-
-export type SaveContentResponseBody = {
-  contentId: number;
 };
 
 // POST update-activity/${activityId}/version/${versionId}/status

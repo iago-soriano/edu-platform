@@ -43,10 +43,10 @@ class UseCase implements IGetActivityVersionUseCase {
 
   async execute({ user, versionId, activityId }: InputParams) {
     const activity =
-      await this.activitiesRepository.getActivityById(activityId);
+      await this.activitiesRepository.findActivityById(activityId);
 
     const { version, contents, questions } =
-      await this.activitiesRepository.getVersionById(versionId);
+      await this.activitiesRepository.findVersionById(versionId);
 
     const elements = [
       ...contents.map((c) => ({ ...c, elementType: "content" })),

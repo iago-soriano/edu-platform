@@ -31,3 +31,9 @@ export type ActivityContentSelectDTO = typeof activityContents.$inferSelect;
 export const QuestionTypeEnum = typeof questionTypeEnum.enumValues;
 export type QuestionInsertDTO = typeof activityQuestions.$inferInsert;
 export type QuestionSelectDTO = typeof activityQuestions.$inferSelect;
+
+export type CompleteVersionSelectDTO = {
+  version: ActivityVersionSelectDTO;
+  contents: ActivityContentSelectDTO[];
+  questions: QuestionSelectDTO[];
+};

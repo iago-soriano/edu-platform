@@ -27,7 +27,7 @@ class UseCase implements IDeleteVersionUseCase {
     const activityId = parseInt(activityIdString);
     const versionId = parseInt(versionIdString);
 
-    const version = await this.activitiesRepository.getVersionById(versionId);
+    const version = await this.activitiesRepository.findVersionById(versionId);
 
     if (!version) throw new ActivityVersionNotFound();
 
@@ -52,7 +52,7 @@ class UseCase implements IDeleteVersionUseCase {
         content.parentId !== null
       ) {
         const parentVersion =
-          await this.activitiesRepository.getActivityContentByContentId(
+          await this.activitiesRepository.findActivityContentById(
             content.parentId
           );
 
@@ -75,7 +75,7 @@ class UseCase implements IDeleteVersionUseCase {
       await this.activitiesRepository.deleteContent(content.id);
     }
 
-    await this.activitiesRepository.updateActivityMetadata(activityId, {
+    await this.activitiesRepository.updateActivity(activityId, {
       draftVersionId: null,
     });
 

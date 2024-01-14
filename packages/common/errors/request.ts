@@ -222,3 +222,10 @@ export class HasTooManyTopics extends CustomError {
     });
   }
 }
+
+export class UnprocessableEntity extends CustomError {
+  HTTPstatusCode = 422;
+  constructor(message: string) {
+    super(message);
+  }
+}

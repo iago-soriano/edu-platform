@@ -31,7 +31,7 @@ class UseCase implements IUpdateActivityMetadataUseCase {
     topics,
   }: InputParams) {
     const existingActivity =
-      await this.activitiesRepository.getActivityById(activityId);
+      await this.activitiesRepository.findActivityById(activityId);
 
     if (!existingActivity) throw new ActivityIsNotFound();
 
@@ -42,7 +42,7 @@ class UseCase implements IUpdateActivityMetadataUseCase {
       throw new ActivityIsNotFound();
 
     const { version } =
-      await this.activitiesRepository.getVersionById(versionId);
+      await this.activitiesRepository.findVersionById(versionId);
 
     if (version.activityId != activityId) throw new ActivityIsNotFound();
     if (version.status !== "Draft") throw new ActivityIsNotDraft();
@@ -51,7 +51,7 @@ class UseCase implements IUpdateActivityMetadataUseCase {
     description && Activity.validateDescription(description);
     topics && Activity.validateTopics(topics);
 
-    await this.activitiesRepository.updateActivityVersionMetadata(versionId, {
+    await this.activitiesRepository.updateActivityVersion(versionId, {
       title,
       description,
       topics,

@@ -18,17 +18,17 @@ class UseCase implements ICreateNewActivityVersionUseCase {
     const activityId = parseInt(activityIdString);
 
     const activity =
-      await this.activitiesRepository.getActivityById(activityId);
+      await this.activitiesRepository.findActivityById(activityId);
 
     if (Activity.hasDraft(activity.draftVersionId)) {
       return { versionId: activity.draftVersionId };
     } else {
       const versionToBeDuplicated =
-        await this.activitiesRepository.getVersionById(activity.lastVersionId);
+        await this.activitiesRepository.findVersionById(activity.lastVersionId);
 
       // cria nova versão na atividade
       const { versionId } =
-        await this.activitiesRepository.insertNewVersion(activityId);
+        await this.activitiesRepository.insertVersion(activityId);
 
       // TEM QUE MUDAR A VERSION?
 
@@ -54,7 +54,7 @@ class UseCase implements ICreateNewActivityVersionUseCase {
         })
       );
 
-      await this.activitiesRepository.updateActivityMetadata(activityId, {
+      await this.activitiesRepository.updateActivity(activityId, {
         draftVersionId: versionId,
       });
 

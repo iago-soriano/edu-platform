@@ -4,21 +4,27 @@ import {
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
-import {
-  SaveContentRequestBody,
-  SaveContentResponseBody,
-  SaveContentRequestParams,
-} from "@edu-platform/common/api";
+import { ContentDTO, parseToContentDTO } from "@dto";
 import { ISaveContentUseCase } from "@use-cases";
+import { parseNumberId } from "@infrastructure";
+
+export type SaveContentRequestParams = {
+  activityId: string;
+  versionId: string;
+};
+export type SaveContentRequestBody = ContentDTO;
+export type SaveContentResponseBody = void;
 
 type Request = TypedRequest<
-  SaveContentRequestParams,
+  { activityId: string; versionId: string },
   {},
   SaveContentRequestBody
 >;
 type Response = TypedResponse<SaveContentResponseBody>;
 
-export class SaveContentController implements HTTPController {
+export class SaveContentController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.POST;
   path: string = "activity/:activityId/version/:versionId/content";
   middlewares: string[] = ["auth", "file"];
@@ -26,32 +32,18 @@ export class SaveContentController implements HTTPController {
   constructor(private saveContentUseCase: ISaveContentUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const {
-      title,
-      description,
-      type,
-      contentId: cntntIdStr,
-      payload,
-      order,
-    } = req.body;
-    const { activityId: actvIdStr, versionId: vrsnIdStr } = req.params;
-    const image = req.files?.image[0];
-    const activityId = parseInt(actvIdStr);
-    const versionId = parseInt(vrsnIdStr);
-    const contentId = cntntIdStr && parseInt(cntntIdStr);
+    const contentDto = parseToContentDTO(req.body);
+    const { activityId, versionId } = parseNumberId(req.params, [
+      "activityId",
+      "versionId",
+    ]);
+    const image = req.files?.image?.[0];
+    contentDto.payload.image = { file: image };
 
     const { user } = req;
 
     await this.saveContentUseCase.execute({
-      title,
-      description,
-      type,
-      contentId,
-      order,
-      payload: {
-        ...payload,
-        image,
-      },
+      contentDto,
       user,
       activityId,
       versionId,
