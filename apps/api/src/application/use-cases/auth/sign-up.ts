@@ -4,10 +4,8 @@ import {
   ITokenRepository,
   IIdGenerator,
   IEmailService,
-  IAssetRepository,
   UserInsertDTO,
   IUseCase,
-  TokenType,
 } from "@interfaces";
 import { User } from "@domain";
 import {
@@ -31,8 +29,7 @@ class UseCase implements ISignUpUseCase {
     private encryptionService: IEncryptionService,
     private idService: IIdGenerator,
     private emailService: IEmailService,
-    private tokenRepository: ITokenRepository,
-    private assetRepository: IAssetRepository
+    private tokenRepository: ITokenRepository
   ) {}
 
   async execute({ email, password, name, confirmPassword }: InputParams) {

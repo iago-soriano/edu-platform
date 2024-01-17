@@ -1,22 +1,25 @@
-import { Tabs } from "./../../../../web-app/src/components/tabs/index";
-import { Content } from "@domain";
 import {
   ActivityIsNotFound,
   ActivityVersionNotFound,
 } from "@edu-platform/common";
 import {
-  ActivityContentSelectDTO,
   ActivitySelectDTO,
-  ActivityVersionSelectDTO,
   IActivitiesRepository,
   IUseCase,
+  UserSelectDTO,
+  ActivityVersionSelectDTO,
 } from "@interfaces";
-import { Activity } from "application/domain/activity";
+import { Activity, ActivityVersion, VersionStatus } from "@domain";
+import {
+  IGetActivityUseCaseHelper,
+  IValidateActivityUserRelationUseCaseMiddleware,
+} from "application/use-case-middlewares";
 
 type InputParams = {
-  activityId: string;
-  versionId: string;
-  newActivityStatus: string;
+  user: UserSelectDTO;
+  activityId: number;
+  versionId: number;
+  newActivityStatus: VersionStatus;
 };
 
 type Return = {
@@ -26,26 +29,79 @@ type Return = {
 export type IUpdateActivityStatusUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IUpdateActivityStatusUseCase {
-  constructor(private activitiesRepository: IActivitiesRepository) {}
+  constructor(
+    private activitiesRepository: IActivitiesRepository,
+    private getActivityHelper: IGetActivityUseCaseHelper,
+    private validateActivityUserRelationUseCaseMiddleware: IValidateActivityUserRelationUseCaseMiddleware
+  ) {}
+
+  async execute({
+    user,
+    activityId,
+    versionId,
+    newActivityStatus,
+  }: InputParams) {
+    const { version, activity } = await this.getActivityHelper.execute({
+      activityId,
+      versionId,
+    });
+
+    await this.validateActivityUserRelationUseCaseMiddleware.execute({
+      user,
+      activity,
+    });
+
+    return this.handle({ activity, version, newActivityStatus });
+  }
+
+  async handle({
+    activity: activityDto,
+    version: versionDto,
+    newActivityStatus,
+  }: {
+    activity: ActivitySelectDTO;
+    version: ActivityVersionSelectDTO;
+    newActivityStatus: VersionStatus;
+  }) {
+    const activity = Activity.mapFromDatabaseDto(activityDto);
+    const version = ActivityVersion.mapFromDatabaseDto(versionDto);
+
+    if (
+      version.status === VersionStatus.Draft &&
+      newActivityStatus === VersionStatus.Published
+    ) {
+      await this.handlePublishDraft(activity, version);
+    } else if (
+      version.status === VersionStatus.Archived &&
+      newActivityStatus === VersionStatus.Published
+    ) {
+      await this.handlePublishArchived(activity, version);
+    } else if (
+      version.status === VersionStatus.Published &&
+      newActivityStatus === VersionStatus.Archived
+    ) {
+      await this.handleArchivePublished(activity);
+    }
+
+    return {};
+  }
 
   private handlePublishDraft = async (
-    activityToBeUpdated: ActivitySelectDTO,
-    version: ActivityVersionSelectDTO,
-    contents: ActivityContentSelectDTO[],
-    versionId: number,
-    activityId: number
+    activity: Activity,
+    version: ActivityVersion
   ) => {
+    const { contents, questions } =
+      await this.activitiesRepository.Versions.findElementsByVersionId(
+        version.id
+      );
+
     if (!contents || !contents.length) throw new Error("Não há conteúdos");
 
-    const activityHasPublishedVersion = Activity.hasPublishedVersion(
-      activityToBeUpdated.lastVersionId
-    );
-
-    if (activityHasPublishedVersion) {
-      await this.activitiesRepository.updateActivityVersion(
-        activityToBeUpdated.lastVersionId,
+    if (activity.hasPublishedVersion()) {
+      await this.activitiesRepository.Versions.update(
+        activity.lastVersionId || 0,
         {
-          status: "Archived",
+          status: VersionStatus.Published,
         }
       );
     }
@@ -55,133 +111,71 @@ class UseCase implements IUpdateActivityStatusUseCase {
 
     let contentCounter = 0;
 
-    for (let content of contents) {
-      const contentToBeVerified = Content.createContent({
-        type: content.type,
-        id: content.id,
-        title: content.title,
-        description: content.description,
-        imageUrl: content.imageUrl,
-        tracks: content.tracks,
-        videoUrl: content.videoUrl,
-        text: content.text,
-        order: content.order,
-        originatingVersionId: content.originatingVersionId,
-      });
+    // for (let content of contents) {
+    //   const contentToBeVerified = Content.createContent({
+    //     type: content.type,
+    //     id: content.id,
+    //     title: content.title,
+    //     description: content.description,
+    //     imageUrl: content.imageUrl,
+    //     tracks: content.tracks,
+    //     videoUrl: content.videoUrl,
+    //     text: content.text,
+    //     order: content.order,
+    //     originatingVersionId: content.originatingVersionId,
+    //   });
 
-      if (contentToBeVerified.isHalfCompleted()) {
-        throw new Error(
-          `Conteúdo tem apenas título e/ou descrição. Título: ${contentToBeVerified.title}. Descrição: ${contentToBeVerified.description}`
-        );
-      } else if (contentToBeVerified.isEmpty()) {
-        await this.activitiesRepository.deleteContentVersionRelation(
-          content.id,
-          versionId
-        );
-        await this.activitiesRepository.deleteContent(content.id);
-      } else {
-        contentCounter++;
-      }
-    }
+    //   if (contentToBeVerified.isHalfCompleted()) {
+    //     throw new Error(
+    //       `Conteúdo tem apenas título e/ou descrição. Título: ${contentToBeVerified.title}. Descrição: ${contentToBeVerified.description}`
+    //     );
+    //   } else if (contentToBeVerified.isEmpty()) {
+    //     await this.activitiesRepository.deleteContentVersionRelation(
+    //       content.id,
+    //       versionId
+    //     );
+    //     await this.activitiesRepository.deleteContent(content.id);
+    //   } else {
+    //     contentCounter++;
+    //   }
+    // }
 
     if (contentCounter === 0) throw new Error("Não há conteúdos");
 
-    await this.activitiesRepository.updateActivityVersion(
-      activityToBeUpdated.draftVersionId,
-      {
-        status: "Published",
-        version: version.version + 1,
-      }
-    );
-    await this.activitiesRepository.updateActivity(activityId, {
-      lastVersionId: activityToBeUpdated.draftVersionId,
+    await this.activitiesRepository.Versions.update(activity.draftVersionId, {
+      status: "Published",
+      version: (version.version || 0) + 1,
+    });
+    await this.activitiesRepository.Activities.update(activity.id, {
+      lastVersionId: activity.draftVersionId,
       draftVersionId: null,
     });
   };
 
   private handlePublishArchived = async (
-    activityToBeUpdated: ActivitySelectDTO,
-    versionId: number,
-    activityId: number
+    activity: Activity,
+    version: ActivityVersion
   ) => {
-    const activityHasPublishedVersion = Activity.hasPublishedVersion(
-      activityToBeUpdated.lastVersionId
-    );
-
-    if (activityHasPublishedVersion) {
-      return activityToBeUpdated.lastVersionId;
+    if (activity.hasPublishedVersion()) {
+      return activity.lastVersionId;
     } else {
-      await this.activitiesRepository.updateActivityVersion(versionId, {
-        status: "Published",
+      await this.activitiesRepository.Versions.update(version.id, {
+        status: VersionStatus.Published,
       });
-      await this.activitiesRepository.updateActivity(activityId, {
-        lastVersionId: versionId,
+      await this.activitiesRepository.Activities.update(activity.id, {
+        lastVersionId: version.id,
       });
     }
   };
 
-  private handleArchivePublished = async (
-    activityToBeUpdated: ActivitySelectDTO,
-    activityId: number
-  ) => {
-    await this.activitiesRepository.updateActivityVersion(
-      activityToBeUpdated.lastVersionId,
-      { status: "Archived" }
-    );
-    await this.activitiesRepository.updateActivity(activityId, {
+  private handleArchivePublished = async (activity: Activity) => {
+    await this.activitiesRepository.Versions.update(activity.lastVersionId, {
+      status: VersionStatus.Archived,
+    });
+    await this.activitiesRepository.Activities.update(activity.id, {
       lastVersionId: null,
     });
   };
-
-  async execute({
-    activityId: activityIdString,
-    versionId: versionIdString,
-    newActivityStatus,
-  }: InputParams) {
-    const activityId = parseInt(activityIdString);
-    const versionId = parseInt(versionIdString);
-
-    const validStatus = Activity.validateStatuses([newActivityStatus])[0];
-
-    const activityToBeUpdated =
-      await this.activitiesRepository.findActivityById(activityId);
-
-    if (!activityToBeUpdated) throw new ActivityIsNotFound();
-
-    const activityVersionToBeUpdated =
-      await this.activitiesRepository.findVersionById(versionId);
-
-    if (!activityVersionToBeUpdated) throw new ActivityVersionNotFound();
-
-    if (
-      activityVersionToBeUpdated.version.status === "Draft" &&
-      validStatus === "Published"
-    ) {
-      await this.handlePublishDraft(
-        activityToBeUpdated,
-        activityVersionToBeUpdated.version,
-        activityVersionToBeUpdated.contents,
-        versionId,
-        activityId
-      );
-    } else if (
-      activityVersionToBeUpdated.version.status === "Archived" &&
-      validStatus === "Published"
-    ) {
-      await this.handlePublishArchived(
-        activityToBeUpdated,
-        versionId,
-        activityId
-      );
-    } else if (
-      activityVersionToBeUpdated.version.status === "Published" &&
-      validStatus === "Archived"
-    ) {
-      await this.handleArchivePublished(activityToBeUpdated, activityId);
-    }
-
-    return {};
-  }
 }
 
 export default UseCase;

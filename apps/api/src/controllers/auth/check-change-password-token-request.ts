@@ -14,7 +14,7 @@ type Request = TypedRequest<{}, CheckChangePasswordTokenRequestQueryParams, {}>;
 type Response = TypedResponse<CheckChangePasswordTokenResponseBody>;
 
 export class CheckChangePasswordTokenRequestController
-  implements HTTPController
+  implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
   path: string = "check-token-validity";

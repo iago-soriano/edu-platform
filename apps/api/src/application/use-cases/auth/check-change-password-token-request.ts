@@ -1,4 +1,4 @@
-import { ITokenRepository, IUseCase, TokenType } from "@interfaces";
+import { ITokenRepository, IUseCase } from "@interfaces";
 
 type InputParams = {
   token: string;
@@ -23,6 +23,7 @@ class UseCase implements ICheckChangePasswordTokenRequestUseCase {
 
     if (
       changePasswordRequestToken &&
+      changePasswordRequestToken.expiresAt &&
       changePasswordRequestToken.expiresAt.getTime() > Date.now()
     ) {
       return true;

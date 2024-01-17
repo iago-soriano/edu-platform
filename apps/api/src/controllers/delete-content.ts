@@ -6,11 +6,14 @@ import {
 } from "@interfaces";
 import { IDeleteContentUseCase } from "@use-cases";
 import { DeleteActivityContentParams } from "@edu-platform/common/api";
+import { parseNumberId } from "@infrastructure";
 
 type Request = TypedRequest<DeleteActivityContentParams, {}, {}>;
 type Response = TypedResponse<{}>;
 
-export class DeleteContentController implements HTTPController {
+export class DeleteContentController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.DELETE;
   path: string = "activity/:activityId/version/:versionId/content/:contentId";
   middlewares: string[] = ["auth"];
@@ -18,11 +21,18 @@ export class DeleteContentController implements HTTPController {
   constructor(private deleteContentUseCase: IDeleteContentUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { versionId, contentId } = req.params;
+    const { activityId, versionId, contentId } = parseNumberId(req.params, [
+      "activityId",
+      "versionId",
+      "contentId",
+    ]);
+    const { user } = req;
 
     await this.deleteContentUseCase.execute({
+      activityId,
       versionId,
       contentId,
+      user,
     });
 
     res.status(200).json();

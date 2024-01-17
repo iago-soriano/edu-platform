@@ -13,7 +13,9 @@ import {
 type Request = TypedRequest<{}, {}, ProviderSignUpRequestBody>;
 type Response = TypedResponse<ProviderSignUpResponseBody>;
 
-export class ProviderSignUpController implements HTTPController {
+export class ProviderSignUpController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.POST;
   path: string = "sign-up/provider";
 

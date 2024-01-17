@@ -29,7 +29,9 @@ import CreateNewActivityUseCase, {
 import UpdateActivityMetadataUseCase, {
   IUpdateActivityMetadataUseCase,
 } from "./update-activity-metadata";
-import GetActivitiesUseCase, { IGetActivitiesUseCase } from "./get-activities";
+import ListActivityVersionsUseCase, {
+  IListActivityVersionsUseCase,
+} from "./list-activity-versions";
 import GetActivityVersionUseCase, {
   IGetActivityVersionUseCase,
 } from "./get-activity-version";
@@ -65,8 +67,8 @@ export {
   ICreateNewActivityUseCase,
   UpdateActivityMetadataUseCase,
   IUpdateActivityMetadataUseCase,
-  GetActivitiesUseCase,
-  IGetActivitiesUseCase,
+  ListActivityVersionsUseCase,
+  IListActivityVersionsUseCase,
   GetActivityVersionUseCase,
   IGetActivityVersionUseCase,
   DeleteContentUseCase,

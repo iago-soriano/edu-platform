@@ -1,12 +1,12 @@
 import { FileType } from "@interfaces";
-import { Content, ContentTypesType } from "./base";
+import { Content, ContentTypes } from "./base";
 import { ContentDTO } from "@dto";
 
 export class ImageContent extends Content {
   public url: string = "";
 
   constructor() {
-    super("Image");
+    super(ContentTypes.Image);
   }
 
   mergePayload(newContent: ImageContent) {
@@ -18,6 +18,10 @@ export class ImageContent extends Content {
   }
 
   validatePayload(): void {}
+
+  storedFileUrl(): string {
+    return this.url;
+  }
 
   setFileUrl(url: string) {
     this.url = url;

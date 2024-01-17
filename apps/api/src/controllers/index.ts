@@ -15,6 +15,6 @@ export * from "./save-question";
 export * from "./save-content";
 export * from "./create-new-activity";
 export * from "./update-activity-metadata";
-export * from "./get-activities";
+export * from "./list-activity-versions";
 export * from "./get-activity-version";
 export * from "./delete-content";

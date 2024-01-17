@@ -35,7 +35,7 @@ class UseCase implements ISignInUseCase {
   ) {}
 
   async execute({ email, password }: InputParams) {
-    let userDTO: UserSelectDTO;
+    let userDTO: UserSelectDTO | null;
 
     if (email && password) {
       userDTO = await this.userRepository.getUserByEmail(email);
@@ -47,7 +47,7 @@ class UseCase implements ISignInUseCase {
 
       const passwordValid = await this.encryptionService.compare(
         password,
-        userDTO.hashedPassword
+        userDTO?.hashedPassword || ""
       );
       if (!passwordValid) throw new InvalidCredentialsError();
     } else {
@@ -67,7 +67,11 @@ class UseCase implements ISignInUseCase {
     return {
       accessToken,
       refreshToken,
-      user: { email: userDTO.email, name: userDTO.name, image: userDTO.image },
+      user: userDTO && {
+        email: userDTO.email || "",
+        name: userDTO.name || "",
+        image: userDTO.image || "",
+      },
     };
   }
 }

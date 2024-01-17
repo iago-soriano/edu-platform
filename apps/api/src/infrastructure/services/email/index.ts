@@ -8,6 +8,11 @@ import * as EmailValidator from "email-validator";
 
 export const validateEmail = EmailValidator.validate;
 
+type SendEmailArgs = {
+  destination: string;
+  url: string;
+};
+
 export class EmailService implements IEmailService {
   _transporter;
   from = '"Iago Soriano" <iago.srm.is@gmail.com>';
@@ -24,7 +29,7 @@ export class EmailService implements IEmailService {
     });
   }
 
-  async sendForgotPasswordEmail({ destination, url }) {
+  async sendForgotPasswordEmail({ destination, url }: SendEmailArgs) {
     const resp = await this._transporter.sendMail({
       from: this.from,
       to: destination, // list of receivers
@@ -34,7 +39,7 @@ export class EmailService implements IEmailService {
     });
   }
 
-  async sendVerifyAccountEmail({ destination, url }) {
+  async sendVerifyAccountEmail({ destination, url }: SendEmailArgs) {
     const resp = await this._transporter.sendMail({
       from: this.from,
       to: destination, // list of receivers

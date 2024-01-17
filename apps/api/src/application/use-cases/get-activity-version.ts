@@ -1,16 +1,16 @@
-import { Activity } from "@domain";
-import {
-  ActivityIsNotDraft,
-  ActivityIsNotFound,
-  UserNotActivityAuthor,
-} from "@edu-platform/common";
+import { Content, VersionStatus } from "@domain";
+import { ElementDTO, parseVersionStatus } from "@dto";
 import {
   IUseCase,
   UserSelectDTO,
   IActivitiesRepository,
-  ActivityContentSelectDTO,
-  QuestionSelectDTO,
+  ActivitySelectDTO,
+  ActivityVersionSelectDTO,
 } from "@interfaces";
+import {
+  IGetActivityUseCaseHelper,
+  IValidateActivityUserRelationUseCaseMiddleware,
+} from "application/use-case-middlewares";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -21,50 +21,72 @@ type InputParams = {
 type Return = {
   title: string;
   description: string;
-  status: string;
+  status: VersionStatus;
   topics: string;
-  elements: {
-    id: number;
-    title?: string;
-    description?: string;
-    type: string;
-    content?: string;
-    elementType: string;
-    question?: string;
-    answerKey?: string;
-    order: number;
-  }[];
+  elements?: ElementDTO[];
 };
 
 export type IGetActivityVersionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IGetActivityVersionUseCase {
-  constructor(private activitiesRepository: IActivitiesRepository) {}
+  constructor(
+    private activitiesRepository: IActivitiesRepository,
+    private getActivityHelper: IGetActivityUseCaseHelper,
+    private validateActivityUserRelationUseCaseMiddleware: IValidateActivityUserRelationUseCaseMiddleware
+  ) {}
 
-  async execute({ user, versionId, activityId }: InputParams) {
-    const activity =
-      await this.activitiesRepository.findActivityById(activityId);
+  async execute({ user, activityId, versionId }: InputParams) {
+    const { version, activity } = await this.getActivityHelper.execute({
+      activityId,
+      versionId,
+    });
 
-    const { version, contents, questions } =
-      await this.activitiesRepository.findVersionById(versionId);
+    await this.validateActivityUserRelationUseCaseMiddleware.execute({
+      user,
+      activity,
+    });
+
+    return this.handle({ user, activity, version });
+  }
+
+  async handle({
+    user,
+    version,
+    activity,
+  }: {
+    user: UserSelectDTO;
+    activity: ActivitySelectDTO;
+    version: ActivityVersionSelectDTO;
+  }) {
+    const { contents, questions } =
+      await this.activitiesRepository.Versions.findElementsByVersionId(
+        version.id
+      );
 
     const elements = [
-      ...contents.map((c) => ({ ...c, elementType: "content" })),
-      ...questions.map((c) => ({ ...c, elementType: "question" })),
-    ].sort((el1, el2) => el1.order - el2.order);
-
-    if (version.activityId != activityId)
-      throw new Error("Activity Id and version Id don't match");
+      ...contents.map((c) => ({
+        content: Content.mapFromDatabaseDtoToRegularDto(c),
+        question: null,
+      })),
+      ...questions.map((q) => ({
+        question: { ...q, order: q.order || 0 },
+        content: null,
+      })),
+    ].sort(
+      (el1, el2) =>
+        ((el1.content || el1.question).order || 0) -
+        ((el2.content || el2.question).order || 0)
+    );
 
     if (version.status == "Draft" && activity.authorId !== user.id)
       throw new Error("Non-author cannot get draft version");
 
     return {
-      id: version.id,
-      title: version.title,
-      description: version.description,
-      status: version.status,
-      topics: version.topics,
+      id: version.id || 0,
+      title: version.title || "",
+      description: version.description || "",
+      status: parseVersionStatus(version.status) || "",
+      topics: version.topics || "",
       elements,
     };
   }

@@ -6,11 +6,14 @@ import {
 } from "@interfaces";
 import { IDeleteVersionUseCase } from "@use-cases";
 import { DeleteDraftVersionParams } from "@edu-platform/common/api";
+import { parseNumberId } from "@infrastructure";
 
 type Request = TypedRequest<DeleteDraftVersionParams, {}, {}>;
 type Response = TypedResponse<{}>;
 
-export class DeleteVersionController implements HTTPController {
+export class DeleteVersionController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.DELETE;
   path: string = "activity/:activityId/version/:versionId/";
   middlewares: string[] = ["auth"];
@@ -18,11 +21,16 @@ export class DeleteVersionController implements HTTPController {
   constructor(private deleteVersionUseCase: IDeleteVersionUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { activityId, versionId } = req.params;
+    const { activityId, versionId } = parseNumberId(req.params, [
+      "activityId",
+      "versionId",
+    ]);
+    const { user } = req;
 
     await this.deleteVersionUseCase.execute({
       activityId,
       versionId,
+      user,
     });
 
     res.status(200).json();

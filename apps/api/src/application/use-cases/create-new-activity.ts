@@ -15,12 +15,12 @@ class UseCase implements ICreateNewActivityUseCase {
   constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({ user }: InputParams) {
-    const { activityId } = await this.activitiesRepository.insertActivity(
+    const { activityId } = await this.activitiesRepository.Activities.insert(
       user.id
     );
 
     const { versionId } =
-      await this.activitiesRepository.insertVersion(activityId);
+      await this.activitiesRepository.Versions.insert(activityId);
 
     return { activityId, versionId };
   }

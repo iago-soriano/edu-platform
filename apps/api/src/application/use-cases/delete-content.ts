@@ -1,12 +1,22 @@
+import { Content } from "@domain";
 import {
-  ActivityContentNotFound,
-  ActivityVersionNotFound,
-} from "@edu-platform/common";
-import { IUseCase, IActivitiesRepository, IStorageService } from "@interfaces";
+  IUseCase,
+  IActivitiesRepository,
+  IStorageService,
+  UserSelectDTO,
+  ActivityVersionSelectDTO,
+  ActivityContentSelectDTO,
+} from "@interfaces";
+import {
+  IGetActivityUseCaseHelper,
+  IValidateActivityUserRelationUseCaseMiddleware,
+} from "application/use-case-middlewares";
 
 type InputParams = {
-  versionId: string;
-  contentId: string;
+  activityId: number;
+  versionId: number;
+  contentId: number;
+  user: UserSelectDTO;
 };
 
 type Return = void;
@@ -16,43 +26,56 @@ export type IDeleteContentUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IDeleteContentUseCase {
   constructor(
     private activitiesRepository: IActivitiesRepository,
-    private storageService: IStorageService
+    private storageService: IStorageService,
+    private getActivityHelper: IGetActivityUseCaseHelper,
+    private validateActivityUserRelationUseCaseMiddleware: IValidateActivityUserRelationUseCaseMiddleware
   ) {}
 
-  async execute({
-    versionId: versionIdString,
-    contentId: contentIdString,
-  }: InputParams) {
-    const contentId = parseInt(contentIdString);
-    const versionId = parseInt(versionIdString);
-
-    const version = await this.activitiesRepository.findVersionById(versionId);
-
-    if (!version) throw new ActivityVersionNotFound();
-
-    const contentToBeDeleted = version.contents.filter(
-      (ct) => ct.id === contentId
-    )[0];
-
-    if (!contentToBeDeleted) throw new ActivityContentNotFound();
-
-    if (contentToBeDeleted.originatingVersionId !== versionId) {
-      await this.activitiesRepository.deleteContentVersionRelation(
+  async execute({ user, activityId, versionId, contentId }: InputParams) {
+    const { version, activity, content } = await this.getActivityHelper.execute(
+      {
+        activityId,
+        versionId,
         contentId,
-        versionId
+      }
+    );
+
+    await this.validateActivityUserRelationUseCaseMiddleware.execute({
+      user,
+      activity,
+    });
+
+    if (!content) return;
+    return this.handle({ version, content });
+  }
+
+  async handle({
+    content: dbDto,
+    version,
+  }: {
+    content: ActivityContentSelectDTO;
+    version: ActivityVersionSelectDTO;
+  }) {
+    const content = Content.mapFromDatabaseDto(dbDto);
+
+    if (content.originatingVersionId !== version.id) {
+      await this.activitiesRepository.VersionElements.delete(
+        content.id || 0,
+        version.id
       );
       return;
     }
 
-    if (contentToBeDeleted.type === "Image" && contentToBeDeleted.imageUrl) {
-      await this.storageService.deleteFile(contentToBeDeleted.imageUrl);
+    const fileUrl = content.storedFileUrl();
+    if (fileUrl) {
+      await this.storageService.deleteFileByUrl(fileUrl);
     }
 
-    await this.activitiesRepository.deleteContentVersionRelation(
-      contentId,
-      versionId
+    await this.activitiesRepository.VersionElements.delete(
+      content.id || 0,
+      version.id
     );
-    await this.activitiesRepository.deleteContent(contentId);
+    await this.activitiesRepository.Contents.delete(content.id || 0);
   }
 }
 

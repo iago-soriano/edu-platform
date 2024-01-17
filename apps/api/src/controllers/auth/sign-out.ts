@@ -13,7 +13,7 @@ import {
 type Request = TypedRequest<{}, {}, SignOutRequestBody>;
 type Response = TypedResponse<SignOutResponseBody>;
 
-export class SignOutController implements HTTPController {
+export class SignOutController implements HTTPController<Request, Response> {
   method = HttpMethod.POST;
   path: string = "sign-out";
 

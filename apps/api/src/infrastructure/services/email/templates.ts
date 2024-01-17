@@ -17,7 +17,7 @@ a {
 }
 </style>`;
 
-export const VerifyAccountEmailTemplate = ({ url }) => `
+export const VerifyAccountEmailTemplate = ({ url }: { url: string }) => `
 ${styles}
 <div class="container">
 <h1>Bem-vindo(a)!</h1>
@@ -26,7 +26,7 @@ ${styles}
 </div>
 `;
 
-export const ForgotPasswordEmailTemplate = ({ url }) => `
+export const ForgotPasswordEmailTemplate = ({ url }: { url: string }) => `
 ${styles}
 <div class="container">
 <h1>Redefina sua senha</h1>

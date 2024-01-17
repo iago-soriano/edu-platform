@@ -5,16 +5,28 @@ import {
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
-import {
-  GetActivityVersionParams,
-  GetActivityVersionResponseBody,
-} from "@edu-platform/common/api";
+// import {
+//   GetActivityVersionParams,
+//   GetActivityVersionResponseBody,
+// } from "@edu-platform/common/api";
 import { IGetActivityVersionUseCase } from "@use-cases";
+import { VersionDTO, ElementDTO, parseVersionStatus } from "@dto";
+
+// get activity version full view
+export type GetActivityVersionParams = {
+  activityId: string;
+  versionId: string;
+};
+export type GetActivityVersionResponseBody = VersionDTO & {
+  elements: ElementDTO[];
+};
 
 type Request = TypedRequest<GetActivityVersionParams, {}, {}>;
 type Response = TypedResponse<GetActivityVersionResponseBody>;
 
-export class GetActivityVersionController implements HTTPController {
+export class GetActivityVersionController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.GET;
   path = "activity/:activityId/version/:versionId/";
   middlewares: string[] = ["auth"];
@@ -42,12 +54,8 @@ export class GetActivityVersionController implements HTTPController {
       title,
       description,
       status,
-      elements,
+      elements: elements || [],
       topics,
-      // : [...elements.map(el => ({
-      //   ...el,
-      //   title: el.title || ""
-      // }))]
     });
   }
 }

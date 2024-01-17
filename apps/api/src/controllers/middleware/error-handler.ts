@@ -1,8 +1,17 @@
 import { CustomError } from "@edu-platform/common/errors";
-import { Request, Response, HTTPErrorController } from "@interfaces";
+import {
+  Request as TypedRequest,
+  Response as TypedResponse,
+  HTTPErrorController,
+} from "@interfaces";
 
-export class ErrorHandlerController implements HTTPErrorController {
-  execute(error: Error, _: Request, res: Response<{}>) {
+type Request = TypedRequest<{}, {}, {}>;
+type Response = TypedResponse<{}>;
+
+export class ErrorHandlerController
+  implements HTTPErrorController<Request, Response>
+{
+  execute(error: Error, _: Request, res: Response) {
     if (error instanceof CustomError) {
       console.log(
         `ERRO ${error.errors} ${error.HTTPstatusCode} ${error.message} - ${error.realReason}`

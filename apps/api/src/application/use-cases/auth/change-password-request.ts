@@ -43,8 +43,9 @@ class UseCase implements IChangePasswordRequestUseCase {
 
     if (
       tokens &&
-      tokens.filter((token) => token.expiresAt.getTime() > Date.now()).length !=
-        0
+      tokens.filter(
+        (token) => token.expiresAt && token.expiresAt.getTime() > Date.now()
+      ).length != 0
     ) {
       throw new ChangePasswordRequestTokenExist();
     }

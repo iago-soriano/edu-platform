@@ -24,7 +24,7 @@ class UseCase implements IProviderSignUpUseCase {
     private tokenService: ITokenService
   ) {}
 
-  async execute({ email, name, image, provider }) {
+  async execute({ email, name, image, provider }: InputParams) {
     let existingUser = await this.userRepository.getUserByEmail(email);
     let userId;
 

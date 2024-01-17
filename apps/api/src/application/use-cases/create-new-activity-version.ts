@@ -6,7 +6,7 @@ type InputParams = {
 };
 
 type Return = {
-  versionId?: number;
+  versionId: number;
 };
 
 export type ICreateNewActivityVersionUseCase = IUseCase<InputParams, Return>;
@@ -17,25 +17,28 @@ class UseCase implements ICreateNewActivityVersionUseCase {
   async execute({ activityId: activityIdString }: InputParams) {
     const activityId = parseInt(activityIdString);
 
-    const activity =
-      await this.activitiesRepository.findActivityById(activityId);
+    const activityDbDto =
+      await this.activitiesRepository.Activities.findById(activityId);
+    const activity = Activity.mapFromDatabaseDto(activityDbDto);
 
-    if (Activity.hasDraft(activity.draftVersionId)) {
-      return { versionId: activity.draftVersionId };
+    if (activity.hasDraft()) {
+      return { versionId: activity.draftVersionId || 0 };
     } else {
-      const versionToBeDuplicated =
-        await this.activitiesRepository.findVersionById(activity.lastVersionId);
+      const { contents, questions } =
+        await this.activitiesRepository.Versions.findElementsByVersionId(
+          activity.lastVersionId || 0
+        );
 
       // cria nova versão na atividade
       const { versionId } =
-        await this.activitiesRepository.insertVersion(activityId);
+        await this.activitiesRepository.Versions.insert(activityId);
 
       // TEM QUE MUDAR A VERSION?
 
       // cria relações contents
       await Promise.all(
-        versionToBeDuplicated.contents.map(async (content) => {
-          await this.activitiesRepository.insertRelationBetweenVersionAndElement(
+        contents.map(async (content) => {
+          await this.activitiesRepository.VersionElements.insert(
             versionId,
             content.id,
             undefined
@@ -45,8 +48,8 @@ class UseCase implements ICreateNewActivityVersionUseCase {
 
       // cria relações questions
       await Promise.all(
-        versionToBeDuplicated.questions.map(async (question) => {
-          await this.activitiesRepository.insertRelationBetweenVersionAndElement(
+        questions.map(async (question) => {
+          await this.activitiesRepository.VersionElements.insert(
             versionId,
             undefined,
             question.id
@@ -54,11 +57,11 @@ class UseCase implements ICreateNewActivityVersionUseCase {
         })
       );
 
-      await this.activitiesRepository.updateActivity(activityId, {
+      await this.activitiesRepository.Activities.update(activityId, {
         draftVersionId: versionId,
       });
 
-      return { versionId };
+      return { versionId: versionId };
     }
   }
 }

@@ -9,7 +9,9 @@ import {
   UpdateActivityStatusRequestBody,
   UpdateActivityStatusResponseBody,
 } from "@edu-platform/common/api";
-import { IUpdateActivityStatusUseCase } from "application/use-cases/update-activity-status";
+import { IUpdateActivityStatusUseCase } from "@use-cases";
+import { parseNumberId } from "@infrastructure";
+import { parseVersionStatus } from "@dto";
 
 type Request = TypedRequest<
   UpdateActivityStatusRequestParams,
@@ -18,7 +20,9 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<UpdateActivityStatusResponseBody>;
 
-export class UpdateActivityStatusController implements HTTPController {
+export class UpdateActivityStatusController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.POST;
   path = "update-activity/:activityId/version/:versionId/status";
   middlewares: string[] = ["auth"];
@@ -28,10 +32,15 @@ export class UpdateActivityStatusController implements HTTPController {
   ) {}
 
   async execute(req: Request, res: Response) {
-    const { activityId, versionId } = req.params;
-    const { newActivityStatus } = req.body;
+    const { activityId, versionId } = parseNumberId(req.params, [
+      "activityId",
+      "versionId",
+    ]);
+    const newActivityStatus = parseVersionStatus(req.body.newActivityStatus);
+
     const lastPublishedVersion = await this.updateActivityStatusUseCase.execute(
       {
+        user: req.user,
         activityId,
         versionId,
         newActivityStatus,

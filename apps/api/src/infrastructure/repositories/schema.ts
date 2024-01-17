@@ -8,13 +8,13 @@ import {
   primaryKey,
   timestamp,
 } from "drizzle-orm/pg-core";
-import { relations, sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import {
-  ActivityPossibleStatus,
+  VersionStatus,
   QuestionPossibleTypes,
   UserTypes,
+  ContentTypes,
 } from "@domain";
-import { ActivityConstants } from "@edu-platform/common";
 
 /* #region Tokens */
 export const tokenTypeEnum = pgEnum("tokenType", [
@@ -96,9 +96,9 @@ export const activitiesRelations = relations(activities, ({ many, one }) => ({
 /* #endregion */
 
 /* #region Activity Versions */
-export const activityStatusEnum = pgEnum(
+export const versionStatusEnum = pgEnum(
   "activityStatus",
-  ActivityPossibleStatus
+  Object.values(VersionStatus).filter((v) => isNaN(Number(v))) as [string]
 );
 
 export const activityVersions = pgTable("activity_version", {
@@ -109,7 +109,7 @@ export const activityVersions = pgTable("activity_version", {
   title: varchar("title", { length: 50 }),
   description: varchar("description", { length: 200 }),
   topics: varchar("topics", { length: 200 }),
-  status: activityStatusEnum("activity_status").default("Draft"),
+  status: versionStatusEnum("activity_status").default("Draft"),
   version: integer("version").default(0),
 
   activityId: integer("activity_id").references(() => activities.id),
@@ -139,7 +139,7 @@ export const activityVersionsRelations = relations(
 
 export const contentTypeEnum = pgEnum(
   "contentType",
-  ActivityConstants.contentPossibleTypes
+  Object.values(ContentTypes).filter((v) => isNaN(Number(v))) as [string]
 );
 
 export const activityContents = pgTable("activity_contents", {

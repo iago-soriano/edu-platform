@@ -1,18 +1,21 @@
-import { Activity } from "@domain";
+import { Activity, ActivityVersion } from "@domain";
 import {
   ActivityIsNotDraft,
   ActivityIsNotFound,
   UserNotActivityAuthor,
 } from "@edu-platform/common";
 import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
+import { VersionDTO } from "@dto";
+import {
+  IGetActivityUseCaseHelper,
+  IValidateActivityUserRelationUseCaseMiddleware,
+} from "application/use-case-middlewares";
 
 type InputParams = {
   user: UserSelectDTO;
   activityId: number;
   versionId: number;
-  title?: string;
-  description?: string;
-  topics?: string;
+  versionDto: VersionDTO;
 };
 
 type Return = void;
@@ -20,41 +23,39 @@ type Return = void;
 export type IUpdateActivityMetadataUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IUpdateActivityMetadataUseCase {
-  constructor(private activitiesRepository: IActivitiesRepository) {}
+  constructor(
+    private activitiesRepository: IActivitiesRepository,
+    private getActivityHelper: IGetActivityUseCaseHelper,
+    private validateActivityUserRelationUseCaseMiddleware: IValidateActivityUserRelationUseCaseMiddleware
+  ) {}
 
-  async execute({
-    user,
-    activityId,
-    versionId,
-    title,
-    description,
-    topics,
-  }: InputParams) {
-    const existingActivity =
-      await this.activitiesRepository.findActivityById(activityId);
+  async execute({ user, activityId, versionId, versionDto }: InputParams) {
+    const { version, activity } = await this.getActivityHelper.execute({
+      activityId,
+      versionId,
+    });
 
-    if (!existingActivity) throw new ActivityIsNotFound();
-
-    if (existingActivity.authorId !== user.id)
-      throw new UserNotActivityAuthor();
-
-    if (existingActivity.draftVersionId != versionId)
-      throw new ActivityIsNotFound();
-
-    const { version } =
-      await this.activitiesRepository.findVersionById(versionId);
-
-    if (version.activityId != activityId) throw new ActivityIsNotFound();
     if (version.status !== "Draft") throw new ActivityIsNotDraft();
 
-    title && Activity.validateTitle(title);
-    description && Activity.validateDescription(description);
-    topics && Activity.validateTopics(topics);
+    await this.validateActivityUserRelationUseCaseMiddleware.execute({
+      user,
+      activity,
+    });
 
-    await this.activitiesRepository.updateActivityVersion(versionId, {
-      title,
-      description,
-      topics,
+    return this.handle({ versionId, dto: versionDto });
+  }
+
+  async handle({ versionId, dto }: { dto: VersionDTO; versionId: number }) {
+    const version = ActivityVersion.mapFromDto(dto);
+
+    version.validateTitle();
+    version.validateDescription();
+    version.validateTopics();
+
+    await this.activitiesRepository.Versions.update(versionId, {
+      title: version.title,
+      description: version.description,
+      topics: version.topics,
     });
   }
 }

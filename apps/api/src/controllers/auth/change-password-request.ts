@@ -13,7 +13,9 @@ import {
 type Request = TypedRequest<{}, {}, ChangePasswordRequestRequestBody>;
 type Response = TypedResponse<ChangePasswordRequestResponseBody>;
 
-export class ChangePasswordRequestController implements HTTPController {
+export class ChangePasswordRequestController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.POST;
   path: string = "change-password-request";
 

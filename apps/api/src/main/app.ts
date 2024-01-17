@@ -20,16 +20,14 @@ interface IExpressConstructorParams extends IHTTPServerConstructorParams {
 export class ExpressServer extends AbstractServer {
   _app: Express;
   baseUrn: string;
-  _logger: any;
 
   constructor({
-    logger,
     controllers,
     errorHandler,
     middlewares,
     baseUrn,
   }: IExpressConstructorParams) {
-    super({ logger });
+    super();
     this._app = express();
     this.setupServer(this._app);
     this.baseUrn = baseUrn;

@@ -13,7 +13,9 @@ import {
 type Request = TypedRequest<{}, {}, VerifyAccountRequestBody>;
 type Response = TypedResponse<VerifyAccountResponseBody>;
 
-export class VerifyAccountController implements HTTPController {
+export class VerifyAccountController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.PATCH;
   path: string = "verify-account";
 

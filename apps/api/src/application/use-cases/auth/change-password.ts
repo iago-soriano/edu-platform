@@ -39,14 +39,14 @@ class UseCase implements IChangePasswordUseCase {
     );
 
     if (!token) throw new InvalidValidationTokenError();
-    if (token.expiresAt.getTime() < Date.now())
+    if (token.expiresAt && token.expiresAt.getTime() < Date.now())
       throw new InvalidValidationTokenError();
 
     if (!newPassword || !confirmNewPassword)
       throw new PasswordsDontMatchError();
     if (newPassword !== confirmNewPassword) throw new PasswordsDontMatchError();
 
-    const user = await this.userRepository.getUserById(token.userId);
+    const user = await this.userRepository.getUserById(token.userId || 0);
 
     if (!user) throw new UserNotFoundError();
 
@@ -56,7 +56,7 @@ class UseCase implements IChangePasswordUseCase {
       hashedPassword: newHashedPassword,
     });
 
-    await this.tokenRepository.updateTokenByValue(token.value, {
+    await this.tokenRepository.updateTokenByValue(token.value || "", {
       expiresAt: new Date(),
     });
   }

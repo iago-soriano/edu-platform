@@ -13,7 +13,9 @@ import { ICreateNewActivityVersionUseCase } from "@use-cases";
 type Request = TypedRequest<CreateNewActivityVersionParams, {}, {}>;
 type Response = TypedResponse<CreateNewActivityVersionResponseBody>;
 
-export class CreateNewActivityVersionController implements HTTPController {
+export class CreateNewActivityVersionController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.POST;
   path: string = "create-new-version/:activityId";
   middlewares: string[] = ["auth"];

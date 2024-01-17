@@ -13,7 +13,7 @@ import {
 type Request = TypedRequest<{}, {}, SignUpRequestBody>;
 type Response = TypedResponse<SignUpResponseBody>;
 
-export class SignUpController implements HTTPController {
+export class SignUpController implements HTTPController<Request, Response> {
   method = HttpMethod.POST;
   path: string = "sign-up";
 

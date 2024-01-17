@@ -27,6 +27,6 @@ export interface HTTPController<Request = {}, Response = {}> {
 
 export type FileType = Express.Multer.File;
 
-export interface HTTPErrorController {
-  execute: ErrorRequestHandler;
+export interface HTTPErrorController<Request = {}, Response = {}> {
+  execute: (error: Error, req: Request, res: Response) => void;
 }

@@ -32,7 +32,7 @@ class UseCase implements IVerifyAccountUseCase {
     if (!verificationToken) throw new InvalidValidationTokenError();
 
     const user = await this.userRepository.getUserById(
-      verificationToken.userId
+      verificationToken.userId || 0
     );
     if (!user) throw new UserNotFoundError();
 

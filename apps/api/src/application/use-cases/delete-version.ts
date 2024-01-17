@@ -1,13 +1,24 @@
 import {
-  ActivityContentNotFound,
   ActivityIsNotDraft,
   ActivityVersionNotFound,
 } from "@edu-platform/common";
-import { IUseCase, IActivitiesRepository, IStorageService } from "@interfaces";
+import {
+  IUseCase,
+  IActivitiesRepository,
+  IStorageService,
+  UserSelectDTO,
+  ActivitySelectDTO,
+  ActivityVersionSelectDTO,
+} from "@interfaces";
+import {
+  IGetActivityUseCaseHelper,
+  IValidateActivityUserRelationUseCaseMiddleware,
+} from "application/use-case-middlewares";
 
 type InputParams = {
-  activityId: string;
-  versionId: string;
+  user: UserSelectDTO;
+  activityId: number;
+  versionId: number;
 };
 
 type Return = void;
@@ -17,26 +28,40 @@ export type IDeleteVersionUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IDeleteVersionUseCase {
   constructor(
     private activitiesRepository: IActivitiesRepository,
-    private storageService: IStorageService
+    private storageService: IStorageService,
+    private getActivityHelper: IGetActivityUseCaseHelper,
+    private validateActivityUserRelationUseCaseMiddleware: IValidateActivityUserRelationUseCaseMiddleware
   ) {}
 
-  async execute({
-    activityId: activityIdString,
-    versionId: versionIdString,
-  }: InputParams) {
-    const activityId = parseInt(activityIdString);
-    const versionId = parseInt(versionIdString);
+  async execute({ user, activityId, versionId }: InputParams) {
+    const { version, activity } = await this.getActivityHelper.execute({
+      activityId,
+      versionId,
+    });
 
-    const version = await this.activitiesRepository.findVersionById(versionId);
+    await this.validateActivityUserRelationUseCaseMiddleware.execute({
+      user,
+      activity,
+    });
 
-    if (!version) throw new ActivityVersionNotFound();
+    return this.handle({ activity, version });
+  }
 
-    const activityVersionIsDraft = version.version.status === "Draft";
+  async handle({
+    activity,
+    version,
+  }: {
+    activity: ActivitySelectDTO;
+    version: ActivityVersionSelectDTO;
+  }) {
+    if (!(version.status === "Draft")) throw new ActivityIsNotDraft();
+    const { questions, contents } =
+      await this.activitiesRepository.Versions.findElementsByVersionId(
+        version.id
+      );
 
-    if (!activityVersionIsDraft) throw new ActivityIsNotDraft();
-
-    const contentsToBeDeleted = version.contents.filter(
-      (ct) => ct.originatingVersionId === versionId
+    const contentsToBeDeleted = contents.filter(
+      (ct) => ct.originatingVersionId === version.id
     );
 
     for (let content of contentsToBeDeleted) {
@@ -45,37 +70,36 @@ class UseCase implements IDeleteVersionUseCase {
         content.imageUrl &&
         content.parentId === null
       ) {
-        await this.storageService.deleteFile(content.imageUrl);
+        await this.storageService.deleteFileByUrl(content.imageUrl);
       } else if (
         content.type === "Image" &&
         content.imageUrl &&
         content.parentId !== null
       ) {
-        const parentVersion =
-          await this.activitiesRepository.findActivityContentById(
-            content.parentId
-          );
+        const parentVersion = await this.activitiesRepository.Contents.findById(
+          content.parentId
+        );
 
-        const parentImageUrlKeyName = parentVersion.imageUrl
+        const parentImageUrlKeyName = (parentVersion?.imageUrl || "")
           .split("/")[3]
-          .concat("/", parentVersion.imageUrl.split("/")[4]);
+          .concat("/", (parentVersion.imageUrl || "").split("/")[4]);
 
         const contentImageUrlKeyName = content.imageUrl
           .split("/")[3]
           .concat("/", content.imageUrl.split("/")[4]);
 
         if (parentImageUrlKeyName !== contentImageUrlKeyName) {
-          await this.storageService.deleteFile(content.imageUrl);
+          await this.storageService.deleteFileByUrl(content.imageUrl);
         }
       }
-      await this.activitiesRepository.deleteContentVersionRelation(
+      await this.activitiesRepository.VersionElements.delete(
         content.id,
-        versionId
+        version.id
       );
-      await this.activitiesRepository.deleteContent(content.id);
+      await this.activitiesRepository.Contents.delete(content.id);
     }
 
-    await this.activitiesRepository.updateActivity(activityId, {
+    await this.activitiesRepository.Activities.update(activity.id, {
       draftVersionId: null,
     });
 

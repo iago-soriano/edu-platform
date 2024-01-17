@@ -5,21 +5,16 @@ import {
   DomainRules,
   DescriptionIsTooLong,
   DescriptionIsTooShort,
-  ActivityContentNotCreated,
-  ActivityConstants,
 } from "@edu-platform/common";
 import { ImageContent, VideoContent, TextContent } from "@domain";
-import {
-  ActivityContentInsertDTO,
-  ActivityContentSelectDTO,
-  ActivityInsertDTO,
-  ActivitySelectDTO,
-  FileType,
-} from "@interfaces";
+import { ActivityContentSelectDTO, FileType } from "@interfaces";
 import { ContentDTO } from "@dto";
 
-export type ContentTypesType =
-  (typeof ActivityConstants.contentPossibleTypes)[number];
+export enum ContentTypes {
+  Video,
+  Text,
+  Image,
+}
 
 export abstract class Content {
   public id?: number;
@@ -30,18 +25,7 @@ export abstract class Content {
   public parentId?: number;
   public file: FileType | null = null;
 
-  constructor(public type: ContentTypesType) {}
-
-  // is this necessary?
-  static validateContentType(contentType: string) {
-    for (let type of ActivityConstants.contentPossibleTypes) {
-      if (contentType === type) {
-        return type;
-      }
-    }
-
-    throw new ContentTypeNotFound();
-  }
+  constructor(public type: ContentTypes) {}
 
   validateTitle() {
     if (!this.title) return;
@@ -92,6 +76,8 @@ export abstract class Content {
 
   abstract setFileUrl(url: string): void;
 
+  abstract storedFileUrl(): string | null;
+
   mapToDatabaseDto() {
     return {
       id: this.id,
@@ -100,20 +86,22 @@ export abstract class Content {
       title: this.title,
       description: this.description,
       order: this.order,
-      type: this.type,
+      type: this.type.toString(),
     };
   }
 
-  static mapFromDatabaseDto(dto: ActivityContentSelectDTO) {
+  static mapFromDatabaseDtoToRegularDto(
+    dto: ActivityContentSelectDTO
+  ): ContentDTO {
     if (!dto.type) throw new Error("Content saved in db has no type");
 
-    return this.mapFromDto({
+    return {
       type: dto.type,
       order: dto.order || 0,
       payload: {
         video: {
           tracks: dto.tracks || undefined,
-          videoUrl: dto.videoUrl || undefined,
+          url: dto.videoUrl || undefined,
         },
         image: {
           url: dto.imageUrl || undefined,
@@ -127,7 +115,11 @@ export abstract class Content {
       id: dto.id,
       parentId: dto.parentId || undefined,
       originatingVersionId: dto.originatingVersionId || undefined,
-    });
+    };
+  }
+
+  static mapFromDatabaseDto(dto: ActivityContentSelectDTO) {
+    return this.mapFromDto(Content.mapFromDatabaseDtoToRegularDto(dto));
   }
 
   static mapFromDto(dto: ContentDTO) {

@@ -12,7 +12,7 @@ import {
   IStorageService,
   FileType,
   IIdGenerator,
-  CompleteVersionSelectDTO,
+  ActivityVersionSelectDTO,
 } from "@interfaces";
 import { ContentDTO } from "@dto";
 import { Content } from "@domain";
@@ -65,9 +65,9 @@ class UseCase implements ISaveContentUseCase {
     dto: ContentDTO;
     user: UserSelectDTO;
     activity: ActivitySelectDTO;
-    version: CompleteVersionSelectDTO;
+    version: ActivityVersionSelectDTO;
   }) {
-    if (version.version.status !== "Draft") throw new ActivityIsNotDraft();
+    if (version.status !== "Draft") throw new ActivityIsNotDraft();
 
     const newContent = Content.mapFromDto(dto);
 
@@ -82,39 +82,41 @@ class UseCase implements ISaveContentUseCase {
       );
       if (!fileUrl)
         throw new Error("There was an error uploading the file to S3");
+      // if(newContent.) // TODO: remove old file
       newContent.setFileUrl(fileUrl);
     }
 
     // new content
     if (!dto.id) {
-      this.handleInsertNew(version.version.id, newContent);
+      this.handleInsertNew(version.id, newContent);
       return;
     }
 
     // find by id
-    const contentDbDto =
-      await this.activitiesRepository.findActivityContentById(dto.id);
+    const contentDbDto = await this.activitiesRepository.Contents.findById(
+      dto.id
+    );
     if (!contentDbDto) throw new ActivityContentNotFound();
 
     const existingContent = Content.mapFromDatabaseDto(contentDbDto);
 
-    existingContent.merge(version.version.id, newContent);
+    existingContent.merge(version.id, newContent);
     existingContent.mergePayload(newContent as any); // TODO: make this type work
 
     if (!existingContent.id) {
       const insertedContentFromExisting =
-        await this.activitiesRepository.insertContent(
+        await this.activitiesRepository.Contents.insert(
           existingContent.mapToDatabaseDto()
         );
-      await this.activitiesRepository.insertRelationBetweenVersionAndElement(
-        version.version.id,
+      await this.activitiesRepository.VersionElements.insert(
+        version.id,
         insertedContentFromExisting.contentId
       );
     } else {
-      await this.activitiesRepository.updateContent(
+      await this.activitiesRepository.Contents.update(
         existingContent.id,
         existingContent.mapToDatabaseDto(),
-        version.version.id
+        version.id
       );
     }
   }
@@ -126,11 +128,11 @@ class UseCase implements ISaveContentUseCase {
     content.validatePayload();
 
     // persist it
-    const insertedNewContent = await this.activitiesRepository.insertContent({
+    const insertedNewContent = await this.activitiesRepository.Contents.insert({
       ...content.mapToDatabaseDto(),
       originatingVersionId: versionId,
     });
-    await this.activitiesRepository.insertRelationBetweenVersionAndElement(
+    await this.activitiesRepository.VersionElements.insert(
       versionId,
       insertedNewContent.contentId
     );

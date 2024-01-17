@@ -10,6 +10,8 @@ import {
   UpdateActivityVersionMetadataResponseBody,
 } from "@edu-platform/common/api";
 import { IUpdateActivityMetadataUseCase } from "@use-cases";
+import { parseToVersionDTO } from "@dto";
+import { parseNumberId } from "@infrastructure";
 
 type Request = TypedRequest<
   UpdateActivityVersionMetadataRequestParams,
@@ -18,7 +20,9 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<UpdateActivityVersionMetadataResponseBody>;
 
-export class UpdateActivityMetadataController implements HTTPController {
+export class UpdateActivityMetadataController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.POST;
   path = "activity/:activityId/update-activity-metadata/:versionId";
   middlewares: string[] = ["auth"];
@@ -28,17 +32,23 @@ export class UpdateActivityMetadataController implements HTTPController {
   ) {}
 
   async execute(req: Request, res: Response) {
-    const { activityId, versionId } = req.params;
     const { title, description, topics } = req.body;
+    const versionDto = parseToVersionDTO({
+      title,
+      description,
+      topics,
+    });
+    const { activityId, versionId } = parseNumberId(req.params, [
+      "activityId",
+      "versionId",
+    ]);
     const { user } = req;
 
     await this.updateActivityMetadataUseCase.execute({
       user,
-      activityId: parseInt(activityId),
-      versionId: parseInt(versionId),
-      title,
-      description,
-      topics,
+      activityId,
+      versionId,
+      versionDto,
     });
 
     res.status(200).json();

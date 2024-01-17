@@ -5,33 +5,6 @@ export type CreateNewActivityResponseBody = {
   versionId?: number;
 };
 
-// get activity version full view
-export type GetActivityVersionParams = {
-  activityId: string;
-  versionId: string;
-};
-export type ElementResponse = {
-  title?: string;
-  description?: string;
-  id: unknown;
-  type: string;
-  elementType: string;
-  question?: string;
-  answerKey?: string;
-  order: number;
-  videoUrl?: string;
-  tracks?: string;
-  imageUrl?: string;
-  text?: string;
-};
-export type GetActivityVersionResponseBody = {
-  title: string;
-  description: string;
-  status: string;
-  topics: string;
-  elements: ElementResponse[];
-};
-
 // get all activities authored by the user by statuses
 export type GetActivityVersionsResponseBody = {
   title: string;

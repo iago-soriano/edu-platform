@@ -13,7 +13,9 @@ import { ISaveQuestionUseCase } from "@use-cases";
 type Request = TypedRequest<{}, {}, SaveQuestionRequestBody>;
 type Response = TypedResponse<SaveQuestionResponseBody>;
 
-export class SaveQuestionController implements HTTPController {
+export class SaveQuestionController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.POST;
   path: string = "activity/:activityId/version/:versionId/question";
   middlewares: string[] = ["auth"];

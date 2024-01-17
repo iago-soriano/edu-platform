@@ -45,7 +45,7 @@ export const registerServer = (
           }),
           logger: { info: console.log, error: console.error },
           middlewares: {
-            auth: async (req, _, next) => {
+            auth: async (req: any, _: any, next: any) => {
               await authMiddleware.execute.bind(authMiddleware)(
                 req,
                 req.headers
@@ -55,7 +55,7 @@ export const registerServer = (
             file: fileMiddleware,
           },
           errorHandler: {
-            execute: (error: Error, _, res, __) =>
+            execute: (error: Error, _: any, res: any, __: any) =>
               container.resolve("errorHandler").execute(error, _, res),
           },
           baseUrn,

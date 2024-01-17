@@ -13,10 +13,10 @@ export class JWTTokenService implements ITokenService {
   constructor() {
     // this._privateKey = fs.readFile("./credentials/private.pem").toString();
     // this._publicKey = fs.readFile("./credentials/public.pem").toString();
-    this._accessTokenPrivateKey = process.env.ACCESS_TOKEN_PRIVATE_KEY;
-    this._accessTokenPublicKey = process.env.ACCESS_TOKEN_PUBLIC_KEY;
-    this._refreshTokenPrivateKey = process.env.REFRESH_TOKEN_PRIVATE_KEY;
-    this._refreshTokenPublicKey = process.env.REFRESH_TOKEN_PUBLIC_KEY;
+    this._accessTokenPrivateKey = process.env.ACCESS_TOKEN_PRIVATE_KEY || "";
+    this._accessTokenPublicKey = process.env.ACCESS_TOKEN_PUBLIC_KEY || "";
+    this._refreshTokenPrivateKey = process.env.REFRESH_TOKEN_PRIVATE_KEY || "";
+    this._refreshTokenPublicKey = process.env.REFRESH_TOKEN_PUBLIC_KEY || "";
   }
 
   generateRefreshToken({ id }: JWTPayload) {
@@ -29,7 +29,7 @@ export class JWTTokenService implements ITokenService {
       });
       return resp;
     } catch (e) {
-      throw new TokenGenerationError({ error: e.message });
+      throw new TokenGenerationError({ error: (e as Error).message });
     }
   }
 
@@ -43,7 +43,7 @@ export class JWTTokenService implements ITokenService {
       });
       return resp;
     } catch (e) {
-      throw new TokenGenerationError({ error: e.message });
+      throw new TokenGenerationError({ error: (e as Error).message });
     }
   }
 

@@ -4,26 +4,32 @@ import {
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
-import { GetActivityVersionsResponseBody } from "@edu-platform/common/api";
-import { IGetActivitiesUseCase } from "@use-cases";
+// import { GetActivityVersionsResponseBody } from "@edu-platform/common/api";
+import { IListActivityVersionsUseCase } from "@use-cases";
+import { parseVersionStatus, VersionDTO } from "@dto";
+
+export type GetActivityVersionsResponseBody = VersionDTO[];
 
 type Request = TypedRequest<{}, { statuses: string }, {}>;
 type Response = TypedResponse<GetActivityVersionsResponseBody>;
 
-export class GetActivitiesController implements HTTPController {
+export class ListActivityVersionsController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.GET;
   path = "activities";
   middlewares: string[] = ["auth"];
 
-  constructor(private getActivitiesUseCase: IGetActivitiesUseCase) {}
+  constructor(private getActivitiesUseCase: IListActivityVersionsUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { statuses } = req.query;
+    const statuses =
+      req.query.statuses?.split(",").map((s) => parseVersionStatus(s)) || [];
     const { user } = req;
 
     const activitiesByAuthor = await this.getActivitiesUseCase.execute({
       user,
-      statuses: statuses ? statuses.split(",") : [],
+      statuses: statuses,
     });
 
     res.status(200).json(activitiesByAuthor);

@@ -1,12 +1,12 @@
 import { ContentDTO } from "@dto";
-import { Content } from "./base";
+import { Content, ContentTypes } from "./base";
 import { DomainRules } from "@edu-platform/common";
 
 export class TextContent extends Content {
   public text: string = "";
 
   constructor() {
-    super("Text");
+    super(ContentTypes.Text);
   }
 
   mergePayload(newContent: TextContent) {
@@ -23,6 +23,10 @@ export class TextContent extends Content {
 
   hasContent() {
     return !!this.text;
+  }
+
+  storedFileUrl() {
+    return null;
   }
 
   shouldUploadFile(): boolean {

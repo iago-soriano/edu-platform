@@ -13,7 +13,9 @@ import {
 type Request = TypedRequest<{}, {}, RefreshTokenRequestBody>;
 type Response = TypedResponse<RefreshTokenResponseBody>;
 
-export class RefreshTokenController implements HTTPController {
+export class RefreshTokenController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.POST;
   path: string = "refresh-token";
 

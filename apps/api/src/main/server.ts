@@ -8,18 +8,15 @@ export interface IHTTPServerConstructorParams {
 }
 
 export abstract class Server {
-  _server: HttpServer;
-  _hasHTTPS: boolean;
-  _localHostSSL: any;
+  private _server: HttpServer = new HttpServer();
   _logger: ILogger;
 
-  constructor({ logger }) {
-    this._logger = logger;
+  constructor() {
+    this._logger = { info: console.log, error: console.error };
   }
 
   setupServer(app: RequestListener) {
     this._server = http.createServer(app);
-    this._hasHTTPS = false;
   }
 
   async start() {

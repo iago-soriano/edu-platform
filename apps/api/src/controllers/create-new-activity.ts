@@ -13,7 +13,9 @@ import { ICreateNewActivityUseCase } from "@use-cases";
 type Request = TypedRequest<{}, {}, CreateNewActivityRequestBody>;
 type Response = TypedResponse<CreateNewActivityResponseBody>;
 
-export class CreateNewActivityController implements HTTPController {
+export class CreateNewActivityController
+  implements HTTPController<Request, Response>
+{
   method = HttpMethod.POST;
   path: string = "create-new-activity";
   middlewares: string[] = ["auth"];

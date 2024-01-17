@@ -15,7 +15,7 @@ class UseCase implements ISignOutUseCase {
     private tokenService: ITokenService
   ) {}
 
-  async execute({ refreshToken }) {
+  async execute({ refreshToken }: InputParams) {
     try {
       this.tokenService.verifyRefreshToken(refreshToken);
     } catch (ex) {

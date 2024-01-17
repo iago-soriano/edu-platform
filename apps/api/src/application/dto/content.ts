@@ -10,7 +10,7 @@ const contentSchema = z.object({
     video: z
       .object({
         tracks: z.string().optional(),
-        videoUrl: z.string().optional(),
+        url: z.string().optional(),
       })
       .optional(),
     text: z

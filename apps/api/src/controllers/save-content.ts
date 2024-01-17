@@ -37,8 +37,8 @@ export class SaveContentController
       "activityId",
       "versionId",
     ]);
-    const image = req.files?.image?.[0];
-    contentDto.payload.image = { file: image };
+
+    contentDto.payload.image = { file: req.files?.image?.[0] };
 
     const { user } = req;
 
