@@ -11,9 +11,9 @@ import { ActivityContentSelectDTO, FileType } from "@interfaces";
 import { ContentDTO } from "@dto";
 
 export enum ContentTypes {
-  Video,
-  Text,
-  Image,
+  Video = "Video",
+  Text = "Text",
+  Image = "Image",
 }
 
 export abstract class Content {

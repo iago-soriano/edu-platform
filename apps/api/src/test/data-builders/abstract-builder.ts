@@ -1,10 +1,10 @@
-export abstract class AbstractBuilder {
-  public data;
+export abstract class AbstractBuilder<T> {
+  public data!: T;
   constructor() {
     this.reset();
   }
-  abstract reset();
-  getResult() {
+  abstract reset(): void;
+  build() {
     return this.data;
   }
 }

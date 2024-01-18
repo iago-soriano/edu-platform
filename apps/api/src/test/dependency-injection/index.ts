@@ -1,4 +1,4 @@
-import { SignInUpInputBuilder } from "./data-builders";
+import { SignInUpInputBuilder } from "../data-builders";
 import {
   IUserRepository,
   ITokenRepository,
