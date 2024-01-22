@@ -1,18 +1,4 @@
-import { ActivityStatusType } from "@domain";
-import {
-  UserInsertDTO,
-  UserSelectDTO,
-  TokenSelectDTO,
-  TokenInsertDTO,
-  TokenType,
-  QuestionSelectDTO,
-  ActivitySelectDTO,
-  ActivityVersionInsertDTO,
-  ActivityContentInsertDTO,
-  ActivityVersionSelectDTO,
-  ActivityContentSelectDTO,
-  ActivityInsertDTO,
-} from "./dtos";
+import { UserInsertDTO, UserSelectDTO } from "./dtos";
 
 export interface IUserRepository {
   getUserById: (id: number) => Promise<UserSelectDTO | null>;

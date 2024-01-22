@@ -1,4 +1,4 @@
-import { Response as ExpressResponse, ErrorRequestHandler } from "express";
+import { Response as ExpressResponse } from "express";
 import { UserSelectDTO } from "./repository/dtos";
 
 export enum HttpMethod {

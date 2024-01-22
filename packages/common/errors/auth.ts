@@ -1,5 +1,6 @@
 import { CustomError } from "./custom-error";
 import { AuthRules } from "../domain";
+import { FieldError } from "../api/interfaces";
 
 export class PasswordsDontMatchError extends CustomError {
   HTTPstatusCode = 400;
@@ -10,14 +11,14 @@ export class PasswordsDontMatchError extends CustomError {
 
 export class HasProviderAccountError extends CustomError {
   HTTPstatusCode = 400;
-  constructor({ provider }) {
+  constructor({ provider }: { provider: string }) {
     super(`Utilize o botão \"Entrar com a conta do ${provider}\" para entrar`);
   }
 }
 
 export class ActivityNotFound extends CustomError {
   HTTPstatusCode = 404;
-  constructor({ realReason }) {
+  constructor({ realReason }: { realReason: FieldError }) {
     super("Atividade não encontrada", realReason);
   }
 }
@@ -45,7 +46,7 @@ export class InvalidValidationTokenError extends CustomError {
 
 export class UserNotVerifiedError extends CustomError {
   HTTPstatusCode = 400;
-  constructor({ email }) {
+  constructor() {
     super(
       "Favor verificar sua conta através do e-mail enviado antes de entrar"
     );

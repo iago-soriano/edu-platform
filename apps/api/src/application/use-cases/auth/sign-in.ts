@@ -43,7 +43,7 @@ class UseCase implements ISignInUseCase {
 
       if (userDTO.provider) throw new InvalidCredentialsError();
 
-      if (!userDTO.emailVerified) throw new UserNotVerifiedError({ email });
+      if (!userDTO.emailVerified) throw new UserNotVerifiedError();
 
       const passwordValid = await this.encryptionService.compare(
         password,

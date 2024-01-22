@@ -15,7 +15,7 @@
     "sourceMap": true,
     "paths": {
       "@use-cases": ["./application/use-cases/index.ts"],
-      "@use-case-helpers": ["./application/use-case-helpers/index.ts"],
+      "@use-case-middlewares": ["./application/use-case-middlewares/index.ts"],
       "@dto": ["./application/dto/index.ts"],
       "@domain": ["./application/domain/index.ts"],
       "@infrastructure": ["./infrastructure/index.ts"],

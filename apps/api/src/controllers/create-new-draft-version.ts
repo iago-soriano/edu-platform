@@ -8,12 +8,13 @@ import {
   CreateNewActivityVersionParams,
   CreateNewActivityVersionResponseBody,
 } from "@edu-platform/common/api";
-import { ICreateNewActivityVersionUseCase } from "@use-cases";
+import { ICreateNewDraftVersionUseCase } from "@use-cases";
+import { parseNumberId } from "@infrastructure";
 
 type Request = TypedRequest<CreateNewActivityVersionParams, {}, {}>;
 type Response = TypedResponse<CreateNewActivityVersionResponseBody>;
 
-export class CreateNewActivityVersionController
+export class CreateNewDraftVersionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.POST;
@@ -21,15 +22,16 @@ export class CreateNewActivityVersionController
   middlewares: string[] = ["auth"];
 
   constructor(
-    private createNewActivityVersionUseCase: ICreateNewActivityVersionUseCase
+    private createNewDraftVersionUseCase: ICreateNewDraftVersionUseCase
   ) {}
 
   async execute(req: Request, res: Response) {
     const { user } = req;
-    const { activityId } = req.params;
+    const { activityId } = parseNumberId(req.params, ["activityId"]);
 
-    const { versionId } = await this.createNewActivityVersionUseCase.execute({
+    const { versionId } = await this.createNewDraftVersionUseCase.execute({
       activityId,
+      user,
     });
 
     res.status(200).json({ versionId });

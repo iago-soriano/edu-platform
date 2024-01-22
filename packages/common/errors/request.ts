@@ -15,13 +15,6 @@ export class CannotAlterUserError extends CustomError {
   }
 }
 
-export class ParameterNotProvidedError extends CustomError {
-  HTTPstatusCode = 400;
-  constructor({ parameter }) {
-    super("");
-  }
-}
-
 export class InvalidParameterError extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
@@ -40,13 +33,6 @@ export class ActivityIsNotFound extends CustomError {
   HTTPstatusCode = 400;
   constructor() {
     super("Atividade não encontrada");
-  }
-}
-
-export class ActivityStatusNotFound extends CustomError {
-  HTTPstatusCode = 400;
-  constructor({ status }) {
-    super(`Status ${status} não encontrado`);
   }
 }
 
@@ -80,8 +66,9 @@ export class UserNotActivityAuthor extends CustomError {
 
 export class ActivityIsNotDraft extends CustomError {
   HTTPstatusCode = 400;
+  static message = "A atividade não é um draft";
   constructor() {
-    super("A atividade não é um draft");
+    super(ActivityIsNotDraft.message);
   }
 }
 
