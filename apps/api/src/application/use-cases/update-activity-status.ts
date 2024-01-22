@@ -9,11 +9,8 @@ import {
   UserSelectDTO,
   ActivityVersionSelectDTO,
 } from "@interfaces";
-import { Activity, ActivityVersion, VersionStatus } from "@domain";
-import {
-  IGetActivityUseCaseHelper,
-  IValidateActivityUserRelationUseCaseMiddleware,
-} from "application/use-case-middlewares";
+import { Activity, ActivityVersion, VersionStatus, Content } from "@domain";
+import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -31,8 +28,7 @@ export type IUpdateActivityStatusUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IUpdateActivityStatusUseCase {
   constructor(
     private activitiesRepository: IActivitiesRepository,
-    private getActivityHelper: IGetActivityUseCaseHelper,
-    private validateActivityUserRelationUseCaseMiddleware: IValidateActivityUserRelationUseCaseMiddleware
+    private getActivityHelper: IGetActivityUseCaseHelper
   ) {}
 
   async execute({
@@ -46,10 +42,7 @@ class UseCase implements IUpdateActivityStatusUseCase {
       versionId,
     });
 
-    await this.validateActivityUserRelationUseCaseMiddleware.execute({
-      user,
-      activity,
-    });
+    if (activity.authorId !== user.id) throw new ActivityIsNotFound();
 
     return this.handle({ activity, version, newActivityStatus });
   }
@@ -69,21 +62,24 @@ class UseCase implements IUpdateActivityStatusUseCase {
     if (
       version.status === VersionStatus.Draft &&
       newActivityStatus === VersionStatus.Published
-    ) {
-      await this.handlePublishDraft(activity, version);
-    } else if (
+    )
+      return this.handlePublishDraft(activity, version);
+
+    if (
       version.status === VersionStatus.Archived &&
       newActivityStatus === VersionStatus.Published
-    ) {
-      await this.handlePublishArchived(activity, version);
-    } else if (
+    )
+      return this.handleRepublishArchived(activity, version);
+
+    if (
       version.status === VersionStatus.Published &&
       newActivityStatus === VersionStatus.Archived
-    ) {
-      await this.handleArchivePublished(activity);
-    }
+    )
+      return this.handleArchivePublished(activity);
 
-    return {};
+    throw new Error(
+      `Can't update from version ${version.status} to ${newActivityStatus}`
+    );
   }
 
   private handlePublishDraft = async (
@@ -95,13 +91,17 @@ class UseCase implements IUpdateActivityStatusUseCase {
         version.id
       );
 
-    if (!contents || !contents.length) throw new Error("Não há conteúdos");
+    if (!contents || !contents.length)
+      throw new Error(
+        "Não há conteúdos, não se pode publicar uma atividade vazia"
+      );
 
+    // archive currently published version
     if (activity.hasPublishedVersion()) {
       await this.activitiesRepository.Versions.update(
         activity.lastVersionId || 0,
         {
-          status: VersionStatus.Published,
+          status: VersionStatus.Archived,
         }
       );
     }
@@ -109,63 +109,53 @@ class UseCase implements IUpdateActivityStatusUseCase {
     if (!version.title || !version.description)
       throw new Error("Deve haver título e descrição");
 
-    let contentCounter = 0;
+    let contentCounter = contents.length;
 
-    // for (let content of contents) {
-    //   const contentToBeVerified = Content.createContent({
-    //     type: content.type,
-    //     id: content.id,
-    //     title: content.title,
-    //     description: content.description,
-    //     imageUrl: content.imageUrl,
-    //     tracks: content.tracks,
-    //     videoUrl: content.videoUrl,
-    //     text: content.text,
-    //     order: content.order,
-    //     originatingVersionId: content.originatingVersionId,
-    //   });
+    for (let content of contents) {
+      const contentToVerify = Content.mapFromDatabaseDto(content);
 
-    //   if (contentToBeVerified.isHalfCompleted()) {
-    //     throw new Error(
-    //       `Conteúdo tem apenas título e/ou descrição. Título: ${contentToBeVerified.title}. Descrição: ${contentToBeVerified.description}`
-    //     );
-    //   } else if (contentToBeVerified.isEmpty()) {
-    //     await this.activitiesRepository.deleteContentVersionRelation(
-    //       content.id,
-    //       versionId
-    //     );
-    //     await this.activitiesRepository.deleteContent(content.id);
-    //   } else {
-    //     contentCounter++;
-    //   }
-    // }
+      if (contentToVerify.isHalfCompleted())
+        throw new Error(
+          `Um conteúdo tem apenas título e/ou descrição. Termine-o ou exclua-o antes de publicar a atividade. Título: ${contentToVerify.title}. Descrição: ${contentToVerify.description}`
+        );
 
-    if (contentCounter === 0) throw new Error("Não há conteúdos");
+      if (contentToVerify.isEmpty()) {
+        await this.activitiesRepository.Contents.delete(content.id);
+        contentCounter--;
+      }
+    }
+
+    if (contentCounter === 0) throw new Error("Não há conteúdos"); // mesmo erro acima
 
     await this.activitiesRepository.Versions.update(activity.draftVersionId, {
       status: "Published",
       version: (version.version || 0) + 1,
     });
+
     await this.activitiesRepository.Activities.update(activity.id, {
       lastVersionId: activity.draftVersionId,
       draftVersionId: null,
     });
+
+    return {};
   };
 
-  private handlePublishArchived = async (
+  private handleRepublishArchived = async (
     activity: Activity,
     version: ActivityVersion
   ) => {
-    if (activity.hasPublishedVersion()) {
-      return activity.lastVersionId;
-    } else {
-      await this.activitiesRepository.Versions.update(version.id, {
-        status: VersionStatus.Published,
-      });
-      await this.activitiesRepository.Activities.update(activity.id, {
-        lastVersionId: version.id,
-      });
-    }
+    //can't republish if there is another published version active
+    if (activity.hasPublishedVersion())
+      return { lastPublishedVersion: activity.lastVersionId };
+
+    await this.activitiesRepository.Versions.update(version.id, {
+      status: VersionStatus.Published,
+    });
+    await this.activitiesRepository.Activities.update(activity.id, {
+      lastVersionId: version.id,
+    });
+
+    return {};
   };
 
   private handleArchivePublished = async (activity: Activity) => {
@@ -175,6 +165,8 @@ class UseCase implements IUpdateActivityStatusUseCase {
     await this.activitiesRepository.Activities.update(activity.id, {
       lastVersionId: null,
     });
+
+    return {};
   };
 }
 

@@ -15,11 +15,8 @@ import {
   ActivityVersionSelectDTO,
 } from "@interfaces";
 import { ContentDTO } from "@dto";
-import { Content } from "@domain";
-import {
-  IGetActivityUseCaseHelper,
-  IValidateActivityUserRelationUseCaseMiddleware,
-} from "application/use-case-middlewares";
+import { Content, VersionStatus } from "@domain";
+import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
 import { getFileExtension } from "@infrastructure";
 
 type InputParams = {
@@ -38,20 +35,17 @@ class UseCase implements ISaveContentUseCase {
     private activitiesRepository: IActivitiesRepository,
     private storageService: IStorageService,
     private idService: IIdGenerator,
-    private getActivityHelper: IGetActivityUseCaseHelper,
-    private validateActivityUserRelationUseCaseMiddleware: IValidateActivityUserRelationUseCaseMiddleware
+    private getActivityHelper: IGetActivityUseCaseHelper
   ) {}
 
   async execute({ contentDto, user, activityId, versionId }: InputParams) {
     const { version, activity } = await this.getActivityHelper.execute({
       activityId,
       versionId,
+      contentId: contentDto.id,
     });
 
-    await this.validateActivityUserRelationUseCaseMiddleware.execute({
-      user,
-      activity,
-    });
+    if (activity.authorId !== user.id) throw new ActivityIsNotFound();
 
     return this.handle({ dto: contentDto, user, activity, version });
   }
@@ -67,7 +61,7 @@ class UseCase implements ISaveContentUseCase {
     activity: ActivitySelectDTO;
     version: ActivityVersionSelectDTO;
   }) {
-    if (version.status !== "Draft") throw new ActivityIsNotDraft();
+    if (version.status !== VersionStatus.Draft) throw new ActivityIsNotDraft();
 
     const newContent = Content.mapFromDto(dto);
 
@@ -88,7 +82,16 @@ class UseCase implements ISaveContentUseCase {
 
     // new content
     if (!dto.id) {
-      this.handleInsertNew(version.id, newContent);
+      // validate incoming content
+      newContent.validateTitle();
+      newContent.validateDescription();
+      newContent.validatePayload();
+
+      // persist it
+      await this.activitiesRepository.Contents.insert({
+        ...newContent.mapToDatabaseDto(),
+      });
+
       return;
     }
 
@@ -100,41 +103,13 @@ class UseCase implements ISaveContentUseCase {
 
     const existingContent = Content.mapFromDatabaseDto(contentDbDto);
 
-    existingContent.merge(version.id, newContent);
+    existingContent.merge(newContent);
     existingContent.mergePayload(newContent as any); // TODO: make this type work
 
-    if (!existingContent.id) {
-      const insertedContentFromExisting =
-        await this.activitiesRepository.Contents.insert(
-          existingContent.mapToDatabaseDto()
-        );
-      await this.activitiesRepository.VersionElements.insert(
-        version.id,
-        insertedContentFromExisting.contentId
-      );
-    } else {
-      await this.activitiesRepository.Contents.update(
-        existingContent.id,
-        existingContent.mapToDatabaseDto(),
-        version.id
-      );
-    }
-  }
-
-  async handleInsertNew(versionId: number, content: Content) {
-    // validate incoming content
-    content.validateTitle();
-    content.validateDescription();
-    content.validatePayload();
-
-    // persist it
-    const insertedNewContent = await this.activitiesRepository.Contents.insert({
-      ...content.mapToDatabaseDto(),
-      originatingVersionId: versionId,
-    });
-    await this.activitiesRepository.VersionElements.insert(
-      versionId,
-      insertedNewContent.contentId
+    await this.activitiesRepository.Contents.update(
+      dto.id,
+      existingContent.mapToDatabaseDto(),
+      version.id
     );
   }
 }

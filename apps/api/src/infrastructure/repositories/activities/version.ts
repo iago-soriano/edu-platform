@@ -5,17 +5,16 @@ import {
   activityVersions,
   activityContents,
   activityQuestions,
-  activityVersionHasElementsRelationTable,
 } from "@infrastructure";
 import { eq, inArray, and, desc, asc } from "drizzle-orm";
 import { VersionStatus } from "@domain";
 
 export class Versions implements IVersions {
-  async insert(activityId: number) {
+  async insert(activityId: number, versionNumber: number = 0) {
     return await db.transaction(async (tx) => {
       const [{ versionId }] = await tx
         .insert(activityVersions)
-        .values({ activityId })
+        .values({ activityId, version: versionNumber })
         .returning({ versionId: activityVersions.id });
       await tx
         .update(activities)
@@ -83,36 +82,26 @@ export class Versions implements IVersions {
     return version;
   }
 
-  // refatorar para usar join
   async findElementsByVersionId(id: number) {
-    const thisVersionElements = await db
+    const contents = await db
       .select()
-      .from(activityVersionHasElementsRelationTable)
-      .where(eq(activityVersionHasElementsRelationTable.versionId, id));
+      .from(activityContents)
+      .orderBy(asc(activityContents.id))
+      .where(eq(activityContents.versionId, id));
 
-    const contentIds = thisVersionElements
-      .filter((relation) => !!relation.contentId)
-      .map((relation) => relation.contentId || 0);
-    const questionIds = thisVersionElements
-      .filter((relation) => !!relation.questionId)
-      .map((relation) => relation.questionId || 0);
-
-    const contents = contentIds.length
-      ? await db
-          .select()
-          .from(activityContents)
-          .orderBy(asc(activityContents.id))
-          .where(inArray(activityContents.id, contentIds))
-      : [];
-
-    const questions = questionIds.length
-      ? await db
-          .select()
-          .from(activityQuestions)
-          .orderBy(asc(activityQuestions.id))
-          .where(inArray(activityQuestions.id, questionIds))
-      : [];
+    const questions = await db
+      .select()
+      .from(activityQuestions)
+      .orderBy(asc(activityQuestions.id))
+      .where(eq(activityQuestions.versionId, id));
 
     return { contents, questions };
+  }
+
+  async findFullViewById(id: number) {
+    const version = await this.findSimpleViewById(id);
+    const { questions, contents } = await this.findElementsByVersionId(id);
+
+    return { version, questions, contents };
   }
 }

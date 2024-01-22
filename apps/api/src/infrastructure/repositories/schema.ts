@@ -7,8 +7,10 @@ import {
   boolean,
   primaryKey,
   timestamp,
+  pgView,
+  PgViewConfig,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
+import { relations, type InferSelectModel } from "drizzle-orm";
 import {
   VersionStatus,
   QuestionPossibleTypes,
@@ -98,7 +100,7 @@ export const activitiesRelations = relations(activities, ({ many, one }) => ({
 /* #region Activity Versions */
 export const versionStatusEnum = pgEnum(
   "activityStatus",
-  Object.values(VersionStatus).filter((v) => isNaN(Number(v))) as [string]
+  Object.values(VersionStatus || {}).filter((v) => isNaN(Number(v))) as [string]
 );
 
 export const activityVersions = pgTable("activity_version", {
@@ -132,14 +134,15 @@ export const activityVersionsRelations = relations(
       references: [activities.draftVersionId],
       relationName: "openDraft",
     }),
-    elements: many(activityVersionHasElementsRelationTable),
+    questions: many(activityQuestions),
+    contents: many(activityContents),
   })
 );
 /* #endregion */
 
 export const contentTypeEnum = pgEnum(
   "contentType",
-  Object.values(ContentTypes).filter((v) => isNaN(Number(v))) as [string]
+  Object.values(ContentTypes || {}).filter((v) => isNaN(Number(v))) as [string]
 );
 
 export const activityContents = pgTable("activity_contents", {
@@ -156,28 +159,20 @@ export const activityContents = pgTable("activity_contents", {
   imageUrl: varchar("image_url", { length: 150 }),
   text: varchar("text", { length: 1000 }),
 
-  parentId: integer("parent_id"), // references this table
-  originatingVersionId: integer("originating_version_id").references(
-    () => activityVersions.id
-  ),
+  versionId: integer("version_id"),
 });
 
 export const activityContentsRelations = relations(
   activityContents,
-  ({ one, many }) => ({
-    versions: many(activityVersionHasElementsRelationTable),
-    parent: one(activityQuestions, {
-      fields: [activityContents.parentId],
-      references: [activityQuestions.id],
-    }),
-    originatingVersion: one(activityVersions, {
-      fields: [activityContents.originatingVersionId],
-      references: [activityVersions.id],
-    }),
+  ({ one }) => ({
+    version: one(activityVersions),
   })
 );
 
-export const questionTypeEnum = pgEnum("questionType", QuestionPossibleTypes);
+export const questionTypeEnum = pgEnum(
+  "questionType",
+  QuestionPossibleTypes || {}
+);
 
 export const activityQuestions = pgTable("questions", {
   id: serial("id").primaryKey(),
@@ -190,27 +185,15 @@ export const activityQuestions = pgTable("questions", {
   title: varchar("title", { length: 50 }),
   order: integer("order").default(0),
 
-  parentId: integer("parent_id").references(() => activityContents.id),
-  originatingVersionId: integer("originating_version_id").references(
-    () => activityVersions.id
-  ),
+  versionId: integer("version_id"),
 });
 
-export const questionsRelations = relations(
-  activityQuestions,
-  ({ one, many }) => ({
-    versions: many(activityVersionHasElementsRelationTable),
-    choices: many(choices),
-    parent: one(activityQuestions, {
-      fields: [activityQuestions.parentId],
-      references: [activityQuestions.id],
-    }),
-    originatingVersion: one(activityVersions, {
-      fields: [activityQuestions.originatingVersionId],
-      references: [activityVersions.id],
-    }),
-  })
-);
+// export const testView = pgView("my_view").as(qb => qb.select({ id: activityQuestions.id, answerKey: activityQuestions.answerKey }).from(activityQuestions));
+// type ViewType = Pick<InferSelectModel<typeof activityQuestions>, 'id' | 'answerKey'>;
+
+export const questionsRelations = relations(activityQuestions, ({ one }) => ({
+  version: one(activityVersions),
+}));
 
 export const choices = pgTable("choices", {
   id: serial("id").primaryKey(),
@@ -230,36 +213,3 @@ export const choicesRelations = relations(choices, ({ one }) => ({
     references: [activityQuestions.id],
   }),
 }));
-
-export const activityVersionHasElementsRelationTable = pgTable(
-  "version_element_relation",
-  {
-    id: serial("id").primaryKey(),
-    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-
-    contentId: integer("content_id").references(() => activityContents.id),
-    questionId: integer("question_id").references(() => activityQuestions.id),
-    versionId: integer("version_id")
-      .notNull()
-      .references(() => activityVersions.id),
-  }
-);
-
-export const activityVersionHasElementsRelations = relations(
-  activityVersionHasElementsRelationTable,
-  ({ one }) => ({
-    activityVersion: one(activityVersions, {
-      fields: [activityVersionHasElementsRelationTable.versionId],
-      references: [activityVersions.id],
-    }),
-    activityQuestion: one(activityQuestions, {
-      fields: [activityVersionHasElementsRelationTable.questionId],
-      references: [activityQuestions.id],
-    }),
-    activityContent: one(activityContents, {
-      fields: [activityVersionHasElementsRelationTable.contentId],
-      references: [activityContents.id],
-    }),
-  })
-);

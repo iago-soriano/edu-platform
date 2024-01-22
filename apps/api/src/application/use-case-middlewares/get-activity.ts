@@ -45,10 +45,7 @@ class UseCase implements IGetActivityUseCaseHelper {
       content = await this.activitiesRepository.Contents.findById(contentId);
 
       if (!content) throw new ActivityContentNotFound();
-
-      // TODO: check if content belongs to this version
-      // const { contents } = await this.activitiesRepository.Versions.findElementsByVersionId(versionId);
-      // if (contents.map(content => content.id))
+      if (content.versionId !== version.id) throw new ActivityContentNotFound();
     }
 
     return {

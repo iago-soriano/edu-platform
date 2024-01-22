@@ -4,13 +4,9 @@ import {
   IActivitiesRepository,
   IStorageService,
   UserSelectDTO,
-  ActivityVersionSelectDTO,
-  ActivityContentSelectDTO,
 } from "@interfaces";
-import {
-  IGetActivityUseCaseHelper,
-  IValidateActivityUserRelationUseCaseMiddleware,
-} from "application/use-case-middlewares";
+import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
+import { ActivityIsNotFound } from "@edu-platform/common";
 
 type InputParams = {
   activityId: number;
@@ -27,54 +23,33 @@ class UseCase implements IDeleteContentUseCase {
   constructor(
     private activitiesRepository: IActivitiesRepository,
     private storageService: IStorageService,
-    private getActivityHelper: IGetActivityUseCaseHelper,
-    private validateActivityUserRelationUseCaseMiddleware: IValidateActivityUserRelationUseCaseMiddleware
+    private getActivityHelper: IGetActivityUseCaseHelper
   ) {}
 
   async execute({ user, activityId, versionId, contentId }: InputParams) {
-    const { version, activity, content } = await this.getActivityHelper.execute(
-      {
-        activityId,
-        versionId,
-        contentId,
-      }
-    );
-
-    await this.validateActivityUserRelationUseCaseMiddleware.execute({
-      user,
+    const {
+      version,
       activity,
+      content: contentDbDto,
+    } = await this.getActivityHelper.execute({
+      activityId,
+      versionId,
+      contentId,
     });
 
-    if (!content) return;
-    return this.handle({ version, content });
-  }
+    if (!contentDbDto) return;
 
-  async handle({
-    content: dbDto,
-    version,
-  }: {
-    content: ActivityContentSelectDTO;
-    version: ActivityVersionSelectDTO;
-  }) {
-    const content = Content.mapFromDatabaseDto(dbDto);
+    if (activity.authorId !== user.id) throw new ActivityIsNotFound();
 
-    if (content.originatingVersionId !== version.id) {
-      await this.activitiesRepository.VersionElements.delete(
-        content.id || 0,
-        version.id
-      );
-      return;
-    }
+    const content = Content.mapFromDatabaseDto(contentDbDto);
 
+    // TODO: can't just delete the file, because this content might be a copy from an archived one.
+    // figure out a way to know if this file isn't being used elewhere
     const fileUrl = content.storedFileUrl();
     if (fileUrl) {
-      await this.storageService.deleteFileByUrl(fileUrl);
+      //await this.storageService.deleteFileByUrl(fileUrl);
     }
 
-    await this.activitiesRepository.VersionElements.delete(
-      content.id || 0,
-      version.id
-    );
     await this.activitiesRepository.Contents.delete(content.id || 0);
   }
 }

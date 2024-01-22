@@ -26,8 +26,7 @@ const contentSchema = z.object({
       .optional(),
   }),
   order: z.number(),
-  originatingVersionId: z.number().optional(),
-  parentId: z.number().optional(),
+  versionId: z.number(),
 });
 
 export const parseToContentDTO = contentSchema.parse;

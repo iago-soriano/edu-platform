@@ -1,4 +1,4 @@
-import { ActivityStatusType } from "@domain";
+import { VersionStatus } from "@domain";
 import {
   QuestionSelectDTO,
   ActivitySelectDTO,
@@ -26,6 +26,17 @@ export interface IContents {
   delete: (contentId: number) => Promise<void>;
 }
 
+export interface IQuestions {
+  insert: (content: ActivityContentInsertDTO) => Promise<{ contentId: number }>;
+  update: (
+    contentId: number,
+    content: ActivityContentInsertDTO,
+    versionId: number
+  ) => Promise<void>;
+  findById: (contentId: number) => Promise<ActivityContentSelectDTO>;
+  delete: (contentId: number) => Promise<void>;
+}
+
 export interface IVersionElements {
   insert: (
     versionId: number,
@@ -36,16 +47,24 @@ export interface IVersionElements {
 }
 
 export interface IVersions {
-  insert: (activityId: number) => Promise<{ versionId: number }>;
+  insert: (
+    activityId: number,
+    versionNumber?: number
+  ) => Promise<{ versionId: number }>;
   update: (versionId: number, args: ActivityVersionInsertDTO) => Promise<void>;
   findSimpleViewById: (versionId: number) => Promise<ActivityVersionSelectDTO>;
+  findFullViewById: (versionId: number) => Promise<{
+    version: ActivityVersionSelectDTO;
+    contents: ActivityContentSelectDTO[];
+    questions: QuestionSelectDTO[];
+  }>;
   findElementsByVersionId: (versionId: number) => Promise<{
     contents: ActivityContentSelectDTO[];
     questions: QuestionSelectDTO[];
   }>;
   listByAuthorIdAndStatuses: (
     authorId: number,
-    statuses: ActivityStatusType[]
+    statuses: VersionStatus[]
   ) => Promise<ActivityVersionSelectDTO[]>;
 }
 
@@ -53,5 +72,5 @@ export interface IActivitiesRepository {
   Activities: IActivities;
   Contents: IContents;
   Versions: IVersions;
-  VersionElements: IVersionElements;
+  Questions: IQuestions;
 }

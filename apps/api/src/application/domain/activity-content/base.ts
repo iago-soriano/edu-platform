@@ -21,9 +21,8 @@ export abstract class Content {
   public title?: string;
   public description?: string;
   public order?: number;
-  public originatingVersionId?: number;
-  public parentId?: number;
   public file: FileType | null = null;
+  public versionId!: number;
 
   constructor(public type: ContentTypes) {}
 
@@ -47,15 +46,10 @@ export abstract class Content {
     }
   }
 
-  merge(versionId: number, newContent: Content) {
-    if (this.originatingVersionId !== versionId) {
-      this.id = undefined;
-      this.parentId = newContent.id;
-      this.originatingVersionId = versionId;
-    }
-
+  merge(newContent: Content) {
     this.title = newContent.title;
     this.description = newContent.description;
+    this.order = newContent.order;
   }
 
   abstract hasContent(): boolean;
@@ -81,12 +75,11 @@ export abstract class Content {
   mapToDatabaseDto() {
     return {
       id: this.id,
-      originatingVersionId: this.originatingVersionId,
-      parentId: this.parentId,
       title: this.title,
       description: this.description,
       order: this.order,
       type: this.type.toString(),
+      versionId: this.versionId,
     };
   }
 
@@ -113,8 +106,7 @@ export abstract class Content {
       title: dto.title || undefined,
       description: dto.description || undefined,
       id: dto.id,
-      parentId: dto.parentId || undefined,
-      originatingVersionId: dto.originatingVersionId || undefined,
+      versionId: dto.versionId || 0,
     };
   }
 
@@ -146,10 +138,8 @@ export abstract class Content {
     newContent.title = dto.title;
     newContent.description = dto.description;
     newContent.order = dto.order;
-
-    newContent.originatingVersionId = dto.originatingVersionId;
     newContent.id = dto.id;
-    newContent.parentId = dto.parentId;
+    newContent.versionId = dto.versionId;
 
     return newContent;
   }
