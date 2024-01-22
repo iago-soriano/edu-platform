@@ -1,4 +1,4 @@
-import { Activity, ActivityVersion } from "@domain";
+import { VersionStatus, ActivityVersion } from "@domain";
 import {
   ActivityIsNotDraft,
   ActivityIsNotFound,
@@ -6,10 +6,7 @@ import {
 } from "@edu-platform/common";
 import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
 import { VersionDTO } from "@dto";
-import {
-  IGetActivityUseCaseHelper,
-  IValidateActivityUserRelationUseCaseMiddleware,
-} from "application/use-case-middlewares";
+import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -25,8 +22,7 @@ export type IUpdateActivityMetadataUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IUpdateActivityMetadataUseCase {
   constructor(
     private activitiesRepository: IActivitiesRepository,
-    private getActivityHelper: IGetActivityUseCaseHelper,
-    private validateActivityUserRelationUseCaseMiddleware: IValidateActivityUserRelationUseCaseMiddleware
+    private getActivityHelper: IGetActivityUseCaseHelper
   ) {}
 
   async execute({ user, activityId, versionId, versionDto }: InputParams) {
@@ -35,12 +31,9 @@ class UseCase implements IUpdateActivityMetadataUseCase {
       versionId,
     });
 
-    if (version.status !== "Draft") throw new ActivityIsNotDraft();
+    if (version.status !== VersionStatus.Draft) throw new ActivityIsNotDraft();
 
-    await this.validateActivityUserRelationUseCaseMiddleware.execute({
-      user,
-      activity,
-    });
+    if (activity.authorId !== user.id) throw new ActivityIsNotFound();
 
     return this.handle({ versionId, dto: versionDto });
   }

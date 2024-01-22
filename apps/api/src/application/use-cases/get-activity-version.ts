@@ -7,10 +7,7 @@ import {
   ActivitySelectDTO,
   ActivityVersionSelectDTO,
 } from "@interfaces";
-import {
-  IGetActivityUseCaseHelper,
-  IValidateActivityUserRelationUseCaseMiddleware,
-} from "application/use-case-middlewares";
+import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -31,8 +28,7 @@ export type IGetActivityVersionUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IGetActivityVersionUseCase {
   constructor(
     private activitiesRepository: IActivitiesRepository,
-    private getActivityHelper: IGetActivityUseCaseHelper,
-    private validateActivityUserRelationUseCaseMiddleware: IValidateActivityUserRelationUseCaseMiddleware
+    private getActivityHelper: IGetActivityUseCaseHelper
   ) {}
 
   async execute({ user, activityId, versionId }: InputParams) {
@@ -41,10 +37,8 @@ class UseCase implements IGetActivityVersionUseCase {
       versionId,
     });
 
-    await this.validateActivityUserRelationUseCaseMiddleware.execute({
-      user,
-      activity,
-    });
+    if (version.status == "Draft" && activity.authorId !== user.id)
+      throw new Error("Non-author cannot get draft version");
 
     return this.handle({ user, activity, version });
   }
@@ -77,9 +71,6 @@ class UseCase implements IGetActivityVersionUseCase {
         ((el1.content || el1.question).order || 0) -
         ((el2.content || el2.question).order || 0)
     );
-
-    if (version.status == "Draft" && activity.authorId !== user.id)
-      throw new Error("Non-author cannot get draft version");
 
     return {
       id: version.id || 0,
