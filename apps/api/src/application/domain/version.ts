@@ -7,7 +7,7 @@ import {
   DomainRules,
 } from "@edu-platform/common";
 import { ActivityVersionSelectDTO } from "@interfaces";
-import { VersionDTO, versionStatusSchema } from "@dto";
+import { VersionDTO, parseVersionStatus } from "@dto";
 
 export enum VersionStatus {
   Published = "Published",
@@ -58,7 +58,7 @@ export class ActivityVersion {
       dto.description || "",
       dto.topics || "",
       dto.version || 0,
-      versionStatusSchema.parse(dto.status) || VersionStatus.Draft,
+      parseVersionStatus(dto.status) || VersionStatus.Draft,
       dto.activityId || 0
     );
   }
@@ -70,7 +70,7 @@ export class ActivityVersion {
       dto.description || "",
       dto.topics || "",
       dto.version || 0,
-      versionStatusSchema.parse(dto.status) || VersionStatus.Draft,
+      parseVersionStatus(dto.status) || VersionStatus.Draft,
       dto.activityId || 0
     );
   }

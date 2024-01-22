@@ -30,6 +30,10 @@ export class VideoContent extends Content {
     throw new Error(`${this.type} type does not implement files`);
   }
 
+  shouldUploadFile(): boolean {
+    return false;
+  }
+
   storedFileUrl() {
     return null;
   }

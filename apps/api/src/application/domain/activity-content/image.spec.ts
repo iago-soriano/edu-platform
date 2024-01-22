@@ -16,45 +16,30 @@ import {
 } from "@test";
 
 describe("Unit tests for Image Content domain entity", () => {
+  const imageDataBuilder = new ImageContentDTODataBuilder();
+
+  beforeEach(() => {
+    imageDataBuilder.reset();
+  });
+
   it("Should correctly map payload from dto to domain entity", () => {
-    const urlFromDto = "fdsggrg4ctgwhg";
-    const imageDto = new ImageContentDTODataBuilder()
-      .withPayload({ url: urlFromDto })
-      .build();
+    const imageDto = imageDataBuilder.build();
+
     const imageDomain = Content.mapFromDto(imageDto) as ImageContent;
 
-    expect(imageDomain.url).toBe(urlFromDto);
+    expect(imageDomain.url).toBe(imageDto.payload.image?.url);
+    expect(imageDomain.file).toBe(imageDto.payload.image?.file);
   });
 
-  it("Should correctly say it's empty", () => {
-    const imageDto = new ImageContentDTODataBuilder()
-      .withTitle("")
-      .withDescription("")
-      .withPayload({ url: "" })
-      .build();
-    const domain = Content.mapFromDto(imageDto);
+  it("Should correctly say it has or has no content", () => {
+    const dto1 = imageDataBuilder.withPayload({ url: "" }).build();
+    const domain1 = Content.mapFromDto(dto1);
 
-    expect(domain.isEmpty()).toBeTruthy();
-  });
+    expect(domain1.hasContent()).toBeFalsy();
 
-  it("Should correctly say it's half-completed", () => {
-    const builder = new ImageContentDTODataBuilder().withPayload({ url: "" });
+    const dto2 = imageDataBuilder.withPayload({ url: "fdsfsdfsdfsd" }).build();
+    const domain2 = Content.mapFromDto(dto2);
 
-    // because of description
-    let imageDto = builder
-      .withTitle("")
-      .withDescription("asdasdasdsdasdaa")
-      .build();
-
-    expect(Content.mapFromDto(imageDto).isHalfCompleted()).toBeTruthy();
-    builder.reset();
-
-    // because of title
-    imageDto = builder
-      .withTitle("asdasdasdsdasdaa")
-      .withDescription("")
-      .build();
-
-    expect(Content.mapFromDto(imageDto).isHalfCompleted()).toBeTruthy();
+    expect(domain2.hasContent()).toBeTruthy();
   });
 });
