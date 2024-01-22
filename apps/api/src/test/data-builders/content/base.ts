@@ -1,6 +1,7 @@
-import { AbstractBuilder } from "@test";
+import { AbstractBuilder } from "../abstract-builder";
 import { ContentDTO } from "@dto";
 import { ContentTypes } from "@domain";
+import { DomainRules } from "@edu-platform/common";
 
 export class BaseContentDTODataBuilder extends AbstractBuilder<ContentDTO> {
   constructor() {
@@ -12,8 +13,16 @@ export class BaseContentDTODataBuilder extends AbstractBuilder<ContentDTO> {
       type: ContentTypes.Image,
       order: 0,
       payload: {},
-      title: "título",
-      description: "description",
+      title: "t".repeat(
+        (DomainRules.CONTENT.TITLE.MIN_LENGTH +
+          DomainRules.CONTENT.TITLE.MAX_LENGTH) /
+          2
+      ),
+      description: "d".repeat(
+        (DomainRules.CONTENT.DESCRIPTION.MIN_LENGTH +
+          DomainRules.CONTENT.DESCRIPTION.MAX_LENGTH) /
+          2
+      ),
       id: 5,
       parentId: 6,
       originatingVersionId: 7,
@@ -30,8 +39,32 @@ export class BaseContentDTODataBuilder extends AbstractBuilder<ContentDTO> {
     return this;
   }
 
+  withLongTitle() {
+    this.data.title = "t".repeat(DomainRules.CONTENT.TITLE.MAX_LENGTH + 1);
+    return this;
+  }
+
+  withShortTitle() {
+    this.data.title = "t".repeat(DomainRules.CONTENT.TITLE.MIN_LENGTH - 1);
+    return this;
+  }
+
   withDescription(description: string) {
     this.data.description = description;
+    return this;
+  }
+
+  withLongDescription() {
+    this.data.description = "d".repeat(
+      DomainRules.CONTENT.DESCRIPTION.MAX_LENGTH + 1
+    );
+    return this;
+  }
+
+  withShortDescription() {
+    this.data.description = "d".repeat(
+      DomainRules.CONTENT.DESCRIPTION.MIN_LENGTH - 1
+    );
     return this;
   }
 

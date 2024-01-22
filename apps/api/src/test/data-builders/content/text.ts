@@ -1,4 +1,4 @@
-import { BaseContentDTODataBuilder } from "@test";
+import { BaseContentDTODataBuilder } from "./base";
 import { ContentTypes } from "@domain";
 
 export class TextContentDTODataBuilder extends BaseContentDTODataBuilder {
@@ -9,10 +9,12 @@ export class TextContentDTODataBuilder extends BaseContentDTODataBuilder {
 
   reset() {
     super.reset();
+    this.withType(ContentTypes.Text);
     this.data.payload.text = { text: "textofsdfsdfsdfsfsd" };
   }
 
   withPayload(payload: { text: string }) {
     this.data.payload.text = payload;
+    return this;
   }
 }

@@ -4,7 +4,12 @@ import { AbstractBuilder } from ".";
 const emailGenerator = new EmailGenerator();
 const passwordGenerator = new PasswordGenerator();
 
-export class AuthInputBuilder extends AbstractBuilder {
+export class AuthInputBuilder extends AbstractBuilder<{
+  password?: string;
+  email?: string;
+  confirmPassword?: string;
+  role?: string;
+}> {
   constructor() {
     super();
   }

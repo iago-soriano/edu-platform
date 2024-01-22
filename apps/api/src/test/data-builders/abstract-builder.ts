@@ -1,5 +1,5 @@
 export abstract class AbstractBuilder<T> {
-  public data!: T;
+  protected data!: T;
   constructor() {
     this.reset();
   }
