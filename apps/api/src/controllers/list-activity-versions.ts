@@ -20,14 +20,16 @@ export class ListActivityVersionsController
   path = "activities";
   middlewares: string[] = ["auth"];
 
-  constructor(private getActivitiesUseCase: IListActivityVersionsUseCase) {}
+  constructor(
+    private listActivityVersionsUseCase: IListActivityVersionsUseCase
+  ) {}
 
   async execute(req: Request, res: Response) {
     const statuses =
       req.query.statuses?.split(",").map((s) => parseVersionStatus(s)) || [];
     const { user } = req;
 
-    const activitiesByAuthor = await this.getActivitiesUseCase.execute({
+    const activitiesByAuthor = await this.listActivityVersionsUseCase.execute({
       user,
       statuses: statuses,
     });

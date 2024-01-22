@@ -42,7 +42,7 @@ export class SaveContentController
 
     const { user } = req;
 
-    await this.saveContentUseCase.execute({
+    const response = await this.saveContentUseCase.execute({
       contentDto,
       user,
       activityId,

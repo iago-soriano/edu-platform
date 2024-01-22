@@ -1,3 +1,4 @@
+import { CreateNewActivityController } from "./../controllers/create-new-activity";
 import * as awilix from "awilix";
 import {
   SignInController,
@@ -11,10 +12,10 @@ import {
   UpdateActivityStatusController,
   SaveQuestionController,
   SaveContentController,
-  CreateNewActivityController,
+  CreateNewDraftVersionController,
   UpdateActivityMetadataController,
   GetActivityVersionController,
-  GetActivitiesController,
+  ListActivityVersionsController,
   DeleteContentController,
   RefreshTokenController,
 } from "@controllers";
@@ -32,11 +33,13 @@ import {
   CreateNewActivityUseCase,
   UpdateActivityMetadataUseCase,
   GetActivityVersionUseCase,
-  GetActivitiesUseCase,
+  ListActivityVersionsUseCase,
   DeleteContentUseCase,
   RefreshTokenUseCase,
   SaveContentUseCase,
+  CreateNewDraftVersionUseCase,
 } from "@use-cases";
+import { GetActivityUseCaseHelper } from "@use-case-middlewares";
 import {
   BCryptEncryptionService,
   EmailService,
@@ -46,8 +49,8 @@ import {
   TokenRepository,
   AssetRepository,
   ActivityRepository,
+  S3Service,
 } from "@infrastructure";
-import { S3Service } from "infrastructure/services/aws-s3";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
@@ -82,9 +85,14 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     getActivityVersionController: awilix
       .asClass(GetActivityVersionController)
       .classic(),
-    getActivitiesController: awilix.asClass(GetActivitiesController).classic(),
+    listActivityVersionsController: awilix
+      .asClass(ListActivityVersionsController)
+      .classic(),
     deleteContentController: awilix.asClass(DeleteContentController).classic(),
     refreshTokenController: awilix.asClass(RefreshTokenController).classic(),
+    createNewDraftVersionCntroller: awilix
+      .asClass(CreateNewDraftVersionController)
+      .classic(),
 
     // services
     encryptionService: awilix.asClass(BCryptEncryptionService),
@@ -120,10 +128,16 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     getActivityVersionUseCase: awilix
       .asClass(GetActivityVersionUseCase)
       .classic(),
-    getActivitiesUseCase: awilix.asClass(GetActivitiesUseCase).classic(),
+    listActivityVersionsUseCase: awilix
+      .asClass(ListActivityVersionsUseCase)
+      .classic(),
     saveContentUseCase: awilix.asClass(SaveContentUseCase).classic(),
     deleteContentUseCase: awilix.asClass(DeleteContentUseCase).classic(),
     refreshTokenUseCase: awilix.asClass(RefreshTokenUseCase).classic(),
+    getActivityHelper: awilix.asClass(GetActivityUseCaseHelper).classic(),
+    createNewDraftVersionUseCase: awilix
+      .asClass(CreateNewDraftVersionUseCase)
+      .classic(),
 
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),

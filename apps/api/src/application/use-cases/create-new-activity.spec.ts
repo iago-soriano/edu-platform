@@ -1,7 +1,5 @@
-import { IActivitiesRepository, UserSelectDTO } from "@interfaces";
-import Sut from "./create-new-activity";
-
 describe("Unit tests for Create New Activity Use Case", () => {
-  let activitiesRepositoryMock: IActivitiesRepository;
-  let userDTOMock: UserSelectDTO;
+  it.todo(
+    "Should create an activity and then a new version with correct parameters"
+  );
 });

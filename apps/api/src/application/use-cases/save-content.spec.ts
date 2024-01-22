@@ -1,144 +1,105 @@
-import Sut from "./save-content";
 import {
-  IActivitiesRepository,
-  IStorageService,
-  IIdGenerator,
-} from "@interfaces";
-import { ContentTypesType } from "@domain";
-import { DomainRules } from "@edu-platform/common";
+  ActivityRepositoryMockBuilder,
+  GetActivityMiddlewareMockBuilder,
+  IdGeneratorMockBuilder,
+  BaseContentDTODataBuilder,
+  S3ServiceMockBuilder,
+  UserDTODataBuilder,
+  VersionDTODataBuilder,
+  ActivityDTODataBuilder,
+  ValidateActivityUserRelationMiddlewareMockBuilder,
+  SaveContentUseCaseMockBuilder,
+} from "@test";
+import { SaveContentUseCase } from "@use-cases";
+import { jest, test } from "@jest/globals";
+import {
+  ActivityContentNotFound,
+  ActivityIsNotFound,
+  ActivityVersionNotFound,
+  ActivityIsNotDraft,
+} from "@edu-platform/common";
+import { VersionStatus } from "@domain";
 
-describe("Unit tests for Save Content Use Case", () => {
-  let activitiesRepositoryMock;
-  let storageServiceMock: IStorageService;
-  let idServiceMock: IIdGenerator;
+describe("Save Content Use Case unit tests", () => {
+  const contentDtoDataBuilder = new BaseContentDTODataBuilder();
+  const userDtoDataBuilder = new UserDTODataBuilder();
+  const versionDtoDataBuilder = new VersionDTODataBuilder();
+  const activityDtoDataBuilder = new ActivityDTODataBuilder();
 
-  beforeAll(() => {
-    activitiesRepositoryMock = {
-      insertContent: jest.fn(),
-      insertActivityAndNewVersion: jest.fn(),
-      getActivityById: jest.fn(),
-      updateActivityVersionMetadata: jest.fn(),
-      updateContent: jest.fn(),
-      getVersionById: jest.fn(),
-      getActivityContentByContentId: jest.fn(),
-      getActivityVersionsByAuthorIdAndStatuses: jest.fn(),
-    };
-    storageServiceMock = {
-      uploadFile: jest.fn(),
-      deleteFile: jest.fn(),
-    };
-    idServiceMock = {
-      getId: jest.fn(),
-    };
-  });
-  it("Should not create content if title is too long", async () => {
-    const response = new Sut(
-      activitiesRepositoryMock,
-      storageServiceMock,
-      idServiceMock
-    ).execute({
-      type: "Video",
-      title:
-        "Título muito enormeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-      versionId: 1,
-      activityId: 1,
-      order: 0,
-    });
-    await expect(response).rejects.toThrow(
-      `Título da atividade é longo demais. Tamanho máximo permitido é de ${DomainRules.CONTENT.TITLE.MAX_LENGTH} caracteres`
-    );
-  });
-  it("Should not create content if title is too short", async () => {
-    const response = new Sut(
-      activitiesRepositoryMock,
-      storageServiceMock,
-      idServiceMock
-    ).execute({
-      type: "Video",
-      title: "Ai",
-      versionId: 1,
-      activityId: 1,
-      order: 0,
-    });
-    await expect(response).rejects.toThrow(
-      `Título da atividade é curto demais. Tamanho mínimo permitido é de ${DomainRules.CONTENT.TITLE.MIN_LENGTH} caracteres`
-    );
-  });
-  it("Should not create content if description is too long", async () => {
-    const response = new Sut(
-      activitiesRepositoryMock,
-      storageServiceMock,
-      idServiceMock
-    ).execute({
-      type: "Video",
-      description:
-        "descriçãoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
-      versionId: 1,
-      activityId: 1,
-      order: 0,
-    });
-    await expect(response).rejects.toThrow(
-      `Descrição da atividade é longa demais. Tamanho máximo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MAX_LENGTH} caracteres`
-    );
-  });
-  it("Should not create content if description is too short", async () => {
-    const response = new Sut(
-      activitiesRepositoryMock,
-      storageServiceMock,
-      idServiceMock
-    ).execute({
-      type: "Video",
-      description: "desc",
-      versionId: 1,
-      activityId: 1,
-      order: 0,
-    });
-    await expect(response).rejects.toThrow(
-      `Descrição da atividade é curta demais. Tamanho mínimo permitido é de ${DomainRules.CONTENT.DESCRIPTION.MIN_LENGTH} caracteres`
-    );
-  });
-  it("Should not create content if content type is invalid", async () => {
-    // act
-    const response = new Sut(
-      activitiesRepositoryMock,
-      storageServiceMock,
-      idServiceMock
-    ).execute({
-      type: "fsdfsd" as ContentTypesType,
-      versionId: 1,
-      activityId: 1,
-      order: 0,
-    });
+  const sutBuilder = new SaveContentUseCaseMockBuilder();
 
-    // assert / verify
-    await expect(response).rejects.toThrow("Tipo de conteúdo não encontrado");
-  });
-  it("Should create content if all validations pass", async () => {
-    await new Sut(
-      activitiesRepositoryMock,
-      storageServiceMock,
-      idServiceMock
-    ).execute({
-      type: "Text",
-      title: "Título do content",
-      description:
-        "Testando se content será criado quando todas as validações passarem",
-      versionId: 1,
-      activityId: 1,
-      order: 7,
-    });
+  const activityId = 3;
+  const versionId = 4;
 
-    expect(activitiesRepositoryMock.insertContent.mock.calls).toHaveLength(1);
-    expect(
-      activitiesRepositoryMock.insertContent.mock.calls[0][0]
-    ).toStrictEqual({
-      type: "Text",
-      title: "Título do content",
-      description:
-        "Testando se content será criado quando todas as validações passarem",
-      order: 7,
-      originatingVersionId: 1,
-      content: undefined,
+  beforeEach(() => {
+    contentDtoDataBuilder.reset();
+    userDtoDataBuilder.reset();
+    versionDtoDataBuilder.reset();
+    activityDtoDataBuilder.reset();
+
+    sutBuilder.reset();
+
+    jest.resetAllMocks();
+  });
+
+  it("Should call handle method with correct parameters", async () => {
+    const versionDto = versionDtoDataBuilder.build();
+    const activityDto = activityDtoDataBuilder.build();
+    const contentDto = contentDtoDataBuilder.build();
+    const user = userDtoDataBuilder.build();
+
+    sutBuilder.getActivityMiddlewareMockBuilder.withReturn(
+      versionDto,
+      activityDto
+    );
+    sutBuilder.refresh();
+
+    const sut = sutBuilder.object;
+    jest.spyOn(sut, "handle");
+
+    try {
+      await sut.execute({ contentDto, activityId, versionId, user });
+    } catch (ex) {
+      ex;
+    }
+
+    expect(sut.handle).toHaveBeenCalledWith({
+      dto: contentDto,
+      user,
+      activity: activityDto,
+      version: versionDto,
     });
   });
+
+  it("Should throw if activity is not a draft", async () => {
+    const versionDto = versionDtoDataBuilder
+      .withStatus(VersionStatus.Published)
+      .build();
+    const activityDto = activityDtoDataBuilder.build();
+    const contentDto = contentDtoDataBuilder.build();
+    const user = userDtoDataBuilder.build();
+
+    sutBuilder.getActivityMiddlewareMockBuilder.withReturn(
+      versionDto,
+      activityDto
+    );
+    sutBuilder.refresh();
+
+    const sut = sutBuilder.object;
+
+    await expect(
+      sut.execute({ contentDto, activityId, versionId, user })
+    ).rejects.toThrow(ActivityIsNotDraft.message);
+  });
+
+  describe("File upload validations", () => {
+    it.todo("Should not try to upload files if content type does not allow");
+    it.todo(
+      "Should not try to upload files if file-based content dto has no files"
+    );
+    it.todo("Should try to upload files if file-based content dto has files");
+  });
+
+  it.todo("Should insert new content if dto has no id");
+  it.todo("Should throw if informed content id does not exist");
 });

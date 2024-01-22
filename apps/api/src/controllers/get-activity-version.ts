@@ -11,6 +11,7 @@ import {
 // } from "@edu-platform/common/api";
 import { IGetActivityVersionUseCase } from "@use-cases";
 import { VersionDTO, ElementDTO, parseVersionStatus } from "@dto";
+import { parseNumberId } from "@infrastructure";
 
 // get activity version full view
 export type GetActivityVersionParams = {
@@ -37,11 +38,10 @@ export class GetActivityVersionController
     // const { activityId, versionId } = req.params;
     const { user } = req;
 
-    const activityId = parseInt(req.params.activityId);
-    const versionId = parseInt(req.params.versionId);
-
-    if (!activityId || !versionId)
-      throw new Error("activityId and versionId must be numbers");
+    const { activityId, versionId } = parseNumberId(req.params, [
+      "activityId",
+      "versionId",
+    ]);
 
     const { title, description, elements, status, topics } =
       await this.getActivityVersionUseCase.execute({
