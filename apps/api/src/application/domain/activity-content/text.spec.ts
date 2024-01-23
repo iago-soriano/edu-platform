@@ -15,47 +15,30 @@ import {
   VideoContentDTODataBuilder,
 } from "@test";
 
-describe("Unit tests for Video Content domain entity", () => {
-  const videoDataBuilder = new VideoContentDTODataBuilder();
+describe("Unit tests for Text Content domain entity", () => {
+  const textDataBuilder = new TextContentDTODataBuilder();
 
   beforeEach(() => {
-    videoDataBuilder.reset();
+    textDataBuilder.reset();
   });
 
   it("Should correctly map payload from dto to domain entity", () => {
-    const videoDto = videoDataBuilder.build();
+    const textDto = textDataBuilder.build();
 
-    const videoDomain = Content.mapFromDto(videoDto) as VideoContent;
+    const textDomain = Content.mapFromDto(textDto) as TextContent;
 
-    expect(videoDomain.url).toBe(videoDto.payload.video?.url);
-    expect(videoDomain.tracks).toBe(videoDto.payload.video?.tracks);
+    expect(textDomain.text).toBe(textDto.payload.text?.text);
   });
 
   it("Should correctly say it has content or not", () => {
-    const dto1 = videoDataBuilder.withPayload({ url: "", tracks: "" }).build();
+    const dto1 = textDataBuilder.withPayload({ text: "" }).build();
     const domain1 = Content.mapFromDto(dto1);
 
     expect(domain1.hasContent()).toBeFalsy();
 
-    const dto2 = videoDataBuilder
-      .withPayload({ url: "fdsfsdfsdfsd", tracks: "" })
-      .build();
+    const dto2 = textDataBuilder.withPayload({ text: "fdsfsdfsdfsd" }).build();
     const domain2 = Content.mapFromDto(dto2);
 
     expect(domain2.hasContent()).toBeTruthy();
-
-    const dto3 = videoDataBuilder
-      .withPayload({ url: "", tracks: "00:00:00-00:00:00" })
-      .build();
-    const domain3 = Content.mapFromDto(dto3);
-
-    expect(domain3.hasContent()).toBeTruthy();
-
-    const dto4 = videoDataBuilder
-      .withPayload({ url: "fdsfsdfsdfsd", tracks: "00:00:00-00:00:00" })
-      .build();
-    const domain4 = Content.mapFromDto(dto4);
-
-    expect(domain4.hasContent()).toBeTruthy();
   });
 });

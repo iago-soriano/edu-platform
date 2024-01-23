@@ -1,19 +1,7 @@
-import {
-  Content,
-  ContentTypes,
-  ImageContent,
-  VideoContent,
-  TextContent,
-} from "@domain";
-import { DomainRules } from "@edu-platform/common";
+import { Content, VideoContent } from "@domain";
 import "../../../test/jest/matchers/custom-error";
 import { expect } from "@jest/globals";
-import {
-  BaseContentDTODataBuilder,
-  ImageContentDTODataBuilder,
-  TextContentDTODataBuilder,
-  VideoContentDTODataBuilder,
-} from "@test";
+import { VideoContentDTODataBuilder } from "@test";
 
 describe("Unit tests for Video Content domain entity", () => {
   const videoDataBuilder = new VideoContentDTODataBuilder();
