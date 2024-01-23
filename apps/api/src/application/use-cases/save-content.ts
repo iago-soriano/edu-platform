@@ -47,23 +47,9 @@ class UseCase implements ISaveContentUseCase {
 
     if (activity.authorId !== user.id) throw new ActivityIsNotFound();
 
-    return this.handle({ dto: contentDto, user, activity, version });
-  }
-
-  async handle({
-    dto,
-    user,
-    activity,
-    version,
-  }: {
-    dto: ContentDTO;
-    user: UserSelectDTO;
-    activity: ActivitySelectDTO;
-    version: ActivityVersionSelectDTO;
-  }) {
     if (version.status !== VersionStatus.Draft) throw new ActivityIsNotDraft();
 
-    const newContent = Content.mapFromDto(dto);
+    const newContent = Content.mapFromDto(contentDto);
 
     // try to upload whatever file is sent. Will not persist content if this doesn't work
     if (newContent.shouldUploadFile()) {
@@ -81,7 +67,7 @@ class UseCase implements ISaveContentUseCase {
     }
 
     // new content
-    if (!dto.id) {
+    if (!contentDto.id) {
       // validate incoming content
       newContent.validateTitle();
       newContent.validateDescription();
@@ -97,7 +83,7 @@ class UseCase implements ISaveContentUseCase {
 
     // find by id
     const contentDbDto = await this.activitiesRepository.Contents.findById(
-      dto.id
+      contentDto.id
     );
     if (!contentDbDto) throw new ActivityContentNotFound();
 
@@ -107,7 +93,7 @@ class UseCase implements ISaveContentUseCase {
     existingContent.mergePayload(newContent as any); // TODO: make this type work
 
     await this.activitiesRepository.Contents.update(
-      dto.id,
+      contentDto.id,
       existingContent.mapToDatabaseDto(),
       version.id
     );

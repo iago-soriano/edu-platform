@@ -40,18 +40,6 @@ class UseCase implements IGetActivityVersionUseCase {
     if (version.status == "Draft" && activity.authorId !== user.id)
       throw new Error("Non-author cannot get draft version");
 
-    return this.handle({ user, activity, version });
-  }
-
-  async handle({
-    user,
-    version,
-    activity,
-  }: {
-    user: UserSelectDTO;
-    activity: ActivitySelectDTO;
-    version: ActivityVersionSelectDTO;
-  }) {
     const { contents, questions } =
       await this.activitiesRepository.Versions.findElementsByVersionId(
         version.id

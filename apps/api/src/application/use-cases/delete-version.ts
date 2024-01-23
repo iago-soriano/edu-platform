@@ -36,16 +36,6 @@ class UseCase implements IDeleteVersionUseCase {
 
     if (activity.authorId !== user.id) throw new ActivityIsNotFound();
 
-    return this.handle({ activity, version });
-  }
-
-  async handle({
-    activity,
-    version,
-  }: {
-    activity: ActivitySelectDTO;
-    version: ActivityVersionSelectDTO;
-  }) {
     if (!(version.status === VersionStatus.Draft))
       throw new ActivityIsNotDraft();
 

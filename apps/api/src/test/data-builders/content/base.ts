@@ -11,7 +11,7 @@ export class BaseContentDTODataBuilder extends AbstractBuilder<ContentDTO> {
   reset() {
     this.data = {
       type: ContentTypes.Image,
-      order: 0,
+      order: 2,
       payload: {},
       title: "t".repeat(
         (DomainRules.CONTENT.TITLE.MIN_LENGTH +
@@ -24,8 +24,7 @@ export class BaseContentDTODataBuilder extends AbstractBuilder<ContentDTO> {
           2
       ),
       id: 5,
-      parentId: 6,
-      originatingVersionId: 7,
+      versionId: 7,
     };
   }
 
@@ -75,16 +74,6 @@ export class BaseContentDTODataBuilder extends AbstractBuilder<ContentDTO> {
 
   withId(id: number) {
     this.data.id = id;
-    return this;
-  }
-
-  withParentId(id: number) {
-    this.data.parentId = id;
-    return this;
-  }
-
-  withOriginatingVersionId(id: number) {
-    this.data.originatingVersionId = id;
     return this;
   }
 }

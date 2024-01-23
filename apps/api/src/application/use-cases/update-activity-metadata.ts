@@ -26,20 +26,18 @@ class UseCase implements IUpdateActivityMetadataUseCase {
   ) {}
 
   async execute({ user, activityId, versionId, versionDto }: InputParams) {
-    const { version, activity } = await this.getActivityHelper.execute({
-      activityId,
-      versionId,
-    });
+    const { version: versionDbDto, activity } =
+      await this.getActivityHelper.execute({
+        activityId,
+        versionId,
+      });
 
-    if (version.status !== VersionStatus.Draft) throw new ActivityIsNotDraft();
+    if (versionDbDto.status !== VersionStatus.Draft)
+      throw new ActivityIsNotDraft();
 
     if (activity.authorId !== user.id) throw new ActivityIsNotFound();
 
-    return this.handle({ versionId, dto: versionDto });
-  }
-
-  async handle({ versionId, dto }: { dto: VersionDTO; versionId: number }) {
-    const version = ActivityVersion.mapFromDto(dto);
+    const version = ActivityVersion.mapFromDto(versionDto);
 
     version.validateTitle();
     version.validateDescription();

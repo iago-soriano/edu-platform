@@ -137,7 +137,7 @@ describe("Unit tests for base Content domain entity", () => {
 
     const newDomain = Content.mapFromDto(newDto);
 
-    existingDomain.merge(0, newDomain);
+    existingDomain.merge(newDomain);
 
     expect(existingDomain.title).toBe(newDto.title);
     expect(existingDomain.description).toBe(newDto.description);
