@@ -4,11 +4,13 @@ import {
   ActivitySelectDTO,
   ActivityVersionSelectDTO,
   ActivityContentSelectDTO,
+  QuestionSelectDTO,
 } from "@interfaces";
 import {
-  ActivityIsNotFound,
+  ActivityNotFound,
   ActivityVersionNotFound,
   ActivityContentNotFound,
+  ActivityQuestionNotFound,
 } from "@edu-platform/common";
 
 type InputParams = {
@@ -28,10 +30,10 @@ export type IGetActivityUseCaseHelper = IUseCase<InputParams, Return>;
 class UseCase implements IGetActivityUseCaseHelper {
   constructor(private activitiesRepository: IActivitiesRepository) {}
 
-  async execute({ activityId, versionId, contentId }: InputParams) {
+  async execute({ activityId, versionId, contentId, questionId }: InputParams) {
     const activity =
       await this.activitiesRepository.Activities.findById(activityId);
-    if (!activity) throw new ActivityIsNotFound();
+    if (!activity) throw new ActivityNotFound();
 
     const version =
       await this.activitiesRepository.Versions.findSimpleViewById(versionId);

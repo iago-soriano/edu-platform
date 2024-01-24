@@ -1,3 +1,4 @@
+import { HasAccountWithEmailAndPassword } from "@edu-platform/common";
 import {
   IUserRepository,
   ITokenService,
@@ -29,7 +30,7 @@ class UseCase implements IProviderSignUpUseCase {
     let userId;
 
     if (existingUser && !existingUser.provider)
-      throw new Error("Account already created with e-mail and password");
+      throw new HasAccountWithEmailAndPassword();
 
     if (!existingUser) {
       const userDTO: UserInsertDTO = {

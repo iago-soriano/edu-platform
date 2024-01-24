@@ -1,3 +1,4 @@
+import { EncryptingError } from "@edu-platform/common";
 import { IEncryptionService } from "@interfaces";
 import bcrypt from "bcryptjs";
 
@@ -10,7 +11,7 @@ export class BCryptEncryptionService implements IEncryptionService {
     try {
       return bcrypt.hash(plain, this._saltRounds);
     } catch {
-      throw new Error("Error trying to encrypt password");
+      throw new EncryptingError();
     }
   }
 

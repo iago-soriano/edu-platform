@@ -1,14 +1,15 @@
+import { ContentSavedInDBHasNoType } from "./../../../../../../packages/common/errors/domain/content";
 import {
   ContentTypeNotFound,
-  TitleIsTooLong,
-  TitleIsTooShort,
+  ContentTitleIsTooLong,
+  ContentTitleIsTooShort,
   DomainRules,
-  DescriptionIsTooLong,
-  DescriptionIsTooShort,
+  ContentDescriptionIsTooLong,
+  ContentDescriptionIsTooShort,
 } from "@edu-platform/common";
 import { ImageContent, VideoContent, TextContent } from "@domain";
 import { ActivityContentSelectDTO, FileType } from "@interfaces";
-import { ContentDTO } from "@dto";
+import { ContentDTO, parseContentType } from "@dto";
 
 export enum ContentTypes {
   Video = "Video",
@@ -29,20 +30,20 @@ export abstract class Content {
   validateTitle() {
     if (!this.title) return;
     if (this.title.length > DomainRules.CONTENT.TITLE.MAX_LENGTH) {
-      throw new TitleIsTooLong();
+      throw new ContentTitleIsTooLong();
     } else if (this.title.length < DomainRules.CONTENT.TITLE.MIN_LENGTH) {
-      throw new TitleIsTooShort();
+      throw new ContentTitleIsTooShort();
     }
   }
 
   validateDescription() {
     if (!this.description) return;
     if (this.description.length > DomainRules.CONTENT.DESCRIPTION.MAX_LENGTH) {
-      throw new DescriptionIsTooLong();
+      throw new ContentDescriptionIsTooLong();
     } else if (
       this.description.length < DomainRules.CONTENT.DESCRIPTION.MIN_LENGTH
     ) {
-      throw new DescriptionIsTooShort();
+      throw new ContentDescriptionIsTooShort();
     }
   }
 
@@ -86,10 +87,10 @@ export abstract class Content {
   static mapFromDatabaseDtoToRegularDto(
     dto: ActivityContentSelectDTO
   ): ContentDTO {
-    if (!dto.type) throw new Error("Content saved in db has no type");
+    if (!dto.type) throw new ContentSavedInDBHasNoType();
 
     return {
-      type: dto.type,
+      type: parseContentType(dto.type),
       order: dto.order || 0,
       payload: {
         video: {

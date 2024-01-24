@@ -1,8 +1,7 @@
 import {
   ActivityContentNotFound,
-  ActivityIsNotFound,
-  ActivityVersionNotFound,
-  ActivityIsNotDraft,
+  ActivityNotFound,
+  ActivityVersionIsNotDraft,
 } from "@edu-platform/common";
 import {
   IUseCase,
@@ -18,6 +17,7 @@ import { ContentDTO } from "@dto";
 import { Content, VersionStatus } from "@domain";
 import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
 import { getFileExtension } from "@infrastructure";
+import { FailedToUploadFileToS3 } from "@edu-platform/common/errors/domain/question";
 
 type InputParams = {
   contentDto: ContentDTO;
@@ -45,9 +45,10 @@ class UseCase implements ISaveContentUseCase {
       contentId: contentDto.id,
     });
 
-    if (activity.authorId !== user.id) throw new ActivityIsNotFound();
+    if (activity.authorId !== user.id) throw new ActivityNotFound();
 
-    if (version.status !== VersionStatus.Draft) throw new ActivityIsNotDraft();
+    if (version.status !== VersionStatus.Draft)
+      throw new ActivityVersionIsNotDraft();
 
     const newContent = Content.mapFromDto(contentDto);
 
@@ -60,8 +61,7 @@ class UseCase implements ISaveContentUseCase {
         keyName,
         newContent.file
       );
-      if (!fileUrl)
-        throw new Error("There was an error uploading the file to S3");
+      if (!fileUrl) throw new FailedToUploadFileToS3();
       // if(newContent.) // TODO: remove old file
       newContent.setFileUrl(fileUrl);
     }

@@ -1,4 +1,5 @@
-import { Content, VersionStatus } from "@domain";
+import { UserIsNotDraftAuthor } from "./../../../../../packages/common/errors/domain/version";
+import { Content, VersionStatus, Question } from "@domain";
 import { ElementDTO, parseVersionStatus } from "@dto";
 import {
   IUseCase,
@@ -38,7 +39,7 @@ class UseCase implements IGetActivityVersionUseCase {
     });
 
     if (version.status == "Draft" && activity.authorId !== user.id)
-      throw new Error("Non-author cannot get draft version");
+      throw new UserIsNotDraftAuthor();
 
     const { contents, questions } =
       await this.activitiesRepository.Versions.findElementsByVersionId(

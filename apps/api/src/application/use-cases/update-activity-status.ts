@@ -1,8 +1,4 @@
 import {
-  ActivityIsNotFound,
-  ActivityVersionNotFound,
-} from "@edu-platform/common";
-import {
   ActivitySelectDTO,
   IActivitiesRepository,
   IUseCase,
@@ -11,6 +7,13 @@ import {
 } from "@interfaces";
 import { Activity, ActivityVersion, VersionStatus, Content } from "@domain";
 import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
+import {
+  ActivityVersionHasNoContent,
+  ActivityVersionHasNoTitleOrNoDescription,
+  FailedToUpdateVersionStatus,
+  ActivityNotFound,
+} from "@edu-platform/common/";
+import { ContentIsHalfCompleted } from "@edu-platform/common/errors/domain/content";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -42,7 +45,7 @@ class UseCase implements IUpdateActivityStatusUseCase {
       versionId,
     });
 
-    if (activity.authorId !== user.id) throw new ActivityIsNotFound();
+    if (activity.authorId !== user.id) throw new ActivityNotFound();
 
     return this.handle({ activity, version, newActivityStatus });
   }
@@ -77,9 +80,7 @@ class UseCase implements IUpdateActivityStatusUseCase {
     )
       return this.handleArchivePublished(activity);
 
-    throw new Error(
-      `Can't update from version ${version.status} to ${newActivityStatus}`
-    );
+    throw new FailedToUpdateVersionStatus(version.status, newActivityStatus);
   }
 
   private handlePublishDraft = async (
@@ -91,10 +92,7 @@ class UseCase implements IUpdateActivityStatusUseCase {
         version.id
       );
 
-    if (!contents || !contents.length)
-      throw new Error(
-        "Não há conteúdos, não se pode publicar uma atividade vazia"
-      );
+    if (!contents || !contents.length) throw new ActivityVersionHasNoContent();
 
     // archive currently published version
     if (activity.hasPublishedVersion()) {
@@ -107,7 +105,7 @@ class UseCase implements IUpdateActivityStatusUseCase {
     }
 
     if (!version.title || !version.description)
-      throw new Error("Deve haver título e descrição");
+      throw new ActivityVersionHasNoTitleOrNoDescription();
 
     let contentCounter = contents.length;
 
@@ -115,8 +113,9 @@ class UseCase implements IUpdateActivityStatusUseCase {
       const contentToVerify = Content.mapFromDatabaseDto(content);
 
       if (contentToVerify.isHalfCompleted())
-        throw new Error(
-          `Um conteúdo tem apenas título e/ou descrição. Termine-o ou exclua-o antes de publicar a atividade. Título: ${contentToVerify.title}. Descrição: ${contentToVerify.description}`
+        throw new ContentIsHalfCompleted(
+          contentToVerify.title,
+          contentToVerify.description
         );
 
       if (contentToVerify.isEmpty()) {
@@ -125,7 +124,7 @@ class UseCase implements IUpdateActivityStatusUseCase {
       }
     }
 
-    if (contentCounter === 0) throw new Error("Não há conteúdos"); // mesmo erro acima
+    if (contentCounter === 0) throw new ActivityVersionHasNoContent(); // mesmo erro acima
 
     await this.activitiesRepository.Versions.update(activity.draftVersionId, {
       status: "Published",

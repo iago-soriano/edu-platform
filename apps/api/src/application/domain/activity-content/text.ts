@@ -1,6 +1,11 @@
 import { ContentDTO } from "@dto";
 import { Content, ContentTypes } from "./base";
-import { DomainRules } from "@edu-platform/common";
+import {
+  DomainRules,
+  TextContentIsTooLong,
+  TextContentIsTooShort,
+} from "@edu-platform/common";
+import { ContentDoesNotImplementFiles } from "@edu-platform/common/errors/domain/content";
 
 export class TextContent extends Content {
   public text: string = "";
@@ -15,10 +20,10 @@ export class TextContent extends Content {
 
   validatePayload() {
     if (this.text.length > DomainRules.CONTENT.TEXT.MAX_LENGTH)
-      throw new Error("Text Content is too long");
+      throw new TextContentIsTooLong();
 
     if (this.text.length < DomainRules.CONTENT.TEXT.MIN_LENGTH)
-      throw new Error("Text Content is too short");
+      throw new TextContentIsTooShort();
   }
 
   hasContent() {
@@ -34,7 +39,7 @@ export class TextContent extends Content {
   }
 
   setFileUrl(_: string) {
-    throw new Error(`${this.type} type does not implement files`);
+    throw new ContentDoesNotImplementFiles(this.type);
   }
 
   mapPayloadFromDto(dto: ContentDTO) {

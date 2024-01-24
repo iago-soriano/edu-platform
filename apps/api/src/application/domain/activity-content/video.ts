@@ -1,6 +1,10 @@
 import { ContentDTO } from "@dto";
 import { Content, ContentTypes } from "./base";
 import { DomainRules } from "@edu-platform/common";
+import {
+  ContentDoesNotImplementFiles,
+  VideoContentHasToManyTracks,
+} from "@edu-platform/common/errors/domain/content";
 
 export class VideoContent extends Content {
   public tracks: string = "";
@@ -19,7 +23,7 @@ export class VideoContent extends Content {
     if (
       this.tracks.split(",").length > DomainRules.CONTENT.VIDEO.TRACKS_MAX_NUM
     )
-      throw new Error("Too many tracks");
+      throw new VideoContentHasToManyTracks();
   }
 
   hasContent() {
@@ -27,7 +31,7 @@ export class VideoContent extends Content {
   }
 
   setFileUrl(_: string) {
-    throw new Error(`${this.type} type does not implement files`);
+    throw new ContentDoesNotImplementFiles(this.type);
   }
 
   shouldUploadFile(): boolean {

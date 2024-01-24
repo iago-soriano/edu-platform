@@ -1,10 +1,10 @@
 import {
-  TitleIsTooLong,
-  TitleIsTooShort,
-  DescriptionIsTooLong,
-  DescriptionIsTooShort,
-  HasTooManyTopics,
+  ActivityVersionHasTooManyTopics,
   DomainRules,
+  ActivityTitleIsTooLong,
+  ActivityDescriptionIsTooLong,
+  ActivityDescriptionIsTooShort,
+  ActivityTitleIsTooShort,
 } from "@edu-platform/common";
 import { ActivityVersionSelectDTO } from "@interfaces";
 import { VersionDTO, parseVersionStatus } from "@dto";
@@ -28,26 +28,26 @@ export class ActivityVersion {
 
   validateTitle() {
     if (this.title.length > DomainRules.ACTIVITY.TITLE.MAX_LENGTH) {
-      throw new TitleIsTooLong();
+      throw new ActivityTitleIsTooLong();
     } else if (this.title.length < DomainRules.ACTIVITY.TITLE.MIN_LENGTH) {
-      throw new TitleIsTooShort();
+      throw new ActivityTitleIsTooShort();
     }
   }
 
   validateDescription() {
     if (this.description.length > DomainRules.ACTIVITY.DESCRIPTION.MAX_LENGTH) {
-      throw new DescriptionIsTooLong();
+      throw new ActivityDescriptionIsTooLong();
     } else if (
       this.description.length < DomainRules.ACTIVITY.DESCRIPTION.MIN_LENGTH
     ) {
-      throw new DescriptionIsTooShort();
+      throw new ActivityDescriptionIsTooShort();
     }
   }
 
   validateTopics() {
     const topicsArray = this.topics.split(",");
     if (topicsArray.length > DomainRules.ACTIVITY.TOPICS.MAX_COUNT) {
-      throw new HasTooManyTopics();
+      throw new ActivityVersionHasTooManyTopics();
     }
   }
 

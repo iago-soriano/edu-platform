@@ -1,8 +1,7 @@
 import { VersionStatus, ActivityVersion } from "@domain";
 import {
-  ActivityIsNotDraft,
-  ActivityIsNotFound,
-  UserNotActivityAuthor,
+  ActivityVersionIsNotDraft,
+  ActivityNotFound,
 } from "@edu-platform/common";
 import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
 import { VersionDTO } from "@dto";
@@ -33,9 +32,9 @@ class UseCase implements IUpdateActivityMetadataUseCase {
       });
 
     if (versionDbDto.status !== VersionStatus.Draft)
-      throw new ActivityIsNotDraft();
+      throw new ActivityVersionIsNotDraft();
 
-    if (activity.authorId !== user.id) throw new ActivityIsNotFound();
+    if (activity.authorId !== user.id) throw new ActivityNotFound();
 
     const version = ActivityVersion.mapFromDto(versionDto);
 

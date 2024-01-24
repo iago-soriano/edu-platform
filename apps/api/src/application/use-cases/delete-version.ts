@@ -1,4 +1,3 @@
-import { ActivityIsNotDraft } from "@edu-platform/common";
 import {
   IUseCase,
   IActivitiesRepository,
@@ -9,7 +8,10 @@ import {
 } from "@interfaces";
 import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
 import { VersionStatus, Content } from "@domain";
-import { ActivityIsNotFound } from "@edu-platform/common";
+import {
+  ActivityNotFound,
+  ActivityVersionIsNotDraft,
+} from "@edu-platform/common";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -34,10 +36,10 @@ class UseCase implements IDeleteVersionUseCase {
       versionId,
     });
 
-    if (activity.authorId !== user.id) throw new ActivityIsNotFound();
+    if (activity.authorId !== user.id) throw new ActivityNotFound();
 
     if (!(version.status === VersionStatus.Draft))
-      throw new ActivityIsNotDraft();
+      throw new ActivityVersionIsNotDraft();
 
     const { questions, contents: contentDtos } =
       await this.activitiesRepository.Versions.findElementsByVersionId(

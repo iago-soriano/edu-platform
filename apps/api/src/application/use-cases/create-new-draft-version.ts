@@ -1,6 +1,6 @@
 import { Activity } from "@domain";
 import { IUseCase, IActivitiesRepository, UserSelectDTO } from "@interfaces";
-import { ActivityIsNotFound } from "@edu-platform/common";
+import { ActivityNotFound } from "@edu-platform/common";
 
 type InputParams = {
   activityId: number;
@@ -21,7 +21,7 @@ class UseCase implements ICreateNewDraftVersionUseCase {
       await this.activitiesRepository.Activities.findById(activityId);
     const activity = Activity.mapFromDatabaseDto(activityDbDto);
 
-    if (activity.authorId !== user.id) throw new ActivityIsNotFound();
+    if (activity.authorId !== user.id) throw new ActivityNotFound();
 
     if (activity.hasDraft())
       // there is already a draft in progress. Let user know that. TODO: send this endpoint a "forceDelete" flag and delete the other draft here

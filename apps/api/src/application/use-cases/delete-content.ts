@@ -6,7 +6,7 @@ import {
   UserSelectDTO,
 } from "@interfaces";
 import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
-import { ActivityIsNotFound } from "@edu-platform/common";
+import { ActivityNotFound } from "@edu-platform/common";
 
 type InputParams = {
   activityId: number;
@@ -39,7 +39,7 @@ class UseCase implements IDeleteContentUseCase {
 
     if (!contentDbDto) return;
 
-    if (activity.authorId !== user.id) throw new ActivityIsNotFound();
+    if (activity.authorId !== user.id) throw new ActivityNotFound();
 
     const content = Content.mapFromDatabaseDto(contentDbDto);
 
