@@ -8,7 +8,11 @@ import {
   ContentDescriptionIsTooShort,
 } from "@edu-platform/common";
 import { ImageContent, VideoContent, TextContent } from "@domain";
-import { ActivityContentSelectDTO, FileType } from "@interfaces";
+import {
+  ActivityContentSelectDTO,
+  ActivityContentInsertDTO,
+  FileType,
+} from "@interfaces";
 import { ContentDTO, parseContentType } from "@dto";
 
 export enum ContentTypes {
@@ -73,7 +77,7 @@ export abstract class Content {
 
   abstract storedFileUrl(): string | null;
 
-  mapToDatabaseDto() {
+  mapToDatabaseDto(): ActivityContentInsertDTO {
     return {
       id: this.id,
       title: this.title,
@@ -120,13 +124,13 @@ export abstract class Content {
 
     // instanciate specific type and map payload
     switch (dto.type) {
-      case "Video":
+      case ContentTypes.Video:
         newContent = new VideoContent();
         break;
-      case "Image":
+      case ContentTypes.Image:
         newContent = new ImageContent();
         break;
-      case "Text":
+      case ContentTypes.Text:
         newContent = new TextContent();
         break;
       default:

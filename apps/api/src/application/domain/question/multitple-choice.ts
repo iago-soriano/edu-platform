@@ -1,9 +1,15 @@
 import { Question, QuestionTypes } from ".";
 import { QuestionDTO, AlternativeDTO } from "@dto";
-import { AlternativeInsertDTO, CompleteQuestionInsertDTO } from "@interfaces";
+import {
+  AlternativeInsertDTO,
+  AlternativeSelectDTO,
+  CompleteQuestionInsertDTO,
+  CompleteQuestionSelectDTO,
+} from "@interfaces";
 
 export class Alternative {
   public id: number = 0;
+  public order: number = 0;
   public text: string = "";
   public comment?: string;
   public isCorrect: boolean = false;
@@ -16,7 +22,7 @@ export class Alternative {
     this.questionId = dto.questionId;
     this.isCorrect = dto.isCorrect;
     this.comment = dto.comment || "";
-    this.text = dto.text || "";
+    (this.order = dto.order || 0), (this.text = dto.text || "");
   }
 
   mapToDatabaseDto(): AlternativeInsertDTO {
@@ -24,6 +30,17 @@ export class Alternative {
       text: this.text,
       comment: this.comment,
       isCorrect: this.isCorrect,
+    };
+  }
+
+  static mapFromDatabaseToRegularDto(alt: AlternativeSelectDTO) {
+    return {
+      id: alt.id || 0,
+      questionId: alt.questionId || 0,
+      order: alt.order || 0,
+      comment: alt.comment || "",
+      isCorrect: alt.isCorrect || false,
+      text: alt.text || "",
     };
   }
 }
@@ -53,6 +70,18 @@ export class MultipleChoiceQuestion extends Question {
       alternative.mapFromDto(dto);
       this.alternatives.push(alternative);
     });
+  }
+
+  static mapFromDatabaseDtoToRegularDto({
+    alternatives,
+    ...question
+  }: CompleteQuestionSelectDTO): QuestionDTO {
+    return {
+      ...super.mapFromDatabaseDtoToRegularDto(question),
+      alternatives: alternatives?.map((alt) =>
+        Alternative.mapFromDatabaseToRegularDto(alt)
+      ),
+    };
   }
 
   mapToDatabaseDto(): CompleteQuestionInsertDTO {

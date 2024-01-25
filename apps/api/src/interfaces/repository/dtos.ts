@@ -36,11 +36,9 @@ export type QuestionSelectDTO = typeof activityQuestions.$inferSelect;
 export type AlternativeInsertDTO = typeof alternatives.$inferInsert;
 export type AlternativeSelectDTO = typeof alternatives.$inferInsert;
 
-export type CompleteQuestionInsertDTO = {
-  question: QuestionInsertDTO;
+export type CompleteQuestionInsertDTO = QuestionInsertDTO & {
   alternatives?: AlternativeInsertDTO[];
 };
-export type CompleteQuestionSelectDTO = {
-  question: QuestionSelectDTO;
+export type CompleteQuestionSelectDTO = QuestionSelectDTO & {
   alternatives?: AlternativeSelectDTO[];
 };

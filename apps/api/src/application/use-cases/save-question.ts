@@ -1,16 +1,9 @@
-import { alternatives } from "./../../infrastructure/repositories/schema";
 import {
-  ActivityContentNotFound,
+  ActivityQuestionNotFound,
   ActivityNotFound,
   ActivityVersionIsNotDraft,
 } from "@edu-platform/common";
-import {
-  IUseCase,
-  UserSelectDTO,
-  IActivitiesRepository,
-  IStorageService,
-  IIdGenerator,
-} from "@interfaces";
+import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
 import { QuestionDTO } from "@dto";
 import { MultipleChoiceQuestion, Question, VersionStatus } from "@domain";
 import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
@@ -61,20 +54,18 @@ class UseCase implements ISaveQuestionUseCase {
     }
 
     // find by id
-    const contentDbDto = await this.activitiesRepository.Contents.findById(
-      contentDto.id
+    const questionDbDto = await this.activitiesRepository.Questions.findById(
+      questionDto.id
     );
-    if (!contentDbDto) throw new ActivityContentNotFound();
+    if (!questionDbDto) throw new ActivityQuestionNotFound();
 
-    const existingContent = Content.mapFromDatabaseDto(contentDbDto);
+    const existingQuestion = Question.mapFromDatabaseDto(questionDbDto);
 
-    existingContent.merge(newQuestion);
-    existingContent.mergePayload(newQuestion as any); // TODO: make this type work
+    existingQuestion.merge(newQuestion);
 
-    await this.activitiesRepository.Contents.update(
-      contentDto.id,
-      existingContent.mapToDatabaseDto(),
-      version.id
+    await this.activitiesRepository.Questions.update(
+      questionDto.id,
+      existingQuestion.mapToDatabaseDto()
     );
   }
 }

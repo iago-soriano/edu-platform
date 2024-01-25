@@ -47,14 +47,12 @@ export abstract class Question {
 
   mapToDatabaseDto(): CompleteQuestionInsertDTO {
     return {
-      question: {
-        id: this.id,
-        question: this.question,
-        answer: this.answer,
-        order: this.order,
-        type: this.type.toString(),
-        versionId: this.versionId,
-      },
+      id: this.id,
+      question: this.question,
+      answer: this.answer,
+      order: this.order,
+      type: this.type.toString(),
+      versionId: this.versionId,
     };
   }
 
@@ -85,22 +83,24 @@ export abstract class Question {
     return newQuestion;
   }
 
-  static mapFromDatabaseDtoToRegularDto(dto: QuestionSelectDTO): QuestionDTO {
-    if (!dto.type) throw new QuestionSavedInDBHasNoType();
+  static mapFromDatabaseDtoToRegularDto(
+    question: CompleteQuestionSelectDTO
+  ): QuestionDTO {
+    if (!question.type) throw new QuestionSavedInDBHasNoType();
 
     return {
-      type: parseQuestionType(dto.type),
-      order: dto.order || 0,
+      type: parseQuestionType(question.type),
+      order: question.order || 0,
 
-      question: dto.question || "",
-      answer: dto.answer || "",
+      question: question.question || "",
+      answer: question.answer || "",
 
-      id: dto.id,
-      versionId: dto.versionId || 0,
+      id: question.id || 0,
+      versionId: question.versionId || 0,
     };
   }
 
-  static mapFromDatabaseDto(dto: QuestionSelectDTO) {
+  static mapFromDatabaseDto(dto: CompleteQuestionSelectDTO) {
     return this.mapFromDto(Question.mapFromDatabaseDtoToRegularDto(dto));
   }
 }

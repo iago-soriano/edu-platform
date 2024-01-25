@@ -10,8 +10,8 @@ import { eq, inArray } from "drizzle-orm";
 
 export class Questions implements IQuestions {
   async insert({
-    question,
     alternatives: alternativesDtos,
+    ...question
   }: CompleteQuestionInsertDTO) {
     return db.transaction(async (tx) => {
       const insertedQuestion = (
@@ -43,10 +43,7 @@ export class Questions implements IQuestions {
     )[0];
   }
 
-  async updateQuestion(
-    questionId: number,
-    question: CompleteQuestionInsertDTO
-  ) {
+  async update(questionId: number, question: CompleteQuestionInsertDTO) {
     await db
       .update(activityQuestions)
       .set({ ...question, updatedAt: new Date() })
@@ -63,16 +60,16 @@ export class Questions implements IQuestions {
       .where(eq(alternatives.id, alternativeId));
   }
 
-  async findById(questionId: number) {
-    return (
-      await db
-        .select()
-        .from(activityQuestions)
-        .where(eq(activityQuestions.id, questionId))
-    )[0];
-  }
+  // async findById(questionId: number) {
+  //   return (
+  //     await db
+  //       .select()
+  //       .from(activityQuestions)
+  //       .where(eq(activityQuestions.id, questionId))
+  //   )[0];
+  // }
 
-  async findQuestionAndAlternativesById(questionId: number) {
+  async findById(questionId: number) {
     const question = (
       await db
         .select()
@@ -84,7 +81,7 @@ export class Questions implements IQuestions {
       .from(alternatives)
       .where(eq(alternatives.questionId, questionId));
 
-    return { question, alternatives: alternativesDtos };
+    return { ...question, alternatives: alternativesDtos };
   }
 
   async delete(questionId: number) {

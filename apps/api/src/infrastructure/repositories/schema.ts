@@ -202,6 +202,7 @@ export const alternatives = pgTable("question_alternatives", {
   text: varchar("text", { length: 200 }),
   comment: varchar("comment", { length: 500 }),
   isCorrect: boolean("is_correct"),
+  order: integer("order").default(0),
 
   questionId: integer("question_id").references(() => activityQuestions.id),
 });

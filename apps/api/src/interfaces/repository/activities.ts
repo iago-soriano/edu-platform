@@ -1,4 +1,3 @@
-import { alternatives } from "./../../infrastructure/repositories/schema";
 import { VersionStatus } from "@domain";
 import {
   QuestionSelectDTO,
@@ -10,6 +9,7 @@ import {
   ActivityInsertDTO,
   QuestionInsertDTO,
   CompleteQuestionInsertDTO,
+  CompleteQuestionSelectDTO,
   AlternativeInsertDTO,
   AlternativeSelectDTO,
 } from "./dtos";
@@ -36,19 +36,19 @@ export interface IQuestions {
   insertAlternative: (
     alternative: AlternativeInsertDTO
   ) => Promise<{ alternativeId: number }>;
-  updateQuestion: (
+  update: (
     questionId: number,
-    question: QuestionInsertDTO
+    question: CompleteQuestionInsertDTO
   ) => Promise<void>;
   updateAlternative: (
     alternativeId: number,
     alternative: AlternativeInsertDTO
   ) => Promise<void>;
-  findById: (questionId: number) => Promise<QuestionSelectDTO>;
-  findQuestionAndAlternativesById: (questionId: number) => Promise<{
-    question: QuestionSelectDTO;
-    alternatives: AlternativeSelectDTO[];
-  }>;
+  findById: (questionId: number) => Promise<CompleteQuestionSelectDTO>;
+  // findQuestionAndAlternativesById: (questionId: number) => Promise<{
+  //   question: QuestionSelectDTO;
+  //   alternatives: AlternativeSelectDTO[];
+  // }>;
   delete: (questionId: number) => Promise<void>;
 }
 
@@ -67,6 +67,7 @@ export interface IVersions {
     versionNumber?: number
   ) => Promise<{ versionId: number }>;
   update: (versionId: number, args: ActivityVersionInsertDTO) => Promise<void>;
+  delete: (versionId: number) => Promise<void>;
   findSimpleViewById: (versionId: number) => Promise<ActivityVersionSelectDTO>;
   findFullViewById: (versionId: number) => Promise<{
     version: ActivityVersionSelectDTO;
