@@ -1,10 +1,14 @@
 import { z } from "zod";
 import { FileType } from "@interfaces";
+import { ContentTypes } from "@domain";
+
+const contentTypeSchema = z.nativeEnum(ContentTypes);
+export const parseContentType = contentTypeSchema.parse;
 
 const contentSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
-  type: z.string(),
+  type: z.nativeEnum(ContentTypes),
   id: z.number().optional(),
   payload: z.object({
     video: z

@@ -37,25 +37,17 @@ export const DomainRules = {
     },
   },
   QUESTION: {
-    TITLE: {
+    CHOICE_COMMENT_TEXT: {
       MIN_LENGTH: 5,
       MAX_LENGTH: 100,
     },
-    COMMENT: {
-      MIN_LENGTH: 5,
-      MAX_LENGTH: 100,
-    },
-    TEXT: {
+    QUESTION_TEXT: {
       MIN_LENGTH: 1,
       MAX_LENGTH: 1,
     },
-    ANSWERKEY_TEXT: {
+    SUGGESTED_ANSWER_TEXT: {
       MIN_LENGTH: 5,
       MAX_LENGTH: 100,
-    },
-    ANSWERKEY_MULTIPLECHOICE: {
-      MIN_LENGTH: 1,
-      MAX_LENGTH: 1,
     },
   },
 };

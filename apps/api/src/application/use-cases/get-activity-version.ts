@@ -52,7 +52,7 @@ class UseCase implements IGetActivityVersionUseCase {
         question: null,
       })),
       ...questions.map((q) => ({
-        question: { ...q, order: q.order || 0 },
+        question: Question.mapFromDatabaseDtoToRegularDto(q),
         content: null,
       })),
     ].sort(

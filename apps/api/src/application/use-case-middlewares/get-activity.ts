@@ -17,12 +17,14 @@ type InputParams = {
   activityId: number;
   versionId: number;
   contentId?: number;
+  questionId?: number;
 };
 
 type Return = {
   activity: ActivitySelectDTO;
   version: ActivityVersionSelectDTO;
   content?: ActivityContentSelectDTO;
+  question?: QuestionSelectDTO;
 };
 
 export type IGetActivityUseCaseHelper = IUseCase<InputParams, Return>;
@@ -50,10 +52,21 @@ class UseCase implements IGetActivityUseCaseHelper {
       if (content.versionId !== version.id) throw new ActivityContentNotFound();
     }
 
+    let question;
+
+    if (questionId) {
+      question = await this.activitiesRepository.Questions.findById(questionId);
+
+      if (!question) throw new ActivityQuestionNotFound();
+      if (question.versionId !== version.id)
+        throw new ActivityContentNotFound();
+    }
+
     return {
       activity,
       version,
       content,
+      question,
     };
   }
 }

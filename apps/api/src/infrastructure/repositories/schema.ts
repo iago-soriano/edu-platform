@@ -11,12 +11,7 @@ import {
   PgViewConfig,
 } from "drizzle-orm/pg-core";
 import { relations, type InferSelectModel } from "drizzle-orm";
-import {
-  VersionStatus,
-  QuestionPossibleTypes,
-  UserTypes,
-  ContentTypes,
-} from "@domain";
+import { VersionStatus, QuestionTypes, UserTypes, ContentTypes } from "@domain";
 
 /* #region Tokens */
 export const tokenTypeEnum = pgEnum("tokenType", [
@@ -159,7 +154,7 @@ export const activityContents = pgTable("activity_contents", {
   imageUrl: varchar("image_url", { length: 150 }),
   text: varchar("text", { length: 1000 }),
 
-  versionId: integer("version_id"),
+  versionId: integer("version_id").references(() => activityVersions.id),
 });
 
 export const activityContentsRelations = relations(
@@ -171,7 +166,7 @@ export const activityContentsRelations = relations(
 
 export const questionTypeEnum = pgEnum(
   "questionType",
-  QuestionPossibleTypes || {}
+  Object.values(QuestionTypes || {}).filter((v) => isNaN(Number(v))) as [string]
 );
 
 export const activityQuestions = pgTable("questions", {
@@ -180,36 +175,40 @@ export const activityQuestions = pgTable("questions", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
   type: questionTypeEnum("type"),
+
   question: varchar("question", { length: 200 }),
-  answerKey: varchar("answer_key", { length: 500 }),
-  title: varchar("title", { length: 50 }),
+  answer: varchar("answer_key", { length: 500 }),
   order: integer("order").default(0),
 
-  versionId: integer("version_id"),
+  versionId: integer("version_id").references(() => activityVersions.id),
 });
 
 // export const testView = pgView("my_view").as(qb => qb.select({ id: activityQuestions.id, answerKey: activityQuestions.answerKey }).from(activityQuestions));
 // type ViewType = Pick<InferSelectModel<typeof activityQuestions>, 'id' | 'answerKey'>;
 
-export const questionsRelations = relations(activityQuestions, ({ one }) => ({
-  version: one(activityVersions),
-}));
+export const questionsRelations = relations(
+  activityQuestions,
+  ({ one, many }) => ({
+    version: one(activityVersions),
+    choice: many(alternatives), // TODO: need this?
+  })
+);
 
-export const choices = pgTable("choices", {
+export const alternatives = pgTable("question_alternatives", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
   text: varchar("text", { length: 200 }),
   comment: varchar("comment", { length: 500 }),
-  label: varchar("label", { length: 2 }),
+  isCorrect: boolean("is_correct"),
 
   questionId: integer("question_id").references(() => activityQuestions.id),
 });
 
-export const choicesRelations = relations(choices, ({ one }) => ({
+export const alternativesRelations = relations(alternatives, ({ one }) => ({
   question: one(activityQuestions, {
-    fields: [choices.questionId],
+    fields: [alternatives.questionId],
     references: [activityQuestions.id],
   }),
 }));

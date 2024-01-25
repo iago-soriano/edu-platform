@@ -18,4 +18,5 @@ export * from "./update-activity-metadata";
 export * from "./list-activity-versions";
 export * from "./get-activity-version";
 export * from "./delete-content";
+export * from "./delete-question";
 export * from "./create-new-draft-version";

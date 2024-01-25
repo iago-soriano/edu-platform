@@ -1,3 +1,4 @@
+import { alternatives } from "./../../infrastructure/repositories/schema";
 import { VersionStatus } from "@domain";
 import {
   QuestionSelectDTO,
@@ -7,6 +8,10 @@ import {
   ActivityVersionSelectDTO,
   ActivityContentSelectDTO,
   ActivityInsertDTO,
+  QuestionInsertDTO,
+  CompleteQuestionInsertDTO,
+  AlternativeInsertDTO,
+  AlternativeSelectDTO,
 } from "./dtos";
 
 export interface IActivities {
@@ -27,14 +32,24 @@ export interface IContents {
 }
 
 export interface IQuestions {
-  insert: (content: ActivityContentInsertDTO) => Promise<{ contentId: number }>;
-  update: (
-    contentId: number,
-    content: ActivityContentInsertDTO,
-    versionId: number
+  insert: (args: CompleteQuestionInsertDTO) => Promise<{ questionId: number }>;
+  insertAlternative: (
+    alternative: AlternativeInsertDTO
+  ) => Promise<{ alternativeId: number }>;
+  updateQuestion: (
+    questionId: number,
+    question: QuestionInsertDTO
   ) => Promise<void>;
-  findById: (contentId: number) => Promise<ActivityContentSelectDTO>;
-  delete: (contentId: number) => Promise<void>;
+  updateAlternative: (
+    alternativeId: number,
+    alternative: AlternativeInsertDTO
+  ) => Promise<void>;
+  findById: (questionId: number) => Promise<QuestionSelectDTO>;
+  findQuestionAndAlternativesById: (questionId: number) => Promise<{
+    question: QuestionSelectDTO;
+    alternatives: AlternativeSelectDTO[];
+  }>;
+  delete: (questionId: number) => Promise<void>;
 }
 
 export interface IVersionElements {

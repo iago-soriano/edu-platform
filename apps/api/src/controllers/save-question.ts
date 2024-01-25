@@ -4,13 +4,22 @@ import {
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
-import {
-  SaveQuestionRequestBody,
-  SaveQuestionResponseBody,
-} from "@edu-platform/common/api";
+import { QuestionDTO, parseToQuestionDTO } from "@dto";
 import { ISaveQuestionUseCase } from "@use-cases";
+import { parseNumberId } from "@infrastructure";
 
-type Request = TypedRequest<{}, {}, SaveQuestionRequestBody>;
+export type SaveQuestionRequestParams = {
+  activityId: string;
+  versionId: string;
+};
+export type SaveQuestionRequestBody = QuestionDTO;
+export type SaveQuestionResponseBody = void;
+
+type Request = TypedRequest<
+  { activityId: string; versionId: string },
+  {},
+  SaveQuestionRequestBody
+>;
 type Response = TypedResponse<SaveQuestionResponseBody>;
 
 export class SaveQuestionController
@@ -23,7 +32,20 @@ export class SaveQuestionController
   constructor(private saveQuestionUseCase: ISaveQuestionUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { text, answerKey, type, choices, questionId } = req.body;
+    const questionDto = parseToQuestionDTO(req.body);
+    const { activityId, versionId } = parseNumberId(req.params, [
+      "activityId",
+      "versionId",
+    ]);
+
+    const { user } = req;
+
+    const response = await this.saveQuestionUseCase.execute({
+      questionDto,
+      user,
+      activityId,
+      versionId,
+    });
 
     res.status(200).json();
   }

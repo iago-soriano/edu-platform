@@ -4,16 +4,12 @@ import { eq } from "drizzle-orm";
 
 export class Contents implements IContents {
   async insert(content: ActivityContentInsertDTO) {
-    return await db.transaction(async (tx) => {
-      const { contentId } = (
-        await tx
-          .insert(activityContents)
-          .values(content)
-          .returning({ contentId: activityContents.id })
-      )[0];
-
-      return { contentId };
-    });
+    return (
+      await db
+        .insert(activityContents)
+        .values(content)
+        .returning({ contentId: activityContents.id })
+    )[0];
   }
   async update(
     contentId: number,
