@@ -6,12 +6,9 @@ import {
 import {
   IUseCase,
   UserSelectDTO,
-  ActivitySelectDTO,
   IActivitiesRepository,
   IStorageService,
-  FileType,
   IIdGenerator,
-  ActivityVersionSelectDTO,
 } from "@interfaces";
 import { ContentDTO } from "@dto";
 import { Content, VersionStatus } from "@domain";

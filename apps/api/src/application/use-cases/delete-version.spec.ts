@@ -7,16 +7,13 @@ import {
   UserDTODataBuilder,
   VersionDTODataBuilder,
   ActivityDTODataBuilder,
-  ValidateActivityUserRelationMiddlewareMockBuilder,
   SaveContentUseCaseMockBuilder,
 } from "@test";
 import { SaveContentUseCase } from "@use-cases";
 import { jest, test } from "@jest/globals";
 import {
   ActivityContentNotFound,
-  ActivityIsNotFound,
   ActivityVersionNotFound,
-  ActivityIsNotDraft,
 } from "@edu-platform/common";
 import { VersionStatus } from "@domain";
 

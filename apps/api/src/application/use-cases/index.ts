@@ -35,6 +35,9 @@ import ListActivityVersionsUseCase, {
 import GetActivityVersionUseCase, {
   IGetActivityVersionUseCase,
 } from "./get-activity-version";
+import DeleteQuestionUseCase, {
+  IDeleteQuestionUseCase,
+} from "./delete-question";
 import DeleteContentUseCase, { IDeleteContentUseCase } from "./delete-content";
 import SaveContentUseCase, { ISaveContentUseCase } from "./save-content";
 import DeleteVersionUseCase, { IDeleteVersionUseCase } from "./delete-version";
@@ -81,4 +84,6 @@ export {
   IDeleteVersionUseCase,
   CreateNewDraftVersionUseCase,
   ICreateNewDraftVersionUseCase,
+  DeleteQuestionUseCase,
+  IDeleteQuestionUseCase,
 };

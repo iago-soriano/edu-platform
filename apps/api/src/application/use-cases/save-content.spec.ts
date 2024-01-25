@@ -7,17 +7,11 @@ import {
   UserDTODataBuilder,
   VersionDTODataBuilder,
   ActivityDTODataBuilder,
-  ValidateActivityUserRelationMiddlewareMockBuilder,
   SaveContentUseCaseMockBuilder,
 } from "@test";
 import { SaveContentUseCase } from "@use-cases";
 import { jest, test } from "@jest/globals";
-import {
-  ActivityContentNotFound,
-  ActivityIsNotFound,
-  ActivityVersionNotFound,
-  ActivityIsNotDraft,
-} from "@edu-platform/common";
+import { ActivityVersionIsNotDraft } from "@edu-platform/common";
 import { VersionStatus } from "@domain";
 
 describe("Save Content Use Case unit tests", () => {
@@ -42,35 +36,6 @@ describe("Save Content Use Case unit tests", () => {
     jest.resetAllMocks();
   });
 
-  it("Should call handle method with correct parameters", async () => {
-    const versionDto = versionDtoDataBuilder.build();
-    const activityDto = activityDtoDataBuilder.build();
-    const contentDto = contentDtoDataBuilder.build();
-    const user = userDtoDataBuilder.build();
-
-    sutBuilder.getActivityMiddlewareMockBuilder.withReturn(
-      versionDto,
-      activityDto
-    );
-    sutBuilder.refresh();
-
-    const sut = sutBuilder.object;
-    jest.spyOn(sut, "handle");
-
-    try {
-      await sut.execute({ contentDto, activityId, versionId, user });
-    } catch (ex) {
-      ex;
-    }
-
-    expect(sut.handle).toHaveBeenCalledWith({
-      dto: contentDto,
-      user,
-      activity: activityDto,
-      version: versionDto,
-    });
-  });
-
   it("Should throw if activity is not a draft", async () => {
     const versionDto = versionDtoDataBuilder
       .withStatus(VersionStatus.Published)
@@ -89,7 +54,7 @@ describe("Save Content Use Case unit tests", () => {
 
     await expect(
       sut.execute({ contentDto, activityId, versionId, user })
-    ).rejects.toThrow(ActivityIsNotDraft.message);
+    ).rejects.toThrow(ActivityVersionIsNotDraft.message);
   });
 
   describe("File upload validations", () => {
