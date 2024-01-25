@@ -46,4 +46,11 @@ describe("Unit tests for Video Content domain entity", () => {
 
     expect(domain4.hasContent()).toBeTruthy();
   });
+
+  it("Should throw if video payload has too many tracks", () => {
+    const dto = videoDataBuilder.withTooManyTracks().build();
+    const domain = Content.mapFromDto(dto);
+
+    expect(domain.validatePayload()).toThrow();
+  });
 });

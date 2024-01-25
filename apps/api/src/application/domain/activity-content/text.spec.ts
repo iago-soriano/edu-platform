@@ -5,7 +5,7 @@ import {
   VideoContent,
   TextContent,
 } from "@domain";
-import { DomainRules } from "@edu-platform/common";
+import { DomainRules, TextContentIsTooLong } from "@edu-platform/common";
 import "../../../test/jest/matchers/custom-error";
 import { expect } from "@jest/globals";
 import {
@@ -40,5 +40,28 @@ describe("Unit tests for Text Content domain entity", () => {
     const domain2 = Content.mapFromDto(dto2);
 
     expect(domain2.hasContent()).toBeTruthy();
+  });
+
+  describe("Should validate text payload", () => {
+    it("Should throw if text is too long", () => {
+      const dto = textDataBuilder.withLongText().build();
+      const domain = Content.mapFromDto(dto);
+
+      expect(() => domain.validatePayload()).toThrow();
+    });
+
+    it("Should throw if text is too short", () => {
+      const dto = textDataBuilder.withShortText().build();
+      const domain = Content.mapFromDto(dto);
+
+      expect(() => domain.validatePayload()).toThrow();
+    });
+
+    it("Should not throw if text is right-sized", () => {
+      const dto = textDataBuilder.build();
+      const domain = Content.mapFromDto(dto);
+
+      expect(() => domain.validatePayload()).not.toThrow();
+    });
   });
 });
