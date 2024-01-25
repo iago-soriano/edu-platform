@@ -57,6 +57,7 @@ class UseCase implements IDeleteVersionUseCase {
       await this.activitiesRepository.Contents.delete(content.id || 0);
     }
 
+    await this.activitiesRepository.Versions.delete(versionId);
     await this.activitiesRepository.Activities.update(activity.id, {
       draftVersionId: null,
     });

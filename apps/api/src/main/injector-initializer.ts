@@ -18,6 +18,7 @@ import {
   ListActivityVersionsController,
   DeleteContentController,
   DeleteQuestionController,
+  DeleteVersionController,
   RefreshTokenController,
 } from "@controllers";
 import {
@@ -37,6 +38,7 @@ import {
   ListActivityVersionsUseCase,
   DeleteContentUseCase,
   DeleteQuestionUseCase,
+  DeleteVersionUseCase,
   RefreshTokenUseCase,
   SaveContentUseCase,
   CreateNewDraftVersionUseCase,
@@ -95,7 +97,8 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(DeleteQuestionController)
       .classic(),
     refreshTokenController: awilix.asClass(RefreshTokenController).classic(),
-    createNewDraftVersionCntroller: awilix
+    deleteVersionController: awilix.asClass(DeleteVersionController).classic(),
+    createNewDraftVersionController: awilix
       .asClass(CreateNewDraftVersionController)
       .classic(),
 
@@ -137,6 +140,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(ListActivityVersionsUseCase)
       .classic(),
     saveContentUseCase: awilix.asClass(SaveContentUseCase).classic(),
+    deleteVersionUseCase: awilix.asClass(DeleteVersionUseCase).classic(),
     deleteContentUseCase: awilix.asClass(DeleteContentUseCase).classic(),
     deleteQuestionUseCase: awilix.asClass(DeleteQuestionUseCase).classic(),
     refreshTokenUseCase: awilix.asClass(RefreshTokenUseCase).classic(),

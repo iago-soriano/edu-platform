@@ -43,6 +43,10 @@ export class Versions implements IVersions {
     });
   }
 
+  async delete(id: number) {
+    await db.delete(activityVersions).where(eq(activityVersions.id, id));
+  }
+
   async listByAuthorIdAndStatuses(authorId: number, statuses: VersionStatus[]) {
     const activityIdsByAuthor = (
       await db
@@ -99,7 +103,7 @@ export class Versions implements IVersions {
   }
 
   async findFullViewById(id: number) {
-    const version = await this.findSimpleViewById(id);
+    const version = (await this.findSimpleViewById(id)) || {};
     const { questions, contents } = await this.findElementsByVersionId(id);
 
     return { version, questions, contents };

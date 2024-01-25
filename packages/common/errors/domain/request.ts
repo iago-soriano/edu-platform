@@ -10,8 +10,7 @@ export class InvalidParameterError extends CustomError {
 
 export class UnprocessableEntity extends CustomError {
   HTTPstatusCode = 422;
-  static message = "Entidade não pode ser processada";
-  constructor() {
-    super(UnprocessableEntity.message);
+  constructor(message: string) {
+    super(message);
   }
 }
