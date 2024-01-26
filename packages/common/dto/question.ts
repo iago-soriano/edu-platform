@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { QuestionTypes } from "@domain";
+
+enum QuestionTypes {
+  MultipleChoice = "MultipleChoice",
+  Text = "Text",
+}
 
 const questionypeSchema = z.nativeEnum(QuestionTypes);
 export const parseQuestionType = questionypeSchema.parse;

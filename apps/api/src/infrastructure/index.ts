@@ -1,4 +1,4 @@
 export * from "./services";
-export * from "./repositories";
-export * from "./controllers/params-validators";
+export * from "./repository";
+export * from "./controllers";
 export * from "./utils/file-helper";

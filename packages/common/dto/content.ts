@@ -1,6 +1,11 @@
 import { z } from "zod";
-import { FileType } from "@interfaces";
-import { ContentTypes } from "@domain";
+// import { FileType } from "@interfaces";
+
+export enum ContentTypes {
+  Video = "Video",
+  Text = "Text",
+  Image = "Image",
+}
 
 const contentTypeSchema = z.nativeEnum(ContentTypes);
 export const parseContentType = contentTypeSchema.parse;
@@ -24,7 +29,7 @@ const contentSchema = z.object({
       .optional(),
     image: z
       .object({
-        file: z.custom<FileType>().optional(),
+        // file: z.custom<FileType>().optional(),
         url: z.string().optional(),
       })
       .optional(),

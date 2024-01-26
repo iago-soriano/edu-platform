@@ -1,4 +1,3 @@
-import { ContentDTO } from "@dto";
 import { Content, ContentTypes } from "./base";
 import {
   DomainRules,
@@ -40,16 +39,5 @@ export class TextContent extends Content {
 
   setFileUrl(_: string) {
     throw new ContentDoesNotImplementFiles(this.type);
-  }
-
-  mapPayloadFromDto(dto: ContentDTO) {
-    this.text = dto.payload.text?.text || "";
-  }
-
-  mapToDatabaseDto() {
-    return {
-      ...super.mapToDatabaseDto(),
-      text: this.text,
-    };
   }
 }

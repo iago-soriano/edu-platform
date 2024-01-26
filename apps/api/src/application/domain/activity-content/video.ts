@@ -1,4 +1,3 @@
-import { ContentDTO } from "@dto";
 import { Content, ContentTypes } from "./base";
 import { DomainRules } from "@edu-platform/common";
 import {
@@ -40,18 +39,5 @@ export class VideoContent extends Content {
 
   storedFileUrl() {
     return null;
-  }
-
-  mapPayloadFromDto(dto: ContentDTO) {
-    this.tracks = dto.payload.video?.tracks || "";
-    this.url = dto.payload.video?.url || "";
-  }
-
-  mapToDatabaseDto() {
-    return {
-      ...super.mapToDatabaseDto(),
-      tracks: this.tracks,
-      videoUrl: this.url,
-    };
   }
 }

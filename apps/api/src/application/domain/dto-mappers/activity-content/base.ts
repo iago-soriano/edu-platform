@@ -1,0 +1,51 @@
+import {
+  ContentDTO,
+  ContentTypes,
+  ContentTypeNotFound,
+} from "@edu-platform/common";
+import { VideoContent, ImageContent, TextContent } from "../..";
+import { DomainDtoMapper } from "../types";
+import { VideoContentDtoMapper } from "./video";
+import { ImageContentDtoMapper } from "./image";
+import { TextContentDtoMapper } from "./text";
+
+export const ContentDtoMapper: DomainDtoMapper<
+  VideoContent | ImageContent | TextContent,
+  ContentDTO
+> = {
+  mapFromDto: (dto: ContentDTO) => {
+    let newContent = null;
+
+    // instanciate specific type and map payload
+    switch (dto.type) {
+      case ContentTypes.Video:
+        newContent = VideoContentDtoMapper.mapFromDto(dto);
+        break;
+      case ContentTypes.Image:
+        newContent = ImageContentDtoMapper.mapFromDto(dto);
+        break;
+      case ContentTypes.Text:
+        newContent = TextContentDtoMapper.mapFromDto(dto);
+        break;
+      default:
+        throw new ContentTypeNotFound();
+    }
+
+    newContent.order = dto.order;
+    newContent.id = dto.id;
+    newContent.versionId = dto.versionId;
+
+    return newContent;
+  },
+
+  mapToDto: (domain: VideoContent | ImageContent | TextContent) => {
+    if (domain instanceof VideoContent)
+      return VideoContentDtoMapper.mapToDto(domain);
+    if (domain instanceof ImageContent)
+      return ImageContentDtoMapper.mapToDto(domain);
+    if (domain instanceof TextContent)
+      return TextContentDtoMapper.mapToDto(domain);
+
+    throw new ContentTypeNotFound();
+  },
+};
