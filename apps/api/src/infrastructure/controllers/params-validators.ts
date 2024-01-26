@@ -6,7 +6,7 @@ export const parseNumberId = (params: any, fields: string[]) => {
 
   for (const field of fields) {
     try {
-      response[field] = z.number().int().parse(params[field]);
+      response[field] = z.coerce.number().parse(params[field]);
     } catch (ex) {
       throw new UnprocessableEntity((ex as Error).message);
     }
