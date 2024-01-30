@@ -7,7 +7,7 @@ import {
 import {
   CreateNewActivityVersionParams,
   CreateNewActivityVersionResponseBody,
-} from "@edu-platform/common/api";
+} from "@edu-platform/common";
 import { ICreateNewDraftVersionUseCase } from "@use-cases";
 import { parseNumberId } from "@infrastructure";
 

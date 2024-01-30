@@ -6,11 +6,7 @@ import {
   ContentDescriptionIsTooLong,
   ContentDescriptionIsTooShort,
 } from "@edu-platform/common";
-import {
-  ActivityContentSelectDTO,
-  ActivityContentInsertDTO,
-  FileType,
-} from "@interfaces";
+import { FileType } from "@interfaces";
 
 export enum ContentTypes {
   Video = "Video",
@@ -55,6 +51,7 @@ export abstract class Content {
   }
 
   abstract hasContent(): boolean;
+  abstract mergePayload(newContent: Content): void;
 
   isEmpty() {
     return !this.title && !this.description && !this.hasContent();

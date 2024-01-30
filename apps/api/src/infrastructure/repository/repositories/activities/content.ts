@@ -1,24 +1,25 @@
-import { IContents, ActivityContentInsertDTO } from "@interfaces";
+import { IContents } from "@interfaces";
+import { Content } from "@domain";
 import { db, activityVersions, activityContents } from "@infrastructure";
 import { eq } from "drizzle-orm";
+import { ContentDtoMapper } from "../../dto-mappers";
 
 export class Contents implements IContents {
-  async insert(content: ActivityContentInsertDTO) {
+  async insert(content: Content) {
+    const dto = ContentDtoMapper.maptoInsertDto(content);
+
     return (
       await db
         .insert(activityContents)
-        .values(content)
+        .values(dto)
         .returning({ contentId: activityContents.id })
     )[0];
   }
-  async update(
-    contentId: number,
-    content: ActivityContentInsertDTO,
-    versionId: number
-  ) {
+  async update(contentId: number, content: Content, versionId: number) {
+    const dto = ContentDtoMapper.maptoInsertDto(content);
     await db
       .update(activityContents)
-      .set({ ...content, updatedAt: new Date() })
+      .set({ ...dto, updatedAt: new Date() })
       .where(eq(activityContents.id, contentId));
 
     await db
@@ -28,12 +29,13 @@ export class Contents implements IContents {
   }
 
   async findById(contentId: number) {
-    return (
+    const dto = (
       await db
         .select()
         .from(activityContents)
         .where(eq(activityContents.id, contentId))
     )[0];
+    return ContentDtoMapper.mapFromSelectDto(dto);
   }
 
   async delete(contentId: number) {

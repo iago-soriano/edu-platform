@@ -1,13 +1,20 @@
-import { IVersions, ActivityVersionInsertDTO } from "@interfaces";
+import { IVersions } from "@interfaces";
+import {
+  VersionDtoMapper,
+  ContentDtoMapper,
+  QuestionDtoMapper,
+  AlternativeDtoMapper,
+} from "../../dto-mappers";
 import {
   db,
   activities,
   activityVersions,
   activityContents,
   activityQuestions,
+  alternatives,
 } from "@infrastructure";
 import { eq, inArray, and, desc, asc } from "drizzle-orm";
-import { VersionStatus } from "@domain";
+import { VersionStatus, ActivityVersion } from "@domain";
 
 export class Versions implements IVersions {
   async insert(activityId: number, versionNumber: number = 0) {
@@ -24,19 +31,12 @@ export class Versions implements IVersions {
     });
   }
 
-  async update(
-    id: number,
-    { title, description, status, topics, version }: ActivityVersionInsertDTO
-  ) {
+  async update(id: number, activity: ActivityVersion) {
     await db.transaction(async (tx) => {
       await tx
         .update(activityVersions)
         .set({
-          title,
-          description,
-          status,
-          topics,
-          version,
+          ...activity,
           updatedAt: new Date(),
         })
         .where(eq(activityVersions.id, id));
@@ -68,11 +68,14 @@ export class Versions implements IVersions {
             activityVersions.status,
             statuses.length
               ? Object.keys(statuses)
-              : ["Archived", "Draft", "Published"]
+              : Object.values(VersionStatus || {})
           )
         )
       );
-    return activitiesVersionsByAuthor;
+
+    return activitiesVersionsByAuthor.map((dto) =>
+      VersionDtoMapper.mapFromSelectDto(dto)
+    );
   }
 
   async findSimpleViewById(id: number) {
@@ -83,23 +86,47 @@ export class Versions implements IVersions {
         .where(eq(activityVersions.id, id))
     )[0];
 
-    return version;
+    return VersionDtoMapper.mapFromSelectDto(version);
   }
 
   async findElementsByVersionId(id: number) {
-    const contents = await db
+    const contentDtos = await db
       .select()
       .from(activityContents)
       .orderBy(asc(activityContents.id))
       .where(eq(activityContents.versionId, id));
 
-    const questions = await db
+    const questionDtos = await db
       .select()
       .from(activityQuestions)
       .orderBy(asc(activityQuestions.id))
-      .where(eq(activityQuestions.versionId, id));
+      .where(eq(activityQuestions.versionId, id))
+      .orderBy(activityQuestions.id);
 
-    return { contents, questions };
+    const alternativesDtos = await db
+      .select()
+      .from(alternatives)
+      .where(
+        inArray(
+          alternatives.questionId,
+          questionDtos.map((q) => q.id)
+        )
+      )
+      .orderBy(alternatives.questionId);
+
+    const questions = questionDtos.map((questionDto) => {
+      const question = QuestionDtoMapper.mapFromSelectDto(questionDto);
+      question.alternatives = alternativesDtos
+        .filter((altDto) => altDto.questionId === questionDto.id)
+        .map((dto) => AlternativeDtoMapper.mapFromSelectDto(dto));
+      return question;
+    });
+    return {
+      contents: contentDtos.map((dto) =>
+        ContentDtoMapper.mapFromSelectDto(dto)
+      ),
+      questions,
+    };
   }
 
   async findFullViewById(id: number) {

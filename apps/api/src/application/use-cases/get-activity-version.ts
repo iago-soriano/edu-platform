@@ -1,14 +1,7 @@
-import { UserIsNotDraftAuthor } from "./../../../../../packages/common/errors/domain/version";
+import { UserIsNotDraftAuthor } from "@edu-platform/common";
 import { Content, VersionStatus, Question } from "@domain";
-import { ElementDTO, parseVersionStatus } from "@dto";
-import {
-  IUseCase,
-  UserSelectDTO,
-  IActivitiesRepository,
-  ActivitySelectDTO,
-  ActivityVersionSelectDTO,
-} from "@interfaces";
-import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
+import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
+import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -21,7 +14,7 @@ type Return = {
   description: string;
   status: VersionStatus;
   topics: string;
-  elements?: ElementDTO[];
+  elements?: { content?: Content; question?: Question }[];
 };
 
 export type IGetActivityVersionUseCase = IUseCase<InputParams, Return>;
@@ -47,13 +40,13 @@ class UseCase implements IGetActivityVersionUseCase {
       );
 
     const elements = [
-      ...contents.map((c) => ({
-        content: Content.mapFromDatabaseDtoToRegularDto(c),
-        question: null,
+      ...contents.map((content) => ({
+        content,
+        question: undefined,
       })),
-      ...questions.map((q) => ({
-        question: Question.mapFromDatabaseDtoToRegularDto(q),
-        content: null,
+      ...questions.map((question) => ({
+        question,
+        content: undefined,
       })),
     ].sort(
       (el1, el2) =>
@@ -62,11 +55,7 @@ class UseCase implements IGetActivityVersionUseCase {
     );
 
     return {
-      id: version.id || 0,
-      title: version.title || "",
-      description: version.description || "",
-      status: parseVersionStatus(version.status) || "",
-      topics: version.topics || "",
+      ...version,
       elements,
     };
   }

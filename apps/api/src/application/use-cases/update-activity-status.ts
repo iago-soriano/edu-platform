@@ -47,21 +47,6 @@ class UseCase implements IUpdateActivityStatusUseCase {
 
     if (activity.authorId !== user.id) throw new ActivityNotFound();
 
-    return this.handle({ activity, version, newActivityStatus });
-  }
-
-  async handle({
-    activity: activityDto,
-    version: versionDto,
-    newActivityStatus,
-  }: {
-    activity: ActivitySelectDTO;
-    version: ActivityVersionSelectDTO;
-    newActivityStatus: VersionStatus;
-  }) {
-    const activity = Activity.mapFromDatabaseDto(activityDto);
-    const version = ActivityVersion.mapFromDatabaseDto(versionDto);
-
     if (
       version.status === VersionStatus.Draft &&
       newActivityStatus === VersionStatus.Published
@@ -110,30 +95,29 @@ class UseCase implements IUpdateActivityStatusUseCase {
     let contentCounter = contents.length;
 
     for (let content of contents) {
-      const contentToVerify = Content.mapFromDatabaseDto(content);
+      if (content.isHalfCompleted())
+        throw new ContentIsHalfCompleted(content.title, content.description);
 
-      if (contentToVerify.isHalfCompleted())
-        throw new ContentIsHalfCompleted(
-          contentToVerify.title,
-          contentToVerify.description
-        );
-
-      if (contentToVerify.isEmpty()) {
-        await this.activitiesRepository.Contents.delete(content.id);
+      if (content.isEmpty()) {
+        await this.activitiesRepository.Contents.delete(content.id || 0);
         contentCounter--;
       }
     }
 
-    if (contentCounter === 0) throw new ActivityVersionHasNoContent(); // mesmo erro acima
+    if (contentCounter === 0) throw new ActivityVersionHasNoContent();
+
+    for (let question of questions) {
+      await this.activitiesRepository.Questions.delete(question.id || 0);
+    }
 
     await this.activitiesRepository.Versions.update(activity.draftVersionId, {
-      status: "Published",
+      status: VersionStatus.Published,
       version: (version.version || 0) + 1,
     });
 
     await this.activitiesRepository.Activities.update(activity.id, {
       lastVersionId: activity.draftVersionId,
-      draftVersionId: null,
+      draftVersionId: 0,
     });
 
     return {};
@@ -162,7 +146,7 @@ class UseCase implements IUpdateActivityStatusUseCase {
       status: VersionStatus.Archived,
     });
     await this.activitiesRepository.Activities.update(activity.id, {
-      lastVersionId: null,
+      lastVersionId: 0,
     });
 
     return {};

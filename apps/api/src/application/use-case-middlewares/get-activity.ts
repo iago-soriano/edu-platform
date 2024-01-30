@@ -1,11 +1,5 @@
-import {
-  IUseCase,
-  IActivitiesRepository,
-  ActivitySelectDTO,
-  ActivityVersionSelectDTO,
-  ActivityContentSelectDTO,
-  QuestionSelectDTO,
-} from "@interfaces";
+import { Content, ActivityVersion, Activity, Question } from "@domain";
+import { IUseCase, IActivitiesRepository } from "@interfaces";
 import {
   ActivityNotFound,
   ActivityVersionNotFound,
@@ -21,10 +15,10 @@ type InputParams = {
 };
 
 type Return = {
-  activity: ActivitySelectDTO;
-  version: ActivityVersionSelectDTO;
-  content?: ActivityContentSelectDTO;
-  question?: QuestionSelectDTO;
+  activity: Activity;
+  version: ActivityVersion;
+  content?: Content;
+  question?: Question;
 };
 
 export type IGetActivityUseCaseHelper = IUseCase<InputParams, Return>;
@@ -59,7 +53,7 @@ class UseCase implements IGetActivityUseCaseHelper {
 
       if (!question) throw new ActivityQuestionNotFound();
       if (question.versionId !== version.id)
-        throw new ActivityContentNotFound();
+        throw new ActivityQuestionNotFound();
     }
 
     return {

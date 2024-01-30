@@ -4,7 +4,8 @@ import {
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
-import { ContentDTO, parseToContentDTO } from "@dto";
+import { ContentDTO, parseToContentDTO } from "@edu-platform/common";
+import { ContentDtoMapper } from "@dto-mappers";
 import { ISaveContentUseCase } from "@use-cases";
 import { parseNumberId } from "@infrastructure";
 
@@ -33,17 +34,18 @@ export class SaveContentController
 
   async execute(req: Request, res: Response) {
     const contentDto = parseToContentDTO(req.body);
+    contentDto.payload.image = { file: req.files?.image?.[0] };
+
+    const content = ContentDtoMapper.mapFromDto(contentDto);
     const { activityId, versionId } = parseNumberId(req.params, [
       "activityId",
       "versionId",
     ]);
 
-    contentDto.payload.image = { file: req.files?.image?.[0] };
-
     const { user } = req;
 
     const response = await this.saveContentUseCase.execute({
-      contentDto,
+      content,
       user,
       activityId,
       versionId,

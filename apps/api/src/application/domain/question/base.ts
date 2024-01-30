@@ -1,10 +1,4 @@
-import { QuestionDTO, parseQuestionType } from "@dto";
-import {
-  CompleteQuestionSelectDTO,
-  CompleteQuestionInsertDTO,
-  QuestionSelectDTO,
-} from "@interfaces";
-import { TextQuestion, MultipleChoiceQuestion } from ".";
+import { Alternative, MultipleChoiceQuestion } from ".";
 import {
   DomainRules,
   QuestionTypeNotFound,
@@ -26,7 +20,11 @@ export abstract class Question {
   public question?: string;
   public answer?: string;
 
+  public alternatives?: Alternative[] = [];
+
   constructor(public type: QuestionTypes) {}
+
+  abstract validateAnswer(): void;
 
   validateQuestionText() {
     if (!this.question) return;
@@ -43,64 +41,7 @@ export abstract class Question {
     this.question = newQuestion.question;
     this.answer = newQuestion.answer;
     this.order = newQuestion.order;
-  }
-
-  mapToDatabaseDto(): CompleteQuestionInsertDTO {
-    return {
-      id: this.id,
-      question: this.question,
-      answer: this.answer,
-      order: this.order,
-      type: this.type.toString(),
-      versionId: this.versionId,
-    };
-  }
-
-  static mapFromDto(dto: QuestionDTO) {
-    let newQuestion = null;
-
-    // instanciate specific type and map payload
-    switch (dto.type) {
-      case QuestionTypes.MultipleChoice:
-        newQuestion = new TextQuestion();
-        break;
-      case QuestionTypes.Text:
-        newQuestion = new MultipleChoiceQuestion();
-        newQuestion.mapAlternativesDtos(dto.alternatives);
-        break;
-      default:
-        throw new QuestionTypeNotFound();
-    }
-
-    newQuestion.question = dto.question;
-    newQuestion.answer = dto.answer;
-
-    newQuestion.order = dto.order;
-
-    newQuestion.id = dto.id;
-    newQuestion.versionId = dto.versionId;
-
-    return newQuestion;
-  }
-
-  static mapFromDatabaseDtoToRegularDto(
-    question: CompleteQuestionSelectDTO
-  ): QuestionDTO {
-    if (!question.type) throw new QuestionSavedInDBHasNoType();
-
-    return {
-      type: parseQuestionType(question.type),
-      order: question.order || 0,
-
-      question: question.question || "",
-      answer: question.answer || "",
-
-      id: question.id || 0,
-      versionId: question.versionId || 0,
-    };
-  }
-
-  static mapFromDatabaseDto(dto: CompleteQuestionSelectDTO) {
-    return this.mapFromDto(Question.mapFromDatabaseDtoToRegularDto(dto));
+    if (newQuestion instanceof MultipleChoiceQuestion)
+      this.alternatives = newQuestion.alternatives;
   }
 }

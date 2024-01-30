@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { VersionStatus } from "@domain";
+
+enum VersionStatus {
+  Published = "Published",
+  Draft = "Draft",
+  Archived = "Archived",
+}
 
 const versionStatusSchema = z.nativeEnum(VersionStatus);
 export const parseVersionStatus = versionStatusSchema.parse;

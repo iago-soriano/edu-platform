@@ -16,7 +16,7 @@
     "paths": {
       "@use-cases": ["./application/use-cases/index.ts"],
       "@use-case-middlewares": ["./application/use-case-middlewares/index.ts"],
-      "@dto": ["./application/dto/index.ts"],
+      "@dto-mappers": ["./application/dto-mappers/index.ts"],
       "@domain": ["./application/domain/index.ts"],
       "@infrastructure": ["./infrastructure/index.ts"],
       "@interfaces": ["./interfaces/index.ts"],

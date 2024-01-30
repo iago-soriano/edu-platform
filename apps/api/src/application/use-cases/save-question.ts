@@ -4,12 +4,11 @@ import {
   ActivityVersionIsNotDraft,
 } from "@edu-platform/common";
 import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
-import { QuestionDTO } from "@dto";
 import { MultipleChoiceQuestion, Question, VersionStatus } from "@domain";
 import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
 
 type InputParams = {
-  questionDto: QuestionDTO;
+  question: Question;
   user: UserSelectDTO;
   activityId: number;
   versionId: number;
@@ -25,11 +24,11 @@ class UseCase implements ISaveQuestionUseCase {
     private getActivityHelper: IGetActivityUseCaseHelper
   ) {}
 
-  async execute({ questionDto, user, activityId, versionId }: InputParams) {
+  async execute({ question, user, activityId, versionId }: InputParams) {
     const { version, activity } = await this.getActivityHelper.execute({
       activityId,
       versionId,
-      questionId: questionDto.id,
+      questionId: question.id,
     });
 
     if (activity.authorId !== user.id) throw new ActivityNotFound();
@@ -37,35 +36,29 @@ class UseCase implements ISaveQuestionUseCase {
     if (version.status !== VersionStatus.Draft)
       throw new ActivityVersionIsNotDraft();
 
-    const newQuestion = Question.mapFromDto(questionDto);
-
     // new question
-    if (!questionDto.id) {
+    if (!question.id) {
       // validate incoming content
-      newQuestion.validateAnswer();
-      newQuestion.validateQuestionText();
+      question.validateAnswer();
+      question.validateQuestionText();
 
       // persist it
-      await this.activitiesRepository.Questions.insert(
-        newQuestion.mapToDatabaseDto()
-      );
+      await this.activitiesRepository.Questions.insert(question);
 
       return;
     }
 
     // find by id
-    const questionDbDto = await this.activitiesRepository.Questions.findById(
-      questionDto.id
+    const existingQuestion = await this.activitiesRepository.Questions.findById(
+      question.id
     );
-    if (!questionDbDto) throw new ActivityQuestionNotFound();
+    if (!existingQuestion) throw new ActivityQuestionNotFound();
 
-    const existingQuestion = Question.mapFromDatabaseDto(questionDbDto);
-
-    existingQuestion.merge(newQuestion);
+    existingQuestion.merge(question);
 
     await this.activitiesRepository.Questions.update(
-      questionDto.id,
-      existingQuestion.mapToDatabaseDto()
+      question.id,
+      existingQuestion
     );
   }
 }

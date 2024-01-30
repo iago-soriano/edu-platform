@@ -4,14 +4,20 @@ import {
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
-// import { GetActivityVersionsResponseBody } from "@edu-platform/common/api";
 import { IListActivityVersionsUseCase } from "@use-cases";
-import { parseVersionStatus, VersionDTO } from "@dto";
+import {
+  ListActivityVersionsParams,
+  ListActivityVersionsResponseBody,
+  ListActivityVersionsRequestBody,
+  parseVersionStatus,
+} from "@edu-platform/common";
 
-export type GetActivityVersionsResponseBody = VersionDTO[];
-
-type Request = TypedRequest<{}, { statuses: string }, {}>;
-type Response = TypedResponse<GetActivityVersionsResponseBody>;
+type Request = TypedRequest<
+  {},
+  ListActivityVersionsParams,
+  ListActivityVersionsRequestBody
+>;
+type Response = TypedResponse<ListActivityVersionsResponseBody>;
 
 export class ListActivityVersionsController
   implements HTTPController<Request, Response>

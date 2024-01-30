@@ -3,7 +3,7 @@ import {
   ContentTypes,
   ContentTypeNotFound,
 } from "@edu-platform/common";
-import { VideoContent, ImageContent, TextContent } from "../..";
+import { VideoContent, ImageContent, TextContent } from "@domain";
 import { DomainDtoMapper } from "../types";
 import { VideoContentDtoMapper } from "./video";
 import { ImageContentDtoMapper } from "./image";

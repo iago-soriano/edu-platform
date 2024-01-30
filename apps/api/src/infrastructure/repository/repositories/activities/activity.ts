@@ -1,4 +1,6 @@
-import { IActivities, ActivityInsertDTO } from "@interfaces";
+import { Activity } from "@domain";
+import { ActivityDtoMapper } from "../../dto-mappers";
+import { IActivities } from "@interfaces";
 import { db, activities } from "@infrastructure";
 import { eq } from "drizzle-orm";
 
@@ -12,21 +14,19 @@ export class Activities implements IActivities {
     )[0];
   }
 
-  async update(
-    activityId: number,
-    { lastVersionId, draftVersionId }: ActivityInsertDTO
-  ) {
+  async update(activityId: number, activity: Activity) {
     await db.transaction(async (tx) => {
       await tx
         .update(activities)
-        .set({ lastVersionId, draftVersionId, updatedAt: new Date() })
+        .set({ ...activity, updatedAt: new Date() })
         .where(eq(activities.id, activityId));
     });
   }
 
   async findById(activityId: number) {
-    return (
+    const dto = (
       await db.select().from(activities).where(eq(activities.id, activityId))
     )[0];
+    return ActivityDtoMapper.mapFromSelectDto(dto);
   }
 }

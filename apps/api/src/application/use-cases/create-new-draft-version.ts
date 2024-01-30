@@ -1,4 +1,3 @@
-import { Activity } from "@domain";
 import { IUseCase, IActivitiesRepository, UserSelectDTO } from "@interfaces";
 import { ActivityNotFound } from "@edu-platform/common";
 
@@ -17,9 +16,8 @@ class UseCase implements ICreateNewDraftVersionUseCase {
   constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({ activityId, user }: InputParams) {
-    const activityDbDto =
+    const activity =
       await this.activitiesRepository.Activities.findById(activityId);
-    const activity = Activity.mapFromDatabaseDto(activityDbDto);
 
     if (activity.authorId !== user.id) throw new ActivityNotFound();
 
@@ -41,14 +39,17 @@ class UseCase implements ICreateNewDraftVersionUseCase {
 
     // duplicate all contents and questions to the new version
     await Promise.all(
-      contents.map((content) =>
-        this.activitiesRepository.Contents.insert({
-          ...content,
-          versionId: newVersionId,
-        })
-      )
+      contents.map((content) => {
+        content.versionId = newVersionId;
+        this.activitiesRepository.Contents.insert(content);
+      })
     );
-    // await Promise.all(questions.map(question => this.activitiesRepository.Questions.insert({...question, versionId: newVersionId})));
+    await Promise.all(
+      questions.map((question) => {
+        question.versionId = newVersionId;
+        this.activitiesRepository.Questions.insert(question);
+      })
+    );
 
     await this.activitiesRepository.Activities.update(activityId, {
       draftVersionId: newVersionId,

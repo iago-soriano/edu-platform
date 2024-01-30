@@ -1,4 +1,4 @@
-import { TextContent } from "../..";
+import { TextContent } from "@domain";
 import { DomainDtoMapper } from "../types";
 import { ContentDTO, ContentTypes } from "@edu-platform/common";
 

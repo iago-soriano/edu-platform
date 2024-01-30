@@ -11,7 +11,7 @@ import {
 } from "@edu-platform/common/api";
 import { IUpdateActivityStatusUseCase } from "@use-cases";
 import { parseNumberId } from "@infrastructure";
-import { parseVersionStatus } from "@dto";
+import { parseVersionStatus } from "@edu-platform/common";
 
 type Request = TypedRequest<
   UpdateActivityStatusRequestParams,

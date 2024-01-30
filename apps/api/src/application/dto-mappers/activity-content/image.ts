@@ -1,13 +1,12 @@
-import { VideoContent } from "../..";
+import { ImageContent } from "@domain";
 import { DomainDtoMapper } from "../types";
 import { ContentDTO, ContentTypes } from "@edu-platform/common";
 
-export const VideoContentDtoMapper: DomainDtoMapper<VideoContent, ContentDTO> =
+export const ImageContentDtoMapper: DomainDtoMapper<ImageContent, ContentDTO> =
   {
     mapFromDto(dto: ContentDTO) {
-      const newContent = new VideoContent();
-      newContent.tracks = dto.payload.video?.tracks || "";
-      newContent.url = dto.payload.video?.url || "";
+      const newContent = new ImageContent();
+      newContent.url = dto.payload.image?.url || "";
 
       newContent.title = dto.title;
       newContent.description = dto.description;
@@ -15,7 +14,7 @@ export const VideoContentDtoMapper: DomainDtoMapper<VideoContent, ContentDTO> =
       return newContent;
     },
 
-    mapToDto(domain: VideoContent) {
+    mapToDto(domain: ImageContent) {
       const dto: ContentDTO = {
         id: domain.id,
         title: domain.title,
@@ -24,9 +23,8 @@ export const VideoContentDtoMapper: DomainDtoMapper<VideoContent, ContentDTO> =
         type: ContentTypes.Video,
         versionId: domain.versionId,
         payload: {
-          video: {
+          image: {
             url: domain.url,
-            tracks: domain.tracks,
           },
         },
       };

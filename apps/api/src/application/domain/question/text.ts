@@ -1,5 +1,4 @@
 import { Question, QuestionTypes } from ".";
-import { QuestionDTO } from "@dto";
 import {
   DomainRules,
   AnswerKeyTextQuestionIsTooLong,

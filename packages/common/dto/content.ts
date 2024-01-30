@@ -1,5 +1,6 @@
 import { z } from "zod";
 // import { FileType } from "@interfaces";
+export type FileType = Express.Multer.File;
 
 export enum ContentTypes {
   Video = "Video",
@@ -29,7 +30,7 @@ const contentSchema = z.object({
       .optional(),
     image: z
       .object({
-        // file: z.custom<FileType>().optional(),
+        file: z.custom<FileType>().optional(),
         url: z.string().optional(),
       })
       .optional(),

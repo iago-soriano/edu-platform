@@ -7,8 +7,8 @@ import { db, activityContents } from "@infrastructure";
 import { Content, VideoContent, TextContent, ImageContent } from "@domain";
 import { DomainDtoMapper } from "../types";
 import { VideoContentDtoMapper } from "./video";
-import { TextContentDtoMapper } from "./video";
-import { ImageContentDtoMapper } from "./video";
+import { TextContentDtoMapper } from "./text";
+import { ImageContentDtoMapper } from "./image";
 
 export const ContentDtoMapper: DomainDtoMapper<
   Content,
@@ -32,9 +32,9 @@ export const ContentDtoMapper: DomainDtoMapper<
         throw new ContentTypeNotFound();
     }
 
-    newContent.order = dto.order;
+    newContent.order = dto.order || 0;
     newContent.id = dto.id;
-    newContent.versionId = dto.versionId;
+    newContent.versionId = dto.versionId || 0;
 
     return newContent;
   },

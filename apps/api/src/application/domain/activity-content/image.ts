@@ -1,4 +1,3 @@
-import { FileType } from "@interfaces";
 import { Content, ContentTypes } from "./base";
 
 export class ImageContent extends Content {

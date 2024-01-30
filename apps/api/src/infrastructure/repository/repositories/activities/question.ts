@@ -1,18 +1,11 @@
-import {
-  IQuestions,
-  QuestionInsertDTO,
-  CompleteQuestionInsertDTO,
-  AlternativeInsertDTO,
-  AlternativeSelectDTO,
-} from "@interfaces";
+import { IQuestions } from "@interfaces";
 import { db, activityQuestions, alternatives } from "@infrastructure";
 import { eq, inArray } from "drizzle-orm";
+import { Question } from "@domain";
+import { QuestionDtoMapper, AlternativeDtoMapper } from "../../dto-mappers";
 
 export class Questions implements IQuestions {
-  async insert({
-    alternatives: alternativesDtos,
-    ...question
-  }: CompleteQuestionInsertDTO) {
+  async insert({ alternatives: alternativesDtos, ...question }: Question) {
     return db.transaction(async (tx) => {
       const insertedQuestion = (
         await tx
@@ -34,43 +27,15 @@ export class Questions implements IQuestions {
     });
   }
 
-  async insertAlternative(alternative: AlternativeInsertDTO) {
-    return (
-      await db
-        .insert(alternatives)
-        .values(alternative)
-        .returning({ alternativeId: alternatives.id })
-    )[0];
-  }
-
-  async update(questionId: number, question: CompleteQuestionInsertDTO) {
+  async update(questionId: number, question: Question) {
     await db
       .update(activityQuestions)
       .set({ ...question, updatedAt: new Date() })
       .where(eq(activityQuestions.id, questionId));
   }
 
-  async updateAlternative(
-    alternativeId: number,
-    alternative: AlternativeInsertDTO
-  ) {
-    await db
-      .update(alternatives)
-      .set({ ...alternative, updatedAt: new Date() })
-      .where(eq(alternatives.id, alternativeId));
-  }
-
-  // async findById(questionId: number) {
-  //   return (
-  //     await db
-  //       .select()
-  //       .from(activityQuestions)
-  //       .where(eq(activityQuestions.id, questionId))
-  //   )[0];
-  // }
-
   async findById(questionId: number) {
-    const question = (
+    const questionDto = (
       await db
         .select()
         .from(activityQuestions)
@@ -81,7 +46,12 @@ export class Questions implements IQuestions {
       .from(alternatives)
       .where(eq(alternatives.questionId, questionId));
 
-    return { ...question, alternatives: alternativesDtos };
+    const question = QuestionDtoMapper.mapFromSelectDto(questionDto);
+    question.alternatives = alternativesDtos.map((dto) =>
+      AlternativeDtoMapper.mapFromSelectDto(dto)
+    );
+
+    return question;
   }
 
   async delete(questionId: number) {

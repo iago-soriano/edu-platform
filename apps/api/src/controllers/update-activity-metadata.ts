@@ -10,7 +10,8 @@ import {
   UpdateActivityVersionMetadataResponseBody,
 } from "@edu-platform/common/api";
 import { IUpdateActivityMetadataUseCase } from "@use-cases";
-import { parseToVersionDTO } from "@dto";
+import { parseToVersionDTO } from "@edu-platform/common";
+import { ActivityVersionDtoMapper } from "@dto-mappers";
 import { parseNumberId } from "@infrastructure";
 
 type Request = TypedRequest<
@@ -32,12 +33,9 @@ export class UpdateActivityMetadataController
   ) {}
 
   async execute(req: Request, res: Response) {
-    const { title, description, topics } = req.body;
-    const versionDto = parseToVersionDTO({
-      title,
-      description,
-      topics,
-    });
+    const versionDto = parseToVersionDTO(req.body);
+    const newVersion = ActivityVersionDtoMapper.mapFromDto(versionDto);
+
     const { activityId, versionId } = parseNumberId(req.params, [
       "activityId",
       "versionId",
@@ -48,7 +46,7 @@ export class UpdateActivityMetadataController
       user,
       activityId,
       versionId,
-      versionDto,
+      newVersion,
     });
 
     res.status(200).json();

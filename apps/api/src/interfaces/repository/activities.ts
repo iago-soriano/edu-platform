@@ -1,64 +1,38 @@
-import { VersionStatus } from "@domain";
 import {
-  QuestionSelectDTO,
-  ActivitySelectDTO,
-  ActivityVersionInsertDTO,
-  ActivityContentInsertDTO,
-  ActivityVersionSelectDTO,
-  ActivityContentSelectDTO,
-  ActivityInsertDTO,
-  QuestionInsertDTO,
-  CompleteQuestionInsertDTO,
-  CompleteQuestionSelectDTO,
-  AlternativeInsertDTO,
-  AlternativeSelectDTO,
-} from "./dtos";
+  VersionStatus,
+  Content,
+  Activity,
+  ActivityVersion,
+  Question,
+  TextQuestion,
+  MultipleChoiceQuestion,
+  // Alternative,
+} from "@domain";
 
 export interface IActivities {
   insert: (authorId: number) => Promise<{ activityId: number }>;
-  update: (activityId: number, args: ActivityInsertDTO) => Promise<void>;
-  findById: (activityId: number) => Promise<ActivitySelectDTO>;
+  update: (activityId: number, activity: Partial<Activity>) => Promise<void>;
+  findById: (activityId: number) => Promise<Activity>;
 }
 
 export interface IContents {
-  insert: (content: ActivityContentInsertDTO) => Promise<{ contentId: number }>;
+  insert: (content: Content) => Promise<{ contentId: number }>;
   update: (
     contentId: number,
-    content: ActivityContentInsertDTO,
+    content: Partial<Content>,
     versionId: number
   ) => Promise<void>;
-  findById: (contentId: number) => Promise<ActivityContentSelectDTO>;
+  findById: (contentId: number) => Promise<Content>;
   delete: (contentId: number) => Promise<void>;
 }
 
 export interface IQuestions {
-  insert: (args: CompleteQuestionInsertDTO) => Promise<{ questionId: number }>;
-  insertAlternative: (
-    alternative: AlternativeInsertDTO
-  ) => Promise<{ alternativeId: number }>;
-  update: (
-    questionId: number,
-    question: CompleteQuestionInsertDTO
-  ) => Promise<void>;
-  updateAlternative: (
-    alternativeId: number,
-    alternative: AlternativeInsertDTO
-  ) => Promise<void>;
-  findById: (questionId: number) => Promise<CompleteQuestionSelectDTO>;
-  // findQuestionAndAlternativesById: (questionId: number) => Promise<{
-  //   question: QuestionSelectDTO;
-  //   alternatives: AlternativeSelectDTO[];
-  // }>;
-  delete: (questionId: number) => Promise<void>;
-}
-
-export interface IVersionElements {
   insert: (
-    versionId: number,
-    contentId?: number,
-    questionId?: number
-  ) => Promise<{ relationId: number }>;
-  delete: (contentId: number, versionId: number) => Promise<void>;
+    args: Question
+  ) => Promise<{ questionId: number; alternativesIds: number[] }>;
+  update: (questionId: number, question: Question) => Promise<void>;
+  findById: (questionId: number) => Promise<Question>;
+  delete: (questionId: number) => Promise<void>;
 }
 
 export interface IVersions {
@@ -66,22 +40,22 @@ export interface IVersions {
     activityId: number,
     versionNumber?: number
   ) => Promise<{ versionId: number }>;
-  update: (versionId: number, args: ActivityVersionInsertDTO) => Promise<void>;
+  update: (versionId: number, args: Partial<ActivityVersion>) => Promise<void>;
   delete: (versionId: number) => Promise<void>;
-  findSimpleViewById: (versionId: number) => Promise<ActivityVersionSelectDTO>;
+  findSimpleViewById: (versionId: number) => Promise<ActivityVersion>;
   findFullViewById: (versionId: number) => Promise<{
-    version: ActivityVersionSelectDTO;
-    contents: ActivityContentSelectDTO[];
-    questions: QuestionSelectDTO[];
+    version: ActivityVersion;
+    contents: Content[];
+    questions: Question[];
   }>;
   findElementsByVersionId: (versionId: number) => Promise<{
-    contents: ActivityContentSelectDTO[];
-    questions: QuestionSelectDTO[];
+    contents: Content[];
+    questions: Question[];
   }>;
   listByAuthorIdAndStatuses: (
     authorId: number,
     statuses: VersionStatus[]
-  ) => Promise<ActivityVersionSelectDTO[]>;
+  ) => Promise<ActivityVersion[]>;
 }
 
 export interface IActivitiesRepository {

@@ -18,7 +18,7 @@ export class ActivityContentNotCreated extends CustomError {
 }
 
 export class ContentTypeNotFound extends CustomError {
-  HTTPstatusCode = 400;
+  HTTPstatusCode = 422;
   static message = "Tipo de conteúdo não encontrado";
   constructor() {
     super(ContentTypeNotFound.message);

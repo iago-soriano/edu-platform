@@ -7,7 +7,7 @@ import {
 import {
   CreateNewActivityRequestBody,
   CreateNewActivityResponseBody,
-} from "@edu-platform/common/api";
+} from "@edu-platform/common";
 import { ICreateNewActivityUseCase } from "@use-cases";
 
 type Request = TypedRequest<{}, {}, CreateNewActivityRequestBody>;

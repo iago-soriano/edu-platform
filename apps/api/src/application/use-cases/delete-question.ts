@@ -1,6 +1,5 @@
-import { Question } from "@domain";
 import { IUseCase, IActivitiesRepository, UserSelectDTO } from "@interfaces";
-import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
+import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
 import { ActivityNotFound } from "@edu-platform/common";
 
 type InputParams = {
@@ -21,17 +20,15 @@ class UseCase implements IDeleteQuestionUseCase {
   ) {}
 
   async execute({ user, activityId, versionId, questionId }: InputParams) {
-    const { activity, question: questionDbDto } =
-      await this.getActivityHelper.execute({
-        activityId,
-        versionId,
-        questionId,
-      });
+    const { activity, question } = await this.getActivityHelper.execute({
+      activityId,
+      versionId,
+      questionId,
+    });
 
-    if (!questionDbDto) return;
+    if (!question) return;
     if (activity.authorId !== user.id) throw new ActivityNotFound();
 
-    const question = Question.mapFromDatabaseDto(questionDbDto);
     await this.activitiesRepository.Questions.delete(question.id || 0);
   }
 }

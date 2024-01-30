@@ -4,9 +4,10 @@ import {
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
-import { QuestionDTO, parseToQuestionDTO } from "@dto";
+import { QuestionDTO, parseToQuestionDTO } from "@edu-platform/common";
 import { ISaveQuestionUseCase } from "@use-cases";
 import { parseNumberId } from "@infrastructure";
+import { QuestionDtoMapper } from "@dto-mappers";
 
 export type SaveQuestionRequestParams = {
   activityId: string;
@@ -33,6 +34,8 @@ export class SaveQuestionController
 
   async execute(req: Request, res: Response) {
     const questionDto = parseToQuestionDTO(req.body);
+    const question = QuestionDtoMapper.mapFromDto(questionDto);
+
     const { activityId, versionId } = parseNumberId(req.params, [
       "activityId",
       "versionId",
@@ -40,8 +43,8 @@ export class SaveQuestionController
 
     const { user } = req;
 
-    const response = await this.saveQuestionUseCase.execute({
-      questionDto,
+    await this.saveQuestionUseCase.execute({
+      question,
       user,
       activityId,
       versionId,

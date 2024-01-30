@@ -1,11 +1,10 @@
-import { Content } from "@domain";
 import {
   IUseCase,
   IActivitiesRepository,
   IStorageService,
   UserSelectDTO,
 } from "@interfaces";
-import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
+import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
 import { ActivityNotFound } from "@edu-platform/common";
 
 type InputParams = {
@@ -27,23 +26,19 @@ class UseCase implements IDeleteContentUseCase {
   ) {}
 
   async execute({ user, activityId, versionId, contentId }: InputParams) {
-    const {
-      version,
-      activity,
-      content: contentDbDto,
-    } = await this.getActivityHelper.execute({
-      activityId,
-      versionId,
-      contentId,
-    });
+    const { version, activity, content } = await this.getActivityHelper.execute(
+      {
+        activityId,
+        versionId,
+        contentId,
+      }
+    );
 
-    if (!contentDbDto) return;
+    if (!content) return;
 
     if (activity.authorId !== user.id) throw new ActivityNotFound();
 
-    const content = Content.mapFromDatabaseDto(contentDbDto);
-
-    // TODO: can't just delete the file, because this content might be a copy from an archived one.
+    // TODO: can't just delete the file, because this content might be a copy of an archived one.
     // figure out a way to know if this file isn't being used elewhere
     const fileUrl = content.storedFileUrl();
     if (fileUrl) {
