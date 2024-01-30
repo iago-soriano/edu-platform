@@ -14,7 +14,7 @@ export class Activities implements IActivities {
     )[0];
   }
 
-  async update(activityId: number, activity: Activity) {
+  async update(activityId: number, activity: Partial<Activity>) {
     await db.transaction(async (tx) => {
       await tx
         .update(activities)

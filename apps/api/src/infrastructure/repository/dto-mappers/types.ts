@@ -7,5 +7,5 @@ import {
 
 export interface DomainDtoMapper<Domain, T extends Table> {
   mapFromSelectDto(dto: InferSelectModel<T>): Domain;
-  maptoInsertDto(domain: Domain): InferInsertModel<T>;
+  maptoInsertDto(domain: Partial<Domain>): InferInsertModel<T>;
 }

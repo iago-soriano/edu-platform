@@ -39,7 +39,7 @@ export const ContentDtoMapper: DomainDtoMapper<
     return newContent;
   },
 
-  maptoInsertDto: (domain: VideoContent | ImageContent | TextContent) => {
+  maptoInsertDto: (domain: Partial<Content>) => {
     if (domain instanceof VideoContent)
       return VideoContentDtoMapper.maptoInsertDto(domain);
     if (domain instanceof ImageContent)

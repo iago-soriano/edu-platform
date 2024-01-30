@@ -31,7 +31,7 @@ export class Versions implements IVersions {
     });
   }
 
-  async update(id: number, activity: ActivityVersion) {
+  async update(id: number, activity: Partial<ActivityVersion>) {
     await db.transaction(async (tx) => {
       await tx
         .update(activityVersions)

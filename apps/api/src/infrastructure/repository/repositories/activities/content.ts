@@ -15,7 +15,11 @@ export class Contents implements IContents {
         .returning({ contentId: activityContents.id })
     )[0];
   }
-  async update(contentId: number, content: Content, versionId: number) {
+  async update(
+    contentId: number,
+    content: Partial<Content>,
+    versionId: number
+  ) {
     const dto = ContentDtoMapper.maptoInsertDto(content);
     await db
       .update(activityContents)

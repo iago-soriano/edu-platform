@@ -3,12 +3,18 @@ import { Versions as VersionsTable } from "./version";
 import { Contents as ContentsTable } from "./content";
 import { Questions as QuestionsTable } from "./question";
 
-import { IActivitiesRepository, IQuestions } from "@interfaces";
+import {
+  IActivitiesRepository,
+  IQuestions,
+  IActivities,
+  IContents,
+  IVersions,
+} from "@interfaces";
 
 export class ActivityRepository implements IActivitiesRepository {
-  Activities: ActivitiesTable;
-  Contents: ContentsTable;
-  Versions: VersionsTable;
+  Activities: IActivities;
+  Contents: IContents;
+  Versions: IVersions;
   Questions: IQuestions;
 
   constructor() {
