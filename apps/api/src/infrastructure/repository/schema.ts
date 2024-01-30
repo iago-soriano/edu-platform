@@ -69,6 +69,7 @@ export const activities = pgTable("activities", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
   authorId: integer("author_id").references(() => users.id),
+  collectionId: integer("collection_id"), //TODO: references collections table
   lastVersionId: integer("last_version_id"),
   draftVersionId: integer("draft_version_id"),
 });
@@ -213,3 +214,32 @@ export const alternativesRelations = relations(alternatives, ({ one }) => ({
     references: [activityQuestions.id],
   }),
 }));
+
+// collections
+export const collections = pgTable("collections", {
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  ownerId: integer("owner_id").references(() => users.id),
+  isPrivate: boolean("is_private").default(true),
+  notifyOwnerOnStudentOutput: boolean("notify_owner_on_student_output").default(
+    true
+  ),
+});
+
+export const collectionsRelations = relations(collections, ({ one, many }) => ({
+  owner: one(users, {
+    fields: [collections.ownerId],
+    references: [users.id],
+  }),
+  activities: many(activities),
+}));
+
+export const studentCollectionParticipation = pgTable(
+  "student_collection_participation",
+  {
+    id: serial("id").primaryKey(),
+    studentId: integer("student_id").references(() => users.id),
+    collectionId: integer("collection_id").references(() => collections.id),
+  }
+);
