@@ -1,28 +1,23 @@
 import {
   HTTPController,
   HttpMethod,
-  IActivitiesRepository,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
-// import {
-//   GetActivityVersionParams,
-//   GetActivityVersionResponseBody,
-// } from "@edu-platform/common/api";
+import {
+  GetActivityVersionParams,
+  GetActivityVersionRequestBody,
+  GetActivityVersionResponseBody,
+} from "@edu-platform/common";
 import { IGetActivityVersionUseCase } from "@use-cases";
-import { VersionDTO, ElementDTO, parseVersionStatus } from "@dto";
 import { parseNumberId } from "@infrastructure";
+import { ActivityVersionDtoMapper } from "@dto-mappers";
 
-// get activity version full view
-export type GetActivityVersionParams = {
-  activityId: string;
-  versionId: string;
-};
-export type GetActivityVersionResponseBody = VersionDTO & {
-  elements: ElementDTO[];
-};
-
-type Request = TypedRequest<GetActivityVersionParams, {}, {}>;
+type Request = TypedRequest<
+  GetActivityVersionParams,
+  {},
+  GetActivityVersionRequestBody
+>;
 type Response = TypedResponse<GetActivityVersionResponseBody>;
 
 export class GetActivityVersionController
@@ -43,19 +38,14 @@ export class GetActivityVersionController
       "versionId",
     ]);
 
-    const { title, description, elements, status, topics } =
-      await this.getActivityVersionUseCase.execute({
-        user,
-        activityId,
-        versionId,
-      });
-
-    return res.status(200).json({
-      title,
-      description,
-      status,
-      elements: elements || [],
-      topics,
+    const completeVersion = await this.getActivityVersionUseCase.execute({
+      user,
+      activityId,
+      versionId,
     });
+
+    const versionDto = ActivityVersionDtoMapper.mapToDto(completeVersion);
+
+    return res.status(200).json(versionDto);
   }
 }

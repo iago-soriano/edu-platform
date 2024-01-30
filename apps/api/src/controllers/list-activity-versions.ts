@@ -11,6 +11,7 @@ import {
   ListActivityVersionsRequestBody,
   parseVersionStatus,
 } from "@edu-platform/common";
+import { ActivityVersionDtoMapper } from "@dto-mappers";
 
 type Request = TypedRequest<
   {},
@@ -35,11 +36,18 @@ export class ListActivityVersionsController
       req.query.statuses?.split(",").map((s) => parseVersionStatus(s)) || [];
     const { user } = req;
 
-    const activitiesByAuthor = await this.listActivityVersionsUseCase.execute({
-      user,
-      statuses: statuses,
-    });
+    const activitiesByAuthorDtos =
+      await this.listActivityVersionsUseCase.execute({
+        user,
+        statuses: statuses,
+      });
 
-    res.status(200).json(activitiesByAuthor);
+    res
+      .status(200)
+      .json(
+        activitiesByAuthorDtos.map((dto) =>
+          ActivityVersionDtoMapper.mapToDto(dto)
+        )
+      );
   }
 }

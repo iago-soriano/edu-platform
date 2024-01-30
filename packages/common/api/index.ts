@@ -1,3 +1,4 @@
 export * from "./interfaces";
-export * from "./domain.contracts";
+export * from "./contracts";
+export * from "./client";
 export * from "./auth.contracts";

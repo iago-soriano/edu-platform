@@ -5,16 +5,16 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import {
-  UpdateActivityStatusRequestParams,
+  UpdateActivityStatusParams,
   UpdateActivityStatusRequestBody,
   UpdateActivityStatusResponseBody,
-} from "@edu-platform/common/api";
+} from "@edu-platform/common";
 import { IUpdateActivityStatusUseCase } from "@use-cases";
 import { parseNumberId } from "@infrastructure";
 import { parseVersionStatus } from "@edu-platform/common";
 
 type Request = TypedRequest<
-  UpdateActivityStatusRequestParams,
+  UpdateActivityStatusParams,
   {},
   UpdateActivityStatusRequestBody
 >;

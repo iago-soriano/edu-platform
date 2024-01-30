@@ -1,10 +1,16 @@
 import { z } from "zod";
+import { ContentDTO, QuestionDTO } from ".";
 
 enum VersionStatus {
   Published = "Published",
   Draft = "Draft",
   Archived = "Archived",
 }
+
+type ElementDTO = {
+  content: ContentDTO | undefined;
+  question: QuestionDTO | undefined;
+};
 
 const versionStatusSchema = z.nativeEnum(VersionStatus);
 export const parseVersionStatus = versionStatusSchema.parse;
@@ -19,5 +25,7 @@ export const versionSchema = z.object({
   activityId: z.number().optional(),
 });
 
-export type VersionDTO = z.infer<typeof versionSchema>;
+export type VersionDTO = z.infer<typeof versionSchema> & {
+  elements: ElementDTO[];
+};
 export const parseToVersionDTO = versionSchema.parse;

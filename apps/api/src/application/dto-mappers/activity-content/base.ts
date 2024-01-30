@@ -3,16 +3,13 @@ import {
   ContentTypes,
   ContentTypeNotFound,
 } from "@edu-platform/common";
-import { VideoContent, ImageContent, TextContent } from "@domain";
+import { VideoContent, ImageContent, TextContent, Content } from "@domain";
 import { DomainDtoMapper } from "../types";
 import { VideoContentDtoMapper } from "./video";
 import { ImageContentDtoMapper } from "./image";
 import { TextContentDtoMapper } from "./text";
 
-export const ContentDtoMapper: DomainDtoMapper<
-  VideoContent | ImageContent | TextContent,
-  ContentDTO
-> = {
+export const ContentDtoMapper: DomainDtoMapper<Content, ContentDTO> = {
   mapFromDto: (dto: ContentDTO) => {
     let newContent = null;
 
@@ -38,7 +35,7 @@ export const ContentDtoMapper: DomainDtoMapper<
     return newContent;
   },
 
-  mapToDto: (domain: VideoContent | ImageContent | TextContent) => {
+  mapToDto: (domain: Content) => {
     if (domain instanceof VideoContent)
       return VideoContentDtoMapper.mapToDto(domain);
     if (domain instanceof ImageContent)

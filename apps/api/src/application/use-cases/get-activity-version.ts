@@ -1,5 +1,5 @@
 import { UserIsNotDraftAuthor } from "@edu-platform/common";
-import { Content, VersionStatus, Question } from "@domain";
+import { ActivityVersion, Content, Question } from "@domain";
 import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
 import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
 
@@ -8,14 +8,7 @@ type InputParams = {
   activityId: number;
   versionId: number;
 };
-
-type Return = {
-  title: string;
-  description: string;
-  status: VersionStatus;
-  topics: string;
-  elements?: { content?: Content; question?: Question }[];
-};
+type Return = ActivityVersion;
 
 export type IGetActivityVersionUseCase = IUseCase<InputParams, Return>;
 
@@ -54,10 +47,9 @@ class UseCase implements IGetActivityVersionUseCase {
         ((el2.content || el2.question).order || 0)
     );
 
-    return {
-      ...version,
-      elements,
-    };
+    version.elements = elements;
+
+    return version;
   }
 }
 

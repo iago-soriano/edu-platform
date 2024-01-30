@@ -4,23 +4,17 @@ import {
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
-import { ContentDTO, parseToContentDTO } from "@edu-platform/common";
+import {
+  parseToContentDTO,
+  SaveContentParams,
+  SaveContentRequestBody,
+  SaveContentResponseBody,
+} from "@edu-platform/common";
 import { ContentDtoMapper } from "@dto-mappers";
 import { ISaveContentUseCase } from "@use-cases";
 import { parseNumberId } from "@infrastructure";
 
-export type SaveContentRequestParams = {
-  activityId: string;
-  versionId: string;
-};
-export type SaveContentRequestBody = ContentDTO;
-export type SaveContentResponseBody = void;
-
-type Request = TypedRequest<
-  { activityId: string; versionId: string },
-  {},
-  SaveContentRequestBody
->;
+type Request = TypedRequest<SaveContentParams, {}, SaveContentRequestBody>;
 type Response = TypedResponse<SaveContentResponseBody>;
 
 export class SaveContentController
@@ -44,7 +38,7 @@ export class SaveContentController
 
     const { user } = req;
 
-    const response = await this.saveContentUseCase.execute({
+    await this.saveContentUseCase.execute({
       content,
       user,
       activityId,

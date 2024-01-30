@@ -5,8 +5,8 @@ type InputParams = {
 };
 
 type Return = {
-  activityId?: number;
-  versionId?: number;
+  activityId: number;
+  versionId: number;
 };
 
 export type ICreateNewActivityUseCase = IUseCase<InputParams, Return>;

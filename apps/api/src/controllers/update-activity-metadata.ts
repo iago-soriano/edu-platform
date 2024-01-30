@@ -5,21 +5,21 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import {
-  UpdateActivityVersionMetadataRequestParams,
-  UpdateActivityVersionMetadataRequestBody,
-  UpdateActivityVersionMetadataResponseBody,
-} from "@edu-platform/common/api";
+  UpdateVersionMetadataParams,
+  UpdateVersionMetadataRequestBody,
+  UpdateVersionMetadataResponseBody,
+} from "@edu-platform/common";
 import { IUpdateActivityMetadataUseCase } from "@use-cases";
 import { parseToVersionDTO } from "@edu-platform/common";
 import { ActivityVersionDtoMapper } from "@dto-mappers";
 import { parseNumberId } from "@infrastructure";
 
 type Request = TypedRequest<
-  UpdateActivityVersionMetadataRequestParams,
+  UpdateVersionMetadataParams,
   {},
-  UpdateActivityVersionMetadataRequestBody
+  UpdateVersionMetadataRequestBody
 >;
-type Response = TypedResponse<UpdateActivityVersionMetadataResponseBody>;
+type Response = TypedResponse<UpdateVersionMetadataResponseBody>;
 
 export class UpdateActivityMetadataController
   implements HTTPController<Request, Response>
@@ -34,7 +34,10 @@ export class UpdateActivityMetadataController
 
   async execute(req: Request, res: Response) {
     const versionDto = parseToVersionDTO(req.body);
-    const newVersion = ActivityVersionDtoMapper.mapFromDto(versionDto);
+    const newVersion = ActivityVersionDtoMapper.mapFromDto({
+      ...versionDto,
+      elements: [],
+    });
 
     const { activityId, versionId } = parseNumberId(req.params, [
       "activityId",

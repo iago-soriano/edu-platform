@@ -5,11 +5,19 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import { IDeleteQuestionUseCase } from "@use-cases";
-import { DeleteActivityContentParams } from "@edu-platform/common/api";
+import {
+  DeleteQuestionParams,
+  DeleteQuestionRequestBody,
+  DeleteQuestionResponseBody,
+} from "@edu-platform/common/api";
 import { parseNumberId } from "@infrastructure";
 
-type Request = TypedRequest<DeleteActivityContentParams, {}, {}>;
-type Response = TypedResponse<{}>;
+type Request = TypedRequest<
+  DeleteQuestionParams,
+  {},
+  DeleteQuestionRequestBody
+>;
+type Response = TypedResponse<DeleteQuestionResponseBody>;
 
 export class DeleteQuestionController
   implements HTTPController<Request, Response>

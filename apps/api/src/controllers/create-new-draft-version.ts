@@ -5,14 +5,19 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import {
-  CreateNewActivityVersionParams,
-  CreateNewActivityVersionResponseBody,
+  CreateNewDraftVersionParams,
+  CreateNewDraftVersionRequestBody,
+  CreateNewDraftVersionResponseBody,
 } from "@edu-platform/common";
 import { ICreateNewDraftVersionUseCase } from "@use-cases";
 import { parseNumberId } from "@infrastructure";
 
-type Request = TypedRequest<CreateNewActivityVersionParams, {}, {}>;
-type Response = TypedResponse<CreateNewActivityVersionResponseBody>;
+type Request = TypedRequest<
+  CreateNewDraftVersionParams,
+  {},
+  CreateNewDraftVersionRequestBody
+>;
+type Response = TypedResponse<CreateNewDraftVersionResponseBody>;
 
 export class CreateNewDraftVersionController
   implements HTTPController<Request, Response>

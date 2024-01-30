@@ -6,12 +6,15 @@ import {
   ActivityDescriptionIsTooShort,
   ActivityTitleIsTooShort,
 } from "@edu-platform/common";
+import { Content, Question } from ".";
 
 export enum VersionStatus {
   Published = "Published",
   Draft = "Draft",
   Archived = "Archived",
 }
+
+export type Elements = { content?: Content; question?: Question }[];
 
 export class ActivityVersion {
   public id!: number;
@@ -21,6 +24,7 @@ export class ActivityVersion {
   public version!: number;
   public status!: VersionStatus;
   public activityId!: number;
+  public elements: Elements = [];
 
   validateTitle() {
     if (this.title.length > DomainRules.ACTIVITY.TITLE.MAX_LENGTH) {

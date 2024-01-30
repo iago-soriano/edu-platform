@@ -1,7 +1,7 @@
 import { ActivityVersion, VersionStatus } from "@domain";
 import { DomainDtoMapper } from "./types";
-import { VersionDTO } from "@edu-platform/common";
-import { parseVersionStatus } from "@edu-platform/common";
+import { VersionDTO, parseVersionStatus } from "@edu-platform/common";
+import { QuestionDtoMapper, ContentDtoMapper } from ".";
 
 export const ActivityVersionDtoMapper: DomainDtoMapper<
   ActivityVersion,
@@ -22,7 +22,20 @@ export const ActivityVersionDtoMapper: DomainDtoMapper<
   },
 
   mapToDto(domain: ActivityVersion) {
-    const dto: VersionDTO = {};
-    return domain;
+    const dto: VersionDTO = {
+      id: domain.id,
+      status: domain.status,
+      title: domain.title,
+      description: domain.description,
+      topics: domain.topics,
+      version: domain.version,
+      activityId: domain.activityId,
+      elements: domain.elements.map((element) => ({
+        content: element.content && ContentDtoMapper.mapToDto(element.content),
+        question:
+          element.question && QuestionDtoMapper.mapToDto(element.question),
+      })),
+    };
+    return dto;
   },
 };

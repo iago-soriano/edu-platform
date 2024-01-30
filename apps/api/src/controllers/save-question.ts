@@ -4,23 +4,17 @@ import {
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
-import { QuestionDTO, parseToQuestionDTO } from "@edu-platform/common";
+import { parseToQuestionDTO } from "@edu-platform/common";
+import {
+  SaveQuestionParams,
+  SaveQuestionResponseBody,
+  SaveQuestionRequestBody,
+} from "@edu-platform/common";
 import { ISaveQuestionUseCase } from "@use-cases";
 import { parseNumberId } from "@infrastructure";
 import { QuestionDtoMapper } from "@dto-mappers";
 
-export type SaveQuestionRequestParams = {
-  activityId: string;
-  versionId: string;
-};
-export type SaveQuestionRequestBody = QuestionDTO;
-export type SaveQuestionResponseBody = void;
-
-type Request = TypedRequest<
-  { activityId: string; versionId: string },
-  {},
-  SaveQuestionRequestBody
->;
+type Request = TypedRequest<SaveQuestionParams, {}, SaveQuestionRequestBody>;
 type Response = TypedResponse<SaveQuestionResponseBody>;
 
 export class SaveQuestionController
