@@ -3,7 +3,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { axios, useGetActivityVersionQuery } from "@infrastructure";
+import { axios } from "@infrastructure";
 import { GetActivityVersionResponseBody } from "@edu-platform/common";
 import Version from "./client";
 import posthog from "posthog-js";

@@ -1,8 +1,5 @@
 "use client";
 import { Footer, ImageInput } from "@components";
-import { useState } from "react";
-
-import { useSaveContentMutation } from "@infrastructure";
 
 export default () => {
   return (

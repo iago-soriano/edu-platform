@@ -2,10 +2,10 @@ import { VersionDTO } from "../../dto";
 
 type RequestBody = void;
 type ResponseBody = VersionDTO[];
-type Params = { statuses: string };
+type Query = { statuses: string };
 
 export {
   RequestBody as ListActivityVersionsRequestBody,
   ResponseBody as ListActivityVersionsResponseBody,
-  Params as ListActivityVersionsParams,
+  Query as ListActivityVersionsQuery,
 };

@@ -1,11 +1,12 @@
 "use client";
-import { useGetActivityVersionQuery } from "@infrastructure";
+import { useGetActivityVersionQuery } from "@endpoints";
 import {
   ActivityHeaderInput,
   BaseContent,
   StickyHeader,
   OptionsMenu,
 } from "./components";
+import { Element, QuestionContainer } from "../common-components";
 import { useEffect, useState, useRef, useCallback } from "react";
 
 const Page = ({ params: { activityId, versionId } }) => {
@@ -61,13 +62,17 @@ const Page = ({ params: { activityId, versionId } }) => {
         {versionQuery.data?.elements.length ? (
           <>
             {versionQuery.data?.elements.map((element) => (
-              <BaseContent
-                key={element.id as string}
-                type={element.type}
-                activityId={activityId}
-                versionId={versionId}
-                setSaveState={setSaveState}
-                {...element}
+              <Element
+                element={element}
+                QuestionComponent={() => <QuestionContainer />}
+                ContentComponent={() => (
+                  <BaseContent
+                    versionId={versionId}
+                    activityId={activityId}
+                    setSaveState={setSaveState}
+                    contentDto={element.content}
+                  />
+                )}
               />
             ))}
           </>

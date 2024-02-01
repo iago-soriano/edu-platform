@@ -1,33 +1,30 @@
 import { useState } from "react";
 import Image from "next/image";
-import { SaveContentMutationType } from "@infrastructure";
-import { SaveContentRequestBody } from "@edu-platform/common";
+import { ImageContentPayloadDTO, ContentTypes } from "@edu-platform/common";
+import { CommmonContentProps } from "./types";
 
 export const ImageContent = ({
-  url,
+  payload: { url },
   saveContentMutation,
   contentId,
   title,
   description,
-}: {
-  saveContentMutation: SaveContentMutationType;
-  url: string;
-  contentId: string;
-  title: string;
-  description: string;
-}) => {
+}: { payload: ImageContentPayloadDTO } & CommmonContentProps) => {
   const [selectedImg, setSelectedImg] = useState<File>();
   const onFileUpload = async (e) => {
     setSelectedImg(e.target.files[0]);
     const formData = new FormData();
 
-    formData.append("image", e.target.files[0]);
-    formData.append("contentId", contentId);
-    formData.append("type", "Image");
+    formData.append(
+      "payload",
+      JSON.stringify({ image: { file: e.target.files[0] } })
+    );
+    formData.append("contentId", contentId.toString());
+    formData.append("type", ContentTypes.Image);
     title && formData.append("title", title);
     description && formData.append("description", description);
 
-    saveContentMutation.mutate(formData as unknown as SaveContentRequestBody);
+    saveContentMutation.mutate(formData as unknown);
   };
 
   return (

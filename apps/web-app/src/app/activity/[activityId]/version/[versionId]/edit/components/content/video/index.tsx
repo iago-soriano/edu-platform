@@ -7,16 +7,17 @@ import {
   useMediaQuery,
 } from "@infrastructure";
 import { AddTrackButton, Track } from "./tracks";
+import { VideoContentPayloadDTO, ContentTypes } from "@edu-platform/common";
+import { CommmonContentProps } from "../types";
 
 export const VideoContent = (
   {
     contentId,
-    url,
-    tracks: tracksProps,
+    payload: { url, tracks: tracksProps },
     saveContentMutation,
     onChange,
     hasChanges,
-  }
+  }: { payload: VideoContentPayloadDTO } & CommmonContentProps
   // : {saveContentMutation: UseMutationResult<SaveContentResponseBody, ServerError, SaveContentRequestBody, unknown>}
 ) => {
   const [player, setPlayer] = useState<LibYoutubePlayer>(null);
@@ -30,11 +31,17 @@ export const VideoContent = (
 
     saveContentMutation.mutate({
       payload: {
-        videoUrl: newUrl,
+        video: {
+          tracks,
+          url: newUrl,
+        },
       },
-      type: "Video",
-      contentId,
+      type: ContentTypes.Video,
+      id: contentId,
     });
+
+    //TODO: verificar
+    //onChange(false);
   };
 
   useEffect(() => {
@@ -46,9 +53,14 @@ export const VideoContent = (
 
   useEffect(() => {
     saveContentMutation.mutate({
-      payload: { tracks },
-      type: "Video",
-      contentId,
+      payload: {
+        video: {
+          tracks,
+          url: videoUrl,
+        },
+      },
+      type: ContentTypes.Video,
+      id: contentId,
     });
   }, [tracks]);
 

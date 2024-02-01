@@ -1,13 +1,9 @@
 "use client";
-import {
-  useGetActivityVersionQuery,
-  useSaveContentMutation,
-  useUpdateVersionMetadataMutation,
-} from "@infrastructure";
+import { useGetActivityVersionQuery } from "@endpoints";
 import { ActivityHeader, StickyHeader, BaseContent } from "./components";
+import { Element } from "../common-components";
 import { errorToast } from "@components";
 import { useEffect, useState } from "react";
-import { ElementResponse } from "@edu-platform/common/api";
 
 const Page = ({ params: { activityId, versionId } }) => {
   const versionQuery = useGetActivityVersionQuery({ activityId, versionId });
@@ -35,21 +31,22 @@ const Page = ({ params: { activityId, versionId } }) => {
         saveState={saveState}
       />
       <StickyHeader
+        onOpenOptionsMenu={() => {}}
         show={showAuxHeader}
         title={versionQuery.data?.title}
         description={versionQuery.data?.description}
         saveState={saveState}
       />
       <div>
-        {versionQuery.data?.elements.map((element) => (
-          <BaseContent
-            key={element.id as string}
-            type={element.type}
+        {versionQuery.data?.elements.map((element) => {
+          <ContentComponent
+            key={content.id}
+            type={content.type}
             activityId={activityId}
             versionId={versionId}
             {...element}
-          />
-        ))}
+          />;
+        })}
       </div>
     </div>
   );

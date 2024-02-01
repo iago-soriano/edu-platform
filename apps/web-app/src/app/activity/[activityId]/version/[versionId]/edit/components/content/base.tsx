@@ -10,31 +10,19 @@ import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import {
   useSaveContentMutation,
   useDeleteActivityContentMutation,
-} from "@infrastructure";
+} from "@endpoints";
+import { ContentDTO } from "@edu-platform/common";
 import { twMerge } from "tailwind-merge";
+import { ContentContainer } from "../../../common-components";
 
 type BaseContentProps = {
-  title?: string;
-  description?: string;
-  type: string;
-  id: any;
+  contentDto: ContentDTO;
   activityId: string;
   versionId: string;
-  videoUrl?: string;
-  tracks?: string;
-  imageUrl?: string;
-  text?: string;
   setSaveState: Dispatch<SetStateAction<string>>;
 };
 export const BaseContent = ({
-  title,
-  description,
-  videoUrl,
-  imageUrl,
-  text,
-  tracks,
-  type,
-  id: contentId,
+  contentDto,
   setSaveState,
   activityId,
   versionId,
@@ -49,15 +37,15 @@ export const BaseContent = ({
   const deleteContentMutation = useDeleteActivityContentMutation({
     activityId,
     versionId,
-    contentId,
+    contentId: contentDto.id.toString(),
   });
 
   const onSaveTitle = (e) => {
     if (hasChanges) {
       saveContentMutation.mutate({
         title: e.target.value,
-        type,
-        contentId,
+        type: contentDto.type,
+        id: contentDto.id,
       });
     }
     setHasChanges(false);
@@ -67,8 +55,8 @@ export const BaseContent = ({
     if (hasChanges) {
       saveContentMutation.mutate({
         description: e.target.value,
-        type,
-        contentId,
+        type: contentDto.type,
+        id: contentDto.id,
       });
     }
     setHasChanges(false);
@@ -82,37 +70,27 @@ export const BaseContent = ({
   }, [saveContentMutation.isPending, hasChanges]);
 
   const getContent = (type: string) => {
+    const commonProps = {
+      title: contentDto.title,
+      description: contentDto.description,
+      contentId: contentDto.id,
+      onChange: setHasChanges,
+      hasChanges,
+      saveContentMutation,
+    };
+
     switch (type) {
       case "Text":
         return (
-          <TextContent
-            contentId={contentId}
-            text={text}
-            saveContentMutation={saveContentMutation}
-            onChange={setHasChanges}
-            hasChanges={hasChanges}
-          />
+          <TextContent {...commonProps} payload={contentDto.payload.text} />
         );
       case "Video":
         return (
-          <VideoContent
-            saveContentMutation={saveContentMutation}
-            contentId={contentId}
-            url={videoUrl}
-            tracks={tracks}
-            onChange={setHasChanges}
-            hasChanges={hasChanges}
-          />
+          <VideoContent {...commonProps} payload={contentDto.payload.video} />
         );
       case "Image":
         return (
-          <ImageContent
-            saveContentMutation={saveContentMutation}
-            contentId={contentId}
-            url={imageUrl}
-            title={title}
-            description={description}
-          />
+          <ImageContent {...commonProps} payload={contentDto.payload.video} />
         );
     }
   };
@@ -126,12 +104,12 @@ export const BaseContent = ({
       onBlur={() => setIsFocused(false)}
       onFocus={() => setIsFocused(true)}
     >
-      <div className="lg:col-start-3 lg:col-span-6 sm:col-start-2 sm:col-span-8 col-start-2 col-span-14">
+      <ContentContainer>
         <GhostInput
           name="title"
           placeholder="Título (opcional)"
           className="text-xl leading-10 font-bold"
-          defaultValue={title}
+          defaultValue={contentDto.title}
           onBlur={onSaveTitle}
           error={saveContentMutation.error?.errors?.["title"]}
           onChange={() => setHasChanges(true)}
@@ -140,13 +118,13 @@ export const BaseContent = ({
           name="description"
           placeholder="Descrição (opcional)"
           className="text-text2"
-          defaultValue={description}
+          defaultValue={contentDto.description}
           onBlur={onSaveDescription}
           error={saveContentMutation.error?.errors?.["description"]}
           onChange={() => setHasChanges(true)}
         />
-        {getContent(type)}
-      </div>
+        {getContent(contentDto.type)}
+      </ContentContainer>
       <div className="p-1 lg:col-start-10 col-start-16 col-span-1 flex flex-row justify-center items-start">
         <ButtonWithDropdown>
           <ButtonWithDropdown.Text className="">

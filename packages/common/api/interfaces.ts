@@ -15,6 +15,7 @@ export interface IHTTPClient {
     body: unknown,
     query?: { [k: string]: string }
   ) => Promise<unknown>;
+  delete: (url: string, query?: { [k: string]: string }) => Promise<unknown>;
   setHeader: (header: string, value: string) => void;
 }
 

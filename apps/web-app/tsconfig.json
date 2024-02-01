@@ -11,35 +11,22 @@
     "baseUrl": "./src/",
     "paths": {
       // "@utils": ["utils/index.ts"],
-      "@components": [
-        "components/index.ts"
-      ],
+      "@components": ["components/index.ts"],
       // "@locale": ["locale/index.ts"],
-      "@contexts": [
-        "contexts/index.ts"
-      ],
-      "@styles": [
-        "styles/index.ts"
-      ],
-      "@infrastructure": [
-        "infrastructure/index.ts"
-      ],
+      "@contexts": ["contexts/index.ts"],
+      "@styles": ["styles/index.ts"],
+      "@infrastructure": ["infrastructure/index.ts"],
+      "@endpoints": ["endpoints/index.ts"],
       // "@model": ["model/index.ts"],
       // "@atomic/atoms": ["atomic/atoms/index.ts"],
       // "@atomic/molecules": ["atomic/molecules/index.ts"],
       // "@atomic/organisms": ["atomic/organisms/index.ts"],
       // "@atomic": ["atomic/index.ts"],
-      "@modules/*": [
-        "modules/*/index.tsx"
-      ]
+      "@modules/*": ["modules/*/index.tsx"]
       // "@common/interfaces": ["../../common/interfaces/index.ts"],
       // "@api/client": ["../../api/src/client/index.ts"],
     },
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "incremental": true,
@@ -60,9 +47,7 @@
     // "../../api/src/client/index.ts",
     // "../../common/interfaces/index.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
 // {
 //   "extends": "@edu-platform/tsconfig/web-app.json",

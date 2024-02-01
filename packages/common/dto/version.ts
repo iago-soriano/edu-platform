@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { ContentDTO, QuestionDTO } from ".";
 
-enum VersionStatus {
+export enum VersionStatus {
   Published = "Published",
   Draft = "Draft",
   Archived = "Archived",
@@ -23,9 +23,10 @@ export const versionSchema = z.object({
   topics: z.string().optional(),
   version: z.number().optional(),
   activityId: z.number().optional(),
+  updatedAt: z.date().optional(),
 });
 
 export type VersionDTO = z.infer<typeof versionSchema> & {
-  elements: ElementDTO[];
+  elements?: ElementDTO[];
 };
 export const parseToVersionDTO = versionSchema.parse;

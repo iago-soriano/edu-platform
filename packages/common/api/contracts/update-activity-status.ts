@@ -10,7 +10,7 @@ type Params = {
 };
 
 export {
-  RequestBody as UpdateActivityStatusRequestBody,
-  ResponseBody as UpdateActivityStatusResponseBody,
-  Params as UpdateActivityStatusParams,
+  RequestBody as UpdateVersionStatusRequestBody,
+  ResponseBody as UpdateVersionStatusResponseBody,
+  Params as UpdateVersionStatusParams,
 };

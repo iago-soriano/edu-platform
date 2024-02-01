@@ -89,7 +89,7 @@ export class AxiosFetcher implements IHTTPClient {
       .catch(this._errorHandler);
   }
 
-  async del(url: string, query?: { [k: string]: string }) {
+  async delete(url: string, query?: { [k: string]: string }) {
     return this._instance
       .delete(url, { params: { ...query } })
       .then(this._successHandler)

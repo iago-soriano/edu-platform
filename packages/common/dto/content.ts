@@ -8,6 +8,29 @@ export enum ContentTypes {
   Image = "Image",
 }
 
+const videoPayloadSchema = z
+  .object({
+    tracks: z.string().optional(),
+    url: z.string().optional(),
+  })
+  .optional();
+export type VideoContentPayloadDTO = z.infer<typeof videoPayloadSchema>;
+
+const textPayloadSchema = z
+  .object({
+    text: z.string().optional(),
+  })
+  .optional();
+export type TextContentPayloadDTO = z.infer<typeof textPayloadSchema>;
+
+const imagePayloadSchema = z
+  .object({
+    file: z.custom<FileType>().optional(),
+    url: z.string().optional(),
+  })
+  .optional();
+export type ImageContentPayloadDTO = z.infer<typeof imagePayloadSchema>;
+
 const contentTypeSchema = z.nativeEnum(ContentTypes);
 export const parseContentType = contentTypeSchema.parse;
 
@@ -17,23 +40,9 @@ const contentSchema = z.object({
   type: z.nativeEnum(ContentTypes),
   id: z.number().optional(),
   payload: z.object({
-    video: z
-      .object({
-        tracks: z.string().optional(),
-        url: z.string().optional(),
-      })
-      .optional(),
-    text: z
-      .object({
-        text: z.string().optional(),
-      })
-      .optional(),
-    image: z
-      .object({
-        file: z.custom<FileType>().optional(),
-        url: z.string().optional(),
-      })
-      .optional(),
+    video: videoPayloadSchema,
+    text: textPayloadSchema,
+    image: imagePayloadSchema,
   }),
   order: z.number(),
   versionId: z.number(),

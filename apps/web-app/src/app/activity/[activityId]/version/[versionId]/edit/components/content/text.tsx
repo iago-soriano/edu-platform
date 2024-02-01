@@ -1,18 +1,26 @@
 import { GhostTextArea } from "@components";
+import { TextContentPayloadDTO, ContentTypes } from "@edu-platform/common";
+import { CommmonContentProps } from "./types";
 
 export const TextContent = ({
-  text,
+  payload: { text },
   saveContentMutation,
-  onChange,
-  hasChanges,
   contentId,
-}) => {
+  hasChanges,
+  onChange,
+  title,
+  description,
+}: { payload: TextContentPayloadDTO } & CommmonContentProps) => {
   const onSaveContent = (e) => {
     if (hasChanges) {
       saveContentMutation.mutate({
-        payload: { text: e.target.value },
-        type: "Text",
-        contentId,
+        payload: {
+          text: {
+            text: e.target.value,
+          },
+        },
+        type: ContentTypes.Video,
+        id: contentId,
       });
     }
     onChange(false);
@@ -25,7 +33,7 @@ export const TextContent = ({
       defaultValue={text}
       onBlur={onSaveContent}
       error={saveContentMutation.error?.errors?.["content"]}
-      onChange={onChange}
+      // onChange={onChange}
     />
   );
 };

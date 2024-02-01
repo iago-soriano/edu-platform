@@ -2,7 +2,7 @@ import { ContentDTO } from "../../dto";
 
 type RequestBody = ContentDTO;
 type ResponseBody = {
-  questionId?: number;
+  contentId?: number;
 };
 type Params = { activityId: string; versionId: string };
 

@@ -1,5 +1,5 @@
 import { errorToast, SavingIndicator } from "@components";
-import { useGetActivityVersionQuery } from "@infrastructure";
+import { useGetActivityVersionQuery } from "@endpoints";
 
 export const ActivityHeader = ({ activityId, versionId, saveState }) => {
   const versionQuery = useGetActivityVersionQuery({ activityId, versionId });

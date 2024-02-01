@@ -1,12 +1,12 @@
 "use client";
 import { DraftActivityCard } from "../../components";
 import { LoadingErrorData } from "@components";
-import { useGetActivityVersionsQuery } from "@infrastructure";
+import { useListActivityVersionsQuery } from "@endpoints";
 import { useRouter } from "next/navigation";
 
 export default function Activities() {
   const router = useRouter();
-  const query = useGetActivityVersionsQuery("Draft");
+  const query = useListActivityVersionsQuery("Draft");
 
   return (
     <LoadingErrorData
@@ -21,7 +21,9 @@ export default function Activities() {
               className="lg:col-start-3 lg:col-span-6 col-span-10"
             >
               <DraftActivityCard
-                {...version}
+                title={version.title}
+                description={version.description}
+                updatedAt={version.updatedAt}
                 onClick={() =>
                   router.push(
                     `/activity/${version.activityId}/version/${version.id}/edit`

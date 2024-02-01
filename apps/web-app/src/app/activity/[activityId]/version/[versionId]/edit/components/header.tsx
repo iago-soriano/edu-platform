@@ -12,8 +12,8 @@ import { useState, useEffect } from "react";
 import {
   useGetActivityVersionQuery,
   useUpdateVersionMetadataMutation,
-  openInNewTab,
-} from "@infrastructure";
+} from "@endpoints";
+import { openInNewTab } from "@infrastructure";
 
 export const ActivityHeaderInput = ({
   activityId,

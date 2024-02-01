@@ -3,8 +3,9 @@ import {
   useSaveContentMutation,
   useUpdateVersionStatusMutation,
   useDeleteDraftVersionMutation,
-  VersionQueryResultType,
-} from "@infrastructure";
+  GetActivityVersionQueryType,
+} from "@endpoints";
+import { ContentTypes, VersionStatus } from "@edu-platform/common";
 import { useState } from "react";
 import { redirect } from "next/navigation";
 import { ConfirmDeleteModal, ConfirmPublishModal } from "..";
@@ -37,7 +38,7 @@ const NewItemButton = ({ children, onClick }) => (
 const NewItemHeader = ({ children }) => <h5 className="p-2">{children}</h5>;
 
 interface OptionsMenuProps {
-  version: VersionQueryResultType;
+  version: GetActivityVersionQueryType;
   onClose: () => void;
   activityId: any;
   versionId: any;
@@ -117,21 +118,33 @@ export const OptionsMenu = ({
           <NewItemHeader>Conteúdos</NewItemHeader>
           <NewItemButton
             onClick={() =>
-              saveContentMutation.mutate({ type: "Video", payload: {}, order })
+              saveContentMutation.mutate({
+                type: ContentTypes.Video,
+                payload: { video: {} },
+                order,
+              })
             }
           >
             Vídeo
           </NewItemButton>
           <NewItemButton
             onClick={() =>
-              saveContentMutation.mutate({ type: "Text", payload: {}, order })
+              saveContentMutation.mutate({
+                type: ContentTypes.Text,
+                payload: { text: {} },
+                order,
+              })
             }
           >
             Texto
           </NewItemButton>
           <NewItemButton
             onClick={() =>
-              saveContentMutation.mutate({ type: "Image", payload: {}, order })
+              saveContentMutation.mutate({
+                type: ContentTypes.Image,
+                payload: { image: {} },
+                order,
+              })
             }
           >
             Imagem
@@ -163,7 +176,9 @@ export const OptionsMenu = ({
         <ConfirmPublishModal
           onClose={() => setOpenConfirmPublishModal(false)}
           publishMutation={() =>
-            statusUpdateMutation.mutate({ newActivityStatus: "Published" })
+            statusUpdateMutation.mutate({
+              newActivityStatus: VersionStatus.Published,
+            })
           }
         />
       )}
