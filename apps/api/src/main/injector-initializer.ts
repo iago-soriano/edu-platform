@@ -9,7 +9,7 @@ import {
   ChangePasswordRequestController,
   ChangePasswordController,
   CheckChangePasswordTokenRequestController,
-  UpdateActivityStatusController,
+  UpdateVersionStatusController,
   SaveQuestionController,
   SaveContentController,
   CreateNewDraftVersionController,
@@ -76,7 +76,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(CheckChangePasswordTokenRequestController)
       .classic(),
     updateActivityStatusController: awilix
-      .asClass(UpdateActivityStatusController)
+      .asClass(UpdateVersionStatusController)
       .classic(),
     saveQuestionController: awilix.asClass(SaveQuestionController).classic(),
     saveContentController: awilix.asClass(SaveContentController).classic(),

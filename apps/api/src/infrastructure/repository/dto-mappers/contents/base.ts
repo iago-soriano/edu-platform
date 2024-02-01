@@ -39,13 +39,13 @@ export const ContentDtoMapper: DomainDtoMapper<
     return newContent;
   },
 
-  maptoInsertDto: (domain: Partial<Content>) => {
+  mapToInsertDto: (domain: Partial<Content>) => {
     if (domain instanceof VideoContent)
-      return VideoContentDtoMapper.maptoInsertDto(domain);
+      return VideoContentDtoMapper.mapToInsertDto(domain);
     if (domain instanceof ImageContent)
-      return ImageContentDtoMapper.maptoInsertDto(domain);
+      return ImageContentDtoMapper.mapToInsertDto(domain);
     if (domain instanceof TextContent)
-      return TextContentDtoMapper.maptoInsertDto(domain);
+      return TextContentDtoMapper.mapToInsertDto(domain);
 
     throw new ContentTypeNotFound();
   },

@@ -10,7 +10,7 @@ export const TextContentDtoMapper: DomainDtoMapper<
     const domain = new TextContent();
     return domain;
   },
-  maptoInsertDto: (domain: TextContent) => {
+  mapToInsertDto: (domain: TextContent) => {
     const dto: typeof activityContents.$inferInsert = {};
     return dto;
   },

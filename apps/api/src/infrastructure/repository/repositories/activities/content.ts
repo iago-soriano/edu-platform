@@ -6,7 +6,7 @@ import { ContentDtoMapper } from "../../dto-mappers";
 
 export class Contents implements IContents {
   async insert(content: Content) {
-    const dto = ContentDtoMapper.maptoInsertDto(content);
+    const dto = ContentDtoMapper.mapToInsertDto(content);
 
     return (
       await db
@@ -20,7 +20,7 @@ export class Contents implements IContents {
     content: Partial<Content>,
     versionId: number
   ) {
-    const dto = ContentDtoMapper.maptoInsertDto(content);
+    const dto = ContentDtoMapper.mapToInsertDto(content);
     await db
       .update(activityContents)
       .set({ ...dto, updatedAt: new Date() })

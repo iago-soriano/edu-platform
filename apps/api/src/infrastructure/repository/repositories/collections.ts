@@ -10,7 +10,7 @@ import { and, eq, inArray } from "drizzle-orm";
 
 export class Collections implements ICollections {
   async insert(collection: Collection) {
-    const dto = CollectionDtoMapper.maptoInsertDto(collection);
+    const dto = CollectionDtoMapper.mapToInsertDto(collection);
 
     return (
       await db

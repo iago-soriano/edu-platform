@@ -25,7 +25,7 @@ export const AlternativeDtoMapper: DomainDtoMapper<
 
     return alternative;
   },
-  maptoInsertDto: (domain: Alternative) => {
+  mapToInsertDto: (domain: Alternative) => {
     return domain;
   },
 };
@@ -58,7 +58,7 @@ export const QuestionDtoMapper: DomainDtoMapper<
 
     return newQuestion;
   },
-  maptoInsertDto: (domain: TextQuestion | MultipleChoiceQuestion) => {
+  mapToInsertDto: (domain: TextQuestion | MultipleChoiceQuestion) => {
     return {
       id: domain.id,
       question: domain.question,
@@ -67,7 +67,7 @@ export const QuestionDtoMapper: DomainDtoMapper<
       type: domain.type,
       versionId: domain.versionId,
       alternatives: (domain as MultipleChoiceQuestion)?.alternatives?.map(
-        (alt) => AlternativeDtoMapper.maptoInsertDto(alt)
+        (alt) => AlternativeDtoMapper.mapToInsertDto(alt)
       ),
     };
   },

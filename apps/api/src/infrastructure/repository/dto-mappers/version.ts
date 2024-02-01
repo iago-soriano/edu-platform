@@ -10,18 +10,21 @@ export const VersionDtoMapper: DomainDtoMapper<
   mapFromSelectDto: (dto: typeof activityVersions.$inferSelect) => {
     const version = new ActivityVersion();
 
-    version.id || 0;
-    version.title || "";
-    version.description || "";
-    version.topics || "";
-    version.version || 0;
+    version.id = dto.id || 0;
+    version.title = dto.title || "";
+    version.updatedAt = dto.updatedAt?.toISOString() || "";
+    version.description = dto.description || "";
+    version.topics = dto.topics || "";
+    version.version = dto.version || 0;
     version.status = parseVersionStatus(dto.status) || VersionStatus.Draft;
-    version.activityId || 0;
+    version.activityId = dto.activityId || 0;
 
     return version;
   },
 
-  maptoInsertDto: (domain: ActivityVersion) => {
-    return domain;
+  mapToInsertDto: (domain: ActivityVersion) => {
+    const dto: typeof activityVersions.$inferInsert = {};
+
+    return dto;
   },
 };

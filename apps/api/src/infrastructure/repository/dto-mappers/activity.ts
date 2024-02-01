@@ -14,7 +14,7 @@ export const ActivityDtoMapper: DomainDtoMapper<Activity, typeof activities> = {
     return activity;
   },
 
-  maptoInsertDto: (domain: Activity) => {
+  mapToInsertDto: (domain: Activity) => {
     return domain;
   },
 };

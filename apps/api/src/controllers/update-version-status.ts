@@ -5,22 +5,22 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import {
-  UpdateActivityStatusParams,
-  UpdateActivityStatusRequestBody,
-  UpdateActivityStatusResponseBody,
+  UpdateVersionStatusParams,
+  UpdateVersionStatusRequestBody,
+  UpdateVersionStatusResponseBody,
 } from "@edu-platform/common";
 import { IUpdateActivityStatusUseCase } from "@use-cases";
 import { parseNumberId } from "@infrastructure";
 import { parseVersionStatus } from "@edu-platform/common";
 
 type Request = TypedRequest<
-  UpdateActivityStatusParams,
+  UpdateVersionStatusParams,
   {},
-  UpdateActivityStatusRequestBody
+  UpdateVersionStatusRequestBody
 >;
-type Response = TypedResponse<UpdateActivityStatusResponseBody>;
+type Response = TypedResponse<UpdateVersionStatusResponseBody>;
 
-export class UpdateActivityStatusController
+export class UpdateVersionStatusController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.POST;

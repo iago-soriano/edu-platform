@@ -10,7 +10,7 @@ export const VideoContentDtoMapper: DomainDtoMapper<
     const domain = new VideoContent();
     return domain;
   },
-  maptoInsertDto: (domain: VideoContent) => {
+  mapToInsertDto: (domain: VideoContent) => {
     const dto: typeof activityContents.$inferInsert = {};
     return dto;
   },

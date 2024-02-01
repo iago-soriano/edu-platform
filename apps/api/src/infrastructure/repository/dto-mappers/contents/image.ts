@@ -10,7 +10,7 @@ export const ImageContentDtoMapper: DomainDtoMapper<
     const domain = new ImageContent();
     return domain;
   },
-  maptoInsertDto: (domain: ImageContent) => {
+  mapToInsertDto: (domain: ImageContent) => {
     const dto: typeof activityContents.$inferInsert = {};
     return dto;
   },
