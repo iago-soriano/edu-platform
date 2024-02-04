@@ -1,7 +1,7 @@
 import { CollectionDTO } from "../../dto";
 
 type RequestBody = CollectionDTO;
-type ResponseBody = {};
+type ResponseBody = { collectionId: number };
 type Params = {};
 
 export {

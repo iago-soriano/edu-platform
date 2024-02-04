@@ -1,7 +1,13 @@
-import { VersionDTO } from "../../dto";
+import { VersionDTO, VersionStatus } from "../../dto";
 
 type RequestBody = void;
-type ResponseBody = VersionDTO[];
+type ResponseBody = {
+  [activityId: string]: {
+    [VersionStatus.Draft]?: VersionDTO;
+    [VersionStatus.Published]?: VersionDTO;
+    [VersionStatus.Archived]?: VersionDTO[];
+  };
+};
 type Query = { statuses: string };
 
 export {

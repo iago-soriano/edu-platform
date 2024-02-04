@@ -33,9 +33,11 @@ export class UpdateActivityMetadataController
   ) {}
 
   async execute(req: Request, res: Response) {
-    const versionDto = parseToVersionDTO(req.body);
+    // const versionDto = parseToVersionDTO(req.body);
     const newVersion = ActivityVersionDtoMapper.mapFromDto({
-      ...versionDto,
+      title: req.body.title,
+      description: req.body.description,
+      topics: req.body.topics,
       elements: [],
     });
 

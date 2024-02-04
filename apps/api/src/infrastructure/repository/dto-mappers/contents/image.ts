@@ -8,10 +8,17 @@ export const ImageContentDtoMapper: DomainDtoMapper<
 > = {
   mapFromSelectDto: (dto: typeof activityContents.$inferSelect) => {
     const domain = new ImageContent();
+
+    domain.url = dto.imageUrl || "";
+
     return domain;
   },
   mapToInsertDto: (domain: ImageContent) => {
-    const dto: typeof activityContents.$inferInsert = {};
+    const dto: typeof activityContents.$inferInsert = {
+      ...domain,
+      imageUrl: domain.url,
+    };
+
     return dto;
   },
 };

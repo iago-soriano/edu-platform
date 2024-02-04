@@ -14,7 +14,7 @@ import {
   alternatives,
 } from "@infrastructure";
 import { eq, inArray, and, desc, asc } from "drizzle-orm";
-import { VersionStatus, ActivityVersion } from "@domain";
+import { VersionStatus, ActivityVersion, Question } from "@domain";
 
 export class Versions implements IVersions {
   async insert(activityId: number, versionNumber: number = 0) {
@@ -48,26 +48,20 @@ export class Versions implements IVersions {
   }
 
   async listByAuthorIdAndStatuses(authorId: number, statuses: VersionStatus[]) {
-    const activityIdsByAuthor = (
-      await db
-        .select({ id: activities.id })
-        .from(activities)
-        .where(eq(activities.authorId, authorId))
-    ).map(({ id }) => id);
-
-    if (!activityIdsByAuthor.length) return [];
-
+    const activityIdsByAuthor = db
+      .select({ id: activities.id })
+      .from(activities)
+      .where(eq(activities.authorId, authorId));
     const activitiesVersionsByAuthor = await db
       .select()
       .from(activityVersions)
-      .orderBy(desc(activityVersions.updatedAt))
       .where(
         and(
-          inArray(activityVersions.id, activityIdsByAuthor),
+          inArray(activityVersions.activityId, activityIdsByAuthor),
           inArray(
             activityVersions.status,
             statuses.length
-              ? Object.keys(statuses)
+              ? Object.values(statuses)
               : Object.values(VersionStatus || {})
           )
         )
@@ -86,6 +80,8 @@ export class Versions implements IVersions {
         .where(eq(activityVersions.id, id))
     )[0];
 
+    if (!version) return null;
+
     return VersionDtoMapper.mapFromSelectDto(version);
   }
 
@@ -103,24 +99,28 @@ export class Versions implements IVersions {
       .where(eq(activityQuestions.versionId, id))
       .orderBy(activityQuestions.id);
 
-    const alternativesDtos = await db
-      .select()
-      .from(alternatives)
-      .where(
-        inArray(
-          alternatives.questionId,
-          questionDtos.map((q) => q.id)
+    let questions: Question[] = [];
+    if (questionDtos.length) {
+      const alternativesDtos = await db
+        .select()
+        .from(alternatives)
+        .where(
+          inArray(
+            alternatives.questionId,
+            questionDtos.map((q) => q.id)
+          )
         )
-      )
-      .orderBy(alternatives.questionId);
+        .orderBy(alternatives.questionId);
 
-    const questions = questionDtos.map((questionDto) => {
-      const question = QuestionDtoMapper.mapFromSelectDto(questionDto);
-      question.alternatives = alternativesDtos
-        .filter((altDto) => altDto.questionId === questionDto.id)
-        .map((dto) => AlternativeDtoMapper.mapFromSelectDto(dto));
-      return question;
-    });
+      questions = questionDtos.map((questionDto) => {
+        const question = QuestionDtoMapper.mapFromSelectDto(questionDto);
+        question.alternatives = alternativesDtos
+          .filter((altDto) => altDto.questionId === questionDto.id)
+          .map((dto) => AlternativeDtoMapper.mapFromSelectDto(dto));
+        return question;
+      });
+    }
+
     return {
       contents: contentDtos.map((dto) =>
         ContentDtoMapper.mapFromSelectDto(dto)
@@ -130,7 +130,9 @@ export class Versions implements IVersions {
   }
 
   async findFullViewById(id: number) {
-    const version = (await this.findSimpleViewById(id)) || {};
+    const version = await this.findSimpleViewById(id);
+    if (!version) return null;
+
     const { questions, contents } = await this.findElementsByVersionId(id);
 
     return { version, questions, contents };

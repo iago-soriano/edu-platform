@@ -6,16 +6,17 @@ import {
 } from "@interfaces";
 import { IListActivityVersionsUseCase } from "@use-cases";
 import {
-  ListActivityVersionsParams,
+  ListActivityVersionsQuery,
   ListActivityVersionsResponseBody,
   ListActivityVersionsRequestBody,
   parseVersionStatus,
 } from "@edu-platform/common";
 import { ActivityVersionDtoMapper } from "@dto-mappers";
+import { VersionStatus } from "@domain";
 
 type Request = TypedRequest<
   {},
-  ListActivityVersionsParams,
+  ListActivityVersionsQuery,
   ListActivityVersionsRequestBody
 >;
 type Response = TypedResponse<ListActivityVersionsResponseBody>;
@@ -24,7 +25,7 @@ export class ListActivityVersionsController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path = "activities";
+  path = "activity";
   middlewares: string[] = ["auth"];
 
   constructor(
@@ -42,12 +43,26 @@ export class ListActivityVersionsController
         statuses: statuses,
       });
 
-    res
-      .status(200)
-      .json(
-        activitiesByAuthorDtos.map((dto) =>
-          ActivityVersionDtoMapper.mapToDto(dto)
-        )
-      );
+    const resp: ListActivityVersionsResponseBody = {};
+
+    for (const version in activitiesByAuthorDtos) {
+      resp[version] = {
+        [VersionStatus.Archived]: activitiesByAuthorDtos[version][
+          VersionStatus.Archived
+        ]?.map((domain) => ActivityVersionDtoMapper.mapToDto(domain)),
+        [VersionStatus.Draft]:
+          activitiesByAuthorDtos[version][VersionStatus.Draft] &&
+          ActivityVersionDtoMapper.mapToDto(
+            activitiesByAuthorDtos[version][VersionStatus.Draft]!
+          ),
+        [VersionStatus.Published]:
+          activitiesByAuthorDtos[version][VersionStatus.Published] &&
+          ActivityVersionDtoMapper.mapToDto(
+            activitiesByAuthorDtos[version][VersionStatus.Published]!
+          ),
+      };
+    }
+
+    res.status(200).json(resp);
   }
 }

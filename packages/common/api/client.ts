@@ -23,10 +23,11 @@ import {
   DeleteVersionParams,
   DeleteVersionRequestBody,
   DeleteVersionResponseBody,
+  CreateNewDraftVersionParams,
+  CreateNewDraftVersionRequestBody,
+  CreateNewDraftVersionResponseBody,
 } from "./contracts";
 import { IHTTPClient } from "./interfaces";
-
-// const toQueryStringFromList = (list: string) => list.split(",").join("&");
 
 export class ApiClient {
   constructor(private _fetcher: IHTTPClient) {}
@@ -89,5 +90,11 @@ export class ApiClient {
     return this._fetcher.delete(
       `activity/${activityId}/version/${versionId}`
     ) as Promise<DeleteVersionResponseBody>;
+  }
+  createNewDraftVersion({ activityId }: CreateNewDraftVersionParams) {
+    return this._fetcher.post(
+      `create-new-version/${activityId}`,
+      undefined
+    ) as Promise<CreateNewDraftVersionResponseBody>;
   }
 }

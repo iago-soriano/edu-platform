@@ -6,14 +6,14 @@ import {
   ActivityVersionSelectDTO,
 } from "@interfaces";
 import { Activity, ActivityVersion, VersionStatus, Content } from "@domain";
-import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
+import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
 import {
   ActivityVersionHasNoContent,
   ActivityVersionHasNoTitleOrNoDescription,
   FailedToUpdateVersionStatus,
   ActivityNotFound,
+  ContentIsHalfCompleted,
 } from "@edu-platform/common/";
-import { ContentIsHalfCompleted } from "@edu-platform/common/errors/domain/content";
 
 type InputParams = {
   user: UserSelectDTO;

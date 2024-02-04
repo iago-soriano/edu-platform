@@ -42,12 +42,12 @@ export interface IVersions {
   ) => Promise<{ versionId: number }>;
   update: (versionId: number, args: Partial<ActivityVersion>) => Promise<void>;
   delete: (versionId: number) => Promise<void>;
-  findSimpleViewById: (versionId: number) => Promise<ActivityVersion>;
+  findSimpleViewById: (versionId: number) => Promise<ActivityVersion | null>;
   findFullViewById: (versionId: number) => Promise<{
     version: ActivityVersion;
     contents: Content[];
     questions: Question[];
-  }>;
+  } | null>;
   findElementsByVersionId: (versionId: number) => Promise<{
     contents: Content[];
     questions: Question[];

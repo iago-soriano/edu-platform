@@ -32,9 +32,12 @@ export const ContentDtoMapper: DomainDtoMapper<
         throw new ContentTypeNotFound();
     }
 
-    newContent.order = dto.order || 0;
     newContent.id = dto.id;
     newContent.versionId = dto.versionId || 0;
+
+    newContent.title = dto.title || "";
+    newContent.description = dto.description || "";
+    newContent.order = dto.order || 0;
 
     return newContent;
   },

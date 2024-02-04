@@ -12,7 +12,7 @@ export const VersionDtoMapper: DomainDtoMapper<
 
     version.id = dto.id || 0;
     version.title = dto.title || "";
-    version.updatedAt = dto.updatedAt?.toISOString() || "";
+    version.updatedAt = dto.updatedAt || new Date();
     version.description = dto.description || "";
     version.topics = dto.topics || "";
     version.version = dto.version || 0;
@@ -23,7 +23,9 @@ export const VersionDtoMapper: DomainDtoMapper<
   },
 
   mapToInsertDto: (domain: ActivityVersion) => {
-    const dto: typeof activityVersions.$inferInsert = {};
+    const dto: typeof activityVersions.$inferInsert = {
+      ...domain,
+    };
 
     return dto;
   },

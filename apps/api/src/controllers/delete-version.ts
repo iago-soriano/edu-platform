@@ -6,18 +6,14 @@ import {
 } from "@interfaces";
 import { IDeleteVersionUseCase } from "@use-cases";
 import {
-  DeleteDraftVersionParams,
-  DeleteDraftVersionRequestBody,
-  DeleteDraftVersionResponseBody,
+  DeleteVersionParams,
+  DeleteVersionRequestBody,
+  DeleteVersionResponseBody,
 } from "@edu-platform/common/api";
 import { parseNumberId } from "@infrastructure";
 
-type Request = TypedRequest<
-  DeleteDraftVersionParams,
-  {},
-  DeleteDraftVersionRequestBody
->;
-type Response = TypedResponse<DeleteDraftVersionResponseBody>;
+type Request = TypedRequest<DeleteVersionParams, {}, DeleteVersionRequestBody>;
+type Response = TypedResponse<DeleteVersionResponseBody>;
 
 export class DeleteVersionController
   implements HTTPController<Request, Response>

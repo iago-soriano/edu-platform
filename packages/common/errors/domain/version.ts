@@ -2,7 +2,7 @@ import { DomainRules } from "../../domain/domain/rules";
 import { CustomError } from "../custom-error";
 
 export class ActivityVersionNotFound extends CustomError {
-  HTTPstatusCode = 400;
+  HTTPstatusCode = 404;
   static message = "Versão da atividade não encontrada";
   constructor() {
     super(ActivityVersionNotFound.message);

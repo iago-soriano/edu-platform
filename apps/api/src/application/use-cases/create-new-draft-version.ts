@@ -25,10 +25,14 @@ class UseCase implements ICreateNewDraftVersionUseCase {
       // there is already a draft in progress. Let user know that. TODO: send this endpoint a "forceDelete" flag and delete the other draft here
       return { versionId: activity.draftVersionId || 0 };
 
-    const { contents, questions, version } =
+    const fullVersion =
       await this.activitiesRepository.Versions.findFullViewById(
         activity.lastVersionId || 0
       );
+
+    if (!fullVersion) throw new Error("Activity has no draft nor lastVersion");
+
+    const { version, contents, questions } = fullVersion;
 
     // cria nova versão na atividade, com um número de versão novo
     const { versionId: newVersionId } =

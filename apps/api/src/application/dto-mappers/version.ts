@@ -10,13 +10,13 @@ export const ActivityVersionDtoMapper: DomainDtoMapper<
   mapFromDto(dto: VersionDTO) {
     const version = new ActivityVersion();
 
-    version.id || 0;
-    version.title || "";
-    version.description || "";
-    version.topics || "";
-    version.version || 0;
-    version.status = parseVersionStatus(dto.status) || VersionStatus.Draft;
-    version.activityId || 0;
+    // version.id = dto.id || 0;
+    version.title = dto.title || "";
+    version.description = dto.description || "";
+    version.topics = dto.topics || "";
+    // version.version = dto.version || 0;
+    // version.status = parseVersionStatus(dto.status) || VersionStatus.Draft;
+    // version.activityId = dto.activityId || 0;
 
     return version;
   },
@@ -30,6 +30,7 @@ export const ActivityVersionDtoMapper: DomainDtoMapper<
       topics: domain.topics,
       version: domain.version,
       activityId: domain.activityId,
+      updatedAt: domain.updatedAt,
       elements: domain.elements.map((element) => ({
         content: element.content && ContentDtoMapper.mapToDto(element.content),
         question:

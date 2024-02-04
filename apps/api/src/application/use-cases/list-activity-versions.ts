@@ -6,7 +6,13 @@ type InputParams = {
   statuses: VersionStatus[];
 };
 
-type Return = ActivityVersion[];
+type Return = {
+  [activityId: string]: {
+    [VersionStatus.Draft]?: ActivityVersion;
+    [VersionStatus.Published]?: ActivityVersion;
+    [VersionStatus.Archived]?: ActivityVersion[];
+  };
+};
 
 export type IListActivityVersionsUseCase = IUseCase<InputParams, Return>;
 
@@ -14,10 +20,38 @@ class UseCase implements IListActivityVersionsUseCase {
   constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({ user, statuses }: InputParams) {
-    return this.activitiesRepository.Versions.listByAuthorIdAndStatuses(
-      user.id,
-      statuses
-    );
+    const resp: Return = {};
+    const versions =
+      await this.activitiesRepository.Versions.listByAuthorIdAndStatuses(
+        user.id,
+        statuses
+      );
+
+    versions.forEach((version) => {
+      if (!!resp[version.activityId])
+        resp[version.activityId] = {
+          ...resp[version.activityId],
+          [version.status]: version,
+        };
+      else
+        resp[version.activityId] = {
+          [version.status]: version,
+        };
+    });
+
+    for (const activityId in resp) {
+      const activity = resp[activityId];
+      delete resp[activityId];
+      const sortKey =
+        activity[VersionStatus.Draft]?.updatedAt.getTime() ||
+        activity[VersionStatus.Published]?.updatedAt.getTime() ||
+        activity[VersionStatus.Archived]
+          ?.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())[0]
+          ?.updatedAt.getTime();
+      resp[`${sortKey}-${activityId}`] = activity;
+    }
+
+    return resp;
   }
 }
 

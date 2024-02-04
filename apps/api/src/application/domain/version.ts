@@ -25,8 +25,10 @@ export class ActivityVersion {
   public status!: VersionStatus;
   public activityId!: number;
   public elements: Elements = [];
+  public updatedAt!: Date;
 
   validateTitle() {
+    if (!this.title) return;
     if (this.title.length > DomainRules.ACTIVITY.TITLE.MAX_LENGTH) {
       throw new ActivityTitleIsTooLong();
     } else if (this.title.length < DomainRules.ACTIVITY.TITLE.MIN_LENGTH) {
@@ -35,6 +37,7 @@ export class ActivityVersion {
   }
 
   validateDescription() {
+    if (!this.description) return;
     if (this.description.length > DomainRules.ACTIVITY.DESCRIPTION.MAX_LENGTH) {
       throw new ActivityDescriptionIsTooLong();
     } else if (

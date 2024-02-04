@@ -8,10 +8,18 @@ export const VideoContentDtoMapper: DomainDtoMapper<
 > = {
   mapFromSelectDto: (dto: typeof activityContents.$inferSelect) => {
     const domain = new VideoContent();
+
+    domain.url = dto.videoUrl || "";
+    domain.tracks = dto.tracks || "";
+
     return domain;
   },
   mapToInsertDto: (domain: VideoContent) => {
-    const dto: typeof activityContents.$inferInsert = {};
+    const dto: typeof activityContents.$inferInsert = {
+      ...domain,
+      videoUrl: domain.url,
+      tracks: domain.tracks,
+    };
     return dto;
   },
 };
