@@ -59,7 +59,7 @@ export const OptionsMenu = ({
     versionId,
     onSuccess: () => {
       setOpenConfirmDeleteModal(false);
-      redirect("dashboard/my-activities/draft");
+      redirect("/dashboard/my-activities");
     },
   });
   const statusUpdateMutation = useUpdateVersionStatusMutation({
@@ -84,7 +84,7 @@ export const OptionsMenu = ({
     }
   };
 
-  const order = version.data.elements.length;
+  const order = version.data?.elements?.length;
   const openClasses = isOpen
     ? "opacity-100 -translate-x-0"
     : "translate-x-3 pointer-events-none opacity-0";

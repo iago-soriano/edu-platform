@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { MutationArgsType } from "../infrastructure/api/types";
 import { errorToast } from "@components";
+import { redirect } from "next/navigation";
 
 type ParamsGet = Parameters<ApiClient["getActivityVersion"]>[0];
 type ReturnGet = Awaited<ReturnType<ApiClient["getActivityVersion"]>>;
@@ -53,7 +54,7 @@ export const useUpdateVersionMetadataMutation = ({
       client.updateVersionMetadata({ activityId, versionId }, args),
     onSuccess: (d, v, c) => {
       onSuccess && onSuccess(d, v, c);
-      queryClient.invalidateQueries({ queryKey: ["activities"] });
+      queryClient.invalidateQueries({ queryKey: ["all"] });
       queryClient.invalidateQueries({
         queryKey: ["version", activityId, versionId],
       });
@@ -72,7 +73,7 @@ export const useListActivityVersionsQuery = (status) => {
   const client = new ApiClient(axios);
 
   return useQuery<ReturnList, ServerError>({
-    queryKey: [status],
+    queryKey: [status || "all"],
     queryFn: () => client.listActivityVersions({ statuses: status }),
   });
 };
@@ -96,7 +97,7 @@ export const useUpdateVersionStatusMutation = ({
       client.updateVersionStatus({ activityId, versionId }, args),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["version", activityId, versionId],
+        queryKey: ["all"],
       });
     },
     onError: onError
@@ -123,11 +124,36 @@ export const useDeleteDraftVersionMutation = ({
     onSuccess: (e, v, c) => {
       onSuccess && onSuccess(e, v, c);
       queryClient.invalidateQueries({
-        queryKey: ["Draft"],
+        queryKey: ["all"],
       });
     },
     onError: onError
       ? (e, v, c) => onError(e, v, c)
-      : (e) => errorToast(`Algo deu errado: ${e.message}`),
+      : async (e) => {
+          if (e.message === "NEXT_REDIRECT") return;
+          errorToast(`Algo deu errado: ${e.message}`);
+        },
+  });
+};
+
+type ParamsCreateNewDraft = Parameters<ApiClient["createNewDraftVersion"]>[0];
+type ReturnCreateNewDraft = Awaited<
+  ReturnType<ApiClient["createNewDraftVersion"]>
+>;
+export const useCreateNewDraftVersionMutation = ({
+  onSuccess,
+}: MutationArgsType<ParamsCreateNewDraft, ReturnCreateNewDraft>) => {
+  const queryClient = useQueryClient();
+  const axios = useAxiosAuth();
+  const client = new ApiClient(axios);
+
+  return useMutation<ReturnCreateNewDraft, ServerError, ParamsCreateNewDraft>({
+    mutationFn: ({ activityId }: ParamsCreateNewDraft) =>
+      client.createNewDraftVersion({ activityId }),
+    onSuccess: (d, v, c) => {
+      onSuccess && onSuccess(d, v, c);
+      queryClient.invalidateQueries({ queryKey: ["all"] });
+    },
+    onError: (e) => errorToast(`Algo deu errado: ${e.message}`),
   });
 };

@@ -7,7 +7,7 @@ export const SavingIndicator = ({ isLoading, hasChanges }) => {
         <Spinner />
       ) : hasChanges ? (
         <Tooltip content={"Há mudanças não salvas"}>
-          <Icons.EDIT size={28} />
+          <Icons.PENCIL_LINE size={28} />
         </Tooltip>
       ) : (
         <Tooltip content={"Atividade salva"}>

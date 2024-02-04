@@ -1,10 +1,12 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCreateNewActivityMutation } from "@endpoints";
 import { Spinner, Tabs, ToggleText } from "@components";
 
 const Page = ({ children }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const createActivityMutation = useCreateNewActivityMutation({
     onSuccess: ({ activityId, versionId }) => {
       router.push(`/activity/${activityId}/version/${versionId}/edit`);
@@ -17,9 +19,16 @@ const Page = ({ children }) => {
       <div className="flex justify-between p-2">
         <ToggleText
           buttons={[
-            { text: "Publicadas", href: "/dashboard/my-activities/published" },
-            { text: "Rascunhos", href: "/dashboard/my-activities/draft" },
-            { text: "Arquivadas", href: "/dashboard/my-activities/archived" },
+            {
+              text: "Ativas",
+              href: "/dashboard/my-activities",
+              isSelected: !searchParams.get("status"),
+            },
+            {
+              text: "Arquivadas",
+              href: "/dashboard/my-activities?status=Archived",
+              isSelected: searchParams.get("status") === "Archived",
+            },
           ]}
         />
         <button

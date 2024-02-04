@@ -14,6 +14,9 @@ export const TanstackQueryProvider = ({ children }) => {
             staleTime: 60 * 1000,
             retry: false,
           },
+          mutations: {
+            throwOnError: (e) => e.message === "NEXT_REDIRECT",
+          },
         },
       })
   );

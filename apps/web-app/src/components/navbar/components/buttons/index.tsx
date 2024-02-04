@@ -47,7 +47,7 @@ export const MyActivitiesButton = ({
   isHighlighted,
 }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/dashboard/my-activities/draft"
+    path="/dashboard/my-activities"
     label="Minhas atividades"
     currentPath={currentPath}
     Component={Component}

@@ -1,6 +1,16 @@
 import React from "react";
 
-export const getLocaleTimeFromISO = (dateString: string) => {
+export const getLocaleDateFromISO = (dateString: string) => {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = {
+    // year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  };
+  return date.toLocaleString(undefined, options);
+};
+
+export const getLocaleDateTimeFromISO = (dateString: string) => {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
@@ -8,8 +18,6 @@ export const getLocaleTimeFromISO = (dateString: string) => {
     day: "numeric",
     hour: "numeric",
     minute: "numeric",
-    // second: "numeric",
-    // timeZoneName: "short",
   };
   return date.toLocaleString(undefined, options);
 };

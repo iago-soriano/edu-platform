@@ -1,4 +1,5 @@
 "use client";
+export * from "./badge";
 export * from "./buttons";
 export * from "./navbar";
 export * from "./toggle";

@@ -5,6 +5,7 @@ import {
   EyeSlash,
   Check,
   PencilLine,
+  Pencil,
   CaretDown,
   CaretUp,
   Trash,
@@ -16,10 +17,13 @@ import {
   List,
   ArrowFatLinesUp,
   Play,
+  Clock,
+  Folder,
 } from "@phosphor-icons/react";
 
 export const Icons = {
-  EDIT: (props) => <PencilLine {...props} />,
+  PENCIL: (props) => <Pencil {...props} />,
+  PENCIL_LINE: (props) => <PencilLine {...props} />,
   CAN_SEE: (props) => <Eye {...props} size={props.size || 24} />,
   CANT_SEE: () => <EyeSlash size={24} />,
   CARET_DOWN: (props) => <CaretDown {...props} />,
@@ -36,4 +40,6 @@ export const Icons = {
   LIST: (props) => <List {...props} />,
   PUBLISH: (props) => <ArrowFatLinesUp {...props} />,
   PLAY: (props) => <Play {...props} />,
+  CLOCK: (props) => <Clock {...props} />,
+  FOLDER: (props) => <Folder {...props} />,
 };

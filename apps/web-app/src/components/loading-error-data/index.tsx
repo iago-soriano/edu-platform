@@ -38,7 +38,6 @@ export const LoadingErrorData = ({
     );
   }
 
-  console.log(data);
   if (!hasData)
     return noData || <h5 className="text-center">Não há dados disponíveis</h5>;
   return data;

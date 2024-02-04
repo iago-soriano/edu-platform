@@ -14,6 +14,7 @@ import {
   useUpdateVersionMetadataMutation,
 } from "@endpoints";
 import { openInNewTab } from "@infrastructure";
+import { Topic } from "../../common-components";
 
 export const ActivityHeaderInput = ({
   activityId,
@@ -43,7 +44,10 @@ export const ActivityHeaderInput = ({
 
   const onChangeTitle = (args) => {
     if (hasChanges) {
-      metadataMutation.mutate({ title: args.target.value, activityId });
+      metadataMutation.mutate({
+        ...versionQuery.data,
+        title: args.target.value,
+      });
     }
     onChange(false);
   };
@@ -63,7 +67,7 @@ export const ActivityHeaderInput = ({
       ? `${versionQuery.data?.topics},${currentTopic}`
       : currentTopic;
 
-    metadataMutation.mutate({ topics: newTopics, activityId });
+    metadataMutation.mutate({ ...versionQuery.data, topics: newTopics });
     onChange(false);
     setCurrentTopic("");
   };
@@ -73,12 +77,15 @@ export const ActivityHeaderInput = ({
       ?.split(",")
       .filter((_, i) => i !== index)
       .join(",");
-    metadataMutation.mutate({ topics: newTopics, activityId });
+    metadataMutation.mutate({ ...versionQuery.data, topics: newTopics });
   };
 
   const onChangeDescription = (args) => {
     if (hasChanges) {
-      metadataMutation.mutate({ description: args.target.value, activityId });
+      metadataMutation.mutate({
+        ...versionQuery.data,
+        description: args.target.value,
+      });
     }
     onChange(false);
   };
@@ -102,16 +109,13 @@ export const ActivityHeaderInput = ({
         <div className="flex items-center justify-center">
           {versionQuery.data?.topics?.length !== 0 &&
             versionQuery.data?.topics?.split(",").map((topic, index) => (
-              <div
-                key={index}
-                className="flex rounded p-1 items-center bg-accent text-white w-fit h-fit  mx-1"
-              >
+              <Topic key={index}>
                 {topic}{" "}
                 <Icons.X
                   className="cursor-pointer mx-2 hover:bg-opacity-70"
                   onClick={() => onDeleteTopic(index)}
                 />
-              </div>
+              </Topic>
             ))}
           <div className="w-[160px] flex">
             <input
