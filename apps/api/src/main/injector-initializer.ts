@@ -20,6 +20,7 @@ import {
   DeleteQuestionController,
   DeleteVersionController,
   RefreshTokenController,
+  SaveCollectionController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -42,6 +43,7 @@ import {
   RefreshTokenUseCase,
   SaveContentUseCase,
   CreateNewDraftVersionUseCase,
+  SaveCollectionUseCase,
 } from "@use-cases";
 import { GetActivityUseCaseHelper } from "@use-case-middlewares";
 import {
@@ -54,6 +56,7 @@ import {
   AssetRepository,
   ActivityRepository,
   S3Service,
+  Collections,
 } from "@infrastructure";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
@@ -100,6 +103,9 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     deleteVersionController: awilix.asClass(DeleteVersionController).classic(),
     createNewDraftVersionController: awilix
       .asClass(CreateNewDraftVersionController)
+      .classic(),
+    saveCollectionController: awilix
+      .asClass(SaveCollectionController)
       .classic(),
 
     // services
@@ -148,10 +154,12 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     createNewDraftVersionUseCase: awilix
       .asClass(CreateNewDraftVersionUseCase)
       .classic(),
+    saveCollectionUseCase: awilix.asClass(SaveCollectionUseCase).classic(),
 
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),
     tokenRepository: awilix.asClass(TokenRepository).classic(),
     activitiesRepository: awilix.asClass(ActivityRepository).classic(),
+    collections: awilix.asClass(Collections).classic(),
   });
 };

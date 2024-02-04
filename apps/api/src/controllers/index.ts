@@ -21,3 +21,4 @@ export * from "./delete-content";
 export * from "./delete-question";
 export * from "./create-new-draft-version";
 export * from "./delete-version";
+export * from "./save-collection";

@@ -19,11 +19,20 @@ export class Collections implements ICollections {
         .returning({ collectionId: collections.id })
     )[0];
   }
+
+  async update(collectionId: number, collection: Partial<Collection>) {
+    await db
+      .update(collections)
+      .set({ ...collection, updatedAt: new Date() })
+      .where(eq(collections.id, collectionId));
+  }
+
   async insertStudent(studentId: number, collectionId: number) {
     await db
       .insert(studentCollectionParticipation)
       .values({ studentId, collectionId });
   }
+
   async removeStudent(studentId: number, collectionId: number) {
     await db
       .delete(studentCollectionParticipation)
@@ -34,6 +43,7 @@ export class Collections implements ICollections {
         )
       );
   }
+
   async listByOwner(ownerId: number) {
     const dto = await db
       .select()
@@ -44,6 +54,18 @@ export class Collections implements ICollections {
       CollectionDtoMapper.mapFromSelectDto(collection)
     );
   }
+
+  async getById(collectionId: number) {
+    const dto = (
+      await db
+        .select()
+        .from(collections)
+        .where(eq(collections.id, collectionId))
+    )[0];
+
+    return CollectionDtoMapper.mapFromSelectDto(dto);
+  }
+
   async listByStudent(studentId: number) {
     const studentCollections = db
       .select()

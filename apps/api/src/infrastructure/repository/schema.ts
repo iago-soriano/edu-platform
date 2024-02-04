@@ -218,6 +218,7 @@ export const alternativesRelations = relations(alternatives, ({ one }) => ({
 // collections
 export const collections = pgTable("collections", {
   id: serial("id").primaryKey(),
+  name: varchar("name", { length: 50 }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   ownerId: integer("owner_id").references(() => users.id),

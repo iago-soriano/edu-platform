@@ -44,6 +44,9 @@ import DeleteVersionUseCase, { IDeleteVersionUseCase } from "./delete-version";
 import CreateNewDraftVersionUseCase, {
   ICreateNewDraftVersionUseCase,
 } from "./create-new-draft-version";
+import SaveCollectionUseCase, {
+  ISaveCollectionUseCase,
+} from "./save-collection";
 
 export {
   SignInUseCase,
@@ -86,4 +89,6 @@ export {
   ICreateNewDraftVersionUseCase,
   DeleteQuestionUseCase,
   IDeleteQuestionUseCase,
+  SaveCollectionUseCase,
+  ISaveCollectionUseCase,
 };
