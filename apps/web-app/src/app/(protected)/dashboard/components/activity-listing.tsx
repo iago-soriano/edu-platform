@@ -94,7 +94,6 @@ export const PublishedVersionActivityCard = ({
       <div className="grid col-span-1 justify-items-center">
         <div className="min-w-[60%] mx-auto">
           <Tooltip
-            className="w-full mb-1"
             content={
               hasDraft
                 ? "Há um rascunho em progresso. Clique para continuar a edição"
@@ -104,14 +103,14 @@ export const PublishedVersionActivityCard = ({
             {hasDraft ? (
               <button
                 onClick={onClickSeeDraft}
-                className="bg-surface4 flex justify-center rounded p-2 w-full"
+                className="bg-surface4 flex justify-center rounded p-2 w-full mb-1"
               >
                 <Icons.PENCIL_LINE size={20} />
               </button>
             ) : (
               <button
                 onClick={onClickCreateDraft}
-                className="flex w-full items-center justify-center rounded p-2 hover:opacity-50 border border-text2"
+                className="flex w-full items-center justify-center rounded p-2 hover:opacity-50 border border-text2 mb-1"
               >
                 <Icons.PENCIL size={20} />
               </button>
@@ -124,10 +123,12 @@ export const PublishedVersionActivityCard = ({
                 : "Não há versões arquivadas desta atividade"
             }
           >
-            <Badge classes="text-white bg-gray-600 flex items-center cursor-auto">
-              <Icons.FOLDER size={20} />
-              <span className="px-1">{archivedCount || "0"}</span>
-            </Badge>
+            <span>
+              <Badge classes="text-white bg-gray-600 flex items-center cursor-auto">
+                <Icons.FOLDER size={20} />
+                <span className="px-1">{archivedCount || "0"}</span>
+              </Badge>
+            </span>
           </Tooltip>
         </div>
       </div>
