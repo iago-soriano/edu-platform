@@ -18,7 +18,7 @@ export const Footer = () => {
   const isAuthenticated = session.status == "authenticated";
 
   return (
-    <footer className="absolute top-full w-full">
+    <footer className="">
       <div className="bg-surface1 grid grid-cols-16 p-10 gap-y-3">
         <div className="lg:col-span-5 md:col-span-10 col-span-12">
           <Image
