@@ -1,4 +1,4 @@
-import { VideoContent } from "@domain";
+import { ContentTypes, VideoContent } from "@domain";
 import { DomainDtoMapper } from "../types";
 import { activityContents } from "@infrastructure";
 
@@ -16,10 +16,15 @@ export const VideoContentDtoMapper: DomainDtoMapper<
   },
   mapToInsertDto: (domain: VideoContent) => {
     const dto: typeof activityContents.$inferInsert = {
-      ...domain,
+      title: domain.title,
+      description: domain.description,
+      order: domain.order,
       videoUrl: domain.url,
       tracks: domain.tracks,
+      versionId: domain.versionId,
+      type: ContentTypes.Video,
     };
+
     return dto;
   },
 };

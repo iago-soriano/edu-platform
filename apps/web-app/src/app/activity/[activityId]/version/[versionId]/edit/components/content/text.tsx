@@ -19,7 +19,7 @@ export const TextContent = ({
             text: e.target.value,
           },
         },
-        type: ContentTypes.Video,
+        type: ContentTypes.Text,
         id: contentId,
       });
     }

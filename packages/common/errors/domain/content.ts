@@ -63,7 +63,7 @@ export class TextContentIsTooLong extends CustomError {
   HTTPstatusCode = 400;
   static message = `O texto é grande demais. O tamanho máximo permitido é de ${DomainRules.CONTENT.TEXT.MAX_LENGTH} caracteres`;
   constructor() {
-    super(TextContentIsTooLong.message);
+    super("", { text: TextContentIsTooLong.message });
   }
 }
 
@@ -71,7 +71,7 @@ export class TextContentIsTooShort extends CustomError {
   HTTPstatusCode = 400;
   static message = `O texto é curto demais. O tamanho mínimo permitido é de ${DomainRules.CONTENT.TEXT.MIN_LENGTH} caracteres`;
   constructor() {
-    super(TextContentIsTooLong.message);
+    super("", { text: TextContentIsTooShort.message });
   }
 }
 
@@ -109,8 +109,8 @@ export class ContentDescriptionIsTooShort extends CustomError {
 
 export class VideoContentHasToManyTracks extends CustomError {
   HTTPstatusCode = 400;
-  static message = "Vídeo tem muitas tracks";
+  static message = `Há faixas demais. O número máximo é de ${DomainRules.CONTENT.VIDEO.TRACKS_MAX_NUM} faixas`;
   constructor() {
-    super(VideoContentHasToManyTracks.message);
+    super("", { tracks: VideoContentHasToManyTracks.message });
   }
 }

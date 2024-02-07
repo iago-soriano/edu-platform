@@ -7,17 +7,18 @@ import {
 import { ContentDoesNotImplementFiles } from "@edu-platform/common/errors/domain/content";
 
 export class TextContent extends Content {
-  public text: string = "";
+  public text?: string;
 
   constructor() {
     super(ContentTypes.Text);
   }
 
   mergePayload(newContent: TextContent) {
-    this.text = newContent.text;
+    if (newContent.text) this.text = newContent.text;
   }
 
   validatePayload() {
+    if (!this.text) return;
     if (this.text.length > DomainRules.CONTENT.TEXT.MAX_LENGTH)
       throw new TextContentIsTooLong();
 

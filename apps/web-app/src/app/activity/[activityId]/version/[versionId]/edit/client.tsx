@@ -6,7 +6,7 @@ import {
   StickyHeader,
   OptionsMenu,
 } from "./components";
-import { Element, QuestionContainer } from "../common-components";
+import { QuestionContainer } from "../common-components";
 import { useEffect, useState, useRef, useCallback } from "react";
 
 const Page = ({ params: { activityId, versionId } }) => {
@@ -61,20 +61,22 @@ const Page = ({ params: { activityId, versionId } }) => {
       <div>
         {versionQuery.data?.elements.length ? (
           <>
-            {versionQuery.data?.elements.map((element) => (
-              <Element
-                element={element}
-                QuestionComponent={() => <QuestionContainer />}
-                ContentComponent={() => (
+            {versionQuery.data?.elements.map((element) => {
+              if (element.content && !element.question) {
+                return (
                   <BaseContent
+                    key={`c-${element.content.id}`}
                     versionId={versionId}
                     activityId={activityId}
                     setSaveState={setSaveState}
                     contentDto={element.content}
                   />
-                )}
-              />
-            ))}
+                );
+              } else if (!element.content && element.question) {
+                return <QuestionContainer key={`q-${element.content.id}`} />;
+              }
+              return <h1>What is this</h1>;
+            })}
           </>
         ) : (
           <h5 className="text-center">

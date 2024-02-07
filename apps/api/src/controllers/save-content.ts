@@ -28,7 +28,13 @@ export class SaveContentController
 
   async execute(req: Request, res: Response) {
     const contentDto = parseToContentDTO(req.body);
-    contentDto.payload.image = { file: req.files?.image?.[0] };
+
+    if (req.files?.image?.[0]) {
+      if (!contentDto.payload) contentDto.payload = { image: undefined };
+      contentDto.payload.image = { file: req.files?.image?.[0] };
+    }
+
+    if (!contentDto.type) throw new Error("Informar tipo de conteúdo");
 
     const content = ContentDtoMapper.mapFromDto(contentDto);
     const { activityId, versionId } = parseNumberId(req.params, [

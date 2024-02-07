@@ -6,7 +6,7 @@ export const ImageContentDtoMapper: DomainDtoMapper<ImageContent, ContentDTO> =
   {
     mapFromDto(dto: ContentDTO) {
       const newContent = new ImageContent();
-      newContent.url = dto.payload.image?.url || "";
+      newContent.url = dto.payload?.image?.url;
 
       newContent.title = dto.title;
       newContent.description = dto.description;

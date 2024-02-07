@@ -30,7 +30,7 @@ export const ContentDtoMapper: DomainDtoMapper<Content, ContentDTO> = {
 
     newContent.order = dto.order;
     newContent.id = dto.id;
-    newContent.versionId = dto.versionId;
+    newContent.versionId = dto.versionId || 0;
 
     return newContent;
   },

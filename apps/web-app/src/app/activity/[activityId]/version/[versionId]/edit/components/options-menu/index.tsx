@@ -1,4 +1,4 @@
-import { Icons } from "@components";
+import { Icons, Tooltip } from "@components";
 import {
   useSaveContentMutation,
   useUpdateVersionStatusMutation,
@@ -14,15 +14,40 @@ import { twMerge } from "tailwind-merge";
 const footerButtonsClasses =
   "inline-block rounded border-2 border-accent p-2 flex items-center justify-center w-[35%] [&>span]:mx-2";
 const RemoveButton = (props) => (
-  <button {...props} className={twMerge(footerButtonsClasses, props.className)}>
+  <button {...props} className={twMerge(footerButtonsClasses, "text-accent")}>
     <Icons.TRASH size={20} /> <span>Remover</span>
   </button>
 );
-const PublishButton = (props) => (
-  <button {...props} className={twMerge(footerButtonsClasses, props.className)}>
-    <Icons.PUBLISH size={25} /> <span>Publicar</span>
-  </button>
-);
+const PublishButton = ({ disabled, ...rest }) => {
+  const getContent = () => (
+    <>
+      <Icons.PUBLISH size={25} /> <span>Publicar</span>
+    </>
+  );
+  if (disabled)
+    return (
+      <Tooltip content="Não se pode publicar uma atividade sem conteúdos ou perguntas">
+        <button
+          {...rest}
+          className={twMerge(
+            footerButtonsClasses,
+            "bg-accent text-white",
+            "cursor-not-allowed bg-opacity-60 border-none"
+          )}
+        >
+          {getContent()}
+        </button>
+      </Tooltip>
+    );
+  return (
+    <button
+      {...rest}
+      className={twMerge(footerButtonsClasses, "bg-accent text-white")}
+    >
+      {getContent()}
+    </button>
+  );
+};
 
 const NewItemButton = ({ children, onClick }) => (
   <button
@@ -155,13 +180,10 @@ export const OptionsMenu = ({
           <NewItemButton onClick={() => {}}>Múltipla escolha</NewItemButton>
           {/* Footer */}
           <div className="absolute bottom-0 p-2 my-3 flex justify-around w-full">
-            <RemoveButton
-              className="text-accent"
-              onClick={() => setOpenConfirmDeleteModal(true)}
-            />
+            <RemoveButton onClick={() => setOpenConfirmDeleteModal(true)} />
             <PublishButton
-              className="bg-accent text-white"
               onClick={() => setOpenConfirmPublishModal(true)}
+              disabled={!version.data?.elements?.length}
             />
           </div>
         </div>

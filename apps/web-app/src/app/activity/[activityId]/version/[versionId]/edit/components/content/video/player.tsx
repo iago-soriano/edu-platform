@@ -1,10 +1,10 @@
 import LibYoutubePlayer from "react-player/youtube";
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 import dynamic from "next/dynamic";
-import { useMediaQuery } from "@infrastructure";
-import { GhostInput, Spinner } from "@components";
+import { useMediaQuery, parseNumberToTimeLabel } from "@infrastructure";
+import { Spinner } from "@components";
 
-export const YoutubePlayer = ({ player, setPlayer, videoUrl }) => {
+export const YoutubePlayer = ({ setDuration, setPlayer, videoUrl }) => {
   const isMore900 = useMediaQuery("(min-width: 900px)");
   const isMore590 = useMediaQuery("(min-width: 590px)");
 
@@ -17,6 +17,7 @@ export const YoutubePlayer = ({ player, setPlayer, videoUrl }) => {
         <ReactPlayer
           onReady={(e) => {
             setPlayer(e["player"]);
+            setDuration(parseNumberToTimeLabel(e["player"]?.getDuration()));
           }}
           url={videoUrl}
           width={playerWidth}

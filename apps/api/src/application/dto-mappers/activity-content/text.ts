@@ -5,7 +5,7 @@ import { ContentDTO, ContentTypes } from "@edu-platform/common";
 export const TextContentDtoMapper: DomainDtoMapper<TextContent, ContentDTO> = {
   mapFromDto(dto: ContentDTO) {
     const newContent = new TextContent();
-    newContent.text = dto.payload.text?.text || "";
+    newContent.text = dto.payload?.text?.text;
 
     newContent.title = dto.title;
     newContent.description = dto.description;

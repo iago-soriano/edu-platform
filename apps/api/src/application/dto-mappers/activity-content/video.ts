@@ -6,8 +6,8 @@ export const VideoContentDtoMapper: DomainDtoMapper<VideoContent, ContentDTO> =
   {
     mapFromDto(dto: ContentDTO) {
       const newContent = new VideoContent();
-      newContent.tracks = dto.payload.video?.tracks || "";
-      newContent.url = dto.payload.video?.url || "";
+      newContent.tracks = dto.payload?.video?.tracks;
+      newContent.url = dto.payload?.video?.url;
 
       newContent.title = dto.title;
       newContent.description = dto.description;

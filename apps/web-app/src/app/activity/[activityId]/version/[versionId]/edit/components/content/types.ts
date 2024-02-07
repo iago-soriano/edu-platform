@@ -5,6 +5,7 @@ export type CommmonContentProps = {
   title: string;
   description: string;
   contentId: number;
+  order: number;
   onChange: Dispatch<SetStateAction<boolean>>;
   hasChanges: boolean;
   saveContentMutation: SaveContentMutationType;

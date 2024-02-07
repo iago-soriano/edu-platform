@@ -23,8 +23,8 @@ type Response = TypedResponse<UpdateVersionStatusResponseBody>;
 export class UpdateVersionStatusController
   implements HTTPController<Request, Response>
 {
-  method = HttpMethod.POST;
-  path = "update-activity/:activityId/version/:versionId/status";
+  method = HttpMethod.PATCH;
+  path = "activity/:activityId/version/:versionId/status";
   middlewares: string[] = ["auth"];
 
   constructor(

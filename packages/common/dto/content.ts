@@ -37,15 +37,17 @@ export const parseContentType = contentTypeSchema.parse;
 const contentSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
-  type: z.nativeEnum(ContentTypes),
+  type: z.nativeEnum(ContentTypes).optional(),
   id: z.number().optional(),
-  payload: z.object({
-    video: videoPayloadSchema,
-    text: textPayloadSchema,
-    image: imagePayloadSchema,
-  }),
-  order: z.number(),
-  versionId: z.number(),
+  payload: z
+    .object({
+      video: videoPayloadSchema,
+      text: textPayloadSchema,
+      image: imagePayloadSchema,
+    })
+    .optional(),
+  order: z.number().optional(),
+  versionId: z.number().optional(),
 });
 
 export const parseToContentDTO = contentSchema.parse;

@@ -1,14 +1,14 @@
 import { Content, ContentTypes } from "./base";
 
 export class ImageContent extends Content {
-  public url: string = "";
+  public url?: string;
 
   constructor() {
     super(ContentTypes.Image);
   }
 
   mergePayload(newContent: ImageContent) {
-    this.url = newContent.url;
+    if (newContent.url) this.url = newContent.url;
   }
 
   hasContent() {
@@ -18,7 +18,7 @@ export class ImageContent extends Content {
   validatePayload(): void {}
 
   storedFileUrl(): string {
-    return this.url;
+    return this.url || "";
   }
 
   setFileUrl(url: string) {

@@ -40,7 +40,7 @@ export const parseNumberToTimeLabel = (num: number) => {
   const hours = Math.floor(num / 3600)
     .toString()
     .padStart(2, "0");
-  const mins = Math.floor(num / 60)
+  const mins = Math.floor((num / 60) % 60)
     .toString()
     .padStart(2, "0");
   const secs = Math.floor(num % 60)

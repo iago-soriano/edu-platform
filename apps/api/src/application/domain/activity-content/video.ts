@@ -6,19 +6,20 @@ import {
 } from "@edu-platform/common/errors/domain/content";
 
 export class VideoContent extends Content {
-  public tracks: string = "";
-  public url: string = "";
+  public tracks?: string = "";
+  public url?: string = "";
 
   constructor() {
     super(ContentTypes.Video);
   }
 
   mergePayload(newContent: VideoContent) {
-    this.tracks = newContent.tracks;
-    this.url = newContent.url;
+    if (newContent.tracks) this.tracks = newContent.tracks;
+    if (newContent.url) this.url = newContent.url;
   }
 
   validatePayload() {
+    if (!this.tracks) return;
     if (
       this.tracks.split(",").length > DomainRules.CONTENT.VIDEO.TRACKS_MAX_NUM
     )

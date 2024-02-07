@@ -122,10 +122,10 @@ export const useDeleteDraftVersionMutation = ({
   return useMutation<void, ServerError>({
     mutationFn: () => client.deleteVersion({ activityId, versionId }),
     onSuccess: (e, v, c) => {
-      onSuccess && onSuccess(e, v, c);
       queryClient.invalidateQueries({
         queryKey: ["all"],
       });
+      onSuccess && onSuccess(e, v, c);
     },
     onError: onError
       ? (e, v, c) => onError(e, v, c)

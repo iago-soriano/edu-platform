@@ -74,6 +74,8 @@ class UseCase implements ISaveContentUseCase {
       newContent.validateDescription();
       newContent.validatePayload();
 
+      newContent.versionId = versionId;
+
       // persist it
       await this.activitiesRepository.Contents.insert(newContent);
 
@@ -90,6 +92,7 @@ class UseCase implements ISaveContentUseCase {
 
     existingContent.merge(newContent);
     existingContent.mergePayload(newContent as any); // TODO: make this type work
+    existingContent.validatePayload();
 
     await this.activitiesRepository.Contents.update(
       existingContent.id || 0,

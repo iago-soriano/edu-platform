@@ -1,4 +1,4 @@
-import { ImageContent } from "@domain";
+import { ImageContent, ContentTypes, Content } from "@domain";
 import { DomainDtoMapper } from "../types";
 import { activityContents } from "@infrastructure";
 
@@ -15,8 +15,12 @@ export const ImageContentDtoMapper: DomainDtoMapper<
   },
   mapToInsertDto: (domain: ImageContent) => {
     const dto: typeof activityContents.$inferInsert = {
-      ...domain,
+      title: domain.title,
+      description: domain.description,
+      order: domain.order,
+      versionId: domain.versionId,
       imageUrl: domain.url,
+      type: ContentTypes.Image,
     };
 
     return dto;

@@ -45,9 +45,9 @@ export abstract class Content {
   }
 
   merge(newContent: Content) {
-    this.title = newContent.title;
-    this.description = newContent.description;
-    this.order = newContent.order;
+    if (newContent.title) this.title = newContent.title;
+    if (newContent.description) this.description = newContent.description;
+    if (newContent.order) this.order = newContent.order;
   }
 
   abstract hasContent(): boolean;
