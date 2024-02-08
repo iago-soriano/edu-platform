@@ -22,16 +22,16 @@ export const FeatureImage = ({ src }) => {
 };
 
 export const FeatureTextContainer = ({ children }) => (
-  <div className="justify-self-center w-[70%] flex flex-col lg:items-start items-center">
+  <div className="justify-self-center w-[70%] flex flex-col items-center">
     {children}
   </div>
 );
 
 export const Step = ({ title, description, imageSrc }) => {
   return (
-    <div className="flex md:flex-col flex-row">
+    <div className="flex md:flex-col flex-row w-[210px]">
       <h3>{title}</h3>
-      <p>{description}</p>
+      <p className="w-full whitespace-break-spaces">{description}</p>
       <Image src={imageSrc} alt={imageSrc} width={200} height={400} />
     </div>
   );
