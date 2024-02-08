@@ -21,6 +21,8 @@ import {
   DeleteVersionController,
   RefreshTokenController,
   SaveCollectionController,
+  InsertUserInCollectionController,
+  RemoveUserFromCollectionController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -44,6 +46,8 @@ import {
   SaveContentUseCase,
   CreateNewDraftVersionUseCase,
   SaveCollectionUseCase,
+  InsertUserInCollectionUseCase,
+  RemoveUserFromCollectionUseCase,
 } from "@use-cases";
 import { GetActivityUseCaseHelper } from "@use-case-middlewares";
 import {
@@ -107,6 +111,12 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     saveCollectionController: awilix
       .asClass(SaveCollectionController)
       .classic(),
+    insertUserInCollectionController: awilix
+      .asClass(InsertUserInCollectionController)
+      .classic(),
+    removeUserFromCollectionController: awilix
+      .asClass(RemoveUserFromCollectionController)
+      .classic(),
 
     // services
     encryptionService: awilix.asClass(BCryptEncryptionService),
@@ -155,6 +165,12 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(CreateNewDraftVersionUseCase)
       .classic(),
     saveCollectionUseCase: awilix.asClass(SaveCollectionUseCase).classic(),
+    insertUserInCollectionUseCase: awilix
+      .asClass(InsertUserInCollectionUseCase)
+      .classic(),
+    removeUserFromCollectionUseCase: awilix
+      .asClass(RemoveUserFromCollectionUseCase)
+      .classic(),
 
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),

@@ -26,6 +26,15 @@ import {
   CreateNewDraftVersionParams,
   CreateNewDraftVersionRequestBody,
   CreateNewDraftVersionResponseBody,
+  InsertUserInCollectionParams,
+  InsertUserInCollectionRequestBody,
+  InsertUserInCollectionResponseBody,
+  RemoveUserFromCollectionParams,
+  RemoveUserFromCollectionRequestBody,
+  RemoveUserFromCollectionResponseBody,
+  SaveCollectionParams,
+  SaveCollectionRequestBody,
+  SaveCollectionResponseBody,
 } from "./contracts";
 import { IHTTPClient } from "./interfaces";
 
@@ -81,8 +90,8 @@ export class ApiClient {
     { activityId, versionId }: UpdateVersionStatusParams,
     body: UpdateVersionStatusRequestBody
   ) {
-    return this._fetcher.post(
-      `activity/${activityId}/update-activity-metadata/${versionId}`,
+    return this._fetcher.patch(
+      `activity/${activityId}/version/${versionId}/status`,
       body
     ) as Promise<UpdateVersionStatusResponseBody>;
   }
@@ -96,5 +105,29 @@ export class ApiClient {
       `create-new-version/${activityId}`,
       undefined
     ) as Promise<CreateNewDraftVersionResponseBody>;
+  }
+  saveCollection(args: SaveCollectionRequestBody) {
+    return this._fetcher.post(
+      `collection`,
+      args
+    ) as Promise<SaveCollectionResponseBody>;
+  }
+  insertUserInCollection(
+    { collectionId }: InsertUserInCollectionParams,
+    args: InsertUserInCollectionRequestBody
+  ) {
+    return this._fetcher.post(
+      `collection/${collectionId}/student`,
+      args
+    ) as Promise<InsertUserInCollectionResponseBody>;
+  }
+  removeUserFromCollection({
+    collectionId,
+    studentId,
+  }: RemoveUserFromCollectionParams) {
+    return this._fetcher.post(
+      `collection/${collectionId}/student/${studentId}`,
+      undefined
+    ) as Promise<RemoveUserFromCollectionResponseBody>;
   }
 }

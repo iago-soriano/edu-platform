@@ -51,8 +51,6 @@ class UseCase implements ISaveContentUseCase {
     if (version.status !== VersionStatus.Draft)
       throw new ActivityVersionIsNotDraft();
 
-    // const newContent = Content.mapFromDto(contentDto);
-
     // try to upload whatever file is sent. Will not persist content if this doesn't work
     if (newContent.shouldUploadFile()) {
       const keyName = `${activity.id}/${
@@ -87,8 +85,6 @@ class UseCase implements ISaveContentUseCase {
       newContent.id
     );
     if (!existingContent) throw new ActivityContentNotFound();
-
-    // const existingContent = Content.mapFromDatabaseDto(contentDbDto);
 
     existingContent.merge(newContent);
     existingContent.mergePayload(newContent as any); // TODO: make this type work

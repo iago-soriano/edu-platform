@@ -10,3 +10,5 @@ export * from "./save-content";
 export * from "./update-activity-status";
 export * from "./update-version-metadata";
 export * from "./save-collection";
+export * from "./insert-user-in-collection";
+export * from "./remove-user-from-collection";

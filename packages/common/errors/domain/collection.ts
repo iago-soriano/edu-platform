@@ -16,3 +16,11 @@ export class UserIsNotCollectionOwner extends CustomError {
     super(UserIsNotCollectionOwner.message);
   }
 }
+
+export class StudentIsNotUser extends CustomError {
+  HTTPstatusCode = 400;
+  static message = "Estudante não cadastrado na plataforma";
+  constructor() {
+    super(StudentIsNotUser.message);
+  }
+}

@@ -82,4 +82,20 @@ export class Collections implements ICollections {
       CollectionDtoMapper.mapFromSelectDto(collection)
     );
   }
+
+  async findStudentCollectionRelation(studentId: number, collectionId: number) {
+    const relation = (
+      await db
+        .select()
+        .from(studentCollectionParticipation)
+        .where(
+          and(
+            eq(studentCollectionParticipation.studentId, studentId),
+            eq(studentCollectionParticipation.collectionId, collectionId)
+          )
+        )
+    )[0];
+
+    return relation;
+  }
 }

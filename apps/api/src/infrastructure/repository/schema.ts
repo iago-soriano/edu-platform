@@ -239,8 +239,16 @@ export const collectionsRelations = relations(collections, ({ one, many }) => ({
 export const studentCollectionParticipation = pgTable(
   "student_collection_participation",
   {
-    id: serial("id").primaryKey(),
-    studentId: integer("student_id").references(() => users.id),
-    collectionId: integer("collection_id").references(() => collections.id),
+    studentId: integer("student_id")
+      .notNull()
+      .references(() => users.id),
+    collectionId: integer("collection_id")
+      .notNull()
+      .references(() => collections.id),
+  },
+  (table) => {
+    return {
+      pk: primaryKey(table.collectionId, table.studentId),
+    };
   }
 );

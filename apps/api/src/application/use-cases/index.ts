@@ -47,6 +47,12 @@ import CreateNewDraftVersionUseCase, {
 import SaveCollectionUseCase, {
   ISaveCollectionUseCase,
 } from "./save-collection";
+import InsertUserInCollectionUseCase, {
+  IInsertUserInCollectionUseCase,
+} from "./insert-user-in-collection";
+import RemoveUserFromCollectionUseCase, {
+  IRemoveUserFromCollectionUseCase,
+} from "./remove-user-from-collection";
 
 export {
   SignInUseCase,
@@ -91,4 +97,8 @@ export {
   IDeleteQuestionUseCase,
   SaveCollectionUseCase,
   ISaveCollectionUseCase,
+  InsertUserInCollectionUseCase,
+  IInsertUserInCollectionUseCase,
+  RemoveUserFromCollectionUseCase,
+  IRemoveUserFromCollectionUseCase,
 };

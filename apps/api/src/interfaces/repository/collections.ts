@@ -11,4 +11,8 @@ export interface ICollections {
   listByOwner: (ownerId: number) => Promise<Collection[]>;
   getById: (collectionId: number) => Promise<Collection>;
   listByStudent: (studentId: number) => Promise<Collection[]>;
+  findStudentCollectionRelation: (
+    studentId: number,
+    collectionId: number
+  ) => Promise<{ studentId: number; collectionId: number } | undefined>;
 }
