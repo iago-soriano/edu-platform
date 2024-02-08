@@ -6,7 +6,9 @@ export const ImageContentDtoMapper: DomainDtoMapper<ImageContent, ContentDTO> =
   {
     mapFromDto(dto: ContentDTO) {
       const newContent = new ImageContent();
+
       newContent.url = dto.payload?.image?.url;
+      newContent.file = dto.payload?.image?.file || null;
 
       newContent.title = dto.title;
       newContent.description = dto.description;
@@ -20,7 +22,7 @@ export const ImageContentDtoMapper: DomainDtoMapper<ImageContent, ContentDTO> =
         title: domain.title,
         description: domain.description,
         order: domain.order || 0,
-        type: ContentTypes.Video,
+        type: ContentTypes.Image,
         versionId: domain.versionId,
         payload: {
           image: {

@@ -19,7 +19,7 @@ export const TextContentDtoMapper: DomainDtoMapper<TextContent, ContentDTO> = {
       title: domain.title,
       description: domain.description,
       order: domain.order || 0,
-      type: ContentTypes.Video,
+      type: ContentTypes.Text,
       versionId: domain.versionId,
       payload: {
         text: {

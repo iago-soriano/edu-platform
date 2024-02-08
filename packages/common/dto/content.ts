@@ -38,7 +38,7 @@ const contentSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   type: z.nativeEnum(ContentTypes).optional(),
-  id: z.number().optional(),
+  id: z.any().optional(),
   payload: z
     .object({
       video: videoPayloadSchema,

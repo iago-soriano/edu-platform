@@ -45,8 +45,9 @@ export abstract class Content {
   }
 
   merge(newContent: Content) {
-    if (newContent.title) this.title = newContent.title;
-    if (newContent.description) this.description = newContent.description;
+    if (newContent.title !== undefined) this.title = newContent.title;
+    if (newContent.description !== undefined)
+      this.description = newContent.description;
     if (newContent.order) this.order = newContent.order;
   }
 
