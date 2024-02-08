@@ -17,9 +17,9 @@ export function Input(args: IInputProps) {
   } = args;
   const mandatoryTooltip = (
     <Tooltip content={"É preciso preencher para continuar"}>
-      {"("}
-      <span className="text-accent">&#10033;</span>
-      {")"}
+      <span className="text-accent">
+        {"("}&#10033;{")"}
+      </span>
     </Tooltip>
   );
   const explanationTooltip = (

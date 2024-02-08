@@ -87,12 +87,12 @@ export const BigScreenNavbar = ({
                 <ProductButton currentPath={currentPath} Component={Button} />
               </li>
             )}
-            <li>
+            {/* <li>
               <StudentOutputsButton
                 currentPath={currentPath}
                 Component={Button}
               />
-            </li>
+            </li> */}
             {/* <NewActivityButton currentPath={currentPath} Component={Button} /> */}
           </div>
           <div className="flex">

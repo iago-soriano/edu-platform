@@ -8,9 +8,6 @@ export const Tooltip = ({
   ...rest
 }: HtmlHTMLAttributes<HTMLDivElement>) => {
   const Child = React.forwardRef<HTMLDivElement>((props, ref) =>
-    // <div {...props} ref={ref}>
-    //   {children}
-    // </div>
     React.Children.map(children, (child) =>
       React.cloneElement(child as unknown as ReactElement, { ...props, ref })
     )

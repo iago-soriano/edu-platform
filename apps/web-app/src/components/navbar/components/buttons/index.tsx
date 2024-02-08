@@ -34,7 +34,7 @@ export const ProductButton = ({
   Component,
 }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/product"
+    path="/home"
     label="Home"
     currentPath={currentPath}
     Component={Component}
