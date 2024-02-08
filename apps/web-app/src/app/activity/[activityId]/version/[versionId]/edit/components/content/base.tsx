@@ -41,7 +41,6 @@ export const BaseContent = ({
   });
 
   const onSaveTitle = (e) => {
-    console.log("save title", e.target.value);
     if (hasChanges) {
       saveContentMutation.mutate({
         title: e.target.value,
@@ -72,8 +71,6 @@ export const BaseContent = ({
 
   const getContent = (type: string) => {
     const commonProps = {
-      title: contentDto.title,
-      description: contentDto.description,
       contentId: contentDto.id,
       order: contentDto.order,
       onChange: setHasChanges,

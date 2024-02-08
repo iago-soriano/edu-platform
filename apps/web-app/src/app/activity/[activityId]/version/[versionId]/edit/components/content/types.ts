@@ -2,8 +2,6 @@ import { SetStateAction, Dispatch } from "react";
 import { SaveContentMutationType } from "@endpoints";
 
 export type CommmonContentProps = {
-  title: string;
-  description: string;
   contentId: number;
   order: number;
   onChange: Dispatch<SetStateAction<boolean>>;

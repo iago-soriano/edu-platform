@@ -7,22 +7,15 @@ export const ImageContent = ({
   payload: { url },
   saveContentMutation,
   contentId,
-  title,
-  description,
 }: { payload: ImageContentPayloadDTO } & CommmonContentProps) => {
   const [selectedImg, setSelectedImg] = useState<File>();
   const onFileUpload = async (e) => {
     setSelectedImg(e.target.files[0]);
     const formData = new FormData();
 
-    formData.append(
-      "payload",
-      JSON.stringify({ image: { file: e.target.files[0] } })
-    );
-    formData.append("contentId", contentId.toString());
+    formData.append("image", e.target.files[0]);
+    formData.append("id", contentId.toString());
     formData.append("type", ContentTypes.Image);
-    title && formData.append("title", title);
-    description && formData.append("description", description);
 
     saveContentMutation.mutate(formData as unknown);
   };

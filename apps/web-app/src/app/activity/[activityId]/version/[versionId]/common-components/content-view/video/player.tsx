@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useMediaQuery } from "@infrastructure";
 import { Spinner } from "@components";
 
-export const YoutubePlayer = ({ player, setPlayer, videoUrl }) => {
+export const YoutubePlayer = ({ setPlayer, videoUrl }) => {
   const isMore900 = useMediaQuery("(min-width: 900px)");
   const isMore590 = useMediaQuery("(min-width: 590px)");
 

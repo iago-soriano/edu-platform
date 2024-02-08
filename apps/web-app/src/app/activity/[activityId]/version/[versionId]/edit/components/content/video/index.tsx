@@ -11,12 +11,10 @@ import {
 import { CommmonContentProps } from "../types";
 
 export const VideoContent = ({
-  order,
   contentId,
   payload: { url: urlProps, tracks: tracksProps },
   saveContentMutation,
   onChange,
-  hasChanges,
 }: { payload: VideoContentPayloadDTO } & CommmonContentProps) => {
   const [player, setPlayer] = useState<LibYoutubePlayer>(null);
   const [videoDuration, setVideoDuration] = useState<string>();

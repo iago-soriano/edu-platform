@@ -41,12 +41,15 @@ const Page = ({ params: { activityId, versionId } }) => {
           versionQuery.data?.elements.map((element) => {
             if (element.content && !element.question) {
               return (
-                <BaseContent
-                  key={`c-${element.content.id}`}
-                  versionId={versionId}
-                  activityId={activityId}
-                  contentDto={element.content}
-                />
+                <div>
+                  <BaseContent
+                    key={`c-${element.content.id}`}
+                    versionId={versionId}
+                    activityId={activityId}
+                    contentDto={element.content}
+                  />
+                  <br className="my-5" />
+                </div>
               );
             } else if (!element.content && element.question) {
               return <QuestionContainer key={`q-${element.content.id}`} />;

@@ -163,13 +163,17 @@ export const ActivityHeaderInput = ({
             isLoading={saveState === "isLoading"}
           />
           <Tooltip content="Pré-visualizar atividade. Abre uma nova aba">
-            <Icons.CAN_SEE
-              onClick={() =>
-                openInNewTab(`/activity/${activityId}/version/${versionId}/do`)
-              }
-              className="cursor-pointer mx-3 text-text2 text-opacity-50 p-1"
-              size={33}
-            />
+            <span>
+              <Icons.CAN_SEE
+                onClick={() =>
+                  openInNewTab(
+                    `/activity/${activityId}/version/${versionId}/preview`
+                  )
+                }
+                className="cursor-pointer mx-3 text-text2 text-opacity-50 p-1"
+                size={33}
+              />
+            </span>
           </Tooltip>
         </div>
       </div>

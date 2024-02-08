@@ -8,11 +8,10 @@ export const TextContent = ({
   contentId,
   hasChanges,
   onChange,
-  title,
-  description,
 }: { payload: TextContentPayloadDTO } & CommmonContentProps) => {
   const onSaveContent = (e) => {
     if (hasChanges) {
+      console.log();
       saveContentMutation.mutate({
         payload: {
           text: {
@@ -32,8 +31,8 @@ export const TextContent = ({
       className="min-h-[200px]"
       defaultValue={text}
       onBlur={onSaveContent}
-      error={saveContentMutation.error?.errors?.["content"]}
-      // onChange={onChange}
+      error={saveContentMutation.error?.errors?.["text"]}
+      onChange={() => onChange(true)}
     />
   );
 };

@@ -1,7 +1,6 @@
-import { errorToast, SavingIndicator } from "@components";
 import { useGetActivityVersionQuery } from "@endpoints";
 
-export const ActivityHeader = ({ activityId, versionId, saveState }) => {
+export const ActivityHeader = ({ activityId, versionId }) => {
   const versionQuery = useGetActivityVersionQuery({ activityId, versionId });
 
   return (
@@ -24,16 +23,9 @@ export const ActivityHeader = ({ activityId, versionId, saveState }) => {
               </div>
             ))}
         </div>
-
         <p className="text-xl text-text2 text-center h-auto">
           {versionQuery.data?.description}
         </p>
-      </div>
-      <div className="lg:col-start-10 col-start-16 col-span-1 flex flex-row justify-end items-start">
-        <SavingIndicator
-          hasChanges={saveState === "hasChanges"}
-          isLoading={saveState === "isLoading"}
-        />
       </div>
     </div>
   );
