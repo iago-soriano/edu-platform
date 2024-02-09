@@ -8,9 +8,9 @@ export interface ICollections {
   ) => Promise<void>;
   insertStudent: (studentId: number, collectionId: number) => Promise<void>;
   removeStudent: (studentId: number, collectionId: number) => Promise<void>;
-  listByOwner: (ownerId: number) => Promise<Collection[]>;
+  listByOwnership: (userId: number) => Promise<Collection[]>;
   getById: (collectionId: number) => Promise<Collection>;
-  listByStudent: (studentId: number) => Promise<Collection[]>;
+  listByParticipation: (userId: number) => Promise<Collection[]>;
   findStudentCollectionRelation: (
     studentId: number,
     collectionId: number

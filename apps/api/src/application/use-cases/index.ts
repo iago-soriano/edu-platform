@@ -53,6 +53,9 @@ import InsertUserInCollectionUseCase, {
 import RemoveUserFromCollectionUseCase, {
   IRemoveUserFromCollectionUseCase,
 } from "./remove-user-from-collection";
+import ListCollectionsByUserUseCase, {
+  IListCollectionsByUserUseCase,
+} from "./list-collections-by-user";
 
 export {
   SignInUseCase,
@@ -101,4 +104,6 @@ export {
   IInsertUserInCollectionUseCase,
   RemoveUserFromCollectionUseCase,
   IRemoveUserFromCollectionUseCase,
+  ListCollectionsByUserUseCase,
+  IListCollectionsByUserUseCase,
 };

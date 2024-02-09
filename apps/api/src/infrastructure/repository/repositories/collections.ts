@@ -44,7 +44,7 @@ export class Collections implements ICollections {
       );
   }
 
-  async listByOwner(ownerId: number) {
+  async listByOwnership(ownerId: number) {
     const dto = await db
       .select()
       .from(collections)
@@ -66,20 +66,18 @@ export class Collections implements ICollections {
     return CollectionDtoMapper.mapFromSelectDto(dto);
   }
 
-  async listByStudent(studentId: number) {
-    const studentCollections = db
-      .select()
-      .from(studentCollectionParticipation)
-      .where(eq(studentCollectionParticipation.studentId, studentId))
-      .as("studentCollections");
-
+  async listByParticipation(userId: number) {
     const c = await db
       .select()
       .from(collections)
-      .where(inArray(collections.id, studentCollections));
+      .innerJoin(
+        studentCollectionParticipation,
+        eq(studentCollectionParticipation.collectionId, collections.id)
+      )
+      .where(eq(studentCollectionParticipation.studentId, userId));
 
-    return c.map((collection) =>
-      CollectionDtoMapper.mapFromSelectDto(collection)
+    return c.map(({ collections }) =>
+      CollectionDtoMapper.mapFromSelectDto(collections)
     );
   }
 

@@ -1,3 +1,4 @@
+import { ListCollectionsByUserController } from "./../controllers/list-collections-by-user";
 import { CreateNewActivityController } from "./../controllers/create-new-activity";
 import * as awilix from "awilix";
 import {
@@ -48,6 +49,7 @@ import {
   SaveCollectionUseCase,
   InsertUserInCollectionUseCase,
   RemoveUserFromCollectionUseCase,
+  ListCollectionsByUserUseCase,
 } from "@use-cases";
 import { GetActivityUseCaseHelper } from "@use-case-middlewares";
 import {
@@ -117,6 +119,9 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     removeUserFromCollectionController: awilix
       .asClass(RemoveUserFromCollectionController)
       .classic(),
+    listCollectionsByUserController: awilix
+      .asClass(ListCollectionsByUserController)
+      .classic(),
 
     // services
     encryptionService: awilix.asClass(BCryptEncryptionService),
@@ -170,6 +175,9 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     removeUserFromCollectionUseCase: awilix
       .asClass(RemoveUserFromCollectionUseCase)
+      .classic(),
+    listCollectionsByUserUseCase: awilix
+      .asClass(ListCollectionsByUserUseCase)
       .classic(),
 
     // repositories
