@@ -35,7 +35,7 @@ class UseCase implements IGetActivityUseCaseHelper {
       await this.activitiesRepository.Versions.findSimpleViewById(versionId);
     if (!version) throw new ActivityVersionNotFound();
 
-    if (version.activityId !== activityId) throw new ActivityVersionNotFound();
+    if (version.activity.id !== activityId) throw new ActivityVersionNotFound();
 
     let content;
 
@@ -43,7 +43,8 @@ class UseCase implements IGetActivityUseCaseHelper {
       content = await this.activitiesRepository.Contents.findById(contentId);
 
       if (!content) throw new ActivityContentNotFound();
-      if (content.versionId !== version.id) throw new ActivityContentNotFound();
+      if (content.version.id !== version.id)
+        throw new ActivityContentNotFound();
     }
 
     let question;
@@ -52,7 +53,7 @@ class UseCase implements IGetActivityUseCaseHelper {
       question = await this.activitiesRepository.Questions.findById(questionId);
 
       if (!question) throw new ActivityQuestionNotFound();
-      if (question.versionId !== version.id)
+      if (question.version.id !== version.id)
         throw new ActivityQuestionNotFound();
     }
 

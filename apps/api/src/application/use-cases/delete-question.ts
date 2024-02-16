@@ -27,7 +27,7 @@ class UseCase implements IDeleteQuestionUseCase {
     });
 
     if (!question) return;
-    if (activity.authorId !== user.id) throw new ActivityNotFound();
+    if (activity.author.id !== user.id) throw new ActivityNotFound();
 
     await this.activitiesRepository.Questions.delete(question.id || 0);
   }

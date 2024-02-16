@@ -1,6 +1,7 @@
 import {
-  StudentOutputDTO,
-  VersionDTO,
+  StudentOutputRequestDTO,
+  StudentOutputResponseDTO,
+  VersionRequestDTO,
   parseOutputStatus,
 } from "@edu-platform/common";
 import { ActivityVersion, OutputStatus, StudentOutput, User } from "@domain";
@@ -9,12 +10,13 @@ import { UserSelectDTO } from "@interfaces";
 
 export const StudentOutputDtoMapper: DomainDtoMapper<
   StudentOutput,
-  StudentOutputDTO
+  StudentOutputRequestDTO,
+  StudentOutputResponseDTO
 > = {
   mapFromDto: (
-    dto: StudentOutputDTO,
+    dto: StudentOutputRequestDTO,
     userDto: UserSelectDTO,
-    versionDto: VersionDTO
+    versionDto: VersionRequestDTO
   ) => {
     const output = new StudentOutput();
 
@@ -34,10 +36,10 @@ export const StudentOutputDtoMapper: DomainDtoMapper<
   },
 
   mapToDto: (domain: StudentOutput) => {
-    const dto: StudentOutputDTO = {
-      id: domain.id,
-      status: domain.status,
-      userId: domain.user.id,
+    const dto: StudentOutputResponseDTO = {
+      id: domain.id || 0,
+      status: domain.status || OutputStatus.Draft,
+      userId: domain.user?.id || 0,
       versionId: domain.version.id,
     };
     return dto;

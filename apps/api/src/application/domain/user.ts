@@ -9,12 +9,13 @@ import { AuthRules, DomainRules } from "@edu-platform/common/domain";
 export const UserTypes = ["Teacher", "Student", "Admin"] as const;
 
 export class User {
-  public id?: number;
+  // public id!: number;
 
   constructor(
-    public name: string,
-    public email: string,
-    public password: string
+    public id?: number,
+    public name?: string,
+    public email?: string,
+    public password?: string
   ) {
     if (email) this.setEmail(email);
     if (password) this.setPassword(password);

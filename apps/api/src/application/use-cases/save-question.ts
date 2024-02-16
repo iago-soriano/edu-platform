@@ -31,7 +31,7 @@ class UseCase implements ISaveQuestionUseCase {
       questionId: question.id,
     });
 
-    if (activity.authorId !== user.id) throw new ActivityNotFound();
+    if (activity.author.id !== user.id) throw new ActivityNotFound();
 
     if (version.status !== VersionStatus.Draft)
       throw new ActivityVersionIsNotDraft();

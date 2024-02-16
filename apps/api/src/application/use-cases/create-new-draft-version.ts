@@ -1,3 +1,4 @@
+import { ActivityVersion } from "@domain";
 import { IUseCase, IActivitiesRepository, UserSelectDTO } from "@interfaces";
 import { ActivityNotFound } from "@edu-platform/common";
 
@@ -19,15 +20,15 @@ class UseCase implements ICreateNewDraftVersionUseCase {
     const activity =
       await this.activitiesRepository.Activities.findById(activityId);
 
-    if (activity.authorId !== user.id) throw new ActivityNotFound();
+    if (activity.author.id !== user.id) throw new ActivityNotFound();
 
-    if (activity.hasDraft())
+    if (activity.draftVersion)
       // there is already a draft in progress. Let user know that. TODO: send this endpoint a "forceDelete" flag and delete the other draft here
-      return { versionId: activity.draftVersionId || 0 };
+      return { versionId: activity.draftVersion.id || 0 };
 
     const fullVersion =
       await this.activitiesRepository.Versions.findFullViewById(
-        activity.lastVersionId || 0
+        activity.lastVersion.id || 0
       );
 
     if (!fullVersion) throw new Error("Activity has no draft nor lastVersion");
@@ -44,19 +45,19 @@ class UseCase implements ICreateNewDraftVersionUseCase {
     // duplicate all contents and questions to the new version
     await Promise.all(
       contents.map((content) => {
-        content.versionId = newVersionId;
+        content.version.id = newVersionId;
         this.activitiesRepository.Contents.insert(content);
       })
     );
     await Promise.all(
       questions.map((question) => {
-        question.versionId = newVersionId;
+        question.version.id = newVersionId;
         this.activitiesRepository.Questions.insert(question);
       })
     );
 
     await this.activitiesRepository.Activities.update(activityId, {
-      draftVersionId: newVersionId,
+      draftVersion: new ActivityVersion(newVersionId),
     });
 
     return { versionId: newVersionId };

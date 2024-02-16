@@ -5,11 +5,11 @@ import { db, activities } from "@infrastructure";
 import { eq } from "drizzle-orm";
 
 export class Activities implements IActivities {
-  async insert(authorId: number) {
+  async insert(authorId: number, collectionId: number) {
     return (
       await db
         .insert(activities)
-        .values({ authorId })
+        .values({ authorId, collectionId })
         .returning({ activityId: activities.id })
     )[0];
   }

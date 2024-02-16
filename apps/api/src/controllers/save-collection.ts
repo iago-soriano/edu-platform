@@ -5,7 +5,7 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import {
-  parseToCollectionDTO,
+  parseToCollectionRequestDTO,
   SaveCollectionParams,
   SaveCollectionRequestBody,
   SaveCollectionResponseBody,
@@ -30,11 +30,10 @@ export class SaveCollectionController
   constructor(private saveCollectionUseCase: ISaveCollectionUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const collectionDto = parseToCollectionDTO(req.body);
-
-    const collection = CollectionDtoMapper.mapFromDto(collectionDto);
-
+    const collectionDto = parseToCollectionRequestDTO(req.body);
     const { user } = req;
+
+    const collection = CollectionDtoMapper.mapFromDto(collectionDto, user);
 
     const collectionId = await this.saveCollectionUseCase.execute({
       user,

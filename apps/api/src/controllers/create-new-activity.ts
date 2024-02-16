@@ -9,6 +9,7 @@ import {
   CreateNewActivityResponseBody,
 } from "@edu-platform/common";
 import { ICreateNewActivityUseCase } from "@use-cases";
+import { parseNumberId } from "@infrastructure";
 
 type Request = TypedRequest<{}, {}, CreateNewActivityRequestBody>;
 type Response = TypedResponse<CreateNewActivityResponseBody>;
@@ -24,9 +25,11 @@ export class CreateNewActivityController
 
   async execute(req: Request, res: Response) {
     const { user } = req;
+    const { collectionId } = parseNumberId(req.body, ["collectionId"]); // TODO: use activity dto parser
 
     const { activityId, versionId } =
       await this.createNewActivityUseCase.execute({
+        collectionId,
         user,
       });
 

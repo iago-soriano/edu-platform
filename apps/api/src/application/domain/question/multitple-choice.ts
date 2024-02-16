@@ -3,6 +3,9 @@ import { ActivityVersion } from "../version";
 
 export class Alternative {
   public id: number = 0;
+  public createdAt?: Date;
+  public updatedAt?: Date;
+
   public order: number = 0;
   public text: string = "";
   public comment?: string;
@@ -11,7 +14,7 @@ export class Alternative {
 }
 
 export class MultipleChoiceQuestion extends Question {
-  constructor() {
+  constructor(public id?: number) {
     super(QuestionTypes.MultipleChoice);
   }
 

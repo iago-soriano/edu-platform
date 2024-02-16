@@ -21,7 +21,7 @@ export const VideoContentDtoMapper: DomainDtoMapper<
       order: domain.order,
       videoUrl: domain.url,
       tracks: domain.tracks,
-      versionId: domain.versionId,
+      versionId: domain.version.id,
       type: ContentTypes.Video,
     };
 

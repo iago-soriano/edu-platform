@@ -1,10 +1,12 @@
+import { ContentTypes, ContentTypeNotFound } from "@edu-platform/common";
+import { activityContents } from "@infrastructure";
 import {
-  ContentDTO,
-  ContentTypes,
-  ContentTypeNotFound,
-} from "@edu-platform/common";
-import { db, activityContents } from "@infrastructure";
-import { Content, VideoContent, TextContent, ImageContent } from "@domain";
+  Content,
+  VideoContent,
+  TextContent,
+  ImageContent,
+  ActivityVersion,
+} from "@domain";
 import { DomainDtoMapper } from "../types";
 import { VideoContentDtoMapper } from "./video";
 import { TextContentDtoMapper } from "./text";
@@ -33,7 +35,7 @@ export const ContentDtoMapper: DomainDtoMapper<
     }
 
     newContent.id = dto.id;
-    newContent.versionId = dto.versionId || 0;
+    newContent.version = new ActivityVersion(dto.versionId || 0);
 
     newContent.title = dto.title || "";
     newContent.description = dto.description || "";

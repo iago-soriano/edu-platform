@@ -27,6 +27,10 @@ export class ActivityVersion {
   public elements: Elements = [];
   public updatedAt!: Date;
 
+  constructor(id?: number) {
+    this.id = id || 0;
+  }
+
   validateTitle() {
     if (!this.title) return;
     if (this.title.length > DomainRules.ACTIVITY.TITLE.MAX_LENGTH) {

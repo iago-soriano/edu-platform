@@ -1,5 +1,5 @@
 import { Collection } from "@domain";
-import { ICollections } from "@interfaces";
+import { ICollectionsRepository } from "@interfaces";
 import {
   db,
   collections,
@@ -8,7 +8,7 @@ import {
 import { CollectionDtoMapper } from "../dto-mappers/collection";
 import { and, eq, inArray } from "drizzle-orm";
 
-export class Collections implements ICollections {
+export class CollectionsRepository implements ICollectionsRepository {
   async insert(collection: Collection) {
     const dto = CollectionDtoMapper.mapToInsertDto(collection);
 

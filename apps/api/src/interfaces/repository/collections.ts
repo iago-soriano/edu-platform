@@ -1,6 +1,6 @@
 import { Collection } from "@domain";
 
-export interface ICollections {
+export interface ICollectionsRepository {
   insert: (collection: Collection) => Promise<{ collectionId: number }>;
   update: (
     collectionId: number,

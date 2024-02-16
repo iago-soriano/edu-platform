@@ -1,10 +1,17 @@
-import { CollectionDTO } from "@edu-platform/common";
+import {
+  CollectionRequestDTO,
+  CollectionResponseDTO,
+} from "@edu-platform/common";
 import { Collection, User } from "@domain";
 import { DomainDtoMapper } from "./types";
 import { UserSelectDTO } from "@interfaces";
 
-export const CollectionDtoMapper: DomainDtoMapper<Collection, CollectionDTO> = {
-  mapFromDto: (dto: CollectionDTO, user: UserSelectDTO) => {
+export const CollectionDtoMapper: DomainDtoMapper<
+  Collection,
+  CollectionRequestDTO,
+  CollectionResponseDTO
+> = {
+  mapFromDto: (dto: CollectionRequestDTO, user: UserSelectDTO) => {
     const collection = new Collection();
 
     collection.id = dto.id || undefined;
@@ -21,10 +28,14 @@ export const CollectionDtoMapper: DomainDtoMapper<Collection, CollectionDTO> = {
   },
 
   mapToDto: (domain: Collection) => {
-    const dto: CollectionDTO = {
-      id: domain.id,
+    const dto: CollectionResponseDTO = {
+      id: domain.id || 0,
+      createdAt: domain.createdAt || new Date(),
+      updatedAt: domain.updatedAt || new Date(),
+
       name: domain.name,
-      ownerId: domain.owner.id,
+      description: domain.description,
+      ownerId: domain.owner.id || 0,
       isPrivate: domain.isPrivate,
       notifyOwnerOnStudentOutput: domain.notifyOwnerOnStudentOutput,
     };

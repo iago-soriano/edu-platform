@@ -36,7 +36,7 @@ class UseCase implements IDeleteContentUseCase {
 
     if (!content) return;
 
-    if (activity.authorId !== user.id) throw new ActivityNotFound();
+    if (activity.author.id !== user.id) throw new ActivityNotFound();
 
     // TODO: can't just delete the file, because this content might be a copy of an archived one.
     // figure out a way to know if this file isn't being used elewhere

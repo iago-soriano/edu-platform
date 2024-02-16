@@ -8,7 +8,7 @@ import {
 import {
   IUseCase,
   UserSelectDTO,
-  ICollections,
+  ICollectionsRepository,
   IUserRepository,
 } from "@interfaces";
 
@@ -24,20 +24,20 @@ export type IInsertUserInCollectionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IInsertUserInCollectionUseCase {
   constructor(
-    private collections: ICollections,
+    private collectionsRepository: ICollectionsRepository,
     private userRepository: IUserRepository
   ) {}
 
   async execute({ user, collectionId, studentEmail }: InputParams) {
-    const collection = await this.collections.getById(collectionId);
+    const collection = await this.collectionsRepository.getById(collectionId);
 
-    if (collection.ownerId !== user.id) throw new UserIsNotCollectionOwner();
+    if (collection.owner.id !== user.id) throw new UserIsNotCollectionOwner();
 
     const student = await this.userRepository.getUserByEmail(studentEmail);
 
     if (!student) throw new StudentIsNotUser();
 
-    await this.collections.insertStudent(student.id, collectionId);
+    await this.collectionsRepository.insertStudent(student.id, collectionId);
   }
 }
 export default UseCase;

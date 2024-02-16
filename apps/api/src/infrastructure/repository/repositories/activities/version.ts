@@ -4,6 +4,8 @@ import {
   ContentDtoMapper,
   QuestionDtoMapper,
   AlternativeDtoMapper,
+  ActivityDtoMapper,
+  CollectionDtoMapper,
 } from "../../dto-mappers";
 import {
   db,
@@ -12,8 +14,10 @@ import {
   activityContents,
   activityQuestions,
   alternatives,
+  collections,
+  studentCollectionParticipation,
 } from "@infrastructure";
-import { eq, inArray, and, desc, asc } from "drizzle-orm";
+import { eq, inArray, and, desc, asc, sql } from "drizzle-orm";
 import { VersionStatus, ActivityVersion, Question } from "@domain";
 
 export class Versions implements IVersions {
@@ -47,29 +51,49 @@ export class Versions implements IVersions {
     await db.delete(activityVersions).where(eq(activityVersions.id, id));
   }
 
-  async listByAuthorIdAndStatuses(authorId: number, statuses: VersionStatus[]) {
-    const activityIdsByAuthor = db
-      .select({ id: activities.id })
-      .from(activities)
-      .where(eq(activities.authorId, authorId));
-    const activitiesVersionsByAuthor = await db
+  async listByCollectionOwnership(userId: number, collectionId?: number) {
+    const res = await db
       .select()
       .from(activityVersions)
+      .innerJoin(activities, eq(activities.id, activityVersions.activityId))
+      .innerJoin(collections, eq(collections.id, activities.collectionId)) // activity belonging to a collection
       .where(
-        and(
-          inArray(activityVersions.activityId, activityIdsByAuthor),
-          inArray(
-            activityVersions.status,
-            statuses.length
-              ? Object.values(statuses)
-              : Object.values(VersionStatus || {})
-          )
-        )
+        collectionId
+          ? and(
+              eq(collections.ownerId, userId), // user owns collection
+              eq(collections.id, collectionId)
+            )
+          : eq(collections.ownerId, userId)
       );
 
-    return activitiesVersionsByAuthor.map((dto) =>
-      VersionDtoMapper.mapFromSelectDto(dto)
-    );
+    return res.map(({ activity_version, collections }) => ({
+      version: VersionDtoMapper.mapFromSelectDto(activity_version),
+      collection: CollectionDtoMapper.mapFromSelectDto(collections),
+    }));
+  }
+
+  async listByCollectionParticipation(userId: number, collectionId?: number) {
+    const conditions = [
+      eq(studentCollectionParticipation.studentId, userId),
+      eq(activityVersions.status, VersionStatus.Published),
+    ];
+    if (collectionId) conditions.push(eq(collections.id, collectionId));
+
+    const res = await db
+      .select()
+      .from(activityVersions)
+      .innerJoin(activities, eq(activities.id, activityVersions.activityId))
+      .innerJoin(collections, eq(collections.id, activities.collectionId))
+      .innerJoin(
+        studentCollectionParticipation,
+        eq(studentCollectionParticipation.collectionId, collections.id)
+      )
+      .where(and(...conditions));
+
+    return res.map(({ activity_version, collections }) => ({
+      version: VersionDtoMapper.mapFromSelectDto(activity_version),
+      collection: CollectionDtoMapper.mapFromSelectDto(collections),
+    }));
   }
 
   async findSimpleViewById(id: number) {

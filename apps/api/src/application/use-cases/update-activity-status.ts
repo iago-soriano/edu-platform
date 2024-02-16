@@ -45,7 +45,7 @@ class UseCase implements IUpdateActivityStatusUseCase {
       versionId,
     });
 
-    if (activity.authorId !== user.id) throw new ActivityNotFound();
+    if (activity.author.id !== user.id) throw new ActivityNotFound();
 
     if (
       version.status === VersionStatus.Draft &&
@@ -80,9 +80,9 @@ class UseCase implements IUpdateActivityStatusUseCase {
     if (!contents || !contents.length) throw new ActivityVersionHasNoContent();
 
     // archive currently published version
-    if (activity.hasPublishedVersion()) {
+    if (activity.lastVersion) {
       await this.activitiesRepository.Versions.update(
-        activity.lastVersionId || 0,
+        activity.lastVersion.id || 0,
         {
           status: VersionStatus.Archived,
         }
@@ -110,14 +110,14 @@ class UseCase implements IUpdateActivityStatusUseCase {
       await this.activitiesRepository.Questions.delete(question.id || 0);
     }
 
-    await this.activitiesRepository.Versions.update(activity.draftVersionId, {
+    await this.activitiesRepository.Versions.update(activity.draftVersion.id, {
       status: VersionStatus.Published,
       version: (version.version || 0) + 1,
     });
 
     await this.activitiesRepository.Activities.update(activity.id, {
-      lastVersionId: activity.draftVersionId,
-      draftVersionId: 0,
+      lastVersion: new ActivityVersion(activity.draftVersion.id),
+      draftVersion: new ActivityVersion(0),
     });
 
     return {};
@@ -128,25 +128,25 @@ class UseCase implements IUpdateActivityStatusUseCase {
     version: ActivityVersion
   ) => {
     //can't republish if there is another published version active
-    if (activity.hasPublishedVersion())
-      return { lastPublishedVersion: activity.lastVersionId };
+    if (activity.lastVersion)
+      return { lastPublishedVersion: activity.lastVersion.id };
 
     await this.activitiesRepository.Versions.update(version.id, {
       status: VersionStatus.Published,
     });
     await this.activitiesRepository.Activities.update(activity.id, {
-      lastVersionId: version.id,
+      lastVersion: new ActivityVersion(version.id),
     });
 
     return {};
   };
 
   private handleArchivePublished = async (activity: Activity) => {
-    await this.activitiesRepository.Versions.update(activity.lastVersionId, {
+    await this.activitiesRepository.Versions.update(activity.lastVersion.id, {
       status: VersionStatus.Archived,
     });
     await this.activitiesRepository.Activities.update(activity.id, {
-      lastVersionId: 0,
+      lastVersion: new ActivityVersion(0),
     });
 
     return {};

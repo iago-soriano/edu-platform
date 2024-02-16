@@ -5,11 +5,11 @@ export class Collection {
   public createdAt?: Date;
   public updatedAt?: Date;
 
-  public name?: string;
-  public description?: string;
+  public name!: string;
+  public description!: string;
   public owner!: User;
-  public isPrivate?: boolean;
-  public notifyOwnerOnStudentOutput?: boolean;
+  public isPrivate!: boolean;
+  public notifyOwnerOnStudentOutput!: boolean;
 
   validateName() {
     if (!this.name) return;

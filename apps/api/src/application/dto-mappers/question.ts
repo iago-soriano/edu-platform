@@ -1,7 +1,8 @@
 import {
-  QuestionDTO,
-  AlternativeDTO,
+  QuestionRequestDTO,
+  QuestionResponseDTO,
   QuestionTypeNotFound,
+  VersionRequestDTO,
 } from "@edu-platform/common";
 import {
   TextQuestion,
@@ -11,50 +12,22 @@ import {
   ActivityVersion,
 } from "@domain";
 import { DomainDtoMapper } from "./types";
-
-const AlternativeDtoMapper: DomainDtoMapper<Alternative, AlternativeDTO> = {
-  mapFromDto: (dto: AlternativeDTO, questionDto: QuestionDTO) => {
-    const alternative = new Alternative();
-
-    alternative.id = dto.id || 0;
-    alternative.isCorrect = dto.isCorrect;
-    alternative.comment = dto.comment || "";
-    alternative.order = dto.order || 0;
-    alternative.text = dto.text || "";
-
-    const question = new MultipleChoiceQuestion();
-    question.id = questionDto.id;
-
-    alternative.question = question;
-
-    return alternative;
-  },
-  mapToDto: (domain: Alternative) => {
-    const dto: AlternativeDTO = {
-      text: domain.text,
-      comment: domain.comment,
-      isCorrect: domain.isCorrect,
-      questionId: domain.question.id || 0,
-      id: domain.id,
-      order: domain.order,
-    };
-    return dto;
-  },
-};
+import { AlternativeDtoMapper } from "./alternative";
 
 export const QuestionDtoMapper: DomainDtoMapper<
   TextQuestion | MultipleChoiceQuestion,
-  QuestionDTO
+  QuestionRequestDTO,
+  QuestionResponseDTO
 > = {
-  mapFromDto: (dto: QuestionDTO) => {
+  mapFromDto: (dto: QuestionRequestDTO, versionDto: VersionRequestDTO) => {
     let newQuestion = null;
 
     // instanciate specific type and map payload
     switch (dto.type) {
-      case QuestionTypes.MultipleChoice:
+      case QuestionTypes.Text:
         newQuestion = new TextQuestion();
         break;
-      case QuestionTypes.Text:
+      case QuestionTypes.MultipleChoice:
         newQuestion = new MultipleChoiceQuestion();
         newQuestion.alternatives =
           dto.alternatives?.map((alternativeDto) =>
@@ -73,17 +46,20 @@ export const QuestionDtoMapper: DomainDtoMapper<
     newQuestion.id = dto.id;
 
     const version = new ActivityVersion();
-    version.id = dto.versionId;
+    version.id = versionDto.id;
 
     newQuestion.version = version;
 
     return newQuestion;
   },
   mapToDto: (domain: TextQuestion | MultipleChoiceQuestion) => {
-    return {
-      id: domain.id,
-      question: domain.question,
-      answer: domain.answer,
+    const dto: QuestionResponseDTO = {
+      id: domain.id || 0,
+      // createdAt: domain.createdAt || new Date(),
+      // updatedAt: domain.updatedAt || new Date(),
+
+      question: domain.question || "",
+      answer: domain.answer || "",
       order: domain.order || 0,
       type: domain.type,
       versionId: domain.version.id,
@@ -91,5 +67,6 @@ export const QuestionDtoMapper: DomainDtoMapper<
         (alt) => AlternativeDtoMapper.mapToDto(alt)
       ),
     };
+    return dto;
   },
 };

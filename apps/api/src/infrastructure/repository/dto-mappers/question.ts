@@ -6,6 +6,7 @@ import {
   MultipleChoiceQuestion,
   QuestionTypes,
   Alternative,
+  ActivityVersion,
 } from "@domain";
 import { DomainDtoMapper } from "./types";
 
@@ -17,7 +18,7 @@ export const AlternativeDtoMapper: DomainDtoMapper<
     const alternative = new Alternative();
 
     alternative.id = dto.id || 0;
-    alternative.questionId = dto.questionId || 0;
+    alternative.question = new MultipleChoiceQuestion(dto.questionId || 0);
     alternative.isCorrect = dto.isCorrect || false;
     alternative.comment = dto.comment || "";
     alternative.order = dto.order || 0;
@@ -54,7 +55,7 @@ export const QuestionDtoMapper: DomainDtoMapper<
     newQuestion.order = questionDto.order || 0;
 
     newQuestion.id = questionDto.id;
-    newQuestion.versionId = questionDto.versionId || 0;
+    newQuestion.version = new ActivityVersion(questionDto.versionId || 0);
 
     return newQuestion;
   },
@@ -65,7 +66,7 @@ export const QuestionDtoMapper: DomainDtoMapper<
       answer: domain.answer,
       order: domain.order || 0,
       type: domain.type,
-      versionId: domain.versionId,
+      versionId: domain.version.id,
       alternatives: (domain as MultipleChoiceQuestion)?.alternatives?.map(
         (alt) => AlternativeDtoMapper.mapToInsertDto(alt)
       ),

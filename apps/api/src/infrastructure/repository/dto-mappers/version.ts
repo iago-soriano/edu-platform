@@ -1,6 +1,6 @@
 import { activityVersions } from "@infrastructure";
 import { parseVersionStatus } from "@edu-platform/common";
-import { ActivityVersion, VersionStatus } from "@domain";
+import { ActivityVersion, VersionStatus, Activity } from "@domain";
 import { DomainDtoMapper } from "./types";
 
 export const VersionDtoMapper: DomainDtoMapper<
@@ -8,7 +8,7 @@ export const VersionDtoMapper: DomainDtoMapper<
   typeof activityVersions
 > = {
   mapFromSelectDto: (dto: typeof activityVersions.$inferSelect) => {
-    const version = new ActivityVersion();
+    const version = new ActivityVersion(dto.id);
 
     version.id = dto.id || 0;
     version.title = dto.title || "";
@@ -17,7 +17,7 @@ export const VersionDtoMapper: DomainDtoMapper<
     version.topics = dto.topics || "";
     version.version = dto.version || 0;
     version.status = parseVersionStatus(dto.status) || VersionStatus.Draft;
-    version.activityId = dto.activityId || 0;
+    version.activity = new Activity(dto.activityId || 0);
 
     return version;
   },

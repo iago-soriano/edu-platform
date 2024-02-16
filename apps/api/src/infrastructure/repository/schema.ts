@@ -11,7 +11,13 @@ import {
   PgViewConfig,
 } from "drizzle-orm/pg-core";
 import { relations, type InferSelectModel } from "drizzle-orm";
-import { VersionStatus, QuestionTypes, UserTypes, ContentTypes } from "@domain";
+import {
+  VersionStatus,
+  QuestionTypes,
+  UserTypes,
+  ContentTypes,
+  OutputStatus,
+} from "@domain";
 
 /* #region Tokens */
 export const tokenTypeEnum = pgEnum("tokenType", [
@@ -252,3 +258,31 @@ export const studentCollectionParticipation = pgTable(
     };
   }
 );
+
+// student output
+
+export const studentOutputStatusEnum = pgEnum(
+  "studentOutputStatus",
+  Object.values(OutputStatus || {}).filter((v) => isNaN(Number(v))) as [string]
+);
+
+export const studentOutput = pgTable("student_output", {
+  id: serial("id").primaryKey(),
+  status: studentOutputStatusEnum("status"),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id),
+  versionId: integer("version_id")
+    .notNull()
+    .references(() => activityVersions.id),
+});
+
+// student answer
+
+export const studentAnswer = pgTable("student_answer", {
+  questionId: integer("question_id").references(() => activityQuestions.id),
+  answer: varchar("answer", { length: 500 }),
+  studentOutputId: integer("student_output_id").references(
+    () => studentOutput.id
+  ),
+});

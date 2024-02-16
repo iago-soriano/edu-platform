@@ -9,7 +9,7 @@ type InputParams = {
 type Return = {
   [collectionId: number]: {
     activities: {
-      activityId: string;
+      activityId: number;
       [VersionStatus.Draft]?: ActivityVersion;
       [VersionStatus.Published]?: ActivityVersion;
       [VersionStatus.Archived]?: ActivityVersion[];
@@ -28,6 +28,7 @@ class UseCase implements IListActivityVersionsByOwnershipUseCase {
 
   async execute({ user, collectionId }: InputParams) {
     const resp: Return = {};
+
     const resps =
       await this.activitiesRepository.Versions.listByCollectionOwnership(
         user.id,
@@ -41,37 +42,80 @@ class UseCase implements IListActivityVersionsByOwnershipUseCase {
             [VersionStatus.Draft]?: ActivityVersion;
             [VersionStatus.Published]?: ActivityVersion;
             [VersionStatus.Archived]?: ActivityVersion[];
+            sortKey?: number;
           };
         };
         collection: Collection;
       };
     } = {};
+
     resps.forEach(({ collection, version }) => {
       if (!collection.id) return;
-      if (!!resp[collection.id]) {
-        const thisCollection = resp[collection.id];
-        // thisCollection.activities.
-        //  = {
-        //   collection: resp[collection.id].collection,
-        //   activities: {
-        //     ...resp[collection.id].activities,
+      const thisCollection = partialResp[collection.id];
 
-        //   }
-        // }
+      if (thisCollection) {
+        // we've been through this collection
+        const thisActivity = thisCollection?.activities[version.activity.id];
+        const thisVersion = thisActivity[version.status];
+
+        if (thisActivity) {
+          // collection knows activity
+          if (version.status !== VersionStatus.Archived)
+            // if not archived, version is unique. just add it to activity
+            thisActivity[version.status] = version;
+          else {
+            // if archived, there needs to be an array of versions
+            if (thisVersion)
+              // there is a previous archived version saved
+              thisActivity[VersionStatus.Archived]?.push(version);
+            else thisActivity[VersionStatus.Archived] = [version]; // this is the first archived version
+          }
+        } else {
+          thisCollection.activities = {
+            ...thisCollection.activities,
+            [version.activity.id]: {
+              [version.status]: version,
+            },
+          };
+        }
       } else {
+        //this is a new collection
+        partialResp[collection.id] = {
+          collection,
+          activities: {
+            [version.activity.id]: {
+              [version.status]:
+                version.status === VersionStatus.Archived ? [version] : version,
+            },
+          },
+        };
       }
     });
 
-    for (const activityId in resp) {
-      const activity = resp[activityId];
-      delete resp[activityId];
-      const sortKey =
-        activity[VersionStatus.Draft]?.updatedAt.getTime() ||
-        activity[VersionStatus.Published]?.updatedAt.getTime() ||
-        activity[VersionStatus.Archived]
-          ?.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())[0]
-          ?.updatedAt.getTime();
-      resp[`${sortKey}-${activityId}`] = activity;
+    // order return based on latest update
+    for (const collectionId in partialResp) {
+      const { collection, activities } = partialResp[collectionId];
+      for (const activityId in collection) {
+        const activity = activities[activityId];
+        const sortKey =
+          activity[VersionStatus.Draft]?.updatedAt.getTime() ||
+          activity[VersionStatus.Published]?.updatedAt.getTime() ||
+          activity[VersionStatus.Archived]
+            ?.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())[0]
+            ?.updatedAt.getTime() ||
+          -Infinity;
+        activity.sortKey = sortKey;
+      }
+
+      resp[collectionId] = {
+        activities: Object.keys(activities)
+          .map((activityId) => ({
+            activityId: Number(activityId),
+            ...activities[activityId],
+          }))
+          .sort((a, b) => b.sortKey || 0 - (a.sortKey || 0)),
+        collection,
+      };
     }
 
     return resp;

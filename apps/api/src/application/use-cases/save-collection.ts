@@ -3,7 +3,7 @@ import {
   UserIsNotCollectionOwner,
   UserIsNotTeacher,
 } from "@edu-platform/common";
-import { IUseCase, UserSelectDTO, ICollections } from "@interfaces";
+import { IUseCase, UserSelectDTO, ICollectionsRepository } from "@interfaces";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -17,22 +17,25 @@ type Return = {
 export type ISaveCollectionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ISaveCollectionUseCase {
-  constructor(private collections: ICollections) {}
+  constructor(private collectionsRepository: ICollectionsRepository) {}
 
   async execute({ user, collection }: InputParams) {
-    if (user.type !== "Teacher") throw new UserIsNotTeacher();
-
     if (collection.id !== undefined) {
-      const existingCollection = await this.collections.getById(collection.id);
+      const existingCollection = await this.collectionsRepository.getById(
+        collection.id
+      );
 
-      if (existingCollection.ownerId !== user.id)
+      if (existingCollection.owner.id !== user.id)
         throw new UserIsNotCollectionOwner();
 
-      await this.collections.update(collection.id, collection);
+      await this.collectionsRepository.update(collection.id, collection);
       return { collectionId: collection.id };
     }
 
-    return await this.collections.insert(collection);
+    collection.validateName();
+    collection.validateDescription();
+
+    return await this.collectionsRepository.insert(collection);
   }
 }
 export default UseCase;

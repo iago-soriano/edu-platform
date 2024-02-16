@@ -24,7 +24,7 @@ export class ListCollectionsByUserController
 {
   method = HttpMethod.GET;
   path: string = "collection";
-  middlewares: string[] = ["auth", "file"];
+  middlewares: string[] = ["auth"];
 
   constructor(
     private listCollectionsByUserUseCase: IListCollectionsByUserUseCase

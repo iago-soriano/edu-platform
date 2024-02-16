@@ -24,3 +24,11 @@ export class StudentIsNotUser extends CustomError {
     super(StudentIsNotUser.message);
   }
 }
+
+export class StudentIsNotParticipant extends CustomError {
+  HTTPstatusCode = 400;
+  static message = "Cannot create output for this activity: no participation";
+  constructor() {
+    super(StudentIsNotParticipant.message);
+  }
+}

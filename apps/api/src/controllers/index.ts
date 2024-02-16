@@ -25,3 +25,5 @@ export * from "./save-collection";
 export * from "./insert-user-in-collection";
 export * from "./remove-user-from-collection";
 export * from "./list-collections-by-user";
+export * from "./create-student-output";
+export * from "./get-collection";

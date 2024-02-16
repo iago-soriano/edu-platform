@@ -32,7 +32,7 @@ class UseCase implements IUpdateActivityMetadataUseCase {
     if (version.status !== VersionStatus.Draft)
       throw new ActivityVersionIsNotDraft();
 
-    if (activity.authorId !== user.id) throw new ActivityNotFound();
+    if (activity.author.id !== user.id) throw new ActivityNotFound();
 
     newVersion.validateTitle();
     newVersion.validateDescription();

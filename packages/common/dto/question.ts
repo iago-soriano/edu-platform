@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { AlternativeResponseDTO, AlternativeRequestDTO } from ".";
 
 enum QuestionTypes {
   MultipleChoice = "MultipleChoice",
@@ -8,27 +9,33 @@ enum QuestionTypes {
 const questionypeSchema = z.nativeEnum(QuestionTypes);
 export const parseQuestionType = questionypeSchema.parse;
 
-const alternativeSchema = z.object({
-  id: z.number().optional(),
+const questionResponseSchema = z.object({
+  id: z.number(),
+  // createdAt: z.date(),
+  // updatedAt: z.date(),
+
+  type: questionypeSchema,
   order: z.number(),
-  text: z.string(),
-  comment: z.string().optional(),
-  isCorrect: z.boolean(),
-  questionId: z.number(),
+  question: z.string(),
+  answer: z.string(),
+
+  versionId: z.number(),
 });
 
-const questionSchema = z.object({
+export type QuestionResponseDTO = z.infer<typeof questionResponseSchema> & {
+  alternatives?: AlternativeResponseDTO[];
+};
+
+const questionRequestSchema = z.object({
   id: z.number().optional(),
-  versionId: z.number(),
+
   type: questionypeSchema,
-
-  order: z.number(),
-
+  order: z.number().optional(),
   question: z.string().optional(),
   answer: z.string().optional(),
-  alternatives: alternativeSchema.array().optional(),
 });
 
-export const parseToQuestionDTO = questionSchema.parse;
-export type QuestionDTO = z.infer<typeof questionSchema>;
-export type AlternativeDTO = z.infer<typeof alternativeSchema>;
+export const parseToQuestionRequestDTO = questionRequestSchema.parse;
+export type QuestionRequestDTO = z.infer<typeof questionRequestSchema> & {
+  alternatives?: AlternativeRequestDTO[];
+};

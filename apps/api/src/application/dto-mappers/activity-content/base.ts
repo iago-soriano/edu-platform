@@ -1,5 +1,7 @@
 import {
-  ContentDTO,
+  ContentRequestDTO,
+  ContentResponseDTO,
+  VersionResponseDTO,
   ContentTypes,
   ContentTypeNotFound,
 } from "@edu-platform/common";
@@ -15,8 +17,15 @@ import { VideoContentDtoMapper } from "./video";
 import { ImageContentDtoMapper } from "./image";
 import { TextContentDtoMapper } from "./text";
 
-export const ContentDtoMapper: DomainDtoMapper<Content, ContentDTO> = {
-  mapFromDto: (dto: ContentDTO) => {
+export const ContentDtoMapper: DomainDtoMapper<
+  Content,
+  ContentRequestDTO,
+  ContentResponseDTO
+> = {
+  mapFromDto: (
+    dto: ContentRequestDTO,
+    versionDto: Partial<VersionResponseDTO>
+  ) => {
     let newContent = null;
 
     // instanciate specific type and map payload
@@ -38,7 +47,7 @@ export const ContentDtoMapper: DomainDtoMapper<Content, ContentDTO> = {
     newContent.id = dto.id;
 
     const version = new ActivityVersion();
-    version.id = dto.versionId || 0;
+    version.id = versionDto.id || 0;
 
     return newContent;
   },

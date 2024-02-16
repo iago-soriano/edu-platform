@@ -5,7 +5,7 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import {
-  parseToContentDTO,
+  parseToContentRequestDTO,
   SaveContentParams,
   SaveContentRequestBody,
   SaveContentResponseBody,
@@ -27,7 +27,7 @@ export class SaveContentController
   constructor(private saveContentUseCase: ISaveContentUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const contentDto = parseToContentDTO(req.body);
+    const contentDto = parseToContentRequestDTO(req.body);
 
     if (req.files?.image?.[0]) {
       if (!contentDto.payload) contentDto.payload = { image: undefined };

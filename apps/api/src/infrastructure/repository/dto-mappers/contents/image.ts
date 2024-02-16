@@ -18,7 +18,7 @@ export const ImageContentDtoMapper: DomainDtoMapper<
       title: domain.title,
       description: domain.description,
       order: domain.order,
-      versionId: domain.versionId,
+      versionId: domain.version.id,
       imageUrl: domain.url,
       type: ContentTypes.Image,
     };

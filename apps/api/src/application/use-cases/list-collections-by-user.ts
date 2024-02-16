@@ -1,5 +1,5 @@
 import { CollectionDTO } from "@edu-platform/common";
-import { IUseCase, UserSelectDTO, ICollections } from "@interfaces";
+import { IUseCase, UserSelectDTO, ICollectionsRepository } from "@interfaces";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -13,11 +13,13 @@ type Return = {
 export type IListCollectionsByUserUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IListCollectionsByUserUseCase {
-  constructor(private collections: ICollections) {}
+  constructor(private collectionsRepository: ICollectionsRepository) {}
 
   async execute({ user }: InputParams) {
-    const isOwnerOf = await this.collections.listByOwnership(user.id);
-    const participatesIn = await this.collections.listByParticipation(user.id);
+    const isOwnerOf = await this.collectionsRepository.listByOwnership(user.id);
+    const participatesIn = await this.collectionsRepository.listByParticipation(
+      user.id
+    );
 
     return { isOwnerOf, participatesIn };
   }

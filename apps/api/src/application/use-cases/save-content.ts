@@ -46,7 +46,7 @@ class UseCase implements ISaveContentUseCase {
       contentId: newContent.id,
     });
 
-    if (activity.authorId !== user.id) throw new ActivityNotFound();
+    if (activity.author.id !== user.id) throw new ActivityNotFound();
 
     if (version.status !== VersionStatus.Draft)
       throw new ActivityVersionIsNotDraft();
@@ -72,7 +72,7 @@ class UseCase implements ISaveContentUseCase {
       newContent.validateDescription();
       newContent.validatePayload();
 
-      newContent.versionId = versionId;
+      newContent.version.id = versionId;
 
       // persist it
       await this.activitiesRepository.Contents.insert(newContent);

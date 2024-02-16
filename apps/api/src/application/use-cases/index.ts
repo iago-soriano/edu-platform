@@ -29,9 +29,12 @@ import CreateNewActivityUseCase, {
 import UpdateActivityMetadataUseCase, {
   IUpdateActivityMetadataUseCase,
 } from "./update-activity-metadata";
-import ListActivityVersionsUseCase, {
+import ListActivityVersionsByOwnershipUseCase, {
   IListActivityVersionsByOwnershipUseCase,
 } from "./list-activity-versions/by-ownership";
+import ListActivityVersionsByParticipationUseCase, {
+  IListActivityVersionsByParticipationUseCase,
+} from "./list-activity-versions/by-participation";
 import GetActivityVersionUseCase, {
   IGetActivityVersionUseCase,
 } from "./get-activity-version";
@@ -56,8 +59,14 @@ import RemoveUserFromCollectionUseCase, {
 import ListCollectionsByUserUseCase, {
   IListCollectionsByUserUseCase,
 } from "./list-collections-by-user";
+import CreateStudentOutputUseCase, {
+  ICreateStudentOutputUseCase,
+} from "./create-student-output";
+import GetCollectionUseCase, { IGetCollectionUseCase } from "./get-collection";
 
 export {
+  GetCollectionUseCase,
+  IGetCollectionUseCase,
   SignInUseCase,
   ISignInUseCase,
   SignUpUseCase,
@@ -82,8 +91,10 @@ export {
   ICreateNewActivityUseCase,
   UpdateActivityMetadataUseCase,
   IUpdateActivityMetadataUseCase,
-  ListActivityVersionsUseCase,
-  IListActivityVersionsByOwnershipUseCase as IListActivityVersionsUseCase,
+  ListActivityVersionsByOwnershipUseCase,
+  IListActivityVersionsByOwnershipUseCase,
+  ListActivityVersionsByParticipationUseCase,
+  IListActivityVersionsByParticipationUseCase,
   GetActivityVersionUseCase,
   IGetActivityVersionUseCase,
   DeleteContentUseCase,
@@ -106,4 +117,6 @@ export {
   IRemoveUserFromCollectionUseCase,
   ListCollectionsByUserUseCase,
   IListCollectionsByUserUseCase,
+  CreateStudentOutputUseCase,
+  ICreateStudentOutputUseCase,
 };

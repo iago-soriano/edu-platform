@@ -17,6 +17,9 @@ export enum ContentTypes {
 
 export abstract class Content {
   public id?: number;
+  public createdAt?: Date;
+  public updatedAt?: Date;
+
   public title?: string;
   public description?: string;
   public order?: number;

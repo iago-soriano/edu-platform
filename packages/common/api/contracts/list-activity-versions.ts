@@ -1,14 +1,18 @@
-import { VersionDTO, VersionStatus } from "../../dto";
+import { VersionDTO, CollectionDTO, VersionStatus } from "../../dto";
 
 type RequestBody = void;
 type ResponseBody = {
-  [activityId: string]: {
-    [VersionStatus.Draft]?: VersionDTO;
-    [VersionStatus.Published]?: VersionDTO;
-    [VersionStatus.Archived]?: VersionDTO[];
+  [collectionId: number]: {
+    activities: {
+      activityId: number;
+      [VersionStatus.Draft]?: VersionDTO;
+      [VersionStatus.Published]?: VersionDTO;
+      [VersionStatus.Archived]?: VersionDTO[];
+    }[];
+    collection: CollectionDTO;
   };
 };
-type Query = { statuses: string };
+type Query = { byOwnership: boolean; collectionId?: string };
 
 export {
   RequestBody as ListActivityVersionsRequestBody,

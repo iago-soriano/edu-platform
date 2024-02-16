@@ -6,11 +6,15 @@ import {
   Question,
   TextQuestion,
   MultipleChoiceQuestion,
+  Collection,
   // Alternative,
 } from "@domain";
 
 export interface IActivities {
-  insert: (authorId: number) => Promise<{ activityId: number }>;
+  insert: (
+    authorId: number,
+    collectionId: number
+  ) => Promise<{ activityId: number }>;
   update: (activityId: number, activity: Partial<Activity>) => Promise<void>;
   findById: (activityId: number) => Promise<Activity>;
 }
@@ -52,10 +56,14 @@ export interface IVersions {
     contents: Content[];
     questions: Question[];
   }>;
-  listByAuthorIdAndStatuses: (
-    authorId: number,
-    statuses: VersionStatus[]
-  ) => Promise<ActivityVersion[]>;
+  listByCollectionOwnership: (
+    userId: number,
+    collectionId?: number
+  ) => Promise<{ collection: Collection; version: ActivityVersion }[]>;
+  listByCollectionParticipation: (
+    userId: number,
+    collectionId?: number
+  ) => Promise<{ collection: Collection; version: ActivityVersion }[]>;
 }
 
 export interface IActivitiesRepository {

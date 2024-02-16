@@ -24,7 +24,7 @@ class UseCase implements IGetActivityVersionUseCase {
       versionId,
     });
 
-    if (version.status == "Draft" && activity.authorId !== user.id)
+    if (version.status == "Draft" && activity.author.id !== user.id)
       throw new UserIsNotDraftAuthor();
 
     const { contents, questions } =

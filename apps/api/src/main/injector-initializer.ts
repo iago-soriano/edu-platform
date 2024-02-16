@@ -24,6 +24,7 @@ import {
   SaveCollectionController,
   InsertUserInCollectionController,
   RemoveUserFromCollectionController,
+  GetCollectionController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -39,7 +40,8 @@ import {
   CreateNewActivityUseCase,
   UpdateActivityMetadataUseCase,
   GetActivityVersionUseCase,
-  ListActivityVersionsUseCase,
+  ListActivityVersionsByParticipationUseCase,
+  ListActivityVersionsByOwnershipUseCase,
   DeleteContentUseCase,
   DeleteQuestionUseCase,
   DeleteVersionUseCase,
@@ -50,6 +52,7 @@ import {
   InsertUserInCollectionUseCase,
   RemoveUserFromCollectionUseCase,
   ListCollectionsByUserUseCase,
+  GetCollectionUseCase,
 } from "@use-cases";
 import { GetActivityUseCaseHelper } from "@use-case-middlewares";
 import {
@@ -62,12 +65,12 @@ import {
   AssetRepository,
   ActivityRepository,
   S3Service,
-  Collections,
+  CollectionsRepository,
 } from "@infrastructure";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
-    // controllers
+    /** #region controllers */
     signInController: awilix.asClass(SignInController).classic(),
     signOutController: awilix.asClass(SignOutController).classic(),
     signUpController: awilix.asClass(SignUpController).classic(),
@@ -122,6 +125,8 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     listCollectionsByUserController: awilix
       .asClass(ListCollectionsByUserController)
       .classic(),
+    getCollectionController: awilix.asClass(GetCollectionController).classic(),
+    /** #endregion */
 
     // services
     encryptionService: awilix.asClass(BCryptEncryptionService),
@@ -157,8 +162,11 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     getActivityVersionUseCase: awilix
       .asClass(GetActivityVersionUseCase)
       .classic(),
-    listActivityVersionsUseCase: awilix
-      .asClass(ListActivityVersionsUseCase)
+    listByOwnershipUseCase: awilix
+      .asClass(ListActivityVersionsByOwnershipUseCase)
+      .classic(),
+    listByParticipationUseCase: awilix
+      .asClass(ListActivityVersionsByParticipationUseCase)
       .classic(),
     saveContentUseCase: awilix.asClass(SaveContentUseCase).classic(),
     deleteVersionUseCase: awilix.asClass(DeleteVersionUseCase).classic(),
@@ -179,11 +187,12 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     listCollectionsByUserUseCase: awilix
       .asClass(ListCollectionsByUserUseCase)
       .classic(),
+    getCollectionUseCase: awilix.asClass(GetCollectionUseCase).classic(),
 
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),
     tokenRepository: awilix.asClass(TokenRepository).classic(),
     activitiesRepository: awilix.asClass(ActivityRepository).classic(),
-    collections: awilix.asClass(Collections).classic(),
+    collectionsRepository: awilix.asClass(CollectionsRepository).classic(),
   });
 };

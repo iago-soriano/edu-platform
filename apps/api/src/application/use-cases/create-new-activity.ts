@@ -2,6 +2,7 @@ import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
 
 type InputParams = {
   user: UserSelectDTO;
+  collectionId: number;
 };
 
 type Return = {
@@ -14,9 +15,10 @@ export type ICreateNewActivityUseCase = IUseCase<InputParams, Return>;
 class UseCase implements ICreateNewActivityUseCase {
   constructor(private activitiesRepository: IActivitiesRepository) {}
 
-  async execute({ user }: InputParams) {
+  async execute({ user, collectionId }: InputParams) {
     const { activityId } = await this.activitiesRepository.Activities.insert(
-      user.id
+      user.id,
+      collectionId
     );
 
     const { versionId } = await this.activitiesRepository.Versions.insert(

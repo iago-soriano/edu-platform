@@ -4,7 +4,7 @@ import {
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@interfaces";
-import { parseToQuestionDTO } from "@edu-platform/common";
+import { parseToQuestionRequestDTO } from "@edu-platform/common";
 import {
   SaveQuestionParams,
   SaveQuestionResponseBody,
@@ -27,7 +27,7 @@ export class SaveQuestionController
   constructor(private saveQuestionUseCase: ISaveQuestionUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const questionDto = parseToQuestionDTO(req.body);
+    const questionDto = parseToQuestionRequestDTO(req.body);
     const question = QuestionDtoMapper.mapFromDto(questionDto);
 
     const { activityId, versionId } = parseNumberId(req.params, [

@@ -1,4 +1,4 @@
-type RequestBody = void;
+type RequestBody = { collectionId: number };
 type ResponseBody = {
   activityId: number;
   versionId: number;

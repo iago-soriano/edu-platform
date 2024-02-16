@@ -19,7 +19,7 @@ export const TextContentDtoMapper: DomainDtoMapper<
       description: domain.description,
       order: domain.order,
       text: domain.text,
-      versionId: domain.versionId,
+      versionId: domain.version.id,
       type: ContentTypes.Text,
     };
     return dto;

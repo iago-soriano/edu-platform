@@ -33,7 +33,7 @@ class UseCase implements ISignUpUseCase {
   ) {}
 
   async execute({ email, password, name, confirmPassword }: InputParams) {
-    const user = new User(name, email, password);
+    const user = new User(0, name, email, password);
 
     const existingUser = await this.userRepository.getUserByEmail(email);
 
@@ -48,7 +48,7 @@ class UseCase implements ISignUpUseCase {
       email: user.email,
       name: user.name,
       emailVerified: false,
-      hashedPassword: await this.encryptionService.encrypt(user.password),
+      hashedPassword: await this.encryptionService.encrypt(user.password || ""),
     };
 
     const { userId } = await this.userRepository.insertUser(userDTO);

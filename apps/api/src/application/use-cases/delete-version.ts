@@ -7,7 +7,7 @@ import {
   ActivityVersionSelectDTO,
 } from "@interfaces";
 import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
-import { VersionStatus, Content } from "@domain";
+import { VersionStatus, Content, ActivityVersion } from "@domain";
 import {
   ActivityNotFound,
   ActivityVersionIsNotDraft,
@@ -36,7 +36,7 @@ class UseCase implements IDeleteVersionUseCase {
       versionId,
     });
 
-    if (activity.authorId !== user.id) throw new ActivityNotFound();
+    if (activity.author.id !== user.id) throw new ActivityNotFound();
 
     if (!(version.status === VersionStatus.Draft))
       throw new ActivityVersionIsNotDraft();
@@ -61,7 +61,7 @@ class UseCase implements IDeleteVersionUseCase {
 
     await this.activitiesRepository.Versions.delete(versionId);
     await this.activitiesRepository.Activities.update(activity.id, {
-      draftVersionId: 0,
+      draftVersion: new ActivityVersion(0),
     });
 
     // TODO verificar se é a única versão desta atividade (version = 0). Se sim deletar activity
