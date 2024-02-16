@@ -6,7 +6,7 @@ import {
   ActivityDescriptionIsTooShort,
   ActivityTitleIsTooShort,
 } from "@edu-platform/common";
-import { Content, Question } from ".";
+import { Content, Question, Activity } from ".";
 
 export enum VersionStatus {
   Published = "Published",
@@ -23,7 +23,7 @@ export class ActivityVersion {
   public topics!: string;
   public version!: number;
   public status!: VersionStatus;
-  public activityId!: number;
+  public activity!: Activity;
   public elements: Elements = [];
   public updatedAt!: Date;
 

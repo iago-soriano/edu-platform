@@ -1,4 +1,5 @@
 import { Question, QuestionTypes } from ".";
+import { ActivityVersion } from "../version";
 
 export class Alternative {
   public id: number = 0;
@@ -6,7 +7,7 @@ export class Alternative {
   public text: string = "";
   public comment?: string;
   public isCorrect: boolean = false;
-  public questionId: number = 0;
+  public question: MultipleChoiceQuestion = new MultipleChoiceQuestion();
 }
 
 export class MultipleChoiceQuestion extends Question {

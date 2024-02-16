@@ -1,4 +1,4 @@
 export interface DomainDtoMapper<Domain, Dto> {
-  mapFromDto(dto: Dto): Domain;
+  mapFromDto(dto: Dto, ...other: any): Domain;
   mapToDto(dto: Domain): Dto;
 }

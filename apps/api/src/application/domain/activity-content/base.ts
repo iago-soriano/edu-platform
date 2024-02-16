@@ -7,6 +7,7 @@ import {
   ContentDescriptionIsTooShort,
 } from "@edu-platform/common";
 import { FileType } from "@interfaces";
+import { ActivityVersion } from "../version";
 
 export enum ContentTypes {
   Video = "Video",
@@ -20,7 +21,7 @@ export abstract class Content {
   public description?: string;
   public order?: number;
   public file: FileType | null = null;
-  public versionId!: number;
+  public version!: ActivityVersion;
 
   constructor(public type: ContentTypes) {}
 

@@ -8,19 +8,24 @@ import {
   MultipleChoiceQuestion,
   QuestionTypes,
   Alternative,
+  ActivityVersion,
 } from "@domain";
 import { DomainDtoMapper } from "./types";
 
 const AlternativeDtoMapper: DomainDtoMapper<Alternative, AlternativeDTO> = {
-  mapFromDto: (dto: AlternativeDTO) => {
+  mapFromDto: (dto: AlternativeDTO, questionDto: QuestionDTO) => {
     const alternative = new Alternative();
 
     alternative.id = dto.id || 0;
-    alternative.questionId = dto.questionId;
     alternative.isCorrect = dto.isCorrect;
     alternative.comment = dto.comment || "";
     alternative.order = dto.order || 0;
     alternative.text = dto.text || "";
+
+    const question = new MultipleChoiceQuestion();
+    question.id = questionDto.id;
+
+    alternative.question = question;
 
     return alternative;
   },
@@ -29,7 +34,7 @@ const AlternativeDtoMapper: DomainDtoMapper<Alternative, AlternativeDTO> = {
       text: domain.text,
       comment: domain.comment,
       isCorrect: domain.isCorrect,
-      questionId: domain.questionId,
+      questionId: domain.question.id || 0,
       id: domain.id,
       order: domain.order,
     };
@@ -52,8 +57,8 @@ export const QuestionDtoMapper: DomainDtoMapper<
       case QuestionTypes.Text:
         newQuestion = new MultipleChoiceQuestion();
         newQuestion.alternatives =
-          dto.alternatives?.map((dto) =>
-            AlternativeDtoMapper.mapFromDto(dto)
+          dto.alternatives?.map((alternativeDto) =>
+            AlternativeDtoMapper.mapFromDto(alternativeDto, dto)
           ) || [];
         break;
       default:
@@ -66,7 +71,11 @@ export const QuestionDtoMapper: DomainDtoMapper<
     newQuestion.order = dto.order;
 
     newQuestion.id = dto.id;
-    newQuestion.versionId = dto.versionId;
+
+    const version = new ActivityVersion();
+    version.id = dto.versionId;
+
+    newQuestion.version = version;
 
     return newQuestion;
   },
@@ -77,7 +86,7 @@ export const QuestionDtoMapper: DomainDtoMapper<
       answer: domain.answer,
       order: domain.order || 0,
       type: domain.type,
-      versionId: domain.versionId,
+      versionId: domain.version.id,
       alternatives: (domain as MultipleChoiceQuestion)?.alternatives?.map(
         (alt) => AlternativeDtoMapper.mapToDto(alt)
       ),

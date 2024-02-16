@@ -1,4 +1,4 @@
-import { ImageContent } from "@domain";
+import { ImageContent, ActivityVersion } from "@domain";
 import { DomainDtoMapper } from "../types";
 import { ContentDTO, ContentTypes } from "@edu-platform/common";
 
@@ -23,7 +23,7 @@ export const ImageContentDtoMapper: DomainDtoMapper<ImageContent, ContentDTO> =
         description: domain.description,
         order: domain.order || 0,
         type: ContentTypes.Image,
-        versionId: domain.versionId,
+        versionId: domain.version.id,
         payload: {
           image: {
             url: domain.url,

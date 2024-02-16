@@ -20,7 +20,7 @@ export const TextContentDtoMapper: DomainDtoMapper<TextContent, ContentDTO> = {
       description: domain.description,
       order: domain.order || 0,
       type: ContentTypes.Text,
-      versionId: domain.versionId,
+      versionId: domain.version.id,
       payload: {
         text: {
           text: domain.text,

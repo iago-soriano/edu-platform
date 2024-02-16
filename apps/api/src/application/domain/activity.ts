@@ -1,14 +1,9 @@
+import { ActivityVersion, Collection, User } from ".";
+
 export class Activity {
   public id!: number;
-  public authorId!: number;
-  public lastVersionId!: number;
-  public draftVersionId!: number;
-
-  hasPublishedVersion() {
-    return !!this.lastVersionId;
-  }
-
-  hasDraft() {
-    return !!this.draftVersionId;
-  }
+  public author!: User;
+  public collection!: Collection;
+  public lastVersion!: ActivityVersion;
+  public draftVersion!: ActivityVersion;
 }

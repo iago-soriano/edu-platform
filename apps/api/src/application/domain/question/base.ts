@@ -6,6 +6,7 @@ import {
   TextQuestionIsTooShort,
   QuestionSavedInDBHasNoType,
 } from "@edu-platform/common";
+import { ActivityVersion } from "../version";
 
 export enum QuestionTypes {
   MultipleChoice = "MultipleChoice",
@@ -14,7 +15,7 @@ export enum QuestionTypes {
 
 export abstract class Question {
   public id?: number;
-  public versionId!: number;
+  public version!: ActivityVersion;
   public order?: number;
 
   public question?: string;

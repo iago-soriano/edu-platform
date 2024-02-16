@@ -29,7 +29,7 @@ export const ActivityVersionDtoMapper: DomainDtoMapper<
       description: domain.description,
       topics: domain.topics,
       version: domain.version,
-      activityId: domain.activityId,
+      activityId: domain.activity.id,
       updatedAt: domain.updatedAt,
       elements: domain.elements.map((element) => ({
         content: element.content && ContentDtoMapper.mapToDto(element.content),

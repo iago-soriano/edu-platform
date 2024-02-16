@@ -22,7 +22,7 @@ export const VideoContentDtoMapper: DomainDtoMapper<VideoContent, ContentDTO> =
         description: domain.description,
         order: domain.order || 0,
         type: ContentTypes.Video,
-        versionId: domain.versionId,
+        versionId: domain.version.id,
         payload: {
           video: {
             url: domain.url,
