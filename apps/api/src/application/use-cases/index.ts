@@ -30,8 +30,8 @@ import UpdateActivityMetadataUseCase, {
   IUpdateActivityMetadataUseCase,
 } from "./update-activity-metadata";
 import ListActivityVersionsUseCase, {
-  IListActivityVersionsUseCase,
-} from "./list-activity-versions";
+  IListActivityVersionsByOwnershipUseCase,
+} from "./list-activity-versions/by-ownership";
 import GetActivityVersionUseCase, {
   IGetActivityVersionUseCase,
 } from "./get-activity-version";
@@ -83,7 +83,7 @@ export {
   UpdateActivityMetadataUseCase,
   IUpdateActivityMetadataUseCase,
   ListActivityVersionsUseCase,
-  IListActivityVersionsUseCase,
+  IListActivityVersionsByOwnershipUseCase as IListActivityVersionsUseCase,
   GetActivityVersionUseCase,
   IGetActivityVersionUseCase,
   DeleteContentUseCase,
