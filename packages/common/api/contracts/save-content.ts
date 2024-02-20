@@ -1,6 +1,6 @@
-import { ContentDTO } from "../../dto";
+import { ContentRequestDTO } from "../../dto";
 
-type RequestBody = ContentDTO;
+type RequestBody = ContentRequestDTO;
 type ResponseBody = {
   contentId?: number;
 };

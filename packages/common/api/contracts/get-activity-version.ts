@@ -1,7 +1,7 @@
-import { VersionDTO } from "../../dto";
+import { VersionResponseDTO } from "../../dto";
 
 type RequestBody = void;
-type ResponseBody = VersionDTO;
+type ResponseBody = VersionResponseDTO;
 type Params = {
   activityId: string;
   versionId: string;

@@ -1,6 +1,6 @@
-import { StudentOutputDTO } from "../../dto";
+import { StudentOutputRequestDTO } from "../../dto";
 
-type RequestBody = StudentOutputDTO;
+type RequestBody = StudentOutputRequestDTO;
 type ResponseBody = { outputId: number };
 type Params = { activityId: number; versionId: number };
 

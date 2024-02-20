@@ -20,6 +20,10 @@ class UseCase implements ICreateNewDraftVersionUseCase {
     const activity =
       await this.activitiesRepository.Activities.findById(activityId);
 
+    if (!activity) throw new ActivityNotFound();
+
+    if (!activity.lastVersion) throw new Error("Published version not found");
+
     if (activity.author.id !== user.id) throw new ActivityNotFound();
 
     if (activity.draftVersion)
@@ -39,7 +43,7 @@ class UseCase implements ICreateNewDraftVersionUseCase {
     const { versionId: newVersionId } =
       await this.activitiesRepository.Versions.insert(
         activityId,
-        (version.version || 0) + 1
+        (version || 0) + 1
       );
 
     // duplicate all contents and questions to the new version

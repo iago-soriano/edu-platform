@@ -36,11 +36,12 @@ export class SaveContentController
 
     if (!contentDto.type) throw new Error("Informar tipo de conteúdo");
 
-    const content = ContentDtoMapper.mapFromDto(contentDto);
     const { activityId, versionId } = parseNumberId(req.params, [
       "activityId",
       "versionId",
     ]);
+
+    const content = ContentDtoMapper.mapFromDto(contentDto, { id: versionId });
 
     const { user } = req;
 

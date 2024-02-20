@@ -1,13 +1,10 @@
-import {
-  IUserRepository,
-  ITokenRepository,
-  IUseCase,
-  TokenType,
-} from "@interfaces";
+import { IUserRepository, ITokenRepository, IUseCase } from "@interfaces";
+import { IInsertDefaultCollectionUseCase } from "@use-cases";
 import {
   InvalidValidationTokenError,
   UserNotFoundError,
-} from "@edu-platform/common/errors";
+} from "@edu-platform/common";
+import { Collection, User } from "@domain";
 
 type InputParams = {
   verifyAccountToken: string;
@@ -20,7 +17,8 @@ export type IVerifyAccountUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IVerifyAccountUseCase {
   constructor(
     private userRepository: IUserRepository,
-    private tokenRepository: ITokenRepository
+    private tokenRepository: ITokenRepository,
+    private insertDefaultCollectionUseCase: IInsertDefaultCollectionUseCase
   ) {}
 
   async execute({ verifyAccountToken }: InputParams) {
@@ -39,6 +37,9 @@ class UseCase implements IVerifyAccountUseCase {
     if (user.emailVerified) return;
 
     await this.userRepository.updateUser(user.id, { emailVerified: true });
+    await this.insertDefaultCollectionUseCase.execute(
+      new User(user.id, user.name || "", user.email || "", "")
+    );
   }
 }
 

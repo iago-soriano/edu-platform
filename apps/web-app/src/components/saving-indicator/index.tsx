@@ -12,7 +12,7 @@ export const SavingIndicator = ({ isLoading, hasChanges }) => {
           </span>
         </Tooltip>
       ) : (
-        <Tooltip content={"Atividade salva"}>
+        <Tooltip content={"Todas as mudanças estão salvas"}>
           <span>
             <Icons.CHECK size={28} />
           </span>

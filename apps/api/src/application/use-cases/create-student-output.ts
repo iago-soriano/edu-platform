@@ -3,7 +3,7 @@ import { StudentIsNotParticipant } from "@edu-platform/common";
 import {
   IUseCase,
   UserSelectDTO,
-  IActivitiesRepository,
+  ICollectionParticipationsRepository,
   IStudentOutputsRepository,
   ICollectionsRepository,
 } from "@interfaces";
@@ -23,7 +23,7 @@ export type ICreateStudentOutputUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ICreateStudentOutputUseCase {
   constructor(
-    private activitiesRepository: IActivitiesRepository,
+    private collectionParticipationsRepository: ICollectionParticipationsRepository,
     private collectionsRepository: ICollectionsRepository,
     private studentOutputsRepository: IStudentOutputsRepository,
     private getActivityHelper: IGetActivityUseCaseHelper
@@ -39,8 +39,10 @@ class UseCase implements ICreateStudentOutputUseCase {
       activity.collection?.id || 0
     );
 
+    if (!collection) throw new Error("Coleção não encontrada");
+
     const studentIsParticipant =
-      await this.collectionsRepository.findStudentCollectionRelation(
+      await this.collectionParticipationsRepository.findStudentCollectionRelation(
         user.id,
         collection.id!
       );

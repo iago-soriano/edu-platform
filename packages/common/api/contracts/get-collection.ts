@@ -1,7 +1,7 @@
-import { CollectionDTO } from "../../dto";
+import { CollectionResponseDTO } from "../../dto";
 
 type Params = { collectionId: number };
-type ResponseBody = CollectionDTO;
+type ResponseBody = CollectionResponseDTO;
 
 export {
   ResponseBody as GetCollectionResponseBody,

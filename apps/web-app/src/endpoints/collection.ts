@@ -13,25 +13,26 @@ import { errorToast } from "@components";
 type RequestSaveCollection = Parameters<ApiClient["saveCollection"]>[0];
 type ReturnSaveCollection = Awaited<ReturnType<ApiClient["saveCollection"]>>;
 
-export type SaveCollectionMutationType = UseMutationResult<
-  ReturnSaveCollection,
-  ServerError,
-  Request
->;
-
-export const saveCollectionMutation = (args: RequestSaveCollection) => {
+export const useSaveCollectionMutation = ({
+  collectionId,
+  onSuccess,
+}: { collectionId?: number } & MutationArgsType<
+  RequestSaveCollection,
+  ReturnSaveCollection
+>) => {
   const queryClient = useQueryClient();
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
   return useMutation<ReturnSaveCollection, ServerError, RequestSaveCollection>({
-    mutationFn: () => {
+    mutationFn: (args: RequestSaveCollection) => {
       return client.saveCollection(args);
     },
     onSuccess: (d, v, c) => {
       queryClient.invalidateQueries({
-        queryKey: ["collections"],
+        queryKey: [`collection-${collectionId}`],
       });
+      onSuccess && onSuccess(d, v, c);
     },
     onError: (e) => errorToast(`Algo deu errado: ${e.message}`),
   });
@@ -49,7 +50,7 @@ export type InsertUserMutationType = UseMutationResult<
   Request
 >;
 
-export const insertUserInCollectionMutation = (
+export const useInsertUserInCollectionMutation = (
   params: ParamsInsertUser,
   args: RequestInsertUser
 ) => {
@@ -81,7 +82,9 @@ export type RemoveUserMutationType = UseMutationResult<
   Request
 >;
 
-export const removeUserFromCollectionMutation = (params: ParamsRemoveUser) => {
+export const useRemoveUserFromCollectionMutation = (
+  params: ParamsRemoveUser
+) => {
   const queryClient = useQueryClient();
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
@@ -96,5 +99,49 @@ export const removeUserFromCollectionMutation = (params: ParamsRemoveUser) => {
     //   });
     // },
     onError: (e) => errorToast(`Algo deu errado: ${e.message}`),
+  });
+};
+
+type CollectionListResponse = Awaited<ReturnType<ApiClient["listCollections"]>>;
+
+export const useListCollectionsQuery = () => {
+  const axios = useAxiosAuth();
+  const client = new ApiClient(axios);
+
+  return useQuery<CollectionListResponse, ServerError>({
+    queryKey: ["collections"],
+    queryFn: () => client.listCollections(),
+  });
+};
+
+type GetCollectionParams = Parameters<ApiClient["getCollection"]>[0];
+type GetCollectionResponse = Awaited<ReturnType<ApiClient["getCollection"]>>;
+
+export const useGetCollectionQuery = ({
+  collectionId,
+}: GetCollectionParams) => {
+  const axios = useAxiosAuth();
+  const client = new ApiClient(axios);
+
+  return useQuery<GetCollectionResponse, ServerError>({
+    queryKey: [`collection-${collectionId}`],
+    queryFn: () => client.getCollection({ collectionId }),
+  });
+};
+
+type GetStudentsParams = Parameters<ApiClient["getStudentsOfCollection"]>[0];
+type GetStudentsResponse = Awaited<
+  ReturnType<ApiClient["getStudentsOfCollection"]>
+>;
+
+export const useGetStudentsOfCollectionQuery = ({
+  collectionId,
+}: GetStudentsParams) => {
+  const axios = useAxiosAuth();
+  const client = new ApiClient(axios);
+
+  return useQuery<GetStudentsResponse, ServerError>({
+    queryKey: ["collection-students", collectionId],
+    queryFn: () => client.getStudentsOfCollection({ collectionId }),
   });
 };

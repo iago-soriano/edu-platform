@@ -25,6 +25,7 @@ import {
   InsertUserInCollectionController,
   RemoveUserFromCollectionController,
   GetCollectionController,
+  ListUsersInCollectionController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -53,6 +54,8 @@ import {
   RemoveUserFromCollectionUseCase,
   ListCollectionsByUserUseCase,
   GetCollectionUseCase,
+  ListUsersInCollectionUseCase,
+  InsertDefaultCollectionUseCase,
 } from "@use-cases";
 import { GetActivityUseCaseHelper } from "@use-case-middlewares";
 import {
@@ -66,6 +69,7 @@ import {
   ActivityRepository,
   S3Service,
   CollectionsRepository,
+  CollectionParticipationsRepository,
 } from "@infrastructure";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
@@ -126,6 +130,10 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(ListCollectionsByUserController)
       .classic(),
     getCollectionController: awilix.asClass(GetCollectionController).classic(),
+    listUsersInCollectionController: awilix
+      .asClass(ListUsersInCollectionController)
+      .classic(),
+
     /** #endregion */
 
     // services
@@ -188,11 +196,19 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(ListCollectionsByUserUseCase)
       .classic(),
     getCollectionUseCase: awilix.asClass(GetCollectionUseCase).classic(),
-
+    listUsersInCollectionUseCase: awilix
+      .asClass(ListUsersInCollectionUseCase)
+      .classic(),
+    insertDefaultCollectionUseCase: awilix
+      .asClass(InsertDefaultCollectionUseCase)
+      .classic(),
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),
     tokenRepository: awilix.asClass(TokenRepository).classic(),
     activitiesRepository: awilix.asClass(ActivityRepository).classic(),
     collectionsRepository: awilix.asClass(CollectionsRepository).classic(),
+    collectionParticipationsRepository: awilix
+      .asClass(CollectionParticipationsRepository)
+      .classic(),
   });
 };

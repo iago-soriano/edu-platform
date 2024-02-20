@@ -1,13 +1,14 @@
-import { CollectionDTO } from "@edu-platform/common";
+import { CollectionResponseDTO } from "@edu-platform/common";
 import { IUseCase, UserSelectDTO, ICollectionsRepository } from "@interfaces";
+import { CollectionDtoMapper } from "@dto-mappers";
 
 type InputParams = {
   user: UserSelectDTO;
 };
 
 type Return = {
-  isOwnerOf: CollectionDTO[] | undefined;
-  participatesIn: CollectionDTO[] | undefined;
+  isOwnerOf: CollectionResponseDTO[] | undefined;
+  participatesIn: CollectionResponseDTO[] | undefined;
 };
 
 export type IListCollectionsByUserUseCase = IUseCase<InputParams, Return>;
@@ -21,7 +22,12 @@ class UseCase implements IListCollectionsByUserUseCase {
       user.id
     );
 
-    return { isOwnerOf, participatesIn };
+    return {
+      isOwnerOf: isOwnerOf.map((coll) => CollectionDtoMapper.mapToDto(coll)),
+      participatesIn: participatesIn.map((coll) =>
+        CollectionDtoMapper.mapToDto(coll)
+      ),
+    };
   }
 }
 export default UseCase;

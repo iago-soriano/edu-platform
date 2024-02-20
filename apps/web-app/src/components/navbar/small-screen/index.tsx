@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { ActionLink } from "@components";
 import { HamburguerButton } from "./hamburguer";
 import {
-  HowItWorksButton,
   MyProfileButton,
-  StudentOutputsButton,
-  MyActivitiesButton,
+  StudentAreaButton,
+  TeacherAreaButton,
   SignInButton,
   SignUpButton,
-  ProductButton,
+  HomeButton,
   SignOutButton,
   Logo,
   NavButton,
@@ -58,55 +57,24 @@ export const SmallScreenNavbar = ({
       </nav>
       <div ref={addRef}>
         <Dropdown className="w-full" open={burguerOpen}>
-          {isAuthenticated ? (
-            <>
-              <MyActivitiesButton
-                currentPath={currentPath}
-                Component={DrawerMenuItem}
-              />
-              <StudentOutputsButton
-                currentPath={currentPath}
-                Component={DrawerMenuItem}
-              />
-              <hr />
-              <ProductButton
-                currentPath={currentPath}
-                Component={DrawerMenuItem}
-              />
-              <HowItWorksButton
-                currentPath={currentPath}
-                Component={DrawerMenuItem}
-              />
-              <hr />
-              <MyProfileButton
-                currentPath={currentPath}
-                Component={DrawerMenuItem}
-              />
-              <SignOutButton signOut={signOut} />
-            </>
-          ) : (
-            <>
-              <ProductButton
-                currentPath={currentPath}
-                Component={DrawerMenuItem}
-              />
-              <HowItWorksButton
-                currentPath={currentPath}
-                Component={DrawerMenuItem}
-              />
-              <hr />
-              <div className="flex flex-row justify-center my-2 hover:opacity-80">
-                <SignUpButton
-                  currentPath={currentPath}
-                  Component={ActionLink}
-                />
-              </div>
-              <SignInButton
-                currentPath={currentPath}
-                Component={DrawerMenuItem}
-              />
-            </>
-          )}
+          <>
+            <TeacherAreaButton
+              currentPath={currentPath}
+              Component={DrawerMenuItem}
+            />
+            <StudentAreaButton
+              currentPath={currentPath}
+              Component={DrawerMenuItem}
+            />
+            <hr />
+            <HomeButton currentPath={currentPath} Component={DrawerMenuItem} />
+            <hr />
+            <MyProfileButton
+              currentPath={currentPath}
+              Component={DrawerMenuItem}
+            />
+            <SignOutButton signOut={signOut} />
+          </>
         </Dropdown>
       </div>
     </>

@@ -72,10 +72,14 @@ class UseCase implements IUpdateActivityStatusUseCase {
     activity: Activity,
     version: ActivityVersion
   ) => {
-    const { contents, questions } =
-      await this.activitiesRepository.Versions.findElementsByVersionId(
-        version.id
-      );
+    if (!activity.draftVersion) throw new Error("Draft version not found");
+
+    const v = await this.activitiesRepository.Versions.findFullViewById(
+      version.id
+    );
+    if (!v) throw new ActivityNotFound();
+
+    const { contents, questions } = v;
 
     if (!contents || !contents.length) throw new ActivityVersionHasNoContent();
 
@@ -115,10 +119,10 @@ class UseCase implements IUpdateActivityStatusUseCase {
       version: (version.version || 0) + 1,
     });
 
-    await this.activitiesRepository.Activities.update(activity.id, {
-      lastVersion: new ActivityVersion(activity.draftVersion.id),
-      draftVersion: new ActivityVersion(0),
-    });
+    activity.lastVersion = new ActivityVersion(activity.draftVersion.id);
+    activity.draftVersion = undefined;
+
+    await this.activitiesRepository.Activities.update(activity.id, activity);
 
     return {};
   };
@@ -142,6 +146,8 @@ class UseCase implements IUpdateActivityStatusUseCase {
   };
 
   private handleArchivePublished = async (activity: Activity) => {
+    if (!activity.lastVersion) throw new Error("Published version not found");
+
     await this.activitiesRepository.Versions.update(activity.lastVersion.id, {
       status: VersionStatus.Archived,
     });

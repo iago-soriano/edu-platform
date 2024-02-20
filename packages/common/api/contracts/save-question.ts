@@ -1,6 +1,6 @@
-import { QuestionDTO } from "../../dto";
+import { QuestionRequestDTO } from "../../dto";
 
-type RequestBody = QuestionDTO;
+type RequestBody = QuestionRequestDTO;
 type ResponseBody = {
   questionId?: number;
 };

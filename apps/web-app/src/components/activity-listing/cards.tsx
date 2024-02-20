@@ -3,9 +3,9 @@ import {
   getLocaleDateTimeFromISO,
 } from "@infrastructure";
 import { twMerge } from "tailwind-merge";
-import { VersionDTO } from "@edu-platform/common";
+import { VersionResponseDTO } from "@edu-platform/common";
 import { Badge, Icons, Tooltip } from "@components";
-import { Topic } from "../../../activity/[activityId]/version/[versionId]/common-components";
+import { Topic } from "../../app/activity/[activityId]/version/[versionId]/common-components";
 
 const OutlinedContainer = ({
   children,
@@ -54,7 +54,7 @@ export const ArchivedGroupActivityCard = ({
   versions,
 }: {
   currentTitle: string;
-  versions: VersionDTO[];
+  versions: VersionResponseDTO[];
 }) => {
   return (
     <OutlinedContainer legend={currentTitle}>
@@ -75,7 +75,7 @@ export const PublishedVersionActivityCard = ({
   onClickCreateDraft,
   onClickSeeDraft,
 }: {
-  version: VersionDTO;
+  version: VersionResponseDTO;
   hasDraft: boolean;
   archivedCount: number;
   onClick: (args: any) => any;
@@ -148,7 +148,7 @@ export const DraftVersionActivityCard = ({
   version: { title, description, updatedAt, topics },
   onClick,
 }: {
-  version: VersionDTO;
+  version: VersionResponseDTO;
   onClick: (args: any) => any;
 }) => {
   return (

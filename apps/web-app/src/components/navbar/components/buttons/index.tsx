@@ -29,10 +29,7 @@ export const NavButton = ({
   );
 };
 
-export const ProductButton = ({
-  currentPath,
-  Component,
-}: NavbarButtonProps) => (
+export const HomeButton = ({ currentPath, Component }: NavbarButtonProps) => (
   <AbstractNavbarButton
     path="/home"
     label="Home"
@@ -41,43 +38,45 @@ export const ProductButton = ({
   />
 );
 
-export const MyActivitiesButton = ({
+export const TeacherAreaButton = ({
   currentPath,
   Component,
   isHighlighted,
 }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/dashboard/my-activities"
-    label="Minhas atividades"
+    path="/teacher-area?activeTab=ActiveActivities"
+    label="Área do Professor"
     currentPath={currentPath}
     Component={Component}
     isHighlighted={isHighlighted}
   />
 );
 
-export const StudentOutputsButton = ({
+export const StudentAreaButton = ({
   currentPath,
   Component,
   isHighlighted,
 }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/dashboard/student-outputs"
-    label="Produções dos Estudantes"
+    path="/student-area/activities"
+    label="Área do Estudante"
     currentPath={currentPath}
     Component={Component}
     isHighlighted={isHighlighted}
   />
 );
 
-export const HowItWorksButton = ({
+export const CollectionsButton = ({
   currentPath,
   Component,
+  isHighlighted,
 }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/faq"
-    label="Como funciona"
+    path="/collections?isOwner=true"
+    label="Coleções"
     currentPath={currentPath}
     Component={Component}
+    isHighlighted={isHighlighted}
   />
 );
 

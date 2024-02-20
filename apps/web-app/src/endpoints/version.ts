@@ -26,7 +26,7 @@ export const useGetActivityVersionQuery = ({
   const client = new ApiClient(axios);
 
   return useQuery<ReturnGet, ServerError>({
-    queryKey: ["version", activityId, versionId],
+    queryKey: [`version-${versionId}`],
     queryFn: () => client.getActivityVersion({ activityId, versionId }),
   });
 };
@@ -54,9 +54,11 @@ export const useUpdateVersionMetadataMutation = ({
       client.updateVersionMetadata({ activityId, versionId }, args),
     onSuccess: (d, v, c) => {
       onSuccess && onSuccess(d, v, c);
-      queryClient.invalidateQueries({ queryKey: ["all"] });
       queryClient.invalidateQueries({
-        queryKey: ["version", activityId, versionId],
+        queryKey: [`version-${versionId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["versions"],
       });
     },
     onError: onError
@@ -67,14 +69,15 @@ export const useUpdateVersionMetadataMutation = ({
 };
 
 type ReturnList = Awaited<ReturnType<ApiClient["listActivityVersions"]>>;
+export type ListQueryReturn = UseQueryResult<ReturnList, ServerError>;
 
-export const useListActivityVersionsQuery = (status) => {
+export const useListActivityVersionsQuery = ({ byOwnership }) => {
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
   return useQuery<ReturnList, ServerError>({
-    queryKey: [status || "all"],
-    queryFn: () => client.listActivityVersions({ statuses: status }),
+    queryKey: ["versions"],
+    queryFn: () => client.listActivityVersions({ byOwnership }),
   });
 };
 
@@ -86,6 +89,7 @@ export const useUpdateVersionStatusMutation = ({
   activityId,
   versionId,
   onError,
+  onSuccess,
 }: MutationArgsType<RequestUpdateStatus, ReturnUpdateStatus> &
   ParamsUpdateStatus) => {
   const queryClient = useQueryClient();
@@ -95,14 +99,18 @@ export const useUpdateVersionStatusMutation = ({
   return useMutation<ReturnUpdateStatus, ServerError, RequestUpdateStatus>({
     mutationFn: (args: RequestUpdateStatus) =>
       client.updateVersionStatus({ activityId, versionId }, args),
-    onSuccess: () => {
+    onSuccess: (e, v, c) => {
       queryClient.invalidateQueries({
-        queryKey: ["all"],
+        queryKey: ["version"],
       });
+      onSuccess && onSuccess(e, v, c);
     },
     onError: onError
       ? (e, v, c) => onError(e, v, c)
-      : (e) => errorToast(`Algo deu errado: ${e.message}`),
+      : (e) => {
+          if (e.message === "NEXT_REDIRECT") return;
+          errorToast(`Algo deu errado: ${e.message}`);
+        },
   });
 };
 
@@ -123,7 +131,7 @@ export const useDeleteDraftVersionMutation = ({
     mutationFn: () => client.deleteVersion({ activityId, versionId }),
     onSuccess: (e, v, c) => {
       queryClient.invalidateQueries({
-        queryKey: ["all"],
+        queryKey: [`version-${versionId}`],
       });
       onSuccess && onSuccess(e, v, c);
     },

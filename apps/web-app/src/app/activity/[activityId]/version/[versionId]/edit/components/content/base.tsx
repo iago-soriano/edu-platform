@@ -11,12 +11,12 @@ import {
   useSaveContentMutation,
   useDeleteActivityContentMutation,
 } from "@endpoints";
-import { ContentDTO } from "@edu-platform/common";
+import { ContentResponseDTO } from "@edu-platform/common";
 import { twMerge } from "tailwind-merge";
 import { ContentContainer } from "../../../common-components";
 
 type BaseContentProps = {
-  contentDto: ContentDTO;
+  contentDto: ContentResponseDTO;
   activityId: string;
   versionId: string;
   setSaveState: Dispatch<SetStateAction<string>>;

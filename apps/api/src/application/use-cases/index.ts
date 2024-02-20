@@ -63,6 +63,12 @@ import CreateStudentOutputUseCase, {
   ICreateStudentOutputUseCase,
 } from "./create-student-output";
 import GetCollectionUseCase, { IGetCollectionUseCase } from "./get-collection";
+import ListUsersInCollectionUseCase, {
+  IListUsersInCollectionUseCase,
+} from "./list-users-in-collection";
+import InsertDefaultCollectionUseCase, {
+  IInsertDefaultCollectionUseCase,
+} from "./insert-default-collection";
 
 export {
   GetCollectionUseCase,
@@ -119,4 +125,8 @@ export {
   IListCollectionsByUserUseCase,
   CreateStudentOutputUseCase,
   ICreateStudentOutputUseCase,
+  IListUsersInCollectionUseCase,
+  ListUsersInCollectionUseCase,
+  InsertDefaultCollectionUseCase,
+  IInsertDefaultCollectionUseCase,
 };

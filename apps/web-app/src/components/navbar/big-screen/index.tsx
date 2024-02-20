@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import {
-  StudentOutputsButton,
-  MyActivitiesButton,
+  StudentAreaButton,
+  TeacherAreaButton,
+  CollectionsButton,
   SignInButton,
   SignUpButton,
-  ProductButton,
+  HomeButton,
   Logo,
   NavButton,
 } from "../components";
@@ -74,19 +75,40 @@ export const BigScreenNavbar = ({
             <Logo />
           </li>
           <div className="flex flex-row justify-center">
-            {isAuthenticated ? (
+            {/* {isAuthenticated ? ( */}
+            <li>
+              <HomeButton
+                isHighlighted={(cp) => cp.startsWith("/home")}
+                currentPath={currentPath}
+                Component={Button}
+              />
+            </li>
+            <li>
+              <TeacherAreaButton
+                isHighlighted={(cp) => cp.startsWith("/teacher-area")}
+                currentPath={currentPath}
+                Component={Button}
+              />
+            </li>
+            <li>
+              <StudentAreaButton
+                isHighlighted={(cp) => cp.startsWith("/student-area")}
+                currentPath={currentPath}
+                Component={Button}
+              />
+            </li>
+            {/* <li>
+              <CollectionsButton
+                isHighlighted={(cp) => cp.startsWith("/collections")}
+                currentPath={currentPath}
+                Component={Button}
+              />
+            </li> */}
+            {/* ) : (
               <li>
-                <MyActivitiesButton
-                  isHighlighted={(cp) => cp.startsWith("/dashboard")}
-                  currentPath={currentPath}
-                  Component={Button}
-                />
+                <HomeButton currentPath={currentPath} Component={Button} />
               </li>
-            ) : (
-              <li>
-                <ProductButton currentPath={currentPath} Component={Button} />
-              </li>
-            )}
+            )} */}
             {/* <li>
               <StudentOutputsButton
                 currentPath={currentPath}

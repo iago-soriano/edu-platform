@@ -15,18 +15,29 @@ export const ActivityVersionDtoMapper: DomainDtoMapper<
   mapFromDto(dto: VersionRequestDTO) {
     const version = new ActivityVersion();
 
-    // version.id = dto.id || 0;
     version.title = dto.title || "";
     version.description = dto.description || "";
     version.topics = dto.topics || "";
-    // version.version = dto.version || 0;
-    // version.status = parseVersionStatus(dto.status) || VersionStatus.Draft;
-    // version.activityId = dto.activityId || 0;
 
     return version;
   },
 
   mapToDto(domain: ActivityVersion) {
+    const elements = [
+      ...domain.contents.map((content) => ({
+        content: ContentDtoMapper.mapToDto(content),
+        question: undefined,
+      })),
+      ...domain.questions.map((question) => ({
+        question: QuestionDtoMapper.mapToDto(question),
+        content: undefined,
+      })),
+    ].sort(
+      (el1, el2) =>
+        ((el1?.content || el1?.question)?.order || 0) -
+        ((el2?.content || el2?.question)?.order || 0)
+    );
+
     const dto: VersionResponseDTO = {
       id: domain.id,
       updatedAt: domain.updatedAt,
@@ -37,12 +48,9 @@ export const ActivityVersionDtoMapper: DomainDtoMapper<
       topics: domain.topics,
       version: domain.version,
       activityId: domain.activity.id,
-      elements: domain.elements.map((element) => ({
-        content: element.content && ContentDtoMapper.mapToDto(element.content),
-        question:
-          element.question && QuestionDtoMapper.mapToDto(element.question),
-      })),
+      elements,
     };
+
     return dto;
   },
 };

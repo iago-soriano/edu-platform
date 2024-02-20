@@ -8,6 +8,8 @@ export const VersionDtoMapper: DomainDtoMapper<
   typeof activityVersions
 > = {
   mapFromSelectDto: (dto: typeof activityVersions.$inferSelect) => {
+    // if (!dto) return null;
+
     const version = new ActivityVersion(dto.id);
 
     version.id = dto.id || 0;

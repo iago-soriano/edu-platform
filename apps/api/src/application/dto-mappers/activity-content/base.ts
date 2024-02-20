@@ -46,8 +46,7 @@ export const ContentDtoMapper: DomainDtoMapper<
     newContent.order = dto.order;
     newContent.id = dto.id;
 
-    const version = new ActivityVersion();
-    version.id = versionDto.id || 0;
+    newContent.version = new ActivityVersion(versionDto.id);
 
     return newContent;
   },

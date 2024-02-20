@@ -36,7 +36,7 @@ export const useSaveContentMutation = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["version", activityId, versionId],
+        queryKey: [`version-${versionId}`],
       });
       onSuccess && onSuccess();
     },

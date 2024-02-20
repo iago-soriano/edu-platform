@@ -20,15 +20,21 @@ class UseCase implements ISaveCollectionUseCase {
   constructor(private collectionsRepository: ICollectionsRepository) {}
 
   async execute({ user, collection }: InputParams) {
-    if (collection.id !== undefined) {
+    if (collection.id) {
       const existingCollection = await this.collectionsRepository.getById(
         collection.id
       );
+      if (!existingCollection) throw new Error("Coleção não encontrada");
 
       if (existingCollection.owner.id !== user.id)
         throw new UserIsNotCollectionOwner();
 
-      await this.collectionsRepository.update(collection.id, collection);
+      existingCollection.merge(collection);
+
+      await this.collectionsRepository.update(
+        collection.id,
+        existingCollection
+      );
       return { collectionId: collection.id };
     }
 

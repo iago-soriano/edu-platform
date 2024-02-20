@@ -27,7 +27,7 @@ export class VideoContent extends Content {
   }
 
   hasContent() {
-    return !!this.tracks || !!this.url;
+    return !!this.url;
   }
 
   setFileUrl(_: string) {

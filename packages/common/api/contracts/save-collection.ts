@@ -1,6 +1,6 @@
-import { CollectionDTO } from "../../dto";
+import { CollectionRequestDTO } from "../../dto";
 
-type RequestBody = CollectionDTO;
+type RequestBody = CollectionRequestDTO;
 type ResponseBody = { collectionId: number };
 type Params = {};
 

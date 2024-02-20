@@ -46,7 +46,7 @@ export const QuestionDtoMapper: DomainDtoMapper<
     newQuestion.id = dto.id;
 
     const version = new ActivityVersion();
-    version.id = versionDto.id;
+    version.id = versionDto.id || 0;
 
     newQuestion.version = version;
 

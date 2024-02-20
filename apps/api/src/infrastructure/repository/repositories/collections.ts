@@ -23,25 +23,8 @@ export class CollectionsRepository implements ICollectionsRepository {
   async update(collectionId: number, collection: Partial<Collection>) {
     await db
       .update(collections)
-      .set({ ...collection, updatedAt: new Date() })
+      .set(CollectionDtoMapper.mapToInsertDto(collection))
       .where(eq(collections.id, collectionId));
-  }
-
-  async insertStudent(studentId: number, collectionId: number) {
-    await db
-      .insert(studentCollectionParticipation)
-      .values({ studentId, collectionId });
-  }
-
-  async removeStudent(studentId: number, collectionId: number) {
-    await db
-      .delete(studentCollectionParticipation)
-      .where(
-        and(
-          eq(studentCollectionParticipation.studentId, studentId),
-          eq(studentCollectionParticipation.collectionId, collectionId)
-        )
-      );
   }
 
   async listByOwnership(ownerId: number) {
@@ -50,8 +33,9 @@ export class CollectionsRepository implements ICollectionsRepository {
       .from(collections)
       .where(eq(collections.ownerId, ownerId));
 
-    return dto.map((collection) =>
-      CollectionDtoMapper.mapFromSelectDto(collection)
+    return dto.map(
+      (collection) =>
+        CollectionDtoMapper.mapFromSelectDto(collection) || new Collection()
     );
   }
 
@@ -76,24 +60,9 @@ export class CollectionsRepository implements ICollectionsRepository {
       )
       .where(eq(studentCollectionParticipation.studentId, userId));
 
-    return c.map(({ collections }) =>
-      CollectionDtoMapper.mapFromSelectDto(collections)
+    return c.map(
+      ({ collections }) =>
+        CollectionDtoMapper.mapFromSelectDto(collections) || new Collection()
     );
-  }
-
-  async findStudentCollectionRelation(studentId: number, collectionId: number) {
-    const relation = (
-      await db
-        .select()
-        .from(studentCollectionParticipation)
-        .where(
-          and(
-            eq(studentCollectionParticipation.studentId, studentId),
-            eq(studentCollectionParticipation.collectionId, collectionId)
-          )
-        )
-    )[0];
-
-    return relation;
   }
 }

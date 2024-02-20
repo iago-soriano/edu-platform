@@ -18,7 +18,16 @@ import {
   studentCollectionParticipation,
 } from "@infrastructure";
 import { eq, inArray, and, desc, asc, sql } from "drizzle-orm";
-import { VersionStatus, ActivityVersion, Question } from "@domain";
+import {
+  VersionStatus,
+  ActivityVersion,
+  Question,
+  Collection,
+  MultipleChoiceQuestion,
+  Alternative,
+  TextContent,
+  Content,
+} from "@domain";
 
 export class Versions implements IVersions {
   async insert(activityId: number, versionNumber: number = 0) {
@@ -67,8 +76,11 @@ export class Versions implements IVersions {
       );
 
     return res.map(({ activity_version, collections }) => ({
-      version: VersionDtoMapper.mapFromSelectDto(activity_version),
-      collection: CollectionDtoMapper.mapFromSelectDto(collections),
+      version:
+        VersionDtoMapper.mapFromSelectDto(activity_version) ||
+        new ActivityVersion(),
+      collection:
+        CollectionDtoMapper.mapFromSelectDto(collections) || new Collection(),
     }));
   }
 
@@ -91,8 +103,11 @@ export class Versions implements IVersions {
       .where(and(...conditions));
 
     return res.map(({ activity_version, collections }) => ({
-      version: VersionDtoMapper.mapFromSelectDto(activity_version),
-      collection: CollectionDtoMapper.mapFromSelectDto(collections),
+      version:
+        VersionDtoMapper.mapFromSelectDto(activity_version) ||
+        new ActivityVersion(),
+      collection:
+        CollectionDtoMapper.mapFromSelectDto(collections) || new Collection(),
     }));
   }
 
@@ -104,61 +119,61 @@ export class Versions implements IVersions {
         .where(eq(activityVersions.id, id))
     )[0];
 
-    if (!version) return null;
-
     return VersionDtoMapper.mapFromSelectDto(version);
   }
 
-  async findElementsByVersionId(id: number) {
-    const contentDtos = await db
-      .select()
-      .from(activityContents)
-      .orderBy(asc(activityContents.id))
-      .where(eq(activityContents.versionId, id));
-
-    const questionDtos = await db
-      .select()
-      .from(activityQuestions)
-      .orderBy(asc(activityQuestions.id))
-      .where(eq(activityQuestions.versionId, id))
-      .orderBy(activityQuestions.id);
-
-    let questions: Question[] = [];
-    if (questionDtos.length) {
-      const alternativesDtos = await db
-        .select()
-        .from(alternatives)
-        .where(
-          inArray(
-            alternatives.questionId,
-            questionDtos.map((q) => q.id)
-          )
-        )
-        .orderBy(alternatives.questionId);
-
-      questions = questionDtos.map((questionDto) => {
-        const question = QuestionDtoMapper.mapFromSelectDto(questionDto);
-        question.alternatives = alternativesDtos
-          .filter((altDto) => altDto.questionId === questionDto.id)
-          .map((dto) => AlternativeDtoMapper.mapFromSelectDto(dto));
-        return question;
-      });
-    }
-
-    return {
-      contents: contentDtos.map((dto) =>
-        ContentDtoMapper.mapFromSelectDto(dto)
-      ),
-      questions,
-    };
-  }
-
   async findFullViewById(id: number) {
-    const version = await this.findSimpleViewById(id);
-    if (!version) return null;
+    const fullVersion = await db
+      .select()
+      .from(activityVersions)
+      .leftJoin(activityContents, eq(activityContents.versionId, id))
+      .leftJoin(activityQuestions, eq(activityQuestions.versionId, id))
+      .leftJoin(alternatives, ({ questions }) =>
+        eq(questions.id, alternatives.questionId)
+      )
+      .where(eq(activityVersions.id, id));
 
-    const { questions, contents } = await this.findElementsByVersionId(id);
+    if (!fullVersion) return null;
 
-    return { version, questions, contents };
+    const version = VersionDtoMapper.mapFromSelectDto(
+      fullVersion[0].activity_version
+    );
+
+    const contents: Content[] = fullVersion.map(({ activity_contents }) =>
+      activity_contents
+        ? ContentDtoMapper.mapFromSelectDto(activity_contents)
+        : new TextContent()
+    );
+    const qs: { [questionId: number]: Question } = {};
+
+    fullVersion.forEach(({ questions, question_alternatives }) => {
+      if (!questions) return;
+
+      if (!qs[questions.id]) {
+        qs[questions.id] =
+          QuestionDtoMapper.mapFromSelectDto(questions) ||
+          new MultipleChoiceQuestion();
+      }
+
+      if (question_alternatives) {
+        const alternative = AlternativeDtoMapper.mapFromSelectDto(
+          question_alternatives
+        );
+        if (alternative) qs[questions.id]?.alternatives?.push(alternative);
+      }
+    });
+
+    const questions = Object.values(qs);
+
+    version.contents = contents;
+    version.questions = questions;
+
+    return version;
+    // const version = await this.findSimpleViewById(id);
+    // if (!version) return null;
+
+    // const { questions, contents } = await this.findElementsByVersionId(id);
+
+    // return { version, questions, contents };
   }
 }

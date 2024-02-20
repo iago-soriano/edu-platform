@@ -5,12 +5,27 @@ export class Collection {
   public createdAt?: Date;
   public updatedAt?: Date;
 
-  public name!: string;
-  public description!: string;
+  public name?: string;
+  public description?: string;
   public owner!: User;
-  public isPrivate!: boolean;
-  public notifyOwnerOnStudentOutput!: boolean;
+  public isPrivate?: boolean;
+  public notifyOwnerOnStudentOutput?: boolean;
 
+  merge(newCollection: Collection) {
+    if (newCollection.description) {
+      this.description = newCollection.description;
+      this.validateDescription();
+    }
+    if (newCollection.name) {
+      this.name = newCollection.name;
+      this.validateName();
+    }
+    if (newCollection.isPrivate !== undefined)
+      this.isPrivate = newCollection.isPrivate;
+    if (newCollection.notifyOwnerOnStudentOutput !== undefined)
+      this.notifyOwnerOnStudentOutput =
+        newCollection.notifyOwnerOnStudentOutput;
+  }
   validateName() {
     if (!this.name) return;
     if (this.name.length > 100) {

@@ -1,7 +1,7 @@
 import { IQuestions } from "@interfaces";
 import { db, activityQuestions, alternatives } from "@infrastructure";
 import { eq, inArray } from "drizzle-orm";
-import { Question } from "@domain";
+import { Alternative, Question } from "@domain";
 import { QuestionDtoMapper, AlternativeDtoMapper } from "../../dto-mappers";
 
 export class Questions implements IQuestions {
@@ -47,8 +47,10 @@ export class Questions implements IQuestions {
       .where(eq(alternatives.questionId, questionId));
 
     const question = QuestionDtoMapper.mapFromSelectDto(questionDto);
-    question.alternatives = alternativesDtos.map((dto) =>
-      AlternativeDtoMapper.mapFromSelectDto(dto)
+    if (question === null) return null;
+
+    question.alternatives = alternativesDtos.map(
+      (dto) => AlternativeDtoMapper.mapFromSelectDto(dto) || new Alternative()
     );
 
     return question;

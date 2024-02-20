@@ -56,7 +56,7 @@ class UseCase implements IListActivityVersionsByOwnershipUseCase {
       if (thisCollection) {
         // we've been through this collection
         const thisActivity = thisCollection?.activities[version.activity.id];
-        const thisVersion = thisActivity[version.status];
+        const thisVersion = thisActivity?.[version.status];
 
         if (thisActivity) {
           // collection knows activity
@@ -95,7 +95,7 @@ class UseCase implements IListActivityVersionsByOwnershipUseCase {
     // order return based on latest update
     for (const collectionId in partialResp) {
       const { collection, activities } = partialResp[collectionId];
-      for (const activityId in collection) {
+      for (const activityId in activities) {
         const activity = activities[activityId];
         const sortKey =
           activity[VersionStatus.Draft]?.updatedAt.getTime() ||
@@ -113,7 +113,7 @@ class UseCase implements IListActivityVersionsByOwnershipUseCase {
             activityId: Number(activityId),
             ...activities[activityId],
           }))
-          .sort((a, b) => b.sortKey || 0 - (a.sortKey || 0)),
+          .sort((a, b) => (b.sortKey || 0) - (a.sortKey || 0)),
         collection,
       };
     }

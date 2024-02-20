@@ -14,6 +14,7 @@ class UseCase implements IGetCollectionUseCase {
 
   async execute({ user, collectionId }: InputParams) {
     const collection = await this.collectionsRepository.getById(collectionId);
+    if (!collection) throw new Error("Coleção não encontrada");
 
     if (collection.owner.id !== user.id)
       throw new Error("Collection not found");

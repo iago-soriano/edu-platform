@@ -20,19 +20,20 @@ export type CreateNewActivityMutationType = UseMutationResult<
 >;
 
 export const useCreateNewActivityMutation = ({
+  collectionId,
   onSuccess,
-}: MutationArgsType<Request, Return>) => {
+}: { collectionId: number } & MutationArgsType<void, Return>) => {
   const queryClient = useQueryClient();
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
-  return useMutation<Return, ServerError, Request>({
+  return useMutation<Return, ServerError, void>({
     mutationFn: () => {
-      return client.createNewActivity();
+      return client.createNewActivity({ collectionId });
     },
     onSuccess: (d, v, c) => {
       queryClient.invalidateQueries({
-        queryKey: ["Draft"],
+        queryKey: ["versions"],
       });
       onSuccess && onSuccess(d, v, c);
     },

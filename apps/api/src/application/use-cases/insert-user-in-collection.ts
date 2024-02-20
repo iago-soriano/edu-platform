@@ -1,5 +1,3 @@
-import { UserRepository } from "./../../infrastructure/repository/repositories/user";
-import { Collection } from "@domain";
 import {
   StudentIsNotUser,
   UserIsNotCollectionOwner,
@@ -8,6 +6,7 @@ import {
 import {
   IUseCase,
   UserSelectDTO,
+  ICollectionParticipationsRepository,
   ICollectionsRepository,
   IUserRepository,
 } from "@interfaces";
@@ -25,11 +24,13 @@ export type IInsertUserInCollectionUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IInsertUserInCollectionUseCase {
   constructor(
     private collectionsRepository: ICollectionsRepository,
+    private collectionParticipationsRepository: ICollectionParticipationsRepository,
     private userRepository: IUserRepository
   ) {}
 
   async execute({ user, collectionId, studentEmail }: InputParams) {
     const collection = await this.collectionsRepository.getById(collectionId);
+    if (!collection) throw new Error("Coleção não encontrada");
 
     if (collection.owner.id !== user.id) throw new UserIsNotCollectionOwner();
 
@@ -37,7 +38,10 @@ class UseCase implements IInsertUserInCollectionUseCase {
 
     if (!student) throw new StudentIsNotUser();
 
-    await this.collectionsRepository.insertStudent(student.id, collectionId);
+    await this.collectionParticipationsRepository.insertStudent(
+      student.id,
+      collectionId
+    );
   }
 }
 export default UseCase;

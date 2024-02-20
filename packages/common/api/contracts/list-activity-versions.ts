@@ -1,15 +1,19 @@
-import { VersionDTO, CollectionDTO, VersionStatus } from "../../dto";
+import {
+  VersionResponseDTO,
+  CollectionResponseDTO,
+  VersionStatus,
+} from "../../dto";
 
 type RequestBody = void;
 type ResponseBody = {
   [collectionId: number]: {
     activities: {
       activityId: number;
-      [VersionStatus.Draft]?: VersionDTO;
-      [VersionStatus.Published]?: VersionDTO;
-      [VersionStatus.Archived]?: VersionDTO[];
+      [VersionStatus.Draft]?: VersionResponseDTO;
+      [VersionStatus.Published]?: VersionResponseDTO;
+      [VersionStatus.Archived]?: VersionResponseDTO[];
     }[];
-    collection: CollectionDTO;
+    collection: CollectionResponseDTO;
   };
 };
 type Query = { byOwnership: boolean; collectionId?: string };

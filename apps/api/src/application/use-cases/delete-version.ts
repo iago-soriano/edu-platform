@@ -41,10 +41,12 @@ class UseCase implements IDeleteVersionUseCase {
     if (!(version.status === VersionStatus.Draft))
       throw new ActivityVersionIsNotDraft();
 
-    const { questions, contents } =
-      await this.activitiesRepository.Versions.findElementsByVersionId(
-        version.id
-      );
+    const v = await this.activitiesRepository.Versions.findFullViewById(
+      version.id
+    );
+    if (!v) throw new ActivityNotFound();
+
+    const { contents, questions } = v;
 
     for (let content of contents) {
       // see TODO of delete-content.ts use-case
@@ -60,9 +62,9 @@ class UseCase implements IDeleteVersionUseCase {
     }
 
     await this.activitiesRepository.Versions.delete(versionId);
-    await this.activitiesRepository.Activities.update(activity.id, {
-      draftVersion: new ActivityVersion(0),
-    });
+
+    activity.draftVersion = new ActivityVersion(0);
+    await this.activitiesRepository.Activities.update(activity.id, activity);
 
     // TODO verificar se é a única versão desta atividade (version = 0). Se sim deletar activity
     // OU: deixar a activity vazia por motivos de histórico

@@ -15,7 +15,7 @@ const Page = async ({ params: { activityId, versionId } }) => {
   posthog.capture("activity page", { property: `${activityId}/${versionId}` });
 
   await queryClient.prefetchQuery({
-    queryKey: ["version", activityId, versionId],
+    queryKey: [`version-${versionId}`],
     queryFn: () =>
       axios.get.bind(axios)(`activity/${activityId}/version/${versionId}`),
   });

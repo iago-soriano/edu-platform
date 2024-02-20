@@ -16,7 +16,7 @@ export interface IActivities {
     collectionId: number
   ) => Promise<{ activityId: number }>;
   update: (activityId: number, activity: Partial<Activity>) => Promise<void>;
-  findById: (activityId: number) => Promise<Activity>;
+  findById: (activityId: number) => Promise<Activity | null>;
 }
 
 export interface IContents {
@@ -26,7 +26,7 @@ export interface IContents {
     content: Partial<Content>,
     versionId: number
   ) => Promise<void>;
-  findById: (contentId: number) => Promise<Content>;
+  findById: (contentId: number) => Promise<Content | null>;
   delete: (contentId: number) => Promise<void>;
 }
 
@@ -35,7 +35,7 @@ export interface IQuestions {
     args: Question
   ) => Promise<{ questionId: number; alternativesIds: number[] }>;
   update: (questionId: number, question: Question) => Promise<void>;
-  findById: (questionId: number) => Promise<Question>;
+  findById: (questionId: number) => Promise<Question | null>;
   delete: (questionId: number) => Promise<void>;
 }
 
@@ -47,15 +47,7 @@ export interface IVersions {
   update: (versionId: number, args: Partial<ActivityVersion>) => Promise<void>;
   delete: (versionId: number) => Promise<void>;
   findSimpleViewById: (versionId: number) => Promise<ActivityVersion | null>;
-  findFullViewById: (versionId: number) => Promise<{
-    version: ActivityVersion;
-    contents: Content[];
-    questions: Question[];
-  } | null>;
-  findElementsByVersionId: (versionId: number) => Promise<{
-    contents: Content[];
-    questions: Question[];
-  }>;
+  findFullViewById: (versionId: number) => Promise<ActivityVersion | null>;
   listByCollectionOwnership: (
     userId: number,
     collectionId?: number

@@ -55,7 +55,7 @@ export const QuestionDtoMapper: DomainDtoMapper<
     newQuestion.order = questionDto.order || 0;
 
     newQuestion.id = questionDto.id;
-    newQuestion.version = new ActivityVersion(questionDto.versionId || 0);
+    newQuestion.version = new ActivityVersion(questionDto.versionId!);
 
     return newQuestion;
   },

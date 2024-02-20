@@ -1,5 +1,10 @@
 import { UserIsNotCollectionOwner } from "@edu-platform/common";
-import { IUseCase, UserSelectDTO, ICollectionsRepository } from "@interfaces";
+import {
+  IUseCase,
+  UserSelectDTO,
+  ICollectionsRepository,
+  ICollectionParticipationsRepository,
+} from "@interfaces";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -12,21 +17,28 @@ type Return = { alreadyRemoved: boolean };
 export type IRemoveUserFromCollectionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IRemoveUserFromCollectionUseCase {
-  constructor(private collectionsRepository: ICollectionsRepository) {}
+  constructor(
+    private collectionsRepository: ICollectionsRepository,
+    private collectionParticipationsRepository: ICollectionParticipationsRepository
+  ) {}
 
   async execute({ user, collectionId, studentId }: InputParams) {
     const collection = await this.collectionsRepository.getById(collectionId);
+    if (!collection) throw new Error("Coleção não encontrada");
 
     if (collection.owner.id !== user.id) throw new UserIsNotCollectionOwner();
 
     const studentAssociatedWithCollection =
-      await this.collectionsRepository.findStudentCollectionRelation(
+      await this.collectionParticipationsRepository.findStudentCollectionRelation(
         studentId,
         collectionId
       );
 
     if (studentAssociatedWithCollection) {
-      await this.collectionsRepository.removeStudent(studentId, collectionId);
+      await this.collectionParticipationsRepository.removeStudent(
+        studentId,
+        collectionId
+      );
       return { alreadyRemoved: false };
     } else {
       return { alreadyRemoved: true };

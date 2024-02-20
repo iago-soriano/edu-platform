@@ -73,7 +73,7 @@ export class ListActivityVersionsController
             ActivityVersionDtoMapper.mapToDto(act[VersionStatus.Published]),
           activityId: act.activityId,
         })),
-        collection: CollectionDtoMapper.mapFromDto(collection),
+        collection: CollectionDtoMapper.mapToDto(collection),
       };
     }
 

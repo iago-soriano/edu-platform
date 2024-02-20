@@ -18,7 +18,7 @@ export class Activities implements IActivities {
     await db.transaction(async (tx) => {
       await tx
         .update(activities)
-        .set({ ...activity, updatedAt: new Date() })
+        .set(ActivityDtoMapper.mapToInsertDto(activity))
         .where(eq(activities.id, activityId));
     });
   }

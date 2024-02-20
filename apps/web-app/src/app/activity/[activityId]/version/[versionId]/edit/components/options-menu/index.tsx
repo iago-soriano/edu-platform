@@ -84,12 +84,16 @@ export const OptionsMenu = ({
     versionId,
     onSuccess: () => {
       setOpenConfirmDeleteModal(false);
-      redirect("/dashboard/my-activities");
+      redirect("/teacher-area?activeTab=ActiveActivities");
     },
   });
   const statusUpdateMutation = useUpdateVersionStatusMutation({
     activityId,
     versionId,
+    onSuccess: () => {
+      setOpenConfirmDeleteModal(false);
+      redirect("/teacher-area?activeTab=ActiveActivities");
+    },
   });
   const saveContentMutation = useSaveContentMutation({
     activityId,

@@ -35,6 +35,13 @@ import {
   SaveCollectionParams,
   SaveCollectionRequestBody,
   SaveCollectionResponseBody,
+  ListCollectionsByUserParams,
+  ListCollectionsByUserRequestBody,
+  ListCollectionsByUserResponseBody,
+  GetCollectionParams,
+  GetCollectionResponseBody,
+  ListStudentsOfCollectionParams,
+  ListStudentsOfCollectionResponseBody,
 } from "./contracts";
 import { IHTTPClient } from "./interfaces";
 
@@ -72,9 +79,10 @@ export class ApiClient {
       body
     ) as Promise<UpdateVersionMetadataResponseBody>;
   }
-  public listActivityVersions({ statuses }: ListActivityVersionsQuery) {
+  public listActivityVersions(query: ListActivityVersionsQuery) {
     return this._fetcher.get("activity", {
-      statuses,
+      byOwnership: query.byOwnership.toString(),
+      collectionId: query.collectionId || "",
     }) as Promise<ListActivityVersionsResponseBody>;
   }
   public deleteContent({
@@ -129,5 +137,25 @@ export class ApiClient {
       `collection/${collectionId}/student/${studentId}`,
       undefined
     ) as Promise<RemoveUserFromCollectionResponseBody>;
+  }
+  public listCollections() {
+    return this._fetcher.get(
+      "collection"
+    ) as Promise<ListCollectionsByUserResponseBody>;
+  }
+
+  public async getCollection({ collectionId }: GetCollectionParams) {
+    return this._fetcher.get(
+      `collection/${collectionId}`
+    ) as Promise<GetCollectionResponseBody>;
+  }
+
+  public async getStudentsOfCollection({
+    collectionId,
+  }: ListStudentsOfCollectionParams) {
+    return this._fetcher.get(
+      `collection/${collectionId}/student`
+    ) as Promise<ListStudentsOfCollectionResponseBody>;
+    // return [{ id: 1, name: "student 1", email: "email1" }];
   }
 }

@@ -14,14 +14,13 @@ export const CollectionDtoMapper: DomainDtoMapper<
   mapFromDto: (dto: CollectionRequestDTO, user: UserSelectDTO) => {
     const collection = new Collection();
 
-    collection.id = dto.id || undefined;
-    collection.name = dto.name || "";
-    collection.isPrivate = dto.isPrivate || true;
-    collection.notifyOwnerOnStudentOutput =
-      dto.notifyOwnerOnStudentOutput || true;
+    collection.id = dto.id;
+    collection.name = dto.name;
+    collection.description = dto.description;
+    collection.isPrivate = dto.isPrivate;
+    collection.notifyOwnerOnStudentOutput = dto.notifyOwnerOnStudentOutput;
 
-    const owner = new User("", "", "");
-    owner.id = user.id;
+    const owner = new User(user.id, "", "", "");
     collection.owner = owner;
 
     return collection;
@@ -33,11 +32,11 @@ export const CollectionDtoMapper: DomainDtoMapper<
       createdAt: domain.createdAt || new Date(),
       updatedAt: domain.updatedAt || new Date(),
 
-      name: domain.name,
-      description: domain.description,
+      name: domain.name || "",
+      description: domain.description || "",
       ownerId: domain.owner.id || 0,
-      isPrivate: domain.isPrivate,
-      notifyOwnerOnStudentOutput: domain.notifyOwnerOnStudentOutput,
+      isPrivate: domain.isPrivate || false,
+      notifyOwnerOnStudentOutput: domain.notifyOwnerOnStudentOutput || false,
     };
     return dto;
   },

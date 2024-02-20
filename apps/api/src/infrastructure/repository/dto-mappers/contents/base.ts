@@ -18,6 +18,7 @@ export const ContentDtoMapper: DomainDtoMapper<
 > = {
   mapFromSelectDto: (dto: typeof activityContents.$inferSelect) => {
     let newContent = null;
+    // if (!dto) return null;
 
     // instanciate specific type and map payload
     switch (dto.type) {
@@ -34,12 +35,12 @@ export const ContentDtoMapper: DomainDtoMapper<
         throw new ContentTypeNotFound();
     }
 
-    newContent.id = dto.id;
-    newContent.version = new ActivityVersion(dto.versionId || 0);
+    newContent!.id = dto.id;
+    newContent!.version = new ActivityVersion(dto.versionId || 0);
 
-    newContent.title = dto.title || "";
-    newContent.description = dto.description || "";
-    newContent.order = dto.order || 0;
+    newContent!.title = dto.title || "";
+    newContent!.description = dto.description || "";
+    newContent!.order = dto.order || 0;
 
     return newContent;
   },

@@ -27,29 +27,10 @@ class UseCase implements IGetActivityVersionUseCase {
     if (version.status == "Draft" && activity.author.id !== user.id)
       throw new UserIsNotDraftAuthor();
 
-    const { contents, questions } =
-      await this.activitiesRepository.Versions.findElementsByVersionId(
-        version.id
-      );
-
-    const elements = [
-      ...contents.map((content) => ({
-        content,
-        question: undefined,
-      })),
-      ...questions.map((question) => ({
-        question,
-        content: undefined,
-      })),
-    ].sort(
-      (el1, el2) =>
-        ((el1.content || el1.question).order || 0) -
-        ((el2.content || el2.question).order || 0)
+    const res = await this.activitiesRepository.Versions.findFullViewById(
+      version.id
     );
-
-    version.elements = elements;
-
-    return version;
+    return res!;
   }
 }
 

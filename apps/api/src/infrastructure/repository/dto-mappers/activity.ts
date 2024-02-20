@@ -7,14 +7,25 @@ export const ActivityDtoMapper: DomainDtoMapper<Activity, typeof activities> = {
     const activity = new Activity();
 
     activity.author = new User(dto.authorId || 0);
-    activity.draftVersion = new ActivityVersion(dto.draftVersionId || 0);
+    activity.draftVersion = dto.draftVersionId
+      ? new ActivityVersion(dto.draftVersionId)
+      : undefined;
     activity.id = dto.id;
-    activity.lastVersion = new ActivityVersion(dto.lastVersionId || 0);
+    activity.lastVersion = dto.lastVersionId
+      ? new ActivityVersion(dto.lastVersionId)
+      : undefined;
 
     return activity;
   },
 
   mapToInsertDto: (domain: Activity) => {
-    return domain;
+    const dto: typeof activities.$inferInsert = {
+      authorId: domain.author.id,
+      draftVersionId: domain.draftVersion?.id,
+      lastVersionId: domain.lastVersion?.id,
+      updatedAt: new Date(),
+    };
+
+    return dto;
   },
 };

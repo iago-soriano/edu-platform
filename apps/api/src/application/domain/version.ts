@@ -14,7 +14,7 @@ export enum VersionStatus {
   Archived = "Archived",
 }
 
-export type Elements = { content?: Content; question?: Question }[];
+export type Elements = { content: Content | null; question: Question | null }[];
 
 export class ActivityVersion {
   public id!: number;
@@ -24,7 +24,9 @@ export class ActivityVersion {
   public version!: number;
   public status!: VersionStatus;
   public activity!: Activity;
-  public elements: Elements = [];
+  // public elements: Elements = [];
+  public contents: Content[] = [];
+  public questions: Question[] = [];
   public updatedAt!: Date;
 
   constructor(id?: number) {

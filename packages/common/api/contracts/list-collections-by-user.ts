@@ -1,9 +1,9 @@
-import { CollectionDTO } from "../../dto";
+import { CollectionResponseDTO } from "../../dto";
 
 type RequestBody = {};
 type ResponseBody = {
-  isOwnerOf: CollectionDTO[] | undefined;
-  participatesIn: CollectionDTO[] | undefined;
+  isOwnerOf: CollectionResponseDTO[] | undefined;
+  participatesIn: CollectionResponseDTO[] | undefined;
 };
 type Params = {};
 

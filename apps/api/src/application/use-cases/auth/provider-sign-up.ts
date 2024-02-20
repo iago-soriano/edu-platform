@@ -5,6 +5,8 @@ import {
   UserInsertDTO,
   IUseCase,
 } from "@interfaces";
+import { IInsertDefaultCollectionUseCase } from "@use-cases";
+import { User } from "@domain";
 
 type InputParams = {
   email: string;
@@ -22,7 +24,8 @@ export type IProviderSignUpUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IProviderSignUpUseCase {
   constructor(
     private userRepository: IUserRepository,
-    private tokenService: ITokenService
+    private tokenService: ITokenService,
+    private insertDefaultCollectionUseCase: IInsertDefaultCollectionUseCase
   ) {}
 
   async execute({ email, name, image, provider }: InputParams) {
@@ -42,6 +45,9 @@ class UseCase implements IProviderSignUpUseCase {
       };
 
       userId = (await this.userRepository.insertUser(userDTO)).userId;
+      await this.insertDefaultCollectionUseCase.execute(
+        new User(userId, name, email, "")
+      );
     } else {
       userId = existingUser.id;
     }

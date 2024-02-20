@@ -1,6 +1,6 @@
-import { VersionDTO } from "../../dto";
+import { VersionRequestDTO } from "../../dto";
 
-type RequestBody = VersionDTO;
+type RequestBody = VersionRequestDTO;
 type ResponseBody = {
   activityId: number;
 };

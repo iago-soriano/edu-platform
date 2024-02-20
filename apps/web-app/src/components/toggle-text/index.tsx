@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
 const getTabClassNames = (disabled, isSelected) => {
@@ -13,18 +12,19 @@ const getTabClassNames = (disabled, isSelected) => {
 
 export const ToggleText = ({
   buttons,
+  className,
 }: {
   buttons: {
     text: string;
-    href: string;
+    href?: string;
     disabled?: boolean;
     isSelected: boolean;
+    onClick?: () => any;
   }[];
+  className?: string;
 }) => {
-  const pathName = usePathname();
-
   return (
-    <div className="">
+    <div className={twMerge("w-full", className)}>
       {buttons.map(({ text, href, disabled, isSelected }) => (
         <Link
           key={`${text}-${href}`}
