@@ -21,54 +21,64 @@ import CheckChangePasswordTokenRequestUseCase, {
 } from "./auth/check-change-password-token-request";
 import UpdateActivityStatusUseCase, {
   IUpdateActivityStatusUseCase,
-} from "./update-activity-status";
-import SaveQuestionUseCase, { ISaveQuestionUseCase } from "./save-question";
+} from "./activity-version/update-status";
+import SaveQuestionUseCase, {
+  ISaveQuestionUseCase,
+} from "./activity-version-question/save";
 import CreateNewActivityUseCase, {
   ICreateNewActivityUseCase,
-} from "./create-new-activity";
+} from "./activity/new";
 import UpdateActivityMetadataUseCase, {
   IUpdateActivityMetadataUseCase,
-} from "./update-activity-metadata";
+} from "./activity-version/update-metadata";
 import ListActivityVersionsByOwnershipUseCase, {
   IListActivityVersionsByOwnershipUseCase,
-} from "./list-activity-versions/by-ownership";
+} from "./activity-version/list-by-ownership";
 import ListActivityVersionsByParticipationUseCase, {
   IListActivityVersionsByParticipationUseCase,
-} from "./list-activity-versions/by-participation";
+} from "./activity-version/list-by-participation";
 import GetActivityVersionUseCase, {
   IGetActivityVersionUseCase,
-} from "./get-activity-version";
+} from "./activity-version/get-by-id";
 import DeleteQuestionUseCase, {
   IDeleteQuestionUseCase,
-} from "./delete-question";
-import DeleteContentUseCase, { IDeleteContentUseCase } from "./delete-content";
-import SaveContentUseCase, { ISaveContentUseCase } from "./save-content";
-import DeleteVersionUseCase, { IDeleteVersionUseCase } from "./delete-version";
+} from "./activity-version-question/delete";
+import DeleteContentUseCase, {
+  IDeleteContentUseCase,
+} from "./activity-version-content/delete";
+import SaveContentUseCase, {
+  ISaveContentUseCase,
+} from "./activity-version-content/save";
+import DeleteVersionUseCase, {
+  IDeleteVersionUseCase,
+} from "./activity-version/delete";
 import CreateNewDraftVersionUseCase, {
   ICreateNewDraftVersionUseCase,
-} from "./create-new-draft-version";
+} from "./activity-version/new";
 import SaveCollectionUseCase, {
   ISaveCollectionUseCase,
-} from "./save-collection";
+} from "./collection/save";
 import InsertUserInCollectionUseCase, {
   IInsertUserInCollectionUseCase,
-} from "./insert-user-in-collection";
+} from "./collection-participation/new";
 import RemoveUserFromCollectionUseCase, {
   IRemoveUserFromCollectionUseCase,
-} from "./remove-user-from-collection";
+} from "./collection-participation/delete";
 import ListCollectionsByUserUseCase, {
   IListCollectionsByUserUseCase,
-} from "./list-collections-by-user";
+} from "./collection/list-by-user";
 import CreateStudentOutputUseCase, {
   ICreateStudentOutputUseCase,
-} from "./create-student-output";
-import GetCollectionUseCase, { IGetCollectionUseCase } from "./get-collection";
+} from "./studentOutput/new";
+import GetCollectionUseCase, {
+  IGetCollectionUseCase,
+} from "./collection/get-by-id";
 import ListUsersInCollectionUseCase, {
   IListUsersInCollectionUseCase,
-} from "./list-users-in-collection";
+} from "./collection-participation/list";
 import InsertDefaultCollectionUseCase, {
   IInsertDefaultCollectionUseCase,
-} from "./insert-default-collection";
+} from "./collection/new-default";
 
 export {
   GetCollectionUseCase,

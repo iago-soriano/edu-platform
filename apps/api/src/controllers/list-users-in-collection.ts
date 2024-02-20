@@ -1,4 +1,3 @@
-import { collections } from "./../infrastructure/repository/schema";
 import {
   HTTPController,
   HttpMethod,

@@ -11,7 +11,7 @@ import {
   SaveCollectionResponseBody,
 } from "@edu-platform/common";
 import { CollectionDtoMapper } from "@dto-mappers";
-import { ISaveCollectionUseCase } from "application/use-cases/save-collection";
+import { ISaveCollectionUseCase } from "@use-cases";
 
 type Request = TypedRequest<
   SaveCollectionParams,
