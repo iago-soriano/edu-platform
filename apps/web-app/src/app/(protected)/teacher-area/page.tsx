@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import {
   useCreateNewActivityMutation,
   useListCollectionsQuery,
@@ -18,6 +18,7 @@ import { CollectionOwnsCard } from "./collection-listing";
 const Page = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathName = usePathname();
   const [selectedCollectionId, setSelectedCollectionId] = useState<number>();
 
   const collectionsQuery = useListCollectionsQuery();
@@ -29,7 +30,6 @@ const Page = () => {
   });
   const createCollectionMutation = useSaveCollectionMutation({
     onSuccess: ({ collectionId }) => {
-      console.log(collectionId);
       router.push(
         `/teacher-area/collections/${collectionId}/edit?ActivityTab=Active`
       );
@@ -68,6 +68,7 @@ const Page = () => {
             <div className="grid lg:w-[90%] mx-auto md:w-[80%] w-[90%] lg:grid-cols-5 md:gid-cols-3csm:grid-cols-2 grid-cols-1 auto-rows-max items-center justify-items-center lg:[&>*]:w-[80%]">
               {collectionsQuery?.data?.isOwnerOf?.map((coll) => (
                 <CollectionOwnsCard
+                  key={coll.id}
                   collection={coll}
                   onClick={() => {
                     router.push(
@@ -105,12 +106,29 @@ const Page = () => {
         <div className="lg:col-span-1 md:col-span-2 col-span-1">
           <select
             className="p-3 m-1 rounded bg-surface1"
+            name={"selectedCollectionId"}
             onChange={(e) => {
-              setSelectedCollectionId(Number(e.target.value));
+              const current = new URLSearchParams(
+                Array.from(searchParams.entries())
+              );
+              const value = e.target.value.trim();
+              const name = e.target.name;
+              console.log({ value, name });
+              if (value === "0") {
+                current.delete(name);
+              } else {
+                current.set(name, value);
+              }
+              const search = current.toString();
+              const query = search ? `?${search}` : "";
+              router.push(`${pathName}${query}`);
             }}
             placeholder="Selecionar coleção"
+            value={searchParams.get("selectedCollectionId") || ""}
           >
-            <option key={0}>Todas</option>
+            <option key={0} value={0}>
+              Todas
+            </option>
             {collectionsQuery?.data?.isOwnerOf?.map((coll) => (
               <option key={coll.id} value={coll.id}>
                 {coll.name}
@@ -132,7 +150,7 @@ const Page = () => {
         </div>
       </div>
       <ActivityListing
-        collectionId={selectedCollectionId}
+        collectionId={searchParams.get("selectedCollectionId")}
         showActive={searchParams.get("activeTab") !== "ArchivedActivities"}
       />
     </div>

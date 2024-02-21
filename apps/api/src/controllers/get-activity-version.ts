@@ -9,9 +9,10 @@ import {
   GetActivityVersionRequestBody,
   GetActivityVersionResponseBody,
 } from "@edu-platform/common";
-import { IGetActivityVersionUseCase } from "@use-cases";
+import { IGetActivityVersionUseCase, IGetCollectionUseCase } from "@use-cases";
 import { parseNumberId } from "@infrastructure";
-import { ActivityVersionDtoMapper } from "@dto-mappers";
+import { ActivityVersionDtoMapper, CollectionDtoMapper } from "@dto-mappers";
+import { Collection } from "@domain";
 
 type Request = TypedRequest<
   GetActivityVersionParams,
@@ -27,7 +28,10 @@ export class GetActivityVersionController
   path = "activity/:activityId/version/:versionId/";
   middlewares: string[] = ["auth"];
 
-  constructor(private getActivityVersionUseCase: IGetActivityVersionUseCase) {}
+  constructor(
+    private getActivityVersionUseCase: IGetActivityVersionUseCase,
+    private getCollectionUseCase: IGetCollectionUseCase
+  ) {}
 
   async execute(req: Request, res: Response) {
     // const { activityId, versionId } = req.params;
@@ -44,8 +48,14 @@ export class GetActivityVersionController
       versionId,
     });
 
-    const versionDto = ActivityVersionDtoMapper.mapToDto(completeVersion);
+    const collection = await this.getCollectionUseCase.execute({
+      user,
+      collectionId: completeVersion.activity.collection.id,
+    });
 
-    return res.status(200).json(versionDto);
+    const versionDto = ActivityVersionDtoMapper.mapToDto(completeVersion);
+    const collectionDto = CollectionDtoMapper.mapToDto(collection);
+
+    return res.status(200).json({ ...versionDto, collection: collectionDto });
   }
 }

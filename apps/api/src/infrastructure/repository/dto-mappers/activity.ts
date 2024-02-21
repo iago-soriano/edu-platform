@@ -1,5 +1,5 @@
 import { activities } from "@infrastructure";
-import { Activity, ActivityVersion, User } from "@domain";
+import { Activity, ActivityVersion, Collection, User } from "@domain";
 import { DomainDtoMapper } from "./types";
 
 export const ActivityDtoMapper: DomainDtoMapper<Activity, typeof activities> = {
@@ -14,6 +14,7 @@ export const ActivityDtoMapper: DomainDtoMapper<Activity, typeof activities> = {
     activity.lastVersion = dto.lastVersionId
       ? new ActivityVersion(dto.lastVersionId)
       : undefined;
+    activity.collection = new Collection(dto.collectionId);
 
     return activity;
   },
@@ -24,6 +25,7 @@ export const ActivityDtoMapper: DomainDtoMapper<Activity, typeof activities> = {
       draftVersionId: domain.draftVersion?.id,
       lastVersionId: domain.lastVersion?.id,
       updatedAt: new Date(),
+      collectionId: domain.collection.id,
     };
 
     return dto;

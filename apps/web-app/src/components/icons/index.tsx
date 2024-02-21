@@ -19,13 +19,15 @@ import {
   Play,
   Clock,
   Folder,
+  Bell,
+  BellSlash,
 } from "@phosphor-icons/react";
 
 export const Icons = {
   PENCIL: (props) => <Pencil {...props} />,
   PENCIL_LINE: (props) => <PencilLine {...props} />,
   CAN_SEE: (props) => <Eye {...props} size={props.size || 24} />,
-  CANT_SEE: () => <EyeSlash size={24} />,
+  CANT_SEE: (props) => <EyeSlash {...props} size={props.size || 24} />,
   CARET_DOWN: (props) => <CaretDown {...props} />,
   CARET_UP: (props) => <CaretUp {...props} />,
   QUESTION_CIRCLE: (props) => <Question size={20} {...props} />,
@@ -42,4 +44,6 @@ export const Icons = {
   PLAY: (props) => <Play {...props} />,
   CLOCK: (props) => <Clock {...props} />,
   FOLDER: (props) => <Folder {...props} />,
+  NOTIFICATION: (props) => <Bell {...props} />,
+  NOTIFICATIONSLASH: (props) => <BellSlash {...props} />,
 };

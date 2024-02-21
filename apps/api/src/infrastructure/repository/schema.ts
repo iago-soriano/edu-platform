@@ -75,7 +75,7 @@ export const activities = pgTable("activities", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
   authorId: integer("author_id").references(() => users.id),
-  collectionId: integer("collection_id"), //TODO: references collections table
+  collectionId: integer("collection_id").notNull(), //TODO: references collections table
   lastVersionId: integer("last_version_id"),
   draftVersionId: integer("draft_version_id"),
 });

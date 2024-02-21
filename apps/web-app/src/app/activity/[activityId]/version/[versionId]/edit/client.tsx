@@ -53,8 +53,7 @@ const Page = ({ params: { activityId, versionId } }) => {
       />
       <StickyHeader
         show={showAuxHeader}
-        title={versionQuery.data?.title}
-        description={versionQuery.data?.description}
+        activity={versionQuery}
         saveState={saveState}
         onOpenOptionsMenu={() => setOpenOptionsMenu(true)}
       />

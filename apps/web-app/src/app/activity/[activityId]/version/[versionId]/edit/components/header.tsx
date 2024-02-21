@@ -91,92 +91,100 @@ export const ActivityHeaderInput = ({
   };
 
   return (
-    <div
-      id="activity-header-input"
-      className="grid sm:grid-cols-10 grid-cols-16 bg-surface3 p-2"
-    >
-      <div className="lg:col-start-3 lg:col-span-6 sm:col-start-2 sm:col-span-8 col-start-2 col-span-14">
-        <GhostInput
-          name="title"
-          placeholder="Título da atividade"
-          className="text-3xl leading-10 font-bold text-center"
-          defaultValue={versionQuery.data?.title}
-          disabled={!versionQuery.data}
-          onBlur={onChangeTitle}
-          error={metadataMutation.error?.errors?.title}
-          onChange={() => onChange(true)}
-        />
-        <div className="flex items-center justify-center">
-          {versionQuery.data?.topics?.length !== 0 &&
-            versionQuery.data?.topics?.split(",").map((topic, index) => (
-              <Topic key={index}>
-                {topic}{" "}
-                <Icons.X
-                  className="cursor-pointer mx-2 hover:bg-opacity-70"
-                  onClick={() => onDeleteTopic(index)}
-                />
-              </Topic>
-            ))}
-          <div className="w-[160px] flex">
-            <input
-              name="topic"
-              placeholder="Novo tópico"
-              disabled={!versionQuery.data}
-              className="p-2 rounded w-full bg-surface1 placeholder:opacity-80 placeholder:text-text2"
-              onChange={(e) => {
-                setCurrentTopic((e.target as any).value);
-                onChange(true);
-              }}
-              onKeyDown={(e) => {
-                if (e.key.includes("Enter")) onInsertTopic();
-              }}
-              value={currentTopic}
+    <>
+      <p className="flex flex-start p-2 border-2 border-surface3 w-fit">
+        Esta atividade pertence à coleção
+        <span className="mx-1 font-bold">
+          {versionQuery.data?.collection?.name}
+        </span>
+      </p>
+      <div
+        id="activity-header-input"
+        className="grid sm:grid-cols-10 grid-cols-16 bg-surface3 p-2"
+      >
+        <div className="lg:col-start-3 lg:col-span-6 sm:col-start-2 sm:col-span-8 col-start-2 col-span-14">
+          <GhostInput
+            name="title"
+            placeholder="Título da atividade"
+            className="text-3xl leading-10 font-bold text-center"
+            defaultValue={versionQuery.data?.title}
+            disabled={!versionQuery.data}
+            onBlur={onChangeTitle}
+            error={metadataMutation.error?.errors?.title}
+            onChange={() => onChange(true)}
+          />
+          <div className="flex items-center justify-center">
+            {versionQuery.data?.topics?.length !== 0 &&
+              versionQuery.data?.topics?.split(",").map((topic, index) => (
+                <Topic key={index}>
+                  {topic}{" "}
+                  <Icons.X
+                    className="cursor-pointer mx-2 hover:bg-opacity-70"
+                    onClick={() => onDeleteTopic(index)}
+                  />
+                </Topic>
+              ))}
+            <div className="w-[160px] flex">
+              <input
+                name="topic"
+                placeholder="Novo tópico"
+                disabled={!versionQuery.data}
+                className="p-2 rounded w-full bg-surface1 placeholder:opacity-80 placeholder:text-text2"
+                onChange={(e) => {
+                  setCurrentTopic((e.target as any).value);
+                  onChange(true);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key.includes("Enter")) onInsertTopic();
+                }}
+                value={currentTopic}
+              />
+              <button
+                onClick={onInsertTopic}
+                className="text-error rounded border border-text1 p-3 hover:bg-surface3 hover:opacity-50 hover:border-black hover:shadow-hover hover:font-bold"
+              >
+                <Icons.CHECK />
+              </button>
+            </div>
+          </div>
+          <GhostTextArea
+            name="description"
+            placeholder="Descrição da atividade"
+            className="text-xl text-text2 text-center h-auto"
+            defaultValue={versionQuery.data?.description}
+            disabled={!versionQuery.data}
+            onBlur={onChangeDescription}
+            error={metadataMutation.error?.errors?.description}
+            onChange={() => onChange(true)}
+          />
+        </div>
+        <div className="lg:col-start-10 col-start-16 col-span-1 flex flex-col justify-start items-end">
+          <div className="w-[43px]">
+            <Icons.LIST
+              onClick={onOpenOptionsMenu}
+              className="cursor-pointer mx-3 text-accent text-opacity p-1"
+              size={33}
             />
-            <button
-              onClick={onInsertTopic}
-              className="text-error rounded border border-text1 p-3 hover:bg-surface3 hover:opacity-50 hover:border-black hover:shadow-hover hover:font-bold"
-            >
-              <Icons.CHECK />
-            </button>
+            <SavingIndicator
+              hasChanges={saveState === "hasChanges"}
+              isLoading={saveState === "isLoading"}
+            />
+            <Tooltip content="Pré-visualizar atividade. Abre uma nova aba">
+              <span>
+                <Icons.CAN_SEE
+                  onClick={() =>
+                    openInNewTab(
+                      `/activity/${activityId}/version/${versionId}/preview`
+                    )
+                  }
+                  className="cursor-pointer mx-3 text-text2 text-opacity-50 p-1"
+                  size={33}
+                />
+              </span>
+            </Tooltip>
           </div>
         </div>
-        <GhostTextArea
-          name="description"
-          placeholder="Descrição da atividade"
-          className="text-xl text-text2 text-center h-auto"
-          defaultValue={versionQuery.data?.description}
-          disabled={!versionQuery.data}
-          onBlur={onChangeDescription}
-          error={metadataMutation.error?.errors?.description}
-          onChange={() => onChange(true)}
-        />
       </div>
-      <div className="lg:col-start-10 col-start-16 col-span-1 flex flex-col justify-start items-end">
-        <div className="w-[43px]">
-          <Icons.LIST
-            onClick={onOpenOptionsMenu}
-            className="cursor-pointer mx-3 text-accent text-opacity p-1"
-            size={33}
-          />
-          <SavingIndicator
-            hasChanges={saveState === "hasChanges"}
-            isLoading={saveState === "isLoading"}
-          />
-          <Tooltip content="Pré-visualizar atividade. Abre uma nova aba">
-            <span>
-              <Icons.CAN_SEE
-                onClick={() =>
-                  openInNewTab(
-                    `/activity/${activityId}/version/${versionId}/preview`
-                  )
-                }
-                className="cursor-pointer mx-3 text-text2 text-opacity-50 p-1"
-                size={33}
-              />
-            </span>
-          </Tooltip>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };

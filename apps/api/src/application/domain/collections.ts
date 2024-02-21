@@ -1,7 +1,7 @@
 import { User } from ".";
 
 export class Collection {
-  public id?: number;
+  public id: number;
   public createdAt?: Date;
   public updatedAt?: Date;
 
@@ -10,6 +10,10 @@ export class Collection {
   public owner!: User;
   public isPrivate?: boolean;
   public notifyOwnerOnStudentOutput?: boolean;
+
+  constructor(id: number) {
+    this.id = id;
+  }
 
   merge(newCollection: Collection) {
     if (newCollection.description) {

@@ -28,6 +28,12 @@ module.exports = {
         "span-15": "span 15 / span 15",
         "span-16": "span 16 / span 16",
       },
+      gridColumnStart: {
+        13: "13",
+        14: "14",
+        15: "15",
+        16: "16",
+      },
     },
   },
   plugins: [],

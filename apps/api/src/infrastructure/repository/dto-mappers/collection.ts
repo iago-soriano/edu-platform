@@ -7,10 +7,8 @@ export const CollectionDtoMapper: DomainDtoMapper<
   typeof collections
 > = {
   mapFromSelectDto: (dto: typeof collections.$inferSelect) => {
-    const collection = new Collection();
-    // if (!dto) return null;
+    const collection = new Collection(dto.id);
 
-    collection.id = dto.id;
     collection.name = dto.name || "";
     collection.description = dto.description || "";
     collection.createdAt = dto.createdAt || undefined;
@@ -27,7 +25,6 @@ export const CollectionDtoMapper: DomainDtoMapper<
 
   mapToInsertDto: (domain: Collection) => {
     const dto: typeof collections.$inferInsert = {
-      id: domain.id,
       name: domain.name,
       description: domain.description,
       ownerId: domain.owner.id,

@@ -33,9 +33,8 @@ export class CollectionsRepository implements ICollectionsRepository {
       .from(collections)
       .where(eq(collections.ownerId, ownerId));
 
-    return dto.map(
-      (collection) =>
-        CollectionDtoMapper.mapFromSelectDto(collection) || new Collection()
+    return dto.map((collection) =>
+      CollectionDtoMapper.mapFromSelectDto(collection)
     );
   }
 
@@ -60,9 +59,8 @@ export class CollectionsRepository implements ICollectionsRepository {
       )
       .where(eq(studentCollectionParticipation.studentId, userId));
 
-    return c.map(
-      ({ collections }) =>
-        CollectionDtoMapper.mapFromSelectDto(collections) || new Collection()
+    return c.map(({ collections }) =>
+      CollectionDtoMapper.mapFromSelectDto(collections)
     );
   }
 }

@@ -79,8 +79,7 @@ export class Versions implements IVersions {
       version:
         VersionDtoMapper.mapFromSelectDto(activity_version) ||
         new ActivityVersion(),
-      collection:
-        CollectionDtoMapper.mapFromSelectDto(collections) || new Collection(),
+      collection: CollectionDtoMapper.mapFromSelectDto(collections),
     }));
   }
 
@@ -106,8 +105,7 @@ export class Versions implements IVersions {
       version:
         VersionDtoMapper.mapFromSelectDto(activity_version) ||
         new ActivityVersion(),
-      collection:
-        CollectionDtoMapper.mapFromSelectDto(collections) || new Collection(),
+      collection: CollectionDtoMapper.mapFromSelectDto(collections),
     }));
   }
 
@@ -126,6 +124,7 @@ export class Versions implements IVersions {
     const fullVersion = await db
       .select()
       .from(activityVersions)
+      .innerJoin(activities, eq(activities.id, activityVersions.activityId))
       .leftJoin(activityContents, eq(activityContents.versionId, id))
       .leftJoin(activityQuestions, eq(activityQuestions.versionId, id))
       .leftJoin(alternatives, ({ questions }) =>
@@ -139,11 +138,13 @@ export class Versions implements IVersions {
       fullVersion[0].activity_version
     );
 
-    const contents: Content[] = fullVersion.map(({ activity_contents }) =>
-      activity_contents
-        ? ContentDtoMapper.mapFromSelectDto(activity_contents)
-        : new TextContent()
-    );
+    const contents: Content[] = [];
+
+    fullVersion.forEach(({ activity_contents }) => {
+      if (activity_contents)
+        contents.push(ContentDtoMapper.mapFromSelectDto(activity_contents));
+    });
+
     const qs: { [questionId: number]: Question } = {};
 
     fullVersion.forEach(({ questions, question_alternatives }) => {
@@ -167,6 +168,9 @@ export class Versions implements IVersions {
 
     version.contents = contents;
     version.questions = questions;
+    version.activity = ActivityDtoMapper.mapFromSelectDto(
+      fullVersion[0].activities
+    );
 
     return version;
     // const version = await this.findSimpleViewById(id);

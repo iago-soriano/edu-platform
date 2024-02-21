@@ -7,7 +7,7 @@ import { CollectionResponseDTO } from "@edu-platform/common";
 import { Badge, Icons, Tooltip } from "@components";
 
 const MainContainer = ({ children }) => (
-  <div className="grid grid-rows-3 col-span-9 gap-y-1">{children}</div>
+  <div className="grid grid-rows-3">{children}</div>
 );
 
 const Name = ({ children }) => <h5 className="truncate">{children}</h5>;
@@ -21,17 +21,8 @@ const EmptyDescription = () => (
   <p className={twMerge(descriptionClasses, "text-text2")}>Sem descrição</p>
 );
 
-const Date = ({ date }) => (
-  <Tooltip content={`Última atualização em ${getLocaleDateTimeFromISO(date)}`}>
-    <div className="flex flex-wrap items-center justify-center text-sm p-1">
-      <Icons.CLOCK sze={16} />
-      <span className="px-1">{getLocaleDateFromISO(date)}</span>
-    </div>
-  </Tooltip>
-);
-
 const commonCardClasses =
-  "grid grid-cols-10 p-3 m-2 bg-surface1 border-accent/70 border-2 bg-opacity-70 w-full rounded-lg hover:scale-[1.01] transition-all cursor-pointer h-fit";
+  "p-3 m-2 bg-surface1 border-accent/70 border-2 bg-opacity-70 w-full rounded-lg hover:scale-[1.01] transition-all cursor-pointer h-fit";
 export const CollectionOwnsCard = ({
   onClick,
   collection,
@@ -48,6 +39,44 @@ export const CollectionOwnsCard = ({
         ) : (
           <EmptyDescription />
         )}
+        <div className="grid grid-cols-7">
+          <div className="w-fit col-span-1">
+            <Tooltip
+              content={
+                collection.notifyOwnerOnStudentOutput
+                  ? "Notificações de respostas ativada"
+                  : "Notificações de respostas desativada"
+              }
+            >
+              <span>
+                <Badge classes="flex items-center cursor-auto">
+                  {collection.notifyOwnerOnStudentOutput ? (
+                    <Icons.NOTIFICATION size={20} />
+                  ) : (
+                    <Icons.NOTIFICATIONSLASH size={20} />
+                  )}
+                </Badge>
+              </span>
+            </Tooltip>
+          </div>
+          <div className="w-fit col-span-1">
+            <Tooltip
+              content={
+                collection.isPrivate ? "Coleção privada" : "Coleção pública"
+              }
+            >
+              <span>
+                <Badge classes="flex items-center cursor-auto">
+                  {collection.isPrivate ? (
+                    <Icons.CANT_SEE size={20} />
+                  ) : (
+                    <Icons.CAN_SEE size={20} />
+                  )}
+                </Badge>
+              </span>
+            </Tooltip>
+          </div>
+        </div>
       </MainContainer>
     </div>
   );

@@ -3,7 +3,7 @@ import {
   DraftVersionActivityCard,
   ArchivedGroupActivityCard,
   PublishedVersionActivityCard,
-} from "./cards";
+} from "./activity-cards";
 import { LoadingErrorData } from "..";
 import {
   useListActivityVersionsQuery,
@@ -64,7 +64,12 @@ export function ActivityListing({ collectionId, showActive }) {
                 version={Published}
                 hasDraft={!!Draft}
                 archivedCount={Archived?.length}
-                onClick={() => {}}
+                collection={collectionId ? "" : collection.name}
+                onClick={() => {
+                  router.push(
+                    `/activity/${activityId}/version/${Published.id}/preview`
+                  );
+                }}
                 onClickSeeDraft={() =>
                   router.push(
                     `/activity/${activityId}/version/${Draft.id}/edit`
@@ -78,10 +83,10 @@ export function ActivityListing({ collectionId, showActive }) {
               />
             );
           else if (!Published && Draft) {
-            console.log(Draft);
             content.push(
               <DraftVersionActivityCard
                 key={activityId}
+                collection={collectionId ? "" : collection.name}
                 version={Draft}
                 onClick={() =>
                   router.push(
