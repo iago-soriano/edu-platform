@@ -8,7 +8,7 @@ import {
   UseQueryResult,
 } from "@tanstack/react-query";
 import { MutationArgsType } from "../infrastructure/api/types";
-import { errorToast } from "@components";
+import { errorToast, successToast } from "@components";
 
 type RequestSaveCollection = Parameters<ApiClient["saveCollection"]>[0];
 type ReturnSaveCollection = Awaited<ReturnType<ApiClient["saveCollection"]>>;
@@ -50,23 +50,24 @@ export type InsertUserMutationType = UseMutationResult<
   Request
 >;
 
-export const useInsertUserInCollectionMutation = (
-  params: ParamsInsertUser,
-  args: RequestInsertUser
-) => {
+export const useInsertUserInCollectionMutation = ({
+  collectionId,
+}: ParamsInsertUser &
+  MutationArgsType<RequestInsertUser, ReturnInsertUser>) => {
   const queryClient = useQueryClient();
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
   return useMutation<ReturnInsertUser, ServerError, RequestInsertUser>({
-    mutationFn: () => {
-      return client.insertUserInCollection(params, args);
+    mutationFn: (args: RequestInsertUser) => {
+      return client.insertUserInCollection({ collectionId }, args);
     },
-    // onSuccess: (d, v, c) => {
-    //   queryClient.invalidateQueries({
-    //     queryKey: ["collections"],
-    //   });
-    // },
+    onSuccess: (d, v, c) => {
+      queryClient.invalidateQueries({
+        queryKey: [`collection-participations-${collectionId}`],
+      });
+      successToast("Usuário inserido com sucesso!");
+    },
     onError: (e) => errorToast(`Algo deu errado: ${e.message}`),
   });
 };
@@ -82,22 +83,23 @@ export type RemoveUserMutationType = UseMutationResult<
   Request
 >;
 
-export const useRemoveUserFromCollectionMutation = (
-  params: ParamsRemoveUser
-) => {
+export const useRemoveUserFromCollectionMutation = (params: {
+  collectionId: number;
+}) => {
   const queryClient = useQueryClient();
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
   return useMutation<ReturnRemoveUser, ServerError, ParamsRemoveUser>({
-    mutationFn: () => {
-      return client.removeUserFromCollection(params);
+    mutationFn: (args: ParamsRemoveUser) => {
+      return client.removeUserFromCollection({ ...args });
     },
-    // onSuccess: (d, v, c) => {
-    //   queryClient.invalidateQueries({
-    //     queryKey: ["collections"],
-    //   });
-    // },
+    onSuccess: (d, v, c) => {
+      queryClient.invalidateQueries({
+        queryKey: [`collection-participations-${params.collectionId}`],
+      });
+      successToast("Usuário removido com sucesso!");
+    },
     onError: (e) => errorToast(`Algo deu errado: ${e.message}`),
   });
 };
@@ -133,6 +135,10 @@ type GetStudentsParams = Parameters<ApiClient["getStudentsOfCollection"]>[0];
 type GetStudentsResponse = Awaited<
   ReturnType<ApiClient["getStudentsOfCollection"]>
 >;
+export type GetStudentsOfCollectionQueryType = UseQueryResult<
+  GetStudentsResponse,
+  ServerError
+>;
 
 export const useGetStudentsOfCollectionQuery = ({
   collectionId,
@@ -141,7 +147,7 @@ export const useGetStudentsOfCollectionQuery = ({
   const client = new ApiClient(axios);
 
   return useQuery<GetStudentsResponse, ServerError>({
-    queryKey: ["collection-students", collectionId],
+    queryKey: [`collection-participations-${collectionId}`],
     queryFn: () => client.getStudentsOfCollection({ collectionId }),
   });
 };

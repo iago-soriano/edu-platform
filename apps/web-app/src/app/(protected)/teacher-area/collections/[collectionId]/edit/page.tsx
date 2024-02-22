@@ -11,14 +11,13 @@ import {
 } from "@components";
 import { useRouter, useSearchParams } from "next/navigation";
 import { InsertStudentModal } from "./insert-student-modal";
-import { DomainRules } from "@edu-platform/common";
 import { useState, useEffect } from "react";
 import {
   useSaveCollectionMutation,
   useGetCollectionQuery,
-  useGetStudentsOfCollectionQuery,
   useCreateNewActivityMutation,
 } from "@endpoints";
+import { StudentListing } from "./student-listing";
 
 const Page = ({ params: { collectionId: strId } }) => {
   const router = useRouter();
@@ -33,7 +32,6 @@ const Page = ({ params: { collectionId: strId } }) => {
     useState(false);
 
   const collectionQuery = useGetCollectionQuery({ collectionId });
-  const studentsQuery = useGetStudentsOfCollectionQuery({ collectionId });
 
   const saveCollectionMutation = useSaveCollectionMutation({
     collectionId,
@@ -153,17 +151,7 @@ const Page = ({ params: { collectionId: strId } }) => {
           </Tooltip>
         </div>
       </div>
-      <div className="flex justify-between p-2">
-        <span>Estudantes participantes</span>
-        <button
-          onClick={() => setIsInsertStudentModalOpen(true)}
-          className="h-10 w-36 whitespace-nowrap bg-accent p-2 text-white rounded font-bold transition-opacity hover:opacity-80"
-        >
-          + Inserir Estudante
-        </button>
-      </div>
-      {studentsQuery?.data?.map((student) => <span>{student.name}</span>)}
-      <div className="flex justify-between p-2">
+      <div className="flex justify-between p-2 mt-5">
         <ToggleText
           buttons={[
             {
@@ -196,14 +184,23 @@ const Page = ({ params: { collectionId: strId } }) => {
           )}
         </button>
       </div>
-
       <ActivityListing
         collectionId={collectionId}
         showActive={searchParams.get("activeTab") !== "ArchivedActivities"}
       />
-
+      <div className="flex justify-between p-2 mt-5">
+        <h5>Estudantes participantes</h5>
+        <button
+          onClick={() => setIsInsertStudentModalOpen(true)}
+          className="h-10 w-38 whitespace-nowrap bg-accent p-2 text-white rounded font-bold transition-opacity hover:opacity-80"
+        >
+          + Inserir Estudante
+        </button>
+      </div>
+      <StudentListing collectionId={collectionId} />
       {isInsertStudentModalOpen && (
         <InsertStudentModal
+          collectionId={collectionId}
           onClose={() => setIsInsertStudentModalOpen(false)}
         />
       )}

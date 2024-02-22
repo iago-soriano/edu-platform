@@ -8,7 +8,6 @@ import {
 } from "@tanstack/react-query";
 import { MutationArgsType } from "../infrastructure/api/types";
 import { errorToast } from "@components";
-import { redirect } from "next/navigation";
 
 type ParamsGet = Parameters<ApiClient["getActivityVersion"]>[0];
 type ReturnGet = Awaited<ReturnType<ApiClient["getActivityVersion"]>>;

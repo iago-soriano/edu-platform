@@ -1,5 +1,5 @@
 "use client";
-import { Footer, ImageInput } from "@components";
+import { Footer } from "@components";
 
 export default () => {
   return (

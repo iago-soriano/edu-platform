@@ -8,12 +8,11 @@ import {
 } from "@endpoints";
 import {
   Spinner,
-  Tabs,
   ToggleText,
   ActivityListing,
   LoadingErrorData,
+  CollectionOwnsCard,
 } from "@components";
-import { CollectionOwnsCard } from "./collection-listing";
 
 const Page = () => {
   const router = useRouter();
