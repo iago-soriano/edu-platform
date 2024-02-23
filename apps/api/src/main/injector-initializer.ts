@@ -26,6 +26,7 @@ import {
   RemoveUserFromCollectionController,
   GetCollectionController,
   ListUsersInCollectionController,
+  SaveAnswerController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -56,6 +57,7 @@ import {
   GetCollectionUseCase,
   ListUsersInCollectionUseCase,
   InsertDefaultCollectionUseCase,
+  SaveAnswerUseCase,
 } from "@use-cases";
 import { GetActivityUseCaseHelper } from "@use-case-middlewares";
 import {
@@ -133,6 +135,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     listUsersInCollectionController: awilix
       .asClass(ListUsersInCollectionController)
       .classic(),
+    SaveAnswerController: awilix.asClass(SaveAnswerController).classic(),
 
     /** #endregion */
 
@@ -202,6 +205,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     insertDefaultCollectionUseCase: awilix
       .asClass(InsertDefaultCollectionUseCase)
       .classic(),
+    saveAnswerUseCase: awilix.asClass(SaveAnswerUseCase).classic(),
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),
     tokenRepository: awilix.asClass(TokenRepository).classic(),

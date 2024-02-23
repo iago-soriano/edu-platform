@@ -1,37 +1,29 @@
-/* import {
-  StudentAnswerRequestDTO,
-  StudentAnswerResponseDTO,
-  CollectionRequestDTO,
-  CollectionResponseDTO,
-} from "@edu-platform/common";
-import { Collection, StudentAnswer, User } from "@domain";
+import { StudentOutput, StudentAnswer, TextQuestion } from "@domain";
 import { DomainDtoMapper } from "./types";
-import { QuestionSelectDTO, UserSelectDTO } from "@interfaces";
+import { studentAnswer } from "@infrastructure";
 
 export const StudentAnswerDtoMapper: DomainDtoMapper<
   StudentAnswer,
-  StudentAnswerRequestDTO,
-  StudentAnswerResponseDTO
+  typeof studentAnswer
 > = {
-  mapFromDto: (dto: StudentAnswerRequestDTO, user: UserSelectDTO, question: QuestionSelectDTO) => {
+  mapFromSelectDto: (dto: typeof studentAnswer.$inferSelect) => {
     const answer = new StudentAnswer();
+
+    answer.answer = dto.answer || "";
+    answer.question = new TextQuestion();
+    answer.studentOutput = new StudentOutput(dto.studentOutputId);
 
     return answer;
   },
 
-  mapToDto: (domain: StudentAnswer) => {
-    const dto: StudentAnswerResponseDTO = {
-      id: domain.id || 0,
-      createdAt: domain.createdAt || new Date(),
-      updatedAt: domain.updatedAt || new Date(),
+  mapToInsertDto: (domain: StudentAnswer) => {
+    if (!domain.studentOutput.id) throw new Error();
 
-      name: domain.name,
-      description: domain.description,
-      ownerId: domain.owner.id || 0,
-      isPrivate: domain.isPrivate,
-      notifyOwnerOnStudentOutput: domain.notifyOwnerOnStudentOutput,
+    const dto: typeof studentAnswer.$inferInsert = {
+      answer: domain.answer,
+      questionId: domain.question.id,
+      studentOutputId: domain.studentOutput.id,
     };
     return dto;
   },
 };
- */
