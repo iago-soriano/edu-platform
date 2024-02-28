@@ -25,10 +25,10 @@ export const QuestionDtoMapper: DomainDtoMapper<
     // instanciate specific type and map payload
     switch (dto.type) {
       case QuestionTypes.Text:
-        newQuestion = new TextQuestion();
+        newQuestion = new TextQuestion(dto.id);
         break;
       case QuestionTypes.MultipleChoice:
-        newQuestion = new MultipleChoiceQuestion();
+        newQuestion = new MultipleChoiceQuestion(dto.id);
         newQuestion.alternatives =
           dto.alternatives?.map((alternativeDto) =>
             AlternativeDtoMapper.mapFromDto(alternativeDto, dto)
@@ -42,8 +42,6 @@ export const QuestionDtoMapper: DomainDtoMapper<
     newQuestion.answer = dto.answer;
 
     newQuestion.order = dto.order;
-
-    newQuestion.id = dto.id;
 
     const version = new ActivityVersion();
     version.id = versionDto.id || 0;

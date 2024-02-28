@@ -1,5 +1,6 @@
 import { StudentOutput } from "@domain";
 
 export interface IStudentOutputsRepository {
-  create: (output: StudentOutput) => Promise<{ outputId: number }>;
+  insert: (output: StudentOutput) => Promise<{ outputId: number }>;
+  getById: (outputId: number) => Promise<StudentOutput>;
 }

@@ -1,6 +1,6 @@
 type RequestBody = { studentEmail: string };
 type ResponseBody = {};
-type Params = { collectionId: string };
+type Params = { collectionId: number };
 
 export {
   RequestBody as InsertUserInCollectionRequestBody,

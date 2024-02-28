@@ -281,9 +281,11 @@ export const studentOutput = pgTable("student_output", {
 // student answer
 
 export const studentAnswer = pgTable("student_answer", {
-  questionId: integer("question_id").references(() => activityQuestions.id),
+  questionId: integer("question_id")
+    .references(() => activityQuestions.id)
+    .notNull(),
   answer: varchar("answer", { length: 500 }),
-  studentOutputId: integer("student_output_id").references(
-    () => studentOutput.id
-  ),
+  studentOutputId: integer("student_output_id")
+    .references(() => studentOutput.id)
+    .notNull(),
 });

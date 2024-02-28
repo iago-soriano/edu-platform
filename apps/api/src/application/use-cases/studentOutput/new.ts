@@ -1,5 +1,8 @@
-import { ActivityVersion, User } from "@domain";
-import { StudentIsNotParticipant } from "@edu-platform/common";
+import { ActivityVersion, OutputStatus, User } from "@domain";
+import {
+  CollectionNotFound,
+  StudentIsNotParticipant,
+} from "@edu-platform/common";
 import {
   IUseCase,
   UserSelectDTO,
@@ -39,7 +42,7 @@ class UseCase implements ICreateStudentOutputUseCase {
       activity.collection?.id || 0
     );
 
-    if (!collection) throw new Error("Coleção não encontrada");
+    if (!collection) throw new CollectionNotFound();
 
     const studentIsParticipant =
       await this.collectionParticipationsRepository.findStudentCollectionRelation(
@@ -50,9 +53,10 @@ class UseCase implements ICreateStudentOutputUseCase {
     if (collection.isPrivate && !studentIsParticipant)
       throw new StudentIsNotParticipant();
 
-    return await this.studentOutputsRepository.create({
+    return await this.studentOutputsRepository.insert({
       user: new User(user.id),
       version: new ActivityVersion(versionId),
+      status: OutputStatus.Draft,
     });
   }
 }

@@ -30,30 +30,35 @@ import {
 } from "@domain";
 
 export class Versions implements IVersions {
-  async insert(activityId: number, versionNumber: number = 0) {
-    return await db.transaction(async (tx) => {
-      const [{ versionId }] = await tx
+  async insert(
+    title: string,
+    description: string,
+    topics: string,
+    activityId: number,
+    versionNumber: number = 0
+  ) {
+    return (
+      await db
         .insert(activityVersions)
-        .values({ activityId, version: versionNumber })
-        .returning({ versionId: activityVersions.id });
-      await tx
-        .update(activities)
-        .set({ draftVersionId: versionId })
-        .where(eq(activities.id, activityId));
-      return { versionId };
-    });
+        .values({
+          title,
+          description,
+          topics,
+          activityId,
+          version: versionNumber,
+        })
+        .returning({ versionId: activityVersions.id })
+    )[0];
   }
 
   async update(id: number, activity: Partial<ActivityVersion>) {
-    await db.transaction(async (tx) => {
-      await tx
-        .update(activityVersions)
-        .set({
-          ...activity,
-          updatedAt: new Date(),
-        })
-        .where(eq(activityVersions.id, id));
-    });
+    await db
+      .update(activityVersions)
+      .set({
+        ...activity,
+        updatedAt: new Date(),
+      })
+      .where(eq(activityVersions.id, id));
   }
 
   async delete(id: number) {

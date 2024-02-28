@@ -28,3 +28,4 @@ export * from "./list-collections-by-user";
 export * from "./create-student-output";
 export * from "./get-collection";
 export * from "./list-users-in-collection";
+export * from "./save-answer";

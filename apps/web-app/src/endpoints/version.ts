@@ -100,7 +100,7 @@ export const useUpdateVersionStatusMutation = ({
       client.updateVersionStatus({ activityId, versionId }, args),
     onSuccess: (e, v, c) => {
       queryClient.invalidateQueries({
-        queryKey: ["version"],
+        queryKey: ["versions"],
       });
       onSuccess && onSuccess(e, v, c);
     },
@@ -130,7 +130,7 @@ export const useDeleteDraftVersionMutation = ({
     mutationFn: () => client.deleteVersion({ activityId, versionId }),
     onSuccess: (e, v, c) => {
       queryClient.invalidateQueries({
-        queryKey: [`version-${versionId}`],
+        queryKey: [`versions`],
       });
       onSuccess && onSuccess(e, v, c);
     },
@@ -159,7 +159,7 @@ export const useCreateNewDraftVersionMutation = ({
       client.createNewDraftVersion({ activityId }),
     onSuccess: (d, v, c) => {
       onSuccess && onSuccess(d, v, c);
-      queryClient.invalidateQueries({ queryKey: ["all"] });
+      queryClient.invalidateQueries({ queryKey: ["versions"] });
     },
     onError: (e) => errorToast(`Algo deu errado: ${e.message}`),
   });

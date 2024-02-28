@@ -1,5 +1,6 @@
 import { ActivityVersion, Collection, VersionStatus } from "@domain";
 import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
+import { isArray } from "util";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -65,16 +66,17 @@ class UseCase implements IListActivityVersionsByOwnershipUseCase {
             thisActivity[version.status] = version;
           else {
             // if archived, there needs to be an array of versions
-            if (thisVersion)
+            if (thisVersion && Array.isArray(thisVersion))
               // there is a previous archived version saved
-              thisActivity[VersionStatus.Archived]?.push(version);
+              thisVersion?.push(version);
             else thisActivity[VersionStatus.Archived] = [version]; // this is the first archived version
           }
         } else {
           thisCollection.activities = {
             ...thisCollection.activities,
             [version.activity.id]: {
-              [version.status]: version,
+              [version.status]:
+                version.status === VersionStatus.Archived ? [version] : version,
             },
           };
         }

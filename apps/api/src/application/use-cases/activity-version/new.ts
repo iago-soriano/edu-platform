@@ -37,13 +37,17 @@ class UseCase implements ICreateNewDraftVersionUseCase {
 
     if (!fullVersion) throw new Error("Activity has no draft nor lastVersion");
 
-    const { version, contents, questions } = fullVersion;
+    const { title, description, version, topics, contents, questions } =
+      fullVersion;
 
     // cria nova versão na atividade, com um número de versão novo
     const { versionId: newVersionId } =
       await this.activitiesRepository.Versions.insert(
+        title,
+        description,
+        topics,
         activityId,
-        (version || 0) + 1
+        version + 1
       );
 
     // duplicate all contents and questions to the new version

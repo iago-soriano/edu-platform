@@ -15,6 +15,7 @@ import { ContentTypes, VersionStatus } from "@edu-platform/common";
 import { useState } from "react";
 import { redirect } from "next/navigation";
 import { twMerge } from "tailwind-merge";
+import { Router } from "@infrastructure";
 
 const NewItemHeader = ({ children }) => <h5 className="p-2">{children}</h5>;
 
@@ -40,7 +41,7 @@ export const OptionsMenu = ({
     versionId,
     onSuccess: () => {
       setOpenConfirmDeleteModal(false);
-      redirect("/teacher-area?activeTab=ActiveActivities");
+      redirect(Router.teacherHome);
     },
   });
   const statusUpdateMutation = useUpdateVersionStatusMutation({
@@ -48,7 +49,7 @@ export const OptionsMenu = ({
     versionId,
     onSuccess: () => {
       setOpenConfirmDeleteModal(false);
-      redirect("/teacher-area?activeTab=ActiveActivities");
+      redirect(Router.teacherHome);
     },
   });
   const saveContentMutation = useSaveContentMutation({

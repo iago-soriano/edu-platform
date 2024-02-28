@@ -41,6 +41,9 @@ export interface IQuestions {
 
 export interface IVersions {
   insert: (
+    title: string,
+    description: string,
+    topics: string,
     activityId: number,
     versionNumber?: number
   ) => Promise<{ versionId: number }>;

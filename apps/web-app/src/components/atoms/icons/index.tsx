@@ -21,6 +21,7 @@ import {
   Folder,
   Bell,
   BellSlash,
+  GitBranch,
 } from "@phosphor-icons/react";
 
 export const Icons = {
@@ -46,4 +47,5 @@ export const Icons = {
   FOLDER: (props) => <Folder {...props} />,
   NOTIFICATION: (props) => <Bell {...props} />,
   NOTIFICATIONSLASH: (props) => <BellSlash {...props} />,
+  VERSION: (props) => <GitBranch {...props} />,
 };

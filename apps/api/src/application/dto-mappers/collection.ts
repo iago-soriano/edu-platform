@@ -12,9 +12,8 @@ export const CollectionDtoMapper: DomainDtoMapper<
   CollectionResponseDTO
 > = {
   mapFromDto: (dto: CollectionRequestDTO, user: UserSelectDTO) => {
-    const collection = new Collection();
+    const collection = new Collection(dto.id || 0);
 
-    collection.id = dto.id;
     collection.name = dto.name;
     collection.description = dto.description;
     collection.isPrivate = dto.isPrivate;

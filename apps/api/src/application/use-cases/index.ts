@@ -82,6 +82,9 @@ import InsertDefaultCollectionUseCase, {
 import SaveAnswerUseCase, {
   ISaveAnswerUseCase,
 } from "./studentOutput-answer/new";
+import UpdateStudentOutputUseCase, {
+  IUpdateStudentOutputUseCase,
+} from "./studentOutput/update";
 
 export {
   GetCollectionUseCase,
@@ -144,4 +147,6 @@ export {
   IInsertDefaultCollectionUseCase,
   SaveAnswerUseCase,
   ISaveAnswerUseCase,
+  UpdateStudentOutputUseCase,
+  IUpdateStudentOutputUseCase,
 };

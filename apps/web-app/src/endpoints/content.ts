@@ -64,7 +64,7 @@ export const useDeleteActivityContentMutation = ({
       client.deleteContent({ activityId, contentId, versionId }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["version", activityId, versionId],
+        queryKey: [`version-${versionId}`],
       });
     },
     onError: onError

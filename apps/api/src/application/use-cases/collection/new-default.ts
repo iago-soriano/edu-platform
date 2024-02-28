@@ -11,7 +11,7 @@ class UseCase implements IInsertDefaultCollectionUseCase {
   constructor(private collectionsRepository: ICollectionsRepository) {}
 
   async execute(user: InputParams) {
-    const defaultCollection = new Collection();
+    const defaultCollection = new Collection(0);
     defaultCollection.name = "Minha coleção";
     defaultCollection.description =
       "Esta é sua primeira coleção! Altere seu nome e descrição para refletir o objetivo desta coleção, e, então, insira estudantes";

@@ -78,7 +78,7 @@ const useSignInPage = () => {
       errorToast("Ocorreu um erro :(");
     },
     onSuccess: () => {
-      router.push("/dashboard/my-activities");
+      router.push("/home");
     },
   });
   const googleSignInMutation = useGoogleSignInMutation();

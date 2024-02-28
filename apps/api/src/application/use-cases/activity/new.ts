@@ -1,4 +1,5 @@
 import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
+import { ActivityVersion } from "@domain";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -22,9 +23,16 @@ class UseCase implements ICreateNewActivityUseCase {
     );
 
     const { versionId } = await this.activitiesRepository.Versions.insert(
+      "",
+      "",
+      "",
       activityId,
-      0
+      1
     );
+
+    await this.activitiesRepository.Activities.update(activityId, {
+      draftVersion: new ActivityVersion(versionId),
+    });
 
     return { activityId, versionId };
   }

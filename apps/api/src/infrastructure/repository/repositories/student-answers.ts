@@ -3,7 +3,7 @@ import { IStudentAnswersRepository } from "@interfaces";
 import { StudentAnswerDtoMapper } from "../dto-mappers";
 import { db, studentAnswer } from "@infrastructure";
 
-export class StudentAnswers implements IStudentAnswersRepository {
+export class StudentAnswersRepository implements IStudentAnswersRepository {
   async insert(answer: StudentAnswer) {
     const dto = StudentAnswerDtoMapper.mapToInsertDto(answer);
 

@@ -18,6 +18,7 @@ import {
   useCreateNewActivityMutation,
 } from "@endpoints";
 import { StudentListing } from "./student-listing";
+import { Router } from "@infrastructure";
 
 const Page = ({ params: { collectionId: strId } }) => {
   const router = useRouter();
@@ -44,7 +45,7 @@ const Page = ({ params: { collectionId: strId } }) => {
     collectionId,
     onSuccess: ({ activityId, versionId }) => {
       console.log({ activityId, versionId });
-      router.push(`/activity/${activityId}/version/${versionId}/edit`);
+      router.push(Router.editActivity({ activityId, versionId }));
     },
   });
 

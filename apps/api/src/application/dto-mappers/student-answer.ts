@@ -13,7 +13,7 @@ export const StudentAnswerDtoMapper: DomainDtoMapper<
   mapFromDto: (dto: StudentAnswerRequestDTO) => {
     const answer = new StudentAnswer();
 
-    answer.question = new TextQuestion() || undefined;
+    answer.question = new TextQuestion(dto.questionId);
     answer.answer = dto.answer || "";
     answer.studentOutput = new StudentOutput(dto.studentOutputId);
 

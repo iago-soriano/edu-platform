@@ -9,11 +9,11 @@ import {
   EmptyDescription,
   Date,
   commonCardClasses,
-  TopicsCollectionRow,
+  BottomRow,
 } from "./common";
 
 export const DraftVersionActivityCard = ({
-  version: { title, description, updatedAt, topics },
+  version: { title, description, updatedAt, topics, version },
   onClick,
   collection,
 }: {
@@ -37,7 +37,7 @@ export const DraftVersionActivityCard = ({
       <div className="grid col-span-1 justify-items-end items-center">
         <Date date={updatedAt} />
       </div>
-      <TopicsCollectionRow topics={topics} collection={collection} />
+      <BottomRow version={version} topics={topics} collection={collection} />
     </div>
   );
 };

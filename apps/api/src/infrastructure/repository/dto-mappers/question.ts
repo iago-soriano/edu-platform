@@ -40,10 +40,10 @@ export const QuestionDtoMapper: DomainDtoMapper<
 
     switch (questionDto.type) {
       case QuestionTypes.Text:
-        newQuestion = new TextQuestion();
+        newQuestion = new TextQuestion(questionDto.id);
         break;
       case QuestionTypes.MultipleChoice:
-        newQuestion = new MultipleChoiceQuestion();
+        newQuestion = new MultipleChoiceQuestion(questionDto.id);
         break;
       default:
         throw new QuestionTypeNotFound();
@@ -54,7 +54,6 @@ export const QuestionDtoMapper: DomainDtoMapper<
 
     newQuestion.order = questionDto.order || 0;
 
-    newQuestion.id = questionDto.id;
     newQuestion.version = new ActivityVersion(questionDto.versionId!);
 
     return newQuestion;

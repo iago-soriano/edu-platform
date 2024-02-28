@@ -65,10 +65,16 @@ fonte poppins bold, poppins light
     --accent: calc(var(--brand-hue) - 180) 90% 40%;
     --error: 0 100% 70%;
 
-    --text1: var(--brand-hue) 15% 85%;
+    /* --text1: var(--brand-hue) 15% 85%;
     --text2: var(--brand-hue) 10% 70%;
     --surface1: var(--brand-hue) 40% 8%;
     --surface2: var(--brand-hue) 30% 13%;
+    --surface3: var(--brand-hue) 30% 11%;
+    --surface4: var(--brand-hue) 30% 7%; */
+    --text1: 0 10% 94%;
+    --text2: 0 10% 85%;
+    --surface1: 24 33% 3%;
+    --surface2: 24 33% 3%;
     --surface3: var(--brand-hue) 30% 11%;
     --surface4: var(--brand-hue) 30% 7%;
   }

@@ -16,3 +16,5 @@ export * from "./list-collections-by-user";
 export * from "./get-collection";
 export * from "./get-students-of-collection";
 export * from "./create-student-output";
+export * from "./save-answer";
+export * from "./update-student-output";

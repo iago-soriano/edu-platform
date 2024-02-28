@@ -18,13 +18,16 @@ export const StudentOutputDtoMapper: DomainDtoMapper<
     userDto: UserSelectDTO,
     versionDto: VersionRequestDTO
   ) => {
-    const output = new StudentOutput();
+    const output = new StudentOutput(dto.id || 0);
 
-    output.id = dto.id || undefined;
     output.status = parseOutputStatus(dto.status) || OutputStatus.Draft;
 
-    const user = new User(userDto.name || "", userDto.email || "", "");
-    user.id = userDto.id;
+    const user = new User(
+      userDto.id,
+      userDto.name || "",
+      userDto.email || "",
+      ""
+    );
 
     const version = new ActivityVersion();
     version.id = versionDto.id || 0;

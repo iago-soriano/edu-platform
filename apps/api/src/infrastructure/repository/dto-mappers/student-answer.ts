@@ -10,19 +10,17 @@ export const StudentAnswerDtoMapper: DomainDtoMapper<
     const answer = new StudentAnswer();
 
     answer.answer = dto.answer || "";
-    answer.question = new TextQuestion();
+    answer.question = new TextQuestion(dto.questionId);
     answer.studentOutput = new StudentOutput(dto.studentOutputId);
 
     return answer;
   },
 
   mapToInsertDto: (domain: StudentAnswer) => {
-    if (!domain.studentOutput.id) throw new Error();
-
     const dto: typeof studentAnswer.$inferInsert = {
       answer: domain.answer,
-      questionId: domain.question.id,
-      studentOutputId: domain.studentOutput.id,
+      questionId: domain.question.id!,
+      studentOutputId: domain.studentOutput.id!,
     };
     return dto;
   },

@@ -21,11 +21,11 @@ export const ActivityDtoMapper: DomainDtoMapper<Activity, typeof activities> = {
 
   mapToInsertDto: (domain: Activity) => {
     const dto: typeof activities.$inferInsert = {
-      authorId: domain.author.id,
+      authorId: domain.author?.id,
       draftVersionId: domain.draftVersion?.id,
       lastVersionId: domain.lastVersion?.id,
       updatedAt: new Date(),
-      collectionId: domain.collection.id,
+      collectionId: domain.collection?.id,
     };
 
     return dto;

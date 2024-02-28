@@ -12,26 +12,25 @@ import {
   ActivityListing,
   LoadingErrorData,
   CollectionOwnsCard,
+  ConfirmModal,
+  Icons,
+  PanelButton,
 } from "@components";
+import { Router } from "@infrastructure";
+import { ConfirmCollectionModal } from "./confirm-collection-modal";
 
 const Page = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathName = usePathname();
-  const [selectedCollectionId, setSelectedCollectionId] = useState<number>();
 
+  const [openConfirmCollectionModal, setOpenConfirmCollectionModal] =
+    useState(false);
   const collectionsQuery = useListCollectionsQuery();
-  const createActivityMutation = useCreateNewActivityMutation({
-    collectionId: selectedCollectionId,
-    onSuccess: ({ activityId, versionId }) => {
-      router.push(`/activity/${activityId}/version/${versionId}/edit`);
-    },
-  });
+
   const createCollectionMutation = useSaveCollectionMutation({
     onSuccess: ({ collectionId }) => {
-      router.push(
-        `/teacher-area/collections/${collectionId}/edit?ActivityTab=Active`
-      );
+      router.push(Router.editCollection({ collectionId }));
     },
   });
 
@@ -71,7 +70,7 @@ const Page = () => {
                   collection={coll}
                   onClick={() => {
                     router.push(
-                      `/teacher-area/collections/${coll.id}/edit?ActivityTab=Active`
+                      Router.editCollection({ collectionId: coll.id })
                     );
                   }}
                 />
@@ -135,16 +134,10 @@ const Page = () => {
             ))}
           </select>
           <button
-            disabled={createActivityMutation.isPending}
-            onClick={() => createActivityMutation.mutate()}
+            onClick={() => setOpenConfirmCollectionModal(true)}
             className="h-10 w-36 whitespace-nowrap bg-accent p-2 text-white rounded font-bold transition-opacity hover:opacity-80"
           >
-            {createActivityMutation.isPending ||
-            createActivityMutation.isSuccess ? (
-              <Spinner />
-            ) : (
-              " + Nova atividade"
-            )}
+            + Nova atividade
           </button>
         </div>
       </div>
@@ -152,6 +145,13 @@ const Page = () => {
         collectionId={searchParams.get("selectedCollectionId")}
         showActive={searchParams.get("activeTab") !== "ArchivedActivities"}
       />
+      {openConfirmCollectionModal && (
+        <ConfirmCollectionModal
+          collectionsQuery={collectionsQuery}
+          onClose={() => setOpenConfirmCollectionModal(false)}
+          collectionId={Number(searchParams.get("selectedCollectionId"))}
+        />
+      )}
     </div>
   );
 };

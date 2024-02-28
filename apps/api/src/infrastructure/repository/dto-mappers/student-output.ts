@@ -8,10 +8,9 @@ export const StudentOutputDtoMapper: DomainDtoMapper<
   typeof studentOutput
 > = {
   mapFromSelectDto: (dto: typeof studentOutput.$inferSelect) => {
-    const output = new StudentOutput();
+    const output = new StudentOutput(dto.id);
 
-    output.id = dto.id || undefined;
-    output.status = parseOutputStatus(dto.status) || OutputStatus.Draft;
+    output.status = parseOutputStatus(dto.status);
     const user = new User(dto.userId, "", "", "");
     user.id = dto.userId || 0;
     output.user = user;

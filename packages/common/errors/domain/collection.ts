@@ -32,3 +32,35 @@ export class StudentIsNotParticipant extends CustomError {
     super(StudentIsNotParticipant.message);
   }
 }
+
+export class CollectionNotFound extends CustomError {
+  HTTPstatusCode = 400;
+  static message = "Coleção não encontrada";
+  constructor() {
+    super(CollectionNotFound.message);
+  }
+}
+
+export class OutputNotFound extends CustomError {
+  HTTPstatusCode = 400;
+  static message = "Output não encontrado";
+  constructor() {
+    super(OutputNotFound.message);
+  }
+}
+
+export class OutputIsNotDraft extends CustomError {
+  HTTPstatusCode = 400;
+  static message = "Output não é draft";
+  constructor() {
+    super(OutputIsNotDraft.message);
+  }
+}
+
+export class StudentIsNotOutputAuthor extends CustomError {
+  HTTPstatusCode = 400;
+  static message = "Usuário não é o autor da resposta";
+  constructor() {
+    super(StudentIsNotOutputAuthor.message);
+  }
+}

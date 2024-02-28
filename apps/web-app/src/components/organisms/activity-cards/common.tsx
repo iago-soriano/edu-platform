@@ -3,14 +3,14 @@ import {
   getLocaleDateTimeFromISO,
 } from "@infrastructure";
 import { twMerge } from "tailwind-merge";
-import { Tag, Icons, Tooltip } from "@components";
+import { Tag, Icons, Tooltip, Badge } from "@components";
 
 export const commonCardClasses =
   "grid grid-cols-10 p-3 m-2 w-full rounded-lg hover:scale-[1.01] transition-all cursor-pointer h-fit";
 
-export const TopicsCollectionRow = ({ topics, collection }) => {
+export const BottomRow = ({ topics, version, collection }) => {
   return (
-    <div className="flex justify-between col-span-10">
+    <div className="flex justify-between items-end col-span-10">
       <div className="col-span-9 flex justify-start">
         {!!topics.length &&
           topics.split(",").map((topic, i) => (
@@ -19,7 +19,19 @@ export const TopicsCollectionRow = ({ topics, collection }) => {
             </span>
           ))}
       </div>
-      <span>{collection}</span>
+      <div className="flex items-center my-1">
+        <span className="mx-1 font-light bg-surface1 rounded p-1 cursor-auto">
+          {collection}
+        </span>
+        <Tooltip content="Versão da atividade">
+          <span>
+            <Badge classes="border border-text2 text-text2 flex items-center cursor-auto">
+              <Icons.VERSION size={20} />
+              <span className="">{version}</span>
+            </Badge>
+          </span>
+        </Tooltip>
+      </div>
     </div>
   );
 };

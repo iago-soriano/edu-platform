@@ -1,3 +1,4 @@
+"use client";
 import { Footer } from "@components";
 import Image from "next/image";
 import { usePathname } from "next/navigation";

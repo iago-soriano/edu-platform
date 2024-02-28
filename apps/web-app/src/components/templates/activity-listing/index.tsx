@@ -3,13 +3,14 @@ import {
   DraftVersionActivityCard,
   ArchivedGroupActivityCard,
   PublishedVersionActivityCard,
-} from "../../organisms/activity-cards";
-import { LoadingErrorData } from "../..";
+  LoadingErrorData,
+} from "@components";
 import {
   useListActivityVersionsQuery,
   useCreateNewDraftVersionMutation,
 } from "@endpoints";
 import { useRouter } from "next/navigation";
+import { Router } from "@infrastructure";
 
 export function ActivityListing({ collectionId, showActive }) {
   const router = useRouter();
@@ -21,7 +22,12 @@ export function ActivityListing({ collectionId, showActive }) {
 
   const newDraftMutation = useCreateNewDraftVersionMutation({
     onSuccess: (d, v) => {
-      router.push(`/activity/${v.activityId}/version/${d.versionId}/edit`);
+      router.push(
+        Router.editActivity({
+          activityId: v.activityId,
+          versionId: d.versionId,
+        })
+      );
     },
   });
 
@@ -64,15 +70,21 @@ export function ActivityListing({ collectionId, showActive }) {
                 version={Published}
                 hasDraft={!!Draft}
                 archivedCount={Archived?.length}
-                collection={collectionId ? "" : collection.name}
+                collection={collection.name}
                 onClick={() => {
                   router.push(
-                    `/activity/${activityId}/version/${Published.id}/preview`
+                    Router.previewActivity({
+                      activityId: activityId,
+                      versionId: Published.id,
+                    })
                   );
                 }}
                 onClickSeeDraft={() =>
                   router.push(
-                    `/activity/${activityId}/version/${Draft.id}/edit`
+                    Router.editActivity({
+                      activityId: activityId,
+                      versionId: Draft.id,
+                    })
                   )
                 }
                 onClickCreateDraft={() =>
@@ -90,7 +102,10 @@ export function ActivityListing({ collectionId, showActive }) {
                 version={Draft}
                 onClick={() =>
                   router.push(
-                    `/activity/${activityId}/version/${Draft.id}/edit`
+                    Router.editActivity({
+                      activityId: activityId,
+                      versionId: Draft.id,
+                    })
                   )
                 }
               />

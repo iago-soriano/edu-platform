@@ -7,11 +7,11 @@ import {
   Description,
   Date,
   commonCardClasses,
-  TopicsCollectionRow,
+  BottomRow,
 } from "./common";
 
 export const PublishedVersionActivityCard = ({
-  version: { title, description, topics },
+  version: { title, description, topics, version },
   onClick,
   archivedCount,
   hasDraft,
@@ -22,9 +22,9 @@ export const PublishedVersionActivityCard = ({
   version: VersionResponseDTO;
   hasDraft: boolean;
   archivedCount: number;
-  onClick: (args: any) => any;
-  onClickCreateDraft: (args: any) => any;
-  onClickSeeDraft: (args: any) => any;
+  onClick: () => any;
+  onClickCreateDraft: () => any;
+  onClickSeeDraft: () => any;
   collection: string;
 }) => {
   return (
@@ -47,14 +47,20 @@ export const PublishedVersionActivityCard = ({
           >
             {hasDraft ? (
               <button
-                onClick={onClickSeeDraft}
+                onClick={(e) => {
+                  onClickSeeDraft();
+                  e.stopPropagation();
+                }}
                 className="bg-surface4 flex justify-center rounded p-2 w-full mb-1"
               >
                 <Icons.PENCIL_LINE size={20} />
               </button>
             ) : (
               <button
-                onClick={onClickCreateDraft}
+                onClick={(e) => {
+                  onClickCreateDraft();
+                  e.stopPropagation();
+                }}
                 className="flex w-full items-center justify-center rounded p-2 hover:opacity-50 border border-text2 mb-1"
               >
                 <Icons.PENCIL size={20} />
@@ -64,7 +70,7 @@ export const PublishedVersionActivityCard = ({
           <Tooltip
             content={
               archivedCount
-                ? `Há ${archivedCount} versões arquivadas desta atividade.`
+                ? `Há ${archivedCount} versões arquivadas desta atividade`
                 : "Não há versões arquivadas desta atividade"
             }
           >
@@ -77,7 +83,7 @@ export const PublishedVersionActivityCard = ({
           </Tooltip>
         </div>
       </div>
-      <TopicsCollectionRow topics={topics} collection={collection} />
+      <BottomRow topics={topics} version={version} collection={collection} />
     </div>
   );
 };

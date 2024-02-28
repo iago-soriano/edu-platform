@@ -1,3 +1,4 @@
+import { IdGeneratorMockBuilder } from "./../../../test/mock-factories/services/id";
 import { Question, QuestionTypes } from ".";
 import {
   DomainRules,
@@ -6,8 +7,9 @@ import {
 } from "@edu-platform/common";
 
 export class TextQuestion extends Question {
-  constructor() {
+  constructor(id?: number) {
     super(QuestionTypes.Text);
+    this.id = id;
   }
 
   validateAnswer() {

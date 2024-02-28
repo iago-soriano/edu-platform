@@ -3,7 +3,7 @@ import { Modal, ConfirmButton, CancelButton } from "@components";
 interface ConfirmModalProps {
   onClose: () => any;
   confirmAction: (args: any) => any;
-  title: string;
+  title?: string;
   children: React.ReactNode;
   confirmButton: {
     Icon: React.ComponentType<any>;

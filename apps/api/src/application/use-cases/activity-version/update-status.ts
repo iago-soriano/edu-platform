@@ -83,16 +83,6 @@ class UseCase implements IUpdateActivityStatusUseCase {
 
     if (!contents || !contents.length) throw new ActivityVersionHasNoContent();
 
-    // archive currently published version
-    if (activity.lastVersion) {
-      await this.activitiesRepository.Versions.update(
-        activity.lastVersion.id || 0,
-        {
-          status: VersionStatus.Archived,
-        }
-      );
-    }
-
     if (!version.title || !version.description)
       throw new ActivityVersionHasNoTitleOrNoDescription();
 
@@ -114,13 +104,22 @@ class UseCase implements IUpdateActivityStatusUseCase {
       await this.activitiesRepository.Questions.delete(question.id || 0);
     }
 
+    // publish current draft
     await this.activitiesRepository.Versions.update(activity.draftVersion.id, {
       status: VersionStatus.Published,
-      version: (version.version || 0) + 1,
+      version: version.version,
     });
 
+    // archive currently published version
+    if (activity.lastVersion) {
+      await this.activitiesRepository.Versions.update(activity.lastVersion.id, {
+        status: VersionStatus.Archived,
+      });
+    }
+
+    // update activity
     activity.lastVersion = new ActivityVersion(activity.draftVersion.id);
-    activity.draftVersion = undefined;
+    activity.draftVersion = new ActivityVersion(0);
 
     await this.activitiesRepository.Activities.update(activity.id, activity);
 

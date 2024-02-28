@@ -72,6 +72,8 @@ import {
   S3Service,
   CollectionsRepository,
   CollectionParticipationsRepository,
+  StudentOutputsRepository,
+  StudentAnswersRepository,
 } from "@infrastructure";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
@@ -206,6 +208,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(InsertDefaultCollectionUseCase)
       .classic(),
     saveAnswerUseCase: awilix.asClass(SaveAnswerUseCase).classic(),
+
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),
     tokenRepository: awilix.asClass(TokenRepository).classic(),
@@ -213,6 +216,12 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     collectionsRepository: awilix.asClass(CollectionsRepository).classic(),
     collectionParticipationsRepository: awilix
       .asClass(CollectionParticipationsRepository)
+      .classic(),
+    studentOutputsRepository: awilix
+      .asClass(StudentOutputsRepository)
+      .classic(),
+    studentAnswersRepository: awilix
+      .asClass(StudentAnswersRepository)
       .classic(),
   });
 };

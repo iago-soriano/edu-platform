@@ -6,11 +6,11 @@ export enum OutputStatus {
 }
 
 export class StudentOutput {
-  // constructor(id: number, versionId: number) {
-  //   this.user = new User("","","")
-  // }
+  constructor(id: number) {
+    this.id = id;
+  }
   public id?: number;
-  public status?: OutputStatus;
+  public status!: OutputStatus;
   public user!: User;
   public version!: ActivityVersion;
 }
