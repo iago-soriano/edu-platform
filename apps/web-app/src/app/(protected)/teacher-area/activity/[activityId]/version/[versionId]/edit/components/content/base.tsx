@@ -8,10 +8,7 @@ import {
 } from "@components";
 import { TextContent, VideoContent, ImageContent } from ".";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
-import {
-  useSaveContentMutation,
-  useDeleteActivityContentMutation,
-} from "@endpoints";
+import { useSaveContentMutation, useDeleteContentMutation } from "@endpoints";
 import { ContentResponseDTO } from "@edu-platform/common";
 import { twMerge } from "tailwind-merge";
 
@@ -30,19 +27,14 @@ export const BaseContent = ({
   const [hasChanges, setHasChanges] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
-  const saveContentMutation = useSaveContentMutation({
-    activityId,
-    versionId,
-  });
-  const deleteContentMutation = useDeleteActivityContentMutation({
-    activityId,
-    versionId,
-    contentId: contentDto.id.toString(),
-  });
+  const saveContentMutation = useSaveContentMutation({});
+  const deleteContentMutation = useDeleteContentMutation({});
 
   const onSaveTitle = (e) => {
     if (hasChanges) {
       saveContentMutation.mutate({
+        activityId,
+        versionId,
         title: e.target.value,
         type: contentDto.type,
         id: contentDto.id,
@@ -54,6 +46,8 @@ export const BaseContent = ({
   const onSaveDescription = (e) => {
     if (hasChanges) {
       saveContentMutation.mutate({
+        activityId,
+        versionId,
         description: e.target.value,
         type: contentDto.type,
         id: contentDto.id,
@@ -131,7 +125,12 @@ export const BaseContent = ({
           </ButtonWithDropdown.Text>
           <ButtonWithDropdown.DrawerItem
             className="flex items-center"
-            onClick={deleteContentMutation.mutate}
+            onClick={() =>
+              deleteContentMutation.mutate({
+                contentId: contentDto.id,
+                versionId,
+              })
+            }
           >
             <Icons.TRASH className="cursor-pointer mx-3" size={16} /> Remover
           </ButtonWithDropdown.DrawerItem>

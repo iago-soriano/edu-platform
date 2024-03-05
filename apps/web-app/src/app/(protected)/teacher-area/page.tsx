@@ -8,7 +8,6 @@ import {
 } from "@endpoints";
 import {
   Spinner,
-  ToggleText,
   ActivityListing,
   LoadingErrorData,
   CollectionOwnsCard,
@@ -80,7 +79,7 @@ const Page = () => {
         />
       </div>
       <div className="grid lg:grid-cols-5 md:grid-cols-4 grid-cols-3 items-center justify-items-end w-[95%] mx-auto">
-        <ToggleText
+        {/* <ToggleText
           className="lg:col-span-4 col-span-2"
           buttons={[
             {
@@ -100,7 +99,7 @@ const Page = () => {
               isSelected: searchParams.get("activeTab") === "StudentOutputs",
             },
           ]}
-        />
+        /> */}
         <div className="lg:col-span-1 md:col-span-2 col-span-1">
           <select
             className="p-3 m-1 rounded bg-surface1"

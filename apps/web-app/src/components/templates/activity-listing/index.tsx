@@ -89,7 +89,7 @@ export function ActivityListing({ collectionId, showActive }) {
                 }
                 onClickCreateDraft={() =>
                   newDraftMutation.mutate({
-                    activityId: activityId.toString(),
+                    activityId,
                   })
                 }
               />

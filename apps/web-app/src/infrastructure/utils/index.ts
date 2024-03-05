@@ -50,8 +50,6 @@ export const parseNumberToTimeLabel = (num: number) => {
   return `${hours}:${mins}:${secs}`;
 };
 
-export * from "./refresh-token";
-
 export function openInNewTab(href: string) {
   Object.assign(document.createElement("a"), {
     target: "_blank",
@@ -59,3 +57,6 @@ export function openInNewTab(href: string) {
     href: href,
   }).click();
 }
+
+export * from "./refresh-token";
+export * from "./shadcn";

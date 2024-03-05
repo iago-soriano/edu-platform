@@ -1,4 +1,4 @@
-import { Modal, Input, Icons } from "@components";
+import { Modal, Input, Icons, successToast } from "@components";
 import { useState } from "react";
 import { useInsertUserInCollectionMutation } from "@endpoints";
 import { StudentListing } from "./student-listing";
@@ -13,7 +13,7 @@ export const InsertStudentModal = ({
   collectionId,
 }: InsertStudentModalProps) => {
   const insertMutation = useInsertUserInCollectionMutation({
-    collectionId,
+    onSuccess: () => successToast("Usuário inserido com sucesso!"),
   });
   const [email, setEmail] = useState("");
 
@@ -34,7 +34,7 @@ export const InsertStudentModal = ({
         <div className="cursor-pointer border-2 p-2 h-fit mt-4 mx-1 rounded-md">
           <Icons.CHECK
             onClick={() => {
-              insertMutation.mutate({ studentEmail: email });
+              insertMutation.mutate({ collectionId, studentEmail: email });
             }}
             size={24}
           />

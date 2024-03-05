@@ -33,8 +33,8 @@ export class ActivityVersion {
 
   constructor(
     public id?: number // public updatedAt?: Date,
-  ) // public createdAt?: Date,
-  // public title?: string,
+    // public createdAt?: Date,
+  ) // public title?: string,
   // public description?: string,
   // public topics?: string,
   // public version?: number,
@@ -63,6 +63,7 @@ export class ActivityVersion {
   }
 
   validateTopics() {
+    // TODO why no worky?
     const topicsArray = this.topics?.split(",");
     if (topicsArray?.length || 0 > DomainRules.ACTIVITY.TOPICS.MAX_COUNT) {
       throw new ActivityVersionHasTooManyTopics();

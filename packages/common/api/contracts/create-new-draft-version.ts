@@ -3,7 +3,7 @@ type ResponseBody = {
   versionId: number;
 };
 type Params = {
-  activityId: string;
+  activityId: number;
 };
 
 export {

@@ -7,7 +7,6 @@ import {
   Tooltip,
   Toggle,
   Spinner,
-  ToggleText,
 } from "@components";
 import { useRouter, useSearchParams } from "next/navigation";
 import { InsertStudentModal } from "./insert-student-modal";
@@ -35,14 +34,12 @@ const Page = ({ params: { collectionId: strId } }) => {
   const collectionQuery = useGetCollectionQuery({ collectionId });
 
   const saveCollectionMutation = useSaveCollectionMutation({
-    collectionId,
     onSuccess: (e, v, c) => {
       setHasChanges(false);
     },
   });
 
   const createActivityMutation = useCreateNewActivityMutation({
-    collectionId,
     onSuccess: ({ activityId, versionId }) => {
       console.log({ activityId, versionId });
       router.push(Router.editActivity({ activityId, versionId }));
@@ -153,7 +150,7 @@ const Page = ({ params: { collectionId: strId } }) => {
         </div>
       </div>
       <div className="flex justify-between p-2 mt-5">
-        <ToggleText
+        {/* <ToggleText
           buttons={[
             {
               text: "Atividades Ativas",
@@ -171,10 +168,10 @@ const Page = ({ params: { collectionId: strId } }) => {
               isSelected: false, //TODO
             },
           ]}
-        />
+        /> */}
         <button
           disabled={createActivityMutation.isPending}
-          onClick={() => createActivityMutation.mutate()}
+          onClick={() => createActivityMutation.mutate({ collectionId })}
           className="h-10 w-36 whitespace-nowrap bg-accent p-2 text-white rounded font-bold transition-opacity hover:opacity-80"
         >
           {createActivityMutation.isPending ||

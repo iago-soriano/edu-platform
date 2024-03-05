@@ -52,10 +52,11 @@ interface IApiClient {
 }
 export class ApiClient implements IApiClient {
   constructor(private _fetcher: IHTTPClient) {}
-  public saveContent(
-    { activityId, versionId }: SaveContentParams,
-    body: SaveContentRequestBody
-  ) {
+  public saveContent({
+    activityId,
+    versionId,
+    ...body
+  }: SaveContentParams & SaveContentRequestBody) {
     return this._fetcher.post(
       `activity/${activityId}/version/${versionId}/content`,
       body
@@ -75,10 +76,11 @@ export class ApiClient implements IApiClient {
       `activity/${activityId}/version/${versionId}`
     ) as Promise<GetActivityVersionResponseBody>;
   }
-  public updateVersionMetadata(
-    { activityId, versionId }: UpdateVersionMetadataParams,
-    body: UpdateVersionMetadataRequestBody
-  ) {
+  public updateVersionMetadata({
+    activityId,
+    versionId,
+    ...body
+  }: UpdateVersionMetadataParams & UpdateVersionMetadataRequestBody) {
     return this._fetcher.post(
       `activity/${activityId}/update-activity-metadata/${versionId}`,
       body
@@ -90,19 +92,16 @@ export class ApiClient implements IApiClient {
       collectionId: query.collectionId || "",
     }) as Promise<ListActivityVersionsResponseBody>;
   }
-  public deleteContent({
-    activityId,
-    versionId,
-    contentId,
-  }: DeleteContentParams) {
+  public deleteContent({ versionId, contentId }: DeleteContentParams) {
     return this._fetcher.delete(
-      `activity/${activityId}/version/${versionId}/content/${contentId}`
+      `version/${versionId}/content/${contentId}`
     ) as Promise<DeleteContentResponseBody>;
   }
-  public updateVersionStatus(
-    { activityId, versionId }: UpdateVersionStatusParams,
-    body: UpdateVersionStatusRequestBody
-  ) {
+  public updateVersionStatus({
+    activityId,
+    versionId,
+    ...body
+  }: UpdateVersionStatusParams & UpdateVersionStatusRequestBody) {
     return this._fetcher.patch(
       `activity/${activityId}/version/${versionId}/status`,
       body
@@ -125,10 +124,10 @@ export class ApiClient implements IApiClient {
       args
     ) as Promise<SaveCollectionResponseBody>;
   }
-  insertUserInCollection(
-    { collectionId }: InsertUserInCollectionParams,
-    args: InsertUserInCollectionRequestBody
-  ) {
+  insertUserInCollection({
+    collectionId,
+    ...args
+  }: InsertUserInCollectionParams & InsertUserInCollectionRequestBody) {
     return this._fetcher.post(
       `collection/${collectionId}/student`,
       args

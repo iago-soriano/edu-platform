@@ -37,24 +37,18 @@ export const OptionsMenu = ({
   scrollToBottom,
 }: OptionsMenuProps) => {
   const deleteVersionMutation = useDeleteDraftVersionMutation({
-    activityId,
-    versionId,
     onSuccess: () => {
       setOpenConfirmDeleteModal(false);
       redirect(Router.teacherHome);
     },
   });
   const statusUpdateMutation = useUpdateVersionStatusMutation({
-    activityId,
-    versionId,
     onSuccess: () => {
       setOpenConfirmDeleteModal(false);
       redirect(Router.teacherHome);
     },
   });
   const saveContentMutation = useSaveContentMutation({
-    activityId,
-    versionId,
     onSuccess: () => {
       onClose();
       // scrollToBottom();
@@ -105,6 +99,8 @@ export const OptionsMenu = ({
           <NewItemButton
             onClick={() =>
               saveContentMutation.mutate({
+                activityId,
+                versionId,
                 type: ContentTypes.Video,
                 payload: { video: {} },
                 order,
@@ -116,6 +112,8 @@ export const OptionsMenu = ({
           <NewItemButton
             onClick={() =>
               saveContentMutation.mutate({
+                activityId,
+                versionId,
                 type: ContentTypes.Text,
                 payload: { text: {} },
                 order,
@@ -127,6 +125,8 @@ export const OptionsMenu = ({
           <NewItemButton
             onClick={() =>
               saveContentMutation.mutate({
+                activityId,
+                versionId,
                 type: ContentTypes.Image,
                 payload: { image: {} },
                 order,
@@ -152,7 +152,9 @@ export const OptionsMenu = ({
       {openConfirmDeleteModal && (
         <ConfirmModal
           onClose={() => setOpenConfirmDeleteModal(false)}
-          confirmAction={() => deleteVersionMutation.mutate()}
+          confirmAction={() =>
+            deleteVersionMutation.mutate({ activityId, versionId })
+          }
           title="Ao remover este rascunho, todas as alterações serão perdidas"
           children={
             <>
@@ -169,6 +171,8 @@ export const OptionsMenu = ({
           onClose={() => setOpenConfirmPublishModal(false)}
           confirmAction={() =>
             statusUpdateMutation.mutate({
+              activityId,
+              versionId,
               newActivityStatus: VersionStatus.Published,
             })
           }

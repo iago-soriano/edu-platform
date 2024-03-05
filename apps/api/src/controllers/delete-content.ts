@@ -19,7 +19,7 @@ export class DeleteContentController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.DELETE;
-  path: string = "activity/:activityId/version/:versionId/content/:contentId";
+  path: string = "version/:versionId/content/:contentId";
   middlewares: string[] = ["auth"];
 
   constructor(private deleteContentUseCase: IDeleteContentUseCase) {}

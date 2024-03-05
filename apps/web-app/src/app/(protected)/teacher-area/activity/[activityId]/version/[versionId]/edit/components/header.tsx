@@ -27,10 +27,7 @@ export const ActivityHeaderInput = ({
   const [currentTopic, setCurrentTopic] = useState("");
 
   const [hasChanges, setHasChanges] = useState(false);
-  const metadataMutation = useUpdateVersionMetadataMutation({
-    activityId,
-    versionId,
-  });
+  const metadataMutation = useUpdateVersionMetadataMutation({});
 
   useEffect(() => {
     if (metadataMutation.isPending) setSaveState("isLoading");
@@ -45,6 +42,8 @@ export const ActivityHeaderInput = ({
   const onChangeTitle = (args) => {
     if (hasChanges) {
       metadataMutation.mutate({
+        activityId,
+        versionId,
         ...versionQuery.data,
         title: args.target.value,
       });
@@ -67,7 +66,12 @@ export const ActivityHeaderInput = ({
       ? `${versionQuery.data?.topics},${currentTopic}`
       : currentTopic;
 
-    metadataMutation.mutate({ ...versionQuery.data, topics: newTopics });
+    metadataMutation.mutate({
+      ...versionQuery.data,
+      topics: newTopics,
+      activityId,
+      versionId,
+    });
     onChange(false);
     setCurrentTopic("");
   };
@@ -77,12 +81,19 @@ export const ActivityHeaderInput = ({
       ?.split(",")
       .filter((_, i) => i !== index)
       .join(",");
-    metadataMutation.mutate({ ...versionQuery.data, topics: newTopics });
+    metadataMutation.mutate({
+      ...versionQuery.data,
+      topics: newTopics,
+      activityId,
+      versionId,
+    });
   };
 
   const onChangeDescription = (args) => {
     if (hasChanges) {
       metadataMutation.mutate({
+        activityId,
+        versionId,
         ...versionQuery.data,
         description: args.target.value,
       });

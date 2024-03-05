@@ -1,7 +1,6 @@
 type RequestBody = void;
 type ResponseBody = void;
 type Params = {
-  activityId: string;
   versionId: string;
   contentId: string;
 };
