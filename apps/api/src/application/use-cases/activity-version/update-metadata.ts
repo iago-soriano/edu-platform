@@ -2,9 +2,9 @@ import { VersionStatus, ActivityVersion } from "@domain";
 import {
   ActivityVersionIsNotDraft,
   ActivityNotFound,
+  ActivityVersionNotFound,
 } from "@edu-platform/common";
 import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
-import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -18,31 +18,27 @@ type Return = void;
 export type IUpdateActivityMetadataUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IUpdateActivityMetadataUseCase {
-  constructor(
-    private activitiesRepository: IActivitiesRepository,
-    private getActivityHelper: IGetActivityUseCaseHelper
-  ) {}
+  constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({ user, activityId, versionId, newVersion }: InputParams) {
-    const { version, activity } = await this.getActivityHelper.execute({
-      activityId,
+    const version = await this.activitiesRepository.Versions.findFullViewById(
       versionId,
-    });
+      activityId
+    );
+    if (!version) throw new ActivityVersionNotFound();
+
+    if (version.activity.author.id !== user.id) throw new ActivityNotFound();
 
     if (version.status !== VersionStatus.Draft)
       throw new ActivityVersionIsNotDraft();
-
-    if (activity.author.id !== user.id) throw new ActivityNotFound();
 
     newVersion.validateTitle();
     newVersion.validateDescription();
     newVersion.validateTopics();
 
-    await this.activitiesRepository.Versions.update(versionId, {
-      title: newVersion.title,
-      description: newVersion.description,
-      topics: newVersion.topics,
-    });
+    version.merge(newVersion);
+
+    await this.activitiesRepository.Versions.update(version);
   }
 }
 

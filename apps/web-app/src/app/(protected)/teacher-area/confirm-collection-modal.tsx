@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ConfirmModal, Icons, Spinner, PanelButton } from "@components";
 import { useCreateNewActivityMutation } from "@endpoints";
-import { Router } from "@infrastructure";
 import { useRouter } from "next/navigation";
+import { Router } from "@infrastructure";
 
 export const ConfirmCollectionModal = ({
   collectionId,
@@ -13,7 +13,6 @@ export const ConfirmCollectionModal = ({
 
   const [selected, setSelected] = useState(collectionId);
   const createActivityMutation = useCreateNewActivityMutation({
-    collectionId: selected,
     onSuccess: ({ activityId, versionId }) => {
       router.push(Router.editActivity({ activityId, versionId }));
     },
@@ -22,7 +21,9 @@ export const ConfirmCollectionModal = ({
   return (
     <ConfirmModal
       onClose={onClose}
-      confirmAction={() => createActivityMutation.mutate()}
+      confirmAction={() =>
+        createActivityMutation.mutate({ collectionId: selected })
+      }
       confirmButton={{ Icon: Icons.PLUS, text: "Criar atividade" }}
       title="Selecione uma coleção"
     >

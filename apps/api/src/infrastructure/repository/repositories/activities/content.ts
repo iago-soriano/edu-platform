@@ -1,4 +1,4 @@
-import { IContents } from "@interfaces";
+import { IContents, IContentsRead } from "@interfaces";
 import { Content } from "@domain";
 import { db, activityVersions, activityContents } from "@infrastructure";
 import { eq } from "drizzle-orm";
@@ -6,30 +6,27 @@ import { ContentDtoMapper } from "../../dto-mappers";
 
 export class Contents implements IContents {
   async insert(content: Content) {
-    const dto = ContentDtoMapper.mapToInsertDto(content);
-
     return (
       await db
         .insert(activityContents)
-        .values(dto)
+        .values(ContentDtoMapper.mapToInsertDto(content))
         .returning({ contentId: activityContents.id })
     )[0];
   }
-  async update(
-    contentId: number,
-    content: Partial<Content>,
-    versionId: number
-  ) {
-    const dto = ContentDtoMapper.mapToInsertDto(content);
+  async update(content: Content) {
+    //TODO: make transaction
+    if (!content.id || !content.version.id)
+      throw new Error("There must be an id to update");
+
     await db
       .update(activityContents)
-      .set({ ...dto, updatedAt: new Date() })
-      .where(eq(activityContents.id, contentId));
+      .set(ContentDtoMapper.mapToInsertDto(content))
+      .where(eq(activityContents.id, content.id));
 
     await db
       .update(activityVersions)
       .set({ updatedAt: new Date() })
-      .where(eq(activityVersions.id, versionId));
+      .where(eq(activityVersions.id, content.version.id));
   }
 
   async findById(contentId: number) {
@@ -44,5 +41,25 @@ export class Contents implements IContents {
 
   async delete(contentId: number) {
     await db.delete(activityContents).where(eq(activityContents.id, contentId));
+  }
+
+  async listByVersionId(versionId: number) {
+    const contents = await db
+      .select()
+      .from(activityContents)
+      .where(eq(activityVersions.id, versionId));
+
+    return contents.map((dto) => ContentDtoMapper.mapFromSelectDto(dto));
+  }
+}
+
+export class ContentsRead implements IContentsRead {
+  async listByVersionId(versionId: number) {
+    const contents = await db
+      .select()
+      .from(activityContents)
+      .where(eq(activityVersions.id, versionId));
+
+    return contents.map((dto) => ContentDtoMapper.mapFromSelectDto(dto));
   }
 }

@@ -5,19 +5,23 @@ import { Alternative, Question } from "@domain";
 import { QuestionDtoMapper, AlternativeDtoMapper } from "../../dto-mappers";
 
 export class Questions implements IQuestions {
-  async insert({ alternatives: alternativesDtos, ...question }: Question) {
+  async insert(question: Question) {
     return db.transaction(async (tx) => {
       const insertedQuestion = (
         await tx
           .insert(activityQuestions)
-          .values(question)
+          .values(QuestionDtoMapper.mapToInsertDto(question))
           .returning({ id: activityQuestions.id })
       )[0];
       let insertedAlternatives: { id: number }[] = [];
-      if (alternativesDtos) {
+      if (question.alternatives) {
         insertedAlternatives = await tx
           .insert(alternatives)
-          .values(alternativesDtos)
+          .values(
+            question.alternatives.map((alt) =>
+              AlternativeDtoMapper.mapToInsertDto(alt)
+            )
+          )
           .returning({ id: alternatives.id });
       }
       return {
@@ -27,11 +31,14 @@ export class Questions implements IQuestions {
     });
   }
 
-  async update(questionId: number, question: Question) {
+  async update(question: Question) {
+    //TODO: update updatedAt, like contents
+    if (!question.id) throw new Error("There must be an id to update");
+
     await db
       .update(activityQuestions)
-      .set({ ...question, updatedAt: new Date() })
-      .where(eq(activityQuestions.id, questionId));
+      .set(QuestionDtoMapper.mapToInsertDto(question))
+      .where(eq(activityQuestions.id, question.id));
   }
 
   async findById(questionId: number) {

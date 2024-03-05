@@ -2,15 +2,14 @@ import {
   ActivityQuestionNotFound,
   ActivityNotFound,
   ActivityVersionIsNotDraft,
+  ActivityVersionNotFound,
 } from "@edu-platform/common";
 import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
 import { MultipleChoiceQuestion, Question, VersionStatus } from "@domain";
-import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
 
 type InputParams = {
   question: Question;
   user: UserSelectDTO;
-  activityId: number;
   versionId: number;
 };
 
@@ -19,19 +18,14 @@ type Return = void;
 export type ISaveQuestionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ISaveQuestionUseCase {
-  constructor(
-    private activitiesRepository: IActivitiesRepository,
-    private getActivityHelper: IGetActivityUseCaseHelper
-  ) {}
+  constructor(private activitiesRepository: IActivitiesRepository) {}
 
-  async execute({ question, user, activityId, versionId }: InputParams) {
-    const { version, activity } = await this.getActivityHelper.execute({
-      activityId,
-      versionId,
-      questionId: question.id,
-    });
+  async execute({ question, user, versionId }: InputParams) {
+    const version =
+      await this.activitiesRepository.Versions.findFullViewById(versionId);
+    if (!version) throw new ActivityVersionNotFound();
 
-    if (activity.author.id !== user.id) throw new ActivityNotFound();
+    if (version.activity.author.id !== user.id) throw new ActivityNotFound();
 
     if (version.status !== VersionStatus.Draft)
       throw new ActivityVersionIsNotDraft();
@@ -56,10 +50,7 @@ class UseCase implements ISaveQuestionUseCase {
 
     existingQuestion.merge(question);
 
-    await this.activitiesRepository.Questions.update(
-      question.id,
-      existingQuestion
-    );
+    await this.activitiesRepository.Questions.update(existingQuestion);
   }
 }
 export default UseCase;

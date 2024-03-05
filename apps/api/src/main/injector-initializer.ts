@@ -59,7 +59,6 @@ import {
   InsertDefaultCollectionUseCase,
   SaveAnswerUseCase,
 } from "@use-cases";
-import { GetActivityUseCaseHelper } from "@use-case-middlewares";
 import {
   BCryptEncryptionService,
   EmailService,
@@ -74,6 +73,9 @@ import {
   CollectionParticipationsRepository,
   StudentOutputsRepository,
   StudentAnswersRepository,
+  ActivityReadRepository,
+  CollectionsReadRepository,
+  CollectionParticipationsReadRepository,
 } from "@infrastructure";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
@@ -186,7 +188,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     deleteContentUseCase: awilix.asClass(DeleteContentUseCase).classic(),
     deleteQuestionUseCase: awilix.asClass(DeleteQuestionUseCase).classic(),
     refreshTokenUseCase: awilix.asClass(RefreshTokenUseCase).classic(),
-    getActivityHelper: awilix.asClass(GetActivityUseCaseHelper).classic(),
     createNewDraftVersionUseCase: awilix
       .asClass(CreateNewDraftVersionUseCase)
       .classic(),
@@ -213,9 +214,16 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     userRepository: awilix.asClass(UserRepository).classic(),
     tokenRepository: awilix.asClass(TokenRepository).classic(),
     activitiesRepository: awilix.asClass(ActivityRepository).classic(),
+    activitiesReadRepository: awilix.asClass(ActivityReadRepository).classic(),
     collectionsRepository: awilix.asClass(CollectionsRepository).classic(),
+    collectionsReadRepository: awilix
+      .asClass(CollectionsReadRepository)
+      .classic(),
     collectionParticipationsRepository: awilix
       .asClass(CollectionParticipationsRepository)
+      .classic(),
+    collectionParticipationsReadRepository: awilix
+      .asClass(CollectionParticipationsReadRepository)
       .classic(),
     studentOutputsRepository: awilix
       .asClass(StudentOutputsRepository)

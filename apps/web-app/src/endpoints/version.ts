@@ -10,11 +10,8 @@ import { MutationArgsType } from "../infrastructure/api/types";
 import { errorToast } from "@components";
 
 type ParamsGet = Parameters<ApiClient["getActivityVersion"]>[0];
-type ReturnGet = Awaited<ReturnType<ApiClient["getActivityVersion"]>>;
-
-export type GetActivityVersionQueryType = UseQueryResult<
-  ReturnGet,
-  ServerError
+export type ReturnGetActivityVersion = Awaited<
+  ReturnType<ApiClient["getActivityVersion"]>
 >;
 
 export const useGetActivityVersionQuery = ({
@@ -24,7 +21,7 @@ export const useGetActivityVersionQuery = ({
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
-  return useQuery<ReturnGet, ServerError>({
+  return useQuery<ReturnGetActivityVersion, ServerError>({
     queryKey: [`version-${versionId}`],
     queryFn: () => client.getActivityVersion({ activityId, versionId }),
   });

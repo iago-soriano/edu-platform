@@ -39,7 +39,7 @@ export const ActivityVersionDtoMapper: DomainDtoMapper<
     );
 
     const dto: VersionResponseDTO = {
-      id: domain.id,
+      id: domain.id!,
       updatedAt: domain.updatedAt,
 
       status: domain.status,

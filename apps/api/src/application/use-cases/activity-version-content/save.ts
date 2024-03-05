@@ -2,6 +2,7 @@ import {
   ActivityContentNotFound,
   ActivityNotFound,
   ActivityVersionIsNotDraft,
+  ActivityVersionNotFound,
 } from "@edu-platform/common";
 import {
   IUseCase,
@@ -11,7 +12,6 @@ import {
   IIdGenerator,
 } from "@interfaces";
 import { Content, VersionStatus } from "@domain";
-import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
 import { getFileExtension } from "@infrastructure";
 import { FailedToUploadFileToS3 } from "@edu-platform/common/errors/domain/question";
 
@@ -30,8 +30,7 @@ class UseCase implements ISaveContentUseCase {
   constructor(
     private activitiesRepository: IActivitiesRepository,
     private storageService: IStorageService,
-    private idService: IIdGenerator,
-    private getActivityHelper: IGetActivityUseCaseHelper
+    private idService: IIdGenerator
   ) {}
 
   async execute({
@@ -40,20 +39,20 @@ class UseCase implements ISaveContentUseCase {
     activityId,
     versionId,
   }: InputParams) {
-    const { version, activity } = await this.getActivityHelper.execute({
-      activityId,
+    const version = await this.activitiesRepository.Versions.findFullViewById(
       versionId,
-      contentId: newContent.id,
-    });
+      activityId
+    );
+    if (!version) throw new ActivityVersionNotFound();
 
-    if (activity.author.id !== user.id) throw new ActivityNotFound();
+    if (version.activity.author.id !== user.id) throw new ActivityNotFound();
 
     if (version.status !== VersionStatus.Draft)
       throw new ActivityVersionIsNotDraft();
 
     // try to upload whatever file is sent. Will not persist content if this doesn't work
     if (newContent.shouldUploadFile()) {
-      const keyName = `${activity.id}/${
+      const keyName = `${version.activity.id}/${
         newContent.id
       }/${this.idService.getId()}.${getFileExtension(newContent.file)}`;
       const fileUrl = await this.storageService.uploadFile(
@@ -90,11 +89,7 @@ class UseCase implements ISaveContentUseCase {
     existingContent.mergePayload(newContent as any); // TODO: make this type work
     existingContent.validatePayload();
 
-    await this.activitiesRepository.Contents.update(
-      existingContent.id || 0,
-      existingContent,
-      version.id
-    );
+    await this.activitiesRepository.Contents.update(existingContent);
   }
 }
 export default UseCase;

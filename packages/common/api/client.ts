@@ -45,7 +45,12 @@ import {
 } from "./contracts";
 import { IHTTPClient } from "./interfaces";
 
-export class ApiClient {
+interface IApiClient {
+  createNewActivity: (
+    body: CreateNewActivityRequestBody
+  ) => Promise<CreateNewActivityResponseBody>;
+}
+export class ApiClient implements IApiClient {
   constructor(private _fetcher: IHTTPClient) {}
   public saveContent(
     { activityId, versionId }: SaveContentParams,

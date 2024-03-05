@@ -4,7 +4,6 @@ import {
   ActivityNotFound,
 } from "@edu-platform/common";
 import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
-import { IGetActivityUseCaseHelper } from "application/use-case-middlewares";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -17,10 +16,7 @@ type Return = void;
 export type IUpdateStudentOutputUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IUpdateStudentOutputUseCase {
-  constructor(
-    private activitiesRepository: IActivitiesRepository,
-    private getActivityHelper: IGetActivityUseCaseHelper
-  ) {}
+  constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({ user, studentOutputId, newOutputStatus }: InputParams) {}
 }

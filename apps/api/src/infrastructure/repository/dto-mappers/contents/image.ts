@@ -2,10 +2,7 @@ import { ImageContent, ContentTypes, Content } from "@domain";
 import { DomainDtoMapper } from "../types";
 import { activityContents } from "@infrastructure";
 
-export const ImageContentDtoMapper: DomainDtoMapper<
-  ImageContent,
-  typeof activityContents
-> = {
+export const ImageContentDtoMapper = {
   mapFromSelectDto: (dto: typeof activityContents.$inferSelect) => {
     const domain = new ImageContent();
 

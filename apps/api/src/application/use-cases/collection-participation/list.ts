@@ -1,7 +1,7 @@
 import {
   IUseCase,
   UserSelectDTO,
-  ICollectionParticipationsRepository,
+  ICollectionParticipationsReadRepository,
   ICollectionsRepository,
 } from "@interfaces";
 
@@ -16,7 +16,7 @@ export type IListUsersInCollectionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IListUsersInCollectionUseCase {
   constructor(
-    private collectionParticipationsRepository: ICollectionParticipationsRepository,
+    private collectionParticipationsReadRepository: ICollectionParticipationsReadRepository,
     private collectionsRepository: ICollectionsRepository
   ) {}
 
@@ -28,7 +28,7 @@ class UseCase implements IListUsersInCollectionUseCase {
       throw new Error("Collection not found");
 
     return (
-      await this.collectionParticipationsRepository.findParticipatingStudents(
+      await this.collectionParticipationsReadRepository.listStudents(
         collectionId
       )
     ).map((user) => ({

@@ -21,7 +21,7 @@ export class SaveQuestionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.POST;
-  path: string = "activity/:activityId/version/:versionId/question";
+  path: string = "version/:versionId/question";
   middlewares: string[] = ["auth"];
 
   constructor(private saveQuestionUseCase: ISaveQuestionUseCase) {}
@@ -40,7 +40,6 @@ export class SaveQuestionController
     await this.saveQuestionUseCase.execute({
       question,
       user,
-      activityId,
       versionId,
     });
 

@@ -44,12 +44,6 @@ type ReturnInsertUser = Awaited<
   ReturnType<ApiClient["insertUserInCollection"]>
 >;
 
-export type InsertUserMutationType = UseMutationResult<
-  ReturnSaveCollection,
-  ServerError,
-  Request
->;
-
 export const useInsertUserInCollectionMutation = ({
   collectionId,
 }: ParamsInsertUser &
@@ -75,12 +69,6 @@ export const useInsertUserInCollectionMutation = ({
 type ParamsRemoveUser = Parameters<ApiClient["removeUserFromCollection"]>[0];
 type ReturnRemoveUser = Awaited<
   ReturnType<ApiClient["removeUserFromCollection"]>
->;
-
-export type RemoveUserMutationType = UseMutationResult<
-  ReturnSaveCollection,
-  ServerError,
-  Request
 >;
 
 export const useRemoveUserFromCollectionMutation = (params: {

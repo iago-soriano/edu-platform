@@ -4,11 +4,12 @@ import {
   IStorageService,
   UserSelectDTO,
 } from "@interfaces";
-import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
-import { ActivityNotFound } from "@edu-platform/common";
+import {
+  ActivityNotFound,
+  ActivityVersionNotFound,
+} from "@edu-platform/common";
 
 type InputParams = {
-  activityId: number;
   versionId: number;
   contentId: number;
   user: UserSelectDTO;
@@ -21,22 +22,18 @@ export type IDeleteContentUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IDeleteContentUseCase {
   constructor(
     private activitiesRepository: IActivitiesRepository,
-    private storageService: IStorageService,
-    private getActivityHelper: IGetActivityUseCaseHelper
+    private storageService: IStorageService
   ) {}
 
-  async execute({ user, activityId, versionId, contentId }: InputParams) {
-    const { version, activity, content } = await this.getActivityHelper.execute(
-      {
-        activityId,
-        versionId,
-        contentId,
-      }
-    );
+  async execute({ user, versionId, contentId }: InputParams) {
+    const version =
+      await this.activitiesRepository.Versions.findFullViewById(versionId);
+    if (!version) throw new ActivityVersionNotFound();
+    if (version.activity.author.id !== user.id) throw new ActivityNotFound();
 
+    const content =
+      await this.activitiesRepository.Contents.findById(contentId);
     if (!content) return;
-
-    if (activity.author.id !== user.id) throw new ActivityNotFound();
 
     // TODO: can't just delete the file, because this content might be a copy of an archived one.
     // figure out a way to know if this file isn't being used elewhere
@@ -45,7 +42,7 @@ class UseCase implements IDeleteContentUseCase {
       //await this.storageService.deleteFileByUrl(fileUrl);
     }
 
-    await this.activitiesRepository.Contents.delete(content.id || 0);
+    await this.activitiesRepository.Contents.delete(content.id!);
   }
 }
 

@@ -7,8 +7,6 @@ import {
   boolean,
   primaryKey,
   timestamp,
-  pgView,
-  PgViewConfig,
 } from "drizzle-orm/pg-core";
 import { relations, type InferSelectModel } from "drizzle-orm";
 import {
@@ -107,16 +105,22 @@ export const versionStatusEnum = pgEnum(
 
 export const activityVersions = pgTable("activity_version", {
   id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
 
   title: varchar("title", { length: 50 }),
   description: varchar("description", { length: 200 }),
   topics: varchar("topics", { length: 200 }),
-  status: versionStatusEnum("activity_status").default("Draft"),
+  status: versionStatusEnum("activity_status").default("Draft").notNull(),
   version: integer("version").default(0),
 
-  activityId: integer("activity_id").references(() => activities.id),
+  activityId: integer("activity_id")
+    .references(() => activities.id)
+    .notNull(),
 });
 
 export const activityVersionsRelations = relations(
@@ -224,10 +228,12 @@ export const alternativesRelations = relations(alternatives, ({ one }) => ({
 // collections
 export const collections = pgTable("collections", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 50 }),
-  description: varchar("description", { length: 200 }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+
+  name: varchar("name", { length: 50 }),
+  description: varchar("description", { length: 200 }),
+
   ownerId: integer("owner_id").references(() => users.id),
   isPrivate: boolean("is_private").default(true),
   notifyOwnerOnStudentOutput: boolean("notify_owner_on_student_output").default(
@@ -267,8 +273,11 @@ export const studentOutputStatusEnum = pgEnum(
   Object.values(OutputStatus || {}).filter((v) => isNaN(Number(v))) as [string]
 );
 
-export const studentOutput = pgTable("student_output", {
+export const studentOutputs = pgTable("student_output", {
   id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+
   status: studentOutputStatusEnum("status"),
   userId: integer("user_id")
     .notNull()
@@ -280,12 +289,14 @@ export const studentOutput = pgTable("student_output", {
 
 // student answer
 
-export const studentAnswer = pgTable("student_answer", {
+export const studentAnswers = pgTable("student_answer", {
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   questionId: integer("question_id")
     .references(() => activityQuestions.id)
     .notNull(),
   answer: varchar("answer", { length: 500 }),
   studentOutputId: integer("student_output_id")
-    .references(() => studentOutput.id)
+    .references(() => studentOutputs.id)
     .notNull(),
 });

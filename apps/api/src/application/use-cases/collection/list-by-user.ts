@@ -1,5 +1,9 @@
 import { CollectionResponseDTO } from "@edu-platform/common";
-import { IUseCase, UserSelectDTO, ICollectionsRepository } from "@interfaces";
+import {
+  IUseCase,
+  UserSelectDTO,
+  ICollectionsReadRepository,
+} from "@interfaces";
 import { CollectionDtoMapper } from "@dto-mappers";
 
 type InputParams = {
@@ -14,13 +18,14 @@ type Return = {
 export type IListCollectionsByUserUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IListCollectionsByUserUseCase {
-  constructor(private collectionsRepository: ICollectionsRepository) {}
+  constructor(private collectionsReadRepository: ICollectionsReadRepository) {}
 
   async execute({ user }: InputParams) {
-    const isOwnerOf = await this.collectionsRepository.listByOwnership(user.id);
-    const participatesIn = await this.collectionsRepository.listByParticipation(
+    const isOwnerOf = await this.collectionsReadRepository.listByOwnership(
       user.id
     );
+    const participatesIn =
+      await this.collectionsReadRepository.listByParticipation(user.id);
 
     return {
       isOwnerOf: isOwnerOf.map((coll) => CollectionDtoMapper.mapToDto(coll)),

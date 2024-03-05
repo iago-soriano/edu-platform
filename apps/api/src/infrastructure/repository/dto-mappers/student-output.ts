@@ -1,30 +1,44 @@
 import { parseOutputStatus } from "./../../../../../../packages/common/dto/student-output";
 import { OutputStatus, StudentOutput, ActivityVersion, User } from "@domain";
 import { DomainDtoMapper } from "./types";
-import { studentOutput } from "@infrastructure";
+import { VersionDtoMapper } from ".";
+import { studentOutputs, users, activityVersions } from "@infrastructure";
 
 export const StudentOutputDtoMapper: DomainDtoMapper<
   StudentOutput,
-  typeof studentOutput
+  typeof studentOutputs
 > = {
-  mapFromSelectDto: (dto: typeof studentOutput.$inferSelect) => {
+  mapFromSelectDto: (
+    dto: typeof studentOutputs.$inferSelect,
+    versionDto?: typeof activityVersions.$inferSelect,
+    userDto?: typeof users.$inferSelect
+  ) => {
     const output = new StudentOutput(dto.id);
 
     output.status = parseOutputStatus(dto.status);
-    const user = new User(dto.userId, "", "", "");
+    const user = new User(
+      dto.userId,
+      userDto?.name || "",
+      userDto?.email || "",
+      ""
+    );
     user.id = dto.userId || 0;
     output.user = user;
-    output.version = new ActivityVersion(dto.versionId || 0);
+    output.version = versionDto
+      ? VersionDtoMapper.mapFromSelectDto({
+          ...versionDto,
+        })
+      : new ActivityVersion(dto.versionId || 0);
 
     return output;
   },
 
   mapToInsertDto: (domain: StudentOutput) => {
-    const dto: typeof studentOutput.$inferInsert = {
-      id: domain.id,
+    const dto: typeof studentOutputs.$inferInsert = {
       status: domain.status,
-      userId: domain.user.id || 0,
-      versionId: domain.version.id,
+      userId: domain.user.id,
+      versionId: domain.version.id!,
+      updatedAt: new Date(),
     };
     return dto;
   },

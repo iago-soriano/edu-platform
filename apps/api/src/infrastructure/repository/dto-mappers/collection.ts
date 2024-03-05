@@ -2,10 +2,7 @@ import { Collection, User } from "@domain";
 import { DomainDtoMapper } from "./types";
 import { collections } from "@infrastructure";
 
-export const CollectionDtoMapper: DomainDtoMapper<
-  Collection,
-  typeof collections
-> = {
+export const CollectionDtoMapper = {
   mapFromSelectDto: (dto: typeof collections.$inferSelect) => {
     const collection = new Collection(dto.id);
 

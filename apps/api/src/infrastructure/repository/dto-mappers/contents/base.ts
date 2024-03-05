@@ -1,5 +1,5 @@
 import { ContentTypes, ContentTypeNotFound } from "@edu-platform/common";
-import { activityContents } from "@infrastructure";
+import { activityContents, activityVersions } from "@infrastructure";
 import {
   Content,
   VideoContent,
@@ -11,14 +11,14 @@ import { DomainDtoMapper } from "../types";
 import { VideoContentDtoMapper } from "./video";
 import { TextContentDtoMapper } from "./text";
 import { ImageContentDtoMapper } from "./image";
+import { VersionDtoMapper } from "..";
 
-export const ContentDtoMapper: DomainDtoMapper<
-  Content,
-  typeof activityContents
-> = {
-  mapFromSelectDto: (dto: typeof activityContents.$inferSelect) => {
+export const ContentDtoMapper = {
+  mapFromSelectDto: (
+    dto: typeof activityContents.$inferSelect,
+    versionDto?: typeof activityVersions.$inferSelect
+  ) => {
     let newContent = null;
-    // if (!dto) return null;
 
     // instanciate specific type and map payload
     switch (dto.type) {
@@ -36,7 +36,11 @@ export const ContentDtoMapper: DomainDtoMapper<
     }
 
     newContent!.id = dto.id;
-    newContent!.version = new ActivityVersion(dto.versionId || 0);
+    newContent.version = versionDto
+      ? VersionDtoMapper.mapFromSelectDto({
+          ...versionDto,
+        })
+      : new ActivityVersion(dto.versionId || 0);
 
     newContent!.title = dto.title || "";
     newContent!.description = dto.description || "";
@@ -45,14 +49,19 @@ export const ContentDtoMapper: DomainDtoMapper<
     return newContent;
   },
 
-  mapToInsertDto: (domain: Partial<Content>) => {
-    if (domain instanceof VideoContent)
-      return VideoContentDtoMapper.mapToInsertDto(domain);
-    if (domain instanceof ImageContent)
-      return ImageContentDtoMapper.mapToInsertDto(domain);
-    if (domain instanceof TextContent)
-      return TextContentDtoMapper.mapToInsertDto(domain);
+  mapToInsertDto: (domain: Content) => {
+    let content: typeof activityContents.$inferInsert = {};
 
-    throw new ContentTypeNotFound();
+    if (domain instanceof VideoContent)
+      content = VideoContentDtoMapper.mapToInsertDto(domain);
+    else if (domain instanceof ImageContent)
+      content = ImageContentDtoMapper.mapToInsertDto(domain);
+    else if (domain instanceof TextContent)
+      content = TextContentDtoMapper.mapToInsertDto(domain);
+    else throw new ContentTypeNotFound();
+
+    content.updatedAt = new Date();
+
+    return content;
   },
 };

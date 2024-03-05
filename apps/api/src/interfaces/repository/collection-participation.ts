@@ -8,5 +8,9 @@ export interface ICollectionParticipationsRepository {
     studentId: number,
     collectionId: number
   ) => Promise<{ studentId: number; collectionId: number } | undefined>;
-  findParticipatingStudents: (collectionId: number) => Promise<User[]>;
+}
+
+export interface ICollectionParticipationsReadRepository {
+  listStudents: (collectionId: number) => Promise<User[]>;
+  // listCollections: (studentId: number) => Promise<Collection[]>;
 }

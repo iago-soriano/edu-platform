@@ -2,10 +2,7 @@ import { TextContent, ContentTypes } from "@domain";
 import { DomainDtoMapper } from "../types";
 import { activityContents } from "@infrastructure";
 
-export const TextContentDtoMapper: DomainDtoMapper<
-  TextContent,
-  typeof activityContents
-> = {
+export const TextContentDtoMapper = {
   mapFromSelectDto: (dto: typeof activityContents.$inferSelect) => {
     const domain = new TextContent();
 

@@ -37,7 +37,6 @@ export class DeleteQuestionController
     const { user } = req;
 
     await this.deleteQuestionUseCase.execute({
-      activityId,
       versionId,
       questionId,
       user,

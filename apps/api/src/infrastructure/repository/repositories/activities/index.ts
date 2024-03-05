@@ -1,6 +1,6 @@
 import { Activities as ActivitiesTable } from "./activity";
-import { Versions as VersionsTable } from "./version";
-import { Contents as ContentsTable } from "./content";
+import { Versions as VersionsTable, VersionsRead } from "./version";
+import { Contents as ContentsTable, ContentsRead } from "./content";
 import { Questions as QuestionsTable } from "./question";
 
 import {
@@ -9,6 +9,9 @@ import {
   IActivities,
   IContents,
   IVersions,
+  IActivitiesReadRepository,
+  IVersionsRead,
+  IContentsRead,
 } from "@interfaces";
 
 export class ActivityRepository implements IActivitiesRepository {
@@ -22,5 +25,15 @@ export class ActivityRepository implements IActivitiesRepository {
     this.Contents = new ContentsTable();
     this.Versions = new VersionsTable();
     this.Questions = new QuestionsTable();
+  }
+}
+
+export class ActivityReadRepository implements IActivitiesReadRepository {
+  Contents: IContentsRead;
+  Versions: IVersionsRead;
+
+  constructor() {
+    this.Contents = new ContentsRead();
+    this.Versions = new VersionsRead();
   }
 }

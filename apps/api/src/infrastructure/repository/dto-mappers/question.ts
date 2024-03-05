@@ -1,5 +1,9 @@
 import { QuestionTypeNotFound } from "@edu-platform/common";
-import { activityQuestions, alternatives } from "@infrastructure";
+import {
+  activityQuestions,
+  alternatives,
+  activityVersions,
+} from "@infrastructure";
 import {
   Question,
   TextQuestion,
@@ -9,11 +13,9 @@ import {
   ActivityVersion,
 } from "@domain";
 import { DomainDtoMapper } from "./types";
+import { VersionDtoMapper } from ".";
 
-export const AlternativeDtoMapper: DomainDtoMapper<
-  Alternative,
-  typeof alternatives
-> = {
+export const AlternativeDtoMapper = {
   mapFromSelectDto: (dto: typeof alternatives.$inferSelect) => {
     const alternative = new Alternative();
 
@@ -31,11 +33,11 @@ export const AlternativeDtoMapper: DomainDtoMapper<
   },
 };
 
-export const QuestionDtoMapper: DomainDtoMapper<
-  Question,
-  typeof activityQuestions
-> = {
-  mapFromSelectDto: (questionDto: typeof activityQuestions.$inferSelect) => {
+export const QuestionDtoMapper = {
+  mapFromSelectDto: (
+    questionDto: typeof activityQuestions.$inferSelect,
+    versionDto?: typeof activityVersions.$inferSelect
+  ) => {
     let newQuestion = null;
 
     switch (questionDto.type) {
@@ -54,13 +56,18 @@ export const QuestionDtoMapper: DomainDtoMapper<
 
     newQuestion.order = questionDto.order || 0;
 
-    newQuestion.version = new ActivityVersion(questionDto.versionId!);
+    newQuestion.version = versionDto
+      ? VersionDtoMapper.mapFromSelectDto({
+          ...versionDto,
+        })
+      : new ActivityVersion(questionDto.versionId || 0);
 
     return newQuestion;
   },
-  mapToInsertDto: (domain: TextQuestion | MultipleChoiceQuestion) => {
+  mapToInsertDto: (domain: Question) => {
     return {
       id: domain.id,
+      updatedAt: new Date(),
       question: domain.question,
       answer: domain.answer,
       order: domain.order || 0,

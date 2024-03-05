@@ -1,5 +1,10 @@
 import { ActivityVersion } from "@domain";
-import { IUseCase, IActivitiesRepository, UserSelectDTO } from "@interfaces";
+import {
+  IUseCase,
+  IActivitiesRepository,
+  IActivitiesReadRepository,
+  UserSelectDTO,
+} from "@interfaces";
 import { ActivityNotFound } from "@edu-platform/common";
 
 type InputParams = {
@@ -14,7 +19,10 @@ type Return = {
 export type ICreateNewDraftVersionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ICreateNewDraftVersionUseCase {
-  constructor(private activitiesRepository: IActivitiesRepository) {}
+  constructor(
+    private activitiesRepository: IActivitiesRepository,
+    private activitiesReadRepository: IActivitiesReadRepository
+  ) {}
 
   async execute({ activityId, user }: InputParams) {
     const activity =
@@ -30,24 +38,21 @@ class UseCase implements ICreateNewDraftVersionUseCase {
       // there is already a draft in progress. Let user know that. TODO: send this endpoint a "forceDelete" flag and delete the other draft here
       return { versionId: activity.draftVersion.id || 0 };
 
-    const fullVersion =
+    const publishedVersion =
       await this.activitiesRepository.Versions.findFullViewById(
-        activity.lastVersion.id || 0
+        activity.lastVersion.id!
       );
 
-    if (!fullVersion) throw new Error("Activity has no draft nor lastVersion");
-
-    const { title, description, version, topics, contents, questions } =
-      fullVersion;
+    if (!publishedVersion) throw new Error("Full view not found"); // TODO: better understand how we could get here
 
     // cria nova versão na atividade, com um número de versão novo
+    publishedVersion.version++;
     const { versionId: newVersionId } =
-      await this.activitiesRepository.Versions.insert(
-        title,
-        description,
-        topics,
-        activityId,
-        version + 1
+      await this.activitiesRepository.Versions.insert(publishedVersion);
+
+    const contents =
+      await this.activitiesReadRepository.Contents.listByVersionId(
+        activity.lastVersion.id!
       );
 
     // duplicate all contents and questions to the new version
@@ -57,16 +62,16 @@ class UseCase implements ICreateNewDraftVersionUseCase {
         this.activitiesRepository.Contents.insert(content);
       })
     );
-    await Promise.all(
-      questions.map((question) => {
-        question.version.id = newVersionId;
-        this.activitiesRepository.Questions.insert(question);
-      })
-    );
+    // TODO
+    // await Promise.all(
+    //   questions.map((question) => {
+    //     question.version.id = newVersionId;
+    //     this.activitiesRepository.Questions.insert(question);
+    //   })
+    // );
 
-    await this.activitiesRepository.Activities.update(activityId, {
-      draftVersion: new ActivityVersion(newVersionId),
-    });
+    activity.draftVersion = new ActivityVersion(newVersionId);
+    await this.activitiesRepository.Activities.update(activity);
 
     return { versionId: newVersionId };
   }

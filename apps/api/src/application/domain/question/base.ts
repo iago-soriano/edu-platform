@@ -15,13 +15,13 @@ export enum QuestionTypes {
 
 export abstract class Question {
   public id?: number;
-  public version!: ActivityVersion;
   public order?: number;
 
   public question?: string;
   public answer?: string;
 
   public alternatives?: Alternative[] = [];
+  public version!: ActivityVersion;
 
   constructor(public type: QuestionTypes) {}
 

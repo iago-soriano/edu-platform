@@ -33,7 +33,7 @@ export const ImageContentDtoMapper: DomainDtoMapper<
       description: domain.description || "",
       order: domain.order || 0,
       type: ContentTypes.Image,
-      versionId: domain.version.id,
+      versionId: domain.version.id!,
       payload: {
         image: {
           url: domain.url,

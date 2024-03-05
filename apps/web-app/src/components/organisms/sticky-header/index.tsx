@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import { SavingIndicator, Icons, Tag } from "@components";
-import { GetActivityVersionQueryType } from "@endpoints";
+import { ReturnGetActivityVersion } from "@endpoints";
 
 export const StickyHeader = ({
   show,
@@ -9,7 +9,7 @@ export const StickyHeader = ({
   onOpenOptionsMenu,
 }: {
   show: boolean;
-  activity: GetActivityVersionQueryType;
+  activity: ReturnGetActivityVersion;
   saveState: any;
   onOpenOptionsMenu: () => any;
 }) => {
@@ -21,11 +21,11 @@ export const StickyHeader = ({
       )}
     >
       <span className="lg:col-span-2 col-span-1 mx-1 font-bold overflow-ellipsis h-fit">
-        {activity.data?.collection?.name}
+        {activity?.collection?.name}
       </span>
-      <h5 className="col-span-2 overflow-hidden">{activity.data?.title}</h5>
+      <h5 className="col-span-2 overflow-hidden">{activity?.title}</h5>
       <div className="lg:col-span-2 col-span-1 mx-2 sm:flex hidden items-center">
-        {activity.data?.topics
+        {activity?.topics
           ?.split(",")
           .map((topic, index) => <Tag key={index} text={topic} />)}
       </div>

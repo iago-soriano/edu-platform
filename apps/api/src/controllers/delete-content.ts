@@ -25,7 +25,7 @@ export class DeleteContentController
   constructor(private deleteContentUseCase: IDeleteContentUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { activityId, versionId, contentId } = parseNumberId(req.params, [
+    const { versionId, contentId } = parseNumberId(req.params, [
       "activityId",
       "versionId",
       "contentId",
@@ -33,7 +33,6 @@ export class DeleteContentController
     const { user } = req;
 
     await this.deleteContentUseCase.execute({
-      activityId,
       versionId,
       contentId,
       user,

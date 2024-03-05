@@ -2,6 +2,7 @@ import { ActivityVersion, OutputStatus, User } from "@domain";
 import {
   CollectionNotFound,
   StudentIsNotParticipant,
+  ActivityVersionNotFound,
 } from "@edu-platform/common";
 import {
   IUseCase,
@@ -9,8 +10,8 @@ import {
   ICollectionParticipationsRepository,
   IStudentOutputsRepository,
   ICollectionsRepository,
+  IActivitiesRepository,
 } from "@interfaces";
-import { IGetActivityUseCaseHelper } from "@use-case-middlewares";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -29,17 +30,18 @@ class UseCase implements ICreateStudentOutputUseCase {
     private collectionParticipationsRepository: ICollectionParticipationsRepository,
     private collectionsRepository: ICollectionsRepository,
     private studentOutputsRepository: IStudentOutputsRepository,
-    private getActivityHelper: IGetActivityUseCaseHelper
+    private activitiesRepository: IActivitiesRepository
   ) {}
 
   async execute({ user, activityId, versionId }: InputParams) {
-    const { version, activity } = await this.getActivityHelper.execute({
-      activityId,
+    const version = await this.activitiesRepository.Versions.findFullViewById(
       versionId,
-    });
+      activityId
+    );
+    if (!version) throw new ActivityVersionNotFound();
 
     const collection = await this.collectionsRepository.getById(
-      activity.collection?.id || 0
+      version.activity.collection?.id
     );
 
     if (!collection) throw new CollectionNotFound();

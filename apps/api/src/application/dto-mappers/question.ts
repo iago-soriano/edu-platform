@@ -60,7 +60,7 @@ export const QuestionDtoMapper: DomainDtoMapper<
       answer: domain.answer || "",
       order: domain.order || 0,
       type: domain.type,
-      versionId: domain.version.id,
+      versionId: domain.version.id!,
       alternatives: (domain as MultipleChoiceQuestion)?.alternatives?.map(
         (alt) => AlternativeDtoMapper.mapToDto(alt)
       ),

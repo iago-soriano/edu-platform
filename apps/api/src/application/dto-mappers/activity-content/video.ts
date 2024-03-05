@@ -32,7 +32,7 @@ export const VideoContentDtoMapper: DomainDtoMapper<
       description: domain.description || "",
       order: domain.order || 0,
       type: ContentTypes.Video,
-      versionId: domain.version.id,
+      versionId: domain.version.id!,
       payload: {
         video: {
           url: domain.url,

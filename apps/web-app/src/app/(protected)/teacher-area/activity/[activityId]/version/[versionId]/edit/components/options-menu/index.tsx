@@ -9,7 +9,7 @@ import {
   useSaveContentMutation,
   useUpdateVersionStatusMutation,
   useDeleteDraftVersionMutation,
-  GetActivityVersionQueryType,
+  ReturnGetActivityVersion,
 } from "@endpoints";
 import { ContentTypes, VersionStatus } from "@edu-platform/common";
 import { useState } from "react";
@@ -20,7 +20,7 @@ import { Router } from "@infrastructure";
 const NewItemHeader = ({ children }) => <h5 className="p-2">{children}</h5>;
 
 interface OptionsMenuProps {
-  version: GetActivityVersionQueryType;
+  version: ReturnGetActivityVersion;
   onClose: () => void;
   activityId: any;
   versionId: any;
@@ -70,7 +70,7 @@ export const OptionsMenu = ({
     }
   };
 
-  const order = version.data?.elements?.length;
+  const order = version?.elements?.length;
   const openClasses = isOpen
     ? "opacity-100 -translate-x-0"
     : "translate-x-3 pointer-events-none opacity-0";
@@ -144,7 +144,7 @@ export const OptionsMenu = ({
             <RemoveButton onClick={() => setOpenConfirmDeleteModal(true)} />
             <PublishButton
               onClick={() => setOpenConfirmPublishModal(true)}
-              disabled={!version.data?.elements?.length}
+              disabled={!version?.elements?.length}
             />
           </div>
         </div>

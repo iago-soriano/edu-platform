@@ -17,21 +17,30 @@ export enum VersionStatus {
 export type Elements = { content: Content | null; question: Question | null }[];
 
 export class ActivityVersion {
-  public id!: number;
+  // public id!: number;
+  public updatedAt!: Date;
+  public createdAt!: Date;
+
   public title!: string;
   public description!: string;
   public topics!: string;
   public version!: number;
   public status!: VersionStatus;
   public activity!: Activity;
-  // public elements: Elements = [];
+  public elements: Elements = [];
   public contents: Content[] = [];
   public questions: Question[] = [];
-  public updatedAt!: Date;
 
-  constructor(id?: number) {
-    this.id = id || 0;
-  }
+  constructor(
+    public id?: number // public updatedAt?: Date,
+  ) // public createdAt?: Date,
+  // public title?: string,
+  // public description?: string,
+  // public topics?: string,
+  // public version?: number,
+  // public status?: VersionStatus,
+  // public activity?: Activity
+  {}
 
   validateTitle() {
     if (!this.title) return;
@@ -54,9 +63,16 @@ export class ActivityVersion {
   }
 
   validateTopics() {
-    const topicsArray = this.topics.split(",");
-    if (topicsArray.length > DomainRules.ACTIVITY.TOPICS.MAX_COUNT) {
+    const topicsArray = this.topics?.split(",");
+    if (topicsArray?.length || 0 > DomainRules.ACTIVITY.TOPICS.MAX_COUNT) {
       throw new ActivityVersionHasTooManyTopics();
     }
+  }
+
+  merge(newVersion: ActivityVersion) {
+    if (newVersion.title !== undefined) this.title = newVersion.title;
+    if (newVersion.description !== undefined)
+      this.description = newVersion.description;
+    if (newVersion.topics) this.topics = newVersion.topics;
   }
 }

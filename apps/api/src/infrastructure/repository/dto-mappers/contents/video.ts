@@ -2,10 +2,7 @@ import { ContentTypes, VideoContent } from "@domain";
 import { DomainDtoMapper } from "../types";
 import { activityContents } from "@infrastructure";
 
-export const VideoContentDtoMapper: DomainDtoMapper<
-  VideoContent,
-  typeof activityContents
-> = {
+export const VideoContentDtoMapper = {
   mapFromSelectDto: (dto: typeof activityContents.$inferSelect) => {
     const domain = new VideoContent();
 

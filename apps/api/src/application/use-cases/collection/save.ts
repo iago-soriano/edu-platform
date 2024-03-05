@@ -31,10 +31,7 @@ class UseCase implements ISaveCollectionUseCase {
 
       existingCollection.merge(collection);
 
-      await this.collectionsRepository.update(
-        collection.id,
-        existingCollection
-      );
+      await this.collectionsRepository.update(existingCollection);
       return { collectionId: collection.id };
     }
 

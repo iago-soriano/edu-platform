@@ -1,6 +1,9 @@
 import { ActivityVersion, Collection, VersionStatus } from "@domain";
-import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
-import { isArray } from "util";
+import {
+  IUseCase,
+  UserSelectDTO,
+  IActivitiesReadRepository,
+} from "@interfaces";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -25,13 +28,13 @@ export type IListActivityVersionsByOwnershipUseCase = IUseCase<
 >;
 
 class UseCase implements IListActivityVersionsByOwnershipUseCase {
-  constructor(private activitiesRepository: IActivitiesRepository) {}
+  constructor(private activitiesReadRepository: IActivitiesReadRepository) {}
 
   async execute({ user, collectionId }: InputParams) {
     const resp: Return = {};
 
     const resps =
-      await this.activitiesRepository.Versions.listByCollectionOwnership(
+      await this.activitiesReadRepository.Versions.listByCollectionOwnership(
         user.id,
         collectionId
       );

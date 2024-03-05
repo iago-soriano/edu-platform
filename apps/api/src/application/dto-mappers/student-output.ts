@@ -43,7 +43,7 @@ export const StudentOutputDtoMapper: DomainDtoMapper<
       id: domain.id || 0,
       status: domain.status || OutputStatus.Draft,
       userId: domain.user?.id || 0,
-      versionId: domain.version.id,
+      versionId: domain.version.id!,
     };
     return dto;
   },

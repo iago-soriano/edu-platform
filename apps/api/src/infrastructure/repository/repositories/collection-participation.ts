@@ -1,5 +1,8 @@
 import { Collection, User } from "@domain";
-import { ICollectionParticipationsRepository } from "@interfaces";
+import {
+  ICollectionParticipationsRepository,
+  ICollectionParticipationsReadRepository,
+} from "@interfaces";
 import {
   db,
   collections,
@@ -43,8 +46,12 @@ export class CollectionParticipationsRepository
 
     return relation;
   }
+}
 
-  async findParticipatingStudents(collectionId: number) {
+export class CollectionParticipationsReadRepository
+  implements ICollectionParticipationsReadRepository
+{
+  async listStudents(collectionId: number) {
     const relation = await db
       .select()
       .from(studentCollectionParticipation)
