@@ -1,10 +1,5 @@
 import { ActivityVersion } from "@domain";
-import {
-  IUseCase,
-  IActivitiesRepository,
-  IActivitiesReadRepository,
-  UserSelectDTO,
-} from "@interfaces";
+import { IUseCase, IActivitiesRepository, UserSelectDTO } from "@interfaces";
 import { ActivityNotFound } from "@edu-platform/common";
 
 type InputParams = {
@@ -19,10 +14,7 @@ type Return = {
 export type ICreateNewDraftVersionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ICreateNewDraftVersionUseCase {
-  constructor(
-    private activitiesRepository: IActivitiesRepository,
-    private activitiesReadRepository: IActivitiesReadRepository
-  ) {}
+  constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({ activityId, user }: InputParams) {
     const activity =
@@ -38,10 +30,10 @@ class UseCase implements ICreateNewDraftVersionUseCase {
       // there is already a draft in progress. Let user know that. TODO: send this endpoint a "forceDelete" flag and delete the other draft here
       return { versionId: activity.draftVersion.id || 0 };
 
-    const publishedVersion =
-      await this.activitiesRepository.Versions.findFullViewById(
-        activity.lastVersion.id!
-      );
+    const publishedVersion = await this.activitiesRepository.Versions.findById(
+      activity.lastVersion.id!,
+      activityId
+    );
 
     if (!publishedVersion) throw new Error("Full view not found"); // TODO: better understand how we could get here
 
@@ -50,10 +42,9 @@ class UseCase implements ICreateNewDraftVersionUseCase {
     const { versionId: newVersionId } =
       await this.activitiesRepository.Versions.insert(publishedVersion);
 
-    const contents =
-      await this.activitiesReadRepository.Contents.listByVersionId(
-        activity.lastVersion.id!
-      );
+    const contents = await this.activitiesRepository.Contents.listByVersionId(
+      activity.lastVersion.id!
+    );
 
     // duplicate all contents and questions to the new version
     await Promise.all(

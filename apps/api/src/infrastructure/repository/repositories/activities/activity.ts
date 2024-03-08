@@ -22,15 +22,12 @@ export class Activities implements IActivities {
   }
 
   async update(activity: Activity) {
-    //TODO: remove transaction
     if (!activity.id) throw new Error("There must be an id to update");
 
-    await db.transaction(async (tx) => {
-      await tx
-        .update(activities)
-        .set(ActivityDtoMapper.mapToInsertDto(activity))
-        .where(eq(activities.id, activity.id));
-    });
+    await db
+      .update(activities)
+      .set(ActivityDtoMapper.mapToInsertDto(activity))
+      .where(eq(activities.id, activity.id));
   }
 
   async findById(activityId: number) {

@@ -21,7 +21,7 @@ class UseCase implements IUpdateActivityMetadataUseCase {
   constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({ user, activityId, versionId, newVersion }: InputParams) {
-    const version = await this.activitiesRepository.Versions.findFullViewById(
+    const version = await this.activitiesRepository.Versions.findById(
       versionId,
       activityId
     );

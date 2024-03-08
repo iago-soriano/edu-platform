@@ -10,6 +10,7 @@ import {
 } from "@edu-platform/common";
 
 type InputParams = {
+  activityId: number;
   versionId: number;
   contentId: number;
   user: UserSelectDTO;
@@ -25,9 +26,11 @@ class UseCase implements IDeleteContentUseCase {
     private storageService: IStorageService
   ) {}
 
-  async execute({ user, versionId, contentId }: InputParams) {
-    const version =
-      await this.activitiesRepository.Versions.findFullViewById(versionId);
+  async execute({ user, activityId, versionId, contentId }: InputParams) {
+    const version = await this.activitiesRepository.Versions.findById(
+      versionId,
+      activityId
+    );
     if (!version) throw new ActivityVersionNotFound();
     if (version.activity.author.id !== user.id) throw new ActivityNotFound();
 

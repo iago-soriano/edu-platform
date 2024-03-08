@@ -34,7 +34,7 @@ class UseCase implements ICreateStudentOutputUseCase {
   ) {}
 
   async execute({ user, activityId, versionId }: InputParams) {
-    const version = await this.activitiesRepository.Versions.findFullViewById(
+    const version = await this.activitiesRepository.Versions.findById(
       versionId,
       activityId
     );

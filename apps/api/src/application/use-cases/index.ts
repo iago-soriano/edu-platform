@@ -37,9 +37,6 @@ import ListActivityVersionsByOwnershipUseCase, {
 import ListActivityVersionsByParticipationUseCase, {
   IListActivityVersionsByParticipationUseCase,
 } from "./activity-version/list-by-participation";
-import GetActivityVersionUseCase, {
-  IGetActivityVersionUseCase,
-} from "./activity-version/get-by-id";
 import DeleteQuestionUseCase, {
   IDeleteQuestionUseCase,
 } from "./activity-version-question/delete";
@@ -64,9 +61,6 @@ import InsertUserInCollectionUseCase, {
 import RemoveUserFromCollectionUseCase, {
   IRemoveUserFromCollectionUseCase,
 } from "./collection-participation/delete";
-import ListCollectionsByUserUseCase, {
-  IListCollectionsByUserUseCase,
-} from "./collection/list-by-user";
 import CreateStudentOutputUseCase, {
   ICreateStudentOutputUseCase,
 } from "./studentOutput/new";
@@ -117,8 +111,6 @@ export {
   IListActivityVersionsByOwnershipUseCase,
   ListActivityVersionsByParticipationUseCase,
   IListActivityVersionsByParticipationUseCase,
-  GetActivityVersionUseCase,
-  IGetActivityVersionUseCase,
   DeleteContentUseCase,
   IDeleteContentUseCase,
   SaveContentUseCase,
@@ -137,8 +129,6 @@ export {
   IInsertUserInCollectionUseCase,
   RemoveUserFromCollectionUseCase,
   IRemoveUserFromCollectionUseCase,
-  ListCollectionsByUserUseCase,
-  IListCollectionsByUserUseCase,
   CreateStudentOutputUseCase,
   ICreateStudentOutputUseCase,
   IListUsersInCollectionUseCase,

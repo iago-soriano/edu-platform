@@ -32,11 +32,11 @@ export class DeleteQuestionController
     const { activityId, versionId, questionId } = parseNumberId(req.params, [
       "activityId",
       "versionId",
-      "questionId",
     ]);
     const { user } = req;
 
     await this.deleteQuestionUseCase.execute({
+      activityId,
       versionId,
       questionId,
       user,

@@ -10,6 +10,7 @@ import { MultipleChoiceQuestion, Question, VersionStatus } from "@domain";
 type InputParams = {
   question: Question;
   user: UserSelectDTO;
+  activityId: number;
   versionId: number;
 };
 
@@ -20,9 +21,11 @@ export type ISaveQuestionUseCase = IUseCase<InputParams, Return>;
 class UseCase implements ISaveQuestionUseCase {
   constructor(private activitiesRepository: IActivitiesRepository) {}
 
-  async execute({ question, user, versionId }: InputParams) {
-    const version =
-      await this.activitiesRepository.Versions.findFullViewById(versionId);
+  async execute({ question, user, activityId, versionId }: InputParams) {
+    const version = await this.activitiesRepository.Versions.findById(
+      versionId,
+      activityId
+    );
     if (!version) throw new ActivityVersionNotFound();
 
     if (version.activity.author.id !== user.id) throw new ActivityNotFound();

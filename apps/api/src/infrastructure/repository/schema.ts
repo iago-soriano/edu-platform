@@ -72,8 +72,12 @@ export const activities = pgTable("activities", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
-  authorId: integer("author_id").references(() => users.id),
-  collectionId: integer("collection_id").notNull(), //TODO: references collections table
+  authorId: integer("author_id")
+    .references(() => users.id)
+    .notNull(),
+  collectionId: integer("collection_id")
+    .references(() => collections.id)
+    .notNull(), //TODO: references collections table
   lastVersionId: integer("last_version_id"),
   draftVersionId: integer("draft_version_id"),
 });
@@ -116,7 +120,7 @@ export const activityVersions = pgTable("activity_version", {
   description: varchar("description", { length: 200 }),
   topics: varchar("topics", { length: 200 }),
   status: versionStatusEnum("activity_status").default("Draft").notNull(),
-  version: integer("version").default(0),
+  version: integer("version").default(0).notNull(),
 
   activityId: integer("activity_id")
     .references(() => activities.id)
@@ -156,16 +160,18 @@ export const activityContents = pgTable("activity_contents", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
-  type: contentTypeEnum("type"),
-  description: varchar("description", { length: 500 }),
-  title: varchar("title", { length: 50 }),
-  order: integer("order").default(0),
+  type: contentTypeEnum("type").notNull(),
+  description: varchar("description", { length: 500 }).default("").notNull(),
+  title: varchar("title", { length: 50 }).default("").notNull(),
+  order: integer("order").default(0).notNull(),
   tracks: varchar("video_tracks", { length: 180 }), // 10 tracks max
   videoUrl: varchar("video_url", { length: 100 }),
   imageUrl: varchar("image_url", { length: 150 }),
-  text: varchar("text", { length: 1000 }),
+  text: varchar("text", { length: 1000 }).default("").notNull(),
 
-  versionId: integer("version_id").references(() => activityVersions.id),
+  versionId: integer("version_id")
+    .references(() => activityVersions.id)
+    .notNull(),
 });
 
 export const activityContentsRelations = relations(
@@ -228,17 +234,23 @@ export const alternativesRelations = relations(alternatives, ({ one }) => ({
 // collections
 export const collections = pgTable("collections", {
   id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
 
   name: varchar("name", { length: 50 }),
   description: varchar("description", { length: 200 }),
 
-  ownerId: integer("owner_id").references(() => users.id),
-  isPrivate: boolean("is_private").default(true),
-  notifyOwnerOnStudentOutput: boolean("notify_owner_on_student_output").default(
-    true
-  ),
+  ownerId: integer("owner_id")
+    .references(() => users.id)
+    .notNull(),
+  isPrivate: boolean("is_private").default(true).notNull(),
+  notifyOwnerOnStudentOutput: boolean("notify_owner_on_student_output")
+    .default(true)
+    .notNull(),
 });
 
 export const collectionsRelations = relations(collections, ({ one, many }) => ({

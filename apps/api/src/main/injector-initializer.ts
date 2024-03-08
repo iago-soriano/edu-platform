@@ -1,5 +1,5 @@
-import { ListCollectionsByUserController } from "./../controllers/list-collections-by-user";
-import { CreateNewActivityController } from "./../controllers/create-new-activity";
+import { ListCollectionsByUserController } from "../controllers/collection/list-by-user";
+import { CreateNewActivityController } from "../controllers/activity/new";
 import * as awilix from "awilix";
 import {
   SignInController,
@@ -41,7 +41,6 @@ import {
   SaveQuestionUseCase,
   CreateNewActivityUseCase,
   UpdateActivityMetadataUseCase,
-  GetActivityVersionUseCase,
   ListActivityVersionsByParticipationUseCase,
   ListActivityVersionsByOwnershipUseCase,
   DeleteContentUseCase,
@@ -53,7 +52,6 @@ import {
   SaveCollectionUseCase,
   InsertUserInCollectionUseCase,
   RemoveUserFromCollectionUseCase,
-  ListCollectionsByUserUseCase,
   GetCollectionUseCase,
   ListUsersInCollectionUseCase,
   InsertDefaultCollectionUseCase,
@@ -174,9 +172,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     updateActivityMetadataUseCase: awilix
       .asClass(UpdateActivityMetadataUseCase)
       .classic(),
-    getActivityVersionUseCase: awilix
-      .asClass(GetActivityVersionUseCase)
-      .classic(),
     listByOwnershipUseCase: awilix
       .asClass(ListActivityVersionsByOwnershipUseCase)
       .classic(),
@@ -197,9 +192,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     removeUserFromCollectionUseCase: awilix
       .asClass(RemoveUserFromCollectionUseCase)
-      .classic(),
-    listCollectionsByUserUseCase: awilix
-      .asClass(ListCollectionsByUserUseCase)
       .classic(),
     getCollectionUseCase: awilix.asClass(GetCollectionUseCase).classic(),
     listUsersInCollectionUseCase: awilix

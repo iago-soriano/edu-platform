@@ -1,4 +1,5 @@
 import { Collection } from "@domain";
+import { ListCollectionsByUserResponseBody } from "@edu-platform/common";
 
 export interface ICollectionsRepository {
   insert: (collection: Collection) => Promise<{ collectionId: number }>;
@@ -7,6 +8,10 @@ export interface ICollectionsRepository {
 }
 
 export interface ICollectionsReadRepository {
-  listByParticipation: (userId: number) => Promise<Collection[]>;
-  listByOwnership: (userId: number) => Promise<Collection[]>;
+  listByParticipation: (
+    userId: number
+  ) => Promise<ListCollectionsByUserResponseBody["participatesIn"]>;
+  listByOwnership: (
+    userId: number
+  ) => Promise<ListCollectionsByUserResponseBody["isOwnerOf"]>;
 }

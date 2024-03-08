@@ -1,4 +1,4 @@
-import { activityVersions, activities } from "@infrastructure";
+import { activityVersions, activities, users } from "@infrastructure";
 import { parseVersionStatus } from "@edu-platform/common";
 import { ActivityVersion, VersionStatus, Activity } from "@domain";
 import { DomainDtoMapper } from "./types";
@@ -7,7 +7,8 @@ import { ActivityDtoMapper } from ".";
 export const VersionDtoMapper = {
   mapFromSelectDto: (
     dto: typeof activityVersions.$inferSelect,
-    activityDto?: typeof activities.$inferSelect
+    activityDto?: typeof activities.$inferSelect,
+    userDto?: typeof users.$inferSelect
   ) => {
     const version = new ActivityVersion(dto.id);
 
@@ -22,9 +23,13 @@ export const VersionDtoMapper = {
     version.status = parseVersionStatus(dto.status) || VersionStatus.Draft;
 
     version.activity = activityDto
-      ? ActivityDtoMapper.mapFromSelectDto({
-          ...activityDto,
-        })
+      ? ActivityDtoMapper.mapFromSelectDto(
+          activityDto,
+          undefined,
+          undefined,
+          undefined,
+          userDto
+        )
       : new Activity(dto.activityId || 0);
 
     return version;

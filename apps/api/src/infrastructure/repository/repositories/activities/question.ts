@@ -1,11 +1,19 @@
 import { IQuestions } from "@interfaces";
-import { db, activityQuestions, alternatives } from "@infrastructure";
+import {
+  db,
+  activityQuestions,
+  alternatives,
+  activityVersions,
+} from "@infrastructure";
 import { eq, inArray } from "drizzle-orm";
 import { Alternative, Question } from "@domain";
 import { QuestionDtoMapper, AlternativeDtoMapper } from "../../dto-mappers";
 
 export class Questions implements IQuestions {
   async insert(question: Question) {
+    if (!question.version.id)
+      throw new Error("There must be a version id to insert");
+
     return db.transaction(async (tx) => {
       const insertedQuestion = (
         await tx
@@ -24,6 +32,11 @@ export class Questions implements IQuestions {
           )
           .returning({ id: alternatives.id });
       }
+      await tx
+        .update(activityVersions)
+        .set({ updatedAt: new Date() })
+        .where(eq(activityVersions.id, question.version.id!));
+
       return {
         questionId: insertedQuestion.id,
         alternativesIds: insertedAlternatives.map(({ id }) => id),
@@ -32,13 +45,19 @@ export class Questions implements IQuestions {
   }
 
   async update(question: Question) {
-    //TODO: update updatedAt, like contents
     if (!question.id) throw new Error("There must be an id to update");
 
-    await db
-      .update(activityQuestions)
-      .set(QuestionDtoMapper.mapToInsertDto(question))
-      .where(eq(activityQuestions.id, question.id));
+    await db.transaction(async (tx) => {
+      await tx
+        .update(activityQuestions)
+        .set(QuestionDtoMapper.mapToInsertDto(question))
+        .where(eq(activityQuestions.id, question.id!));
+
+      await tx
+        .update(activityVersions)
+        .set({ updatedAt: new Date() })
+        .where(eq(activityVersions.id, question.id!));
+    });
   }
 
   async findById(questionId: number) {

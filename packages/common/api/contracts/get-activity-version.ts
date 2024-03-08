@@ -1,7 +1,19 @@
-import { CollectionResponseDTO, VersionResponseDTO } from "../../dto";
+import { ContentResponseDTO, QuestionResponseDTO } from "../../dto";
 
 type RequestBody = void;
-type ResponseBody = VersionResponseDTO & { collection: CollectionResponseDTO };
+type ResponseBody = {
+  title: string;
+  description: string;
+  topics: string;
+  status: string;
+  version: number;
+  collectionName: string;
+  authorId: number;
+  elements: {
+    content: ContentResponseDTO | null;
+    question?: QuestionResponseDTO;
+  }[];
+};
 type Params = {
   activityId: string;
   versionId: string;

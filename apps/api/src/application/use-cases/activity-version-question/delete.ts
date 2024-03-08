@@ -5,6 +5,7 @@ import {
 } from "@edu-platform/common";
 
 type InputParams = {
+  activityId: number;
   versionId: number;
   questionId: number;
   user: UserSelectDTO;
@@ -17,9 +18,11 @@ export type IDeleteQuestionUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IDeleteQuestionUseCase {
   constructor(private activitiesRepository: IActivitiesRepository) {}
 
-  async execute({ user, versionId, questionId }: InputParams) {
-    const version =
-      await this.activitiesRepository.Versions.findFullViewById(versionId);
+  async execute({ user, activityId, versionId, questionId }: InputParams) {
+    const version = await this.activitiesRepository.Versions.findById(
+      versionId,
+      activityId
+    );
     if (!version) throw new ActivityVersionNotFound();
     if (version.activity.author.id !== user.id) throw new ActivityNotFound();
 

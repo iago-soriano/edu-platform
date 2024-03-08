@@ -52,7 +52,7 @@ class UseCase implements IUpdateActivityStatusUseCase {
     versionId,
     newActivityStatus,
   }: InputParams) {
-    const version = await this.activitiesRepository.Versions.findFullViewById(
+    const version = await this.activitiesRepository.Versions.findById(
       versionId,
       activityId
     );

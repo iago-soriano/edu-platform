@@ -9,6 +9,7 @@ import {
   Collection,
   // Alternative,
 } from "@domain";
+import { GetActivityVersionResponseBody } from "@edu-platform/common";
 
 export interface IActivities {
   insert: (
@@ -43,11 +44,7 @@ export interface IVersions {
   delete: (versionId: number) => Promise<void>;
   findById: (
     versionId: number,
-    activityId?: number
-  ) => Promise<ActivityVersion | null>;
-  findFullViewById: (
-    versionId: number,
-    activityId?: number
+    activityId: number
   ) => Promise<ActivityVersion | null>;
 }
 
@@ -67,13 +64,17 @@ export interface IVersionsRead {
     userId: number,
     collectionId?: number
   ) => Promise<{ collection: Collection; version: ActivityVersion }[]>;
+  findFullViewById: (
+    versionId: number,
+    activityId: number
+  ) => Promise<GetActivityVersionResponseBody | null>;
 }
 
-export interface IContentsRead {
-  listByVersionId: (versionId: number) => Promise<Content[]>;
-}
+// export interface IContentsRead {
+//   listByVersionId: (versionId: number) => Promise<Content[]>;
+// }
 
 export interface IActivitiesReadRepository {
   Versions: IVersionsRead;
-  Contents: IContentsRead;
+  // Contents: IContentsRead;
 }

@@ -50,7 +50,10 @@ export const ContentDtoMapper = {
   },
 
   mapToInsertDto: (domain: Content) => {
-    let content: typeof activityContents.$inferInsert = {};
+    let content: typeof activityContents.$inferInsert = {
+      type: "",
+      versionId: 0,
+    };
 
     if (domain instanceof VideoContent)
       content = VideoContentDtoMapper.mapToInsertDto(domain);

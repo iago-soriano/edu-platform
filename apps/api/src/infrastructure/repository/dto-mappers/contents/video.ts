@@ -18,7 +18,7 @@ export const VideoContentDtoMapper = {
       order: domain.order,
       videoUrl: domain.url,
       tracks: domain.tracks,
-      versionId: domain.version.id,
+      versionId: domain.version.id!,
       type: ContentTypes.Video,
     };
 

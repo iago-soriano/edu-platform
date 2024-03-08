@@ -1,7 +1,6 @@
 import {
   IUseCase,
   IActivitiesRepository,
-  IActivitiesReadRepository,
   IStorageService,
   UserSelectDTO,
   ActivitySelectDTO,
@@ -25,13 +24,10 @@ type Return = void;
 export type IDeleteVersionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IDeleteVersionUseCase {
-  constructor(
-    private activitiesRepository: IActivitiesRepository,
-    private activitiesReadRepository: IActivitiesReadRepository
-  ) {}
+  constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({ user, activityId, versionId }: InputParams) {
-    const version = await this.activitiesRepository.Versions.findFullViewById(
+    const version = await this.activitiesRepository.Versions.findById(
       versionId,
       activityId
     );
@@ -44,7 +40,7 @@ class UseCase implements IDeleteVersionUseCase {
 
     // const { contents, questions } = v;
     const contents =
-      await this.activitiesReadRepository.Contents.listByVersionId(versionId);
+      await this.activitiesRepository.Contents.listByVersionId(versionId);
 
     for (let content of contents) {
       //   // see TODO of delete-content.ts use-case

@@ -24,8 +24,8 @@ type Response = TypedResponse<UpdateVersionMetadataResponseBody>;
 export class UpdateActivityMetadataController
   implements HTTPController<Request, Response>
 {
-  method = HttpMethod.POST;
-  path = "activity/:activityId/update-activity-metadata/:versionId";
+  method = HttpMethod.PATCH;
+  path = "activity/:activityId/version/:versionId/metadata";
   middlewares: string[] = ["auth"];
 
   constructor(

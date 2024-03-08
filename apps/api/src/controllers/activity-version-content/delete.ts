@@ -19,13 +19,13 @@ export class DeleteContentController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.DELETE;
-  path: string = "version/:versionId/content/:contentId";
+  path: string = "activity/:activityId/version/:versionId/content/:contentId";
   middlewares: string[] = ["auth"];
 
   constructor(private deleteContentUseCase: IDeleteContentUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { versionId, contentId } = parseNumberId(req.params, [
+    const { activityId, versionId, contentId } = parseNumberId(req.params, [
       "activityId",
       "versionId",
       "contentId",
@@ -33,6 +33,7 @@ export class DeleteContentController
     const { user } = req;
 
     await this.deleteContentUseCase.execute({
+      activityId,
       versionId,
       contentId,
       user,

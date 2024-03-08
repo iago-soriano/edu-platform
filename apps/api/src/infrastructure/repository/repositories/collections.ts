@@ -1,4 +1,4 @@
-import { Collection } from "@domain";
+import { Collection, VersionStatus } from "@domain";
 import {
   ICollectionsRepository,
   ICollectionsReadRepository,
@@ -7,9 +7,12 @@ import {
   db,
   collections,
   studentCollectionParticipation,
+  activities,
+  activityVersions,
 } from "@infrastructure";
 import { CollectionDtoMapper } from "../dto-mappers/collection";
-import { and, eq, inArray } from "drizzle-orm";
+import { eq, sql, and } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 
 export class CollectionsRepository implements ICollectionsRepository {
   async insert(collection: Collection) {
@@ -53,19 +56,44 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
       )
       .where(eq(studentCollectionParticipation.studentId, userId));
 
-    return c.map(({ collections }) =>
-      CollectionDtoMapper.mapFromSelectDto(collections)
-    );
+    return c.map(({ collections }) => ({
+      id: collections.id,
+      createdAt: collections.createdAt,
+      updatedAt: collections.updatedAt,
+      name: collections.name || "",
+      description: collections.description || "",
+      isPrivate: collections.isPrivate,
+      notifyOwnerOnStudentOutput: collections.notifyOwnerOnStudentOutput,
+      ownerId: collections.ownerId,
+    }));
   }
 
   async listByOwnership(ownerId: number) {
     const dto = await db
-      .select()
+      .select({
+        id: collections.id,
+        name: collections.name,
+        updatedAt: collections.updatedAt,
+        isPrivate: collections.isPrivate,
+        notifyOwnerOnStudentOutput: collections.notifyOwnerOnStudentOutput,
+        draftVersionsCount: sql<number>`
+          select cast(count(${activityVersions.id}) as int) 
+          from ${activityVersions} 
+          JOIN ${activities} ON ${activities.id} = ${activityVersions.activityId} 
+          JOIN ${collections} ON ${activities.collectionId} = ${collections.id} 
+          where ${activityVersions.status} = ${VersionStatus.Draft}
+        `,
+      })
       .from(collections)
       .where(eq(collections.ownerId, ownerId));
 
-    return dto.map((collection) =>
-      CollectionDtoMapper.mapFromSelectDto(collection)
-    );
+    return dto.map((collections) => ({
+      id: collections.id,
+      updatedAt: collections.updatedAt,
+      name: collections.name || "",
+      isPrivate: collections.isPrivate,
+      notifyOwnerOnStudentOutput: collections.notifyOwnerOnStudentOutput,
+      draftVersionsCount: collections.draftVersionsCount,
+    }));
   }
 }

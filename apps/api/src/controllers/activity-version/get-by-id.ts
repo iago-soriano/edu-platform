@@ -3,16 +3,15 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
+  IActivitiesReadRepository,
 } from "@interfaces";
 import {
   GetActivityVersionParams,
   GetActivityVersionRequestBody,
   GetActivityVersionResponseBody,
+  ActivityVersionNotFound,
 } from "@edu-platform/common";
-import { IGetActivityVersionUseCase, IGetCollectionUseCase } from "@use-cases";
 import { parseNumberId } from "@infrastructure";
-import { ActivityVersionDtoMapper, CollectionDtoMapper } from "@dto-mappers";
-import { Collection } from "@domain";
 
 type Request = TypedRequest<
   GetActivityVersionParams,
@@ -28,13 +27,9 @@ export class GetActivityVersionController
   path = "activity/:activityId/version/:versionId/";
   middlewares: string[] = ["auth"];
 
-  constructor(
-    private getActivityVersionUseCase: IGetActivityVersionUseCase,
-    private getCollectionUseCase: IGetCollectionUseCase
-  ) {}
+  constructor(private activitiesReadRepository: IActivitiesReadRepository) {}
 
   async execute(req: Request, res: Response) {
-    // const { activityId, versionId } = req.params;
     const { user } = req;
 
     const { activityId, versionId } = parseNumberId(req.params, [
@@ -42,20 +37,16 @@ export class GetActivityVersionController
       "versionId",
     ]);
 
-    const completeVersion = await this.getActivityVersionUseCase.execute({
-      user,
-      activityId,
+    const resp = await this.activitiesReadRepository.Versions.findFullViewById(
       versionId,
-    });
+      activityId
+    );
 
-    const collection = await this.getCollectionUseCase.execute({
-      user,
-      collectionId: completeVersion.activity.collection.id,
-    });
+    if (!resp) throw new ActivityVersionNotFound();
 
-    const versionDto = ActivityVersionDtoMapper.mapToDto(completeVersion);
-    const collectionDto = CollectionDtoMapper.mapToDto(collection);
+    if (resp.status == "Draft" && resp.authorId !== user.id)
+      throw new ActivityVersionNotFound();
 
-    return res.status(200).json({ ...versionDto, collection: collectionDto });
+    return res.status(200).json(resp);
   }
 }
