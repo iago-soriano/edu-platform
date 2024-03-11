@@ -58,7 +58,9 @@ export const useRemoveUserFromCollectionMutation = (
     ...args,
   });
 
-type CollectionListResponse = Awaited<ReturnType<ApiClient["listCollections"]>>;
+export type CollectionListResponse = Awaited<
+  ReturnType<ApiClient["listCollections"]>
+>;
 
 export const useListCollectionsQuery = () => {
   const axios = useAxiosAuth();
@@ -66,7 +68,7 @@ export const useListCollectionsQuery = () => {
 
   return useQuery<CollectionListResponse, ServerError>({
     queryKey: ["collections"],
-    queryFn: () => client.listCollections(),
+    queryFn: () => client.listCollections({ byOwnership: true }),
   });
 };
 

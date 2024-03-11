@@ -9,7 +9,6 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 import "tippy.js/dist/tippy.css";
 import "../styles/global.css";
-// import StyledJsxRegistry from "../styles/styled-components-registry";
 import { ThemedHtml } from "./_themed_html";
 import { getServerSession } from "@infrastructure";
 

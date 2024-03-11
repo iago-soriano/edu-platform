@@ -5,9 +5,6 @@ const nextConfig = {
   transpilePackages: ["@edu-platform"],
   // },
   reactStrictMode: true,
-  compiler: {
-    styledComponents: true,
-  },
   images: {
     remotePatterns: [
       {

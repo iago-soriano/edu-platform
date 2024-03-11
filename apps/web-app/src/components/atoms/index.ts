@@ -2,6 +2,7 @@ export * from "./badge";
 export * from "./buttons";
 export * from "./dropdown";
 export * from "./fixed-alerts";
+export * from "./frame";
 export * from "./icons";
 export * from "./input";
 export * from "./separator";

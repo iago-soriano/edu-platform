@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState, useContext, ReactNode } from "react";
-import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { isModeValid, Modes, Theme } from "./types";
 import { getTheme } from "./theme";
 import { LocalStorageHelper } from "@infrastructure";
@@ -45,17 +44,15 @@ export const ThemeProvider: React.FC<MyComponentProps> = ({
   }, [defaultTheme]);
 
   return (
-    <StyledThemeProvider theme={getTheme(mode)}>
-      <ColorModeContext.Provider
-        value={{
-          mode,
-          theme: getTheme(mode),
-          setMode,
-        }}
-      >
-        {children}
-      </ColorModeContext.Provider>
-    </StyledThemeProvider>
+    <ColorModeContext.Provider
+      value={{
+        mode,
+        theme: getTheme(mode),
+        setMode,
+      }}
+    >
+      {children}
+    </ColorModeContext.Provider>
   );
 };
 
