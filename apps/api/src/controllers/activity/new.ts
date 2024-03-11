@@ -27,6 +27,8 @@ export class CreateNewActivityController
     const { user } = req;
     const { collectionId } = parseNumberId(req.body, ["collectionId"]); // TODO: use activity dto parser
 
+    if (!collectionId) throw new Error("Please inform a collection");
+
     const { activityId, versionId } =
       await this.createNewActivityUseCase.execute({
         collectionId,

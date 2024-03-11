@@ -141,9 +141,11 @@ export class ApiClient implements IApiClient {
       undefined
     ) as Promise<RemoveUserFromCollectionResponseBody>;
   }
-  public listCollections() {
+  public listCollections(
+    { byOwnership }: ListCollectionsByUserQuery = { byOwnership: false }
+  ) {
     return this._fetcher.get(
-      "collection"
+      `collection?byOwnership=${byOwnership}`
     ) as Promise<ListCollectionsByUserResponseBody>;
   }
 

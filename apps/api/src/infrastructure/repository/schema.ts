@@ -87,6 +87,10 @@ export const activitiesRelations = relations(activities, ({ many, one }) => ({
     fields: [activities.authorId],
     references: [users.id],
   }),
+  collection: one(collections, {
+    fields: [activities.collectionId],
+    references: [collections.id],
+  }),
   lastVersion: one(activityVersions, {
     fields: [activities.lastVersionId],
     references: [activityVersions.id],

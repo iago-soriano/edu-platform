@@ -9,7 +9,11 @@ import {
   Collection,
   // Alternative,
 } from "@domain";
-import { GetActivityVersionResponseBody } from "@edu-platform/common";
+import {
+  GetActivityVersionResponseBody,
+  ListActivityVersionsResponseBody,
+} from "@edu-platform/common";
+import { PaginatedParams } from ".";
 
 export interface IActivities {
   insert: (
@@ -57,9 +61,11 @@ export interface IActivitiesRepository {
 
 export interface IVersionsRead {
   listByCollectionOwnership: (
-    userId: number,
-    collectionId?: number
-  ) => Promise<{ collection: Collection; version: ActivityVersion }[]>;
+    args: {
+      userId: number;
+      collectionId?: number;
+    } & PaginatedParams
+  ) => Promise<ListActivityVersionsResponseBody>;
   listByCollectionParticipation: (
     userId: number,
     collectionId?: number

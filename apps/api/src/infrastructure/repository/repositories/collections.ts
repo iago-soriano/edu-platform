@@ -2,6 +2,7 @@ import { Collection, VersionStatus } from "@domain";
 import {
   ICollectionsRepository,
   ICollectionsReadRepository,
+  PaginatedParams,
 } from "@interfaces";
 import {
   db,
@@ -9,10 +10,10 @@ import {
   studentCollectionParticipation,
   activities,
   activityVersions,
+  studentOutputs,
 } from "@infrastructure";
 import { CollectionDtoMapper } from "../dto-mappers/collection";
-import { eq, sql, and } from "drizzle-orm";
-import { alias } from "drizzle-orm/pg-core";
+import { eq, sql, desc } from "drizzle-orm";
 
 export class CollectionsRepository implements ICollectionsRepository {
   async insert(collection: Collection) {
@@ -46,7 +47,7 @@ export class CollectionsRepository implements ICollectionsRepository {
 }
 
 export class CollectionsReadRepository implements ICollectionsReadRepository {
-  async listByParticipation(userId: number) {
+  async listByParticipation({ userId }: { userId: number } & PaginatedParams) {
     const c = await db
       .select()
       .from(collections)
@@ -68,32 +69,63 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
     }));
   }
 
-  async listByOwnership(ownerId: number) {
-    const dto = await db
-      .select({
-        id: collections.id,
-        name: collections.name,
-        updatedAt: collections.updatedAt,
-        isPrivate: collections.isPrivate,
-        notifyOwnerOnStudentOutput: collections.notifyOwnerOnStudentOutput,
-        draftVersionsCount: sql<number>`
-          select cast(count(${activityVersions.id}) as int) 
-          from ${activityVersions} 
-          JOIN ${activities} ON ${activities.id} = ${activityVersions.activityId} 
-          JOIN ${collections} ON ${activities.collectionId} = ${collections.id} 
-          where ${activityVersions.status} = ${VersionStatus.Draft}
-        `,
-      })
-      .from(collections)
-      .where(eq(collections.ownerId, ownerId));
+  async listByOwnership({
+    userId,
+    page,
+    pageSize,
+  }: { userId: number } & PaginatedParams) {
+    const sq = db.$with("sq").as(
+      db
+        .select({
+          id: collections.id,
+          name: collections.name,
+          updatedAt: collections.updatedAt,
+          isPrivate: collections.isPrivate,
+          notifyOwnerOnStudentOutput: collections.notifyOwnerOnStudentOutput,
+          totalActivitiesCount:
+            sql<number>`COUNT(DISTINCT ${activities.id})`.as(
+              "totalActivitiesCount"
+            ),
+          totalCollectionsCount:
+            sql<number>`COUNT(${collections.id}) OVER ()`.as(
+              "totalCollectionsCount"
+            ),
+          draftVersionsCount:
+            sql<number>`COUNT(CASE WHEN ${activityVersions.status} = ${VersionStatus.Draft} THEN 1 END)`.as(
+              "draftVersionsCount"
+            ),
+          archivedVersionsCount:
+            sql<number>`COUNT(CASE WHEN ${activityVersions.status} = ${VersionStatus.Archived} THEN 1 END)`.as(
+              "archivedVersionsCount"
+            ),
+          publishedVersionsCount:
+            sql<number>`COUNT(CASE WHEN ${activityVersions.status} = ${VersionStatus.Published} THEN 1 END)`.as(
+              "publishedVersionsCount"
+            ),
+        })
+        .from(collections)
+        .orderBy(desc(collections.updatedAt))
+        .leftJoin(activities, eq(activities.collectionId, collections.id))
+        .leftJoin(
+          activityVersions,
+          eq(activityVersions.activityId, activities.id)
+        )
+        .groupBy(collections.id)
+        .where(eq(collections.ownerId, userId))
+    );
 
-    return dto.map((collections) => ({
-      id: collections.id,
-      updatedAt: collections.updatedAt,
-      name: collections.name || "",
-      isPrivate: collections.isPrivate,
-      notifyOwnerOnStudentOutput: collections.notifyOwnerOnStudentOutput,
-      draftVersionsCount: collections.draftVersionsCount,
-    }));
+    const dto = await db
+      .with(sq)
+      .select()
+      .from(sq)
+      .limit(pageSize)
+      .offset(page * pageSize);
+
+    return {
+      collections: dto,
+      pagination: {
+        totalRowCount: dto[0]?.totalCollectionsCount,
+      },
+    };
   }
 }

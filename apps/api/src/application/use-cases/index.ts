@@ -31,12 +31,6 @@ import CreateNewActivityUseCase, {
 import UpdateActivityMetadataUseCase, {
   IUpdateActivityMetadataUseCase,
 } from "./activity-version/update-metadata";
-import ListActivityVersionsByOwnershipUseCase, {
-  IListActivityVersionsByOwnershipUseCase,
-} from "./activity-version/list-by-ownership";
-import ListActivityVersionsByParticipationUseCase, {
-  IListActivityVersionsByParticipationUseCase,
-} from "./activity-version/list-by-participation";
 import DeleteQuestionUseCase, {
   IDeleteQuestionUseCase,
 } from "./activity-version-question/delete";
@@ -107,10 +101,6 @@ export {
   ICreateNewActivityUseCase,
   UpdateActivityMetadataUseCase,
   IUpdateActivityMetadataUseCase,
-  ListActivityVersionsByOwnershipUseCase,
-  IListActivityVersionsByOwnershipUseCase,
-  ListActivityVersionsByParticipationUseCase,
-  IListActivityVersionsByParticipationUseCase,
   DeleteContentUseCase,
   IDeleteContentUseCase,
   SaveContentUseCase,

@@ -41,8 +41,6 @@ import {
   SaveQuestionUseCase,
   CreateNewActivityUseCase,
   UpdateActivityMetadataUseCase,
-  ListActivityVersionsByParticipationUseCase,
-  ListActivityVersionsByOwnershipUseCase,
   DeleteContentUseCase,
   DeleteQuestionUseCase,
   DeleteVersionUseCase,
@@ -171,12 +169,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     updateActivityMetadataUseCase: awilix
       .asClass(UpdateActivityMetadataUseCase)
-      .classic(),
-    listByOwnershipUseCase: awilix
-      .asClass(ListActivityVersionsByOwnershipUseCase)
-      .classic(),
-    listByParticipationUseCase: awilix
-      .asClass(ListActivityVersionsByParticipationUseCase)
       .classic(),
     saveContentUseCase: awilix.asClass(SaveContentUseCase).classic(),
     deleteVersionUseCase: awilix.asClass(DeleteVersionUseCase).classic(),

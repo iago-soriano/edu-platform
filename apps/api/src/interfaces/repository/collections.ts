@@ -1,5 +1,6 @@
 import { Collection } from "@domain";
 import { ListCollectionsByUserResponseBody } from "@edu-platform/common";
+import { PaginatedParams } from ".";
 
 export interface ICollectionsRepository {
   insert: (collection: Collection) => Promise<{ collectionId: number }>;
@@ -9,9 +10,9 @@ export interface ICollectionsRepository {
 
 export interface ICollectionsReadRepository {
   listByParticipation: (
-    userId: number
+    args: { userId: number } & PaginatedParams
   ) => Promise<ListCollectionsByUserResponseBody["participatesIn"]>;
   listByOwnership: (
-    userId: number
+    args: { userId: number } & PaginatedParams
   ) => Promise<ListCollectionsByUserResponseBody["isOwnerOf"]>;
 }

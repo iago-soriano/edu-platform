@@ -3,16 +3,14 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
+  IActivitiesReadRepository,
 } from "@interfaces";
-import { IListActivityVersionsByOwnershipUseCase } from "@use-cases";
 import {
   ListActivityVersionsQuery,
   ListActivityVersionsResponseBody,
   ListActivityVersionsRequestBody,
   parseVersionStatus,
 } from "@edu-platform/common";
-import { ActivityVersionDtoMapper, CollectionDtoMapper } from "@dto-mappers";
-import { VersionStatus } from "@domain";
 import { parseNumberId } from "@infrastructure";
 
 type Request = TypedRequest<
@@ -26,57 +24,45 @@ export class ListActivityVersionsController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path = "activity";
+  path = "activities";
   middlewares: string[] = ["auth"];
 
-  constructor(
-    private listByOwnershipUseCase: IListActivityVersionsByOwnershipUseCase,
-    private listByParticipationUseCase: IListActivityVersionsByOwnershipUseCase
-  ) {}
+  constructor(private activitiesReadRepository: IActivitiesReadRepository) {}
 
   async execute(req: Request, res: Response) {
-    const { user } = req;
-    const { collectionId } = parseNumberId(req.query, ["coollectionId"]);
+    const {
+      user: { id: userId },
+    } = req;
+    const { collectionId, pageSize, page } = parseNumberId(req.query, [
+      "collectionId",
+      "pageSize",
+      "page",
+    ]);
 
-    let result: Awaited<
-      ReturnType<IListActivityVersionsByOwnershipUseCase["execute"]>
-    > = {};
+    if (pageSize <= 0 || page < 0)
+      throw new Error("Please provide valid pagination parameters");
+
+    let result: ListActivityVersionsResponseBody = {
+      activities: [],
+      pagination: { totalRowCount: 0 },
+    };
 
     if (req.query.byOwnership) {
-      result = await this.listByOwnershipUseCase.execute({
-        user,
-        collectionId,
-      });
+      result =
+        await this.activitiesReadRepository.Versions.listByCollectionOwnership({
+          userId,
+          collectionId,
+          page: page || 0,
+          pageSize: pageSize || 100,
+        });
     } else {
-      result = await this.listByParticipationUseCase.execute({
-        user,
-        collectionId,
-      });
+      // result =
+      //   await this.activitiesReadRepository.Versions.listByCollectionParticipation(
+      //     userId,
+      //     collectionId
+      //   );
     }
 
-    const resp: ListActivityVersionsResponseBody = {};
-
-    for (const collectionId in result) {
-      const { collection, activities } = result[collectionId];
-      resp[collectionId] = {
-        activities: activities.map((act) => ({
-          [VersionStatus.Draft]:
-            act[VersionStatus.Draft] &&
-            ActivityVersionDtoMapper.mapToDto(act[VersionStatus.Draft]),
-          [VersionStatus.Archived]: act[VersionStatus.Archived]?.length
-            ? act[VersionStatus.Archived].map((arch) =>
-                ActivityVersionDtoMapper.mapToDto(arch)
-              )
-            : undefined,
-          [VersionStatus.Published]:
-            act[VersionStatus.Published] &&
-            ActivityVersionDtoMapper.mapToDto(act[VersionStatus.Published]),
-          activityId: act.activityId,
-        })),
-        collection: CollectionDtoMapper.mapToDto(collection),
-      };
-    }
-
-    res.status(200).json(resp);
+    res.status(200).json(result);
   }
 }

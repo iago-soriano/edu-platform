@@ -1,12 +1,22 @@
 type ResponseBody = {
   isOwnerOf: {
-    id: number;
-    name: string;
-    updatedAt: Date;
-    isPrivate: boolean;
-    notifyOwnerOnStudentOutput: boolean;
-    draftVersionsCount: number;
-  }[];
+    collections: {
+      id: number;
+      name?: string | null;
+      updatedAt?: Date;
+      isPrivate?: boolean;
+      totalActivitiesCount?: number;
+      notifyOwnerOnStudentOutput?: boolean;
+      draftVersionsCount?: number;
+      archivedVersionsCount?: number;
+      publishedVersionsCount?: number;
+      // newStudentOutputsCount: number;
+      // feedbackGivenStudentOutputsCount: number;
+    }[];
+    pagination: {
+      totalRowCount: number;
+    };
+  };
   participatesIn: {}[];
 };
 type Query = { byOwnership: boolean };

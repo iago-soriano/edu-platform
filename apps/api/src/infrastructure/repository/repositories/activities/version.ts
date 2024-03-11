@@ -1,5 +1,5 @@
 import { activityContents } from "./../../schema";
-import { IVersions, IVersionsRead } from "@interfaces";
+import { IVersions, IVersionsRead, PaginatedParams } from "@interfaces";
 import {
   VersionDtoMapper,
   CollectionDtoMapper,
@@ -15,12 +15,13 @@ import {
   activityQuestions,
   users,
 } from "@infrastructure";
-import { eq, inArray, and } from "drizzle-orm";
+import { eq, sql, and, desc } from "drizzle-orm";
 import { VersionStatus, ActivityVersion } from "@domain";
 import {
   ContentDtoMapper as ContentControllerDtoMapper,
   QuestionDtoMapper as QuestionControllerDtoMapper,
 } from "@dto-mappers";
+import { alias } from "drizzle-orm/pg-core";
 
 export class Versions implements IVersions {
   async insert(version: ActivityVersion) {
@@ -71,12 +72,66 @@ export class Versions implements IVersions {
 }
 
 export class VersionsRead implements IVersionsRead {
-  async listByCollectionOwnership(userId: number, collectionId?: number) {
-    const res = await db
-      .select()
-      .from(activityVersions)
-      .innerJoin(activities, eq(activities.id, activityVersions.activityId))
-      .innerJoin(collections, eq(collections.id, activities.collectionId)) // activity belonging to a collection
+  async listByCollectionOwnership({
+    userId,
+    collectionId,
+    page,
+    pageSize,
+  }: {
+    userId: number;
+    collectionId?: number;
+  } & PaginatedParams) {
+    const draftVersions = alias(activityVersions, "draftVersions");
+    const publishedVersions = alias(activityVersions, "publishedVersions");
+    const archivedVersions = alias(activityVersions, "archivedVersions");
+
+    const sq = db
+      .select({
+        collectionName: collections.name,
+        activityId: sql`${activities.id}`.as("activity_id"),
+        draft: {
+          id: sql`${draftVersions.id}`.as("draftVersionId"),
+          updatedAt: sql`${draftVersions.updatedAt}`.as("draftUpdatedAt"),
+        },
+        published: {
+          id: sql`${publishedVersions.id}`.as("publishedVersionId"),
+          description: sql`${publishedVersions.description}`.as(
+            "publishedVersionDescription"
+          ),
+          title: sql`${publishedVersions.title}`.as("publishedVersionTitle"),
+          updatedAt: sql`${publishedVersions.updatedAt}`.as(
+            "publishedUpdatedAt"
+          ),
+        },
+
+        archivedVersionsCount:
+          sql<number>`COUNT(CASE WHEN ${archivedVersions.status} = ${VersionStatus.Archived} THEN 1 END)`.as(
+            "archivedVersionsCount"
+          ),
+      })
+      .from(collections)
+      .leftJoin(activities, eq(activities.collectionId, collections.id))
+      .leftJoin(
+        archivedVersions,
+        eq(archivedVersions.activityId, activities.id)
+      )
+      .leftJoin(
+        publishedVersions,
+        eq(publishedVersions.id, activities.lastVersionId)
+      )
+      .leftJoin(draftVersions, eq(draftVersions.id, activities.draftVersionId))
+      .groupBy(
+        collections.id,
+        activities.id,
+
+        draftVersions.id,
+        draftVersions.updatedAt,
+
+        publishedVersions.id,
+        publishedVersions.title,
+        publishedVersions.description,
+        publishedVersions.updatedAt
+      )
       .where(
         collectionId
           ? and(
@@ -84,14 +139,47 @@ export class VersionsRead implements IVersionsRead {
               eq(collections.id, collectionId)
             )
           : eq(collections.ownerId, userId)
-      );
+      )
+      .as("sq");
 
-    return res.map(({ activity_version, collections }) => ({
-      version:
-        VersionDtoMapper.mapFromSelectDto(activity_version) ||
-        new ActivityVersion(),
-      collection: CollectionDtoMapper.mapFromSelectDto(collections),
-    }));
+    const resp = await db
+      .select({
+        collectionName: sq.collectionName,
+        activityId: sq.activityId,
+        draft: sq.draft,
+        published: sq.published,
+        archivedVersionsCount: sq.archivedVersionsCount,
+        totalActivitiesCount: sql<number>`COUNT(${activities.id}) OVER ()`.as(
+          "totalActivitiesCount"
+        ),
+      })
+      .from(sq)
+      .innerJoin(activities, eq(activities.id, sq.activityId))
+      .groupBy(
+        sq.collectionName,
+        sq.activityId,
+        activities.id,
+        sq.draft.id,
+        sq.draft.updatedAt,
+        sq.published.id,
+        sq.published.updatedAt,
+        sq.published.title,
+        sq.published.description,
+        sq.archivedVersionsCount
+        // sq.totalActivitiesCount
+      )
+      .orderBy(
+        desc(sql`GREATEST(${sq.draft.updatedAt}, ${sq.published.updatedAt})`)
+      )
+      .limit(pageSize)
+      .offset(page * pageSize);
+
+    return {
+      activities: resp,
+      pagination: {
+        totalRowCount: resp[0]?.totalActivitiesCount,
+      },
+    };
   }
 
   async listByCollectionParticipation(userId: number, collectionId?: number) {
