@@ -1,5 +1,5 @@
-import { activityContents } from "./../../schema";
-import { IVersions, IVersionsRead, PaginatedParams } from "@interfaces";
+import { activityContents } from "../../schema/tables";
+import { IVersions, IVersionsRead } from "@interfaces";
 import {
   VersionDtoMapper,
   CollectionDtoMapper,
@@ -11,7 +11,7 @@ import {
   activities,
   activityVersions,
   collections,
-  studentCollectionParticipation,
+  collectionParticipations,
   activityQuestions,
   users,
 } from "@infrastructure";
@@ -22,6 +22,7 @@ import {
   QuestionDtoMapper as QuestionControllerDtoMapper,
 } from "@dto-mappers";
 import { alias } from "drizzle-orm/pg-core";
+import { PaginatedParamsDTO } from "@edu-platform/common";
 
 export class Versions implements IVersions {
   async insert(version: ActivityVersion) {
@@ -64,7 +65,7 @@ export class Versions implements IVersions {
     )[0];
 
     return VersionDtoMapper.mapFromSelectDto(
-      version.activity_version,
+      version.activity_versions,
       version.activities,
       version.users
     );
@@ -80,7 +81,7 @@ export class VersionsRead implements IVersionsRead {
   }: {
     userId: number;
     collectionId?: number;
-  } & PaginatedParams) {
+  } & PaginatedParamsDTO) {
     const draftVersions = alias(activityVersions, "draftVersions");
     const publishedVersions = alias(activityVersions, "publishedVersions");
     const archivedVersions = alias(activityVersions, "archivedVersions");
@@ -88,22 +89,33 @@ export class VersionsRead implements IVersionsRead {
     const sq = db
       .select({
         collectionName: collections.name,
-        activityId: sql`${activities.id}`.as("activity_id"),
+        activityId: sql<number>`${activities.id}`.as("activity_id"),
         draft: {
-          id: sql`${draftVersions.id}`.as("draftVersionId"),
-          updatedAt: sql`${draftVersions.updatedAt}`.as("draftUpdatedAt"),
+          id: sql<number>`${draftVersions.id}`.as("draftVersionId"),
+          updatedAt: sql<Date>`${draftVersions.updatedAt}`.as("draftUpdatedAt"),
+          description: sql<string>`${draftVersions.description}`.as(
+            "draftVersionDescription"
+          ),
+          title: sql<string>`${draftVersions.title}`.as("draftVersionTitle"),
+          version: sql<number>`${draftVersions.version}`.as(
+            "draftVersionVersion"
+          ),
         },
         published: {
-          id: sql`${publishedVersions.id}`.as("publishedVersionId"),
-          description: sql`${publishedVersions.description}`.as(
-            "publishedVersionDescription"
-          ),
-          title: sql`${publishedVersions.title}`.as("publishedVersionTitle"),
-          updatedAt: sql`${publishedVersions.updatedAt}`.as(
+          id: sql<number>`${publishedVersions.id}`.as("publishedVersionId"),
+          updatedAt: sql<Date>`${publishedVersions.updatedAt}`.as(
             "publishedUpdatedAt"
           ),
+          description: sql<string>`${publishedVersions.description}`.as(
+            "publishedVersionDescription"
+          ),
+          title: sql<string>`${publishedVersions.title}`.as(
+            "publishedVersionTitle"
+          ),
+          version: sql<number>`${publishedVersions.version}`.as(
+            "publishedVersionVersion"
+          ),
         },
-
         archivedVersionsCount:
           sql<number>`COUNT(CASE WHEN ${archivedVersions.status} = ${VersionStatus.Archived} THEN 1 END)`.as(
             "archivedVersionsCount"
@@ -126,10 +138,14 @@ export class VersionsRead implements IVersionsRead {
 
         draftVersions.id,
         draftVersions.updatedAt,
+        draftVersions.description,
+        draftVersions.version,
+        draftVersions.updatedAt,
 
         publishedVersions.id,
         publishedVersions.title,
         publishedVersions.description,
+        publishedVersions.version,
         publishedVersions.updatedAt
       )
       .where(
@@ -161,12 +177,15 @@ export class VersionsRead implements IVersionsRead {
         activities.id,
         sq.draft.id,
         sq.draft.updatedAt,
+        sq.draft.title,
+        sq.draft.description,
+        sq.draft.version,
         sq.published.id,
         sq.published.updatedAt,
         sq.published.title,
         sq.published.description,
+        sq.published.version,
         sq.archivedVersionsCount
-        // sq.totalActivitiesCount
       )
       .orderBy(
         desc(sql`GREATEST(${sq.draft.updatedAt}, ${sq.published.updatedAt})`)
@@ -175,7 +194,13 @@ export class VersionsRead implements IVersionsRead {
       .offset(page * pageSize);
 
     return {
-      activities: resp,
+      activities: resp.map((dto) => ({
+        collectionName: dto.collectionName,
+        activityId: dto.activityId,
+        draft: dto.draft?.id ? dto.draft : null,
+        published: dto.published?.id ? dto.published : null,
+        archivedVersionsCount: dto.archivedVersionsCount,
+      })),
       pagination: {
         totalRowCount: resp[0]?.totalActivitiesCount,
       },
@@ -184,7 +209,7 @@ export class VersionsRead implements IVersionsRead {
 
   async listByCollectionParticipation(userId: number, collectionId?: number) {
     const conditions = [
-      eq(studentCollectionParticipation.studentId, userId),
+      eq(collectionParticipations.userId, userId),
       eq(activityVersions.status, VersionStatus.Published),
     ];
     if (collectionId) conditions.push(eq(collections.id, collectionId));
@@ -195,14 +220,14 @@ export class VersionsRead implements IVersionsRead {
       .innerJoin(activities, eq(activities.id, activityVersions.activityId))
       .innerJoin(collections, eq(collections.id, activities.collectionId))
       .innerJoin(
-        studentCollectionParticipation,
-        eq(studentCollectionParticipation.collectionId, collections.id)
+        collectionParticipations,
+        eq(collectionParticipations.collectionId, collections.id)
       )
       .where(and(...conditions));
 
-    return res.map(({ activity_version, collections }) => ({
+    return res.map(({ activity_versions, collections }) => ({
       version:
-        VersionDtoMapper.mapFromSelectDto(activity_version) ||
+        VersionDtoMapper.mapFromSelectDto(activity_versions) ||
         new ActivityVersion(),
       collection: CollectionDtoMapper.mapFromSelectDto(collections),
     }));
@@ -252,11 +277,11 @@ export class VersionsRead implements IVersionsRead {
     );
 
     const resp = {
-      title: fullVersion[0].activity_version.title || "",
-      description: fullVersion[0].activity_version.description || "",
-      topics: fullVersion[0].activity_version.topics || "",
-      status: fullVersion[0].activity_version.status,
-      version: fullVersion[0].activity_version.version,
+      title: fullVersion[0].activity_versions.title || "",
+      description: fullVersion[0].activity_versions.description || "",
+      topics: fullVersion[0].activity_versions.topics || "",
+      status: fullVersion[0].activity_versions.status,
+      version: fullVersion[0].activity_versions.version,
       collectionName: fullVersion[0].collections?.name || "",
       authorId: fullVersion[0].activities.authorId,
       elements: sortedElements,

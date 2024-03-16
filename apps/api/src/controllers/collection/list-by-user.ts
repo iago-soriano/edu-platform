@@ -1,3 +1,4 @@
+import { parseToPaginatedParamsDTO } from "./../../../../../packages/common/dto/paginated-params";
 import {
   HTTPController,
   HttpMethod,
@@ -9,7 +10,6 @@ import {
   ListCollectionsByUserQuery,
   ListCollectionsByUserResponseBody,
 } from "@edu-platform/common";
-import { parseNumberId } from "@infrastructure";
 
 type Request = TypedRequest<{}, ListCollectionsByUserQuery, {}>;
 type Response = TypedResponse<ListCollectionsByUserResponseBody>;
@@ -26,7 +26,7 @@ export class ListCollectionsByUserController
   async execute(req: Request, res: Response) {
     const { user } = req;
 
-    const { pageSize, page } = parseNumberId(req.query, ["pageSize", "page"]);
+    const { page, pageSize } = parseToPaginatedParamsDTO(req.query);
 
     if (pageSize <= 0 || page < 0)
       throw new Error("Please provide valid pagination parameters");

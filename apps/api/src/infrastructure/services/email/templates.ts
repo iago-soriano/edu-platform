@@ -35,3 +35,12 @@ ${styles}
 <a target="_blank" href="${url}">Trocar senha</a>
 </div>
 `;
+
+export const NewStudentOutputEmailTemplate = ({ url }: { url: string }) => `
+${styles}
+<div class="container">
+<h1>New Student Output</h1>
+<h3>Clique no link abaixo para ver o output</h3>
+<a target="_blank" href="${url}">Student Output</a>
+</div>
+`;

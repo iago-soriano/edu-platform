@@ -6,3 +6,4 @@ export * from "./question";
 export * from "./collections";
 export * from "./student-output";
 export * from "./student-answer";
+export * from "./notification";

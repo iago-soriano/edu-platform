@@ -3,6 +3,7 @@ import {
   CollectionNotFound,
   StudentIsNotParticipant,
   ActivityVersionNotFound,
+  CantCreateOutputOnPublicCollection,
 } from "@edu-platform/common";
 import {
   IUseCase,
@@ -46,7 +47,9 @@ class UseCase implements ICreateStudentOutputUseCase {
 
     if (!collection) throw new CollectionNotFound();
 
-    const studentIsParticipant =
+    if (!collection.isPrivate) throw new CantCreateOutputOnPublicCollection();
+
+    const studentIsParticipant = // TODO: pegar pelo tipo Student
       await this.collectionParticipationsRepository.findStudentCollectionRelation(
         user.id,
         collection.id!

@@ -17,6 +17,7 @@ class UseCase implements ICreateNewActivityUseCase {
   constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({ user, collectionId }: InputParams) {
+    // TODO Verificar se usuário é o dono da collection
     const { activityId } = await this.activitiesRepository.Activities.insert(
       user.id,
       collectionId
@@ -24,6 +25,7 @@ class UseCase implements ICreateNewActivityUseCase {
 
     const activity = new Activity(activityId);
 
+    //TODO colocar em estado draft
     const version = new ActivityVersion();
     version.activity = activity;
     version.version = 1;

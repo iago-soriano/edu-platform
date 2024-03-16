@@ -6,7 +6,7 @@ import {
 import {
   db,
   collections,
-  studentCollectionParticipation,
+  collectionParticipations,
   users,
 } from "@infrastructure";
 import { and, eq, inArray } from "drizzle-orm";
@@ -14,19 +14,23 @@ import { and, eq, inArray } from "drizzle-orm";
 export class CollectionParticipationsRepository
   implements ICollectionParticipationsRepository
 {
-  async insertStudent(studentId: number, collectionId: number) {
+  async insertStudent(
+    userId: number,
+    collectionId: number,
+    type: "Follower" | "Student"
+  ) {
     await db
-      .insert(studentCollectionParticipation)
-      .values({ studentId, collectionId });
+      .insert(collectionParticipations)
+      .values({ userId, collectionId, type });
   }
 
   async removeStudent(studentId: number, collectionId: number) {
     await db
-      .delete(studentCollectionParticipation)
+      .delete(collectionParticipations)
       .where(
         and(
-          eq(studentCollectionParticipation.studentId, studentId),
-          eq(studentCollectionParticipation.collectionId, collectionId)
+          eq(collectionParticipations.userId, studentId),
+          eq(collectionParticipations.collectionId, collectionId)
         )
       );
   }
@@ -35,11 +39,11 @@ export class CollectionParticipationsRepository
     const relation = (
       await db
         .select()
-        .from(studentCollectionParticipation)
+        .from(collectionParticipations)
         .where(
           and(
-            eq(studentCollectionParticipation.studentId, studentId),
-            eq(studentCollectionParticipation.collectionId, collectionId)
+            eq(collectionParticipations.userId, studentId),
+            eq(collectionParticipations.collectionId, collectionId)
           )
         )
     )[0];
@@ -54,9 +58,9 @@ export class CollectionParticipationsReadRepository
   async listStudents(collectionId: number) {
     const relation = await db
       .select()
-      .from(studentCollectionParticipation)
-      .innerJoin(users, eq(studentCollectionParticipation.studentId, users.id))
-      .where(eq(studentCollectionParticipation.collectionId, collectionId));
+      .from(collectionParticipations)
+      .innerJoin(users, eq(collectionParticipations.userId, users.id))
+      .where(eq(collectionParticipations.collectionId, collectionId));
 
     return relation.map(
       ({ users }) => new User(users.id, users.name || "", users.email || "", "")

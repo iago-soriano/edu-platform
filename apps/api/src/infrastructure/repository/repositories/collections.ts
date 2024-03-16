@@ -2,18 +2,17 @@ import { Collection, VersionStatus } from "@domain";
 import {
   ICollectionsRepository,
   ICollectionsReadRepository,
-  PaginatedParams,
 } from "@interfaces";
 import {
   db,
   collections,
-  studentCollectionParticipation,
+  collectionParticipations,
   activities,
   activityVersions,
-  studentOutputs,
 } from "@infrastructure";
 import { CollectionDtoMapper } from "../dto-mappers/collection";
 import { eq, sql, desc } from "drizzle-orm";
+import { PaginatedParamsDTO } from "@edu-platform/common";
 
 export class CollectionsRepository implements ICollectionsRepository {
   async insert(collection: Collection) {
@@ -44,18 +43,47 @@ export class CollectionsRepository implements ICollectionsRepository {
 
     return CollectionDtoMapper.mapFromSelectDto(dto);
   }
+
+  async getCollectionByVersionId(versionId: number) {
+    return db.transaction(async (tx) => {
+      const { activityId } = (
+        await tx
+          .select({ activityId: activityVersions.activityId })
+          .from(activityVersions)
+          .where(eq(activityVersions.id, versionId))
+      )[0];
+
+      const { collectionId } = (
+        await tx
+          .select({ collectionId: activities.collectionId })
+          .from(activities)
+          .where(eq(activities.id, activityId))
+      )[0];
+
+      const collection = (
+        await tx
+          .select()
+          .from(collections)
+          .where(eq(collections.id, collectionId))
+      )[0];
+
+      return CollectionDtoMapper.mapFromSelectDto(collection);
+    });
+  }
 }
 
 export class CollectionsReadRepository implements ICollectionsReadRepository {
-  async listByParticipation({ userId }: { userId: number } & PaginatedParams) {
+  async listByParticipation({
+    userId,
+  }: { userId: number } & PaginatedParamsDTO) {
     const c = await db
       .select()
       .from(collections)
       .innerJoin(
-        studentCollectionParticipation,
-        eq(studentCollectionParticipation.collectionId, collections.id)
+        collectionParticipations,
+        eq(collectionParticipations.collectionId, collections.id)
       )
-      .where(eq(studentCollectionParticipation.studentId, userId));
+      .where(eq(collectionParticipations.userId, userId));
 
     return c.map(({ collections }) => ({
       id: collections.id,
@@ -73,7 +101,7 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
     userId,
     page,
     pageSize,
-  }: { userId: number } & PaginatedParams) {
+  }: { userId: number } & PaginatedParamsDTO) {
     const sq = db.$with("sq").as(
       db
         .select({

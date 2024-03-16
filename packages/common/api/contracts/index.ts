@@ -18,3 +18,5 @@ export * from "./get-students-of-collection";
 export * from "./create-student-output";
 export * from "./save-answer";
 export * from "./update-student-output";
+export * from "./list-notifications";
+export * from "./update-notification";

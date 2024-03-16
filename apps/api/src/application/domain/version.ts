@@ -33,8 +33,8 @@ export class ActivityVersion {
 
   constructor(
     public id?: number // public updatedAt?: Date,
-    // public createdAt?: Date,
-  ) // public title?: string,
+    // public title?: string,
+  ) // public createdAt?: Date,
   // public description?: string,
   // public topics?: string,
   // public version?: number,

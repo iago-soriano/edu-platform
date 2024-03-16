@@ -38,6 +38,7 @@ class UseCase implements ISaveAnswerUseCase {
     if (!output) throw new OutputNotFound();
 
     if (output.status !== "Draft") {
+      // TODO: usar enum
       throw new OutputIsNotDraft();
     }
 

@@ -5,10 +5,9 @@ import {
   serial,
   varchar,
   boolean,
-  primaryKey,
   timestamp,
+  primaryKey,
 } from "drizzle-orm/pg-core";
-import { relations, type InferSelectModel } from "drizzle-orm";
 import {
   VersionStatus,
   QuestionTypes,
@@ -17,14 +16,13 @@ import {
   OutputStatus,
 } from "@domain";
 
-/* #region Tokens */
 export const tokenTypeEnum = pgEnum("tokenType", [
   "VerifyAccount",
   "ForgotPassword",
   "ChangePasswordRequest",
 ]);
 
-export const tokens = pgTable("token", {
+export const tokens = pgTable("tokens", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
@@ -34,15 +32,6 @@ export const tokens = pgTable("token", {
   expiresAt: timestamp("expires_at", { withTimezone: true }).defaultNow(),
 });
 
-export const tokensRelations = relations(tokens, ({ one }) => ({
-  users: one(users, {
-    fields: [tokens.userId],
-    references: [users.id],
-  }),
-}));
-/* #endregion */
-
-/* #region Users */
 export const userTypeEnum = pgEnum("userType", UserTypes);
 
 export const users = pgTable("users", {
@@ -60,13 +49,6 @@ export const users = pgTable("users", {
   type: userTypeEnum("user_type"),
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
-  activities: many(activities),
-  tokens: many(tokens),
-}));
-/* #endregion */
-
-/* #region Activities */
 export const activities = pgTable("activities", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
@@ -77,41 +59,16 @@ export const activities = pgTable("activities", {
     .notNull(),
   collectionId: integer("collection_id")
     .references(() => collections.id)
-    .notNull(), //TODO: references collections table
+    .notNull(),
   lastVersionId: integer("last_version_id"),
   draftVersionId: integer("draft_version_id"),
 });
 
-export const activitiesRelations = relations(activities, ({ many, one }) => ({
-  author: one(users, {
-    fields: [activities.authorId],
-    references: [users.id],
-  }),
-  collection: one(collections, {
-    fields: [activities.collectionId],
-    references: [collections.id],
-  }),
-  lastVersion: one(activityVersions, {
-    fields: [activities.lastVersionId],
-    references: [activityVersions.id],
-    relationName: "lastVersion",
-  }),
-  draftVersion: one(activityVersions, {
-    fields: [activities.draftVersionId],
-    references: [activityVersions.id],
-    relationName: "openDraft",
-  }),
-  activityVersions: many(activityVersions),
-}));
-/* #endregion */
-
-/* #region Activity Versions */
 export const versionStatusEnum = pgEnum(
   "activityStatus",
   Object.values(VersionStatus || {}).filter((v) => isNaN(Number(v))) as [string]
 );
-
-export const activityVersions = pgTable("activity_version", {
+export const activityVersions = pgTable("activity_versions", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
@@ -131,34 +88,10 @@ export const activityVersions = pgTable("activity_version", {
     .notNull(),
 });
 
-export const activityVersionsRelations = relations(
-  activityVersions,
-  ({ one, many }) => ({
-    activity: one(activities, {
-      fields: [activityVersions.activityId],
-      references: [activities.id],
-    }),
-    lastVersionOf: one(activities, {
-      fields: [activityVersions.activityId],
-      references: [activities.lastVersionId],
-      relationName: "lastVersion",
-    }),
-    isDraftOf: one(activities, {
-      fields: [activityVersions.activityId],
-      references: [activities.draftVersionId],
-      relationName: "openDraft",
-    }),
-    questions: many(activityQuestions),
-    contents: many(activityContents),
-  })
-);
-/* #endregion */
-
 export const contentTypeEnum = pgEnum(
   "contentType",
   Object.values(ContentTypes || {}).filter((v) => isNaN(Number(v))) as [string]
 );
-
 export const activityContents = pgTable("activity_contents", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
@@ -178,18 +111,10 @@ export const activityContents = pgTable("activity_contents", {
     .notNull(),
 });
 
-export const activityContentsRelations = relations(
-  activityContents,
-  ({ one }) => ({
-    version: one(activityVersions),
-  })
-);
-
 export const questionTypeEnum = pgEnum(
   "questionType",
   Object.values(QuestionTypes || {}).filter((v) => isNaN(Number(v))) as [string]
 );
-
 export const activityQuestions = pgTable("questions", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
@@ -204,17 +129,6 @@ export const activityQuestions = pgTable("questions", {
   versionId: integer("version_id").references(() => activityVersions.id),
 });
 
-// export const testView = pgView("my_view").as(qb => qb.select({ id: activityQuestions.id, answerKey: activityQuestions.answerKey }).from(activityQuestions));
-// type ViewType = Pick<InferSelectModel<typeof activityQuestions>, 'id' | 'answerKey'>;
-
-export const questionsRelations = relations(
-  activityQuestions,
-  ({ one, many }) => ({
-    version: one(activityVersions),
-    choice: many(alternatives), // TODO: need this?
-  })
-);
-
 export const alternatives = pgTable("question_alternatives", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
@@ -228,14 +142,6 @@ export const alternatives = pgTable("question_alternatives", {
   questionId: integer("question_id").references(() => activityQuestions.id),
 });
 
-export const alternativesRelations = relations(alternatives, ({ one }) => ({
-  question: one(activityQuestions, {
-    fields: [alternatives.questionId],
-    references: [activityQuestions.id],
-  }),
-}));
-
-// collections
 export const collections = pgTable("collections", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true })
@@ -257,39 +163,39 @@ export const collections = pgTable("collections", {
     .notNull(),
 });
 
-export const collectionsRelations = relations(collections, ({ one, many }) => ({
-  owner: one(users, {
-    fields: [collections.ownerId],
-    references: [users.id],
-  }),
-  activities: many(activities),
-}));
+export const participantTypeEnum = pgEnum("participantType", [
+  "Follower",
+  "Student",
+]);
 
-export const studentCollectionParticipation = pgTable(
-  "student_collection_participation",
+export const collectionParticipations = pgTable(
+  "collection_participations",
   {
-    studentId: integer("student_id")
+    userId: integer("user_id")
       .notNull()
       .references(() => users.id),
     collectionId: integer("collection_id")
       .notNull()
       .references(() => collections.id),
+    type: participantTypeEnum("participantType").notNull(),
+    notifyOnActivityInsert: boolean("notify_on_activity_insert").default(true),
   },
   (table) => {
     return {
-      pk: primaryKey(table.collectionId, table.studentId),
+      pk: primaryKey({
+        columns: [table.collectionId, table.userId, table.type],
+      }),
     };
   }
 );
 
 // student output
-
 export const studentOutputStatusEnum = pgEnum(
   "studentOutputStatus",
   Object.values(OutputStatus || {}).filter((v) => isNaN(Number(v))) as [string]
 );
 
-export const studentOutputs = pgTable("student_output", {
+export const studentOutputs = pgTable("student_outputs", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
@@ -303,9 +209,7 @@ export const studentOutputs = pgTable("student_output", {
     .references(() => activityVersions.id),
 });
 
-// student answer
-
-export const studentAnswers = pgTable("student_answer", {
+export const studentAnswers = pgTable("student_answers", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   questionId: integer("question_id")
@@ -315,4 +219,22 @@ export const studentAnswers = pgTable("student_answer", {
   studentOutputId: integer("student_output_id")
     .references(() => studentOutputs.id)
     .notNull(),
+});
+
+export const notificationTypeEnum = pgEnum(
+  "notificationType",
+  Object.values(OutputStatus || {}).filter((v) => isNaN(Number(v))) as [string]
+);
+
+export const notifications = pgTable("notifications", {
+  id: integer("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  userId: integer("user_id")
+    .references(() => users.id)
+    .notNull(),
+  isNew: boolean("is_new").default(true).notNull(),
+  type: notificationTypeEnum("notificationType").notNull(),
+  message: varchar("message", { length: 250 }),
+  details: varchar("details", { length: 500 }),
 });

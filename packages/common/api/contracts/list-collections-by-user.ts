@@ -1,3 +1,5 @@
+import { PaginatedParamsDTO } from "@edu-platform/common";
+
 type ResponseBody = {
   isOwnerOf: {
     collections: {
@@ -19,7 +21,7 @@ type ResponseBody = {
   };
   participatesIn: {}[];
 };
-type Query = { byOwnership: boolean };
+type Query = { byOwnership: boolean } & PaginatedParamsDTO;
 
 export {
   ResponseBody as ListCollectionsByUserResponseBody,

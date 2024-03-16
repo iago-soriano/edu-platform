@@ -12,8 +12,8 @@ import {
 import {
   GetActivityVersionResponseBody,
   ListActivityVersionsResponseBody,
+  PaginatedParamsDTO,
 } from "@edu-platform/common";
-import { PaginatedParams } from ".";
 
 export interface IActivities {
   insert: (
@@ -64,7 +64,7 @@ export interface IVersionsRead {
     args: {
       userId: number;
       collectionId?: number;
-    } & PaginatedParams
+    } & PaginatedParamsDTO
   ) => Promise<ListActivityVersionsResponseBody>;
   listByCollectionParticipation: (
     userId: number,

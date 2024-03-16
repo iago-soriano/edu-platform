@@ -1,7 +1,7 @@
 type RequestBody = {
   newOutputStatus: string;
 };
-type ResponseBody = {};
+type ResponseBody = { statusWasChanged: boolean };
 type Params = {
   studentOutputId: string;
 };

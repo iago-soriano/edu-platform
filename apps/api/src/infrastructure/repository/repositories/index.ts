@@ -5,3 +5,4 @@ export * from "./collections";
 export * from "./student-outputs";
 export * from "./student-answers";
 export * from "./collection-participation";
+export * from "./notifications";

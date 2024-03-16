@@ -40,7 +40,8 @@ class UseCase implements IInsertUserInCollectionUseCase {
 
     await this.collectionParticipationsRepository.insertStudent(
       student.id,
-      collectionId
+      collectionId,
+      "Follower"
     );
   }
 }

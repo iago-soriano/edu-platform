@@ -29,3 +29,4 @@ export * from "./student-output/new";
 export * from "./collection/get-by-id";
 export * from "./collection-participation/list";
 export * from "./studentOutput-answer/new";
+export * from "./notification/update";

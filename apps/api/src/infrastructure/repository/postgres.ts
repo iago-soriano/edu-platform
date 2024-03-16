@@ -8,7 +8,7 @@ import * as schema from "./schema";
 
 class LogWriter implements DrizzleLogWriter {
   write(message: string) {
-    console.log(message);
+    // console.log(message);
   }
 }
 

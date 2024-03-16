@@ -1,5 +1,11 @@
 import { StudentOutput } from "@domain";
-import { db, studentOutputs } from "@infrastructure";
+import {
+  activities,
+  activityVersions,
+  collections,
+  db,
+  studentOutputs,
+} from "@infrastructure";
 import { IStudentOutputsRepository } from "@interfaces";
 import { StudentOutputDtoMapper } from "../dto-mappers";
 import { eq } from "drizzle-orm";
@@ -26,5 +32,14 @@ export class StudentOutputsRepository implements IStudentOutputsRepository {
     )[0];
 
     return StudentOutputDtoMapper.mapFromSelectDto(dto);
+  }
+
+  async update(studentOutput: StudentOutput) {
+    if (!studentOutput.id) throw new Error("There must be an id to update");
+
+    await db
+      .update(studentOutputs)
+      .set(StudentOutputDtoMapper.mapToInsertDto(studentOutput))
+      .where(eq(studentOutputs.id, studentOutput.id));
   }
 }

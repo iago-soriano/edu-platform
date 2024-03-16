@@ -73,6 +73,9 @@ import SaveAnswerUseCase, {
 import UpdateStudentOutputUseCase, {
   IUpdateStudentOutputUseCase,
 } from "./studentOutput/update";
+import UpdateNotificationUseCase, {
+  IUpdateNotificationUseCase,
+} from "./notification/update";
 
 export {
   GetCollectionUseCase,
@@ -129,4 +132,6 @@ export {
   ISaveAnswerUseCase,
   UpdateStudentOutputUseCase,
   IUpdateStudentOutputUseCase,
+  UpdateNotificationUseCase,
+  IUpdateNotificationUseCase,
 };

@@ -1,36 +1,31 @@
-import {
-  VersionResponseDTO,
-  CollectionResponseDTO,
-  VersionStatus,
-} from "../../dto";
+import { PaginatedParamsDTO } from "@edu-platform/common";
 
 type RequestBody = void;
+
+type ActivityVersionDto = {
+  id: number;
+  description: string | null;
+  title: string | null;
+  updatedAt: Date;
+  version: number;
+} | null;
 type ResponseBody = {
-  activities: // {
-  //   collectionName: string | null;
-  //   activityId: unknown;
-  //   draftVersionId: unknown;
-  //   publishedTitle: string | null;
-  //   archivedVersionsCount: number;
-  //   totalActivitiesCount: number;
-  // }
-  unknown[];
+  activities: {
+    collectionName: string | null;
+    activityId: number;
+    draft: ActivityVersionDto;
+    published: ActivityVersionDto;
+    archivedVersionsCount: number;
+  }[];
   pagination: {
     totalRowCount: number;
   };
 };
-// {
-//   [collectionId: number]: {
-//     activities: {
-//       activityId: number;
-//       [VersionStatus.Draft]?: VersionResponseDTO;
-//       [VersionStatus.Published]?: VersionResponseDTO;
-//       [VersionStatus.Archived]?: VersionResponseDTO[];
-//     }[];
-//     collection: CollectionResponseDTO;
-//   };
-// };
-type Query = { byOwnership: boolean; collectionId?: string };
+
+type Query = {
+  byOwnership: boolean;
+  collectionId?: string;
+} & PaginatedParamsDTO;
 
 export {
   RequestBody as ListActivityVersionsRequestBody,

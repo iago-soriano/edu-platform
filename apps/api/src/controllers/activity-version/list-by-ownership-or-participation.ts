@@ -9,9 +9,9 @@ import {
   ListActivityVersionsQuery,
   ListActivityVersionsResponseBody,
   ListActivityVersionsRequestBody,
-  parseVersionStatus,
 } from "@edu-platform/common";
 import { parseNumberId } from "@infrastructure";
+import { parseToPaginatedParamsDTO } from "@edu-platform/common/dto/paginated-params";
 
 type Request = TypedRequest<
   {},
@@ -33,14 +33,9 @@ export class ListActivityVersionsController
     const {
       user: { id: userId },
     } = req;
-    const { collectionId, pageSize, page } = parseNumberId(req.query, [
-      "collectionId",
-      "pageSize",
-      "page",
-    ]);
+    const { collectionId } = parseNumberId(req.query, ["collectionId"]);
 
-    if (pageSize <= 0 || page < 0)
-      throw new Error("Please provide valid pagination parameters");
+    const { page, pageSize } = parseToPaginatedParamsDTO(req.query);
 
     let result: ListActivityVersionsResponseBody = {
       activities: [],

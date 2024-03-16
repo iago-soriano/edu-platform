@@ -86,7 +86,7 @@ export class ApiClient implements IApiClient {
     ) as Promise<UpdateVersionMetadataResponseBody>;
   }
   public listActivityVersions(query: ListActivityVersionsQuery) {
-    return this._fetcher.get("activity", {
+    return this._fetcher.get("activities", {
       byOwnership: query.byOwnership.toString(),
       collectionId: query.collectionId || "",
     }) as Promise<ListActivityVersionsResponseBody>;
@@ -142,10 +142,14 @@ export class ApiClient implements IApiClient {
     ) as Promise<RemoveUserFromCollectionResponseBody>;
   }
   public listCollections(
-    { byOwnership }: ListCollectionsByUserQuery = { byOwnership: false }
+    { byOwnership, page, pageSize }: ListCollectionsByUserQuery = {
+      byOwnership: false,
+      page: 0,
+      pageSize: 10,
+    }
   ) {
     return this._fetcher.get(
-      `collection?byOwnership=${byOwnership}`
+      `collection?byOwnership=${byOwnership}&page=${page}&pageSize=${pageSize}`
     ) as Promise<ListCollectionsByUserResponseBody>;
   }
 

@@ -41,6 +41,14 @@ export class CollectionNotFound extends CustomError {
   }
 }
 
+export class CantCreateOutputOnPublicCollection extends CustomError {
+  HTTPstatusCode = 400;
+  static message = "Coleção não encontrada";
+  constructor() {
+    super(CantCreateOutputOnPublicCollection.message);
+  }
+}
+
 export class OutputNotFound extends CustomError {
   HTTPstatusCode = 400;
   static message = "Output não encontrado";

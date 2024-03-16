@@ -6,8 +6,4 @@ export * from "./collections";
 export * from "./collection-participation";
 export * from "./student-outputs";
 export * from "./student-answers";
-
-export interface PaginatedParams {
-  page: number;
-  pageSize: number;
-}
+export * from "./notifications";

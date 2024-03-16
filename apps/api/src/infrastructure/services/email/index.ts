@@ -2,6 +2,7 @@ import { IEmailService } from "@interfaces";
 import {
   VerifyAccountEmailTemplate,
   ForgotPasswordEmailTemplate,
+  NewStudentOutputEmailTemplate,
 } from "./templates";
 import nodemailer from "nodemailer";
 import * as EmailValidator from "email-validator";
@@ -45,6 +46,15 @@ export class EmailService implements IEmailService {
       to: destination, // list of receivers
       subject: "Verifique sua conta", // Subject line
       html: VerifyAccountEmailTemplate({ url }), // html body
+    });
+  }
+
+  async sendStudentOutputCompletedEmail({ destination, url }: SendEmailArgs) {
+    const resp = await this._transporter.sendMail({
+      from: this.from,
+      to: destination, // list of receivers
+      subject: "New student output", // Subject line
+      html: NewStudentOutputEmailTemplate({ url }), // html body
     });
   }
 }

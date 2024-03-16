@@ -2,12 +2,19 @@ import { Collection, User } from "@domain";
 import { UserSelectDTO } from "./dtos";
 
 export interface ICollectionParticipationsRepository {
-  insertStudent: (studentId: number, collectionId: number) => Promise<void>;
+  insertStudent: (
+    studentId: number,
+    collectionId: number,
+    type: "Follower" | "Student"
+  ) => Promise<void>;
   removeStudent: (studentId: number, collectionId: number) => Promise<void>;
   findStudentCollectionRelation: (
     studentId: number,
     collectionId: number
-  ) => Promise<{ studentId: number; collectionId: number } | undefined>;
+  ) => Promise<
+    | { userId: number; collectionId: number; type: "Follower" | "Student" }
+    | undefined
+  >;
 }
 
 export interface ICollectionParticipationsReadRepository {
