@@ -1,16 +1,12 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components";
 import { Router } from "@infrastructure";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useRouter, redirect, usePathname } from "next/navigation";
 
 export default function DashboardLayout({ children }) {
   const pathName = usePathname();
   const router = useRouter();
 
-  // TODO: some redirecting
-  //if(pathName?.split("/").pop()) {
-  //redirect(`${Router.teacherHome}/overview`);
-  //}
   return (
     <div className="p-3">
       <Tabs

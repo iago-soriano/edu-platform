@@ -1,7 +1,6 @@
 import { Modal, Input, Icons, successToast } from "@components";
 import { useState } from "react";
 import { useInsertUserInCollectionMutation } from "@endpoints";
-import { StudentListing } from "./student-listing";
 
 interface InsertStudentModalProps {
   collectionId: number;
@@ -41,7 +40,6 @@ export const InsertStudentModal = ({
         </div>
       </div>
       <br />
-      <StudentListing collectionId={collectionId} />
     </Modal>
   );
 };

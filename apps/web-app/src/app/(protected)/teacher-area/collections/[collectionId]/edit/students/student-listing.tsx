@@ -8,9 +8,7 @@ interface StudentListingProps {
   collectionId: number;
 }
 export const StudentListing = ({ collectionId }: StudentListingProps) => {
-  const removeMutation = useRemoveUserFromCollectionMutation({
-    collectionId,
-  });
+  const removeMutation = useRemoveUserFromCollectionMutation({});
   const studentsQuery = useGetStudentsOfCollectionQuery({ collectionId });
 
   return (

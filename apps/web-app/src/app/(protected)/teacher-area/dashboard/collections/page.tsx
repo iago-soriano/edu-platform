@@ -18,6 +18,8 @@ import { Router } from "@infrastructure";
 import { ConfirmCollectionModal } from "./confirm-collection-modal";
 import { CollectionsTable } from "./collections-table";
 
+const pageSize = 10;
+
 const Page = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -25,11 +27,12 @@ const Page = () => {
 
   const [openConfirmCollectionModal, setOpenConfirmCollectionModal] =
     useState(false);
-  const collectionsQuery = useListCollectionsQuery();
+  const [page, setPage] = useState(0);
+  const collectionsQuery = useListCollectionsQuery({ page, pageSize });
 
   const createCollectionMutation = useSaveCollectionMutation({
     onSuccess: ({ collectionId }) => {
-      router.push(Router.editCollection({ collectionId }));
+      router.push(Router.editCollection(collectionId));
     },
   });
 
@@ -37,7 +40,7 @@ const Page = () => {
     <div className="min-h-[70vh]">
       <div>
         <LoadingErrorData
-          loading={collectionsQuery.isPending}
+          loading={collectionsQuery.isPending && !collectionsQuery?.data}
           error={collectionsQuery.error}
           hasData={!!collectionsQuery?.data}
           noData={<h6 className="text-center">Não há coleções para exibir</h6>}
@@ -46,10 +49,8 @@ const Page = () => {
               <div className="my-3">
                 <OverviewCard>
                   <OverviewCardHeader>
-                    {
-                      collectionsQuery.data?.isOwnerOf?.pagination
-                        ?.totalRowCount
-                    }{" "}
+                    {collectionsQuery.data?.isOwnerOf?.pagination
+                      ?.totalRowCount || "0"}{" "}
                     Collections
                   </OverviewCardHeader>
                   {/* <OverviewCardBody>
@@ -90,6 +91,14 @@ const Page = () => {
                 </div>
                 <CollectionsTable
                   collections={collectionsQuery.data?.isOwnerOf?.collections}
+                  pagination={{
+                    totalRowCount:
+                      collectionsQuery.data?.isOwnerOf?.pagination
+                        ?.totalRowCount || 0,
+                    pageSize,
+                    currentPage: page,
+                    setCurrentPage: setPage,
+                  }}
                 />
               </Frame>
             </div>
