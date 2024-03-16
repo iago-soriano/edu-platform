@@ -46,16 +46,20 @@ export const useUpdateVersionMetadataMutation = (
     ...args,
   });
 
+type ListQueryParams = Parameters<ApiClient["listActivityVersions"]>[0];
 type ReturnList = Awaited<ReturnType<ApiClient["listActivityVersions"]>>;
 export type ListQueryReturn = UseQueryResult<ReturnList, ServerError>;
 
-export const useListActivityVersionsQuery = ({ byOwnership }) => {
+export const useListActivityVersionsQuery = ({
+  byOwnership,
+  collectionId,
+}: ListQueryParams) => {
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
   return useQuery<ReturnList, ServerError>({
     queryKey: ["versions"],
-    queryFn: () => client.listActivityVersions({ byOwnership }),
+    queryFn: () => client.listActivityVersions({ byOwnership, collectionId }),
   });
 };
 

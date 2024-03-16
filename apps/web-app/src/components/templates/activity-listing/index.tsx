@@ -12,11 +12,11 @@ import {
 import { useRouter } from "next/navigation";
 import { Router } from "@infrastructure";
 
-export function ActivityListing({ collectionId, showActive }) {
+export function ActivityListingOwnership({ collectionId, showActive }) {
   const router = useRouter();
 
   const query = useListActivityVersionsQuery({
-    // collectionId,
+    collectionId,
     byOwnership: true,
   });
 
@@ -32,90 +32,73 @@ export function ActivityListing({ collectionId, showActive }) {
   });
 
   const renderContent = (queryData: typeof query.data) => {
-    if (!queryData) return [];
-
-    const content = [];
-
-    if (!showActive) {
-      for (const collId in queryData) {
-        const { activities, collection } = queryData[collId];
-
-        content.push(
-          activities
-            .filter((act) => act.Archived?.length)
-            .map((act) => ({
-              versions: act.Archived,
-              activityId: act.activityId,
-              currentTitle: act.Published?.title,
-            }))
-            .map(({ versions, activityId, currentTitle }) => (
-              <ArchivedGroupActivityCard
-                key={activityId}
-                currentTitle={currentTitle || "Não há versão publicada"}
-                versions={versions}
-              />
-            ))
+    // if (!queryData) return [];
+    return queryData?.activities?.map(
+      ({
+        collectionName,
+        activityId,
+        published,
+        draft,
+        archivedVersionsCount,
+      }) => {
+        if (published) {
+          return (
+            <PublishedVersionActivityCard
+              key={activityId}
+              version={published}
+              hasDraft={!!draft}
+              archivedCount={archivedVersionsCount}
+              collection={collectionName}
+              onClick={() => {
+                router.push(
+                  Router.previewActivity({
+                    activityId: activityId,
+                    versionId: published.id,
+                  })
+                );
+              }}
+              onClickSeeDraft={() =>
+                router.push(
+                  Router.editActivity({
+                    activityId: activityId,
+                    versionId: draft?.id,
+                  })
+                )
+              }
+              onClickCreateDraft={() =>
+                newDraftMutation.mutate({
+                  activityId,
+                })
+              }
+            />
+          );
+        }
+        if (draft) {
+          return (
+            <DraftVersionActivityCard
+              key={activityId}
+              collection={collectionId ? "" : collectionName}
+              version={draft}
+              onClick={() =>
+                router.push(
+                  Router.editActivity({
+                    activityId: activityId,
+                    versionId: draft.id,
+                  })
+                )
+              }
+            />
+          );
+        }
+        return (
+          <ArchivedGroupActivityCard
+            key={activityId}
+            currentTitle={"Não há versão publicada"}
+            archivedCount={archivedVersionsCount}
+          />
         );
       }
-    } else if (showActive) {
-      for (const collId in queryData) {
-        if (collectionId && collId != collectionId) continue;
-
-        const { activities, collection } = queryData[collId];
-        activities.map(({ activityId, Published, Draft, Archived }) => {
-          if (Published)
-            content.push(
-              <PublishedVersionActivityCard
-                key={activityId}
-                version={Published}
-                hasDraft={!!Draft}
-                archivedCount={Archived?.length}
-                collection={collection.name}
-                onClick={() => {
-                  router.push(
-                    Router.previewActivity({
-                      activityId: activityId,
-                      versionId: Published.id,
-                    })
-                  );
-                }}
-                onClickSeeDraft={() =>
-                  router.push(
-                    Router.editActivity({
-                      activityId: activityId,
-                      versionId: Draft.id,
-                    })
-                  )
-                }
-                onClickCreateDraft={() =>
-                  newDraftMutation.mutate({
-                    activityId,
-                  })
-                }
-              />
-            );
-          else if (!Published && Draft) {
-            content.push(
-              <DraftVersionActivityCard
-                key={activityId}
-                collection={collectionId ? "" : collection.name}
-                version={Draft}
-                onClick={() =>
-                  router.push(
-                    Router.editActivity({
-                      activityId: activityId,
-                      versionId: Draft.id,
-                    })
-                  )
-                }
-              />
-            );
-          }
-        });
-      }
-    }
-
-    return content;
+    );
   };
 
   return (

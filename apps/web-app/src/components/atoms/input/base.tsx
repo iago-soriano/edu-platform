@@ -1,6 +1,7 @@
 import React from "react";
 import { Tooltip, Icons } from "@components";
 import { IInputProps } from "./interface";
+import { twMerge } from "tailwind-merge";
 
 export function Input(args: IInputProps) {
   const {
@@ -13,6 +14,7 @@ export function Input(args: IInputProps) {
     instructions,
     tooltipExplanation,
     hidden,
+    className,
     ...rest
   } = args;
   const mandatoryTooltip = (
@@ -43,7 +45,10 @@ export function Input(args: IInputProps) {
         </div>
       </span>
       <input
-        className="block p-4 rounded w-full bg-surface3 placeholder:opacity-80 placeholder:text-text2"
+        className={twMerge(
+          "block p-4 rounded w-full bg-surface3 placeholder:opacity-80 placeholder:text-text2",
+          className
+        )}
         {...(register && register(name))}
         {...rest}
         placeholder={placeholder}

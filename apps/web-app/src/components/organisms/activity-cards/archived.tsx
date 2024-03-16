@@ -2,16 +2,18 @@ import { VersionResponseDTO } from "@edu-platform/common";
 
 export const ArchivedGroupActivityCard = ({
   currentTitle,
-  versions,
+  archivedCount,
 }: {
   currentTitle: string;
-  versions: VersionResponseDTO[];
+  // versions: VersionResponseDTO[];
+  archivedCount: number;
 }) => {
   return (
     <OutlinedContainer legend={currentTitle}>
-      {versions.map((dto) => (
+      {archivedCount}
+      {/* {versions.map((dto) => (
         <div>{JSON.stringify(dto)}</div>
-      ))}
+      ))} */}
     </OutlinedContainer>
   );
 };

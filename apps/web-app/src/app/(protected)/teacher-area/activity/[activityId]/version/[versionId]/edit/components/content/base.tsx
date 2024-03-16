@@ -121,7 +121,10 @@ export const BaseContent = ({
       <div className="p-1 lg:col-start-10 col-start-16 col-span-1 flex flex-row justify-center items-start">
         <ButtonWithDropdown>
           <ButtonWithDropdown.Text className="">
-            <Icons.THREE_DOTS className="hover:shadow-lg p-2" size={36} />
+            <Icons.THREE_DOTS_VERTICAL
+              className="hover:shadow-lg p-2"
+              size={36}
+            />
           </ButtonWithDropdown.Text>
           <ButtonWithDropdown.DrawerItem
             className="flex items-center"

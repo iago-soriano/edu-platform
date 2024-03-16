@@ -2,6 +2,7 @@ import { Icons } from "@components";
 import { AbstractNavbarButton, NavbarButtonProps } from "./common";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
+import { Router } from "@infrastructure";
 
 export const NavButton = ({
   highlighted,
@@ -44,7 +45,7 @@ export const TeacherAreaButton = ({
   isHighlighted,
 }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/teacher-area?activeTab=ActiveActivities"
+    path={Router.teacherHome}
     label="Área do Professor"
     currentPath={currentPath}
     Component={Component}
@@ -58,7 +59,7 @@ export const StudentAreaButton = ({
   isHighlighted,
 }: NavbarButtonProps) => (
   <AbstractNavbarButton
-    path="/student-area/activities"
+    path={Router.studentHome}
     label="Área do Estudante"
     currentPath={currentPath}
     Component={Component}

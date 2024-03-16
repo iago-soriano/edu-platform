@@ -6,3 +6,4 @@ export * from "./with-dropdown";
 export * from "./new-item";
 export * from "./panel";
 export * from "./publish-remove";
+export * from "./variants";

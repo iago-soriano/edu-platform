@@ -17,11 +17,11 @@ export default function DashboardLayout({ children }) {
         }}
       >
         <TabsList className="grid w-full m-0 lg:w-[60%] lg:mr-auto grid-cols-3">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="collections">Collections</TabsTrigger>
           <TabsTrigger value="activities">Activities</TabsTrigger>
           <TabsTrigger value="student-outputs">Student Outputs</TabsTrigger>
         </TabsList>
-        <TabsContent value="overview">{children}</TabsContent>
+        <TabsContent value="collections">{children}</TabsContent>
         <TabsContent value="activities">{children}</TabsContent>
         <TabsContent value="student-outputs">{children}</TabsContent>
       </Tabs>

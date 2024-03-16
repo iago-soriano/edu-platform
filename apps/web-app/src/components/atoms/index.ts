@@ -5,6 +5,7 @@ export * from "./fixed-alerts";
 export * from "./frame";
 export * from "./icons";
 export * from "./input";
+export * from "./pagination";
 export * from "./separator";
 export * from "./spinner";
 export * from "./tabs";

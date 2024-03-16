@@ -6,6 +6,7 @@ import {
   useQueryClient,
   UseMutationResult,
   UseQueryResult,
+  keepPreviousData,
 } from "@tanstack/react-query";
 import { MutationArgsType } from "../infrastructure/api/types";
 import { errorToast, successToast } from "@components";
@@ -26,7 +27,7 @@ export const useSaveCollectionMutation = (
 ) =>
   useBaseMutation<RequestSaveCollection, ReturnSaveCollection>({
     mutationFn: (client, args) => client.saveCollection(args),
-    invalidateQueries: ["collection"],
+    invalidateQueries: ["collection", "listCollections"],
     ...args,
   });
 
@@ -62,13 +63,15 @@ export type CollectionListResponse = Awaited<
   ReturnType<ApiClient["listCollections"]>
 >;
 
-export const useListCollectionsQuery = () => {
+export const useListCollectionsQuery = ({ pageSize, page }) => {
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
   return useQuery<CollectionListResponse, ServerError>({
-    queryKey: ["collections"],
-    queryFn: () => client.listCollections({ byOwnership: true }),
+    queryKey: ["collections", page],
+    placeholderData: keepPreviousData,
+    queryFn: () =>
+      client.listCollections({ byOwnership: true, page, pageSize }),
   });
 };
 

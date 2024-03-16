@@ -6,14 +6,7 @@ import {
   useListCollectionsQuery,
   useSaveCollectionMutation,
 } from "@endpoints";
-import {
-  Spinner,
-  Frame,
-  LoadingErrorData,
-  OverviewCard,
-  OverviewCardHeader,
-  OverviewCardBody,
-} from "@components";
+import { Spinner, Frame, LoadingErrorData, Icons, Button } from "@components";
 import { Router } from "@infrastructure";
 import { ConfirmCollectionModal } from "./confirm-collection-modal";
 import { CollectionsTable } from "./collections-table";
@@ -29,6 +22,7 @@ const Page = () => {
     useState(false);
   const [page, setPage] = useState(0);
   const collectionsQuery = useListCollectionsQuery({ page, pageSize });
+  const [isLoading, setIsLoading] = useState(false);
 
   const createCollectionMutation = useSaveCollectionMutation({
     onSuccess: ({ collectionId }) => {
@@ -46,49 +40,41 @@ const Page = () => {
           noData={<h6 className="text-center">Não há coleções para exibir</h6>}
           data={
             <div>
-              <div className="my-3">
-                <OverviewCard>
-                  <OverviewCardHeader>
-                    {collectionsQuery.data?.isOwnerOf?.pagination
-                      ?.totalRowCount || "0"}{" "}
-                    Collections
-                  </OverviewCardHeader>
-                  {/* <OverviewCardBody>
-                    {
-                      collectionsQuery.data?.isOwnerOf?.filter(
-                        (coll) => coll.isPrivate
-                      ).length
-                    }{" "}
-                    are private
-                  </OverviewCardBody>
-                  <OverviewCardBody>
-                    {
-                      collectionsQuery.data?.isOwnerOf?.filter(
-                        (coll) => !coll.isPrivate
-                      ).length
-                    }{" "}
-                    are not private
-                  </OverviewCardBody> */}
-                </OverviewCard>
+              <div className="flex justify-between p-4 w-[95%] mx-auto">
+                <div className="flex items-center">
+                  <span className="text-xl p-2">My Collections</span>
+                  <Icons.DOT />
+                  <span className="text-sm text-muted-foreground p-2">
+                    {collectionsQuery.data?.isOwnerOf?.collections?.filter(
+                      (coll) => coll.isPrivate
+                    ).length || "0"}{" "}
+                    private collections
+                  </span>
+                  <Icons.DOT />
+                  <span className="text-sm text-muted-foreground p-2">
+                    {collectionsQuery.data?.isOwnerOf?.collections?.filter(
+                      (coll) => !coll.isPrivate
+                    ).length || "0"}{" "}
+                    public collections
+                  </span>
+                </div>
+                <button onClick={() => setIsLoading((l) => !l)}>Loading</button>
+                <Button
+                  withIcon="PLUS"
+                  variant="action"
+                  size="lg"
+                  isLoading={createCollectionMutation.isPending || isLoading}
+
+                  // onClick={() =>
+                  //   createCollectionMutation.mutate({
+                  //     name: "My new Collection",
+                  //   })
+                  // }
+                >
+                  New Collection
+                </Button>
               </div>
               <Frame>
-                <div className="flex justify-between p-4 w-[95%] mx-auto">
-                  <h5>My Collections</h5>
-                  <button
-                    disabled={createCollectionMutation.isPending}
-                    onClick={() =>
-                      createCollectionMutation.mutate({ name: "Nova coleção" })
-                    }
-                    className="h-10 w-36 whitespace-nowrap bg-accent p-2 text-white rounded font-bold transition-opacity hover:opacity-80"
-                  >
-                    {createCollectionMutation.isPending ||
-                    createCollectionMutation.isSuccess ? (
-                      <Spinner />
-                    ) : (
-                      " + Nova coleção"
-                    )}
-                  </button>
-                </div>
                 <CollectionsTable
                   collections={collectionsQuery.data?.isOwnerOf?.collections}
                   pagination={{
