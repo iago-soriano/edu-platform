@@ -44,12 +44,7 @@ import {
 } from "./contracts";
 import { IHTTPClient } from "./interfaces";
 
-interface IApiClient {
-  createNewActivity: (
-    body: CreateNewActivityRequestBody
-  ) => Promise<CreateNewActivityResponseBody>;
-}
-export class ApiClient implements IApiClient {
+export class ApiClient {
   constructor(private _fetcher: IHTTPClient) {}
   public saveContent({
     activityId,
@@ -87,8 +82,7 @@ export class ApiClient implements IApiClient {
   }
   public listActivityVersions(query: ListActivityVersionsQuery) {
     return this._fetcher.get("activities", {
-      byOwnership: query.byOwnership.toString(),
-      collectionId: query.collectionId || "",
+      ...query,
     }) as Promise<ListActivityVersionsResponseBody>;
   }
   public deleteContent({ versionId, contentId }: DeleteContentParams) {

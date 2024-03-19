@@ -6,7 +6,7 @@ import {
 } from "@edu-platform/common/api";
 
 export const refreshToken = async (session: {
-  data: Session;
+  data: Session | null;
   update?: (data?: any) => Promise<Session | null>;
 }) => {
   const res: RefreshTokenResponseBody = await axios.post("/refresh-token", {
@@ -16,10 +16,12 @@ export const refreshToken = async (session: {
     await session.update({
       ...session.data,
       user: {
-        ...session.data.user,
+        ...session?.data?.user,
         ...res,
       },
     });
-  session.data.user.accessToken = res.accessToken;
-  session.data.user.refreshToken = res.refreshToken;
+  if (session?.data?.user?.accessToken && session?.data?.user?.refreshToken) {
+    session.data.user.accessToken = res.accessToken;
+    session.data.user.refreshToken = res.refreshToken;
+  }
 };

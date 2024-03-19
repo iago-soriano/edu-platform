@@ -11,16 +11,16 @@ import { Router } from "@infrastructure";
 import { ConfirmCollectionModal } from "./confirm-collection-modal";
 import { CollectionsTable } from "./collections-table";
 
-const pageSize = 10;
+const pageSize = 1;
 
 const Page = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathName = usePathname();
+  const page = Number(searchParams.get("page")) || 0;
 
   const [openConfirmCollectionModal, setOpenConfirmCollectionModal] =
     useState(false);
-  const [page, setPage] = useState(0);
   const collectionsQuery = useListCollectionsQuery({ page, pageSize });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -83,7 +83,13 @@ const Page = () => {
                         ?.totalRowCount || 0,
                     pageSize,
                     currentPage: page,
-                    setCurrentPage: setPage,
+                    setCurrentPage: (p) => {
+                      const params = new URLSearchParams(
+                        searchParams.toString()
+                      );
+                      params.set("page", p.toString());
+                      router.replace(pathName + "?" + params.toString());
+                    },
                   }}
                 />
               </Frame>

@@ -1,21 +1,10 @@
+type Query = { [k: string]: string | number | boolean };
 export interface IHTTPClient {
-  get: (url: string, query?: { [k: string]: string }) => Promise<any>;
-  patch: (
-    url: string,
-    body: unknown,
-    query?: { [k: string]: string }
-  ) => Promise<unknown>;
-  post: (
-    url: string,
-    body: unknown,
-    query?: { [k: string]: string }
-  ) => Promise<unknown>;
-  put: (
-    url: string,
-    body: unknown,
-    query?: { [k: string]: string }
-  ) => Promise<unknown>;
-  delete: (url: string, query?: { [k: string]: string }) => Promise<unknown>;
+  get: (url: string, query?: Query) => Promise<any>;
+  patch: (url: string, body: unknown, query?: Query) => Promise<unknown>;
+  post: (url: string, body: unknown, query?: Query) => Promise<unknown>;
+  put: (url: string, body: unknown, query?: Query) => Promise<unknown>;
+  delete: (url: string, query?: Query) => Promise<unknown>;
   setHeader: (header: string, value: string) => void;
 }
 

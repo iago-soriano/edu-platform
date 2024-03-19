@@ -9,6 +9,7 @@ import {
   ListActivityVersionsQuery,
   ListActivityVersionsResponseBody,
   ListActivityVersionsRequestBody,
+  parseListActivityVersionsQuery,
 } from "@edu-platform/common";
 import { parseNumberId } from "@infrastructure";
 import { parseToPaginatedParamsDTO } from "@edu-platform/common/dto/paginated-params";
@@ -33,16 +34,15 @@ export class ListActivityVersionsController
     const {
       user: { id: userId },
     } = req;
-    const { collectionId } = parseNumberId(req.query, ["collectionId"]);
-
-    const { page, pageSize } = parseToPaginatedParamsDTO(req.query);
+    const { collectionId, page, pageSize, byOwnership } =
+      parseListActivityVersionsQuery(req.query);
 
     let result: ListActivityVersionsResponseBody = {
-      activities: [],
-      pagination: { totalRowCount: 0 },
+      data: [],
+      pagination: { totalCount: 0 },
     };
 
-    if (req.query.byOwnership) {
+    if (byOwnership) {
       result =
         await this.activitiesReadRepository.Versions.listByCollectionOwnership({
           userId,

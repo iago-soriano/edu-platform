@@ -47,7 +47,7 @@ export const useChangePasswordRequestMutation = ({
     mutationFn: (args: ChangePasswordRequestRequestBody) =>
       axios.post.bind(axios)("change-password-request", args),
     onError,
-    onSuccess,
+    // onSuccess,
   });
 
 export const useChangePasswordMutation = (

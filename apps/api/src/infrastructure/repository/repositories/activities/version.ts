@@ -100,6 +100,7 @@ export class VersionsRead implements IVersionsRead {
           version: sql<number>`${draftVersions.version}`.as(
             "draftVersionVersion"
           ),
+          topics: sql<string>`${draftVersions.topics}`.as("draftVersionTopcs"),
         },
         published: {
           id: sql<number>`${publishedVersions.id}`.as("publishedVersionId"),
@@ -139,6 +140,7 @@ export class VersionsRead implements IVersionsRead {
         draftVersions.id,
         draftVersions.updatedAt,
         draftVersions.description,
+        draftVersions.topics,
         draftVersions.version,
         draftVersions.updatedAt,
 
@@ -160,7 +162,7 @@ export class VersionsRead implements IVersionsRead {
 
     const resp = await db
       .select({
-        collectionName: sq.collectionName,
+        collectionName: sq.collectionName || "",
         activityId: sq.activityId,
         draft: sq.draft,
         published: sq.published,
@@ -180,6 +182,7 @@ export class VersionsRead implements IVersionsRead {
         sq.draft.title,
         sq.draft.description,
         sq.draft.version,
+        sq.draft.topics,
         sq.published.id,
         sq.published.updatedAt,
         sq.published.title,
@@ -194,15 +197,22 @@ export class VersionsRead implements IVersionsRead {
       .offset(page * pageSize);
 
     return {
-      activities: resp.map((dto) => ({
-        collectionName: dto.collectionName,
+      data: resp.map((dto) => ({
+        collectionName: dto.collectionName || "",
         activityId: dto.activityId,
-        draft: dto.draft?.id ? dto.draft : null,
+        draft: dto.draft?.id
+          ? {
+              ...dto.draft,
+              title: dto.draft.title || "",
+              description: dto.draft.description || "",
+              topics: dto.draft.topics || "",
+            }
+          : null,
         published: dto.published?.id ? dto.published : null,
         archivedVersionsCount: dto.archivedVersionsCount,
       })),
       pagination: {
-        totalRowCount: resp[0]?.totalActivitiesCount,
+        totalCount: resp[0]?.totalActivitiesCount,
       },
     };
   }

@@ -16,7 +16,7 @@ export const passwordValidation = yup
 export const confirmPasswordValidation = yup
   .string()
   .oneOf(
-    [yup.ref("password"), null],
+    [yup.ref("password"), ""],
     "Senha e confirmação de senha devem ser iguais"
   );
 

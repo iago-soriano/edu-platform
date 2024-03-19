@@ -27,7 +27,7 @@ export const useSaveCollectionMutation = (
 ) =>
   useBaseMutation<RequestSaveCollection, ReturnSaveCollection>({
     mutationFn: (client, args) => client.saveCollection(args),
-    invalidateQueries: ["collection", "listCollections"],
+    invalidateQueries: ["collection", "collections"],
     ...args,
   });
 
@@ -68,7 +68,7 @@ export const useListCollectionsQuery = ({ pageSize, page }) => {
   const client = new ApiClient(axios);
 
   return useQuery<CollectionListResponse, ServerError>({
-    queryKey: ["collections", page],
+    queryKey: ["collections", { page }],
     placeholderData: keepPreviousData,
     queryFn: () =>
       client.listCollections({ byOwnership: true, page, pageSize }),
@@ -87,6 +87,9 @@ export const useGetCollectionQuery = ({
   return useQuery<GetCollectionResponse, ServerError>({
     queryKey: ["collection"],
     queryFn: () => client.getCollection({ collectionId }),
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
   });
 };
 

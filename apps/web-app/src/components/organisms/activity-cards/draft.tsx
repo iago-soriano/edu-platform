@@ -17,7 +17,7 @@ export const DraftVersionActivityCard = ({
   onClick,
   collection,
 }: {
-  version: VersionResponseDTO;
+  version: Partial<VersionResponseDTO>;
   onClick: (args: any) => any;
   collection: string;
 }) => {

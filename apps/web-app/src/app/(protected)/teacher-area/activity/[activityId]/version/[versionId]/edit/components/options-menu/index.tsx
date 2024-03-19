@@ -20,7 +20,7 @@ import { Router } from "@infrastructure";
 const NewItemHeader = ({ children }) => <h5 className="p-2">{children}</h5>;
 
 interface OptionsMenuProps {
-  version: ReturnGetActivityVersion;
+  version?: ReturnGetActivityVersion;
   onClose: () => void;
   activityId: any;
   versionId: any;

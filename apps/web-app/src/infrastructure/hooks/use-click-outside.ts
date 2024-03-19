@@ -1,15 +1,15 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, RefObject } from "react";
 
 export function useClickOutside(callback) {
-  const callbackRef = useRef<(args: unknown) => unknown>(); // initialize mutable ref, which stores callback
-  const refs = new Set([]);
+  const callbackRef = useRef<(args: unknown) => unknown>(null); // initialize mutable ref, which stores callback
+  const refs = new Set<RefObject<(args: unknown) => unknown>>([]);
   const addRef = (ref) => {
     if (ref) refs.add(ref);
   };
 
   // update cb on each render, so second useEffect has access to current value
   useEffect(() => {
-    callbackRef.current = callback;
+    if (callbackRef.current != null) callbackRef.current = callback; // TODO wft?
   });
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export function useClickOutside(callback) {
       if (
         callbackRef.current &&
         !Array.from(refs).reduce(
-          (acc, curr) => curr.contains(e.target) || acc,
+          (acc, curr) => curr.contains(e.target) || acc, // TODO wft2
           false
         )
       ) {

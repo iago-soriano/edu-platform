@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { errorToast } from "@components";
 
-interface IForm {
+interface IForm extends React.ButtonHTMLAttributes<HTMLFormElement> {
   defaultValues?: {
     [key: string]: string;
   };
@@ -19,6 +19,7 @@ export function Form({
   onSubmit,
   schema,
   error,
+  ...rest
 }: IForm) {
   const defaults = defaultValues || {};
   const {
@@ -33,6 +34,7 @@ export function Form({
 
   return (
     <form
+      {...rest}
       onSubmit={handleSubmit(onSubmit, () =>
         errorToast("Favor inserir valores válidos")
       )}

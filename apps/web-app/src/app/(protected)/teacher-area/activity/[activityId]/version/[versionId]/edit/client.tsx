@@ -11,7 +11,7 @@ const Page = ({ params: { activityId, versionId } }) => {
   const [showAuxHeader, setShowAuxHeader] = useState(false);
   const [openOptionsMenu, setOpenOptionsMenu] = useState(false);
 
-  const scrollRef = useRef<HTMLDivElement>();
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // TODO: make this work
   // const scrollToBottom = useCallback(() => {
@@ -25,7 +25,7 @@ const Page = ({ params: { activityId, versionId } }) => {
   useEffect(() => {
     const setSticky = () => {
       const el = document.getElementById("activity-header-input");
-      if (window.scrollY > el.offsetTop + el.offsetHeight) {
+      if (window.scrollY > (el?.offsetTop || 0) + (el?.offsetHeight || 0)) {
         setShowAuxHeader(true);
       } else {
         setShowAuxHeader(false);
@@ -67,7 +67,7 @@ const Page = ({ params: { activityId, versionId } }) => {
                   />
                 );
               } else if (!element.content && element.question) {
-                return <QuestionContainer key={`q-${element.content.id}`} />;
+                return <QuestionContainer key={`q-${element?.question?.id}`} />;
               }
               return <h1>What is this</h1>;
             })}

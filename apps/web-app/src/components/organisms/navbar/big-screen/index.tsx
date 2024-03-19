@@ -74,7 +74,7 @@ export const BigScreenNavbar = ({
           <li>
             <Logo />
           </li>
-          <div className="flex flex-row justify-center">
+          <div className="flex flex-row w-full justify-start">
             {/* {isAuthenticated ? ( */}
             <li>
               <HomeButton
@@ -97,25 +97,6 @@ export const BigScreenNavbar = ({
                 Component={Button}
               />
             </li>
-            {/* <li>
-              <CollectionsButton
-                isHighlighted={(cp) => cp.startsWith("/collections")}
-                currentPath={currentPath}
-                Component={Button}
-              />
-            </li> */}
-            {/* ) : (
-              <li>
-                <HomeButton currentPath={currentPath} Component={Button} />
-              </li>
-            )} */}
-            {/* <li>
-              <StudentOutputsButton
-                currentPath={currentPath}
-                Component={Button}
-              />
-            </li> */}
-            {/* <NewActivityButton currentPath={currentPath} Component={Button} /> */}
           </div>
           <div className="flex">
             {modeToggle}

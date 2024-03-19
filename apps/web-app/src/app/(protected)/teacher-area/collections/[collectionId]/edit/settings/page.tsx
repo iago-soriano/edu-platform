@@ -5,7 +5,17 @@ import {
   useGetCollectionQuery,
   useCreateNewActivityMutation,
 } from "@endpoints";
-import { Form, Input, FormButton, Toggle } from "@components";
+import {
+  Form,
+  Input,
+  FormButton,
+  Toggle,
+  Tooltip,
+  Button,
+  RadioButton,
+  RadioGroup,
+  successToast,
+} from "@components";
 
 const Page = ({ params: { collectionId: strId } }) => {
   const collectionId = Number(strId);
@@ -33,11 +43,16 @@ const Page = ({ params: { collectionId: strId } }) => {
       });
   }, [collectionQuery?.data]);
 
-  const saveCollectionMutation = useSaveCollectionMutation({});
-
+  const saveCollectionMutation = useSaveCollectionMutation({
+    onSuccess: () => {
+      successToast("Collection saved successfully!");
+      // collectionQuery.refetch();
+    },
+  });
   return (
     <div>
       <Form
+        className="flex flex-col md:items-start items-center"
         onSubmit={() =>
           saveCollectionMutation.mutate({
             id: collectionId,
@@ -50,37 +65,89 @@ const Page = ({ params: { collectionId: strId } }) => {
       >
         <Input
           name="name"
-          className=""
+          placeholder="The name of this collection"
+          className="lg:w-[45%] md:w-[60%] w-[95%]"
           value={collection.name}
           inputLabel={{ text: "Name", mandatory: true }}
+          onChange={(e) => {
+            setCollection((coll) => ({
+              ...coll,
+              name: (e.target as any).value,
+            }));
+          }}
         />
         <Input
           name="description"
           placeholder="An optional text that describes this collection"
-          className="w-[50%]"
+          className="lg:w-[50%] md:w-[70%] w-[95%]"
           inputLabel={{ text: "Description", mandatory: false }}
           value={collection.description}
-        />
-        <Toggle
-          label="Coleção privada"
-          onChange={(e) => setCollection((coll) => ({ ...coll, isPrivate: e }))}
-          checked={collectionQuery?.data?.isPrivate || false}
-        />
-        <Toggle
-          label="Notificações por e-mail"
-          onChange={(e) =>
+          onChange={(e) => {
             setCollection((coll) => ({
               ...coll,
-              notifyOwnerOnStudentOutput: e,
-            }))
-          }
-          checked={collectionQuery?.data?.notifyOwnerOnStudentOutput || false}
+              description: (e.target as any).value,
+            }));
+          }}
         />
-        <FormButton
-          label="Enviar"
-          loading={saveCollectionMutation.isPending}
-          disabled={saveCollectionMutation.isSuccess}
-        />
+        <label className="my-3">
+          <span className="text-lg">Privacy</span>
+          <RadioGroup
+            value={collection.isPrivate}
+            onChange={(v) => {
+              const isPrivate = v.target.value === "true";
+              setCollection((coll) => ({
+                ...coll,
+                isPrivate,
+                notifyOwnerOnStudentOutput: isPrivate
+                  ? coll.notifyOwnerOnStudentOutput
+                  : false,
+              }));
+            }}
+            options={[
+              {
+                text: "Private",
+                subText: "Only students you chose can see new activities",
+                value: true,
+              },
+              {
+                text: "Public",
+                subText: "Collection has followers instead of students",
+                value: false,
+              },
+            ]}
+          />
+        </label>
+        <div className="my-5">
+          {collection?.isPrivate ? (
+            <label className="flex flex-row items-center min-h-11">
+              <Toggle
+                onChange={(e) =>
+                  setCollection((coll) => ({
+                    ...coll,
+                    notifyOwnerOnStudentOutput: e,
+                  }))
+                }
+                checked={collection?.notifyOwnerOnStudentOutput || false}
+              />
+              <span className="text-lg p-2">E-mail Notifications</span>
+              <span className="text-muted-foreground pr-3">
+                Get notified whenever a student finishes an activity in this
+                collection
+              </span>
+            </label>
+          ) : (
+            <span className="text-muted-foreground h-11 flex items-center">
+              E-mail notifications do not apply for public collections
+            </span>
+          )}
+        </div>
+        <Button
+          size="lg"
+          isLoading={saveCollectionMutation.isPending}
+          // disabled={saveCollectionMutation.isSuccess}
+        >
+          Save
+        </Button>
       </Form>
     </div>
   );

@@ -44,10 +44,13 @@ export const useBaseMutation = <Req, Res>({
 
   return useMutation<Res, ServerError, Req>({
     mutationFn: (args) => mutationFn(client, args),
-    onSuccess: (d, v, c) => {
-      queryClient.invalidateQueries({
-        queryKey: invalidateQueries,
-      });
+    onSuccess: async (d, v, c) => {
+      console.log(invalidateQueries);
+      invalidateQueries?.map((ivalidate) =>
+        queryClient.invalidateQueries({
+          queryKey: [ivalidate],
+        })
+      );
       onSuccess && onSuccess(d, v, c);
     },
     onError: (e, v, c) => {

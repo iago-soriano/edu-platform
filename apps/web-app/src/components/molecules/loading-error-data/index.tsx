@@ -2,7 +2,7 @@ import { Spinner, ErrorCard } from "@components";
 import { ReactNode } from "react";
 
 interface ErrorLoadingDataProps {
-  error?: { message: string };
+  error?: { message: string } | null;
   loading?: boolean;
   data: any;
   noData?: ReactNode;

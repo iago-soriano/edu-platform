@@ -3,11 +3,11 @@ import { useAxiosAuth } from "@infrastructure";
 import {
   useMutation,
   useQuery,
-  useQueryClient,
+  useInfiniteQuery,
   UseQueryResult,
+  UseInfiniteQueryResult,
+  InfiniteData,
 } from "@tanstack/react-query";
-import { MutationArgsType } from "../infrastructure/api/types";
-import { errorToast } from "@components";
 import {
   useBaseMutation,
   // useBaseQuery,
@@ -46,20 +46,39 @@ export const useUpdateVersionMetadataMutation = (
     ...args,
   });
 
-type ListQueryParams = Parameters<ApiClient["listActivityVersions"]>[0];
-type ReturnList = Awaited<ReturnType<ApiClient["listActivityVersions"]>>;
-export type ListQueryReturn = UseQueryResult<ReturnList, ServerError>;
+type ListQueryParams = Parameters<ApiClient["listActivityVersions"]>[0]; //TODO: why are the properties in this all being treated as optional?
+type ReturnList = Awaited<
+  ReturnType<ApiClient["listActivityVersions"]>
+>["data"];
+export type ListQueryReturn = UseInfiniteQueryResult<ReturnList, ServerError>;
 
-export const useListActivityVersionsQuery = ({
-  byOwnership,
-  collectionId,
-}: ListQueryParams) => {
+export const useListActivityVersionsQuery = (
+  args: Partial<ListQueryParams>
+) => {
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
-  return useQuery<ReturnList, ServerError>({
+  return useInfiniteQuery({
+    getNextPageParam: (lastPage, allPages, lastPageParam) => lastPage.nextPage,
+    initialPageParam: 0,
     queryKey: ["versions"],
-    queryFn: () => client.listActivityVersions({ byOwnership, collectionId }),
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
+      const pageSize = args.pageSize || 10;
+      const data = await client.listActivityVersions({
+        byOwnership: args.byOwnership || false,
+        collectionId: args.collectionId,
+        pageSize,
+        page: pageParam,
+      });
+      return {
+        data: data.data,
+        currentPage: pageParam,
+        nextPage:
+          pageParam + pageSize < data.pagination.totalCount
+            ? pageParam + pageSize
+            : null,
+      };
+    },
   });
 };
 

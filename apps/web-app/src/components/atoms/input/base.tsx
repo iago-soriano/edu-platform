@@ -34,7 +34,7 @@ export function Input(args: IInputProps) {
 
   return (
     <label
-      className="block relative w-full"
+      className={twMerge("block relative w-fit", className)}
       style={{ display: hidden ? "none" : "block" }}
     >
       <span className="flex flex-row mb-4">
@@ -46,8 +46,7 @@ export function Input(args: IInputProps) {
       </span>
       <input
         className={twMerge(
-          "block p-4 rounded w-full bg-surface3 placeholder:opacity-80 placeholder:text-text2",
-          className
+          "block p-4 rounded w-full bg-surface3 placeholder:opacity-80 placeholder:text-text2"
         )}
         {...(register && register(name))}
         {...rest}

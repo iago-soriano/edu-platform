@@ -38,7 +38,7 @@ export class AxiosFetcher implements IHTTPClient {
             await refreshToken({ data: session });
             prevRequest.headers[
               "Authorization"
-            ] = `Bearer ${session.user.accessToken}`;
+            ] = `Bearer ${session?.user?.accessToken}`;
             return this._instance(prevRequest);
           }
         }
@@ -120,4 +120,4 @@ export class AxiosFetcher implements IHTTPClient {
   }
 }
 
-export const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST);
+export const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);

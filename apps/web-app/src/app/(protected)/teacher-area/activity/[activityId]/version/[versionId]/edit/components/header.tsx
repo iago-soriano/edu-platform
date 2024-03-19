@@ -44,7 +44,6 @@ export const ActivityHeaderInput = ({
       metadataMutation.mutate({
         activityId,
         versionId,
-        ...versionQuery.data,
         title: args.target.value,
       });
     }
@@ -67,7 +66,6 @@ export const ActivityHeaderInput = ({
       : currentTopic;
 
     metadataMutation.mutate({
-      ...versionQuery.data,
       topics: newTopics,
       activityId,
       versionId,
@@ -82,7 +80,6 @@ export const ActivityHeaderInput = ({
       .filter((_, i) => i !== index)
       .join(",");
     metadataMutation.mutate({
-      ...versionQuery.data,
       topics: newTopics,
       activityId,
       versionId,
@@ -94,7 +91,6 @@ export const ActivityHeaderInput = ({
       metadataMutation.mutate({
         activityId,
         versionId,
-        ...versionQuery.data,
         description: args.target.value,
       });
     }
@@ -106,7 +102,7 @@ export const ActivityHeaderInput = ({
       <p className="flex flex-start p-2 border-2 border-surface3 w-fit">
         Esta atividade pertence à coleção
         <span className="mx-1 font-bold">
-          {versionQuery.data?.collection?.name}
+          {versionQuery.data?.collectionName}
         </span>
       </p>
       <div

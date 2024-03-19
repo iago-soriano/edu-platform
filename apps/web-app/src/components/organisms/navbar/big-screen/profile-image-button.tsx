@@ -13,7 +13,7 @@ export const ProfileImageButton = forwardRef<
       ref={ref}
     >
       <Image
-        className="rounded-full border-2 border-accent"
+        className="rounded-full"
         alt={"Imagem de perfil"}
         src={
           user.image ||

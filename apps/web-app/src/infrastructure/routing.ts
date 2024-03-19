@@ -5,6 +5,6 @@ export const Router = {
     `/teacher-area/activity/${activityId}/version/${versionId}/preview`,
   editCollection: (collectionId) =>
     `/teacher-area/collections/${collectionId}/edit/settings`,
-  teacherHome: "/teacher-area/dashboard",
+  teacherHome: "/teacher-area/dashboard/collections?page=0",
   studentHome: "/student-area",
 };

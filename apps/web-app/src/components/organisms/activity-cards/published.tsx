@@ -19,7 +19,7 @@ export const PublishedVersionActivityCard = ({
   onClickSeeDraft,
   collection,
 }: {
-  version: VersionResponseDTO;
+  version: Partial<VersionResponseDTO>;
   hasDraft: boolean;
   archivedCount: number;
   onClick: () => any;

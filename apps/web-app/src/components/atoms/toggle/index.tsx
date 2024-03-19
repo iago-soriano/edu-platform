@@ -1,23 +1,29 @@
 "use client";
 import Switch from "react-switch";
 import { useColorTheme } from "@contexts";
+import React from "react";
+import { twMerge } from "tailwind-merge";
 
-export const Toggle = ({ checked, onChange, label }) => {
+interface IToggleProps {
+  checked: boolean;
+  onChange: any;
+}
+
+export const Toggle = (args: IToggleProps) => {
   const { theme } = useColorTheme();
 
   return (
-    <label className="flex flex-col w-fit">
-      <span className="pb-3">{label}</span>
-      <Switch
-        onChange={onChange}
-        checked={checked}
-        offColor={"#aaa"}
-        onColor={theme.colors.secondary}
-        onHandleColor={theme.colors.text}
-        offHandleColor={theme.colors.text}
-        checkedIcon={false}
-        uncheckedIcon={false}
-      />
-    </label>
+    // <label className={twMerge("flex flex-col w-fit", className)} {...rest}>
+    //   <span className="pb-3">{label}</span>
+    <Switch
+      {...args}
+      offColor={"#aaa"}
+      onColor={theme.colors.secondary}
+      // onHandleColor={"text-"}
+      offHandleColor={theme.colors.text}
+      checkedIcon={false}
+      uncheckedIcon={false}
+    />
+    // </label>
   );
 };

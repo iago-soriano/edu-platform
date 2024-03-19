@@ -75,15 +75,24 @@ export const BaseContent = ({
     switch (type) {
       case "Text":
         return (
-          <TextContent {...commonProps} payload={contentDto.payload.text} />
+          <TextContent
+            {...commonProps}
+            payload={contentDto.payload?.text || { text: "" }}
+          />
         );
       case "Video":
         return (
-          <VideoContent {...commonProps} payload={contentDto.payload.video} />
+          <VideoContent
+            {...commonProps}
+            payload={contentDto.payload.video || { tracks: "", url: "" }}
+          />
         );
       case "Image":
         return (
-          <ImageContent {...commonProps} payload={contentDto.payload.image} />
+          <ImageContent
+            {...commonProps}
+            payload={contentDto.payload.image || { url: "" }}
+          />
         );
     }
   };

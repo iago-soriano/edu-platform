@@ -1,5 +1,4 @@
 "use client";
-
 import { Router } from "@infrastructure";
 import {
   useSaveCollectionMutation,
@@ -15,8 +14,13 @@ const Page = ({ params: { collectionId: strId } }) => {
   const router = useRouter();
 
   const createActivityMutation = useCreateNewActivityMutation({
-    onSuccess: ({ activityId, versionId }) => {
-      router.push(Router.editActivity({ activityId, versionId }));
+    onSuccess: (args) => {
+      router.push(
+        Router.editActivity({
+          activityId: args?.activityId,
+          versionId: args?.versionId,
+        })
+      );
     },
   });
   return (
@@ -30,7 +34,7 @@ const Page = ({ params: { collectionId: strId } }) => {
           + New Activity
         </button>
       </div>
-      <ActivityListingOwnership showActive={true} collectionId={collectionId} />
+      <ActivityListingOwnership collectionId={collectionId} />
     </div>
   );
 };

@@ -9,7 +9,7 @@ export const StickyHeader = ({
   onOpenOptionsMenu,
 }: {
   show: boolean;
-  activity: ReturnGetActivityVersion;
+  activity?: ReturnGetActivityVersion;
   saveState: any;
   onOpenOptionsMenu: () => any;
 }) => {
@@ -21,7 +21,7 @@ export const StickyHeader = ({
       )}
     >
       <span className="lg:col-span-2 col-span-1 mx-1 font-bold overflow-ellipsis h-fit">
-        {activity?.collection?.name}
+        {activity?.collectionName}
       </span>
       <h5 className="col-span-2 overflow-hidden">{activity?.title}</h5>
       <div className="lg:col-span-2 col-span-1 mx-2 sm:flex hidden items-center">

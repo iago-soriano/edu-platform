@@ -21,7 +21,7 @@ export const VideoContent = ({
   saveContentMutation,
   onChange,
 }: { payload: VideoContentPayloadDTO } & CommmonContentProps) => {
-  const [player, setPlayer] = useState<LibYoutubePlayer>(null);
+  const [player, setPlayer] = useState<LibYoutubePlayer | null>(null);
   const [videoDuration, setVideoDuration] = useState<string>();
   const [tracks, setTracks] = useState(tracksProps || "-");
   const [videoUrl, setVideoUrl] = useState(urlProps);
@@ -132,7 +132,7 @@ export const VideoContent = ({
       <AddTrackButton onClick={onClickAddTrack} disabled={!!addTracksError} />
       <div className="p-2 flex justify-center">
         <YoutubePlayer
-          videoUrl={videoUrl}
+          videoUrl={videoUrl || ""}
           setPlayer={setPlayer}
           setDuration={setVideoDuration}
           fallbackMessage="Insira uma URL do youtube acima"

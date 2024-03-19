@@ -52,7 +52,7 @@ export const CollectionsTable = ({
     totalRowCount: number;
     pageSize: number;
     currentPage: number;
-    setCurrentPage: Dispatch<SetStateAction<number>>;
+    setCurrentPage: (page: number) => unknown;
   };
 }) => {
   const router = useRouter();
@@ -230,7 +230,7 @@ export const CollectionsTable = ({
           <PaginationItem>
             <PaginationPrevious
               disabled={currentPage === 0}
-              onClick={() => setCurrentPage((curr) => curr - 1)}
+              onClick={() => setCurrentPage(currentPage - 1)}
             />
           </PaginationItem>
           {Array.from({ length: totalPages }, (_, index) => index + 1).map(
@@ -248,7 +248,7 @@ export const CollectionsTable = ({
           <PaginationItem>
             <PaginationNext
               disabled={Math.min(currentPage + 1, totalRowCount) === totalPages}
-              onClick={() => setCurrentPage((curr) => curr + 1)}
+              onClick={() => setCurrentPage(currentPage + 1)}
             />
           </PaginationItem>
         </PaginationContent>
