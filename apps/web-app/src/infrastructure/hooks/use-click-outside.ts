@@ -9,18 +9,17 @@ export function useClickOutside(callback) {
 
   // update cb on each render, so second useEffect has access to current value
   useEffect(() => {
-    if (callbackRef.current != null) callbackRef.current = callback; // TODO wft?
+    (callbackRef.current as any) = callback;
   });
 
   useEffect(() => {
-    // console.log("useff");
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
     function handleClick(e) {
       if (
         callbackRef.current &&
         !Array.from(refs).reduce(
-          (acc, curr) => curr.contains(e.target) || acc, // TODO wft2
+          (acc, curr) => (curr as any).contains(e.target) || acc,
           false
         )
       ) {
