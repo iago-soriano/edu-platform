@@ -1,19 +1,18 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { AxiosFetcher } from "@infrastructure";
+// import axiosBase from "axios";
 import {
   ProviderSignUpRequestBody,
   ProviderSignUpResponseBody,
 } from "@edu-platform/common";
-
-const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST);
+import { AxiosFetcher } from "../../../../infrastructure/api/axios-fetcher";
 
 export const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       // authorization: {
       //   params: {
       //     prompt: "consent",
@@ -29,6 +28,11 @@ export const authOptions: AuthOptions = {
       },
       id: "credentials",
       async authorize(_, req) {
+        // const axios = axiosBase.create({
+        //   url: process.env.NEXT_PUBLIC_API_HOST!,
+        // });
+        const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
+
         return await axios.post.bind(axios)("sign-in", {
           email: req.query?.email,
           password: req.query?.password,
@@ -45,7 +49,12 @@ export const authOptions: AuthOptions = {
       // happens on sign-in of existing and of new users
       // console.log("SIGN IN");
       // console.log({ user, account, profile, email, credentials });
-      if (account.provider == "google") {
+      if (account?.provider == "google") {
+        // const axios = axiosBase.create({
+        //   url: process.env.NEXT_PUBLIC_API_HOST!,
+        // });
+        const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
+
         const { refreshToken, accessToken } = (await axios.post.bind(axios)(
           "sign-up/provider",
           {

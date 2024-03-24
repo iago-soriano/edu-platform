@@ -1,51 +1,11 @@
-import { getServerSession, refreshToken } from "@infrastructure";
 import axiosClient, { AxiosInstance } from "axios";
-import {
-  IHTTPClient,
-  RefreshTokenRequestBody,
-  RefreshTokenResponseBody,
-} from "@edu-platform/common/api";
+import { IHTTPClient } from "@edu-platform/common/api";
 
 export class AxiosFetcher implements IHTTPClient {
   public _instance: AxiosInstance;
 
   constructor(baseURL: string) {
     this._instance = axiosClient.create({ baseURL });
-    this._instance.interceptors.request.use(
-      async (config) => {
-        if (typeof window == "undefined") {
-          const session = await getServerSession();
-          if (!config.headers["Authorization"]) {
-            config.headers[
-              "Authorization"
-            ] = `Bearer ${session?.user.accessToken}`;
-          }
-        }
-        return config;
-      },
-      (error) => Promise.reject(error)
-    );
-
-    this._instance.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        if (typeof window == "undefined") {
-          const prevRequest = error?.config;
-          if (error?.response?.status === 401 && !prevRequest?.sent) {
-            const session = await getServerSession();
-            prevRequest.sent = true;
-            console.log("refresh server-side");
-            await refreshToken({ data: session });
-            prevRequest.headers[
-              "Authorization"
-            ] = `Bearer ${session?.user?.accessToken}`;
-            return this._instance(prevRequest);
-          }
-        }
-
-        return Promise.reject(error);
-      }
-    );
   }
 
   private _successHandler(res) {
@@ -112,6 +72,7 @@ export class AxiosFetcher implements IHTTPClient {
     onFulfilled: (args) => any,
     onRejected: (error) => any
   ) {
+    // console.log(this._instance.interceptors);
     return this._instance.interceptors[side].use(onFulfilled, onRejected);
   }
 
@@ -119,5 +80,3 @@ export class AxiosFetcher implements IHTTPClient {
     this._instance.interceptors[side].eject(interceptor);
   }
 }
-
-export const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);

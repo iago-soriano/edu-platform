@@ -3,12 +3,11 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { axios } from "@infrastructure";
+import { SSRAxios } from "@infrastructure";
 import { ApiClient } from "@edu-platform/common";
 import Client from "./client";
-import { headers } from "next/headers";
 
-const pageSize = 10;
+const pageSize = 1;
 
 const Page = async ({ searchParams }) => {
   const queryClient = new QueryClient();
@@ -18,7 +17,7 @@ const Page = async ({ searchParams }) => {
   await queryClient.prefetchQuery({
     queryKey: ["collections", { isPrivate: true, page: pagePrivate, pageSize }],
     queryFn: () =>
-      new ApiClient(axios).listCollections({
+      new ApiClient(SSRAxios).listCollections({
         byOwnership: true,
         isPrivate: true,
         page: pagePrivate,
@@ -31,7 +30,7 @@ const Page = async ({ searchParams }) => {
   await queryClient.prefetchQuery({
     queryKey: ["collections", { isPrivate: false, page: pagePublic, pageSize }],
     queryFn: () =>
-      new ApiClient(axios).listCollections({
+      new ApiClient(SSRAxios).listCollections({
         byOwnership: true,
         isPrivate: false,
         page: pagePublic,
@@ -42,7 +41,7 @@ const Page = async ({ searchParams }) => {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Client
-        currActiveTab={searchParams?.activeTab}
+        currActiveTab={searchParams?.activeTab || "private"}
         pagePublic={pagePublic}
         pagePrivate={pagePrivate}
       />

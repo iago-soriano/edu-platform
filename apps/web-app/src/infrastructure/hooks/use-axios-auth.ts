@@ -1,13 +1,10 @@
-"use client";
-import { axios } from "../api/axios";
-import { useEffect } from "react";
-import { useSignOut, refreshToken } from "@infrastructure";
+import { useRefreshToken } from "./use-refresh-token";
+import { AxiosFetcher } from "../api/axios-fetcher";
+import { useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
+import { useSignOut } from "./use-sign-out";
 
-const useRefreshToken = () => {
-  const session = useSession();
-  return async () => await refreshToken(session);
-};
+const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
 
 export const useAxiosAuth = () => {
   const session = useSession();
@@ -32,6 +29,7 @@ export const useAxiosAuth = () => {
       "response",
       (response) => response,
       async (error) => {
+        console.log("error", error);
         const prevRequest = error?.config;
         if (error?.response?.status === 401 && !prevRequest?.sent) {
           prevRequest.sent = true;

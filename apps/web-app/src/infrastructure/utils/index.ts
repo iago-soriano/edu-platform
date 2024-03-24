@@ -58,5 +58,5 @@ export function openInNewTab(href: string) {
   }).click();
 }
 
-export * from "./refresh-token";
+export * from "../api/auth/refresh-token";
 export * from "./shadcn";

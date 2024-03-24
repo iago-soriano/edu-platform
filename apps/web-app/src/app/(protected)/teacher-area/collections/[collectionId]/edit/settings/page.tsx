@@ -3,16 +3,17 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { axios } from "@infrastructure";
-import { ApiClient } from "@edu-platform/common";
 import Client from "./client";
+import { SSRAxios } from "@infrastructure";
+import { ApiClient } from "@edu-platform/common";
+
 const Page = async ({ params: { collectionId: strId } }) => {
   const queryClient = new QueryClient();
   const collectionId = Number(strId);
 
   await queryClient.prefetchQuery({
     queryKey: ["collection", { collectionId }],
-    queryFn: () => new ApiClient(axios).getCollection({ collectionId }),
+    queryFn: () => new ApiClient(SSRAxios).getCollection({ collectionId }),
   });
 
   return (

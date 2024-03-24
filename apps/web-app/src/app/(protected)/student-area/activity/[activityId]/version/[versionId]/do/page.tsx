@@ -3,7 +3,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { axios } from "@infrastructure";
+import { SSRAxios } from "@infrastructure";
+import { ApiClient } from "@edu-platform/common";
 import Version from "./client";
 import posthog from "posthog-js";
 
@@ -12,11 +13,11 @@ const Page = async ({ params: { activityId, versionId } }) => {
 
   posthog.capture("activity page", { property: `${activityId}/${versionId}` });
 
-  await queryClient.prefetchQuery({
-    queryKey: ["version", activityId, versionId],
-    queryFn: () =>
-      axios.get.bind(axios)(`activity/${activityId}/version/${versionId}`),
-  });
+  // await queryClient.prefetchQuery({
+  //   queryKey: ["version", activityId, versionId],
+  //   queryFn: () =>
+  //     axios.get.bind(SSRAxios)(`activity/${activityId}/version/${versionId}`),
+  // });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

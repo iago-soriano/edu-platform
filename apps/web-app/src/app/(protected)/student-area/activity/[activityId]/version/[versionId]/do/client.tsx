@@ -16,7 +16,7 @@ const Page = ({ params: { activityId, versionId } }) => {
   useEffect(() => {
     const handleScroll = () => {
       const el = document.getElementById("activity-header-input");
-      if (window.scrollY > el.offsetTop + el.offsetHeight) {
+      if (window.scrollY > (el?.offsetTop || 0) + (el?.offsetHeight || 0)) {
         setShowAuxHeader(true);
       } else {
         setShowAuxHeader(false);
@@ -48,7 +48,9 @@ const Page = ({ params: { activityId, versionId } }) => {
                 />
               );
             } else if (!element.content && element.question) {
-              return <QuestionContainer key={`q-${element.content.id}`} />;
+              return (
+                <QuestionContainer key={`q-${element?.content?.id || 0}`} />
+              );
             }
             return <h1>What is this</h1>;
           })}

@@ -29,6 +29,9 @@ export const useParamsState = (initialParams: { [key: string]: string }) => {
     for (let key in newParams) {
       if (newParams.hasOwnProperty(key)) {
         params.set(key, newParams[key]);
+        if (typeof window != "undefined") {
+          localStorage.setItem(key, newParams[key]);
+        }
       }
     }
 

@@ -3,7 +3,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { axios } from "@infrastructure";
+// import { axios } from "@infrastructure";
 import { GetActivityVersionResponseBody } from "@edu-platform/common";
 import Version from "./client";
 import posthog from "posthog-js";
@@ -14,18 +14,18 @@ const Page = async ({ params: { activityId, versionId } }) => {
 
   posthog.capture("activity page", { property: `${activityId}/${versionId}` });
 
-  await queryClient.prefetchQuery({
-    queryKey: [`version-${versionId}`],
-    queryFn: () =>
-      axios.get.bind(axios)(`activity/${activityId}/version/${versionId}`),
-  });
+  // await queryClient.prefetchQuery({
+  //   queryKey: [`version-${versionId}`],
+  //   queryFn: () =>
+  //     axios.get.bind(axios)(`activity/${activityId}/version/${versionId}`),
+  // });
 
-  const versionQuery: GetActivityVersionResponseBody = queryClient.getQueryData(
-    ["version", activityId, versionId]
-  );
+  // const versionQuery: GetActivityVersionResponseBody = queryClient.getQueryData(
+  //   ["version", activityId, versionId]
+  // );
 
-  if (versionQuery?.status === "Published")
-    redirect(`/activity/${activityId}/version/${versionId}/do`);
+  // if (versionQuery?.status === "Published")
+  //   redirect(`/activity/${activityId}/version/${versionId}/do`);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

@@ -29,7 +29,7 @@ import {
   publicCollectionColumns,
 } from "./collection-tables";
 
-const pageSize = 10;
+const pageSize = 1;
 
 export default function CollectionsLayout({
   currActiveTab,
@@ -38,15 +38,10 @@ export default function CollectionsLayout({
 }) {
   const router = useRouter();
 
-  const { params, setParams: setPages } = useParamsState({
-    pagePrivate: pagePrivate || "0",
-    pagePublic: pagePublic || "0",
-  });
-  const {
-    params: { activeTab },
-    setParams: setActiveTab,
-  } = useParamsState({
-    activeTab: currActiveTab || "private",
+  const { params, setParams } = useParamsState({
+    pagePrivate: pagePrivate,
+    pagePublic: pagePublic,
+    activeTab: currActiveTab,
   });
 
   const privateCollectionsQuery = useListCollectionsQuery({
@@ -72,9 +67,9 @@ export default function CollectionsLayout({
   return (
     <div className="min-h-[70vh] flex justify-between p-4 w-[95%] mx-auto">
       <Tabs
-        value={activeTab}
+        value={params?.activeTab}
         onValueChange={(e) => {
-          setActiveTab({ activeTab: e });
+          setParams({ ...params, activeTab: e });
         }}
         className="w-full"
       >
@@ -113,7 +108,7 @@ export default function CollectionsLayout({
                     pageSize,
                     currentPage: Number(params.pagePrivate),
                     setCurrentPage: (e) =>
-                      setPages({ ...params, pagePrivate: e }),
+                      setParams({ ...params, pagePrivate: e }),
                   }}
                 />
               </Frame>
@@ -141,7 +136,7 @@ export default function CollectionsLayout({
                     pageSize,
                     currentPage: Number(params.pagePublic),
                     setCurrentPage: (e) =>
-                      setPages({ ...params, pagePublic: e }),
+                      setParams({ ...params, pagePublic: e }),
                   }}
                 />
               </Frame>

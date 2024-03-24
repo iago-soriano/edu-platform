@@ -23,14 +23,17 @@ import {
   CheckChangePasswordTokenResponseBody,
 } from "@edu-platform/common/api";
 import { ServerError } from "@edu-platform/common";
-import { axios } from "@infrastructure";
-import { nextAuthSignIn } from "./next-auth-wraper";
+import { AxiosFetcher } from "../infrastructure/api/axios-fetcher";
+import { nextAuthSignIn } from "../infrastructure/api/next-auth-wraper";
 import {
   ErrorCallback,
   MutationArgsType,
   MutationArgsDefaultValue,
-} from "./types";
+} from "../infrastructure/api/types";
+// import { axios } from "../infrastructure/api/axios-instance";
 // TODO: refactor to use the types above in all calls
+
+export const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
 
 export const useChangePasswordRequestMutation = ({
   onError,
@@ -136,24 +139,24 @@ export const useCredentialsSignInMutation = (
     onSuccess,
   });
 
-export const useSignOutMutation = (
-  {
-    onError,
-    onSuccess,
-  }: Partial<{
-    onError: ErrorCallback<SignOutRequestBody>;
-    onSuccess: () => unknown;
-  }> = {
-    onError: () => {},
-    onSuccess: () => {},
-  }
-) =>
-  useMutation<SignOutResponseBody, ServerError, SignOutRequestBody>({
-    mutationFn: (args: SignOutRequestBody) =>
-      axios.post.bind(axios)("sign-out", args),
-    onError,
-    onSuccess,
-  });
+// export const useSignOutMutation = (
+//   {
+//     onError,
+//     onSuccess,
+//   }: Partial<{
+//     onError: ErrorCallback<SignOutRequestBody>;
+//     onSuccess: () => unknown;
+//   }> = {
+//     onError: () => {},
+//     onSuccess: () => {},
+//   }
+// ) =>
+//   useMutation<SignOutResponseBody, ServerError, SignOutRequestBody>({
+//     mutationFn: (args: SignOutRequestBody) =>
+//       axios.post.bind(axios)("sign-out", args),
+//     onError,
+//     onSuccess,
+//   });
 
 export const useGoogleSignInMutation = (
   {
