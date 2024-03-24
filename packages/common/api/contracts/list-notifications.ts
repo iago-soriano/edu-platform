@@ -1,17 +1,25 @@
-import { PaginatedParamsDTO } from "@edu-platform/common";
+import { PaginatedParamsDTO, PaginatedResponse } from "@edu-platform/common";
+import { z } from "zod";
+
+enum NotificationType {
+  StudentOutputCompleted = "StudentOutputCompleted",
+  FeedbackCompleted = "FeedbackCompleted",
+  ActivityPublished = "ActivityPublished",
+}
 
 type NotificationDto = {
   id: number;
   isNew: boolean;
-  //type: como eu faço? porque os types tão na domain - copiar
+  type: NotificationType;
   message: string;
   details: string;
 };
 
-type ResponseBody = {
-  notifications: NotificationDto[]; // fazer = activity version
+type ResponseBody = PaginatedResponse<{
+  notification: NotificationDto;
   totalNew: number;
-};
+}>;
+
 type Query = PaginatedParamsDTO;
 
 export {

@@ -1,4 +1,4 @@
-export * from "./error-image";
+export * from "./images";
 export * from "./form";
 export * from "./loading-error-data";
 export * from "./modal";

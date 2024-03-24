@@ -46,7 +46,7 @@ interface IRadioGroupProps {
 }
 
 export const RadioGroup = ({ onChange, value, options }: IRadioGroupProps) => {
-  console.log(value);
+  // console.log(value);
   return options.map((opt, i) => {
     return (
       <RadioButton

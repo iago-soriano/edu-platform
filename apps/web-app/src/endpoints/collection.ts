@@ -63,15 +63,20 @@ export type CollectionListResponse = Awaited<
   ReturnType<ApiClient["listCollections"]>
 >;
 
-export const useListCollectionsQuery = ({ pageSize, page }) => {
+export const useListCollectionsQuery = ({
+  pageSize,
+  page,
+  byOwnership,
+  isPrivate,
+}) => {
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
   return useQuery<CollectionListResponse, ServerError>({
-    queryKey: ["collections", { page }],
-    placeholderData: keepPreviousData,
+    queryKey: ["collections", { isPrivate, page, pageSize }],
+    // placeholderData: keepPreviousData,
     queryFn: () =>
-      client.listCollections({ byOwnership: true, page, pageSize }),
+      client.listCollections({ byOwnership, isPrivate, page, pageSize }),
   });
 };
 
@@ -85,7 +90,7 @@ export const useGetCollectionQuery = ({
   const client = new ApiClient(axios);
 
   return useQuery<GetCollectionResponse, ServerError>({
-    queryKey: ["collection"],
+    queryKey: ["collection", { collectionId }],
     queryFn: () => client.getCollection({ collectionId }),
     refetchOnMount: false,
     refetchOnReconnect: false,
@@ -93,19 +98,22 @@ export const useGetCollectionQuery = ({
   });
 };
 
-type GetStudentsParams = Parameters<ApiClient["getStudentsOfCollection"]>[0];
-type GetStudentsResponse = Awaited<
-  ReturnType<ApiClient["getStudentsOfCollection"]>
+type GetStudentsParams = Parameters<ApiClient["listStudentsOfCollection"]>[0];
+type ListStudentsResponse = Awaited<
+  ReturnType<ApiClient["listStudentsOfCollection"]>
 >;
 
-export const useGetStudentsOfCollectionQuery = ({
+export const useListStudentsOfCollectionQuery = ({
   collectionId,
+  pageSize,
+  page,
 }: GetStudentsParams) => {
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
-  return useQuery<GetStudentsResponse, ServerError>({
+  return useQuery<ListStudentsResponse, ServerError>({
     queryKey: [`collection-participations`],
-    queryFn: () => client.getStudentsOfCollection({ collectionId }),
+    queryFn: () =>
+      client.listStudentsOfCollection({ collectionId, pageSize, page }),
   });
 };

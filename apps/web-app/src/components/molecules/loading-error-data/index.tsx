@@ -1,4 +1,4 @@
-import { Spinner, ErrorCard } from "@components";
+import { Spinner, ErrorCard, NoDataCard } from "@components";
 import { ReactNode } from "react";
 
 interface ErrorLoadingDataProps {
@@ -39,6 +39,12 @@ export const LoadingErrorData = ({
   }
 
   if (!hasData)
-    return noData || <h5 className="text-center">Não há dados disponíveis</h5>;
+    return (
+      noData || (
+        <div className="p-3 flex justify-center">
+          <NoDataCard />
+        </div>
+      )
+    );
   return data;
 };

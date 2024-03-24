@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export enum NotificationType {
+enum NotificationType {
   StudentOutputCompleted = "StudentOutputCompleted",
   FeedbackCompleted = "FeedbackCompleted",
   ActivityPublished = "ActivityPublished",

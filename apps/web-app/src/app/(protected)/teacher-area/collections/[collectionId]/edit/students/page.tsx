@@ -1,38 +1,42 @@
-"use client";
-import { useState, useEffect } from "react";
-import { StudentListing } from "./student-listing";
-import { InsertStudentModal } from "./insert-student-modal";
 import {
-  useSaveCollectionMutation,
-  useGetCollectionQuery,
-  useCreateNewActivityMutation,
-} from "@endpoints";
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { axios } from "@infrastructure";
+import { ApiClient } from "@edu-platform/common";
+import Client, { pageSize } from "./client";
 
-const Page = ({ params: { collectionId: strId } }) => {
+const Page = async ({ params: { collectionId: strId }, searchParams }) => {
   const collectionId = Number(strId);
-  const collectionQuery = useGetCollectionQuery({ collectionId });
+  const queryClient = new QueryClient();
 
-  const [isInsertStudentModalOpen, setIsInsertStudentModalOpen] =
-    useState(false);
+  await queryClient.prefetchQuery({
+    queryKey: ["collections", { isPrivate: true }],
+    queryFn: () =>
+      new ApiClient(axios).listCollections({
+        byOwnership: true,
+        isPrivate: true,
+        page: searchParams?.pagePrivate,
+        pageSize,
+      }),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ["collections", { isPrivate: true }],
+    queryFn: () =>
+      new ApiClient(axios).listCollections({
+        byOwnership: true,
+        isPrivate: false,
+        page: searchParams?.pagePublic,
+        pageSize,
+      }),
+  });
+
   return (
-    <div>
-      <div className="w-full flex justify-between p-2 mt-5">
-        <h5>{collectionQuery.data?.name}</h5>
-        <button
-          onClick={() => setIsInsertStudentModalOpen(true)}
-          className="h-10 w-38 whitespace-nowrap bg-accent p-2 text-white rounded font-bold transition-opacity hover:opacity-80"
-        >
-          + New Student
-        </button>
-      </div>
-      <StudentListing collectionId={collectionId} />
-      {isInsertStudentModalOpen && (
-        <InsertStudentModal
-          collectionId={collectionId}
-          onClose={() => setIsInsertStudentModalOpen(false)}
-        />
-      )}
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Client collectionId={collectionId} />
+    </HydrationBoundary>
   );
 };
 

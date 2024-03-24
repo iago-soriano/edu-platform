@@ -39,8 +39,8 @@ import {
   ListCollectionsByUserResponseBody,
   GetCollectionParams,
   GetCollectionResponseBody,
-  ListStudentsOfCollectionParams,
-  ListStudentsOfCollectionResponseBody,
+  ListParticipantsOfCollectionQuery,
+  ListParticipantsOfCollectionResponseBody,
 } from "./contracts";
 import { IHTTPClient } from "./interfaces";
 
@@ -136,14 +136,15 @@ export class ApiClient {
     ) as Promise<RemoveUserFromCollectionResponseBody>;
   }
   public listCollections(
-    { byOwnership, page, pageSize }: ListCollectionsByUserQuery = {
-      byOwnership: false,
+    { byOwnership, isPrivate, page, pageSize }: ListCollectionsByUserQuery = {
+      byOwnership: true,
+      isPrivate: true,
       page: 0,
       pageSize: 10,
     }
   ) {
     return this._fetcher.get(
-      `collection?byOwnership=${byOwnership}&page=${page}&pageSize=${pageSize}`
+      `collection?byOwnership=${byOwnership}&isPrivate=${isPrivate}&page=${page}&pageSize=${pageSize}`
     ) as Promise<ListCollectionsByUserResponseBody>;
   }
 
@@ -153,12 +154,13 @@ export class ApiClient {
     ) as Promise<GetCollectionResponseBody>;
   }
 
-  public async getStudentsOfCollection({
+  public async listStudentsOfCollection({
     collectionId,
-  }: ListStudentsOfCollectionParams) {
+    page,
+    pageSize,
+  }: ListParticipantsOfCollectionQuery) {
     return this._fetcher.get(
-      `collection/${collectionId}/student`
-    ) as Promise<ListStudentsOfCollectionResponseBody>;
-    // return [{ id: 1, name: "student 1", email: "email1" }];
+      `collection/${collectionId}/student?page=${page}&pageSize=${pageSize}`
+    ) as Promise<ListParticipantsOfCollectionResponseBody>;
   }
 }

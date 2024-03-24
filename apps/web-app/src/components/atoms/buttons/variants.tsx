@@ -4,6 +4,7 @@ import { Spinner, Icons } from "@components";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@infrastructure";
 import { twMerge } from "tailwind-merge";
+import Link from "next/link";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
@@ -60,7 +61,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
-    const Icon = Icons[withIcon];
+    const Icon = withIcon && Icons[withIcon];
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
@@ -82,7 +83,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </>
         ) : withIcon ? (
           <>
-            {<Icon />} <span className="px-1" />
+            {Icon && <Icon />} <span className="px-1" />
             {children}
           </>
         ) : (
@@ -95,3 +96,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = "Button";
 
 export { Button, buttonVariants };
+
+interface LinkWithIconProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  icon: keyof typeof Icons;
+  href: string;
+}
+export const LinkWithIcon = ({ icon, ...rest }: LinkWithIconProps) => {
+  const Icon = icon && Icons[icon];
+  return (
+    <Link className="flex justify-center" {...rest}>
+      <span>
+        <Icon />
+      </span>
+    </Link>
+  );
+};

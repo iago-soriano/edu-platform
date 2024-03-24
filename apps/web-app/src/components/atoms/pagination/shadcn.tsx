@@ -2,7 +2,10 @@ import * as React from "react";
 import { Icons, buttonVariants } from "@components";
 import { cn } from "@infrastructure";
 
-const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
+const PaginationRoot = ({
+  className,
+  ...props
+}: React.ComponentProps<"nav">) => (
   <nav
     role="navigation"
     aria-label="pagination"
@@ -13,7 +16,7 @@ const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
     {...props}
   />
 );
-Pagination.displayName = "Pagination";
+PaginationRoot.displayName = "PaginationRoot";
 
 const PaginationContent = React.forwardRef<
   HTMLUListElement,
@@ -107,7 +110,7 @@ const PaginationEllipsis = ({
 PaginationEllipsis.displayName = "PaginationEllipsis";
 
 export {
-  Pagination,
+  PaginationRoot,
   PaginationContent,
   PaginationLink,
   PaginationItem,

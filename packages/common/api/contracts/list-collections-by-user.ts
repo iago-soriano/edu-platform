@@ -1,17 +1,19 @@
-import { PaginatedParamsDTO } from "@edu-platform/common";
+import { paginatedParamsSchema, PaginatedResponse } from "../../dto";
+import { z } from "zod";
 
 type ResponseBody = {
   isOwnerOf: {
     collections: {
       id: number;
       name?: string | null;
-      updatedAt?: Date;
+      updatedAt: Date;
       isPrivate?: boolean;
       totalActivitiesCount?: number;
       notifyOwnerOnStudentOutput?: boolean;
       draftVersionsCount?: number;
       archivedVersionsCount?: number;
       publishedVersionsCount?: number;
+      totalParticipantsCount?: number;
       // newStudentOutputsCount: number;
       // feedbackGivenStudentOutputsCount: number;
     }[];
@@ -21,9 +23,27 @@ type ResponseBody = {
   };
   participatesIn: {}[];
 };
-type Query = { byOwnership: boolean } & PaginatedParamsDTO;
+
+const querySchema = z
+  .object({
+    byOwnership: z
+      .string()
+      .toLowerCase()
+      .transform((x) => x === "true")
+      .pipe(z.boolean()),
+    isPrivate: z
+      .string()
+      .toLowerCase()
+      .transform((x) => x === "true")
+      .pipe(z.boolean()),
+  })
+  .merge(paginatedParamsSchema);
+
+type Query = z.infer<typeof querySchema>;
+const parseListCollectionsQuery = querySchema.parse;
 
 export {
   ResponseBody as ListCollectionsByUserResponseBody,
   Query as ListCollectionsByUserQuery,
+  parseListCollectionsQuery,
 };
