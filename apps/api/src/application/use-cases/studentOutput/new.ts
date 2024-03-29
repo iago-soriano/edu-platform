@@ -49,13 +49,14 @@ class UseCase implements ICreateStudentOutputUseCase {
 
     if (!collection.isPrivate) throw new CantCreateOutputOnPublicCollection();
 
-    const studentIsParticipant = // TODO: pegar pelo tipo Student
-      await this.collectionParticipationsRepository.findStudentCollectionRelation(
+    const studentIsParticipant =
+      await this.collectionParticipationsRepository.findByParticipantAndCollectionId(
         user.id,
         collection.id!
       );
 
     if (collection.isPrivate && !studentIsParticipant)
+      //TODO
       throw new StudentIsNotParticipant();
 
     return await this.studentOutputsRepository.insert({

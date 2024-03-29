@@ -3,39 +3,30 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-// import { axios } from "@infrastructure";
+import { SSRAxios } from "@infrastructure";
 import { ApiClient } from "@edu-platform/common";
-import Client, { pageSize } from "./client";
+import Client from "./client";
+
+const pageSize = 10;
 
 const Page = async ({ params: { collectionId: strId }, searchParams }) => {
   const collectionId = Number(strId);
   const queryClient = new QueryClient();
 
-  // await queryClient.prefetchQuery({
-  //   queryKey: ["collections", { isPrivate: true }],
-  //   queryFn: () =>
-  //     new ApiClient(axios).listCollections({
-  //       byOwnership: true,
-  //       isPrivate: true,
-  //       page: searchParams?.pagePrivate,
-  //       pageSize,
-  //     }),
-  // });
+  const page = Number(searchParams?.page) || 0;
 
-  // await queryClient.prefetchQuery({
-  //   queryKey: ["collections", { isPrivate: true }],
-  //   queryFn: () =>
-  //     new ApiClient(axios).listCollections({
-  //       byOwnership: true,
-  //       isPrivate: false,
-  //       page: searchParams?.pagePublic,
-  //       pageSize,
-  //     }),
-  // });
-
+  await queryClient.prefetchQuery({
+    queryKey: ["collection-participations", { collectionId, page, pageSize }],
+    queryFn: () =>
+      new ApiClient(SSRAxios).listStudentsOfCollection({
+        collectionId,
+        page,
+        pageSize,
+      }),
+  });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Client collectionId={collectionId} />
+      <Client collectionId={collectionId} page={page} pageSize={pageSize} />
     </HydrationBoundary>
   );
 };

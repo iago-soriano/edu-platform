@@ -13,7 +13,11 @@ class UseCase implements IUpdateNotificationUseCase {
   constructor(private notificationsRepository: INotificationsRepository) {}
 
   async execute({ user, notificationId }: InputParams) {
-    // TODO pegar a notificação pelo id e pelo id do usuário
+    const notification =
+      await this.notificationsRepository.getNotificationById(notificationId);
+
+    if (!notification || notification.userId !== user.id)
+      throw new Error(" Notification not found");
 
     await this.notificationsRepository.update(notificationId, false);
   }

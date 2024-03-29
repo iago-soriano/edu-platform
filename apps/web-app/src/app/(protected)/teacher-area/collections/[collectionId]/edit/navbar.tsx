@@ -1,32 +1,28 @@
 "use client";
-import Link from "next/link";
-import { twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";
+import { SideNav } from "@components";
+import {
+  useSaveCollectionMutation,
+  useGetCollectionQuery,
+  useCreateNewActivityMutation,
+} from "@endpoints";
 
-const linkClasses =
-  "inline-flex items-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground px-4 py-4 justify-start";
-
-export const CollectionsSideNav = () => {
+export const CollectionsSideNav = ({ collectionId }) => {
   const path = usePathname();
-  const getLinkClasses = (href: string) =>
-    twMerge(
-      linkClasses,
-      path.split("/").pop() === href
-        ? "bg-muted hover:bg-muted"
-        : "hover:bg-transparent hover:underline"
-    );
+  const collectionQuery = useGetCollectionQuery({ collectionId });
+
+  const tabs = [
+    { title: "Settings", href: "settings" },
+    { title: "Activities", href: "activities", icon: <span>{}</span> }, // TODO: get total os student participants in get by id collection query and display here
+  ];
+
+  if (collectionQuery?.data?.isPrivate)
+    tabs.push({ title: "Students", href: "students" });
 
   return (
-    <nav className="flex flex-col justify-start">
-      <Link className={getLinkClasses("settings")} href="settings">
-        Settings
-      </Link>
-      <Link className={getLinkClasses("activities")} href="activities">
-        Activities
-      </Link>
-      <Link className={getLinkClasses("students")} href="students">
-        Students
-      </Link>
-    </nav>
+    <div>
+      <h5>{collectionQuery?.data?.name}</h5>
+      <SideNav tabs={tabs} active={path.split("/").pop()} />
+    </div>
   );
 };

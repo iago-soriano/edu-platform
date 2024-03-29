@@ -128,10 +128,10 @@ export class ApiClient {
   }
   removeUserFromCollection({
     collectionId,
-    studentId,
+    participationId,
   }: RemoveUserFromCollectionParams) {
     return this._fetcher.delete(
-      `collection/${collectionId}/student/${studentId}`,
+      `collection/${collectionId}/participating-student/${participationId}`,
       undefined
     ) as Promise<RemoveUserFromCollectionResponseBody>;
   }

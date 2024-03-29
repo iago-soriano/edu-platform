@@ -51,19 +51,16 @@ import SaveCollectionUseCase, {
 } from "./collection/save";
 import InsertUserInCollectionUseCase, {
   IInsertUserInCollectionUseCase,
-} from "./collection-participation/new";
-import RemoveUserFromCollectionUseCase, {
-  IRemoveUserFromCollectionUseCase,
-} from "./collection-participation/delete";
+} from "./collection-participation/insert-student";
+import RemoveStudentFromCollectionUseCase, {
+  IRemoveStudentFromCollectionUseCase,
+} from "./collection-participation/remove-student";
 import CreateStudentOutputUseCase, {
   ICreateStudentOutputUseCase,
 } from "./studentOutput/new";
 import GetCollectionUseCase, {
   IGetCollectionUseCase,
 } from "./collection/get-by-id";
-import ListUsersInCollectionUseCase, {
-  IListUsersInCollectionUseCase,
-} from "./collection-participation/list";
 import InsertDefaultCollectionUseCase, {
   IInsertDefaultCollectionUseCase,
 } from "./collection/new-default";
@@ -76,6 +73,18 @@ import UpdateStudentOutputUseCase, {
 import UpdateNotificationUseCase, {
   IUpdateNotificationUseCase,
 } from "./notification/update";
+import InsertFollowerInCollectionUseCase, {
+  IInsertFollowerInCollectionUseCase,
+} from "./collection-participation/follow-collection";
+import UnfollowCollectionUseCase, {
+  IUnfollowCollectionUseCase,
+} from "./collection-participation/unfollow-collection";
+import UpdateNotificationConfigUseCase, {
+  IUpdateNotificationConfigUseCase,
+} from "./collection-participation/update-notification-config";
+import ImportActivityUseCase, {
+  IImportActivityUseCase,
+} from "./activity/import";
 
 export {
   GetCollectionUseCase,
@@ -120,12 +129,10 @@ export {
   ISaveCollectionUseCase,
   InsertUserInCollectionUseCase,
   IInsertUserInCollectionUseCase,
-  RemoveUserFromCollectionUseCase,
-  IRemoveUserFromCollectionUseCase,
+  RemoveStudentFromCollectionUseCase,
+  IRemoveStudentFromCollectionUseCase,
   CreateStudentOutputUseCase,
   ICreateStudentOutputUseCase,
-  IListUsersInCollectionUseCase,
-  ListUsersInCollectionUseCase,
   InsertDefaultCollectionUseCase,
   IInsertDefaultCollectionUseCase,
   SaveAnswerUseCase,
@@ -134,4 +141,12 @@ export {
   IUpdateStudentOutputUseCase,
   UpdateNotificationUseCase,
   IUpdateNotificationUseCase,
+  InsertFollowerInCollectionUseCase,
+  IInsertFollowerInCollectionUseCase,
+  UnfollowCollectionUseCase,
+  IUnfollowCollectionUseCase,
+  UpdateNotificationConfigUseCase,
+  IUpdateNotificationConfigUseCase,
+  ImportActivityUseCase,
+  IImportActivityUseCase,
 };

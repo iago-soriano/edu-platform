@@ -16,6 +16,6 @@ export interface ICollectionsReadRepository {
     args: { userId: number } & PaginatedParamsDTO
   ) => Promise<ListCollectionsByUserResponseBody["participatesIn"]>;
   listByOwnership: (
-    args: { userId: number } & PaginatedParamsDTO
+    args: { userId: number; isPrivate: boolean } & PaginatedParamsDTO
   ) => Promise<ListCollectionsByUserResponseBody["isOwnerOf"]>;
 }

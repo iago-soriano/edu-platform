@@ -23,10 +23,13 @@ import {
   RefreshTokenController,
   SaveCollectionController,
   InsertUserInCollectionController,
-  RemoveUserFromCollectionController,
+  RemoveStudentFromCollectionController,
   GetCollectionController,
   ListUsersInCollectionController,
   SaveAnswerController,
+  UpdateNotificationController,
+  InsertFollowerInCollectionController,
+  ImportActivityController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -49,11 +52,13 @@ import {
   CreateNewDraftVersionUseCase,
   SaveCollectionUseCase,
   InsertUserInCollectionUseCase,
-  RemoveUserFromCollectionUseCase,
+  RemoveStudentFromCollectionUseCase,
   GetCollectionUseCase,
-  ListUsersInCollectionUseCase,
   InsertDefaultCollectionUseCase,
   SaveAnswerUseCase,
+  UpdateNotificationUseCase,
+  InsertFollowerInCollectionUseCase,
+  ImportActivityUseCase,
 } from "@use-cases";
 import {
   BCryptEncryptionService,
@@ -72,7 +77,10 @@ import {
   ActivityReadRepository,
   CollectionsReadRepository,
   CollectionParticipationsReadRepository,
+  NotificationsRepository,
+  NotificationsReadRepository,
 } from "@infrastructure";
+import { ListNotificationsController } from "controllers/notification/list";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
@@ -125,8 +133,8 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     insertUserInCollectionController: awilix
       .asClass(InsertUserInCollectionController)
       .classic(),
-    removeUserFromCollectionController: awilix
-      .asClass(RemoveUserFromCollectionController)
+    removeStudentFromCollectionController: awilix
+      .asClass(RemoveStudentFromCollectionController)
       .classic(),
     listCollectionsByUserController: awilix
       .asClass(ListCollectionsByUserController)
@@ -135,7 +143,19 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     listUsersInCollectionController: awilix
       .asClass(ListUsersInCollectionController)
       .classic(),
-    SaveAnswerController: awilix.asClass(SaveAnswerController).classic(),
+    saveAnswerController: awilix.asClass(SaveAnswerController).classic(),
+    listNotificationsController: awilix
+      .asClass(ListNotificationsController)
+      .classic(),
+    updateNotificationsController: awilix
+      .asClass(UpdateNotificationController)
+      .classic(),
+    insertFollowerInCollectionController: awilix
+      .asClass(InsertFollowerInCollectionController)
+      .classic(),
+    importActivityController: awilix
+      .asClass(ImportActivityController)
+      .classic(),
 
     /** #endregion */
 
@@ -182,17 +202,21 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     insertUserInCollectionUseCase: awilix
       .asClass(InsertUserInCollectionUseCase)
       .classic(),
-    removeUserFromCollectionUseCase: awilix
-      .asClass(RemoveUserFromCollectionUseCase)
+    removeStudentFromCollectionUseCase: awilix
+      .asClass(RemoveStudentFromCollectionUseCase)
       .classic(),
     getCollectionUseCase: awilix.asClass(GetCollectionUseCase).classic(),
-    listUsersInCollectionUseCase: awilix
-      .asClass(ListUsersInCollectionUseCase)
-      .classic(),
     insertDefaultCollectionUseCase: awilix
       .asClass(InsertDefaultCollectionUseCase)
       .classic(),
     saveAnswerUseCase: awilix.asClass(SaveAnswerUseCase).classic(),
+    updateNotificationUseCase: awilix
+      .asClass(UpdateNotificationUseCase)
+      .classic(),
+    insertFollowerInCollectionUserCase: awilix
+      .asClass(InsertFollowerInCollectionUseCase)
+      .classic(),
+    importActivityUseCase: awilix.asClass(ImportActivityUseCase).classic(),
 
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),
@@ -214,6 +238,13 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     studentAnswersRepository: awilix
       .asClass(StudentAnswersRepository)
+      .classic(),
+    notificationsRepository: awilix.asClass(NotificationsRepository).classic(),
+    notificationsReadRepository: awilix
+      .asClass(NotificationsReadRepository)
+      .classic(),
+    insertFollowerInCollectionUseCase: awilix
+      .asClass(InsertUserInCollectionUseCase)
       .classic(),
   });
 };

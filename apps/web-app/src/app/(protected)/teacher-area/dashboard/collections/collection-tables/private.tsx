@@ -32,17 +32,17 @@ export const privateCollectionColumns = [
     cell: (info) => (
       <p className="flex flex-row justify-center">
         {info.getValue() ? (
-          <span>
-            <Tooltip content="You will get notified when students complete activities">
+          <Tooltip content="You will get notified when students complete activities">
+            <span>
               <Icons.NOTIFICATION />
-            </Tooltip>
-          </span>
+            </span>
+          </Tooltip>
         ) : (
-          <span>
-            <Tooltip content="You will not get notified when students complete activities">
+          <Tooltip content="You will not get notified when students complete activities">
+            <span>
               <Icons.NOTIFICATIONSLASH />
-            </Tooltip>
-          </span>
+            </span>
+          </Tooltip>
         )}
       </p>
     ),

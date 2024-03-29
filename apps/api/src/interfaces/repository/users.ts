@@ -13,5 +13,5 @@ export interface IUserRepository {
     provider: string
   ) => Promise<UserSelectDTO | null>;
   insertUser: (user: UserInsertDTO) => Promise<{ userId: number }>;
-  updateUser: (id: number, user: Partial<UserSelectDTO>) => Promise<boolean>;
+  updateUser: (id: number, user: Partial<UserInsertDTO>) => Promise<boolean>;
 }

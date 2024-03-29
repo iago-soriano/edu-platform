@@ -11,7 +11,7 @@ import {
   activityVersions,
 } from "@infrastructure";
 import { CollectionDtoMapper } from "../dto-mappers/collection";
-import { eq, sql, desc } from "drizzle-orm";
+import { eq, sql, desc, and } from "drizzle-orm";
 import { PaginatedParamsDTO } from "@edu-platform/common";
 
 export class CollectionsRepository implements ICollectionsRepository {
@@ -99,9 +99,10 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
 
   async listByOwnership({
     userId,
+    isPrivate,
     page,
     pageSize,
-  }: { userId: number } & PaginatedParamsDTO) {
+  }: { userId: number; isPrivate: boolean } & PaginatedParamsDTO) {
     const sq = db.$with("sq").as(
       db
         .select({
@@ -113,6 +114,10 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
           totalActivitiesCount:
             sql<number>`COUNT(DISTINCT ${activities.id})`.as(
               "totalActivitiesCount"
+            ),
+          totalParticipantsCount:
+            sql<number>`COUNT(DISTINCT ${collectionParticipations.id})`.as(
+              "totalParticipantsCount"
             ),
           totalCollectionsCount:
             sql<number>`COUNT(${collections.id}) OVER ()`.as(
@@ -138,8 +143,17 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
           activityVersions,
           eq(activityVersions.activityId, activities.id)
         )
+        .leftJoin(
+          collectionParticipations,
+          eq(collections.id, collectionParticipations.collectionId)
+        )
         .groupBy(collections.id)
-        .where(eq(collections.ownerId, userId))
+        .where(
+          and(
+            eq(collections.ownerId, userId),
+            eq(collections.isPrivate, isPrivate)
+          )
+        )
     );
 
     const dto = await db

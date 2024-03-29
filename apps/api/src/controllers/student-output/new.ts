@@ -24,7 +24,7 @@ export class CreateUserOutputController
 {
   method = HttpMethod.POST;
   path: string = "activity/:activityId/version/:versionId/student-output";
-  middlewares: string[] = ["auth", "file"];
+  middlewares: string[] = ["auth"];
 
   constructor(
     private createStudentOutputUseCase: ICreateStudentOutputUseCase

@@ -39,7 +39,7 @@ export class UserRepository implements IUserRepository {
     )[0];
   }
 
-  async updateUser(id: number, user: UserInsertDTO) {
+  async updateUser(id: number, user: Partial<UserInsertDTO>) {
     return !!(
       await db
         .update(users)

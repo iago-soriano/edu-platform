@@ -1,4 +1,4 @@
-import { Question, StudentAnswer } from "@domain";
+import { Question, StudentAnswer, OutputStatus } from "@domain";
 import {
   ActivityQuestionNotFound,
   OutputIsNotDraft,
@@ -37,8 +37,7 @@ class UseCase implements ISaveAnswerUseCase {
 
     if (!output) throw new OutputNotFound();
 
-    if (output.status !== "Draft") {
-      // TODO: usar enum
+    if (output.status !== OutputStatus.Draft) {
       throw new OutputIsNotDraft();
     }
 

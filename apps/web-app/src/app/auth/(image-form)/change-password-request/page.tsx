@@ -25,8 +25,8 @@ const Page = () => {
   });
   const hasError = () => mutation.error;
   const getError = () => {
-    console.log(mutation.error.message);
-    if (mutation.error.message === "USER_NOT_FOUND")
+    console.log(mutation.error?.message);
+    if (mutation.error?.message === "USER_NOT_FOUND")
       return (
         <p>
           E-mail não encontrado. Já tem uma conta?{" "}
@@ -38,7 +38,7 @@ const Page = () => {
           </Link>
         </p>
       );
-    return mutation.error.message;
+    return mutation.error?.message;
   };
 
   return (

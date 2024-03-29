@@ -60,7 +60,7 @@ class UseCase implements IProviderSignUpUseCase {
       id: `${userId}`,
     });
 
-    await this.userRepository.updateUser(userId, { refreshToken });
+    // await this.userRepository.updateUser(userId, { refreshToken });
 
     return {
       accessToken,

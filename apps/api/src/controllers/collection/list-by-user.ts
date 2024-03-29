@@ -1,4 +1,3 @@
-import { parseToPaginatedParamsDTO } from "./../../../../../packages/common/dto/paginated-params";
 import {
   HTTPController,
   HttpMethod,
@@ -9,6 +8,7 @@ import {
 import {
   ListCollectionsByUserQuery,
   ListCollectionsByUserResponseBody,
+  parseListCollectionsQuery,
 } from "@edu-platform/common";
 
 type Request = TypedRequest<{}, ListCollectionsByUserQuery, {}>;
@@ -26,20 +26,19 @@ export class ListCollectionsByUserController
   async execute(req: Request, res: Response) {
     const { user } = req;
 
-    const { page, pageSize } = parseToPaginatedParamsDTO(req.query);
-
-    if (pageSize <= 0 || page < 0)
-      throw new Error("Please provide valid pagination parameters");
+    const { page, pageSize, byOwnership, isPrivate } =
+      parseListCollectionsQuery(req.query);
 
     let resp: ListCollectionsByUserResponseBody = {
       isOwnerOf: { collections: [], pagination: { totalRowCount: 0 } },
       participatesIn: [],
     };
 
-    if (req.query.byOwnership) {
+    if (byOwnership) {
       resp = {
         isOwnerOf: await this.collectionsReadRepository.listByOwnership({
           userId: user.id,
+          isPrivate,
           page,
           pageSize,
         }),

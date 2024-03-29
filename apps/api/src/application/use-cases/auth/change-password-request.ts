@@ -61,7 +61,7 @@ class UseCase implements IChangePasswordRequestUseCase {
 
     await this.emailService.sendForgotPasswordEmail({
       destination: email,
-      url: `${process.env.WEB_APP_URL}/auth/change-password?changePasswordToken=${changePasswordToken}`,
+      // url: `${process.env.WEB_APP_URL}/auth/change-password?changePasswordToken=${changePasswordToken}`,
     });
   }
 }

@@ -10,7 +10,7 @@ import {
   UpdateVersionMetadataResponseBody,
 } from "@edu-platform/common";
 import { IUpdateActivityMetadataUseCase } from "@use-cases";
-import { pareToVersionRequestDto } from "@edu-platform/common";
+import { parseToVersionRequestDto } from "@edu-platform/common";
 import { ActivityVersionDtoMapper } from "@dto-mappers";
 import { parseNumberId } from "@infrastructure";
 
@@ -33,7 +33,7 @@ export class UpdateActivityMetadataController
   ) {}
 
   async execute(req: Request, res: Response) {
-    const versionDto = pareToVersionRequestDto(req.body);
+    const versionDto = parseToVersionRequestDto(req.body);
     const newVersion = ActivityVersionDtoMapper.mapFromDto(versionDto);
 
     const { activityId, versionId } = parseNumberId(req.params, [

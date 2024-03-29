@@ -19,7 +19,7 @@ type Response = TypedResponse<SaveAnswerResponseBody>;
 export class SaveAnswerController implements HTTPController<Request, Response> {
   method = HttpMethod.POST;
   path: string = "answer";
-  middlewares: string[] = ["auth", "file"];
+  middlewares: string[] = ["auth"];
 
   constructor(private saveAnswerUseCase: ISaveAnswerUseCase) {}
 

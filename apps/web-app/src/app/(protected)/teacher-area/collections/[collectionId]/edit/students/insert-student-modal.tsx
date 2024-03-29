@@ -10,7 +10,7 @@ export const InsertStudentModal = ({
   collectionId,
 }: InsertStudentModalProps) => {
   const insertMutation = useInsertUserInCollectionMutation({
-    onSuccess: () => successToast("Usuário inserido com sucesso!"),
+    onSuccess: () => successToast("New stuent inserted successfully!"),
   });
   const [email, setEmail] = useState("");
   const [isInsertStudentModalOpen, setIsInsertStudentModalOpen] =
@@ -29,21 +29,29 @@ export const InsertStudentModal = ({
           onClose={() => setIsInsertStudentModalOpen(false)}
           modalKey="insert-student-into-collection"
         >
-          <p>Digite o e-mail do estudante que deseja adicionar à coleção</p>
+          <p>
+            Type in the e-mail of the user you wish to add to this collection
+          </p>
           <div className="flex items-center">
             <Input
-              placeholder="E-mail do estudante"
+              className="w-[90%]"
+              placeholder="Student's e-mail"
               onChange={(e) => {
                 setEmail((e.target as any).value);
               }}
             />
-            <div className="cursor-pointer border-2 p-2 h-fit mt-4 mx-1 rounded-md">
-              <Icons.CHECK
-                onClick={() => {
-                  insertMutation.mutate({ collectionId, studentEmail: email });
-                }}
-                size={24}
-              />
+            <div // TODO : icon button
+              className="cursor-pointer border-2 p-2 h-fit mt-4 mx-1 rounded-md"
+              onClick={async () => {
+                await insertMutation.mutateAsync({
+                  collectionId,
+                  studentEmail: email,
+                });
+                console.log("inserted");
+                setIsInsertStudentModalOpen(false);
+              }}
+            >
+              <Icons.CHECK size={24} />
             </div>
           </div>
           <br />

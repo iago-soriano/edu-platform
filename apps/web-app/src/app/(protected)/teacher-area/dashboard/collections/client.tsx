@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import {
   useRouter,
   useSearchParams,
@@ -29,7 +28,7 @@ import {
   publicCollectionColumns,
 } from "./collection-tables";
 
-const pageSize = 1;
+const pageSize = 10;
 
 export default function CollectionsLayout({
   currActiveTab,

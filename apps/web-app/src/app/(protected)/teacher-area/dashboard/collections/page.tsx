@@ -7,7 +7,7 @@ import { SSRAxios } from "@infrastructure";
 import { ApiClient } from "@edu-platform/common";
 import Client from "./client";
 
-const pageSize = 1;
+const pageSize = 10;
 
 const Page = async ({ searchParams }) => {
   const queryClient = new QueryClient();

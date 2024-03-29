@@ -37,10 +37,15 @@ export interface IAssetRepository {
 
 type SendEmailArgs = {
   destination: string;
-  url: string;
 };
 export interface IEmailService {
   sendForgotPasswordEmail: (args: SendEmailArgs) => Promise<any>;
   sendVerifyAccountEmail: (args: SendEmailArgs) => Promise<any>;
-  sendStudentOutputCompletedEmail: (args: SendEmailArgs) => Promise<any>;
+  sendStudentOutputCompletedEmail: (
+    args: SendEmailArgs & {
+      studentOutputId: number;
+      studentName: string;
+      activityTitle: string;
+    }
+  ) => Promise<any>;
 }

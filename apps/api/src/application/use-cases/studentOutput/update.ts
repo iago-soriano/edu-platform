@@ -9,6 +9,7 @@ import {
   IStudentOutputsRepository,
   IEmailService,
   ICollectionsRepository,
+  INotificationsRepository,
 } from "@interfaces";
 
 type InputParams = {
@@ -25,7 +26,8 @@ class UseCase implements IUpdateStudentOutputUseCase {
   constructor(
     private studentOutputsRepository: IStudentOutputsRepository,
     private emailService: IEmailService,
-    private collectionsRepository: ICollectionsRepository
+    private collectionsRepository: ICollectionsRepository,
+    private notificationsRepository: INotificationsRepository
   ) {}
 
   async execute({ user, studentOutputId, newOutputStatus }: InputParams) {
@@ -42,8 +44,6 @@ class UseCase implements IUpdateStudentOutputUseCase {
       return { statusWasChanged: false };
     }
 
-    // TODO: pegar a collection pelo studentOutputId (criar um novo método, join)
-    // TODO: Pegar o dono da collection e a setting de notification. Criar entidade de notification e, a depender do setting da collection, mandar e-mail
     if (existingStudentOutput.status === OutputStatus.Draft) {
       const newOutput = new StudentOutput(studentOutputId);
       newOutput.status = OutputStatus.Completed;
@@ -58,13 +58,25 @@ class UseCase implements IUpdateStudentOutputUseCase {
       if (collection.notifyOwnerOnStudentOutput) {
         await this.emailService.sendStudentOutputCompletedEmail({
           destination: collection.owner.email!,
-          url: `seinão`, //TODO
+          studentOutputId,
+          studentName: user.name || "",
+          activityTitle: existingStudentOutput.version.title,
         });
       }
 
-      // const notification = Notification.BuildStudentOutputCompletedNotification();
+      const studentOutputCompletedNotification = new Notification();
 
-      // await this.notificationRepo.inser(notification);
+      studentOutputCompletedNotification.buildStudentOutputCompletedNotification(
+        studentOutputId,
+        user.name!,
+        collection.name!,
+        existingStudentOutput.version.title,
+        collection.owner.id
+      );
+
+      await this.notificationsRepository.insert(
+        studentOutputCompletedNotification
+      );
 
       return { statusWasChanged: true };
     }

@@ -1,6 +1,5 @@
 "use client";
 import {
-  PasswordInput,
   Input,
   Form,
   Footer,
@@ -10,6 +9,7 @@ import {
   errorToast,
   Separator,
 } from "@components";
+import { PasswordInput } from "components/atoms/input/password-input";
 import {
   signInSchema,
   useCredentialsSignInMutation,

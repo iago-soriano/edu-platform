@@ -25,7 +25,7 @@ export class SaveCollectionController
 {
   method = HttpMethod.POST;
   path: string = "collection";
-  middlewares: string[] = ["auth", "file"];
+  middlewares: string[] = ["auth"];
 
   constructor(private saveCollectionUseCase: ISaveCollectionUseCase) {}
 

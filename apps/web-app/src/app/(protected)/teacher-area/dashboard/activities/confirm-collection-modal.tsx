@@ -13,8 +13,13 @@ export const ConfirmCollectionModal = ({
 
   const [selected, setSelected] = useState(collectionId);
   const createActivityMutation = useCreateNewActivityMutation({
-    onSuccess: ({ activityId, versionId }) => {
-      router.push(Router.editActivity({ activityId, versionId }));
+    onSuccess: (args) => {
+      router.push(
+        Router.editActivity({
+          activityId: args?.activityId,
+          versionId: args?.versionId,
+        })
+      );
     },
   });
 
@@ -24,7 +29,7 @@ export const ConfirmCollectionModal = ({
       confirmAction={() =>
         createActivityMutation.mutate({ collectionId: selected })
       }
-      confirmButton={{ Icon: Icons.PLUS, text: "Criar atividade" }}
+      confirmButton={{ icon: "PLUS", text: "Criar atividade" }}
       title="Selecione uma coleção"
     >
       <>

@@ -163,7 +163,7 @@ export const OptionsMenu = ({
               <br />
             </>
           }
-          confirmButton={{ Icon: () => <Icons.TRASH />, text: "Remover" }}
+          confirmButton={{ icon: "TRASH", text: "Remover" }}
         />
       )}
       {openConfirmPublishModal && (
@@ -184,7 +184,7 @@ export const OptionsMenu = ({
               <br />
             </>
           }
-          confirmButton={{ Icon: () => <Icons.PUBLISH />, text: "Publicar" }}
+          confirmButton={{ icon: "PUBLISH", text: "Publicar" }}
         />
       )}
     </div>

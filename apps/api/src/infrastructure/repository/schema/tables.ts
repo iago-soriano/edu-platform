@@ -14,6 +14,7 @@ import {
   UserTypes,
   ContentTypes,
   OutputStatus,
+  NotificationType,
 } from "@domain";
 
 export const tokenTypeEnum = pgEnum("tokenType", [
@@ -38,8 +39,8 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-  name: varchar("name", { length: 30 }),
-  email: varchar("email", { length: 320 }).unique(),
+  name: varchar("name", { length: 30 }).notNull(),
+  email: varchar("email", { length: 320 }).unique().notNull(),
   hashedPassword: varchar("hashed_password", { length: 100 }),
   refreshToken: varchar("refresh_token", { length: 500 }),
   image: varchar("profile_image", { length: 150 }),
@@ -171,6 +172,10 @@ export const participantTypeEnum = pgEnum("participantType", [
 export const collectionParticipations = pgTable(
   "collection_participations",
   {
+    id: serial("id").primaryKey(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+
     userId: integer("user_id")
       .notNull()
       .references(() => users.id),
@@ -178,15 +183,17 @@ export const collectionParticipations = pgTable(
       .notNull()
       .references(() => collections.id),
     type: participantTypeEnum("participantType").notNull(),
-    notifyOnActivityInsert: boolean("notify_on_activity_insert").default(true),
-  },
-  (table) => {
-    return {
-      pk: primaryKey({
-        columns: [table.collectionId, table.userId, table.type],
-      }),
-    };
+    notifyOnActivityInsert: boolean("notify_on_activity_insert")
+      .default(true)
+      .notNull(),
   }
+  // (table) => {
+  //   return {
+  //     pk: primaryKey({
+  //       columns: [table.collectionId, table.userId, table.type],
+  //     }),
+  //   };
+  // }
 );
 
 // student output
@@ -223,11 +230,13 @@ export const studentAnswers = pgTable("student_answers", {
 
 export const notificationTypeEnum = pgEnum(
   "notificationType",
-  Object.values(OutputStatus || {}).filter((v) => isNaN(Number(v))) as [string]
+  Object.values(NotificationType || {}).filter((v) => isNaN(Number(v))) as [
+    string,
+  ]
 );
 
 export const notifications = pgTable("notifications", {
-  id: integer("id").primaryKey(),
+  id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   userId: integer("user_id")
@@ -235,6 +244,6 @@ export const notifications = pgTable("notifications", {
     .notNull(),
   isNew: boolean("is_new").default(true).notNull(),
   type: notificationTypeEnum("notificationType").notNull(),
-  message: varchar("message", { length: 250 }),
-  details: varchar("details", { length: 500 }),
+  message: varchar("message", { length: 250 }).notNull(),
+  details: varchar("details", { length: 500 }).notNull(),
 });

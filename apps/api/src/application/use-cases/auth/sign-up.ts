@@ -42,11 +42,13 @@ class UseCase implements ISignUpUseCase {
     if (!password || !confirmPassword) throw new PasswordsDontMatchError();
     if (password !== confirmPassword) throw new PasswordsDontMatchError();
 
+    if (!email || !name) throw new Error("Missing name or e-mail");
+
     const token = this.idService.getId();
 
     const userDTO: UserInsertDTO = {
-      email: user.email,
-      name: user.name,
+      email: user.email!,
+      name: user.name!,
       emailVerified: false,
       hashedPassword: await this.encryptionService.encrypt(user.password || ""),
     };
@@ -60,7 +62,7 @@ class UseCase implements ISignUpUseCase {
 
     await this.emailService.sendVerifyAccountEmail({
       destination: email,
-      url: `${process.env.WEB_APP_URL}/auth/verify-account?verificationToken=${token}`,
+      // url: `${process.env.WEB_APP_URL}/auth/verify-account?verificationToken=${token}`,
     });
   }
 }

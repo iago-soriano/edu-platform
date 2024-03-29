@@ -11,7 +11,6 @@ export const validateEmail = EmailValidator.validate;
 
 type SendEmailArgs = {
   destination: string;
-  url: string;
 };
 
 export class EmailService implements IEmailService {
@@ -30,7 +29,8 @@ export class EmailService implements IEmailService {
     });
   }
 
-  async sendForgotPasswordEmail({ destination, url }: SendEmailArgs) {
+  async sendForgotPasswordEmail({ destination }: SendEmailArgs) {
+    const url = `${process.env.WEB_APP_URL}/change-password`; //TODO ver quais paths passar nesse trem
     const resp = await this._transporter.sendMail({
       from: this.from,
       to: destination, // list of receivers
@@ -40,7 +40,8 @@ export class EmailService implements IEmailService {
     });
   }
 
-  async sendVerifyAccountEmail({ destination, url }: SendEmailArgs) {
+  async sendVerifyAccountEmail({ destination }: SendEmailArgs) {
+    const url = `${process.env.WEB_APP_URL}/verify-account`;
     const resp = await this._transporter.sendMail({
       from: this.from,
       to: destination, // list of receivers
@@ -49,11 +50,21 @@ export class EmailService implements IEmailService {
     });
   }
 
-  async sendStudentOutputCompletedEmail({ destination, url }: SendEmailArgs) {
+  async sendStudentOutputCompletedEmail({
+    destination,
+    studentOutputId,
+    studentName,
+    activityTitle,
+  }: SendEmailArgs & {
+    studentOutputId: number;
+    studentName: string;
+    activityTitle: string;
+  }) {
+    const url = `${process.env.WEB_APP_URL}/teacher-area/dashboard/student-outputs/${studentOutputId}`; //não sei o path desse aqui
     const resp = await this._transporter.sendMail({
       from: this.from,
       to: destination, // list of receivers
-      subject: "New student output", // Subject line
+      subject: `New output from ${studentName} to ${activityTitle}`, // Subject line
       html: NewStudentOutputEmailTemplate({ url }), // html body
     });
   }

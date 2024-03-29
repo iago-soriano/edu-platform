@@ -41,7 +41,11 @@ export const useInsertUserInCollectionMutation = (
 ) =>
   useBaseMutation<ParamsInsertUser, ReturnInsertUser>({
     mutationFn: (client, args) => client.insertUserInCollection(args),
-    invalidateQueries: ["collection-participations"],
+    invalidateQueries: [
+      "collection-participations",
+      "collection",
+      "collections",
+    ],
     ...args,
   });
 
@@ -55,7 +59,11 @@ export const useRemoveUserFromCollectionMutation = (
 ) =>
   useBaseMutation<ParamsRemoveUser, ReturnRemoveUser>({
     mutationFn: (client, args) => client.removeUserFromCollection(args),
-    invalidateQueries: ["collection-participations"],
+    invalidateQueries: [
+      "collection-participations",
+      "collection",
+      "collections",
+    ],
     ...args,
   });
 
@@ -112,7 +120,7 @@ export const useListStudentsOfCollectionQuery = ({
   const client = new ApiClient(axios);
 
   return useQuery<ListStudentsResponse, ServerError>({
-    queryKey: [`collection-participations`],
+    queryKey: ["collection-participations", { page, collectionId, pageSize }],
     queryFn: () =>
       client.listStudentsOfCollection({ collectionId, pageSize, page }),
   });

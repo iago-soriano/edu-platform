@@ -44,4 +44,4 @@ export const versionRequestSchema = z.object({
 export type VersionRequestDTO = z.infer<typeof versionRequestSchema> & {
   elements?: ElementDTO[];
 };
-export const pareToVersionRequestDto = versionRequestSchema.parse;
+export const parseToVersionRequestDto = versionRequestSchema.parse;

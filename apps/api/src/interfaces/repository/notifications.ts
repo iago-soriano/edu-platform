@@ -7,6 +7,7 @@ import {
 export interface INotificationsRepository {
   insert: (notification: Notification) => Promise<{ notificationId: number }>;
   update: (notificationId: number, isNew: boolean) => Promise<void>;
+  getNotificationById: (notificationId: number) => Promise<Notification>;
 }
 
 export interface INotificationsReadRepository {

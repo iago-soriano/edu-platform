@@ -22,3 +22,4 @@ export * from "./list-notifications";
 export * from "./update-notification";
 export * from "./follow-collection";
 export * from "./update-notification-config";
+export * from "./import-activity";

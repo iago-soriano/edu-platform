@@ -1,7 +1,6 @@
 "use client";
 import { useEffect } from "react";
 import {
-  PasswordInput,
   Form,
   FormButton,
   ErrorAlert,
@@ -9,6 +8,7 @@ import {
   successToast,
   Input,
 } from "@components";
+import { PasswordInput } from "components/atoms/input/password-input";
 import {
   useChangePasswordMutation,
   useCheckChangePasswordTokenMutation,
@@ -57,7 +57,7 @@ const Page = () => {
         </>
       )}
       <Form onSubmit={onSubmit} schema={changePasswordSchema}>
-        <Input hidden value={token} readOnly name="token" />
+        <Input hidden value={token || ""} readOnly name="token" />
         <PasswordInput
           name="password"
           inputLabel={{ text: "Senha", mandatory: true }}

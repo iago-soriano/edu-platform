@@ -1,5 +1,10 @@
-import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
-import { Activity, ActivityVersion } from "@domain";
+import {
+  IUseCase,
+  UserSelectDTO,
+  IActivitiesRepository,
+  ICollectionsRepository,
+} from "@interfaces";
+import { Activity, ActivityVersion, VersionStatus } from "@domain";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -14,10 +19,19 @@ type Return = {
 export type ICreateNewActivityUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ICreateNewActivityUseCase {
-  constructor(private activitiesRepository: IActivitiesRepository) {}
+  constructor(
+    private activitiesRepository: IActivitiesRepository,
+    private collectionsRepository: ICollectionsRepository
+  ) {}
 
   async execute({ user, collectionId }: InputParams) {
-    // TODO Verificar se usuário é o dono da collection
+    const collection = await this.collectionsRepository.getById(collectionId);
+
+    if (!collection) throw new Error("Coleção não encontrada");
+
+    if (collection.owner.id !== user.id)
+      throw new Error("Usuário não é dono da coleção");
+
     const { activityId } = await this.activitiesRepository.Activities.insert(
       user.id,
       collectionId
@@ -25,10 +39,10 @@ class UseCase implements ICreateNewActivityUseCase {
 
     const activity = new Activity(activityId);
 
-    //TODO colocar em estado draft
     const version = new ActivityVersion();
     version.activity = activity;
     version.version = 1;
+    version.status = VersionStatus.Draft;
 
     const { versionId } =
       await this.activitiesRepository.Versions.insert(version);

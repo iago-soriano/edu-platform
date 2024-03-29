@@ -1,4 +1,10 @@
-import { Activity, ActivityVersion, VersionStatus, Content } from "@domain";
+import {
+  Activity,
+  ActivityVersion,
+  VersionStatus,
+  Content,
+  Notification,
+} from "@domain";
 import {
   ActivityVersionHasNoContent,
   ActivityVersionHasNoTitleOrNoDescription,
@@ -12,10 +18,16 @@ import {
   IUseCase,
   UserSelectDTO,
   ActivityVersionSelectDTO,
+  ICollectionParticipationsRepository,
+  INotificationsRepository,
 } from "@interfaces";
 
 export class HandlePublishDraft {
-  constructor(private activitiesRepository: IActivitiesRepository) {}
+  constructor(
+    private activitiesRepository: IActivitiesRepository,
+    private collectionParticipationsRepository: ICollectionParticipationsRepository,
+    private notificationsRepository: INotificationsRepository
+  ) {}
   async execute(activity: Activity, version: ActivityVersion) {
     if (!activity.draftVersion) throw new Error("Draft version not found");
 
@@ -69,6 +81,24 @@ export class HandlePublishDraft {
     activity.draftVersion = undefined;
 
     await this.activitiesRepository.Activities.update(activity);
+
+    // send notifications
+    const usersToBeNotified =
+      await this.collectionParticipationsRepository.findParticipantsToBeNotified(
+        activity.collection.id
+      );
+
+    usersToBeNotified.map(async (user) => {
+      const notification = new Notification();
+      notification.buildActivityPublishedNotification(
+        version.id!,
+        activity.collection.name!,
+        version.title,
+        user.userId
+      );
+
+      await this.notificationsRepository.insert(notification);
+    });
 
     return {};
   }

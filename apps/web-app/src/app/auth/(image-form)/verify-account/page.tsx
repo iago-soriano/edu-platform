@@ -52,7 +52,11 @@ const Page = () => {
 const useVerifyAccount = () => {
   const localStorage = new LocalStorageHelper();
 
-  const [verifyState, setVerifyState] = useState({
+  const [verifyState, setVerifyState] = useState<{
+    loading: boolean;
+    error: string | null;
+    verified: boolean;
+  }>({
     loading: true,
     error: null,
     verified: false,
@@ -63,7 +67,7 @@ const useVerifyAccount = () => {
 
   const mutation = useVerifyAccountMutation({
     onSuccess: () => {
-      localStorage.setVerifiedToken(verificationToken);
+      localStorage.setVerifiedToken(verificationToken || "");
       setVerifyState({
         loading: false,
         error: null,

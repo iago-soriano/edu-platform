@@ -18,7 +18,6 @@ export const NotificationDtoMapper = {
 
   mapToInsertDto: (domain: Notification) => {
     const dto: typeof notifications.$inferInsert = {
-      id: domain.id,
       userId: domain.userId,
       isNew: domain.isNew,
       type: domain.type,

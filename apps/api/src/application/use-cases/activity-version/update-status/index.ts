@@ -4,6 +4,8 @@ import {
   IUseCase,
   UserSelectDTO,
   ActivityVersionSelectDTO,
+  ICollectionParticipationsRepository,
+  INotificationsRepository,
 } from "@interfaces";
 import { Activity, ActivityVersion, VersionStatus, Content } from "@domain";
 import {
@@ -36,8 +38,16 @@ class UseCase implements IUpdateActivityStatusUseCase {
   private _handleArchivePublished: HandleArchivePublished;
   private _handleRepublishArchived: HandleRepublishArchived;
 
-  constructor(private activitiesRepository: IActivitiesRepository) {
-    this._handlePublishDraft = new HandlePublishDraft(activitiesRepository);
+  constructor(
+    private activitiesRepository: IActivitiesRepository,
+    private collectionParticipationsRepository: ICollectionParticipationsRepository,
+    private notificationsRepository: INotificationsRepository
+  ) {
+    this._handlePublishDraft = new HandlePublishDraft(
+      activitiesRepository,
+      collectionParticipationsRepository,
+      notificationsRepository
+    );
     this._handleArchivePublished = new HandleArchivePublished(
       activitiesRepository
     );
