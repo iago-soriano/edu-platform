@@ -3,16 +3,16 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
+  ICollectionParticipationsReadRepository,
 } from "@interfaces";
 import {
-  ListStudentsOfCollectionParams,
-  ListStudentsOfCollectionResponseBody,
+  ListParticipantsOfCollectionQuery,
+  ListParticipantsOfCollectionResponseBody,
+  parseListParticipantsOfCollectionQuery,
 } from "@edu-platform/common";
-import { IListUsersInCollectionUseCase } from "@use-cases";
-import { parseNumberId } from "@infrastructure";
 
-type Request = TypedRequest<ListStudentsOfCollectionParams, {}, {}>;
-type Response = TypedResponse<ListStudentsOfCollectionResponseBody>;
+type Request = TypedRequest<ListParticipantsOfCollectionQuery, {}, {}>;
+type Response = TypedResponse<ListParticipantsOfCollectionResponseBody>;
 
 export class ListUsersInCollectionController
   implements HTTPController<Request, Response>
@@ -22,17 +22,21 @@ export class ListUsersInCollectionController
   middlewares: string[] = ["auth"];
 
   constructor(
-    private listUsersInCollectionUseCase: IListUsersInCollectionUseCase
+    private collectionParticipationsReadRepository: ICollectionParticipationsReadRepository
   ) {}
 
   async execute(req: Request, res: Response) {
     const { user } = req;
-    const { collectionId } = parseNumberId(req.params, ["collectionId"]);
+    const { collectionId, page, pageSize } =
+      parseListParticipantsOfCollectionQuery({ ...req.params, ...req.query });
 
-    const resp = await this.listUsersInCollectionUseCase.execute({
-      user,
-      collectionId,
-    });
+    const resp = await this.collectionParticipationsReadRepository.listStudents(
+      {
+        collectionId,
+        page,
+        pageSize,
+      }
+    );
 
     res.status(200).json(resp);
   }

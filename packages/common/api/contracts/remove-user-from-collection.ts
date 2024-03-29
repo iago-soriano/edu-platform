@@ -1,6 +1,6 @@
 type RequestBody = {};
 type ResponseBody = {};
-type Params = { collectionId: number; studentId: number };
+type Params = { collectionId: number; participationId: number };
 
 export {
   RequestBody as RemoveUserFromCollectionRequestBody,

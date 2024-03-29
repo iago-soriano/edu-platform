@@ -30,18 +30,22 @@ class UseCase implements IInsertUserInCollectionUseCase {
 
   async execute({ user, collectionId, studentEmail }: InputParams) {
     const collection = await this.collectionsRepository.getById(collectionId);
-    if (!collection) throw new Error("Coleção não encontrada");
+    if (!collection || !collection.isPrivate)
+      throw new Error("Coleção não encontrada");
 
     if (collection.owner.id !== user.id) throw new UserIsNotCollectionOwner();
 
     const student = await this.userRepository.getUserByEmail(studentEmail);
 
-    if (!student) throw new StudentIsNotUser();
+    if (!student) throw new StudentIsNotUser(); // TODO rename error
 
-    await this.collectionParticipationsRepository.insertStudent(
+    // TODO: ensure the same user is not inserted more than once
+
+    await this.collectionParticipationsRepository.insertParticipant(
       student.id,
       collectionId,
-      "Follower"
+      "Student"
+      // renomear método de inserir e arquivo para insert-student
     );
   }
 }

@@ -9,10 +9,7 @@ import {
   RemoveUserFromCollectionRequestBody,
   RemoveUserFromCollectionResponseBody,
 } from "@edu-platform/common";
-import {
-  IInsertUserInCollectionUseCase,
-  IRemoveUserFromCollectionUseCase,
-} from "@use-cases";
+import { IUnfollowCollectionUseCase } from "@use-cases";
 import { parseNumberId } from "@infrastructure";
 
 type Request = TypedRequest<
@@ -22,33 +19,26 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<RemoveUserFromCollectionResponseBody>;
 
-export class RemoveUserFromCollectionController
+export class UnfollowCollectionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.DELETE;
-  path: string = "collection/:collectionId/student/:studentId";
-  middlewares: string[] = ["auth", "file"];
+  path: string = "collection/:collectionId/unfollow";
+  middlewares: string[] = ["auth"];
 
-  constructor(
-    private removeUserFromCollectionUseCase: IRemoveUserFromCollectionUseCase
-  ) {}
+  constructor(private unfollowCollectionUseCase: IUnfollowCollectionUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { collectionId, studentId } = parseNumberId(req.params, [
-      "collectionId",
-      "studentId",
-    ]);
+    const { collectionId } = parseNumberId(req.params, ["collectionId"]);
 
     const { user } = req;
 
-    const { alreadyRemoved } =
-      await this.removeUserFromCollectionUseCase.execute({
-        user,
-        collectionId,
-        studentId,
-      });
+    const { alreadyUnfollowed } = await this.unfollowCollectionUseCase.execute({
+      user,
+      collectionId,
+    });
 
-    if (!alreadyRemoved) {
+    if (!alreadyUnfollowed) {
       res.status(200).json();
     } else {
       res.status(202).json();

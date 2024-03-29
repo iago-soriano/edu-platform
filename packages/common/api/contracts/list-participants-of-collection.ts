@@ -10,7 +10,11 @@ const querySchema = z
 const parseListParticipantsOfCollectionQuery = querySchema.parse;
 
 type Query = z.infer<typeof querySchema>;
-type ResponseBody = { id: number; name: string; email: string }[];
+type ResponseBody = PaginatedResponse<{
+  id: number;
+  name: string;
+  email: string;
+}>;
 
 export {
   ResponseBody as ListParticipantsOfCollectionResponseBody,

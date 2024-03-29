@@ -24,7 +24,7 @@ export class InsertUserInCollectionController
 {
   method = HttpMethod.POST;
   path: string = "collection/:collectionId/student";
-  middlewares: string[] = ["auth", "file"];
+  middlewares: string[] = ["auth"];
 
   constructor(
     private insertUserInCollectionUseCase: IInsertUserInCollectionUseCase

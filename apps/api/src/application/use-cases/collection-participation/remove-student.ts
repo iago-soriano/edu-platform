@@ -9,36 +9,30 @@ import {
 type InputParams = {
   user: UserSelectDTO;
   collectionId: number;
-  studentId: number;
+  participationId: number;
 };
 
 type Return = { alreadyRemoved: boolean };
 
-export type IRemoveUserFromCollectionUseCase = IUseCase<InputParams, Return>;
+export type IRemoveStudentFromCollectionUseCase = IUseCase<InputParams, Return>;
 
-class UseCase implements IRemoveUserFromCollectionUseCase {
+class UseCase implements IRemoveStudentFromCollectionUseCase {
   constructor(
     private collectionsRepository: ICollectionsRepository,
     private collectionParticipationsRepository: ICollectionParticipationsRepository
   ) {}
 
-  async execute({ user, collectionId, studentId }: InputParams) {
+  async execute({ user, collectionId, participationId }: InputParams) {
     const collection = await this.collectionsRepository.getById(collectionId);
     if (!collection) throw new Error("Coleção não encontrada");
 
     if (collection.owner.id !== user.id) throw new UserIsNotCollectionOwner();
 
     const studentAssociatedWithCollection =
-      await this.collectionParticipationsRepository.findStudentCollectionRelation(
-        studentId,
-        collectionId
-      );
+      await this.collectionParticipationsRepository.findById(participationId);
 
     if (studentAssociatedWithCollection) {
-      await this.collectionParticipationsRepository.removeStudent(
-        studentId,
-        collectionId
-      );
+      await this.collectionParticipationsRepository.delete(participationId);
       return { alreadyRemoved: false };
     } else {
       return { alreadyRemoved: true };

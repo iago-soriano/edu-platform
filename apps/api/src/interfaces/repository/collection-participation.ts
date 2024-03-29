@@ -1,23 +1,51 @@
-import { Collection, User } from "@domain";
-import { UserSelectDTO } from "./dtos";
+import {
+  ListParticipantsOfCollectionResponseBody,
+  PaginatedParamsDTO,
+} from "@edu-platform/common";
 
 export interface ICollectionParticipationsRepository {
-  insertStudent: (
-    studentId: number,
+  insertParticipant: (
+    userId: number,
     collectionId: number,
     type: "Follower" | "Student"
   ) => Promise<void>;
-  removeStudent: (studentId: number, collectionId: number) => Promise<void>;
-  findStudentCollectionRelation: (
+  delete: (id: number) => Promise<void>;
+  findByParticipantAndCollectionId: (
     studentId: number,
     collectionId: number
   ) => Promise<
-    | { userId: number; collectionId: number; type: "Follower" | "Student" }
+    | {
+        id: number;
+        userId: number;
+        collectionId: number;
+        type: "Follower" | "Student";
+        notifyOnActivityInsert: boolean;
+      }
     | undefined
   >;
+  findById: (id: number) => Promise<
+    | {
+        id: number;
+        userId: number;
+        collectionId: number;
+        type: "Follower" | "Student";
+        notifyOnActivityInsert: boolean;
+      }
+    | undefined
+  >;
+  findParticipantsToBeNotified: (
+    collectionId: number
+  ) => Promise<{ userId: number }[]>;
+  updateNotificationsSettings: (
+    userId: number,
+    collectionId: number,
+    notifyOnActivityInsert: boolean
+  ) => Promise<void>;
 }
 
 export interface ICollectionParticipationsReadRepository {
-  listStudents: (collectionId: number) => Promise<User[]>;
+  listStudents: (
+    args: { collectionId: number } & PaginatedParamsDTO
+  ) => Promise<ListParticipantsOfCollectionResponseBody>;
   // listCollections: (studentId: number) => Promise<Collection[]>;
 }
