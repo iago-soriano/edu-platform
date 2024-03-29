@@ -28,7 +28,8 @@ export const YoutubePlayer = ({
         <ReactPlayer
           onReady={(e) => {
             setPlayer(e["player"]);
-            setDuration(parseNumberToTimeLabel(e["player"]?.getDuration()));
+            setDuration &&
+              setDuration(parseNumberToTimeLabel(e["player"]?.getDuration()));
           }}
           url={videoUrl}
           width={playerWidth}

@@ -43,7 +43,7 @@ export const Pagination = ({
           />
         </PaginationItem>
       </PaginationContent>
-      <div className="col-start-3 col-span-1 flex flex-row items-center justify-end mr-3">
+      <div className="md:col-start-3 col-span-1 flex flex-row items-center md:justify-end justify-center mr-3">
         {/* pagination summary */}
         Showing {Math.min(currentPage * pageSize + 1, totalRowCount)} to{" "}
         {Math.min((currentPage + 1) * pageSize, totalRowCount)} of{" "}

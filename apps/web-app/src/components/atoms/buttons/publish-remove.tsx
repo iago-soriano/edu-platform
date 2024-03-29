@@ -1,4 +1,4 @@
-import { Icons, Tooltip } from "@components";
+import { Icons } from "../icons";
 import { twMerge } from "tailwind-merge";
 
 const footerButtonsClasses =
@@ -16,7 +16,7 @@ export const PublishButton = ({ disabled, ...rest }) => {
   );
   if (disabled)
     return (
-      <Tooltip content="Não se pode publicar uma atividade sem conteúdos ou perguntas">
+      <>
         <button
           {...rest}
           className={twMerge(
@@ -27,7 +27,8 @@ export const PublishButton = ({ disabled, ...rest }) => {
         >
           {getContent()}
         </button>
-      </Tooltip>
+        Não se pode publicar uma atividade sem conteúdos ou perguntas
+      </>
     );
   return (
     <button

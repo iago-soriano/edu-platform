@@ -1,5 +1,7 @@
+"use client";
 import { useState } from "react";
-import { Icons, Input } from "@components";
+import { Input } from ".";
+import { Icons } from "../icons";
 import { IInputProps } from "./interface";
 
 export const PasswordInput = ({ label, placeholder, ...rest }: IInputProps) => {

@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge";
-import React, { ReactElement } from "react";
+import React from "react";
 
 interface IRadioButtonProps
   extends React.InputHTMLAttributes<HTMLInputElement> {

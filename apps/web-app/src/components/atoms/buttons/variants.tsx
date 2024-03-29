@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { Spinner, Icons } from "@components";
+import { Icons } from "../icons";
+import { Spinner } from "../spinner";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@infrastructure";
 import { twMerge } from "tailwind-merge";
@@ -26,7 +27,7 @@ const buttonVariants = cva(
       size: {
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-8 py-2",
+        lg: "h-10 rounded-md px-8 py-2 min-w-[140px]",
         icon: "h-9 w-9",
       },
     },
@@ -83,7 +84,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </>
         ) : withIcon ? (
           <>
-            {Icon && <Icon />} <span className="px-1" />
+            {Icon && <Icon size={20} />}
             {children}
           </>
         ) : (

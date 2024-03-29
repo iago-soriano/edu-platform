@@ -17,7 +17,7 @@ export const ActionLink = ({ children, highlighted, className, href }) => {
   );
 };
 
-import { Spinner } from "@components";
+import { Spinner } from "../spinner";
 
 interface IFormButtonProps {
   loading?: boolean;

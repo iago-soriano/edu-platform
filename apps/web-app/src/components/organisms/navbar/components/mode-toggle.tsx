@@ -11,7 +11,6 @@ export const ModeToggle = () => {
       <Toggle
         onChange={() => setMode(mode === "dark" ? "light" : "dark")}
         checked={mode === "dark"}
-        label=""
       />
     </div>
   );

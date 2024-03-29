@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Icons, buttonVariants } from "@components";
+import { buttonVariants } from "../buttons";
+import { Icons } from "../icons";
 import { cn } from "@infrastructure";
 
 const PaginationRoot = ({
@@ -10,7 +11,7 @@ const PaginationRoot = ({
     role="navigation"
     aria-label="pagination"
     className={cn(
-      "mx-auto my-2 grid grid-cols-3 w-full justify-center p-3 ",
+      "mx-auto my-2 grid md:grid-cols-3 grid-cols-1 w-full justify-center p-3 gap-y-1",
       className
     )}
     {...props}
@@ -25,7 +26,7 @@ const PaginationContent = React.forwardRef<
   <ul
     ref={ref}
     className={cn(
-      "col-span-1 col-start-2 flex flex-row items-center justify-center gap-1",
+      "col-span-1 md:col-start-2 flex flex-row items-center justify-center gap-1",
       className
     )}
     {...props}

@@ -6,7 +6,7 @@ export const TrackSeek = ({
   player,
 }: {
   track: string;
-  player: LibYoutubePlayer;
+  player: LibYoutubePlayer | null;
 }) => {
   const start = track.split("-")[0];
   const end = track.split("-")[1];

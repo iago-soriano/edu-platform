@@ -1,4 +1,4 @@
-import { Icons, Tooltip } from "@components";
+import { Icons } from "../icons";
 
 export const NewItemButton = ({ children, ...rest }) => (
   <button

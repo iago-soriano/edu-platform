@@ -1,3 +1,4 @@
+"use client"; // TODO: make this server component
 import { useMediaQuery } from "react-responsive";
 import { usePathname } from "next/navigation";
 import { SmallScreenNavbar } from "./small-screen";

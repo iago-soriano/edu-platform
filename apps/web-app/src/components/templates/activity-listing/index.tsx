@@ -1,4 +1,4 @@
-"use client";
+"use client"; //TODO: after pre-fetch, server component
 import {
   DraftVersionActivityCard,
   ArchivedGroupActivityCard,

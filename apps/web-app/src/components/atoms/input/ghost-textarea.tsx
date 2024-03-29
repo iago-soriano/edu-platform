@@ -1,21 +1,21 @@
 import { twMerge } from "tailwind-merge";
-import React, { InputHTMLAttributes, useRef, useEffect } from "react";
+import React, { InputHTMLAttributes } from "react";
 
 export function GhostTextArea(
   args: InputHTMLAttributes<{}> & { error?: string }
 ) {
   const { className, error, ...rest } = args;
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  useEffect(() => {
-    if (textAreaRef && textAreaRef.current) {
-      textAreaRef.current.style.height =
-        textAreaRef.current.scrollHeight + "px";
-    }
-  }, []);
+  // const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  // useEffect(() => {
+  //   if (textAreaRef && textAreaRef.current) {
+  //     textAreaRef.current.style.height =
+  //       textAreaRef.current.scrollHeight + "px";
+  //   }
+  // }, []); // TODO wft
   return (
     <>
       <textarea
-        ref={textAreaRef}
+        // ref={textAreaRef}
         className={twMerge(
           "block p-2 rounded w-full placeholder:txt-text2 placeholder:opacity-80 outline-none focus:shadow-outline bg-inherit",
           className,

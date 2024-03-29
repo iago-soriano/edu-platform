@@ -1,3 +1,4 @@
+"use client";
 import {
   Envelope,
   Question,
@@ -26,6 +27,7 @@ import {
   BellSlash,
   GitBranch,
   Dot,
+  CircleNotch,
 } from "@phosphor-icons/react";
 
 export const Icons = {
@@ -56,4 +58,5 @@ export const Icons = {
   NOTIFICATIONSLASH: (props) => <BellSlash {...props} />,
   VERSION: (props) => <GitBranch {...props} />,
   DOT: (props) => <Dot {...props} />,
+  SPINNER: (props) => <CircleNotch {...props} />,
 };

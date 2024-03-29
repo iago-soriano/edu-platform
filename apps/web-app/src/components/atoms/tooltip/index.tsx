@@ -1,5 +1,3 @@
-// import { Tooltip as LibToolTip } from 'react-tooltip';
-"use client";
 import Tippy from "@tippyjs/react";
 import React, { HtmlHTMLAttributes, ReactElement } from "react";
 

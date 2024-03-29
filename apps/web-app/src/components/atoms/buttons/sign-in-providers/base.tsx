@@ -1,4 +1,4 @@
-import { VerticalSeparator } from "@components";
+import { VerticalSeparator } from "../../separator";
 
 export interface IProviderButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

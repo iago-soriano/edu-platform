@@ -1,8 +1,9 @@
+"use client";
 import { useState } from "react";
 import { LibYoutubePlayer, YoutubePlayer, TrackSeek } from "@components";
 
 export const VideoContent = ({ url, tracks }) => {
-  const [player, setPlayer] = useState<LibYoutubePlayer>(null);
+  const [player, setPlayer] = useState<LibYoutubePlayer | null>(null);
 
   const isWatchWholeVideo =
     tracks.length === 0 ||

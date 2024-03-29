@@ -1,4 +1,4 @@
-import { Modal, ConfirmButton, CancelButton } from "@components";
+import { Modal, Button, ButtonProps } from "@components";
 
 interface ConfirmModalProps {
   onClose: () => any;
@@ -6,7 +6,7 @@ interface ConfirmModalProps {
   title?: string;
   children: React.ReactNode;
   confirmButton: {
-    Icon: React.ComponentType<any>;
+    icon: ButtonProps["withIcon"];
     text: string;
   };
 }
@@ -15,23 +15,29 @@ export const ConfirmModal = ({
   confirmAction,
   title,
   children,
-  confirmButton: { Icon, text },
+  confirmButton: { icon, text },
 }: ConfirmModalProps) => {
   return (
     <Modal
-      modalKey="confirm-publish"
+      modalKey="confirm-modal"
       onClose={onClose}
       className="max-w-[550px] w-[90%] p-4"
     >
       <h5>{title}</h5>
       {children}
-      <div className="p-2 my-3 flex justify-around w-full">
-        <CancelButton
+      <div className="p-2 my-3 mx-auto flex justify-evenly w-full">
+        <Button
+          variant="secondary"
+          size="lg"
           onClick={() => {
             onClose();
           }}
-        />
-        <ConfirmButton onClick={confirmAction} Icon={Icon} text={text} />
+        >
+          Cancel
+        </Button>
+        <Button size="lg" onClick={confirmAction} withIcon={icon}>
+          {text}
+        </Button>
       </div>
     </Modal>
   );

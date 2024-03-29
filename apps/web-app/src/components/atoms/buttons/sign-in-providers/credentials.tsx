@@ -1,5 +1,5 @@
 import { ProviderSignInButton } from "./base";
-import { Icons } from "@components";
+import { Icons } from "../../icons";
 
 export const CredentialsSignInButton = ({ onClick }) => {
   return (

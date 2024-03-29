@@ -1,3 +1,4 @@
+"use client";
 import { useGetActivityVersionQuery } from "@endpoints";
 
 export const ActivityHeader = ({ activityId, versionId }) => {

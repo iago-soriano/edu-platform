@@ -1,5 +1,6 @@
 import React from "react";
-import { Tooltip, Icons } from "@components";
+import { Icons } from "../icons";
+import { Tooltip } from "../tooltip";
 import { IInputProps } from "./interface";
 import { twMerge } from "tailwind-merge";
 
@@ -56,7 +57,7 @@ export function Input(args: IInputProps) {
       <span className="absolute top-14 right-3 text-text1">{icon}</span>
       {errors && (
         <p className="text-left py-1 mt-2 mb-0 text-error">
-          {errors && errors[name]?.message}
+          {errors && name && errors[name]?.message}
         </p>
       )}
     </label>

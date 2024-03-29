@@ -1,4 +1,4 @@
-import { Spinner, ErrorCard, NoDataCard } from "@components";
+import { Loading, ErrorCard, NoDataCard } from "@components";
 import { ReactNode } from "react";
 
 interface ErrorLoadingDataProps {
@@ -16,35 +16,23 @@ export const LoadingErrorData = ({
   noData,
   hasData,
 }: ErrorLoadingDataProps) => {
+  let errorMessage;
+
   if (error) {
-    let errorMessage = "Houve um erro de conexão com a internet";
+    errorMessage = "Houve um erro de conexão com a internet";
     if (error.message !== "Network Error") {
       console.log("query error", error);
       errorMessage = `Houve um erro: ${error?.message}`;
     }
-
-    return (
-      <div className="p-3 flex justify-center">
-        <ErrorCard message={errorMessage} />
-      </div>
-    );
   }
 
-  if (loading) {
-    return (
-      <div className="h-[150px] my-10">
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (!hasData)
-    return (
-      noData || (
-        <div className="p-3 flex justify-center">
-          <NoDataCard />
-        </div>
-      )
-    );
-  return data;
+  // console.log({ hasData, error, loading });
+  return (
+    <div className="p-3 flex justify-center">
+      {/* {error && <ErrorCard message={errorMessage} />} */}
+      {!error && !hasData && !loading && (noData || <NoDataCard />)}
+      {!error && !loading && hasData && data}
+      <Loading show={loading} />
+    </div>
+  );
 };

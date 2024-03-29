@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { ActionLink } from "@components";
 import { HamburguerButton } from "./hamburguer";

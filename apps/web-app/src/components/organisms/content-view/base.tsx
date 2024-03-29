@@ -1,3 +1,5 @@
+"use client";
+
 import { VideoContent } from ".";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -26,17 +28,17 @@ export const BaseContent = ({
     switch (type) {
       case "Text":
         return (
-          <TextContentView>{contentDto.payload.text.text}</TextContentView>
+          <TextContentView>{contentDto.payload?.text?.text}</TextContentView>
         );
       case "Video":
         return (
           <VideoContent
-            url={contentDto.payload.video.url}
-            tracks={contentDto.payload.video.tracks?.split(",")}
+            url={contentDto.payload?.video?.url}
+            tracks={contentDto.payload?.video?.tracks?.split(",")}
           />
         );
       case "Image":
-        return <ImageView src={contentDto.payload.image.url} />;
+        return <ImageView src={contentDto.payload?.image?.url} />;
     }
   };
 
