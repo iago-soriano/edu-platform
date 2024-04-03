@@ -1,0 +1,76 @@
+// import { IQuestions } from "@interfaces";
+// import {
+//   db,
+//   activityQuestions,
+//   alternatives,
+//   activityVersions,
+// } from "@infrastructure";
+// import { eq, inArray } from "drizzle-orm";
+// import { Question } from "@domain";
+// import { QuestionDtoMapper, AlternativeDtoMapper } from "../../../dto-mappers";
+
+// export class Questions implements IQuestions {
+//   async insert(tx: typeof db, question: Question) {
+//     if (!question.versionId)
+//       throw new Error("There must be a version id to insert");
+
+//     const insertedQuestion = (
+//       await tx
+//         .insert(activityQuestions)
+//         .values(QuestionDtoMapper.mapToInsertDto(question))
+//         .returning({ id: activityQuestions.id })
+//     )[0];
+//     let insertedAlternatives: { id: number }[] = [];
+//     if (question.alternatives) {
+//       insertedAlternatives = await tx
+//         .insert(alternatives)
+//         .values(
+//           question.alternatives.map((alt) =>
+//             AlternativeDtoMapper.mapToInsertDto(alt)
+//           )
+//         )
+//         .returning({ id: alternatives.id });
+//     }
+//     await tx
+//       .update(activityVersions)
+//       .set({ updatedAt: new Date() })
+//       .where(eq(activityVersions.id, question.versionId!));
+
+//     return {
+//       questionId: insertedQuestion.id,
+//       alternativesIds: insertedAlternatives.map(({ id }) => id),
+//     };
+//   }
+
+//   async update(tx: typeof db, question: Question) {
+//     if (!question.id) throw new Error("There must be an id to update");
+
+//     await tx
+//       .update(activityQuestions)
+//       .set(QuestionDtoMapper.mapToInsertDto(question))
+//       .where(eq(activityQuestions.id, question.id!));
+
+//     await tx
+//       .update(activityVersions)
+//       .set({ updatedAt: new Date() })
+//       .where(eq(activityVersions.id, question.versionId!));
+//   }
+
+//   async delete(tx: typeof db, questionId: number) {
+//     // get ids of all alternatives
+//     const alternativeIds = (
+//       await tx
+//         .select({ id: alternatives.id })
+//         .from(alternatives)
+//         .where(eq(activityQuestions.id, questionId))
+//     ).map(({ id }) => id);
+//     // delete them all
+//     await tx
+//       .delete(alternatives)
+//       .where(inArray(alternatives.id, alternativeIds));
+//     // delete question
+//     await db
+//       .delete(activityQuestions)
+//       .where(eq(activityQuestions.id, questionId));
+//   }
+// }

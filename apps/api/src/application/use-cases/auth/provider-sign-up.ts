@@ -5,7 +5,6 @@ import {
   UserInsertDTO,
   IUseCase,
 } from "@interfaces";
-import { IInsertDefaultCollectionUseCase } from "@use-cases";
 import { User } from "@domain";
 
 type InputParams = {
@@ -24,11 +23,12 @@ export type IProviderSignUpUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IProviderSignUpUseCase {
   constructor(
     private userRepository: IUserRepository,
-    private tokenService: ITokenService,
-    private insertDefaultCollectionUseCase: IInsertDefaultCollectionUseCase
+    private tokenService: ITokenService
   ) {}
 
   async execute({ email, name, image, provider }: InputParams) {
+    if (!provider) throw new Error("Please provide a provider name");
+
     let existingUser = await this.userRepository.getUserByEmail(email);
     let userId;
 
@@ -45,9 +45,9 @@ class UseCase implements IProviderSignUpUseCase {
       };
 
       userId = (await this.userRepository.insertUser(userDTO)).userId;
-      await this.insertDefaultCollectionUseCase.execute(
-        new User(userId, name, email, "")
-      );
+      // await this.insertDefaultCollectionUseCase.execute(
+      //   new User(userId, name, email, "")
+      // );
     } else {
       userId = existingUser.id;
     }

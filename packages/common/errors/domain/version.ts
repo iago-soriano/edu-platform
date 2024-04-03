@@ -17,14 +17,6 @@ export class ActivityVersionIsNotDraft extends CustomError {
   }
 }
 
-export class ActivityVersionHasTooManyTopics extends CustomError {
-  HTTPstatusCode = 400;
-  static message = `Há tópicos demais. Número máximo permitido é de ${DomainRules.ACTIVITY.TOPICS.MAX_COUNT}`;
-  constructor() {
-    super("", { topics: ActivityVersionHasTooManyTopics.message });
-  }
-}
-
 export class UserIsNotDraftAuthor extends CustomError {
   HTTPstatusCode = 400;
   static message = "Non-author cannot get draft version";
@@ -47,45 +39,5 @@ export class ActivityVersionHasNoContent extends CustomError {
   static message = "Não há conteúdos, não se pode publicar uma atividade vazia";
   constructor() {
     super(ActivityVersionHasNoContent.message);
-  }
-}
-
-export class ActivityVersionHasNoTitleOrNoDescription extends CustomError {
-  HTTPstatusCode = 400;
-  static message = "Atividade deve haver título e descrição";
-  constructor() {
-    super(ActivityVersionHasNoTitleOrNoDescription.message);
-  }
-}
-
-export class ActivityTitleIsTooLong extends CustomError {
-  HTTPstatusCode = 400;
-  static message = `Título é long demais. Tamanho máximo permitido é de ${DomainRules.ACTIVITY.TITLE.MAX_LENGTH} caracteres`;
-  constructor() {
-    super("", { title: ActivityTitleIsTooLong.message });
-  }
-}
-
-export class ActivityTitleIsTooShort extends CustomError {
-  HTTPstatusCode = 400;
-  static message = `Título é curto demais. Tamanho mínimo permitido é de ${DomainRules.ACTIVITY.TITLE.MIN_LENGTH} caracteres`;
-  constructor() {
-    super("", { title: ActivityTitleIsTooShort.message });
-  }
-}
-
-export class ActivityDescriptionIsTooLong extends CustomError {
-  HTTPstatusCode = 400;
-  static message = `Descrição é longa demais. Tamanho máximo permitido é de ${DomainRules.ACTIVITY.DESCRIPTION.MAX_LENGTH} caracteres`;
-  constructor() {
-    super("", { description: ActivityDescriptionIsTooLong.message });
-  }
-}
-
-export class ActivityDescriptionIsTooShort extends CustomError {
-  HTTPstatusCode = 400;
-  static message = `Descrição é curta demais. Tamanho mínimo permitido é de ${DomainRules.ACTIVITY.DESCRIPTION.MIN_LENGTH} caracteres`;
-  constructor() {
-    super("", { description: ActivityDescriptionIsTooShort.message });
   }
 }

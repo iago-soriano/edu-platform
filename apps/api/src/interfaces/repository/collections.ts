@@ -8,7 +8,7 @@ export interface ICollectionsRepository {
   insert: (collection: Collection) => Promise<{ collectionId: number }>;
   update: (collection: Collection) => Promise<void>;
   getById: (collectionId: number) => Promise<Collection | null>;
-  getCollectionByVersionId: (versionId: number) => Promise<Collection>;
+  getCollectionByVersionId: (versionId: string) => Promise<Collection>;
 }
 
 export interface ICollectionsReadRepository {

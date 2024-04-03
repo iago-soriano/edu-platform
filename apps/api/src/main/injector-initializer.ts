@@ -1,5 +1,5 @@
-import { ListCollectionsByUserController } from "../controllers/collection/list-by-user";
-import { CreateNewActivityController } from "../controllers/activity/new";
+import { ListCollectionsByUserController } from "../controllers/queries/collections/list-by-user";
+import { CreateNewActivityController } from "../controllers/commands/activities/create-new-activity";
 import * as awilix from "awilix";
 import {
   SignInController,
@@ -10,16 +10,14 @@ import {
   ChangePasswordRequestController,
   ChangePasswordController,
   CheckChangePasswordTokenRequestController,
-  UpdateVersionStatusController,
+  PublishDraftController,
   SaveQuestionController,
   SaveContentController,
   CreateNewDraftVersionController,
   UpdateActivityMetadataController,
   GetActivityVersionController,
   ListActivityVersionsController,
-  DeleteContentController,
-  DeleteQuestionController,
-  DeleteVersionController,
+  DeleteElementController,
   RefreshTokenController,
   SaveCollectionController,
   InsertUserInCollectionController,
@@ -40,25 +38,21 @@ import {
   ChangePasswordRequestUseCase,
   ChangePasswordUseCase,
   CheckChangePasswordTokenRequestUseCase,
-  UpdateActivityStatusUseCase,
   SaveQuestionUseCase,
   CreateNewActivityUseCase,
   UpdateActivityMetadataUseCase,
-  DeleteContentUseCase,
-  DeleteQuestionUseCase,
-  DeleteVersionUseCase,
+  DeleteElementUseCase,
   RefreshTokenUseCase,
   SaveContentUseCase,
   CreateNewDraftVersionUseCase,
   SaveCollectionUseCase,
   InsertUserInCollectionUseCase,
   RemoveStudentFromCollectionUseCase,
-  GetCollectionUseCase,
-  InsertDefaultCollectionUseCase,
   SaveAnswerUseCase,
   UpdateNotificationUseCase,
   InsertFollowerInCollectionUseCase,
   ImportActivityUseCase,
+  PublishDraftUseCase,
 } from "@use-cases";
 import {
   BCryptEncryptionService,
@@ -68,19 +62,19 @@ import {
   UserRepository,
   TokenRepository,
   AssetRepository,
-  ActivityRepository,
+  ActivitiesRepository,
   S3Service,
   CollectionsRepository,
   CollectionParticipationsRepository,
   StudentOutputsRepository,
   StudentAnswersRepository,
-  ActivityReadRepository,
+  ActivitiesReadRepository,
   CollectionsReadRepository,
   CollectionParticipationsReadRepository,
   NotificationsRepository,
   NotificationsReadRepository,
 } from "@infrastructure";
-import { ListNotificationsController } from "controllers/notification/list";
+import { ListNotificationsController } from "controllers/queries/notifications/list";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
@@ -101,9 +95,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     checkChangePasswordTokenRequestController: awilix
       .asClass(CheckChangePasswordTokenRequestController)
       .classic(),
-    updateActivityStatusController: awilix
-      .asClass(UpdateVersionStatusController)
-      .classic(),
+    publishDraftController: awilix.asClass(PublishDraftController).classic(),
     saveQuestionController: awilix.asClass(SaveQuestionController).classic(),
     saveContentController: awilix.asClass(SaveContentController).classic(),
     createNewActivityController: awilix
@@ -118,12 +110,8 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     listActivityVersionsController: awilix
       .asClass(ListActivityVersionsController)
       .classic(),
-    deleteContentController: awilix.asClass(DeleteContentController).classic(),
-    deleteQuestionController: awilix
-      .asClass(DeleteQuestionController)
-      .classic(),
+    deleteElementController: awilix.asClass(DeleteElementController).classic(),
     refreshTokenController: awilix.asClass(RefreshTokenController).classic(),
-    deleteVersionController: awilix.asClass(DeleteVersionController).classic(),
     createNewDraftVersionController: awilix
       .asClass(CreateNewDraftVersionController)
       .classic(),
@@ -180,9 +168,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     checkChangePasswordTokenRequestUseCase: awilix
       .asClass(CheckChangePasswordTokenRequestUseCase)
       .classic(),
-    updateActivityStatusUseCase: awilix
-      .asClass(UpdateActivityStatusUseCase)
-      .classic(),
     saveQuestionUseCase: awilix.asClass(SaveQuestionUseCase).classic(),
     createNewActivityUseCase: awilix
       .asClass(CreateNewActivityUseCase)
@@ -191,9 +176,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(UpdateActivityMetadataUseCase)
       .classic(),
     saveContentUseCase: awilix.asClass(SaveContentUseCase).classic(),
-    deleteVersionUseCase: awilix.asClass(DeleteVersionUseCase).classic(),
-    deleteContentUseCase: awilix.asClass(DeleteContentUseCase).classic(),
-    deleteQuestionUseCase: awilix.asClass(DeleteQuestionUseCase).classic(),
+    deleteElementUseCase: awilix.asClass(DeleteElementUseCase).classic(),
     refreshTokenUseCase: awilix.asClass(RefreshTokenUseCase).classic(),
     createNewDraftVersionUseCase: awilix
       .asClass(CreateNewDraftVersionUseCase)
@@ -205,10 +188,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     removeStudentFromCollectionUseCase: awilix
       .asClass(RemoveStudentFromCollectionUseCase)
       .classic(),
-    getCollectionUseCase: awilix.asClass(GetCollectionUseCase).classic(),
-    insertDefaultCollectionUseCase: awilix
-      .asClass(InsertDefaultCollectionUseCase)
-      .classic(),
     saveAnswerUseCase: awilix.asClass(SaveAnswerUseCase).classic(),
     updateNotificationUseCase: awilix
       .asClass(UpdateNotificationUseCase)
@@ -217,12 +196,15 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(InsertFollowerInCollectionUseCase)
       .classic(),
     importActivityUseCase: awilix.asClass(ImportActivityUseCase).classic(),
+    publishDraftUseCase: awilix.asClass(PublishDraftUseCase).classic(),
 
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),
     tokenRepository: awilix.asClass(TokenRepository).classic(),
-    activitiesRepository: awilix.asClass(ActivityRepository).classic(),
-    activitiesReadRepository: awilix.asClass(ActivityReadRepository).classic(),
+    activitiesRepository: awilix.asClass(ActivitiesRepository).classic(),
+    activitiesReadRepository: awilix
+      .asClass(ActivitiesReadRepository)
+      .classic(),
     collectionsRepository: awilix.asClass(CollectionsRepository).classic(),
     collectionsReadRepository: awilix
       .asClass(CollectionsReadRepository)

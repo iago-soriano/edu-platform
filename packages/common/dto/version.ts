@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ContentResponseDTO, QuestionResponseDTO } from ".";
+import { ContentResponseDTO } from ".";
 
 export enum VersionStatus {
   Published = "Published",
@@ -9,7 +9,7 @@ export enum VersionStatus {
 
 type ElementDTO = {
   content: ContentResponseDTO | undefined;
-  question: QuestionResponseDTO | undefined;
+  question: any;
 };
 
 const versionStatusSchema = z.nativeEnum(VersionStatus);
@@ -32,16 +32,3 @@ export const versionResponseSchema = z.object({
 export type VersionResponseDTO = z.infer<typeof versionResponseSchema> & {
   elements?: ElementDTO[];
 };
-
-export const versionRequestSchema = z.object({
-  id: z.number().optional(),
-
-  title: z.string().optional(),
-  description: z.string().optional(),
-  topics: z.string().optional(),
-});
-
-export type VersionRequestDTO = z.infer<typeof versionRequestSchema> & {
-  elements?: ElementDTO[];
-};
-export const parseToVersionRequestDto = versionRequestSchema.parse;

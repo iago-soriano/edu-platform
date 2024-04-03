@@ -13,15 +13,15 @@ export const collectionResponseSchema = z.object({
   ownerId: z.number(),
 });
 
-export type CollectionResponseDTO = z.infer<typeof collectionResponseSchema>;
+// export type CollectionResponseDTO = z.infer<typeof collectionResponseSchema>;
 
-export const collectionRequestSchema = z.object({
-  id: z.number().optional(),
+// export const collectionRequestSchema = z.object({
+//   id: z.number().optional(),
 
-  name: z.string().optional(),
-  description: z.string().optional(),
-  isPrivate: z.boolean().optional(),
-  notifyOwnerOnStudentOutput: z.boolean().optional(),
-});
-export type CollectionRequestDTO = z.infer<typeof collectionRequestSchema>;
-export const parseToCollectionRequestDTO = collectionRequestSchema.parse;
+//   name: z.string().optional(),
+//   description: z.string().optional(),
+//   isPrivate: z.boolean().optional(),
+//   notifyOwnerOnStudentOutput: z.boolean().optional(),
+// });
+// export type CollectionRequestDTO = z.infer<typeof collectionRequestSchema>;
+// export const parseToCollectionRequestDTO = collectionRequestSchema.parse;

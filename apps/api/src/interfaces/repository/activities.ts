@@ -1,86 +1,56 @@
-import {
-  VersionStatus,
-  Content,
-  Activity,
-  ActivityVersion,
-  Question,
-  TextQuestion,
-  MultipleChoiceQuestion,
-  Collection,
-  // Alternative,
-} from "@domain";
+import { Content, Activity, BaseElement, ActivityVersion } from "@domain";
 import {
   GetActivityVersionResponseBody,
   ListActivityVersionsResponseBody,
   PaginatedParamsDTO,
 } from "@edu-platform/common";
+import { db } from "@infrastructure";
 
-export interface IActivities {
-  insert: (
-    authorId: number,
-    collectionId: number
-  ) => Promise<{ activityId: number }>;
-  update: (activity: Activity) => Promise<void>;
-  findById: (activityId: number) => Promise<Activity | null>;
-  findFullViewById: (activityId: number) => Promise<Activity | null>;
+export interface IElements {
+  insert: (tx: typeof db, content: BaseElement) => Promise<void>;
+  update: (tx: typeof db, element: BaseElement) => Promise<void>;
+  delete: (tx: typeof db, element: BaseElement) => Promise<void>;
 }
 
-export interface IContents {
-  insert: (content: Content) => Promise<{ contentId: number }>;
-  update: (content: Content) => Promise<void>;
-  delete: (contentId: number) => Promise<void>;
-  findById: (contentId: number) => Promise<Content | null>;
-  listByVersionId: (versionId: number) => Promise<Content[]>;
-}
-
-export interface IQuestions {
-  insert: (
-    args: Question
-  ) => Promise<{ questionId: number; alternativesIds: number[] }>;
-  update: (question: Question) => Promise<void>;
-  findById: (questionId: number) => Promise<Question | null>;
-  delete: (questionId: number) => Promise<void>;
-}
+// export interface IQuestions {
+//   insert: (
+//     tx: typeof db,
+//     args: Question
+//   ) => Promise<{ questionId: number; alternativesIds: number[] }>;
+//   update: (tx: typeof db, question: Question) => Promise<void>;
+//   delete: (tx: typeof db, questionId: number) => Promise<void>;
+// }
 
 export interface IVersions {
-  insert: (version: ActivityVersion) => Promise<{ versionId: number }>;
-  update: (version: ActivityVersion) => Promise<void>;
-  delete: (versionId: number) => Promise<void>;
-  findById: (
-    versionId: number,
-    activityId: number
-  ) => Promise<ActivityVersion | null>;
+  insert: (
+    tx: typeof db,
+    version: ActivityVersion
+  ) => Promise<{ versionId: string }>;
+  update: (tx: typeof db, version: ActivityVersion) => Promise<void>;
+  delete: (tx: typeof db, versionId: string) => Promise<void>;
 }
 
 export interface IActivitiesRepository {
-  Activities: IActivities;
-  Contents: IContents;
-  Versions: IVersions;
-  Questions: IQuestions;
+  // insert: (activity: Activity) => Promise<{ activityId: string }>;
+  save: (activity: Activity) => Promise<any>;
+  findRootById: (activityId: string) => Promise<Activity | null>;
+  findRootByIdWithContents: (activityId: string) => Promise<Activity | null>;
+  // Elements: IElements;
+  // Versions: IVersions;
 }
 
-export interface IVersionsRead {
+export interface IActivitiesReadRepository {
   listByCollectionOwnership: (
     args: {
       userId: number;
       collectionId?: number;
     } & PaginatedParamsDTO
   ) => Promise<ListActivityVersionsResponseBody>;
-  listByCollectionParticipation: (
-    userId: number,
-    collectionId?: number
-  ) => Promise<{ collection: Collection; version: ActivityVersion }[]>;
+  // listByCollectionParticipation: (
+  //   userId: number,
+  //   collectionId?: number
+  // ) => Promise<{ collection: Collection; version: ActivityVersion }[]>;
   findFullViewById: (
-    versionId: number,
-    activityId: number
+    activityId: string
   ) => Promise<GetActivityVersionResponseBody | null>;
-}
-
-// export interface IContentsRead {
-//   listByVersionId: (versionId: number) => Promise<Content[]>;
-// }
-
-export interface IActivitiesReadRepository {
-  Versions: IVersionsRead;
-  // Contents: IContentsRead;
 }

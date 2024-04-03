@@ -14,15 +14,12 @@ import {
   ListActivityVersionsQuery,
   ListActivityVersionsRequestBody,
   ListActivityVersionsResponseBody,
-  DeleteContentParams,
-  DeleteContentRequestBody,
-  DeleteContentResponseBody,
-  UpdateVersionStatusParams,
-  UpdateVersionStatusRequestBody,
-  UpdateVersionStatusResponseBody,
-  DeleteVersionParams,
-  DeleteVersionRequestBody,
-  DeleteVersionResponseBody,
+  DeleteElementParams,
+  DeleteElementRequestBody,
+  DeleteElementResponseBody,
+  // DeleteVersionParams,
+  // DeleteVersionRequestBody,
+  // DeleteVersionResponseBody,
   CreateNewDraftVersionParams,
   CreateNewDraftVersionRequestBody,
   CreateNewDraftVersionResponseBody,
@@ -48,11 +45,10 @@ export class ApiClient {
   constructor(private _fetcher: IHTTPClient) {}
   public saveContent({
     activityId,
-    versionId,
     ...body
   }: SaveContentParams & SaveContentRequestBody) {
     return this._fetcher.post(
-      `activity/${activityId}/version/${versionId}/content`,
+      `activity/${activityId}/draft-version/contents`,
       body
     ) as Promise<SaveContentResponseBody>;
   }
@@ -62,12 +58,9 @@ export class ApiClient {
       body
     ) as Promise<CreateNewActivityResponseBody>;
   }
-  public getActivityVersion({
-    activityId,
-    versionId,
-  }: GetActivityVersionParams) {
+  public getActivityVersion({ activityId }: GetActivityVersionParams) {
     return this._fetcher.get(
-      `activity/${activityId}/version/${versionId}`
+      `activity/${activityId}/draft-version}`
     ) as Promise<GetActivityVersionResponseBody>;
   }
   public updateVersionMetadata({
@@ -75,8 +68,8 @@ export class ApiClient {
     versionId,
     ...body
   }: UpdateVersionMetadataParams & UpdateVersionMetadataRequestBody) {
-    return this._fetcher.post(
-      `activity/${activityId}/update-activity-metadata/${versionId}`,
+    return this._fetcher.patch(
+      `activities/${activityId}/versions/${versionId}/metadata`,
       body
     ) as Promise<UpdateVersionMetadataResponseBody>;
   }
@@ -85,26 +78,26 @@ export class ApiClient {
       ...query,
     }) as Promise<ListActivityVersionsResponseBody>;
   }
-  public deleteContent({ versionId, contentId }: DeleteContentParams) {
+  public deleteContent({ activityId, elementId }: DeleteElementParams) {
     return this._fetcher.delete(
-      `version/${versionId}/content/${contentId}`
-    ) as Promise<DeleteContentResponseBody>;
+      `activity/${activityId}/draft-version/elements/${elementId}`
+    ) as Promise<DeleteElementResponseBody>;
   }
-  public updateVersionStatus({
-    activityId,
-    versionId,
-    ...body
-  }: UpdateVersionStatusParams & UpdateVersionStatusRequestBody) {
-    return this._fetcher.patch(
-      `activity/${activityId}/version/${versionId}/status`,
-      body
-    ) as Promise<UpdateVersionStatusResponseBody>;
-  }
-  public deleteVersion({ activityId, versionId }: DeleteVersionParams) {
-    return this._fetcher.delete(
-      `activity/${activityId}/version/${versionId}`
-    ) as Promise<DeleteVersionResponseBody>;
-  }
+  // public updateVersionStatus({
+  //   activityId,
+  //   versionId,
+  //   ...body
+  // }: UpdateVersionStatusParams & UpdateVersionStatusRequestBody) {
+  //   return this._fetcher.patch(
+  //     `activity/${activityId}/version/${versionId}/status`,
+  //     body
+  //   ) as Promise<UpdateVersionStatusResponseBody>;
+  // }
+  // public deleteVersion({ activityId, versionId }: DeleteVersionParams) {
+  //   return this._fetcher.delete(
+  //     `activity/${activityId}/version/${versionId}`
+  //   ) as Promise<DeleteVersionResponseBody>;
+  // }
   createNewDraftVersion({ activityId }: CreateNewDraftVersionParams) {
     return this._fetcher.post(
       `create-new-version/${activityId}`,

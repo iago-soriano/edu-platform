@@ -8,7 +8,6 @@ import {
   contentTypeEnum,
   questionTypeEnum,
   activityQuestions,
-  alternatives,
 } from "@infrastructure";
 
 export type UserSelectDTO = typeof users.$inferSelect;
@@ -32,13 +31,3 @@ export type ActivityContentSelectDTO = typeof activityContents.$inferSelect;
 export const QuestionTypeEnum = typeof questionTypeEnum.enumValues;
 export type QuestionInsertDTO = typeof activityQuestions.$inferInsert;
 export type QuestionSelectDTO = typeof activityQuestions.$inferSelect;
-
-export type AlternativeInsertDTO = typeof alternatives.$inferInsert;
-export type AlternativeSelectDTO = typeof alternatives.$inferInsert;
-
-export type CompleteQuestionInsertDTO = QuestionInsertDTO & {
-  alternatives?: AlternativeInsertDTO[];
-};
-export type CompleteQuestionSelectDTO = QuestionSelectDTO & {
-  alternatives?: AlternativeSelectDTO[];
-};

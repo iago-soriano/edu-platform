@@ -28,7 +28,6 @@ import {
   notifications,
   collectionParticipations,
   collections,
-  alternatives,
 } from "./tables";
 
 export const tokensRelations = relations(tokens, ({ one }) => ({
@@ -106,13 +105,5 @@ export const questionsRelations = relations(
   activityQuestions,
   ({ one, many }) => ({
     version: one(activityVersions),
-    choice: many(alternatives), // TODO: need this?
   })
 );
-
-export const alternativesRelations = relations(alternatives, ({ one }) => ({
-  question: one(activityQuestions, {
-    fields: [alternatives.questionId],
-    references: [activityQuestions.id],
-  }),
-}));

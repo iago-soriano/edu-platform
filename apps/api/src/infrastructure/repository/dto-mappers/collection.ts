@@ -10,7 +10,7 @@ export const CollectionDtoMapper = {
     collection.description = dto.description || "";
     collection.createdAt = dto.createdAt || undefined;
     collection.updatedAt = dto.updatedAt || undefined;
-    collection.owner = new User(dto.ownerId || 0);
+    collection.ownerId = dto.ownerId;
     collection.isPrivate = dto.isPrivate === null ? false : dto.isPrivate;
     collection.notifyOwnerOnStudentOutput =
       dto.notifyOwnerOnStudentOutput === null
@@ -24,7 +24,7 @@ export const CollectionDtoMapper = {
     const dto: typeof collections.$inferInsert = {
       name: domain.name,
       description: domain.description,
-      ownerId: domain.owner.id,
+      ownerId: domain.ownerId,
       isPrivate: domain.isPrivate,
       updatedAt: new Date(),
       notifyOwnerOnStudentOutput: domain.notifyOwnerOnStudentOutput,

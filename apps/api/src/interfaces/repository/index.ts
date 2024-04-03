@@ -7,3 +7,9 @@ export * from "./collection-participation";
 export * from "./student-outputs";
 export * from "./student-answers";
 export * from "./notifications";
+
+export interface IChangeEvent {
+  entityId?: string | number;
+  type: string;
+  payload: unknown;
+}

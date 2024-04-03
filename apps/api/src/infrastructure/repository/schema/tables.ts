@@ -7,6 +7,8 @@ import {
   boolean,
   timestamp,
   primaryKey,
+  uuid,
+  json,
 } from "drizzle-orm/pg-core";
 import {
   VersionStatus,
@@ -51,7 +53,7 @@ export const users = pgTable("users", {
 });
 
 export const activities = pgTable("activities", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
@@ -61,8 +63,8 @@ export const activities = pgTable("activities", {
   collectionId: integer("collection_id")
     .references(() => collections.id)
     .notNull(),
-  lastVersionId: integer("last_version_id"),
-  draftVersionId: integer("draft_version_id"),
+  lastVersionId: uuid("last_version_id"),
+  draftVersionId: uuid("draft_version_id"),
 });
 
 export const versionStatusEnum = pgEnum(
@@ -70,7 +72,7 @@ export const versionStatusEnum = pgEnum(
   Object.values(VersionStatus || {}).filter((v) => isNaN(Number(v))) as [string]
 );
 export const activityVersions = pgTable("activity_versions", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -78,13 +80,13 @@ export const activityVersions = pgTable("activity_versions", {
     .defaultNow()
     .notNull(),
 
-  title: varchar("title", { length: 50 }),
-  description: varchar("description", { length: 200 }),
-  topics: varchar("topics", { length: 200 }),
+  title: varchar("title", { length: 50 }).notNull(),
+  description: varchar("description", { length: 200 }).notNull(),
+  topics: varchar("topics", { length: 200 }).notNull(),
   status: versionStatusEnum("activity_status").default("Draft").notNull(),
   version: integer("version").default(0).notNull(),
 
-  activityId: integer("activity_id")
+  activityId: uuid("activity_id")
     .references(() => activities.id)
     .notNull(),
 });
@@ -100,14 +102,10 @@ export const activityContents = pgTable("activity_contents", {
 
   type: contentTypeEnum("type").notNull(),
   description: varchar("description", { length: 500 }).default("").notNull(),
-  title: varchar("title", { length: 50 }).default("").notNull(),
   order: integer("order").default(0).notNull(),
-  tracks: varchar("video_tracks", { length: 180 }), // 10 tracks max
-  videoUrl: varchar("video_url", { length: 100 }),
-  imageUrl: varchar("image_url", { length: 150 }),
-  text: varchar("text", { length: 1000 }).default("").notNull(),
+  payload: json("payload").notNull(),
 
-  versionId: integer("version_id")
+  versionId: uuid("version_id")
     .references(() => activityVersions.id)
     .notNull(),
 });
@@ -127,20 +125,7 @@ export const activityQuestions = pgTable("questions", {
   answer: varchar("answer_key", { length: 500 }),
   order: integer("order").default(0),
 
-  versionId: integer("version_id").references(() => activityVersions.id),
-});
-
-export const alternatives = pgTable("question_alternatives", {
-  id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-
-  text: varchar("text", { length: 200 }),
-  comment: varchar("comment", { length: 500 }),
-  isCorrect: boolean("is_correct"),
-  order: integer("order").default(0),
-
-  questionId: integer("question_id").references(() => activityQuestions.id),
+  versionId: uuid("version_id").references(() => activityVersions.id),
 });
 
 export const collections = pgTable("collections", {
@@ -152,8 +137,8 @@ export const collections = pgTable("collections", {
     .defaultNow()
     .notNull(),
 
-  name: varchar("name", { length: 50 }),
-  description: varchar("description", { length: 200 }),
+  name: varchar("name", { length: 50 }).default("").notNull(),
+  description: varchar("description", { length: 200 }).default("").notNull(),
 
   ownerId: integer("owner_id")
     .references(() => users.id)
@@ -204,21 +189,33 @@ export const studentOutputStatusEnum = pgEnum(
 
 export const studentOutputs = pgTable("student_outputs", {
   id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
 
-  status: studentOutputStatusEnum("status"),
+  status: studentOutputStatusEnum("status")
+    .default(OutputStatus.Draft)
+    .notNull(),
   userId: integer("user_id")
     .notNull()
     .references(() => users.id),
-  versionId: integer("version_id")
+  versionId: uuid("version_id")
     .notNull()
     .references(() => activityVersions.id),
 });
 
 export const studentAnswers = pgTable("student_answers", {
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+
   questionId: integer("question_id")
     .references(() => activityQuestions.id)
     .notNull(),

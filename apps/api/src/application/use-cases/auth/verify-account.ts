@@ -1,5 +1,4 @@
 import { IUserRepository, ITokenRepository, IUseCase } from "@interfaces";
-import { IInsertDefaultCollectionUseCase } from "@use-cases";
 import {
   InvalidValidationTokenError,
   UserNotFoundError,
@@ -17,8 +16,7 @@ export type IVerifyAccountUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IVerifyAccountUseCase {
   constructor(
     private userRepository: IUserRepository,
-    private tokenRepository: ITokenRepository,
-    private insertDefaultCollectionUseCase: IInsertDefaultCollectionUseCase
+    private tokenRepository: ITokenRepository
   ) {}
 
   async execute({ verifyAccountToken }: InputParams) {
@@ -37,9 +35,13 @@ class UseCase implements IVerifyAccountUseCase {
     if (user.emailVerified) return;
 
     await this.userRepository.updateUser(user.id, { emailVerified: true });
-    await this.insertDefaultCollectionUseCase.execute(
-      new User(user.id, user.name || "", user.email || "", "")
-    );
+    // const defaultCollection = new Collection(0); // TODO: put this in domain
+    // defaultCollection.name = "Minha coleção";
+    // defaultCollection.description =
+    //   "Esta é sua primeira coleção! Altere seu nome e descrição para refletir o objetivo desta coleção, e, então, insira estudantes";
+    // defaultCollection.notifyOwnerOnStudentOutput = true;
+    // defaultCollection.isPrivate = true;
+    // defaultCollection.owner = user;
   }
 }
 

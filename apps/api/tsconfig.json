@@ -13,6 +13,8 @@
     "outDir": "./build/",
     "jsx": "react",
     "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "paths": {
       "@use-cases": ["./application/use-cases/index.ts"],
       "@use-case-middlewares": ["./application/use-case-middlewares/index.ts"],

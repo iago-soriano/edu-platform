@@ -19,51 +19,39 @@ import ChangePasswordUseCase, {
 import CheckChangePasswordTokenRequestUseCase, {
   ICheckChangePasswordTokenRequestUseCase,
 } from "./auth/check-change-password-token-request";
-import UpdateActivityStatusUseCase, {
-  IUpdateActivityStatusUseCase,
-} from "./activity-version/update-status";
 import SaveQuestionUseCase, {
   ISaveQuestionUseCase,
-} from "./activity-version-question/save";
+} from "./activity/save-question";
 import CreateNewActivityUseCase, {
   ICreateNewActivityUseCase,
-} from "./activity/new";
+} from "./activity/create-new-activity";
+import PublishDraftUseCase, {
+  IPublishDraftUseCase,
+} from "./activity/publish-draft";
 import UpdateActivityMetadataUseCase, {
   IUpdateActivityMetadataUseCase,
-} from "./activity-version/update-metadata";
-import DeleteQuestionUseCase, {
-  IDeleteQuestionUseCase,
-} from "./activity-version-question/delete";
-import DeleteContentUseCase, {
-  IDeleteContentUseCase,
-} from "./activity-version-content/delete";
+} from "./activity/update-draft-metadata";
+import DeleteElementUseCase, {
+  IDeleteElementUseCase,
+} from "./activity/delete-element";
 import SaveContentUseCase, {
   ISaveContentUseCase,
-} from "./activity-version-content/save";
-import DeleteVersionUseCase, {
-  IDeleteVersionUseCase,
-} from "./activity-version/delete";
+} from "./activity/save-content";
 import CreateNewDraftVersionUseCase, {
   ICreateNewDraftVersionUseCase,
-} from "./activity-version/new";
+} from "./activity/create-new-draft";
 import SaveCollectionUseCase, {
   ISaveCollectionUseCase,
 } from "./collection/save";
 import InsertUserInCollectionUseCase, {
   IInsertUserInCollectionUseCase,
-} from "./collection-participation/insert-student";
+} from "./collection/insert-student";
 import RemoveStudentFromCollectionUseCase, {
   IRemoveStudentFromCollectionUseCase,
-} from "./collection-participation/remove-student";
+} from "./collection/remove-student";
 import CreateStudentOutputUseCase, {
   ICreateStudentOutputUseCase,
 } from "./studentOutput/new";
-import GetCollectionUseCase, {
-  IGetCollectionUseCase,
-} from "./collection/get-by-id";
-import InsertDefaultCollectionUseCase, {
-  IInsertDefaultCollectionUseCase,
-} from "./collection/new-default";
 import SaveAnswerUseCase, {
   ISaveAnswerUseCase,
 } from "./studentOutput-answer/new";
@@ -75,20 +63,18 @@ import UpdateNotificationUseCase, {
 } from "./notification/update";
 import InsertFollowerInCollectionUseCase, {
   IInsertFollowerInCollectionUseCase,
-} from "./collection-participation/follow-collection";
+} from "./collection/follow-collection";
 import UnfollowCollectionUseCase, {
   IUnfollowCollectionUseCase,
-} from "./collection-participation/unfollow-collection";
+} from "./collection/unfollow-collection";
 import UpdateNotificationConfigUseCase, {
   IUpdateNotificationConfigUseCase,
-} from "./collection-participation/update-notification-config";
+} from "./collection/update-notification-config";
 import ImportActivityUseCase, {
   IImportActivityUseCase,
-} from "./activity/import";
+} from "./activity/import-from-public-collection";
 
 export {
-  GetCollectionUseCase,
-  IGetCollectionUseCase,
   SignInUseCase,
   ISignInUseCase,
   SignUpUseCase,
@@ -105,26 +91,20 @@ export {
   IChangePasswordUseCase,
   CheckChangePasswordTokenRequestUseCase,
   ICheckChangePasswordTokenRequestUseCase,
-  UpdateActivityStatusUseCase,
-  IUpdateActivityStatusUseCase,
   SaveQuestionUseCase,
   ISaveQuestionUseCase,
   CreateNewActivityUseCase,
   ICreateNewActivityUseCase,
   UpdateActivityMetadataUseCase,
   IUpdateActivityMetadataUseCase,
-  DeleteContentUseCase,
-  IDeleteContentUseCase,
+  DeleteElementUseCase,
+  IDeleteElementUseCase,
   SaveContentUseCase,
   ISaveContentUseCase,
   RefreshTokenUseCase,
   IRefreshTokenUseCase,
-  DeleteVersionUseCase,
-  IDeleteVersionUseCase,
   CreateNewDraftVersionUseCase,
   ICreateNewDraftVersionUseCase,
-  DeleteQuestionUseCase,
-  IDeleteQuestionUseCase,
   SaveCollectionUseCase,
   ISaveCollectionUseCase,
   InsertUserInCollectionUseCase,
@@ -133,8 +113,6 @@ export {
   IRemoveStudentFromCollectionUseCase,
   CreateStudentOutputUseCase,
   ICreateStudentOutputUseCase,
-  InsertDefaultCollectionUseCase,
-  IInsertDefaultCollectionUseCase,
   SaveAnswerUseCase,
   ISaveAnswerUseCase,
   UpdateStudentOutputUseCase,
@@ -149,4 +127,6 @@ export {
   IUpdateNotificationConfigUseCase,
   ImportActivityUseCase,
   IImportActivityUseCase,
+  PublishDraftUseCase,
+  IPublishDraftUseCase,
 };
