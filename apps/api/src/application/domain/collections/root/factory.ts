@@ -1,5 +1,4 @@
 import { collections } from "@infrastructure";
-import { IChangeEvent } from "@interfaces";
 import { Collection } from "./root";
 import {
   UserIsNotCollectionOwner,
@@ -12,10 +11,10 @@ export class CollectionFactory {
   ) {
     const collection = new Collection(dto.id || 0);
 
-    collection.isPrivate = dto.isPrivate;
-    collection.notifyOwnerOnStudentOutput = dto.notifyOwnerOnStudentOutput;
-    collection.name = dto.name;
-    collection.description = dto.description;
+    // collection.isPrivate = dto.isPrivate;
+    // collection.notifyOwnerOnStudentOutput = dto.notifyOwnerOnStudentOutput;
+    // collection.name = dto.name;
+    // collection.description = dto.description;
 
     const proxiedEntity = new Proxy(collection, {
       set: function (target: object, prop: string, value: any) {
@@ -31,10 +30,10 @@ export class CollectionFactory {
   static fromRequestDto(dto: CollectionRequestDTO, user: { id: number }) {
     const collection = new Collection(dto.id || 0);
 
-    collection.isPrivate = dto.isPrivate;
-    collection.notifyOwnerOnStudentOutput = dto.notifyOwnerOnStudentOutput;
-    collection.name = dto.name;
-    collection.description = dto.description;
+    // collection.isPrivate = dto.isPrivate;
+    // collection.notifyOwnerOnStudentOutput = dto.notifyOwnerOnStudentOutput;
+    // collection.name = dto.name;
+    // collection.description = dto.description;
     collection.ownerId = user.id;
 
     return collection;

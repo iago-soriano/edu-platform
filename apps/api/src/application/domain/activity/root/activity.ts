@@ -10,7 +10,7 @@ import {
 
 export class Activity extends Entity {
   constructor(id?: string) {
-    super(true);
+    super();
     this.id = id || "";
   }
 
@@ -45,7 +45,7 @@ export class Activity extends Entity {
 
     const activity = new Activity();
     activity.id = idService.getId();
-    activity.collectionId = collection.id;
+    activity.collectionId = collection.id as number;
     activity.authorId = user.id;
 
     const version = new ActivityVersion(

@@ -3,36 +3,68 @@ import {
   ICollectionsRepository,
   ICollectionsReadRepository,
 } from "@interfaces";
-import {
-  db,
-  collections,
-  collectionParticipations,
-  activities,
-  activityVersions,
-} from "@infrastructure";
+import { db, collections, collectionParticipations } from "@infrastructure";
 import { CollectionDtoMapper } from "../../dto-mappers/collection";
 import { eq, sql, desc, and } from "drizzle-orm";
+import { CollectionSerializer } from "../serializers/collection";
+import { alias, PgTable } from "drizzle-orm/pg-core";
+
+type CollectionTables = {
+  collections: string;
+  collectionParticipations: string;
+};
 
 export class CollectionsRepository implements ICollectionsRepository {
-  async insert(collection: Collection) {
-    return (
-      await db
-        .insert(collections)
-        .values(CollectionDtoMapper.mapToInsertDto(collection))
-        .returning({ collectionId: collections.id })
-    )[0];
+  tables: { [key in keyof CollectionTables]: PgTable } = {
+    collections,
+    collectionParticipations,
+  };
+  private _events: {
+    [rootId: string]: {
+      [key in keyof CollectionTables]: {
+        [entityId: string | number]: { [prop: string]: string | number };
+      };
+    };
+  } = {};
+
+  async save(collection: Collection) {
+    return db.transaction(async (tx) => {
+      const ret: any = {};
+      if (collection.isNew) {
+        const { collectionId } = (
+          await tx
+            .insert(collections)
+            .values(CollectionSerializer.serializeCollection(collection))
+            .returning({ collectionId: collections.id })
+        )[0];
+        ret.collectionId = collectionId;
+      }
+
+      // if(collection.participants) {}
+
+      // handle updates
+      for (const key in this._events[collection.id]) {
+        const tableName = key as keyof CollectionTables;
+        const table = this.tables[tableName];
+        const changesToEntitiesOfThisTable =
+          this._events[collection.id][tableName];
+        for (let entityId in changesToEntitiesOfThisTable) {
+          const changesToBeMadeToEntity =
+            changesToEntitiesOfThisTable[entityId];
+          if (Object.keys(changesToBeMadeToEntity).length) {
+            await tx
+              .update(this.tables[tableName])
+              .set({ ...changesToBeMadeToEntity, updatedAt: new Date() })
+              .where(eq((table as any).id, entityId));
+          }
+        }
+      }
+
+      return ret;
+    });
   }
 
-  async update(collection: Collection) {
-    if (!collection.id) throw new Error("There must be an id to update");
-
-    await db
-      .update(collections)
-      .set(CollectionDtoMapper.mapToInsertDto(collection))
-      .where(eq(collections.id, collection.id));
-  }
-
-  async getById(collectionId: number) {
+  async findRootById(collectionId: number) {
     const dto = (
       await db
         .select()
@@ -45,7 +77,7 @@ export class CollectionsRepository implements ICollectionsRepository {
     return CollectionDtoMapper.mapFromSelectDto(dto);
   }
 
-  async getByIdWithActivityCount(collectionId: number) {
+  async findRootByIdWithActivityCount(collectionId: number) {
     //TODO
     const dto = (
       await db
@@ -57,32 +89,5 @@ export class CollectionsRepository implements ICollectionsRepository {
     if (!dto) return null;
 
     return CollectionDtoMapper.mapFromSelectDto(dto);
-  }
-
-  async getCollectionByVersionId(versionId: string) {
-    return db.transaction(async (tx) => {
-      const { activityId } = (
-        await tx
-          .select({ activityId: activityVersions.activityId })
-          .from(activityVersions)
-          .where(eq(activityVersions.id, versionId))
-      )[0];
-
-      const { collectionId } = (
-        await tx
-          .select({ collectionId: activities.collectionId })
-          .from(activities)
-          .where(eq(activities.id, activityId))
-      )[0];
-
-      const collection = (
-        await tx
-          .select()
-          .from(collections)
-          .where(eq(collections.id, collectionId))
-      )[0];
-
-      return CollectionDtoMapper.mapFromSelectDto(collection);
-    });
   }
 }

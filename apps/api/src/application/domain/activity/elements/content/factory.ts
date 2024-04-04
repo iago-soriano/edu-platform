@@ -7,7 +7,8 @@ import {
   Content,
 } from ".";
 import { ActivitElementDescription } from "../value-objects/description";
-import { activityContents, activityVersions } from "@infrastructure";
+import { activityContents, ActivitiesRepository } from "@infrastructure";
+import { ChangeEventsTree } from "@interfaces";
 import { ChangeTrackingProxy } from "application/domain/abstract";
 
 export class ContentFactory {
@@ -50,10 +51,15 @@ export class ContentFactory {
 
   static fromDbDTOWithProxy(
     dto: typeof activityContents.$inferSelect,
-    _events: { [prop: string]: string | number }
+    _events: ChangeEventsTree<typeof ActivitiesRepository.Tables>[string]
   ) {
     let newContent = null;
     const parsedPayload = dto.payload as any;
+
+    _events.activityContents = {
+      ..._events.activityContents,
+      [dto.id]: {},
+    };
 
     switch (dto.type) {
       case ContentTypes.Video:
@@ -69,7 +75,7 @@ export class ContentFactory {
         newContent = PayloadMappingProxyFactory.create(
           newVideo,
           videoMappableProperties,
-          _events
+          _events.activityContents[dto.id]
         ) as VideoContent;
 
         break;
@@ -85,7 +91,7 @@ export class ContentFactory {
         newContent = PayloadMappingProxyFactory.create(
           newImage,
           imageMappableProperties,
-          _events
+          _events.activityContents[dto.id]
         ) as ImageContent;
 
         break;
@@ -101,7 +107,7 @@ export class ContentFactory {
         newContent = PayloadMappingProxyFactory.create(
           newText,
           textMappableProperties,
-          _events
+          _events.activityContents[dto.id]
         ) as TextContent;
 
         break;
@@ -117,7 +123,10 @@ export class ContentFactory {
 
     newContent.isNew = false;
 
-    const proxied = new ChangeTrackingProxy(newContent, _events) as Content;
+    const proxied = new ChangeTrackingProxy(
+      newContent,
+      _events.activityContents[dto.id]
+    ) as Content;
     return proxied;
   }
 

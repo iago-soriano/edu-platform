@@ -7,7 +7,7 @@ export abstract class BaseElement extends Entity {
   public description?: ActivitElementDescription;
 
   constructor(public elementType: string) {
-    super(true);
+    super();
   }
 
   abstract storedFileUrl(): string | null;

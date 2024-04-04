@@ -1,47 +1,44 @@
-import { User } from "../..";
+import { CollectionName, CollectionDescription } from "../value-objects";
+import { Entity, CollectionArray } from "../../abstract";
 
-export class Collection {
-  public id: number;
-  public createdAt?: Date;
-  public updatedAt?: Date;
+export class Collection extends Entity {
+  public name: CollectionName;
+  public description: CollectionDescription;
+  public isPrivate: boolean;
+  public notifyOwnerOnStudentOutput: boolean;
 
-  public name?: string;
-  public description?: string;
   public ownerId!: number;
-  public isPrivate?: boolean;
-  public notifyOwnerOnStudentOutput?: boolean;
+  // TODO: participants
 
-  constructor(id: number) {
-    this.id = id;
+  constructor(
+    id?: number,
+    name?: string,
+    description?: string,
+    isPrivate?: boolean,
+    notifyOwnerOnStudentOutput?: boolean
+  ) {
+    super();
+    this.id = id || 0;
+    this.name = new CollectionName(name || "");
+    this.description = new CollectionDescription(description || "");
+    this.isPrivate = isPrivate || true;
+    this.notifyOwnerOnStudentOutput = notifyOwnerOnStudentOutput || true;
   }
 
   merge(newCollection: Collection) {
     if (newCollection.description) {
       this.description = newCollection.description;
-      this.validateDescription();
+      // this.validateDescription();
     }
     if (newCollection.name) {
       this.name = newCollection.name;
-      this.validateName();
+      // this.validateName();
     }
     if (newCollection.isPrivate !== undefined)
       this.isPrivate = newCollection.isPrivate;
     if (newCollection.notifyOwnerOnStudentOutput !== undefined)
       this.notifyOwnerOnStudentOutput =
         newCollection.notifyOwnerOnStudentOutput;
-  }
-  validateName() {
-    if (!this.name) return;
-    if (this.name.length > 100) {
-      throw new Error("Collection name is too long");
-    }
-  }
-
-  validateDescription() {
-    if (!this.description) return;
-    if (this.description.length > 100) {
-      throw new Error("Collection description is too long");
-    }
   }
 
   upsert(

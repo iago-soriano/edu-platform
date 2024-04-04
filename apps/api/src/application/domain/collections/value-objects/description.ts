@@ -1,9 +1,9 @@
-import { ValueObject } from "../../../abstract";
+import { ValueObject } from "../../abstract";
 
 const descriptionMaxLength = 50;
 const descriptionMinLength = 5;
 
-export class ActivityVersionDescription extends ValueObject {
+export class CollectionDescription extends ValueObject {
   constructor(aData: string | null) {
     super(aData || "");
   }

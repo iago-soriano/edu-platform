@@ -27,7 +27,8 @@ class UseCase implements ICreateNewActivityUseCase {
   ) {}
 
   async execute({ user, collectionId }: InputParams) {
-    const collection = await this.collectionsRepository.getById(collectionId);
+    const collection =
+      await this.collectionsRepository.findRootById(collectionId);
 
     if (!collection) throw new Error("Collection not found");
 

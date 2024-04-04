@@ -39,19 +39,6 @@ class UseCase implements ISaveContentUseCase {
     activity.upsertContent(user, contentDto);
 
     await this.activitiesRepository.save(activity);
-
-    // await db.transaction(async (tx) => {
-    //   await Promise.all(
-    //     activity
-    //       .draftVersion!.elements.filter((el) => el.isInsert)
-    //       .map((el) => this.activitiesRepository.Elements.insert(tx, el))
-    //   );
-    //   await Promise.all(
-    //     activity
-    //       .draftVersion!.elements.filter((el) => el.isUpdate)
-    //       .map((el) => this.activitiesRepository.Elements.update(tx, el))
-    //   );
-    // });
   }
 }
 export default UseCase;

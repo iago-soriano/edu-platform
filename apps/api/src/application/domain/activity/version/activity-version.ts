@@ -30,7 +30,7 @@ export class ActivityVersion extends Entity {
     public version: number,
     public status: VersionStatus
   ) {
-    super(true);
+    super();
     this.title = new ActivityVersionTitle(title);
     this.description = new ActivityVersionDescription(description);
     this.topics = new ActivityVersionTopics(topics);

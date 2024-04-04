@@ -23,7 +23,8 @@ class UseCase implements IRemoveStudentFromCollectionUseCase {
   ) {}
 
   async execute({ user, collectionId, participationId }: InputParams) {
-    const collection = await this.collectionsRepository.getById(collectionId);
+    const collection =
+      await this.collectionsRepository.findRootById(collectionId);
     if (!collection) throw new Error("Coleção não encontrada");
 
     if (collection.ownerId !== user.id) throw new UserIsNotCollectionOwner();

@@ -1,14 +1,22 @@
-import { activities } from "@infrastructure";
+import {
+  activities,
+  activityVersions,
+  activityContents,
+  ActivitiesRepository,
+} from "@infrastructure";
 import { Activity } from "./activity";
-import { ActivityVersion } from "../version";
 import { ChangeTrackingProxy } from "application/domain/abstract";
+import { ChangeEventsTree } from "@interfaces";
+import { VersionFactory } from "@domain";
 
 export class ActivityFactory {
   static fromDbDTOWithProxy(
     dto: typeof activities.$inferSelect,
-    _events: { [prop: string]: string | number },
-    draftVersion: ActivityVersion | null,
-    lastVersion: ActivityVersion | null
+    _events: ChangeEventsTree<typeof ActivitiesRepository.Tables>,
+    draftVersionDto: typeof activityVersions.$inferSelect | null,
+    lastVersionDto: typeof activityVersions.$inferSelect | null,
+    draftVersionContentsDtos?: (typeof activityContents.$inferSelect | null)[],
+    lastVersionContentsDtos?: (typeof activityContents.$inferSelect | null)[]
   ) {
     const activity = new Activity(dto.id);
 
@@ -16,12 +24,30 @@ export class ActivityFactory {
     activity.collectionId = dto.collectionId;
     activity.isNew = false;
 
-    activity.draftVersion = draftVersion;
-    activity.lastVersion = lastVersion;
+    activity.draftVersion =
+      draftVersionDto &&
+      VersionFactory.fromDbDTOWithProxy(
+        draftVersionDto,
+        _events,
+        draftVersionContentsDtos
+      );
+
+    activity.lastVersion =
+      lastVersionDto &&
+      VersionFactory.fromDbDTOWithProxy(
+        lastVersionDto,
+        _events,
+        lastVersionContentsDtos
+      );
+
+    _events[dto.id].activities = {
+      ..._events[dto.id].activities,
+      [dto.id]: {},
+    };
 
     const proxiedEntity = new ChangeTrackingProxy(
       activity,
-      _events
+      _events[dto.id].activities[dto.id]
     ) as Activity;
 
     return proxiedEntity;

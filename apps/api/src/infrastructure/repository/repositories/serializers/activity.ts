@@ -5,6 +5,7 @@ import {
 } from "@infrastructure";
 import {
   Activity,
+  Entity,
   ActivityVersion,
   BaseElement,
   VideoContent,
@@ -14,18 +15,17 @@ import {
 } from "@domain";
 
 export class ActivitySerializer {
-  static serializeActivity(domain: Activity) {
+  static serializeActivity = (domain: Activity) => {
     const dto: typeof activities.$inferInsert = {
       id: domain.id,
       authorId: domain.authorId,
       draftVersionId: domain.draftVersion?.id || null,
       lastVersionId: domain.lastVersion?.id || null,
-      updatedAt: new Date(),
       collectionId: domain.collectionId,
     };
 
     return dto;
-  }
+  };
 
   static serializeVersion(domain: ActivityVersion) {
     const dto: typeof activityVersions.$inferInsert = {
@@ -35,7 +35,6 @@ export class ActivitySerializer {
       topics: domain.topics.toString(),
       version: domain.version,
       activityId: domain.activityId,
-      updatedAt: new Date(),
     };
 
     return dto;

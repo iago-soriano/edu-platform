@@ -21,7 +21,8 @@ class UseCase implements IUnfollowCollectionUseCase {
   ) {}
 
   async execute({ user, collectionId }: InputParams) {
-    const collection = await this.collectionsRepository.getById(collectionId);
+    const collection =
+      await this.collectionsRepository.findRootById(collectionId);
     if (!collection || collection.isPrivate)
       throw new Error("Coleção não encontrada");
 

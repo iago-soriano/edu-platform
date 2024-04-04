@@ -67,7 +67,6 @@ import {
   CollectionsRepository,
   CollectionParticipationsRepository,
   StudentOutputsRepository,
-  StudentAnswersRepository,
   ActivitiesReadRepository,
   CollectionsReadRepository,
   CollectionParticipationsReadRepository,
@@ -217,9 +216,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     studentOutputsRepository: awilix
       .asClass(StudentOutputsRepository)
-      .classic(),
-    studentAnswersRepository: awilix
-      .asClass(StudentAnswersRepository)
       .classic(),
     notificationsRepository: awilix.asClass(NotificationsRepository).classic(),
     notificationsReadRepository: awilix

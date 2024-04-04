@@ -4,6 +4,5 @@ export * from "./token";
 export * from "./user";
 export * from "./commands/collections";
 export * from "./commands/student-outputs";
-export * from "./commands/student-answers";
 export * from "./collection-participation";
 export * from "./notifications";

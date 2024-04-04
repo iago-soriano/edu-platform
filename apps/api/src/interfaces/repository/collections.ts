@@ -5,10 +5,12 @@ import {
 } from "@edu-platform/common";
 
 export interface ICollectionsRepository {
-  insert: (collection: Collection) => Promise<{ collectionId: number }>;
-  update: (collection: Collection) => Promise<void>;
-  getById: (collectionId: number) => Promise<Collection | null>;
-  getCollectionByVersionId: (versionId: string) => Promise<Collection>;
+  save: (activity: Collection) => Promise<void>;
+  findRootById: (collectionId: number) => Promise<Collection | null>;
+  findRootByIdWithActivityCount: (
+    collectionId: number
+  ) => Promise<Collection | null>;
+  // getCollectionByVersionId: (versionId: string) => Promise<Collection>;
 }
 
 export interface ICollectionsReadRepository {

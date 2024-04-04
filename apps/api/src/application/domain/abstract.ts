@@ -3,11 +3,9 @@ export abstract class Entity {
   @IgnorePersistance()
   public isDelete = false;
   @IgnorePersistance()
-  public isNew = false;
+  public isNew = true;
 
-  constructor(isNew: boolean) {
-    this.isNew = isNew;
-  }
+  constructor() {}
   getPersistanceValue() {
     return this.id;
   }

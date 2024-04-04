@@ -1,5 +1,5 @@
 import { activityContents } from "../../schema/tables";
-import { IVersions, IActivitiesReadRepository } from "@interfaces";
+import { IActivitiesReadRepository } from "@interfaces";
 import {
   db,
   activities,
@@ -157,32 +157,6 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
       },
     };
   }
-
-  // async listByCollectionParticipation(userId: number, collectionId?: number) {
-  //   const conditions = [
-  //     eq(collectionParticipations.userId, userId),
-  //     eq(activityVersions.status, VersionStatus.Published),
-  //   ];
-  //   if (collectionId) conditions.push(eq(collections.id, collectionId));
-
-  //   const res = await db
-  //     .select()
-  //     .from(activityVersions)
-  //     .innerJoin(activities, eq(activities.id, activityVersions.activityId))
-  //     .innerJoin(collections, eq(collections.id, activities.collectionId))
-  //     .innerJoin(
-  //       collectionParticipations,
-  //       eq(collectionParticipations.collectionId, collections.id)
-  //     )
-  //     .where(and(...conditions));
-
-  //   return res.map(({ activity_versions, collections }) => ({
-  //     version:
-  //       VersionDtoMapper.mapFromSelectDto(activity_versions) ||
-  //       new ActivityVersion(),
-  //     collection: CollectionDtoMapper.mapFromSelectDto(collections),
-  //   }));
-  // }
 
   async findFullViewById(activityId: string) {
     const fullVersion = await db

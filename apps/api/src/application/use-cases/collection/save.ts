@@ -19,7 +19,7 @@ class UseCase implements ISaveCollectionUseCase {
 
   async execute({ user, collectionDto }: InputParams) {
     if (collectionDto.id) {
-      const existingCollection = await this.collectionsRepository.getById(
+      const existingCollection = await this.collectionsRepository.findRootById(
         collectionDto.id
       );
       if (!existingCollection)
@@ -31,7 +31,7 @@ class UseCase implements ISaveCollectionUseCase {
 
     const newCollection = CollectionFactory.fromRequestDto(collectionDto, user);
 
-    await this.collectionsRepository.insert(newCollection);
+    await this.collectionsRepository.save(newCollection);
 
     // if (collection.id) {
     //   const existingCollection = await this.collectionsRepository.getById(

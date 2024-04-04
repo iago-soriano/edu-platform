@@ -1,15 +1,8 @@
 import { Question, StudentAnswer, OutputStatus } from "@domain";
 import {
-  ActivityQuestionNotFound,
-  OutputIsNotDraft,
-  OutputNotFound,
-  StudentIsNotOutputAuthor,
-} from "@edu-platform/common";
-import {
   IUseCase,
   UserSelectDTO,
   IStudentOutputsRepository,
-  IStudentAnswersRepository,
   IActivitiesRepository,
 } from "@interfaces";
 
@@ -25,7 +18,6 @@ export type ISaveAnswerUseCase = IUseCase<InputParams, Return>;
 class UseCase implements ISaveAnswerUseCase {
   constructor(
     private studentOutputsRepository: IStudentOutputsRepository,
-    private studentAnswersRepository: IStudentAnswersRepository,
     private activitiesRepository: IActivitiesRepository
   ) {}
 
