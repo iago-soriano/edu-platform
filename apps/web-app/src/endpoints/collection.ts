@@ -67,24 +67,43 @@ export const useRemoveUserFromCollectionMutation = (
     ...args,
   });
 
-export type CollectionListResponse = Awaited<
-  ReturnType<ApiClient["listCollections"]>
+export type CollectionListOwnerResponse = Awaited<
+  ReturnType<ApiClient["listCollectionsForOwner"]>
 >;
 
-export const useListCollectionsQuery = ({
+export const useListCollectionsForOwnerQuery = ({
   pageSize,
   page,
-  byOwnership,
   isPrivate,
 }) => {
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
-  return useQuery<CollectionListResponse, ServerError>({
+  return useQuery<CollectionListOwnerResponse, ServerError>({
     queryKey: ["collections", { isPrivate, page, pageSize }],
     // placeholderData: keepPreviousData,
     queryFn: () =>
-      client.listCollections({ byOwnership, isPrivate, page, pageSize }),
+      client.listCollectionsForOwner({ isPrivate, page, pageSize }),
+  });
+};
+
+export type CollectionListParticipantResponse = Awaited<
+  ReturnType<ApiClient["listCollectionsForOwner"]>
+>;
+
+export const useListCollectionsForParticipantQuery = ({
+  pageSize,
+  page,
+  isPrivate,
+}) => {
+  const axios = useAxiosAuth();
+  const client = new ApiClient(axios);
+
+  return useQuery<CollectionListParticipantResponse, ServerError>({
+    queryKey: ["collections", { isPrivate, page, pageSize }],
+    // placeholderData: keepPreviousData,
+    queryFn: () =>
+      client.listCollectionsForOwner({ isPrivate, page, pageSize }),
   });
 };
 
