@@ -17,8 +17,7 @@ const Page = async ({ searchParams }) => {
   await queryClient.prefetchQuery({
     queryKey: ["collections", { isPrivate: true, page: pagePrivate, pageSize }],
     queryFn: () =>
-      new ApiClient(SSRAxios).listCollections({
-        byOwnership: true,
+      new ApiClient(SSRAxios).listCollectionsForOwner({
         isPrivate: true,
         page: pagePrivate,
         pageSize,
@@ -30,8 +29,7 @@ const Page = async ({ searchParams }) => {
   await queryClient.prefetchQuery({
     queryKey: ["collections", { isPrivate: false, page: pagePublic, pageSize }],
     queryFn: () =>
-      new ApiClient(SSRAxios).listCollections({
-        byOwnership: true,
+      new ApiClient(SSRAxios).listCollectionsForOwner({
         isPrivate: false,
         page: pagePublic,
         pageSize,

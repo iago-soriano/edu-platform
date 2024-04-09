@@ -3,9 +3,9 @@ import {
   GhostTextArea,
   ErrorCard,
   Icons,
-  ButtonWithDropdown,
   ContentContainer,
 } from "@components";
+import { ButtonWithDropdown } from "components/atoms/buttons/with-dropdown";
 import { TextContent, VideoContent, ImageContent } from ".";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { useSaveContentMutation, useDeleteContentMutation } from "@endpoints";
@@ -15,14 +15,12 @@ import { twMerge } from "tailwind-merge";
 type BaseContentProps = {
   contentDto: ContentResponseDTO;
   activityId: string;
-  versionId: string;
   setSaveState: Dispatch<SetStateAction<string>>;
 };
 export const BaseContent = ({
   contentDto,
   setSaveState,
   activityId,
-  versionId,
 }: BaseContentProps) => {
   const [hasChanges, setHasChanges] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -30,24 +28,10 @@ export const BaseContent = ({
   const saveContentMutation = useSaveContentMutation({});
   const deleteContentMutation = useDeleteContentMutation({});
 
-  const onSaveTitle = (e) => {
-    if (hasChanges) {
-      saveContentMutation.mutate({
-        activityId,
-        versionId,
-        title: e.target.value,
-        type: contentDto.type,
-        id: contentDto.id,
-      });
-    }
-    setHasChanges(false);
-  };
-
   const onSaveDescription = (e) => {
     if (hasChanges) {
       saveContentMutation.mutate({
         activityId,
-        versionId,
         description: e.target.value,
         type: contentDto.type,
         id: contentDto.id,
@@ -66,7 +50,6 @@ export const BaseContent = ({
   const getContent = (type: string) => {
     const commonProps = {
       contentId: contentDto.id,
-      order: contentDto.order,
       onChange: setHasChanges,
       hasChanges,
       saveContentMutation,
@@ -107,7 +90,7 @@ export const BaseContent = ({
       onFocus={() => setIsFocused(true)}
     >
       <ContentContainer>
-        <GhostInput
+        {/* <GhostInput
           name="title"
           placeholder="Título (opcional)"
           className="text-xl leading-10 font-bold"
@@ -115,7 +98,7 @@ export const BaseContent = ({
           onBlur={onSaveTitle}
           error={saveContentMutation.error?.errors?.["title"]}
           onChange={() => setHasChanges(true)}
-        />
+        /> */}
         <GhostTextArea
           name="description"
           placeholder="Descrição (opcional)"
@@ -139,8 +122,8 @@ export const BaseContent = ({
             className="flex items-center"
             onClick={() =>
               deleteContentMutation.mutate({
-                contentId: contentDto.id,
-                versionId,
+                elementId: contentDto.id,
+                activityId,
               })
             }
           >

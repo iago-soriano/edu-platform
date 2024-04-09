@@ -7,8 +7,7 @@ import {
 } from "@components";
 import {
   useSaveContentMutation,
-  useUpdateVersionStatusMutation,
-  useDeleteDraftVersionMutation,
+  usePublishDraftMutation,
   ReturnGetActivityVersion,
 } from "@endpoints";
 import { ContentTypes, VersionStatus } from "@edu-platform/common";
@@ -23,7 +22,6 @@ interface OptionsMenuProps {
   version?: ReturnGetActivityVersion;
   onClose: () => void;
   activityId: any;
-  versionId: any;
   isOpen: boolean;
   scrollToBottom?: () => void;
 }
@@ -31,18 +29,11 @@ interface OptionsMenuProps {
 export const OptionsMenu = ({
   onClose,
   activityId,
-  versionId,
   version,
   isOpen,
   scrollToBottom,
 }: OptionsMenuProps) => {
-  const deleteVersionMutation = useDeleteDraftVersionMutation({
-    onSuccess: () => {
-      setOpenConfirmDeleteModal(false);
-      redirect(Router.teacherHome);
-    },
-  });
-  const statusUpdateMutation = useUpdateVersionStatusMutation({
+  const publishDraftMutation = usePublishDraftMutation({
     onSuccess: () => {
       setOpenConfirmDeleteModal(false);
       redirect(Router.teacherHome);
@@ -100,10 +91,8 @@ export const OptionsMenu = ({
             onClick={() =>
               saveContentMutation.mutate({
                 activityId,
-                versionId,
                 type: ContentTypes.Video,
                 payload: { video: {} },
-                order,
               })
             }
           >
@@ -113,10 +102,8 @@ export const OptionsMenu = ({
             onClick={() =>
               saveContentMutation.mutate({
                 activityId,
-                versionId,
                 type: ContentTypes.Text,
                 payload: { text: {} },
-                order,
               })
             }
           >
@@ -126,10 +113,8 @@ export const OptionsMenu = ({
             onClick={() =>
               saveContentMutation.mutate({
                 activityId,
-                versionId,
                 type: ContentTypes.Image,
                 payload: { image: {} },
-                order,
               })
             }
           >
@@ -149,11 +134,11 @@ export const OptionsMenu = ({
           </div>
         </div>
       </div>
-      {openConfirmDeleteModal && (
+      {/* {openConfirmDeleteModal && (
         <ConfirmModal
           onClose={() => setOpenConfirmDeleteModal(false)}
           confirmAction={() =>
-            deleteVersionMutation.mutate({ activityId, versionId })
+            deleteVersionMutation.mutate({ activityId })
           }
           title="Ao remover este rascunho, todas as alterações serão perdidas"
           children={
@@ -165,15 +150,13 @@ export const OptionsMenu = ({
           }
           confirmButton={{ icon: "TRASH", text: "Remover" }}
         />
-      )}
+      )} */}
       {openConfirmPublishModal && (
         <ConfirmModal
           onClose={() => setOpenConfirmPublishModal(false)}
           confirmAction={() =>
-            statusUpdateMutation.mutate({
+            publishDraftMutation.mutate({
               activityId,
-              versionId,
-              newActivityStatus: VersionStatus.Published,
             })
           }
           title="Publicar rascunho"

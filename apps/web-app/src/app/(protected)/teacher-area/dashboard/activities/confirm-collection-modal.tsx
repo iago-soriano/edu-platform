@@ -17,7 +17,6 @@ export const ConfirmCollectionModal = ({
       router.push(
         Router.editActivity({
           activityId: args?.activityId,
-          versionId: args?.versionId,
         })
       );
     },

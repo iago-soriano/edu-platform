@@ -6,44 +6,49 @@ import {
   Tooltip,
   Icons,
   errorToast,
+  ButtonLink,
   Tag,
 } from "@components";
 import { DomainRules } from "@edu-platform/common";
 import { useState, useEffect } from "react";
 import {
-  useGetActivityVersionQuery,
+  useGetActivityDraftQuery,
   useUpdateVersionMetadataMutation,
 } from "@endpoints";
-import { openInNewTab } from "@infrastructure";
+import { openInNewTab, Router } from "@infrastructure";
 
 export const ActivityHeaderInput = ({
   activityId,
-  versionId,
   saveState,
   setSaveState,
   onOpenOptionsMenu,
 }) => {
-  const versionQuery = useGetActivityVersionQuery({ activityId, versionId });
+  const versionQuery = useGetActivityDraftQuery({ activityId });
   const [currentTopic, setCurrentTopic] = useState("");
 
   const [hasChanges, setHasChanges] = useState(false);
-  const metadataMutation = useUpdateVersionMetadataMutation({});
+  const metadataMutation = useUpdateVersionMetadataMutation({ activityId });
 
+  console.log({ success: metadataMutation.isSuccess });
+  useEffect(() => {
+    if (metadataMutation.isError) setSaveState("error");
+  }, [metadataMutation.isError]);
   useEffect(() => {
     if (metadataMutation.isPending) setSaveState("isLoading");
-    else setSaveState("ready");
   }, [metadataMutation.isPending]);
+  useEffect(() => {
+    if (metadataMutation.isSuccess) setSaveState("ready");
+  }, [metadataMutation.isSuccess]);
 
   const onChange = (hasChange) => {
     setHasChanges(hasChange);
-    setSaveState(hasChange ? "hasChanges" : "ready");
+    if (hasChange) setSaveState("hasChanges");
   };
 
   const onChangeTitle = (args) => {
     if (hasChanges) {
       metadataMutation.mutate({
         activityId,
-        versionId,
         title: args.target.value,
       });
     }
@@ -51,15 +56,15 @@ export const ActivityHeaderInput = ({
   };
 
   const onInsertTopic = () => {
-    if (
-      versionQuery.data?.topics?.split(",").length ===
-      DomainRules.ACTIVITY.TOPICS.MAX_COUNT
-    ) {
-      errorToast(
-        `Não é permitido mais de ${DomainRules.ACTIVITY.TOPICS.MAX_COUNT} tópicos`
-      );
-      return;
-    }
+    // if (
+    //   versionQuery.data?.topics?.split(",").length ===
+    //   DomainRules.ACTIVITY.TOPICS.MAX_COUNT
+    // ) {
+    //   errorToast(
+    //     `Não é permitido mais de ${DomainRules.ACTIVITY.TOPICS.MAX_COUNT} tópicos`
+    //   );
+    //   return;
+    // }
 
     const newTopics = versionQuery.data?.topics?.length
       ? `${versionQuery.data?.topics},${currentTopic}`
@@ -68,7 +73,6 @@ export const ActivityHeaderInput = ({
     metadataMutation.mutate({
       topics: newTopics,
       activityId,
-      versionId,
     });
     onChange(false);
     setCurrentTopic("");
@@ -82,7 +86,6 @@ export const ActivityHeaderInput = ({
     metadataMutation.mutate({
       topics: newTopics,
       activityId,
-      versionId,
     });
   };
 
@@ -90,21 +93,21 @@ export const ActivityHeaderInput = ({
     if (hasChanges) {
       metadataMutation.mutate({
         activityId,
-        versionId,
         description: args.target.value,
       });
     }
     onChange(false);
   };
-
+  //"flex flex-start p-2 border-2 border-surface3 w-fit"
   return (
     <>
-      <p className="flex flex-start p-2 border-2 border-surface3 w-fit">
-        Esta atividade pertence à coleção
-        <span className="mx-1 font-bold">
-          {versionQuery.data?.collectionName}
-        </span>
-      </p>
+      <ButtonLink
+        href={Router.collectionActivities(versionQuery.data?.collectionId)}
+        className="mx-1 flex flex-row w-fit"
+      >
+        <Icons.CARET_LEFT size={19} />
+        {versionQuery.data?.collectionName}
+      </ButtonLink>
       <div
         id="activity-header-input"
         className="grid sm:grid-cols-10 grid-cols-16 bg-surface3 p-2"
@@ -172,17 +175,12 @@ export const ActivityHeaderInput = ({
               className="cursor-pointer mx-3 text-accent text-opacity p-1"
               size={33}
             />
-            <SavingIndicator
-              hasChanges={saveState === "hasChanges"}
-              isLoading={saveState === "isLoading"}
-            />
+            <SavingIndicator saveState={saveState} />
             <Tooltip content="Pré-visualizar atividade. Abre uma nova aba">
               <span>
                 <Icons.CAN_SEE
                   onClick={() =>
-                    openInNewTab(
-                      `/activity/${activityId}/version/${versionId}/preview`
-                    )
+                    openInNewTab(`/activity/${activityId}/preview`)
                   }
                   className="cursor-pointer mx-3 text-text2 text-opacity-50 p-1"
                   size={33}

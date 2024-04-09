@@ -7,7 +7,7 @@ import {
 } from "next/navigation";
 import {
   useCreateNewActivityMutation,
-  useListCollectionsQuery,
+  useListCollectionsForOwnerQuery,
   useSaveCollectionMutation,
 } from "@endpoints";
 import {
@@ -30,6 +30,9 @@ import {
 
 const pageSize = 10;
 
+const CollectionsFrame = ({ children }) => (
+  <Frame className="md:w-[80%] w-[95%]">{children}</Frame>
+);
 export default function CollectionsLayout({
   currActiveTab,
   pagePublic,
@@ -43,15 +46,13 @@ export default function CollectionsLayout({
     activeTab: currActiveTab,
   });
 
-  const privateCollectionsQuery = useListCollectionsQuery({
-    byOwnership: true,
+  const privateCollectionsQuery = useListCollectionsForOwnerQuery({
     isPrivate: true,
     page: Number(params.pagePrivate),
     pageSize,
   });
 
-  const publicCollectionsQuery = useListCollectionsQuery({
-    byOwnership: true,
+  const publicCollectionsQuery = useListCollectionsForOwnerQuery({
     isPrivate: false,
     page: Number(params.pagePublic),
     pageSize,
@@ -59,12 +60,13 @@ export default function CollectionsLayout({
 
   const createCollectionMutation = useSaveCollectionMutation({
     onSuccess: (args) => {
-      if (args) router.push(Router.editCollection(args.collectionId));
+      console.log({ args });
+      router.push(Router.collectionSettings(args?.CollectionId));
     },
   });
 
   return (
-    <div className="min-h-[70vh] flex justify-between p-4 w-[95%] mx-auto">
+    <div className="min-h-[70vh] flex justify-between">
       <Tabs
         value={params?.activeTab}
         onValueChange={(e) => {
@@ -72,7 +74,7 @@ export default function CollectionsLayout({
         }}
         className="w-full"
       >
-        <div className="w-full flex justify-between">
+        <div className="w-[90%] flex justify-between flex-wrap my-2">
           <TabsList>
             <TabsTrigger value={"private"}>Private Collections</TabsTrigger>
             <TabsTrigger value={"public"}>Public Collections</TabsTrigger>
@@ -82,35 +84,31 @@ export default function CollectionsLayout({
             variant="action"
             size="lg"
             isLoading={createCollectionMutation.isPending}
+            onClick={() => createCollectionMutation.mutate({})}
           >
             New Collection
           </Button>
         </div>
-        <TabsContent value={"private"}>
+        <TabsContent value={"private"} className="">
           <LoadingErrorData
             loading={privateCollectionsQuery.isPending}
             error={privateCollectionsQuery.error}
-            hasData={
-              !!privateCollectionsQuery?.data?.isOwnerOf?.collections?.length
-            }
+            hasData={!!privateCollectionsQuery?.data?.data?.length}
             data={
-              <Frame>
+              <CollectionsFrame>
                 <DataTable
                   columns={privateCollectionColumns}
-                  data={
-                    privateCollectionsQuery.data?.isOwnerOf?.collections || []
-                  }
+                  data={privateCollectionsQuery.data?.data || []}
                   pagination={{
                     totalRowCount:
-                      privateCollectionsQuery.data?.isOwnerOf?.pagination
-                        ?.totalRowCount || 0,
+                      privateCollectionsQuery.data?.pagination?.totalCount || 0,
                     pageSize,
                     currentPage: Number(params.pagePrivate),
                     setCurrentPage: (e) =>
                       setParams({ ...params, pagePrivate: e }),
                   }}
                 />
-              </Frame>
+              </CollectionsFrame>
             }
           />
         </TabsContent>
@@ -118,27 +116,22 @@ export default function CollectionsLayout({
           <LoadingErrorData
             loading={publicCollectionsQuery.isPending}
             error={publicCollectionsQuery.error}
-            hasData={
-              !!publicCollectionsQuery?.data?.isOwnerOf?.collections?.length
-            }
+            hasData={!!publicCollectionsQuery?.data?.data?.length}
             data={
-              <Frame>
+              <CollectionsFrame>
                 <DataTable
                   columns={publicCollectionColumns}
-                  data={
-                    publicCollectionsQuery.data?.isOwnerOf?.collections || []
-                  }
+                  data={publicCollectionsQuery?.data?.data || []}
                   pagination={{
                     totalRowCount:
-                      publicCollectionsQuery.data?.isOwnerOf?.pagination
-                        ?.totalRowCount || 0,
+                      publicCollectionsQuery.data?.pagination?.totalCount || 0,
                     pageSize,
                     currentPage: Number(params.pagePublic),
                     setCurrentPage: (e) =>
                       setParams({ ...params, pagePublic: e }),
                   }}
                 />
-              </Frame>
+              </CollectionsFrame>
             }
           />
         </TabsContent>

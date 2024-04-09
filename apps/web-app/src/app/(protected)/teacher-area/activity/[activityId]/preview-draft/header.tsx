@@ -1,7 +1,7 @@
-import { useGetActivityVersionQuery } from "@endpoints";
+import { useGetActivityDraftQuery } from "@endpoints";
 
-export const ActivityHeader = ({ activityId, versionId }) => {
-  const versionQuery = useGetActivityVersionQuery({ activityId, versionId });
+export const ActivityHeader = ({ activityId }) => {
+  const versionQuery = useGetActivityDraftQuery({ activityId });
 
   return (
     <div

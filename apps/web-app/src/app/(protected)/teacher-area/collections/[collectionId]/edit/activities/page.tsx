@@ -1,41 +1,33 @@
-"use client";
-import { Router } from "@infrastructure";
 import {
-  useSaveCollectionMutation,
-  useGetCollectionQuery,
-  useCreateNewActivityMutation,
-} from "@endpoints";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { ActivityListingOwnership } from "@components";
-const Page = ({ params: { collectionId: strId } }) => {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { SSRAxios } from "@infrastructure";
+import { ApiClient } from "@edu-platform/common";
+import Client from "./client";
+
+const pageSize = 10;
+
+const Page = async ({ params: { collectionId: strId }, searchParams }) => {
   const collectionId = Number(strId);
-  const collectionQuery = useGetCollectionQuery({ collectionId });
+  const queryClient = new QueryClient();
 
-  const router = useRouter();
+  const page = Number(searchParams?.page) || 0;
 
-  const createActivityMutation = useCreateNewActivityMutation({
-    onSuccess: (args) => {
-      router.push(
-        Router.editActivity({
-          activityId: args?.activityId,
-          versionId: args?.versionId,
-        })
-      );
-    },
+  await queryClient.prefetchQuery({
+    queryKey: ["activities", { page, pageSize }],
+    queryFn: () =>
+      new ApiClient(SSRAxios).listActivitiesForOwner({
+        collectionId,
+        page,
+        pageSize,
+      }),
   });
   return (
-    <div className="">
-      <div className="w-full flex justify-between p-2 mt-5">
-        <h5>{collectionQuery.data?.name}</h5>
-        <button
-          onClick={() => createActivityMutation.mutate({ collectionId })}
-          className="h-10 w-38 whitespace-nowrap bg-accent p-2 text-white rounded font-bold transition-opacity hover:opacity-80"
-        >
-          + New Activity
-        </button>
-      </div>
-      <ActivityListingOwnership collectionId={collectionId} />
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Client collectionId={collectionId} page={page} pageSize={pageSize} />
+    </HydrationBoundary>
   );
 };
 

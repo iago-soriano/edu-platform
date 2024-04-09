@@ -89,7 +89,7 @@ const Page = ({ params: { collectionId: strId } }) => {
             }));
           }}
         />
-        <label className="my-3">
+        <label className="m-3">
           <span className="text-lg">Privacy</span>
           <RadioGroup
             value={collection.isPrivate}
@@ -117,7 +117,7 @@ const Page = ({ params: { collectionId: strId } }) => {
             ]}
           />
         </label>
-        <div className="my-5">
+        <label className="m-3">
           {collection?.isPrivate && (
             <label className="flex flex-row items-center min-h-11">
               <Toggle
@@ -131,12 +131,11 @@ const Page = ({ params: { collectionId: strId } }) => {
               />
               <span className="text-lg p-2">E-mail Notifications</span>
               <span className="text-muted-foreground pr-3">
-                Get notified whenever a student finishes an activity in this
-                collection
+                Get notified whenever a student finishes an activity
               </span>
             </label>
           )}
-        </div>
+        </label>
         <Button size="lg" isLoading={saveCollectionMutation.isPending}>
           Save
         </Button>

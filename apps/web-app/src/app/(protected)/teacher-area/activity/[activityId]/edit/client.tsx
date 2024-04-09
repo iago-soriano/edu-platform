@@ -1,14 +1,15 @@
 "use client";
-import { useGetActivityVersionQuery } from "@endpoints";
+import { useGetActivityDraftQuery } from "@endpoints";
 import { ActivityHeaderInput, BaseContent, OptionsMenu } from "./components";
 import { QuestionContainer, StickyHeader } from "@components";
 import { useEffect, useState, useRef, useCallback } from "react";
 
-const Page = ({ params: { activityId, versionId } }) => {
-  const versionQuery = useGetActivityVersionQuery({ activityId, versionId });
+const Page = ({ params: { activityId } }) => {
+  const versionQuery = useGetActivityDraftQuery({ activityId });
 
-  const [saveState, setSaveState] = useState("");
-  const [showAuxHeader, setShowAuxHeader] = useState(false);
+  const [saveState, setSaveState] = useState<"hasChanges" | "ready" | "error">(
+    "ready"
+  );
   const [openOptionsMenu, setOpenOptionsMenu] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -22,45 +23,27 @@ const Page = ({ params: { activityId, versionId } }) => {
   //   });
   // }, [scrollRef, document.body.scrollHeight]);
 
-  useEffect(() => {
-    const setSticky = () => {
-      const el = document.getElementById("activity-header-input");
-      if (window.scrollY > (el?.offsetTop || 0) + (el?.offsetHeight || 0)) {
-        setShowAuxHeader(true);
-      } else {
-        setShowAuxHeader(false);
-      }
-    };
-    const handleScroll = setSticky;
-    setSticky();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <div ref={scrollRef}>
       <ActivityHeaderInput
         activityId={activityId}
-        versionId={versionId}
         saveState={saveState}
         setSaveState={setSaveState}
         onOpenOptionsMenu={() => setOpenOptionsMenu(true)}
       />
       <StickyHeader
-        show={showAuxHeader}
         activity={versionQuery?.data}
         saveState={saveState}
         onOpenOptionsMenu={() => setOpenOptionsMenu(true)}
       />
       <div>
-        {versionQuery.data?.elements.length ? (
+        {versionQuery.data?.elements?.length ? (
           <>
             {versionQuery.data?.elements.map((element) => {
               if (element.content && !element.question) {
                 return (
                   <BaseContent
                     key={`c-${element.content.id}`}
-                    versionId={versionId}
                     activityId={activityId}
                     setSaveState={setSaveState}
                     contentDto={element.content}
@@ -86,7 +69,6 @@ const Page = ({ params: { activityId, versionId } }) => {
           setOpenOptionsMenu(false);
         }}
         activityId={activityId}
-        versionId={versionId}
         version={versionQuery?.data}
       />
     </div>

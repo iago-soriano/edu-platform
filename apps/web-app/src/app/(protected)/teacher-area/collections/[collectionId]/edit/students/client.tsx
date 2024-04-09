@@ -5,7 +5,7 @@ import {
   DataTable,
   LoadingErrorData,
   Frame,
-  ConfirmModal,
+  LeftHeader,
   Button,
 } from "@components";
 import { useListStudentsOfCollectionQuery } from "@endpoints";
@@ -29,13 +29,13 @@ const Page = ({ collectionId, page, pageSize }) => {
     () => [
       {
         accessorKey: "name",
-        header: "Name",
+        header: () => <LeftHeader name="Name" />,
         cell: (info) => info.getValue(),
         size: 200,
       },
       {
         accessorKey: "email",
-        header: "E-mail",
+        header: () => <LeftHeader name="E-mail" />,
         cell: (info) => info.getValue(),
       },
       {
@@ -65,9 +65,8 @@ const Page = ({ collectionId, page, pageSize }) => {
         error={studentsQuery.error}
         hasData={!!studentsQuery?.data?.data?.length}
         data={
-          <Frame>
+          <Frame className="md:w-[60%] w-[95%]">
             <DataTable
-              className="min-h-[50vh] justify-between"
               data={studentsQuery?.data?.data || []}
               columns={columns}
               pagination={{

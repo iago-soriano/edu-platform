@@ -1,45 +1,29 @@
 "use client";
-import { useGetActivityVersionQuery } from "@endpoints";
+import { useGetActivityDraftQuery } from "@endpoints";
 import { ActivityHeader } from "./header";
 import { useEffect, useState } from "react";
 import { QuestionContainer, StickyHeader, BaseContent } from "@components";
 
-const Page = ({ params: { activityId, versionId } }) => {
-  const versionQuery = useGetActivityVersionQuery({ activityId, versionId });
-  const [showAuxHeader, setShowAuxHeader] = useState(false);
+const Page = ({ params: { activityId } }) => {
+  const versionQuery = useGetActivityDraftQuery({ activityId });
   const [saveState, setSaveState] = useState("");
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const el = document.getElementById("activity-header-input");
-      if (window.scrollY > el.offsetTop + el.offsetHeight) {
-        setShowAuxHeader(true);
-      } else {
-        setShowAuxHeader(false);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <div>
-      <ActivityHeader activityId={activityId} versionId={versionId} />
+      <ActivityHeader activityId={activityId} />
       <StickyHeader
         onOpenOptionsMenu={() => {}}
-        show={showAuxHeader}
-        activity={versionQuery}
+        activity={versionQuery?.data}
         saveState={saveState}
       />
       <div>
-        {versionQuery.data?.elements.length &&
+        {versionQuery.data?.elements?.length &&
           versionQuery.data?.elements.map((element) => {
             if (element.content && !element.question) {
               return (
                 <div>
                   <BaseContent
                     key={`c-${element.content.id}`}
-                    versionId={versionId}
                     activityId={activityId}
                     contentDto={element.content}
                   />
@@ -47,7 +31,7 @@ const Page = ({ params: { activityId, versionId } }) => {
                 </div>
               );
             } else if (!element.content && element.question) {
-              return <QuestionContainer key={`q-${element.content.id}`} />;
+              return <QuestionContainer key={`q-${element.question.id}`} />;
             }
             return <h1>What is this</h1>;
           })}

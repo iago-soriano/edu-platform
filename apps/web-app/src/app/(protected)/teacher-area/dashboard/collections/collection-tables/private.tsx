@@ -1,31 +1,54 @@
-import Link from "next/link";
 import { createColumnHelper } from "@tanstack/react-table";
-import { CollectionListResponse } from "@endpoints";
-import { Icons, Tooltip, LinkWithIcon } from "@components";
-import { Router, getLocaleDateTimeFromISO } from "@infrastructure";
+import { CollectionListOwnerResponse } from "@endpoints";
+import {
+  Icons,
+  Tooltip,
+  LinkWithIcon,
+  CenteredCell,
+  CenteredDateCell,
+  LeftHeader,
+  cellSizes,
+  CenteredCellWithLink,
+} from "@components";
+import { Router } from "@infrastructure";
 
 const columnHelper =
-  createColumnHelper<
-    CollectionListResponse["isOwnerOf"]["collections"][number]
-  >();
+  createColumnHelper<CollectionListOwnerResponse["data"][number]>();
+
 export const privateCollectionColumns = [
   columnHelper.accessor("name", {
-    header: () => <p className="text-left">Name</p>,
+    header: () => <LeftHeader name="Name" />,
     cell: (info) => <p className="text-left">{info.getValue()}</p>,
-    // size: 250,
   }),
   columnHelper.accessor("draftVersionsCount", {
     header: () => <span>Drafts in progress</span>,
-    cell: (info) => <span>{info.getValue()}</span>,
-    // size: 50,
+    cell: (info) => (
+      <CenteredCellWithLink
+        href={Router.collectionActivities(info.row.original.id)}
+        value={info.getValue()}
+      />
+    ),
+    size: cellSizes.sm,
   }),
   columnHelper.accessor("totalActivitiesCount", {
     header: () => <span>Total Activities</span>,
-    cell: (info) => <span>{info.getValue()}</span>,
+    cell: (info) => (
+      <CenteredCellWithLink
+        href={Router.collectionActivities(info.row.original.id)}
+        value={info.getValue()}
+      />
+    ),
+    size: cellSizes.sm,
   }),
   columnHelper.accessor("totalParticipantsCount", {
     header: () => <span># of Participants</span>,
-    cell: (info) => <span>{info.getValue()}</span>,
+    cell: (info) => (
+      <CenteredCellWithLink
+        href={Router.collectionStudents(info.row.original.id)}
+        value={info.getValue()}
+      />
+    ),
+    size: cellSizes.sm,
   }),
   columnHelper.accessor("notifyOwnerOnStudentOutput", {
     header: () => <p className="text-center">Notifications</p>,
@@ -46,22 +69,24 @@ export const privateCollectionColumns = [
         )}
       </p>
     ),
+    size: cellSizes.sm,
   }),
   columnHelper.accessor("updatedAt", {
     header: () => <span>Last Edited</span>,
-    cell: (info) => (
-      <span>{getLocaleDateTimeFromISO(info.getValue().toString())}</span>
-    ),
-    // size: 200,
+    cell: CenteredDateCell,
+    size: cellSizes.md,
   }),
 
   columnHelper.accessor("id", {
     header: () => <span>Edit</span>,
     cell: (info) => (
-      <LinkWithIcon
-        href={Router.editCollection(info.getValue())}
-        icon="CAN_SEE"
-      />
+      <p className="flex flex-row justify-center">
+        <LinkWithIcon
+          href={Router.collectionSettings(info.getValue())}
+          icon="CAN_SEE"
+        />
+      </p>
     ),
+    size: cellSizes.sm,
   }),
 ];
