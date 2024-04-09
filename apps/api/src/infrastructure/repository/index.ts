@@ -1,3 +1,2 @@
-export * from "./postgres";
-export * from "./schema/tables";
+export * from "./schema";
 export * from "./repositories";

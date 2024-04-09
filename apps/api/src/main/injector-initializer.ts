@@ -1,5 +1,3 @@
-import { ListCollectionsByUserController } from "../controllers/queries/collections/list-by-user";
-import { CreateNewActivityController } from "../controllers/commands/activities/create-new-activity";
 import * as awilix from "awilix";
 import {
   SignInController,
@@ -16,7 +14,8 @@ import {
   CreateNewDraftVersionController,
   UpdateActivityMetadataController,
   GetActivityVersionController,
-  ListActivityVersionsController,
+  ListCollectionsForOwnerController,
+  ListCollectionsForParticipantController,
   DeleteElementController,
   RefreshTokenController,
   SaveCollectionController,
@@ -28,6 +27,10 @@ import {
   UpdateNotificationController,
   InsertFollowerInCollectionController,
   ImportActivityController,
+  CreateNewActivityController,
+  ListActivitiesForCollectionParticipantController,
+  ListActivitiesForCollectionOwnerController,
+  ListNotificationsController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -62,18 +65,16 @@ import {
   UserRepository,
   TokenRepository,
   AssetRepository,
-  ActivitiesRepository,
   S3Service,
-  CollectionsRepository,
-  CollectionParticipationsRepository,
   StudentOutputsRepository,
+  ActivitiesRepository,
   ActivitiesReadRepository,
+  CollectionsRepository,
   CollectionsReadRepository,
-  CollectionParticipationsReadRepository,
   NotificationsRepository,
   NotificationsReadRepository,
 } from "@infrastructure";
-import { ListNotificationsController } from "controllers/queries/notifications/list";
+import { ActivitiesFactory } from "@domain";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
@@ -106,8 +107,11 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     getActivityVersionController: awilix
       .asClass(GetActivityVersionController)
       .classic(),
-    listActivityVersionsController: awilix
-      .asClass(ListActivityVersionsController)
+    listActivitiesForCollectionParticipantController: awilix
+      .asClass(ListActivitiesForCollectionParticipantController)
+      .classic(),
+    listActivitiesForCollectionOwnerController: awilix
+      .asClass(ListActivitiesForCollectionOwnerController)
       .classic(),
     deleteElementController: awilix.asClass(DeleteElementController).classic(),
     refreshTokenController: awilix.asClass(RefreshTokenController).classic(),
@@ -123,8 +127,11 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     removeStudentFromCollectionController: awilix
       .asClass(RemoveStudentFromCollectionController)
       .classic(),
-    listCollectionsByUserController: awilix
-      .asClass(ListCollectionsByUserController)
+    listCollectionsForOwnerController: awilix
+      .asClass(ListCollectionsForOwnerController)
+      .classic(),
+    listCollectionsForParticipantController: awilix
+      .asClass(ListCollectionsForParticipantController)
       .classic(),
     getCollectionController: awilix.asClass(GetCollectionController).classic(),
     listUsersInCollectionController: awilix
@@ -153,6 +160,9 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     tokenService: awilix.asClass(JWTTokenService).singleton(),
     assetRepository: awilix.asClass(AssetRepository),
     storageService: awilix.asClass(S3Service),
+
+    // factories
+    activitiesFactory: awilix.asClass(ActivitiesFactory).classic(),
 
     // use cases
     signInUseCase: awilix.asClass(SignInUseCase).classic(),
@@ -207,12 +217,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     collectionsRepository: awilix.asClass(CollectionsRepository).classic(),
     collectionsReadRepository: awilix
       .asClass(CollectionsReadRepository)
-      .classic(),
-    collectionParticipationsRepository: awilix
-      .asClass(CollectionParticipationsRepository)
-      .classic(),
-    collectionParticipationsReadRepository: awilix
-      .asClass(CollectionParticipationsReadRepository)
       .classic(),
     studentOutputsRepository: awilix
       .asClass(StudentOutputsRepository)

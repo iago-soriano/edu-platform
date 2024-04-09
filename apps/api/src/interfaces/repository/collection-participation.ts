@@ -42,10 +42,3 @@ export interface ICollectionParticipationsRepository {
     notifyOnActivityInsert: boolean
   ) => Promise<void>;
 }
-
-export interface ICollectionParticipationsReadRepository {
-  listStudents: (
-    args: { collectionId: number } & PaginatedParamsDTO
-  ) => Promise<ListParticipantsOfCollectionResponseBody>;
-  // listCollections: (studentId: number) => Promise<Collection[]>;
-}

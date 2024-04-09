@@ -1,8 +1,7 @@
-import { Collection, VersionStatus } from "@domain";
+import { Collection, ParticipationType, VersionStatus } from "@domain";
 import {
   ICollectionsRepository,
   ICollectionsReadRepository,
-  ICollectionParticipationsReadRepository,
 } from "@interfaces";
 import {
   db,
@@ -18,26 +17,61 @@ import { PaginatedParamsDTO } from "@edu-platform/common";
 export class CollectionsReadRepository implements ICollectionsReadRepository {
   async listByParticipation({
     userId,
+    page,
+    pageSize,
   }: { userId: number } & PaginatedParamsDTO) {
-    const c = await db
-      .select()
-      .from(collections)
-      .innerJoin(
-        collectionParticipations,
-        eq(collectionParticipations.collectionId, collections.id)
-      )
-      .where(eq(collectionParticipations.userId, userId));
+    const sq = db.$with("sq").as(
+      db
+        .select({
+          id: collections.id,
+          name: collections.name,
+          // totalPublishedVersionsCount?: sql<number>`COUNT(DISTINCT ${activityVersions.id})`.as(
+          //   "totalActivitiesCount"
+          // ),
+          // newPublishedVersionsCount: number;
+          // myOutputsCount: number;
+          ownerName: users.name,
+          totalCollectionsCount:
+            sql<number>`COUNT(${collections.id}) OVER ()`.as(
+              "totalCollectionsCount"
+            ),
+        })
+        .from(collections)
+        .innerJoin(
+          collectionParticipations,
+          eq(collectionParticipations.collectionId, collections.id)
+        )
+        .leftJoin(activities, eq(activities.collectionId, collections.id))
+        .leftJoin(
+          activityVersions,
+          eq(activities.id, activityVersions.activityId)
+        )
+        .innerJoin(users, eq(collections.ownerId, users.id))
+        .where(
+          and(
+            eq(collectionParticipations.userId, userId),
+            eq(
+              collectionParticipations.type,
+              ParticipationType.Student.toString()
+            ),
+            eq(activityVersions.status, VersionStatus.Published)
+          )
+        )
+    );
 
-    return c.map(({ collections }) => ({
-      id: collections.id,
-      createdAt: collections.createdAt,
-      updatedAt: collections.updatedAt,
-      name: collections.name || "",
-      description: collections.description || "",
-      isPrivate: collections.isPrivate,
-      notifyOwnerOnStudentOutput: collections.notifyOwnerOnStudentOutput,
-      ownerId: collections.ownerId,
-    }));
+    const dto = await db
+      .with(sq)
+      .select()
+      .from(sq)
+      .limit(pageSize)
+      .offset(page * pageSize);
+
+    return {
+      data: dto,
+      pagination: {
+        totalCount: dto[0]?.totalCollectionsCount,
+      },
+    };
   }
 
   async listByOwnership({
@@ -107,17 +141,13 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
       .offset(page * pageSize);
 
     return {
-      collections: dto,
+      data: dto,
       pagination: {
-        totalRowCount: dto[0]?.totalCollectionsCount,
+        totalCount: dto[0]?.totalCollectionsCount,
       },
     };
   }
-}
 
-export class CollectionParticipationsReadRepository
-  implements ICollectionParticipationsReadRepository
-{
   async listStudents({
     collectionId,
     page,
@@ -158,5 +188,28 @@ export class CollectionParticipationsReadRepository
         totalCount: dto[0]?.totalCount,
       },
     };
+  }
+
+  async findByIdForOwner(collectionId: number, user: { id: number }) {
+    const dto = (
+      await db
+        .select({
+          name: collections.name,
+          description: collections.description,
+          isPrivate: collections.isPrivate,
+          notifyOwnerOnStudentOutput: collections.notifyOwnerOnStudentOutput,
+        })
+        .from(collections)
+        .where(
+          and(
+            eq(collections.id, collectionId),
+            eq(collections.ownerId, user.id)
+          )
+        )
+    )[0];
+
+    if (!dto) return null;
+
+    return dto;
   }
 }

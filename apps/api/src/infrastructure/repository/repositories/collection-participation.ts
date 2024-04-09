@@ -1,8 +1,3 @@
-import { Collection, User } from "@domain";
-import {
-  ICollectionParticipationsRepository,
-  ICollectionParticipationsReadRepository,
-} from "@interfaces";
 import {
   db,
   collections,
@@ -12,9 +7,7 @@ import {
 import { and, eq, sql } from "drizzle-orm";
 import { PaginatedParamsDTO } from "@edu-platform/common";
 
-export class CollectionParticipationsRepository
-  implements ICollectionParticipationsRepository
-{
+export class CollectionParticipationsRepository {
   async insertParticipant(
     userId: number,
     collectionId: number,

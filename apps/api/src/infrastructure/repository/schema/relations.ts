@@ -1,21 +1,4 @@
-import {
-  integer,
-  pgEnum,
-  pgTable,
-  serial,
-  varchar,
-  boolean,
-  primaryKey,
-  timestamp,
-} from "drizzle-orm/pg-core";
 import { relations, type InferSelectModel } from "drizzle-orm";
-import {
-  VersionStatus,
-  QuestionTypes,
-  UserTypes,
-  ContentTypes,
-  OutputStatus,
-} from "@domain";
 import {
   users,
   tokens,

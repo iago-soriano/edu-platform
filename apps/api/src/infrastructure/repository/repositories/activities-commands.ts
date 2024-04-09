@@ -1,71 +1,30 @@
 import {
-  Activity,
-  ActivityFactory,
-  ContentFactory,
-  Entity,
-  VersionFactory,
-} from "@domain";
-import { ActivitySerializer } from "../serializers/activity";
-import {
   db,
   activities,
   activityVersions,
-  users,
   activityContents,
   activityQuestions,
 } from "@infrastructure";
-import {
-  IActivitiesRepository,
-  PersistencePathStep,
-  AggregateRootPersistenceTables,
-} from "@interfaces";
+import { IActivitiesRepository } from "@interfaces";
 import { eq } from "drizzle-orm";
-import { BaseRepository } from "./abstract";
+import { BaseRepository, AllTablesIndexer } from "./base-repository";
 import { alias } from "drizzle-orm/pg-core";
+import { ActivitySerializer } from "../serializers";
+
+export const ActivityEntityNames: AllTablesIndexer[] = [
+  "Activity",
+  "ActivityVersion",
+  "VideoContent",
+  "ImageContent",
+  "TextContent",
+];
 
 export class ActivitiesRepository
-  extends BaseRepository<typeof ActivitiesRepository.Tables>
+  extends BaseRepository
   implements IActivitiesRepository
 {
-  static Tables: AggregateRootPersistenceTables = {
-    activities,
-    activityVersions,
-    activityContents,
-  };
   constructor() {
-    super(ActivitiesRepository.Tables);
-  }
-  async save(activity: Activity) {
-    const persistencePath: PersistencePathStep[] = [
-      {
-        entity: activity,
-        table: activities,
-        serializer: ActivitySerializer.serializeActivity,
-      },
-    ];
-    const versions = [activity.draftVersion, activity.lastVersion];
-    for (const version of versions) {
-      if (version) {
-        persistencePath.push({
-          entity: version,
-          table: activityVersions,
-          serializer: ActivitySerializer.serializeVersion,
-        });
-        if (version.elements) {
-          for (const element of version.elements) {
-            if (element.elementType === "Content") {
-              persistencePath.push({
-                entity: element,
-                table: activityContents,
-                serializer: ActivitySerializer.serializeContent,
-              });
-            }
-          }
-        }
-      }
-    }
-
-    return super.save(activity, persistencePath);
+    super(ActivityEntityNames);
   }
 
   async findRootById(activityId: string) {
@@ -79,13 +38,9 @@ export class ActivitiesRepository
       .leftJoin(lastVersions, eq(lastVersions.id, activities.lastVersionId))
       .where(eq(activities.id, activityId));
 
-    super.initializeEventTracking(
-      activityId,
-      this._tableDefinitions,
-      this._events
-    );
+    super.initializeEventTracking(activityId, this._events);
 
-    const activity = ActivityFactory.fromDbDTOWithProxy(
+    const activity = ActivitySerializer.deserialize(
       dto[0].activities,
       this._events,
       dto[0].draftVersions,
@@ -114,7 +69,12 @@ export class ActivitiesRepository
     );
 
     const dto = await db
-      .select()
+      .selectDistinctOn([
+        lastVersionContents.id,
+        draftVersionContents.id,
+        draftVersionQuestions.id,
+        lastVersionQuestions.id,
+      ])
       .from(activities)
 
       // full draft version
@@ -141,23 +101,23 @@ export class ActivitiesRepository
 
       .where(eq(activities.id, activityId));
 
-    super.initializeEventTracking(
-      activityId,
-      this._tableDefinitions,
-      this._events
-    );
+    super.initializeEventTracking(activityId, this._events);
 
-    const activity = ActivityFactory.fromDbDTOWithProxy(
+    const activity = ActivitySerializer.deserialize(
       dto[0].activities,
       this._events,
       dto[0].draftVersions,
       dto[0].lastVersions,
-      dto
-        .map(({ draftVersionContents }) => draftVersionContents)
-        .filter((c) => c !== null),
-      dto
-        .map(({ lastVersionContents }) => lastVersionContents)
-        .filter((c) => c !== null)
+      super.filterOutDuplicates(
+        dto
+          .map(({ draftVersionContents }) => draftVersionContents)
+          .filter((c) => c !== null)
+      ),
+      super.filterOutDuplicates(
+        dto
+          .map(({ lastVersionContents }) => lastVersionContents)
+          .filter((c) => c !== null)
+      )
     );
 
     return activity;

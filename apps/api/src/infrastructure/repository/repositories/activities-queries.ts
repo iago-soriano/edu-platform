@@ -1,4 +1,4 @@
-import { activityContents } from "../../schema/tables";
+import { activityContents, collectionParticipations } from "../schema/tables";
 import { IActivitiesReadRepository } from "@interfaces";
 import {
   db,
@@ -14,7 +14,7 @@ import { alias } from "drizzle-orm/pg-core";
 import { PaginatedParamsDTO } from "@edu-platform/common";
 
 export class ActivitiesReadRepository implements IActivitiesReadRepository {
-  async listByCollectionOwnership({
+  async listForCollectionOwner({
     userId,
     collectionId,
     page,
@@ -30,7 +30,7 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
     const sq = db
       .select({
         collectionName: collections.name,
-        activityId: sql<number>`${activities.id}`.as("activity_id"),
+        activityId: sql<string>`${activities.id}`.as("activity_id"),
         draft: {
           id: sql<number>`${draftVersions.id}`.as("draftVersionId"),
           updatedAt: sql<Date>`${draftVersions.updatedAt}`.as("draftUpdatedAt"),
@@ -41,7 +41,7 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
           version: sql<number>`${draftVersions.version}`.as(
             "draftVersionVersion"
           ),
-          topics: sql<string>`${draftVersions.topics}`.as("draftVersionTopcs"),
+          topics: sql<string>`${draftVersions.topics}`.as("draftVersionTopics"),
         },
         published: {
           id: sql<number>`${publishedVersions.id}`.as("publishedVersionId"),
@@ -50,6 +50,9 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
           ),
           description: sql<string>`${publishedVersions.description}`.as(
             "publishedVersionDescription"
+          ),
+          topics: sql<string>`${draftVersions.topics}`.as(
+            "publishedVersionTopics"
           ),
           title: sql<string>`${publishedVersions.title}`.as(
             "publishedVersionTitle"
@@ -88,6 +91,7 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
         publishedVersions.id,
         publishedVersions.title,
         publishedVersions.description,
+        publishedVersions.topics,
         publishedVersions.version,
         publishedVersions.updatedAt
       )
@@ -128,6 +132,7 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
         sq.published.updatedAt,
         sq.published.title,
         sq.published.description,
+        sq.published.topics,
         sq.published.version,
         sq.archivedVersionsCount
       )
@@ -158,9 +163,129 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
     };
   }
 
-  async findFullViewById(activityId: string) {
+  async listForCollectionParticipant({
+    userId,
+    collectionId,
+    page,
+    pageSize,
+  }: {
+    userId: number;
+    collectionId?: number;
+  } & PaginatedParamsDTO) {
+    const publishedVersions = alias(activityVersions, "publishedVersions");
+
+    const sq = db
+      .select({
+        collectionName: collections.name,
+        activityId: sql<number>`${activities.id}`.as("activity_id"),
+
+        published: {
+          id: sql<number>`${publishedVersions.id}`.as("publishedVersionId"),
+          updatedAt: sql<Date>`${publishedVersions.updatedAt}`.as(
+            "publishedUpdatedAt"
+          ),
+          description: sql<string>`${publishedVersions.description}`.as(
+            "publishedVersionDescription"
+          ),
+          title: sql<string>`${publishedVersions.title}`.as(
+            "publishedVersionTitle"
+          ),
+          version: sql<number>`${publishedVersions.version}`.as(
+            "publishedVersionVersion"
+          ),
+        },
+      })
+      .from(collections)
+      .innerJoin(
+        collectionParticipations,
+        eq(collectionParticipations.collectionId, collections.id)
+      )
+      .leftJoin(activities, eq(activities.collectionId, collections.id))
+
+      .leftJoin(
+        publishedVersions,
+        eq(publishedVersions.id, activities.lastVersionId)
+      )
+      .groupBy(
+        collections.id,
+        activities.id,
+
+        publishedVersions.id,
+        publishedVersions.title,
+        publishedVersions.description,
+        publishedVersions.version,
+        publishedVersions.updatedAt
+      )
+      .where(
+        collectionId
+          ? and(
+              eq(collectionParticipations.userId, userId), // user participates in collection
+              eq(collections.id, collectionId)
+            )
+          : eq(collectionParticipations.userId, userId)
+      )
+      .as("sq");
+
+    const resp = await db
+      .select({
+        collectionName: sq.collectionName || "",
+        activityId: sq.activityId,
+        published: sq.published,
+        totalActivitiesCount: sql<number>`COUNT(${activities.id}) OVER ()`.as(
+          "totalActivitiesCount"
+        ),
+      })
+      .from(sq)
+      .innerJoin(activities, eq(activities.id, sq.activityId))
+      .groupBy(
+        sq.collectionName,
+        sq.activityId,
+        activities.id,
+        sq.published.id,
+        sq.published.updatedAt,
+        sq.published.title,
+        sq.published.description,
+        sq.published.version
+      )
+      .orderBy(desc(sql`${sq.published.updatedAt}`))
+      .limit(pageSize)
+      .offset(page * pageSize);
+
+    return {
+      data: resp.map((dto) => ({
+        collectionName: dto.collectionName || "",
+        activityId: dto.activityId,
+
+        published: dto.published?.id ? dto.published : null,
+      })),
+      pagination: {
+        totalCount: resp[0]?.totalActivitiesCount,
+      },
+    };
+  }
+
+  async findFullDraftViewById(activityId: string, user: { id: number }) {
     const fullVersion = await db
-      .select()
+      .select({
+        title: activityVersions.title,
+        description: activityVersions.description,
+        topics: activityVersions.topics,
+        collectionName: collections.name,
+        collectionId: collections.id,
+        version: activityVersions.version,
+        contents: {
+          type: activityContents.type,
+          description: activityContents.description,
+          payload: activityContents.payload,
+          order: activityContents.order,
+        },
+        questions: {
+          type: activityQuestions.type,
+          question: activityQuestions.question,
+          alternatives: activityQuestions.alternatives,
+          order: activityQuestions.order,
+        },
+      })
       .from(activityVersions)
       .leftJoin(
         activityContents,
@@ -172,18 +297,41 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
       )
       .orderBy(activityContents.order, activityQuestions.order)
       .innerJoin(activities, eq(activities.id, activityVersions.activityId))
-      .leftJoin(collections, eq(activities.collectionId, collections.id))
+      .innerJoin(collections, eq(activities.collectionId, collections.id))
       .where(
         and(
-          //eq(activityVersions.version, version),
-          eq(activities.id, activityId)
+          eq(activityVersions.status, VersionStatus.Draft),
+          eq(activities.id, activityId),
+          eq(activities.authorId, user.id)
         )
       );
 
     if (!fullVersion) return null;
 
+    return {
+      title: fullVersion[0].title,
+      description: fullVersion[0].description,
+      topics: fullVersion[0].topics,
+      collectionName: fullVersion[0].collectionName,
+      collectionId: fullVersion[0].collectionId,
+      version: fullVersion[0].version,
+      elements: [],
+      // contents: {
+      //   type: activityContents.type,
+      //   description: activityContents.description,
+      //   payload: activityContents.payload,
+      //   order: activityContents.order,
+      // },
+      // questions: {
+      //   type: activityQuestions.type,
+      //   question: activityQuestions.question,
+      //   alternatives: activityQuestions.alternatives,
+      //   order: activityQuestions.order,
+      // },
+    };
+
     // const sortedElements = fullVersion.map(
-    //   ({ activity_contents, questions }) => {
+    //   ({ contents, questions }) => {
     //     const content = // TODO: find better way to do this
     //       activity_contents &&
     //       ContentControllerDtoMapper.mapToDto(
@@ -196,23 +344,22 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
     //       );
     //     return {
     //       content,
+    //       question,
     //       // ...question || {},
     //     };
     //   }
     // );
 
     const resp = {
-      title: fullVersion[0].activity_versions.title || "",
-      description: fullVersion[0].activity_versions.description || "",
-      topics: fullVersion[0].activity_versions.topics || "",
-      status: fullVersion[0].activity_versions.status,
-      version: fullVersion[0].activity_versions.version,
-      collectionName: fullVersion[0].collections?.name || "",
-      authorId: fullVersion[0].activities.authorId,
+      // title: fullVersion[0].activity_versions.title || "",
+      // description: fullVersion[0].activity_versions.description || "",
+      // topics: fullVersion[0].activity_versions.topics || "",
+      // status: fullVersion[0].activity_versions.status,
+      // version: fullVersion[0].activity_versions.version,
+      // collectionName: fullVersion[0].collections?.name || "",
+      // authorId: fullVersion[0].activities.authorId,
       // elements: sortedElements,
     };
-
-    return resp;
 
     // const contents: Content[] = [];
 

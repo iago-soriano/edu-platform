@@ -6,7 +6,7 @@ import {
   varchar,
   boolean,
   timestamp,
-  primaryKey,
+  unique,
   uuid,
   json,
 } from "drizzle-orm/pg-core";
@@ -17,6 +17,7 @@ import {
   ContentTypes,
   OutputStatus,
   NotificationType,
+  ParticipationType,
 } from "@domain";
 
 export const tokenTypeEnum = pgEnum("tokenType", [
@@ -123,6 +124,8 @@ export const activityQuestions = pgTable("questions", {
 
   question: varchar("question", { length: 200 }),
   answer: varchar("answer_key", { length: 500 }),
+
+  alternatives: json("alternatives"),
   order: integer("order").default(0),
 
   versionId: uuid("version_id").references(() => activityVersions.id),
@@ -149,11 +152,12 @@ export const collections = pgTable("collections", {
     .notNull(),
 });
 
-export const participantTypeEnum = pgEnum("participantType", [
-  "Follower",
-  "Student",
-]);
-
+export const participantTypeEnum = pgEnum(
+  "participantType",
+  Object.values(ParticipationType || {}).filter((v) => isNaN(Number(v))) as [
+    string,
+  ]
+);
 export const collectionParticipations = pgTable(
   "collection_participations",
   {
@@ -171,14 +175,10 @@ export const collectionParticipations = pgTable(
     notifyOnActivityInsert: boolean("notify_on_activity_insert")
       .default(true)
       .notNull(),
-  }
-  // (table) => {
-  //   return {
-  //     pk: primaryKey({
-  //       columns: [table.collectionId, table.userId, table.type],
-  //     }),
-  //   };
-  // }
+  },
+  (t) => ({
+    unq: unique().on(t.userId, t.collectionId, t.type),
+  })
 );
 
 // student output

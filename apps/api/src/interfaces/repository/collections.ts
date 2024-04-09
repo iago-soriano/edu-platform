@@ -1,23 +1,35 @@
 import { Collection } from "@domain";
 import {
-  ListCollectionsByUserResponseBody,
+  ListCollectionsForParticipantResponseBody,
+  ListCollectionsForOwnerResponseBody,
+  ListParticipantsOfCollectionResponseBody,
+  GetCollectionResponseBody,
   PaginatedParamsDTO,
 } from "@edu-platform/common";
+import { IAbstractRepository } from "./abstract";
 
-export interface ICollectionsRepository {
-  save: (activity: Collection) => Promise<void>;
+export interface ICollectionsRepository extends IAbstractRepository {
   findRootById: (collectionId: number) => Promise<Collection | null>;
+  findRootByIdWithParticipants: (
+    collectionId: number
+  ) => Promise<Collection | null>;
   findRootByIdWithActivityCount: (
     collectionId: number
   ) => Promise<Collection | null>;
-  // getCollectionByVersionId: (versionId: string) => Promise<Collection>;
 }
 
 export interface ICollectionsReadRepository {
   listByParticipation: (
     args: { userId: number } & PaginatedParamsDTO
-  ) => Promise<ListCollectionsByUserResponseBody["participatesIn"]>;
+  ) => Promise<ListCollectionsForParticipantResponseBody>;
   listByOwnership: (
     args: { userId: number; isPrivate: boolean } & PaginatedParamsDTO
-  ) => Promise<ListCollectionsByUserResponseBody["isOwnerOf"]>;
+  ) => Promise<ListCollectionsForOwnerResponseBody>;
+  listStudents: (
+    args: { collectionId: number } & PaginatedParamsDTO
+  ) => Promise<ListParticipantsOfCollectionResponseBody>;
+  findByIdForOwner: (
+    collectionId: number,
+    user: { id: number }
+  ) => Promise<GetCollectionResponseBody | null>;
 }

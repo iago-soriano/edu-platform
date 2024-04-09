@@ -1,4 +1,4 @@
-import { parseNotificationType } from "@edu-platform/common";
+// import { parseNotificationType } from "@edu-platform/common";
 import { Notification } from "@domain";
 import { notifications } from "@infrastructure";
 
@@ -9,7 +9,7 @@ export const NotificationDtoMapper = {
     notification.id = dto.id;
     notification.userId = dto.userId;
     notification.isNew = dto.isNew;
-    notification.type = parseNotificationType(dto.type);
+    // notification.type = parseNotificationType(dto.type);
     notification.message = dto.message || "";
     notification.details = dto.details || "";
 

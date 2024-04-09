@@ -1,10 +1,10 @@
-import { drizzle } from "drizzle-orm/node-postgres";
+import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Client } from "pg";
 import {
   DefaultLogger,
   LogWriter as DrizzleLogWriter,
 } from "drizzle-orm/logger";
-import * as schema from "./schema";
+import * as schema from ".";
 
 class LogWriter implements DrizzleLogWriter {
   write(message: string) {
@@ -17,4 +17,7 @@ export const pgClient = new Client({
 });
 
 const logger = new DefaultLogger({ writer: new LogWriter() });
-export const db = drizzle(pgClient, { logger, schema });
+export const db: NodePgDatabase<typeof schema> = drizzle(pgClient, {
+  logger,
+  schema,
+});

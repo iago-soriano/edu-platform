@@ -1,0 +1,48 @@
+import {
+  activities,
+  activityQuestions,
+  activityVersions,
+  activityContents,
+  collectionParticipations,
+  collections,
+} from "./tables";
+import {
+  ActivitySerializer,
+  ActivityContentSerializer,
+  ActivityVersionSerializer,
+  CollectionSerializer,
+  CollectionParticipationSerializer,
+} from "../serializers";
+import { PgTable } from "drizzle-orm/pg-core";
+
+type TableDefinition = {
+  table: PgTable;
+  serializer: (args: any) => any;
+};
+export const activitiesTable: TableDefinition = {
+  table: activities,
+  serializer: ActivitySerializer.serialize,
+};
+
+export const activityVersionsTable: TableDefinition = {
+  table: activityVersions,
+  serializer: ActivityVersionSerializer.serialize,
+};
+
+export const activityContentsTable: TableDefinition = {
+  table: activityContents,
+  serializer: ActivityContentSerializer.serialize,
+};
+export const activityQuestionsTable: TableDefinition = {
+  table: activityQuestions,
+  serializer: ActivityContentSerializer.serialize, //TODO
+};
+export const collectionsTable: TableDefinition = {
+  table: collections,
+  serializer: CollectionSerializer.serialize,
+};
+
+export const collectionParticipationsTable: TableDefinition = {
+  table: collectionParticipations,
+  serializer: CollectionParticipationSerializer.serialize, // TODO
+};
