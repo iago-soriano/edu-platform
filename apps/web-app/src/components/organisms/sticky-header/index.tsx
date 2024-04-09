@@ -1,18 +1,34 @@
+"use client";
 import { twMerge } from "tailwind-merge";
 import { SavingIndicator, Icons, Tag } from "@components";
 import { ReturnGetActivityVersion } from "@endpoints";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 export const StickyHeader = ({
-  show,
   activity,
   saveState,
   onOpenOptionsMenu,
 }: {
-  show: boolean;
   activity?: ReturnGetActivityVersion;
   saveState: any;
   onOpenOptionsMenu: () => any;
 }) => {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const setSticky = () => {
+      const el = document.getElementById("activity-header-input");
+      if (window.scrollY > (el?.offsetTop || 0) + (el?.offsetHeight || 0)) {
+        setShow(true);
+      } else {
+        setShow(false);
+      }
+    };
+    const handleScroll = setSticky;
+    setSticky();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <div
       className={twMerge(

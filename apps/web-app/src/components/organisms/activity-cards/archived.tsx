@@ -1,11 +1,8 @@
-import { VersionResponseDTO } from "@edu-platform/common";
-
 export const ArchivedGroupActivityCard = ({
   currentTitle,
   archivedCount,
 }: {
   currentTitle: string;
-  // versions: VersionResponseDTO[];
   archivedCount: number;
 }) => {
   return (

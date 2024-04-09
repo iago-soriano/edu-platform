@@ -16,6 +16,7 @@ import {
   Pagination,
 } from "@components";
 import { twMerge } from "tailwind-merge";
+export * from "./config";
 
 interface PaginationProps {
   totalRowCount: number;
@@ -50,7 +51,12 @@ export const DataTable = <TData, TValue>({
   });
 
   return (
-    <div className={twMerge("flex flex-col", className)}>
+    <div
+      className={twMerge(
+        "flex flex-col min-h-[50vh] justify-between",
+        className
+      )}
+    >
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

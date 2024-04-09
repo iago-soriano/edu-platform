@@ -15,13 +15,8 @@ import { ContentResponseDTO } from "@edu-platform/common";
 type BaseContentProps = {
   contentDto: ContentResponseDTO;
   activityId: string;
-  versionId: string;
 };
-export const BaseContent = ({
-  contentDto,
-  activityId,
-  versionId,
-}: BaseContentProps) => {
+export const BaseContent = ({ contentDto }: BaseContentProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const getContent = (type: string) => {
@@ -52,9 +47,8 @@ export const BaseContent = ({
       onFocus={() => setIsFocused(true)}
     >
       <ContentContainer>
-        {(!!contentDto.title || !!contentDto.description) && (
+        {!!contentDto.description && (
           <div>
-            {contentDto.title && <TitleView title={contentDto.title} />}
             {contentDto.description && (
               <DescriptionView description={contentDto.description} />
             )}

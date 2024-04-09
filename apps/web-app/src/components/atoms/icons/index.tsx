@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import {
   Envelope,
   Question,
@@ -28,7 +28,7 @@ import {
   GitBranch,
   Dot,
   CircleNotch,
-} from "@phosphor-icons/react";
+} from "@phosphor-icons/react/dist/ssr";
 
 export const Icons = {
   PENCIL: (props) => <Pencil {...props} />,

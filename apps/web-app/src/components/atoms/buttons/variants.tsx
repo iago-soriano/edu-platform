@@ -98,18 +98,28 @@ Button.displayName = "Button";
 
 export { Button, buttonVariants };
 
-interface LinkWithIconProps
-  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+interface LinkWithIconProps {
+  // extends React.AnchorHTMLAttributes<HTMLAnchorElement>
   icon: keyof typeof Icons;
   href: string;
 }
-export const LinkWithIcon = ({ icon, ...rest }: LinkWithIconProps) => {
+export const LinkWithIcon = ({ icon, href }: LinkWithIconProps) => {
   const Icon = icon && Icons[icon];
   return (
-    <Link className="flex justify-center" {...rest}>
-      <span>
+    <Button variant={"link"} size={"icon"} asChild>
+      <Link href={href}>
         <Icon />
-      </span>
-    </Link>
+      </Link>
+    </Button>
+  );
+};
+
+interface ButtonLinkProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {}
+export const ButtonLink = ({ href, children, className }: ButtonLinkProps) => {
+  return (
+    <Button asChild variant="link" className={className}>
+      <Link href={href || ""}>{children}</Link>
+    </Button>
   );
 };
