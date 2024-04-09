@@ -5,3 +5,4 @@ export * from "./student-output";
 export * from "./student-answer";
 export * from "./notification";
 export * from "./abstract";
+export * from "./activity/factories";

@@ -5,11 +5,7 @@ import {
   IActivitiesRepository,
   IUseCase,
   UserSelectDTO,
-  ActivityVersionSelectDTO,
-  ICollectionParticipationsRepository,
-  INotificationsRepository,
 } from "@interfaces";
-import { db } from "@infrastructure";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -21,11 +17,7 @@ type Return = void;
 export type IPublishDraftUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IPublishDraftUseCase {
-  constructor(
-    private activitiesRepository: IActivitiesRepository,
-    private collectionParticipationsRepository: ICollectionParticipationsRepository,
-    private notificationsRepository: INotificationsRepository
-  ) {}
+  constructor(private activitiesRepository: IActivitiesRepository) {}
   async execute({ user, activityId }: InputParams) {
     const activity =
       await this.activitiesRepository.findRootByIdWithContents(activityId);

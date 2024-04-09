@@ -1,2 +1,2 @@
 export * from "./activity-version";
-export * from "./factory";
+export * from "../factories/version";

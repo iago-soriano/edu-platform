@@ -1,4 +1,5 @@
 import { ValueObject } from "../../../abstract";
+import { InvalidStateError } from "@edu-platform/common";
 
 const topicsMaxCount = 10;
 const topicMaxLength = 20;
@@ -18,8 +19,9 @@ export class ActivityVersionTopics extends ValueObject {
 
     for (const topic of topicsArray) {
       if (topic.length > topicMaxLength)
-        throw new Error(
-          `Topic is too long. Max length is ${topicMaxLength} characters`
+        throw new InvalidStateError(
+          `Topic ${topic} is too long. Max length is ${topicMaxLength} characters`,
+          { fieldName: "topics" }
         );
     }
   }

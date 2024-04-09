@@ -1,2 +1,2 @@
 export * from "./root";
-export * from "./factory";
+export * from "../factories/root";

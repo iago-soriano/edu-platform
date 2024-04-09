@@ -1,4 +1,5 @@
 import { CollectionName, CollectionDescription } from "../value-objects";
+import { CollectionParticipation } from "../participants";
 import { Entity, CollectionArray } from "../../abstract";
 
 export class Collection extends Entity {
@@ -8,7 +9,8 @@ export class Collection extends Entity {
   public notifyOwnerOnStudentOutput: boolean;
 
   public ownerId!: number;
-  // TODO: participants
+  public participants: CollectionArray<CollectionParticipation> =
+    new CollectionArray();
 
   constructor(
     id?: number,
@@ -25,24 +27,25 @@ export class Collection extends Entity {
     this.notifyOwnerOnStudentOutput = notifyOwnerOnStudentOutput || true;
   }
 
-  merge(newCollection: Collection) {
-    if (newCollection.description) {
-      this.description = newCollection.description;
-      // this.validateDescription();
-    }
-    if (newCollection.name) {
-      this.name = newCollection.name;
-      // this.validateName();
-    }
-    if (newCollection.isPrivate !== undefined)
-      this.isPrivate = newCollection.isPrivate;
-    if (newCollection.notifyOwnerOnStudentOutput !== undefined)
-      this.notifyOwnerOnStudentOutput =
-        newCollection.notifyOwnerOnStudentOutput;
-  }
-
   upsert(
     user: { id: number },
-    newValues: { name?: string; description?: string }
-  ) {}
+    newValues: {
+      name?: string;
+      description?: string;
+      isPrivate?: boolean;
+      notifyOwnerOnStudentOutput?: boolean;
+    }
+  ) {
+    if (newValues.description) {
+      this.description = new CollectionDescription(newValues.description);
+      this.description.validate();
+    }
+    if (newValues.name) {
+      this.name = new CollectionName(newValues.name);
+      this.name.validate();
+    }
+    if (newValues.isPrivate !== undefined) this.isPrivate = newValues.isPrivate;
+    if (newValues.notifyOwnerOnStudentOutput !== undefined)
+      this.notifyOwnerOnStudentOutput = newValues.notifyOwnerOnStudentOutput;
+  }
 }

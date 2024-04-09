@@ -1,4 +1,5 @@
 import { ValueObject } from "../../../abstract";
+import { InvalidStateError } from "@edu-platform/common";
 
 const titleMaxLength = 50;
 const titleMinLength = 5;
@@ -8,7 +9,10 @@ export class ActivityVersionTitle extends ValueObject {
     super(aData || "");
   }
   validate() {
-    if (!this._data) throw new Error("Activity description cannot be null");
+    if (!this._data)
+      throw new InvalidStateError("Activity title cannot be null", {
+        fieldName: "title",
+      });
     if (this._data.length > titleMaxLength) {
       throw new Error(
         `Título é long demais. Tamanho máximo permitido é de ${titleMaxLength} caracteres`

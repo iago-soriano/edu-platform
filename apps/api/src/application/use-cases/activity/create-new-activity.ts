@@ -5,8 +5,7 @@ import {
   ICollectionsRepository,
   IIdGenerator,
 } from "@interfaces";
-import { Activity } from "@domain";
-import { db } from "@infrastructure";
+import { Activity, IActivitiesFactory } from "@domain";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -23,7 +22,7 @@ class UseCase implements ICreateNewActivityUseCase {
   constructor(
     private activitiesRepository: IActivitiesRepository,
     private collectionsRepository: ICollectionsRepository,
-    private idService: IIdGenerator
+    private activitiesFactory: IActivitiesFactory
   ) {}
 
   async execute({ user, collectionId }: InputParams) {
@@ -32,11 +31,7 @@ class UseCase implements ICreateNewActivityUseCase {
 
     if (!collection) throw new Error("Collection not found");
 
-    const newActivity = Activity.createNewInCollection(
-      collection,
-      user,
-      this.idService
-    );
+    const newActivity = this.activitiesFactory.from(collection, user);
 
     return this.activitiesRepository.save(newActivity);
   }
