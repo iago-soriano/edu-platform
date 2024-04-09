@@ -1,4 +1,4 @@
-import { PaginatedParamsDTO, PaginatedResponse } from "@edu-platform/common";
+import { PaginatedParamsDTO, PaginatedResponse } from "../../common";
 import { z } from "zod";
 
 enum NotificationType {

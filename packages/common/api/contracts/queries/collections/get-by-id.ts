@@ -1,18 +1,9 @@
-import { z } from "zod";
-
-const collectionResponseSchema = z.object({
-  id: z.number(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-
-  name: z.string(),
-  description: z.string(),
-  isPrivate: z.boolean(),
-  notifyOwnerOnStudentOutput: z.boolean(),
-
-  ownerId: z.number(),
-});
-export type CollectionResponseDTO = z.infer<typeof collectionResponseSchema>;
+export type CollectionResponseDTO = {
+  name: string;
+  description: string;
+  isPrivate: boolean;
+  notifyOwnerOnStudentOutput: boolean;
+};
 
 type Params = { collectionId: number };
 type ResponseBody = CollectionResponseDTO;

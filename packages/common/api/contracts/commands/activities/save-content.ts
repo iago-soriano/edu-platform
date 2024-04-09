@@ -1,28 +1,10 @@
 import { z } from "zod";
-export type FileType = Express.Multer.File;
-
-export enum ContentTypes {
-  Video = "Video",
-  Text = "Text",
-  Image = "Image",
-}
-
-const videoPayloadSchema = z.object({
-  tracks: z.string().optional(),
-  url: z.string().optional(),
-});
-export type VideoContentPayloadDTO = z.infer<typeof videoPayloadSchema>;
-
-const textPayloadSchema = z.object({
-  text: z.string().optional(),
-});
-export type TextContentPayloadDTO = z.infer<typeof textPayloadSchema>;
-
-const imagePayloadSchema = z.object({
-  file: z.custom<FileType>().optional(),
-  url: z.string().optional(),
-});
-export type ImageContentPayloadDTO = z.infer<typeof imagePayloadSchema>;
+import {
+  ContentTypes,
+  videoPayloadSchema,
+  textPayloadSchema,
+  imagePayloadSchema,
+} from "../../common";
 
 const contentRequestSchema = z.object({
   id: z.any().optional(),

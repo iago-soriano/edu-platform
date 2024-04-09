@@ -1,6 +1,4 @@
-import { StudentAnswerRequestDTO } from "../../../../dto";
-
-type RequestBody = StudentAnswerRequestDTO;
+type RequestBody = {};
 type ResponseBody = {};
 type Params = {};
 

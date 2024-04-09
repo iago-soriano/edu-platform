@@ -1,23 +1,44 @@
-type RequestBody = void;
+import {
+  ContentTypes,
+  VideoContentPayloadDTO,
+  TextContentPayloadDTO,
+  ImageContentPayloadDTO,
+} from "../../common";
+
+export type QuestionResponseDTO = {
+  id: number;
+  type: ContentTypes;
+  question: string;
+  alternatives?: string;
+};
+export type ContentResponseDTO = {
+  id: number;
+  type: ContentTypes;
+  description: string;
+  payload: {
+    text: TextContentPayloadDTO;
+    video: VideoContentPayloadDTO;
+    image: ImageContentPayloadDTO;
+  };
+};
+
 type ResponseBody = {
   title: string;
   description: string;
   topics: string;
-  status: string;
   version: number;
   collectionName: string;
-  authorId: number;
-  // elements?: {
-  //   content: ContentResponseDTO | null;
-  //   question?: QuestionResponseDTO;
-  // }[];
+  collectionId: number;
+  elements?: {
+    content: ContentResponseDTO | null;
+    question?: QuestionResponseDTO;
+  }[];
 };
 type Params = {
   activityId: string;
 };
 
 export {
-  RequestBody as GetActivityVersionRequestBody,
-  ResponseBody as GetActivityVersionResponseBody,
-  Params as GetActivityVersionParams,
+  ResponseBody as GetDraftVersionResponseBody,
+  Params as GetDraftVersionParams,
 };

@@ -12,7 +12,7 @@ export type CollectionRequestDTO = z.infer<typeof collectionRequestSchema>;
 export const parseToCollectionRequestDTO = collectionRequestSchema.parse;
 
 type RequestBody = CollectionRequestDTO;
-type ResponseBody = { collectionId: number };
+type ResponseBody = { CollectionId: number };
 type Params = {};
 
 export {

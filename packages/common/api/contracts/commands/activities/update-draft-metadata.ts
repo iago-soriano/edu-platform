@@ -9,12 +9,9 @@ export const versionMetadataRequestSchema = z.object({
 export type VersionRequestDTO = z.infer<typeof versionMetadataRequestSchema>;
 export const parseToVersionRequestDto = versionMetadataRequestSchema.parse;
 
-type ResponseBody = {
-  activityId: number;
-};
+type ResponseBody = void;
 type Params = {
   activityId: string;
-  versionId: string;
 };
 
 export {

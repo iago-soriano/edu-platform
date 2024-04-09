@@ -1,4 +1,4 @@
-import { paginatedParamsSchema, PaginatedResponse } from "../../../../dto";
+import { paginatedParamsSchema, PaginatedResponse } from "../../common";
 import { z } from "zod";
 
 const querySchema = z
