@@ -1,8 +1,3 @@
-import { OutputStatus, StudentOutput, Notification } from "@domain";
-import {
-  UserIsNotOutputAuthor,
-  OutputStatusCanOnlyBeUpdatedToCompleted,
-} from "@edu-platform/common";
 import {
   IUseCase,
   UserSelectDTO,
@@ -15,7 +10,6 @@ import {
 type InputParams = {
   user: UserSelectDTO;
   studentOutputId: number;
-  newOutputStatus: OutputStatus;
 };
 
 type Return = void;
@@ -30,7 +24,7 @@ class UseCase implements IUpdateStudentOutputUseCase {
     private notificationsRepository: INotificationsRepository
   ) {}
 
-  async execute({ user, studentOutputId, newOutputStatus }: InputParams) {
+  async execute({ user, studentOutputId }: InputParams) {
     // const existingStudentOutput =
     //   await this.studentOutputsRepository.getById(studentOutputId);
     // if (user.id !== existingStudentOutput.user.id)

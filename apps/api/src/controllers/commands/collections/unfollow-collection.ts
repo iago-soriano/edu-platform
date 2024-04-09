@@ -22,8 +22,8 @@ type Response = TypedResponse<UnfollowCollectionResponseBody>;
 export class UnfollowCollectionController
   implements HTTPController<Request, Response>
 {
-  method = HttpMethod.DELETE;
-  path: string = "collections/:collectionId/followers";
+  method = HttpMethod.POST;
+  path: string = "collections/:collectionId/unfollow";
   middlewares: string[] = ["auth"];
 
   constructor(private unfollowCollectionUseCase: IUnfollowCollectionUseCase) {}

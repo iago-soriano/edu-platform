@@ -1,8 +1,4 @@
-import {
-  IUseCase,
-  UserSelectDTO,
-  ICollectionParticipationsRepository,
-} from "@interfaces";
+import { IUseCase, UserSelectDTO, ICollectionsRepository } from "@interfaces";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -14,32 +10,12 @@ type Return = void;
 export type IUpdateNotificationConfigUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IUpdateNotificationConfigUseCase {
-  constructor(
-    private collectionParticipationsRepository: ICollectionParticipationsRepository
-  ) {}
+  constructor(private collectionsRepository: ICollectionsRepository) {}
 
   async execute({ user, collectionId }: InputParams) {
-    const collectionParticipation =
-      await this.collectionParticipationsRepository.findByParticipantAndCollectionId(
-        user.id,
-        collectionId
-      );
-    if (!collectionParticipation)
-      throw new Error("Usuário não participa da coleção");
-
-    if (collectionParticipation.notifyOnActivityInsert) {
-      await this.collectionParticipationsRepository.updateNotificationsSettings(
-        user.id,
-        collectionId,
-        false
-      );
-    } else {
-      await this.collectionParticipationsRepository.updateNotificationsSettings(
-        user.id,
-        collectionId,
-        true
-      );
-    }
+    const collection =
+      await this.collectionsRepository.findRootById(collectionId);
+    if (!collection) throw new Error("Coleção não encontrada");
   }
 }
 export default UseCase;

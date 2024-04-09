@@ -24,7 +24,7 @@ export class UpdateActivityMetadataController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.PATCH;
-  path = "activities/:activityId/draft-version/metadata";
+  path = "activities/:activityId/versions/draft/metadata";
   middlewares: string[] = ["auth"];
 
   constructor(

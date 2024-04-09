@@ -18,7 +18,7 @@ export class DeleteElementController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.DELETE;
-  path: string = "activities/:activityId/draft-version/elements/:elementId";
+  path: string = "activities/:activityId/versions/draft/elements/:elementId";
   middlewares: string[] = ["auth"];
 
   constructor(private deleteElementUseCase: IDeleteElementUseCase) {}

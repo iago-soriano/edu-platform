@@ -37,6 +37,6 @@ export class SaveCollectionController
       collectionDto,
     });
 
-    res.status(200).json();
+    res.status(200).json(resp);
   }
 }

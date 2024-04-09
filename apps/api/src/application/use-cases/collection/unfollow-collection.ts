@@ -10,36 +10,19 @@ type InputParams = {
   collectionId: number;
 };
 
-type Return = { alreadyUnfollowed: boolean };
+type Return = void;
 
 export type IUnfollowCollectionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IUnfollowCollectionUseCase {
-  constructor(
-    private collectionsRepository: ICollectionsRepository,
-    private collectionParticipationsRepository: ICollectionParticipationsRepository
-  ) {}
+  constructor(private collectionsRepository: ICollectionsRepository) {}
 
   async execute({ user, collectionId }: InputParams) {
     const collection =
       await this.collectionsRepository.findRootById(collectionId);
-    if (!collection || collection.isPrivate)
-      throw new Error("Coleção não encontrada");
+    if (!collection) throw new Error("Coleção não encontrada");
 
-    const followingCollection =
-      await this.collectionParticipationsRepository.findByParticipantAndCollectionId(
-        user.id,
-        collectionId
-      );
-
-    if (followingCollection) {
-      await this.collectionParticipationsRepository.delete(
-        followingCollection.id
-      );
-      return { alreadyUnfollowed: false };
-    } else {
-      return { alreadyUnfollowed: true };
-    }
+    // TODO: criar repo method que deleta da collectionParticipations pelo userId e type Follower
   }
 }
 export default UseCase;

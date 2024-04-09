@@ -24,30 +24,22 @@ export type IInsertUserInCollectionUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IInsertUserInCollectionUseCase {
   constructor(
     private collectionsRepository: ICollectionsRepository,
-    private collectionParticipationsRepository: ICollectionParticipationsRepository,
     private userRepository: IUserRepository
   ) {}
 
   async execute({ user, collectionId, studentEmail }: InputParams) {
     const collection =
-      await this.collectionsRepository.findRootById(collectionId);
-    if (!collection || !collection.isPrivate)
-      throw new Error("Coleção não encontrada");
-
-    if (collection.ownerId !== user.id) throw new UserIsNotCollectionOwner();
+      await this.collectionsRepository.findRootByIdWithParticipants(
+        collectionId
+      );
+    if (!collection) throw new Error("Coleção não encontrada");
 
     const student = await this.userRepository.getUserByEmail(studentEmail);
+    if (!student) throw new StudentIsNotUser();
 
-    if (!student) throw new StudentIsNotUser(); // TODO rename error
+    // collection.insertStudent(user, student);
 
-    // TODO: ensure the same user is not inserted more than once
-
-    await this.collectionParticipationsRepository.insertParticipant(
-      student.id,
-      collectionId,
-      "Student"
-      // renomear método de inserir e arquivo para insert-student
-    );
+    await this.collectionsRepository.save(collection);
   }
 }
 export default UseCase;

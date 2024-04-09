@@ -19,7 +19,7 @@ export class PublishDraftController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.PATCH;
-  path = "activities/:activityId/draft-version/publish";
+  path = "activities/:activityId/versionS/draft/publish";
   middlewares: string[] = ["auth"];
 
   constructor(private publishDraftUseCase: IPublishDraftUseCase) {}

@@ -20,7 +20,7 @@ export class SaveQuestionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.POST;
-  path: string = "activities/:activityId/draft-version/questions";
+  path: string = "activities/:activityId/versions/draft/questions";
   middlewares: string[] = ["auth"];
 
   constructor(private saveQuestionUseCase: ISaveQuestionUseCase) {}

@@ -22,7 +22,7 @@ export class CreateNewDraftVersionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.POST;
-  path: string = "activities/:activityId/draft-version";
+  path: string = "activities/:activityId/versions/draft";
   middlewares: string[] = ["auth"];
 
   constructor(

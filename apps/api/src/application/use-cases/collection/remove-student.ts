@@ -1,10 +1,4 @@
-import { UserIsNotCollectionOwner } from "@edu-platform/common";
-import {
-  IUseCase,
-  UserSelectDTO,
-  ICollectionsRepository,
-  ICollectionParticipationsRepository,
-} from "@interfaces";
+import { IUseCase, UserSelectDTO, ICollectionsRepository } from "@interfaces";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -12,32 +6,23 @@ type InputParams = {
   participationId: number;
 };
 
-type Return = { alreadyRemoved: boolean };
+type Return = void;
 
 export type IRemoveStudentFromCollectionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IRemoveStudentFromCollectionUseCase {
-  constructor(
-    private collectionsRepository: ICollectionsRepository,
-    private collectionParticipationsRepository: ICollectionParticipationsRepository
-  ) {}
+  constructor(private collectionsRepository: ICollectionsRepository) {}
 
   async execute({ user, collectionId, participationId }: InputParams) {
     const collection =
-      await this.collectionsRepository.findRootById(collectionId);
+      await this.collectionsRepository.findRootByIdWithParticipants(
+        collectionId
+      );
     if (!collection) throw new Error("Coleção não encontrada");
 
-    if (collection.ownerId !== user.id) throw new UserIsNotCollectionOwner();
+    // collection.removeStudent(user, participationId);
 
-    const studentAssociatedWithCollection =
-      await this.collectionParticipationsRepository.findById(participationId);
-
-    if (studentAssociatedWithCollection) {
-      await this.collectionParticipationsRepository.delete(participationId);
-      return { alreadyRemoved: false };
-    } else {
-      return { alreadyRemoved: true };
-    }
+    await this.collectionsRepository.save(collection);
   }
 }
 export default UseCase;

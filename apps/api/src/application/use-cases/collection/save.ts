@@ -10,7 +10,7 @@ type InputParams = {
   collectionDto: CollectionRequestDTO;
 };
 
-type Return = void;
+type Return = { CollectionId: number };
 
 export type ISaveCollectionUseCase = IUseCase<InputParams, Return>;
 
@@ -25,28 +25,14 @@ class UseCase implements ISaveCollectionUseCase {
       if (!existingCollection)
         throw new Error(`Collection with id ${collectionDto.id} not found`);
 
-      existingCollection.upsert(user, collectionDto);
-      // return this.collectionsRepository.save(existingCollection);
+      //existingCollection.updateMetadata(user, collectionDto);
     }
 
     const newCollection = CollectionFactory.fromRequestDto(collectionDto, user);
 
-    await this.collectionsRepository.save(newCollection);
+    // newCollection.validateMetadata();
 
-    // if (collection.id) {
-    //   const existingCollection = await this.collectionsRepository.getById(
-    //     collection.id
-    //   );
-    //   if (!existingCollection) throw new Error("Coleção não encontrada");
-    //   if (existingCollection.owner.id !== user.id)
-    //     throw new UserIsNotCollectionOwner();
-    //   existingCollection.merge(collection);
-    //   await this.collectionsRepository.update(existingCollection);
-    //   return { collectionId: collection.id };
-    // }
-    // collection.validateName();
-    // collection.validateDescription();
-    // return await this.collectionsRepository.insert(collection);
+    return (await this.collectionsRepository.save(newCollection))[0];
   }
 }
 export default UseCase;

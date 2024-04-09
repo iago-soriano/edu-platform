@@ -26,7 +26,7 @@ export class RemoveStudentFromCollectionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.DELETE;
-  path: string = "collection/:collectionId/students/:participationId";
+  path: string = "collections/:collectionId/participation/:participationId";
   middlewares: string[] = ["auth"];
 
   constructor(

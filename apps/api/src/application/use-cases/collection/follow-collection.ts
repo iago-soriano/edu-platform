@@ -1,48 +1,24 @@
-import {
-  IUseCase,
-  UserSelectDTO,
-  ICollectionParticipationsRepository,
-  ICollectionsRepository,
-} from "@interfaces";
+import { IUseCase, UserSelectDTO, ICollectionsRepository } from "@interfaces";
 
 type InputParams = {
   user: UserSelectDTO;
   collectionId: number;
 };
-
-type Return = {
-  startedFollowing: boolean;
-};
+type Return = void;
 
 export type IInsertFollowerInCollectionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IInsertFollowerInCollectionUseCase {
-  constructor(
-    private collectionsRepository: ICollectionsRepository,
-    private collectionParticipationsRepository: ICollectionParticipationsRepository
-  ) {}
+  constructor(private collectionsRepository: ICollectionsRepository) {}
 
   async execute({ user, collectionId }: InputParams) {
     const collection =
       await this.collectionsRepository.findRootById(collectionId);
-    if (!collection || collection.isPrivate)
-      throw new Error("Coleção não encontrada");
+    if (!collection) throw new Error("Coleção não encontrada");
 
-    const isUserAlreadyFollower =
-      await this.collectionParticipationsRepository.findByParticipantAndCollectionId(
-        user.id,
-        collectionId
-      );
+    // collection.insertFollower(user);
 
-    if (isUserAlreadyFollower) return { startedFollowing: false }; //TODO
-
-    await this.collectionParticipationsRepository.insertParticipant(
-      user.id,
-      collectionId,
-      "Follower"
-    );
-
-    return { startedFollowing: true };
+    await this.collectionsRepository.save(collection);
   }
 }
 export default UseCase;

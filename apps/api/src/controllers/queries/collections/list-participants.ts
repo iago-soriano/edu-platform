@@ -3,7 +3,7 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-  ICollectionParticipationsReadRepository,
+  ICollectionsReadRepository,
 } from "@interfaces";
 import {
   ListParticipantsOfCollectionQuery,
@@ -18,25 +18,21 @@ export class ListUsersInCollectionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path: string = "collection/:collectionId/student";
+  path: string = "collections/:collectionId/participants";
   middlewares: string[] = ["auth"];
 
-  constructor(
-    private collectionParticipationsReadRepository: ICollectionParticipationsReadRepository
-  ) {}
+  constructor(private collectionsReadRepository: ICollectionsReadRepository) {}
 
   async execute(req: Request, res: Response) {
     const { user } = req;
     const { collectionId, page, pageSize } =
       parseListParticipantsOfCollectionQuery({ ...req.params, ...req.query });
 
-    const resp = await this.collectionParticipationsReadRepository.listStudents(
-      {
-        collectionId,
-        page,
-        pageSize,
-      }
-    );
+    const resp = await this.collectionsReadRepository.listStudents({
+      collectionId,
+      page,
+      pageSize,
+    });
 
     res.status(200).json(resp);
   }

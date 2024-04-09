@@ -3,6 +3,7 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
+  ICollectionsReadRepository,
 } from "@interfaces";
 import {
   GetCollectionParams,
@@ -17,22 +18,21 @@ export class GetCollectionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path = "collection/:collectionId";
+  path = "collections/:collectionId";
   middlewares: string[] = ["auth"];
 
-  constructor() {}
+  constructor(private collectionsReadRepository: ICollectionsReadRepository) {}
 
   async execute(req: Request, res: Response) {
     const { user } = req;
 
     const { collectionId } = parseNumberId(req.params, ["collectionId"]);
 
-    // const collection = await this.collectionsRepository.getById(collectionId);
-    // if (!collection) throw new Error("Coleção não encontrada");
+    const collection = await this.collectionsReadRepository.findByIdForOwner(
+      collectionId,
+      user
+    );
 
-    // if (collection.owner.id !== user.id)
-    //   throw new Error("Collection not found");
-
-    return res.status(200).json();
+    return res.status(200).json(collection || undefined);
   }
 }

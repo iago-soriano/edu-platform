@@ -5,7 +5,6 @@ import {
   Response as TypedResponse,
 } from "@interfaces";
 import {
-  parseToAnswerRequestDTO,
   SaveAnswerParams,
   SaveAnswerRequestBody,
   SaveAnswerResponseBody,

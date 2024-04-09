@@ -19,7 +19,7 @@ export class SaveContentController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.POST;
-  path: string = "activities/:activityId/draft-version/contents";
+  path: string = "activities/:activityId/versions/draft/contents";
   middlewares: string[] = ["auth", "file"];
 
   constructor(private saveContentUseCase: ISaveContentUseCase) {}

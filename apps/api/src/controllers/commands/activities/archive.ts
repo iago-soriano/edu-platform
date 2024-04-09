@@ -24,7 +24,7 @@ export class ArchiveActivityController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.PATCH;
-  path = "activities/:activityId/publish-version/archive";
+  path = "activities/:activityId/published-version/archive";
   middlewares: string[] = ["auth"];
 
   constructor() {}
