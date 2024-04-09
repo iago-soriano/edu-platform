@@ -14,12 +14,12 @@ export class ActivityDTODataBuilder extends AbstractBuilder<ActivitySelectDTO> {
   }
   reset() {
     this.data = {
-      id: 2,
+      id: "2",
       createdAt: new Date(),
       updatedAt: new Date(),
       authorId: 2,
-      lastVersionId: 2,
-      draftVersionId: 2,
+      lastVersionId: "2",
+      draftVersionId: "2",
     };
   }
 }

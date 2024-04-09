@@ -34,6 +34,9 @@ export class AuthenticationMiddlewareController {
       throw e;
     }
 
+    // up to this point, make a client that retrieves JWT payload from headers
+
+    // get by foreignSystemId (IAM pk), create a dto with this system's id for business logic
     const userDTO = await this.userRepository.getUserById(
       Number(tokenPayload.id)
     );

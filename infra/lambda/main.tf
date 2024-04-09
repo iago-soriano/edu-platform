@@ -5,7 +5,7 @@ resource "aws_lambda_function" "main" {
   s3_key    = "api/${var.app_version}/build.zip"
 
   handler = "build/index.handler"
-  runtime = "nodejs18.x"
+  runtime = "nodejs20.x"
 
   # vpc config
   vpc_config {

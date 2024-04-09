@@ -10,7 +10,7 @@ import {
   ListNotificationsResponseBody,
 } from "@edu-platform/common";
 
-import { parseToPaginatedParamsDTO } from "@edu-platform/common/dto/paginated-params";
+import { parseToPaginatedParamsDTO } from "@edu-platform/common";
 
 type Request = TypedRequest<{}, ListNotificationsQuery, {}>;
 type Response = TypedResponse<ListNotificationsResponseBody>;

@@ -4,9 +4,9 @@
   "description": "API",
   "scripts": {
     "gen-env": "gen-env-types .env -o src/env.d.ts -e .",
-    "build": "tsc",
-    "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn  --exit-child --ignore-watch node_modules src/index.ts",
+    "build": "tsc -p tsconfig.json && tsc-alias",
     "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./build/index.js",
+    "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn  --exit-child --ignore-watch node_modules src/index.ts",
     "test": "cross-env NODE_ENV=test jest --watchAll",
     "test2:ci": "cross-env NODE_ENV=test jest --no-cache --runInBand",
     "test:ci": "cross-env NODE_ENV=test echo \"Testing\"",
@@ -14,7 +14,7 @@
     "format": "npx prettier --write .",
     "format:ci": "npx prettier --config ../eslint-config/.prettierrc.json --ignore-path ../eslint-config/.prettierignore --check .",
     "db:gen:migration": "npm drizzle-kit generate:mysql --schema=./src/schema.ts",
-    "db:push": "drizzle-kit push:pg",
+    "db:push": "drizzle-kit push:pg --strict --verbose",
     "db:studio": "npx drizzle-kit studio",
     "docker:build": "docker build -t language-app/web-api -f ./Dockerfile ../..",
     "docker:exec": "docker exec -ti language-app-web-api /bin/bash"

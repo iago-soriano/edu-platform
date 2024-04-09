@@ -14,12 +14,12 @@ export class ErrorHandlerController
   execute(error: Error, _: Request, res: Response) {
     if (error instanceof CustomError) {
       console.log(
-        `ERRO ${error.errors} ${error.HTTPstatusCode} ${error.message} - ${error.realReason}`
+        `ERRO ${error.fieldErrors} ${error.HTTPstatusCode} ${error.message} - ${error.realReason}`
       );
 
       res
         .status(error.HTTPstatusCode || 500)
-        .json({ message: error.message, errors: error.errors });
+        .json({ message: error.message, errors: error.fieldErrors });
       return;
     }
 
