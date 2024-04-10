@@ -7,9 +7,10 @@ import {
   Content,
 } from "../elements/content";
 import { ActivitElementDescription } from "../elements/value-objects/description";
+import { ActivityVersion } from "../version";
 
 export class ContentFactory {
-  static fromRequestDto(dto: ContentRequestDTO) {
+  static fromRequestDto(dto: ContentRequestDTO, version: ActivityVersion) {
     let newContent = null;
 
     switch (dto.type) {
@@ -23,7 +24,6 @@ export class ContentFactory {
       case ContentTypes.Image:
         newContent = new ImageContent();
 
-        newContent.url = dto.payload?.image?.url;
         newContent.file = dto.payload?.image?.file || null;
         break;
 
@@ -41,7 +41,10 @@ export class ContentFactory {
       dto.description === undefined ? null : dto.description
     );
 
-    newContent.id = dto.id;
+    newContent.versionId = version.id;
+    newContent.order = version.elements.length + 1;
+
+    newContent.validateSelf();
 
     return newContent;
   }

@@ -5,6 +5,7 @@ import {
   TextContentIsTooShort,
 } from "@edu-platform/common";
 import { ContentDoesNotImplementFiles } from "@edu-platform/common/errors/domain/content";
+import { CustomError, ContentRequestDTO } from "@edu-platform/common";
 
 export class TextContent extends Content {
   public text?: string;
@@ -13,32 +14,21 @@ export class TextContent extends Content {
     super(ContentTypes.Text);
   }
 
-  _mergePayload(newContent: TextContent) {
-    if (newContent.text) this.text = newContent.text;
+  hasContent() {
+    return !!this.text;
   }
 
-  validatePayload() {
+  _mergePayload(newValues: ContentRequestDTO) {
+    if (newValues.payload?.text?.text !== undefined)
+      this.text = newValues.payload.text.text;
+  }
+
+  _validatePayload() {
     if (!this.text) return;
     if (this.text.length > DomainRules.CONTENT.TEXT.MAX_LENGTH)
       throw new TextContentIsTooLong();
 
     if (this.text.length < DomainRules.CONTENT.TEXT.MIN_LENGTH)
       throw new TextContentIsTooShort();
-  }
-
-  hasContent() {
-    return !!this.text;
-  }
-
-  storedFileUrl() {
-    return null;
-  }
-
-  shouldUploadFile(): boolean {
-    return false;
-  }
-
-  setFileUrl(_: string) {
-    throw new ContentDoesNotImplementFiles(this.type);
   }
 }

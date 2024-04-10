@@ -1,5 +1,6 @@
 import { ActivityVersion, VersionStatus } from "../version/activity-version";
-import { ContentFactory, Content } from "../elements";
+import { Content } from "../elements";
+import { ContentFactory } from "./content";
 import { IIdGenerator } from "@interfaces";
 
 export class VersionFactory {

@@ -5,6 +5,7 @@ import {
   VideoContentHasToManyTracks,
 } from "@edu-platform/common/errors/domain/content";
 import { IgnorePersistance } from "../../../abstract";
+import { CustomError, ContentRequestDTO } from "@edu-platform/common";
 
 export class VideoContent extends Content {
   @IgnorePersistance()
@@ -16,13 +17,23 @@ export class VideoContent extends Content {
     super(ContentTypes.Video);
   }
 
-  _mergePayload(newContent: VideoContent) {
-    if (newContent.tracks) this.tracks = newContent.tracks;
-    if (newContent.url) this.url = newContent.url;
+  public hasContent() {
+    return !!this.url;
   }
 
-  validatePayload() {
-    if (!this.tracks) return;
+  protected _mergePayload(newValues: ContentRequestDTO) {
+    const payload = newValues.payload?.video;
+    if (!payload) return;
+
+    if (payload.tracks !== undefined) {
+      this.tracks = payload.tracks;
+    }
+    if (payload.url !== undefined) {
+      this.url = payload.url;
+    }
+  }
+
+  private _validateTracks() {
     const tracksArray = this.tracks.split(",");
     if (tracksArray.length > 10)
       throw new Error("Video content has too many tracks");
@@ -36,20 +47,11 @@ export class VideoContent extends Content {
         throw new Error("Tracks format must be hh:mm:ss-hh:mm:ss,...");
     }
   }
-
-  hasContent() {
-    return !!this.url;
+  private _validateVideoUrl() {
+    return true; //TODO
   }
-
-  setFileUrl(_: string) {
-    throw new ContentDoesNotImplementFiles(this.type);
-  }
-
-  shouldUploadFile(): boolean {
-    return false;
-  }
-
-  storedFileUrl() {
-    return null;
+  protected _validatePayload() {
+    this._validateTracks();
+    this._validateVideoUrl();
   }
 }

@@ -27,7 +27,7 @@ class UseCase implements IDeleteElementUseCase {
 
   async execute({ user, activityId, elementId }: InputParams) {
     const activity =
-      await this.activitiesRepository.findRootByIdWithContents(activityId);
+      await this.activitiesRepository.findRootByIdWithElements(activityId);
     if (!activity) throw new ActivityNotFound();
 
     activity.deleteElementOfDraft(user, elementId);

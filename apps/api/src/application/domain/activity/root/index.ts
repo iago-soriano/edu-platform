@@ -1,8 +1,10 @@
-import { Collection } from "@domain";
-import { IActivitiesFactory } from "../factories";
+import { ActivityPublishedEvent } from "../domain-events";
 import { ActivityVersion, BaseElement, VersionStatus } from "..";
-import { IIdGenerator } from "@interfaces";
-import { ContentRequestDTO } from "@edu-platform/common";
+import {
+  DomainServicesRegistry,
+  IDomainServiceRegistry,
+} from "../../../domain-services";
+import { ContentRequestDTO, QuestionRequestDTO } from "@edu-platform/common";
 import {
   Entity,
   CollectionArray,
@@ -12,6 +14,7 @@ import {
 export class Activity extends Entity {
   constructor() {
     super();
+    this._domainServiceRegistry = new DomainServicesRegistry();
   }
 
   public id!: string;
@@ -22,6 +25,8 @@ export class Activity extends Entity {
   @PersistancePropertyName("draftVersionId")
   public draftVersion: ActivityVersion | null = null;
   public archivedVersions: ActivityVersion[] = [];
+
+  private _domainServiceRegistry: IDomainServiceRegistry;
 
   public updateCurrentDraftMetadata(
     newValues: { title?: string; description?: string; topics?: string },
@@ -64,7 +69,7 @@ export class Activity extends Entity {
     return this.draftVersion.deleteElement(id);
   }
 
-  public publishCurrentDraft(user: { id: number }) {
+  public async publishCurrentDraft(user: { id: number }) {
     if (!this.draftVersion)
       throw new Error("There is currently no draft to publish");
     if (this.authorId !== user.id)
@@ -79,15 +84,29 @@ export class Activity extends Entity {
 
     this.setLastVersion(this.draftVersion);
     this.setDraftVersion(null);
+
+    await this._domainServiceRegistry.publishDomainEvent(
+      new ActivityPublishedEvent({ activity: this })
+    );
   }
 
-  public upsertContent(user: { id: number }, contentDto: ContentRequestDTO) {
+  _canUpsertElement(user: { id: number }) {
     if (this.authorId !== user.id)
       throw new Error("You are not allowed to change this activity");
 
     if (!this.draftVersion)
-      throw new Error("There is currently no draft to insert contents in");
+      throw new Error("There is currently no draft to insert elements in");
+  }
 
-    this.draftVersion.upsertContent(contentDto);
+  public upsertContent(user: { id: number }, contentDto: ContentRequestDTO) {
+    this._canUpsertElement(user);
+
+    this.draftVersion!.upsertContent(contentDto);
+  }
+
+  public upsertQuestion(user: { id: number }, questionDto: QuestionRequestDTO) {
+    this._canUpsertElement(user);
+
+    this.draftVersion!.upsertQuestion(questionDto);
   }
 }

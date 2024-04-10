@@ -20,7 +20,7 @@ class UseCase implements ICreateNewDraftVersionUseCase {
 
   async execute({ activityId, user }: InputParams) {
     const activity =
-      await this.activitiesRepository.findRootByIdWithContents(activityId);
+      await this.activitiesRepository.findRootByIdWithElements(activityId);
 
     if (!activity) throw new ActivityNotFound();
 

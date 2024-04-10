@@ -9,6 +9,8 @@ export default {
   schema: "./src/infrastructure/repository/schema/index.ts",
   out: "./drizzle",
   driver: "pg",
+  strict: true,
+  verbose: true,
   dbCredentials: {
     connectionString: process.env.DATABASE_URL,
   },

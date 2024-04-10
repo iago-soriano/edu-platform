@@ -1,14 +1,20 @@
 import {
   activities,
   activityContents,
+  activityQuestions,
   activityVersions,
 } from "@infrastructure";
 import { Activity, ChangeTrackingProxy } from "@domain";
 import { ChangeEventsTree } from "@interfaces";
 import { ActivityVersionSerializer } from "./versions";
 import { ActivityContentSerializer } from "./contents";
+import { ActivityQuestionSerializer } from "./question";
 
-export { ActivityVersionSerializer, ActivityContentSerializer };
+export {
+  ActivityVersionSerializer,
+  ActivityContentSerializer,
+  ActivityQuestionSerializer,
+};
 export class ActivitySerializer {
   static serialize = (domain: Activity) => {
     const dto: typeof activities.$inferInsert = {
@@ -28,7 +34,12 @@ export class ActivitySerializer {
     draftVersionDto: typeof activityVersions.$inferSelect | null,
     lastVersionDto: typeof activityVersions.$inferSelect | null,
     draftVersionContentsDtos?: (typeof activityContents.$inferSelect | null)[],
-    lastVersionContentsDtos?: (typeof activityContents.$inferSelect | null)[]
+    draftVersionQuestionsDtos?: (
+      | typeof activityQuestions.$inferSelect
+      | null
+    )[],
+    lastVersionContentsDtos?: (typeof activityContents.$inferSelect | null)[],
+    lastVersionQuestionsDtos?: (typeof activityQuestions.$inferSelect | null)[]
   ) {
     const activity = new Activity();
 
@@ -42,7 +53,8 @@ export class ActivitySerializer {
       ActivityVersionSerializer.deserialize(
         draftVersionDto,
         _events,
-        draftVersionContentsDtos
+        draftVersionContentsDtos,
+        draftVersionQuestionsDtos
       );
 
     activity.lastVersion =
@@ -50,7 +62,8 @@ export class ActivitySerializer {
       ActivityVersionSerializer.deserialize(
         lastVersionDto,
         _events,
-        lastVersionContentsDtos
+        lastVersionContentsDtos,
+        lastVersionQuestionsDtos
       );
 
     _events[dto.id].Activity = {

@@ -27,3 +27,10 @@ export class InvalidStateError extends CustomError {
     super(message, fieldErrors);
   }
 }
+
+export class SilentInvalidStateError extends CustomError {
+  HTTPstatusCode = 400;
+  constructor(realReason: string) {
+    super("", {}, realReason);
+  }
+}

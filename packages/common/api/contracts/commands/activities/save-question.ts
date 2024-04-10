@@ -10,15 +10,17 @@ const questionRequestSchema = z.object({
 
   type: z.nativeEnum(QuestionTypes),
   question: z.string().optional(),
+  description: z.string().optional(),
   answer: z.string().optional(),
   alternatives: z
-    .object({
-      id: z.number().optional(),
-      order: z.number().optional(),
-      text: z.string().optional(),
-      comment: z.string().optional(),
-      isCorrect: z.boolean().optional(),
-    })
+    .array(
+      z.object({
+        id: z.number().optional(),
+        text: z.string().optional(),
+        comment: z.string().optional(),
+        isCorrect: z.boolean().optional(),
+      })
+    )
     .optional(),
 });
 

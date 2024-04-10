@@ -1,10 +1,4 @@
-import {
-  ActivityContentNotFound,
-  ActivityNotFound,
-  ActivityVersionIsNotDraft,
-  ActivityVersionNotFound,
-  ContentRequestDTO,
-} from "@edu-platform/common";
+import { ContentRequestDTO } from "@edu-platform/common";
 import {
   IUseCase,
   UserSelectDTO,
@@ -12,7 +6,6 @@ import {
   IStorageService,
   IIdGenerator,
 } from "@interfaces";
-import { db } from "@infrastructure";
 
 type InputParams = {
   contentDto: ContentRequestDTO;
@@ -33,8 +26,8 @@ class UseCase implements ISaveContentUseCase {
 
   async execute({ contentDto, user, activityId }: InputParams) {
     const activity =
-      await this.activitiesRepository.findRootByIdWithContents(activityId);
-    if (!activity) throw new ActivityNotFound();
+      await this.activitiesRepository.findRootByIdWithElements(activityId);
+    if (!activity) throw new Error("Activity not found");
 
     activity.upsertContent(user, contentDto);
 

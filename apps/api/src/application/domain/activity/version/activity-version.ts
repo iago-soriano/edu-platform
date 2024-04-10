@@ -1,11 +1,21 @@
-import { ContentFactory, BaseElement, Content } from "../elements";
+import {
+  QuestionFactory,
+  ContentFactory,
+  BaseElement,
+  Content,
+  Question,
+} from "..";
 import {
   ActivityVersionTitle,
   ActivityVersionTopics,
   ActivityVersionDescription,
 } from "./value-objects";
 import { Entity, CollectionArray } from "../../abstract";
-import { CustomError, ContentRequestDTO } from "@edu-platform/common";
+import {
+  CustomError,
+  ContentRequestDTO,
+  QuestionRequestDTO,
+} from "@edu-platform/common";
 
 export enum VersionStatus {
   Published = "Published",
@@ -21,6 +31,8 @@ export class ActivityVersion extends Entity {
 
   public elements: CollectionArray<BaseElement>;
   public activityId!: string;
+
+  public static MAX_ELEMENT_COUNT = 20;
 
   constructor(
     public id: string,
@@ -55,7 +67,7 @@ export class ActivityVersion extends Entity {
     this.topics = newTopics;
   }
 
-  updateMetadata(newValues: {
+  public updateMetadata(newValues: {
     title?: string;
     description?: string;
     topics?: string;
@@ -88,7 +100,7 @@ export class ActivityVersion extends Entity {
     for (let element of this.elements) {
       if (!element.checkValidityForPublication())
         throw new Error(
-          `The element with description ${element.description} is unfinished`
+          `The element with description ${element.description} is unfinished` //TODO: return id and scroll on the page
         );
 
       if (element.isEmpty()) {
@@ -110,35 +122,15 @@ export class ActivityVersion extends Entity {
     this.status = VersionStatus.Archived;
   }
 
-  private _insertContent(contentDto: ContentRequestDTO) {
-    const newContent = ContentFactory.fromRequestDto(contentDto);
-    newContent.versionId = this.id;
-    newContent.order = this.elements.length + 1;
-
-    newContent.description?.validate();
-    newContent.validatePayload();
-
-    this.elements.push(newContent);
-  }
-  private _updateContent(
-    currentContent: Content,
-    contentDto: ContentRequestDTO
-  ) {
-    const newContent = ContentFactory.fromRequestDto(contentDto);
-
-    newContent.description?.validate();
-    newContent.validatePayload();
-
-    currentContent.merge(newContent);
-  }
-
-  public upsertContent(contentDto: ContentRequestDTO) {
-    if (this.elements.length > 20) {
+  private _canInsertElement() {
+    if (this.elements.length === ActivityVersion.MAX_ELEMENT_COUNT) {
       throw new Error(
         "Maximum number of elements has been reached, cannot add any new elements"
       );
     }
+  }
 
+  public async upsertContent(contentDto: ContentRequestDTO) {
     const currentElement = this.elements
       .filter((el) => el.elementType === "Content")
       .filter((cntnt) => cntnt.id === contentDto.id)[0];
@@ -150,12 +142,35 @@ export class ActivityVersion extends Entity {
 
     if (currentContent) {
       if (currentContent.type !== contentDto.type)
-        throw new Error(
-          "Inconsistency: informed content does not have that type"
-        );
-      this._updateContent(currentContent, contentDto);
+        throw new Error("Cannot change content type after creation");
+      await currentContent.update(contentDto);
     } else {
-      this._insertContent(contentDto);
+      this._canInsertElement();
+
+      const newContent = ContentFactory.fromRequestDto(contentDto, this);
+      this.elements.push(newContent);
+    }
+  }
+
+  public upsertQuestion(questionDto: QuestionRequestDTO) {
+    const currentElement = this.elements
+      .filter((el) => el.elementType === "Question")
+      .filter((cntnt) => cntnt.id === questionDto.id)[0];
+
+    const currentQuestion = currentElement as Question;
+
+    if (!currentQuestion && questionDto.id)
+      throw new Error("Could not find specified question");
+
+    if (currentQuestion) {
+      if (currentQuestion.type !== questionDto.type)
+        throw new Error("Cannot change question type after creation");
+      currentQuestion.update(questionDto);
+    } else {
+      this._canInsertElement();
+
+      const newQuestion = QuestionFactory.fromRequestDto(questionDto, this);
+      this.elements.push(newQuestion);
     }
   }
 }

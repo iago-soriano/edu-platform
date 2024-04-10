@@ -8,8 +8,8 @@ export class ActivitElementDescription extends ValueObject {
     super(aData);
   }
 
-  validate() {
-    if (!this._data) return; // not mandatory
+  public validate() {
+    if (!this._data) return;
     if (this._data.length > descriptionMaxLength) {
       throw new Error(
         `Descrição é curta demais. Tamanho mínimo permitido é de ${descriptionMinLength} caracteres`

@@ -1,5 +1,6 @@
 import { BaseElement } from "../abstract-element";
 import { CustomError, ContentRequestDTO } from "@edu-platform/common";
+import { ActivitElementDescription } from "../value-objects/description";
 
 export enum ContentTypes {
   Video = "Video",
@@ -14,28 +15,34 @@ export abstract class Content extends BaseElement {
     super("Content");
   }
 
-  public checkValidityForPublication() {
-    return !this._isHalfCompleted();
-  }
-
   abstract hasContent(): boolean;
-  protected abstract _mergePayload(newContent: Content): void;
 
-  public merge(newContent: Content) {
-    this._mergePayload(newContent);
-    if (newContent.description?.hasValue())
-      this.description = newContent.description;
-  }
-
-  isEmpty() {
-    return this.description?.isEmpty() === true && !this.hasContent();
+  public isEmpty() {
+    return (this.description?.isEmpty() || true) && !this.hasContent();
   }
 
   private _isHalfCompleted() {
-    return !!(!this.description?.isEmpty() && !this.hasContent());
+    return !this.description?.isEmpty() && !this.hasContent();
   }
 
-  abstract validatePayload(): void;
+  protected abstract _validatePayload(): void;
+  public validateSelf() {
+    if (this.description) this.description?.validate();
+    this._validatePayload();
+  }
 
-  abstract setFileUrl(url: string): void;
+  protected abstract _mergePayload(newValues: ContentRequestDTO): void;
+  public async update(contentDto: ContentRequestDTO) {
+    if (contentDto.description) {
+      const newDesc = new ActivitElementDescription(contentDto.description);
+      this.description = newDesc;
+    }
+    this._mergePayload(contentDto);
+
+    this.validateSelf();
+  }
+
+  public checkValidityForPublication() {
+    return !this._isHalfCompleted();
+  }
 }

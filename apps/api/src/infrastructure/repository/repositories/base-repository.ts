@@ -1,4 +1,4 @@
-import { CollectionArray, Entity } from "@domain";
+import { CollectionArray, Entity, TextQuestion } from "@domain";
 import {
   activitiesTable,
   activityVersionsTable,
@@ -31,6 +31,8 @@ export class BaseRepository implements IAbstractRepository {
     Collection: collectionsTable,
     ActivityQuestion: activityQuestionsTable,
     CollectionParticipation: collectionParticipationsTable,
+    MultipleChoiceQuestion: activityQuestionsTable,
+    TextQuestion: activityQuestionsTable,
   };
 
   constructor(private _entities: AllTablesIndexer[]) {}

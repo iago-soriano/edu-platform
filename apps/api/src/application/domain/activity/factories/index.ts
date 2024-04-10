@@ -1,7 +1,10 @@
 import { ContentFactory } from "./content";
+import { QuestionFactory, QuestionAlternativeFactory } from "./question";
 import { VersionFactory } from "./version";
 import { IIdGenerator } from "@interfaces";
 import { Collection, Activity } from "@domain";
+
+export { ContentFactory, QuestionFactory, QuestionAlternativeFactory };
 
 export interface IActivitiesFactory {
   Versions: VersionFactory;

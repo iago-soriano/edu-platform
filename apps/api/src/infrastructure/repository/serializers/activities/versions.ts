@@ -1,7 +1,12 @@
-import { activityContents, activityVersions } from "@infrastructure";
+import {
+  activityContents,
+  activityVersions,
+  activityQuestions,
+} from "@infrastructure";
 import { ChangeTrackingProxy, ActivityVersion } from "@domain";
 import { ChangeEventsTree } from "@interfaces";
 import { ActivityContentSerializer } from "./contents";
+import { ActivityQuestionSerializer } from "./question";
 import { parseVersionStatus } from "@edu-platform/common";
 
 export class ActivityVersionSerializer {
@@ -21,7 +26,8 @@ export class ActivityVersionSerializer {
   static deserialize(
     dto: typeof activityVersions.$inferSelect,
     _events: ChangeEventsTree,
-    contentsDtos?: (typeof activityContents.$inferSelect | null)[]
+    contentsDtos?: (typeof activityContents.$inferSelect | null)[],
+    questionsDtos?: (typeof activityQuestions.$inferSelect | null)[]
   ) {
     const version = new ActivityVersion(
       dto.id,
@@ -35,11 +41,23 @@ export class ActivityVersionSerializer {
     version.isNew = false;
     version.activityId = dto.activityId;
 
+    // TODO: order
     if (contentsDtos) {
       for (let content of contentsDtos) {
         version.elements.push(
           ActivityContentSerializer.deserialize(
             content!,
+            _events[dto.activityId]
+          )
+        );
+      }
+    }
+
+    if (questionsDtos) {
+      for (let question of questionsDtos) {
+        version.elements.push(
+          ActivityQuestionSerializer.deserialize(
+            question!,
             _events[dto.activityId]
           )
         );

@@ -12,7 +12,7 @@ import {
 import { ChangeEventsTree } from "@interfaces";
 
 export class ActivityContentSerializer {
-  static serialize(domain: BaseElement) {
+  static serialize(domain: Content) {
     const content: typeof activityContents.$inferInsert = {
       type: "",
       versionId: "0",

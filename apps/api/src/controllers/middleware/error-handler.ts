@@ -1,4 +1,8 @@
-import { CustomError } from "@edu-platform/common/errors";
+import {
+  CustomError,
+  SilentInvalidStateError,
+  InvalidStateError,
+} from "@edu-platform/common/errors";
 import {
   Request as TypedRequest,
   Response as TypedResponse,
@@ -12,18 +16,20 @@ export class ErrorHandlerController
   implements HTTPErrorController<Request, Response>
 {
   execute(error: Error, _: Request, res: Response) {
-    if (error instanceof CustomError) {
+    if (error instanceof InvalidStateError) {
       console.log(
-        `ERRO ${error.fieldErrors} ${error.HTTPstatusCode} ${error.message} - ${error.realReason}`
+        `ERRO ${error.fieldErrors} ${error.HTTPstatusCode} ${error.message}}`
       );
 
       res
         .status(error.HTTPstatusCode || 500)
         .json({ message: error.message, errors: error.fieldErrors });
       return;
+    } else if (error instanceof SilentInvalidStateError) {
+      console.log(error.realReason);
     }
 
-    console.error(error);
+    // console.error(error);
     res.status(500).json(error.toString());
   }
 }

@@ -1,4 +1,4 @@
-import { ActivityVersion, Collection, User } from ".";
+import { ActivityVersion, Collection, User } from "..";
 
 export enum OutputStatus {
   Draft = "Draft",

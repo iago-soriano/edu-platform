@@ -9,7 +9,7 @@ import { IAbstractRepository } from "./abstract";
 
 export interface IActivitiesRepository extends IAbstractRepository {
   findRootById: (activityId: string) => Promise<Activity | null>;
-  findRootByIdWithContents: (activityId: string) => Promise<Activity | null>;
+  findRootByIdWithElements: (activityId: string) => Promise<Activity | null>;
 }
 
 export interface IActivitiesReadRepository {

@@ -1,28 +1,33 @@
 import { Content, ContentTypes } from "./base";
+import { CustomError, ContentRequestDTO } from "@edu-platform/common";
+import {
+  DomainServicesRegistry,
+  IDomainServiceRegistry,
+} from "../../../../domain-services";
 
 export class ImageContent extends Content {
   public url?: string;
   public file: any;
 
+  private _domainServiceRegistry: IDomainServiceRegistry;
+
   constructor() {
     super(ContentTypes.Image);
-  }
-
-  _mergePayload(newContent: ImageContent) {
-    if (newContent.url) this.url = newContent.url;
+    this._domainServiceRegistry = new DomainServicesRegistry();
   }
 
   hasContent() {
     return !!this.url;
   }
 
-  validatePayload(): void {}
+  _validatePayload() {}
 
-  storedFileUrl(): string {
-    return this.url || "";
+  _mergePayload(newContent: ContentRequestDTO) {
+    if (newContent.payload?.image?.file !== undefined)
+      this.file = newContent.payload?.image?.file;
   }
-
-  setFileUrl(url: string) {
-    this.url = url;
+  public async update(contentDto: ContentRequestDTO) {
+    super.update(contentDto);
+    await this._domainServiceRegistry.uploadActivityContent();
   }
 }

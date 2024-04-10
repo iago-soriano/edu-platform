@@ -25,7 +25,7 @@ export type TextContentPayloadDTO = z.infer<typeof textPayloadSchema>;
 
 export const imagePayloadSchema = z.object({
   file: z.custom<FileType>().optional(),
-  url: z.string().optional(),
+  // url: z.string().optional(),
 });
 export type ImageContentPayloadDTO = z.infer<typeof imagePayloadSchema>;
 

@@ -20,30 +20,12 @@ class UseCase implements IPublishDraftUseCase {
   constructor(private activitiesRepository: IActivitiesRepository) {}
   async execute({ user, activityId }: InputParams) {
     const activity =
-      await this.activitiesRepository.findRootByIdWithContents(activityId);
+      await this.activitiesRepository.findRootByIdWithElements(activityId);
     if (!activity) throw new ActivityNotFound();
 
-    activity.publishCurrentDraft(user);
+    await activity.publishCurrentDraft(user);
 
     await this.activitiesRepository.save(activity);
-
-    // TODO: send domain event
-    // const usersToBeNotified =
-    //   await this.collectionParticipationsRepository.findParticipantsToBeNotified(
-    //     activity.collection.id
-    //   );
-
-    // usersToBeNotified.map(async (user) => {
-    //   const notification = new Notification();
-    //   notification.buildActivityPublishedNotification(
-    //     version.id!,
-    //     activity.collection.name!,
-    //     version.title,
-    //     user.userId
-    //   );
-
-    //   await this.notificationsRepository.insert(notification);
-    // });
   }
 }
 export default UseCase;

@@ -76,3 +76,10 @@ export function IgnorePersistance() {
     Reflect.defineMetadata("ignore", true, target, propertyKey);
   };
 }
+
+export abstract class DomainEvent {
+  constructor(
+    public messageAttributes: { eventType: string },
+    public payload: string
+  ) {}
+}

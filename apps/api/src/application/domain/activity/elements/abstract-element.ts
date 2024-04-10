@@ -10,17 +10,23 @@ export abstract class BaseElement extends Entity {
     super();
   }
 
-  abstract storedFileUrl(): string | null;
-  abstract isEmpty(): boolean;
-  abstract checkValidityForPublication(): boolean;
+  /**
+   * If empty, it can be deleted from a version that is being published
+   */
+  public abstract isEmpty(): boolean;
 
-  // copyPropertiesAndMethods(source: BaseElement, target: BaseElement) {
-  //   const props = Object.getOwnPropertyNames(source);
+  /**
+   * Checks if the content can be published as is
+   */
+  public abstract checkValidityForPublication(): boolean;
 
-  //   props.forEach((prop) => {
-  //     const descriptor = Object.getOwnPropertyDescriptor(source, prop);
-  //     Object.defineProperty(target, prop, descriptor!);
-  //   });
-  // }
-  // abstract copy(): BaseElement;
+  /**
+   * validates all information of a new element being created
+   */
+  public abstract validateSelf(): void;
+
+  /**
+   * Update = merge + validate. Receives some DTO and updates the entity
+   */
+  public abstract update(args: unknown): void;
 }

@@ -1,7 +1,7 @@
-import { Alternative, MultipleChoiceQuestion } from ".";
+import { ActivitElementDescription } from "..";
 import {
   DomainRules,
-  QuestionTypeNotFound,
+  QuestionRequestDTO,
   TextQuestionIsTooLong,
   TextQuestionIsTooShort,
   QuestionSavedInDBHasNoType,
@@ -15,17 +15,16 @@ export enum QuestionTypes {
 
 export abstract class Question extends BaseElement {
   public question?: string;
-  public answer?: string;
-
-  public alternatives?: Alternative[] = [];
 
   constructor(public type: QuestionTypes) {
     super("Question");
   }
 
-  abstract validateAnswer(): void;
+  public isEmpty(): boolean {
+    return !!this.question;
+  }
 
-  validateQuestionText() {
+  private _validateQuestionText() {
     if (!this.question) return;
     if (this.question.length > DomainRules.QUESTION.QUESTION_TEXT.MAX_LENGTH) {
       throw new TextQuestionIsTooLong();
@@ -35,24 +34,21 @@ export abstract class Question extends BaseElement {
       throw new TextQuestionIsTooShort();
     }
   }
-
-  merge(newQuestion: Question) {
-    this.question = newQuestion.question;
-    this.answer = newQuestion.answer;
-    this.order = newQuestion.order;
-    if (newQuestion instanceof MultipleChoiceQuestion)
-      this.alternatives = newQuestion.alternatives;
+  public validateSelf() {
+    if (this.description) this.description.validate();
+    this._validateQuestionText();
   }
 
-  checkValidityForPublication(): boolean {
+  protected _merge(questionDto: QuestionRequestDTO) {
+    if (questionDto.description) {
+      const newDesc = new ActivitElementDescription(questionDto.description);
+      this.description = newDesc;
+    }
+    if (questionDto.question) this.question = questionDto.question;
+  }
+  abstract update(questionDto: QuestionRequestDTO): void;
+
+  public checkValidityForPublication(): boolean {
     return this.isEmpty();
-  }
-
-  isEmpty(): boolean {
-    return !!this.question;
-  }
-
-  storedFileUrl() {
-    return null;
   }
 }

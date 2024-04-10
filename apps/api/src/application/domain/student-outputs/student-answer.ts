@@ -1,4 +1,4 @@
-import { Question, StudentOutput } from ".";
+import { Question, StudentOutput } from "..";
 
 export class StudentAnswer {
   public question!: Question;

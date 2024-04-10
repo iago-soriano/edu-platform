@@ -103,8 +103,10 @@ export const activityContents = pgTable("activity_contents", {
 
   type: contentTypeEnum("type").notNull(),
   description: varchar("description", { length: 500 }).default("").notNull(),
-  order: integer("order").default(0).notNull(),
+
   payload: json("payload").notNull(),
+
+  order: integer("order").default(0).notNull(),
 
   versionId: uuid("version_id")
     .references(() => activityVersions.id)
@@ -121,14 +123,17 @@ export const activityQuestions = pgTable("questions", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
   type: questionTypeEnum("type"),
+  description: varchar("description", { length: 500 }).default("").notNull(),
 
   question: varchar("question", { length: 200 }),
   answer: varchar("answer_key", { length: 500 }),
-
   alternatives: json("alternatives"),
-  order: integer("order").default(0),
 
-  versionId: uuid("version_id").references(() => activityVersions.id),
+  order: integer("order").default(0).notNull(),
+
+  versionId: uuid("version_id")
+    .references(() => activityVersions.id)
+    .notNull(),
 });
 
 export const collections = pgTable("collections", {

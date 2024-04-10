@@ -50,7 +50,7 @@ export class ActivitiesRepository
     return activity;
   }
 
-  async findRootByIdWithContents(activityId: string) {
+  async findRootByIdWithElements(activityId: string) {
     const draftVersions = alias(activityVersions, "draftVersions");
     const draftVersionContents = alias(
       activityContents,
@@ -115,7 +115,17 @@ export class ActivitiesRepository
       ),
       super.filterOutDuplicates(
         dto
+          .map(({ draftVersionQuestions }) => draftVersionQuestions)
+          .filter((c) => c !== null)
+      ),
+      super.filterOutDuplicates(
+        dto
           .map(({ lastVersionContents }) => lastVersionContents)
+          .filter((c) => c !== null)
+      ),
+      super.filterOutDuplicates(
+        dto
+          .map(({ lastVersionQuestions }) => lastVersionQuestions)
           .filter((c) => c !== null)
       )
     );
