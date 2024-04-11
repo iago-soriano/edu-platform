@@ -9,7 +9,7 @@ export interface IDomainServiceRegistry {
     versionId: string,
     contentId: number,
     file: Express.Multer.File
-  ) => Promise<void>;
+  ) => Promise<string>;
 }
 
 export class DomainServicesRegistry implements IDomainServiceRegistry {
@@ -25,12 +25,21 @@ export class DomainServicesRegistry implements IDomainServiceRegistry {
     await this.topicService.send(event, process.env.DOMAIN_SNS_TOPIC_ARN);
   }
 
-  async uploadActivityContent(
+  _getContentFileUrl(activityId: string, versionId: string, contentId: number) {
+    return `${activityId}/${versionId}-${contentId}`;
+  }
+
+  uploadActivityContent(
     activityId: string,
     versionId: string,
     contentId: number,
     file: Express.Multer.File
-  ) {}
+  ) {
+    return this.storageService.uploadFile(
+      this._getContentFileUrl(activityId, versionId, contentId),
+      file
+    );
+  }
 }
 
 export const resolveDomainServicesRegistry = () =>

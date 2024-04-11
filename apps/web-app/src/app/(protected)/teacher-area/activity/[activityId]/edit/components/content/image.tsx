@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { ImageContentPayloadDTO, ContentTypes } from "@edu-platform/common";
 import { CommmonContentProps } from "./types";
+import { useSaveImageContentMutation } from "@endpoints";
 
 export const ImageContent = ({
   payload: { url },
-  saveContentMutation,
+  activityId,
   contentId,
-}: { payload: ImageContentPayloadDTO } & CommmonContentProps) => {
+}: { payload: { url: string } } & CommmonContentProps) => {
   const [selectedImg, setSelectedImg] = useState<File>();
+  const saveContentMutation = useSaveImageContentMutation({});
   const onFileUpload = async (e) => {
     setSelectedImg(e.target.files[0]);
     const formData = new FormData();
@@ -16,7 +18,7 @@ export const ImageContent = ({
     formData.append("id", contentId.toString());
     formData.append("type", ContentTypes.Image);
 
-    saveContentMutation.mutate(formData as unknown);
+    saveContentMutation.mutate({ formData, activityId });
   };
 
   return (

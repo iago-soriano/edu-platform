@@ -20,9 +20,7 @@ export class S3Service implements IStorageService {
     });
   }
 
-  async uploadFile(keyName: string, file: FileType | null) {
-    if (!file) return;
-
+  async uploadFile(keyName: string, file: FileType) {
     const command = new PutObjectCommand({
       Bucket: process.env.BUCKET_NAME,
       Key: keyName,

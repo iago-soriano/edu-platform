@@ -17,10 +17,7 @@ export type ContentResponseDTO = {
   type: string;
   description: string;
   order: number;
-  payload:
-    | TextContentPayloadDTO
-    | VideoContentPayloadDTO
-    | ImageContentPayloadDTO;
+  payload: TextContentPayloadDTO | VideoContentPayloadDTO | { url: string };
 };
 
 export type ElementResponseDTO = {

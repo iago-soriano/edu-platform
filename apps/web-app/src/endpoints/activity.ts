@@ -123,10 +123,27 @@ export const useSaveContentMutation = (
 ) =>
   useBaseMutation<ParamsSaveContent, ReturnSaveContent>({
     mutationFn: (client, args) => {
-      console.log({ args });
       return client.saveContent(args);
     },
-    invalidateQueries: ["version"],
+    invalidateQueries: ["versions/draft"],
+    ...args,
+  });
+type ParamsSaveImageContent = Parameters<ApiClient["saveContentWithFile"]>[0];
+type ReturnSaveImageContent = Awaited<
+  ReturnType<ApiClient["saveContentWithFile"]>
+>;
+
+export const useSaveImageContentMutation = (
+  args: UseBaseMutationCallbacksType<
+    ParamsSaveImageContent,
+    ReturnSaveImageContent
+  >
+) =>
+  useBaseMutation<ParamsSaveImageContent, ReturnSaveImageContent>({
+    mutationFn: (client, args) => {
+      return client.saveContentWithFile(args);
+    },
+    invalidateQueries: ["versions/draft"],
     ...args,
   });
 
@@ -142,7 +159,7 @@ export const useSaveQuestionMutation = (
       console.log({ args });
       return client.saveQuestion(args);
     },
-    invalidateQueries: ["version"],
+    invalidateQueries: ["versions/draft"],
     ...args,
   });
 

@@ -59,12 +59,12 @@ export const BaseContent = ({
   const getContent = (type: string) => {
     const commonProps = {
       contentId: contentDto.id,
+      activityId,
       onChange: setHasChanges,
       hasChanges,
       saveContentMutation,
     };
 
-    console.log({ contentDto });
     switch (type) {
       case "Text":
         return (
@@ -91,9 +91,7 @@ export const BaseContent = ({
         return (
           <ImageContent
             {...commonProps}
-            payload={
-              (contentDto.payload as ImageContentPayloadDTO) || { url: "" }
-            }
+            payload={(contentDto.payload as { url: string }) || { url: "" }}
           />
         );
     }

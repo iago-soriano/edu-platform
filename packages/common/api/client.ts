@@ -58,6 +58,15 @@ export class ApiClient {
       body
     ) as Promise<SaveContentResponseBody>;
   }
+  public saveContentWithFile({
+    activityId,
+    formData,
+  }: SaveContentParams & { formData: FormData }) {
+    return this._fetcher.post(
+      `activities/${activityId}/versions/draft/contents`,
+      formData
+    ) as Promise<SaveContentResponseBody>;
+  }
   public saveQuestion({
     activityId,
     ...body

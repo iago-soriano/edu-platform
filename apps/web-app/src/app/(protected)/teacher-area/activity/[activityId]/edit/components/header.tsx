@@ -29,7 +29,6 @@ export const ActivityHeaderInput = ({
   const [hasChanges, setHasChanges] = useState(false);
   const metadataMutation = useUpdateVersionMetadataMutation({ activityId });
 
-  console.log({ success: metadataMutation.isSuccess });
   useEffect(() => {
     if (metadataMutation.isError) setSaveState("error");
   }, [metadataMutation.isError]);

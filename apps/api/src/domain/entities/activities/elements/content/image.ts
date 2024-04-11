@@ -37,11 +37,12 @@ export class ImageContent extends Content {
 
     if (!this.file) return;
 
-    await this._domainServiceRegistry.uploadActivityContent(
+    const newFileUrl = await this._domainServiceRegistry.uploadActivityContent(
       activityId!,
       versionId!,
       this.id as number,
       this.file!
     );
+    this.url = newFileUrl;
   }
 }

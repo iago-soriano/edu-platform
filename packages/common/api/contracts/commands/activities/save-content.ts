@@ -7,7 +7,7 @@ import {
 } from "../../common";
 
 const contentRequestSchema = z.object({
-  id: z.number().optional(),
+  id: z.coerce.number().optional(),
 
   description: z.string().optional(),
   type: z.nativeEnum(ContentTypes),
