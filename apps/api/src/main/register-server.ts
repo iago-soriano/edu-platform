@@ -1,6 +1,6 @@
 import * as awilix from "awilix";
 import { ExpressServer } from "./app";
-import { HTTPController } from "@interfaces";
+import { HTTPController } from "@controllers";
 import {
   AuthenticationMiddlewareController,
   ErrorHandlerController,

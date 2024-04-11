@@ -2,8 +2,8 @@ import {
   ITokenService,
   IUserRepository,
   JWTPayload,
-  Request,
-} from "@interfaces";
+} from "@application/interfaces";
+import { Request } from "../interfaces";
 import { Forbidden, Unauthorized } from "@edu-platform/common/errors";
 import { TokenExpiredError } from "jsonwebtoken";
 

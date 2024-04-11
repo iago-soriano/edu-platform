@@ -1,6 +1,6 @@
 import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
-import { ITopicService } from "@interfaces";
-import { DomainEvent } from "@domain";
+import { ITopicService } from "@application/interfaces";
+import { DomainEvent } from "@domain/abstract";
 
 export class TopicService implements ITopicService {
   private _snsClient;

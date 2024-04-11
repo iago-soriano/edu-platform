@@ -3,8 +3,7 @@ import {
   UserSelectDTO,
   IActivitiesRepository,
   ICollectionsRepository,
-} from "@interfaces";
-import { Activity, ActivityVersion, VersionStatus } from "@domain";
+} from "@application/interfaces";
 
 type InputParams = {
   user: UserSelectDTO;

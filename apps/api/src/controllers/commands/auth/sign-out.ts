@@ -1,10 +1,10 @@
-import { ISignOutUseCase } from "@use-cases";
+import { ISignOutUseCase } from "@application/use-cases";
 import {
   HTTPController,
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
+} from "../../interfaces";
 import {
   SignOutRequestBody,
   SignOutResponseBody,

@@ -1,5 +1,9 @@
 import { ContentRequestDTO } from "@edu-platform/common";
-import { IUseCase, UserSelectDTO, IActivitiesRepository } from "@interfaces";
+import {
+  IUseCase,
+  UserSelectDTO,
+  IActivitiesRepository,
+} from "@application/interfaces";
 
 type InputParams = {
   contentDto: ContentRequestDTO;

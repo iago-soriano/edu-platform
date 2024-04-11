@@ -1,4 +1,8 @@
-import { IUserRepository, ITokenService, IUseCase } from "@interfaces";
+import {
+  IUserRepository,
+  ITokenService,
+  IUseCase,
+} from "@application/interfaces";
 import { Forbidden } from "@edu-platform/common/errors";
 import { TokenExpiredError } from "jsonwebtoken";
 

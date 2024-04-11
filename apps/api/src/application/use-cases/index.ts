@@ -58,9 +58,6 @@ import SaveAnswerUseCase, {
 import UpdateStudentOutputUseCase, {
   IUpdateStudentOutputUseCase,
 } from "./studentOutput/update";
-import UpdateNotificationUseCase, {
-  IUpdateNotificationUseCase,
-} from "./notification/update";
 import InsertFollowerInCollectionUseCase, {
   IInsertFollowerInCollectionUseCase,
 } from "./collection/follow-collection";
@@ -117,8 +114,6 @@ export {
   ISaveAnswerUseCase,
   UpdateStudentOutputUseCase,
   IUpdateStudentOutputUseCase,
-  UpdateNotificationUseCase,
-  IUpdateNotificationUseCase,
   InsertFollowerInCollectionUseCase,
   IInsertFollowerInCollectionUseCase,
   UnfollowCollectionUseCase,

@@ -1,4 +1,8 @@
-import { IUserRepository, IUseCase, ITokenService } from "@interfaces";
+import {
+  IUserRepository,
+  IUseCase,
+  ITokenService,
+} from "@application/interfaces";
 import { UserNotFoundError, Forbidden } from "@edu-platform/common/errors";
 import { TokenExpiredError } from "jsonwebtoken";
 

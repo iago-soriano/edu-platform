@@ -3,12 +3,11 @@ import {
   IActivitiesRepository,
   IStorageService,
   UserSelectDTO,
-} from "@interfaces";
+} from "@application/interfaces";
 import {
   ActivityNotFound,
   ActivityVersionNotFound,
 } from "@edu-platform/common";
-import { db } from "@infrastructure";
 
 type InputParams = {
   activityId: string;

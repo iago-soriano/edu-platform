@@ -3,14 +3,13 @@ import {
   ITokenRepository,
   IUseCase,
   IEmailService,
-  TokenType,
-} from "@interfaces";
+} from "@application/interfaces";
 import {
   ChangePasswordRequestTokenExist,
   UserNotFoundError,
   HasProviderAccountError,
 } from "@edu-platform/common/errors";
-import { GetUUID } from "@infrastructure";
+import { GetUUID } from "@infrastructure/utils";
 
 type InputParams = {
   email: string;

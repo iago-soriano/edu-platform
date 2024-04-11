@@ -2,9 +2,8 @@ import {
   IUserRepository,
   ITokenRepository,
   IUseCase,
-  TokenType,
   IEncryptionService,
-} from "@interfaces";
+} from "@application/interfaces";
 import {
   InvalidValidationTokenError,
   PasswordsDontMatchError,

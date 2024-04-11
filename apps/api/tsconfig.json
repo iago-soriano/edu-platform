@@ -16,15 +16,18 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "paths": {
-      "@use-cases": ["./application/use-cases/index.ts"],
-      "@use-case-middlewares": ["./application/use-case-middlewares/index.ts"],
-      "@dto-mappers": ["./application/dto-mappers/index.ts"],
-      "@domain": ["./application/domain/index.ts"],
-      "@infrastructure": ["./infrastructure/index.ts"],
-      "@interfaces": ["./interfaces/index.ts"],
-      "@test": ["./test/index.ts"],
+      "@domain/entities": ["./domain/entities/index.ts"],
+      "@domain/abstract": ["./domain/abstract/index.ts"],
+      "@domain/events": ["./domain/events/index.ts"],
+      "@domain/services": ["./domain/services/index.ts"],
+      "@application/use-cases": ["./application/use-cases/index.ts"],
+      "@application/interfaces": ["./application/interfaces/index.ts"],
       "@controllers": ["./controllers/index.ts"],
-      "@main": ["./main/index.ts"]
+      "@infrastructure/persistence": ["./infrastructure/persistence/index.ts"],
+      "@infrastructure/services": ["./infrastructure/services/index.ts"],
+      "@infrastructure/utils": ["./infrastructure/utils/index.ts"],
+      "@main": ["./main/index.ts"],
+      "@test": ["./test/index.ts"]
     }
   },
   "include": ["src/**/*.ts", "node_modules/**/*.d.ts"],

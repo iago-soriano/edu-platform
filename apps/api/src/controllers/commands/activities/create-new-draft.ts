@@ -3,13 +3,13 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
+} from "../../interfaces";
 import {
   CreateNewDraftVersionParams,
   CreateNewDraftVersionRequestBody,
   CreateNewDraftVersionResponseBody,
 } from "@edu-platform/common";
-import { ICreateNewDraftVersionUseCase } from "@use-cases";
+import { ICreateNewDraftVersionUseCase } from "@application/use-cases";
 
 type Request = TypedRequest<
   CreateNewDraftVersionParams,

@@ -4,7 +4,7 @@ import {
   ITokenService,
   UserSelectDTO,
   IUseCase,
-} from "@interfaces";
+} from "@application/interfaces";
 import {
   CredentialsNotProvidedError,
   InvalidCredentialsError,

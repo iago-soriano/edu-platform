@@ -1,10 +1,10 @@
-import { IProviderSignUpUseCase } from "@use-cases";
+import { IProviderSignUpUseCase } from "@application/use-cases";
 import {
   HTTPController,
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
+} from "../../interfaces";
 import {
   ProviderSignUpRequestBody,
   ProviderSignUpResponseBody,

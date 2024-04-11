@@ -1,10 +1,10 @@
-import { Question, StudentAnswer, OutputStatus } from "@domain";
+import { Question, StudentAnswer, OutputStatus } from "@domain/entities";
 import {
   IUseCase,
   UserSelectDTO,
   IStudentOutputsRepository,
   IActivitiesRepository,
-} from "@interfaces";
+} from "@application/interfaces";
 
 type InputParams = {
   user: UserSelectDTO;

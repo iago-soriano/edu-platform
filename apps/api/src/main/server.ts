@@ -1,7 +1,7 @@
 import http, { Server as HttpServer, RequestListener } from "http";
 import { AddressInfo } from "net";
 import { ILogger } from "./logger";
-import { pgClient } from "@infrastructure";
+import { pgClient } from "@infrastructure/persistence";
 
 export interface IHTTPServerConstructorParams {
   logger: ILogger;

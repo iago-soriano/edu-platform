@@ -3,15 +3,14 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
+} from "../../interfaces";
 import {
   parseToQuestionRequestDTO,
   SaveQuestionParams,
   SaveQuestionResponseBody,
   SaveQuestionRequestBody,
 } from "@edu-platform/common";
-import { ISaveQuestionUseCase } from "@use-cases";
-import { parseNumberId } from "@infrastructure";
+import { ISaveQuestionUseCase } from "@application/use-cases";
 
 type Request = TypedRequest<SaveQuestionParams, {}, SaveQuestionRequestBody>;
 type Response = TypedResponse<SaveQuestionResponseBody>;

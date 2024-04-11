@@ -1,4 +1,8 @@
-import { IUseCase, UserSelectDTO, ICollectionsRepository } from "@interfaces";
+import {
+  IUseCase,
+  UserSelectDTO,
+  ICollectionsRepository,
+} from "@application/interfaces";
 
 type InputParams = {
   user: UserSelectDTO;

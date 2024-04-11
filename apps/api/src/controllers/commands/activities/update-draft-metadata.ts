@@ -3,15 +3,14 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
+} from "../../interfaces";
 import {
   UpdateVersionMetadataParams,
   UpdateVersionMetadataRequestBody,
   UpdateVersionMetadataResponseBody,
 } from "@edu-platform/common";
-import { IUpdateActivityMetadataUseCase } from "@use-cases";
+import { IUpdateActivityMetadataUseCase } from "@application/use-cases";
 import { parseToVersionRequestDto } from "@edu-platform/common";
-import { parseNumberId } from "@infrastructure";
 
 type Request = TypedRequest<
   UpdateVersionMetadataParams,

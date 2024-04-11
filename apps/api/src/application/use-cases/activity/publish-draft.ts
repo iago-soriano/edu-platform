@@ -1,11 +1,9 @@
-import { Notification } from "@domain";
 import { ActivityNotFound } from "@edu-platform/common/";
 import {
-  ActivitySelectDTO,
   IActivitiesRepository,
   IUseCase,
   UserSelectDTO,
-} from "@interfaces";
+} from "@application/interfaces";
 
 type InputParams = {
   user: UserSelectDTO;

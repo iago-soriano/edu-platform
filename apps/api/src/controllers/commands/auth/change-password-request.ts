@@ -1,14 +1,14 @@
-import { IChangePasswordRequestUseCase } from "@use-cases";
+import { IChangePasswordRequestUseCase } from "@application/use-cases";
 import {
   HTTPController,
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
+} from "../../interfaces";
 import {
   ChangePasswordRequestRequestBody,
   ChangePasswordRequestResponseBody,
-} from "@edu-platform/common/api";
+} from "@edu-platform/common";
 
 type Request = TypedRequest<{}, {}, ChangePasswordRequestRequestBody>;
 type Response = TypedResponse<ChangePasswordRequestResponseBody>;

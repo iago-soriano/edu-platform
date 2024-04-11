@@ -3,8 +3,8 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
-import { IDeleteElementUseCase } from "@use-cases";
+} from "../../interfaces";
+import { IDeleteElementUseCase } from "@application/use-cases";
 import {
   DeleteElementParams,
   DeleteElementRequestBody,

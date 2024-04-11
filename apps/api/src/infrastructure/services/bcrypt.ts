@@ -1,5 +1,5 @@
 import { EncryptingError } from "@edu-platform/common";
-import { IEncryptionService } from "@interfaces";
+import { IEncryptionService } from "@application/interfaces";
 import bcrypt from "bcryptjs";
 
 export class BCryptEncryptionService implements IEncryptionService {

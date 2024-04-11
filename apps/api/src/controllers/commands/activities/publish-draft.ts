@@ -4,13 +4,13 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
+} from "../../interfaces";
 import {
   PublishDraftParams,
   PublishDraftRequestBody,
   PublishDraftResponseBody,
 } from "@edu-platform/common";
-import { IPublishDraftUseCase } from "@use-cases";
+import { IPublishDraftUseCase } from "@application/use-cases";
 
 type Request = TypedRequest<PublishDraftParams, {}, PublishDraftRequestBody>;
 type Response = TypedResponse<PublishDraftResponseBody>;

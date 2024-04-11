@@ -1,9 +1,13 @@
-import { IUserRepository, ITokenRepository, IUseCase } from "@interfaces";
+import {
+  IUserRepository,
+  ITokenRepository,
+  IUseCase,
+} from "@application/interfaces";
 import {
   InvalidValidationTokenError,
   UserNotFoundError,
 } from "@edu-platform/common";
-import { Collection, User } from "@domain";
+import { Collection, User } from "@domain/entities";
 
 type InputParams = {
   verifyAccountToken: string;

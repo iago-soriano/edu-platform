@@ -1,9 +1,13 @@
-import { CollectionFactory } from "@domain";
+import { CollectionFactory } from "@domain/entities";
 import {
   UserIsNotCollectionOwner,
   CollectionRequestDTO,
 } from "@edu-platform/common";
-import { IUseCase, UserSelectDTO, ICollectionsRepository } from "@interfaces";
+import {
+  IUseCase,
+  UserSelectDTO,
+  ICollectionsRepository,
+} from "@application/interfaces";
 
 type InputParams = {
   user: UserSelectDTO;

@@ -24,13 +24,11 @@ import {
   GetCollectionController,
   ListUsersInCollectionController,
   SaveAnswerController,
-  UpdateNotificationController,
   InsertFollowerInCollectionController,
   ImportActivityController,
   CreateNewActivityController,
   ListActivitiesForCollectionParticipantController,
   ListActivitiesForCollectionOwnerController,
-  ListNotificationsController,
 } from "@controllers";
 import {
   SignInUseCase,
@@ -52,29 +50,30 @@ import {
   InsertUserInCollectionUseCase,
   RemoveStudentFromCollectionUseCase,
   SaveAnswerUseCase,
-  UpdateNotificationUseCase,
   InsertFollowerInCollectionUseCase,
   ImportActivityUseCase,
   PublishDraftUseCase,
-} from "@use-cases";
+} from "@application/use-cases";
 import {
-  BCryptEncryptionService,
-  EmailService,
-  JWTTokenService,
   UserRepository,
   TokenRepository,
-  AssetRepository,
-  S3Service,
-  TopicService,
   StudentOutputsRepository,
   ActivitiesRepository,
   ActivitiesReadRepository,
   CollectionsRepository,
   CollectionsReadRepository,
-  NotificationsRepository,
-  NotificationsReadRepository,
-} from "@infrastructure";
-import { DomainServicesRegistry } from "@domain";
+  // NotificationsRepository,
+  // NotificationsReadRepository,
+} from "@infrastructure/persistence";
+import {
+  AssetRepository,
+  S3Service,
+  TopicService,
+  BCryptEncryptionService,
+  EmailService,
+  JWTTokenService,
+} from "@infrastructure/services";
+import { DomainServicesRegistry } from "@domain/services";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
@@ -138,12 +137,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(ListUsersInCollectionController)
       .classic(),
     saveAnswerController: awilix.asClass(SaveAnswerController).classic(),
-    listNotificationsController: awilix
-      .asClass(ListNotificationsController)
-      .classic(),
-    updateNotificationsController: awilix
-      .asClass(UpdateNotificationController)
-      .classic(),
     insertFollowerInCollectionController: awilix
       .asClass(InsertFollowerInCollectionController)
       .classic(),
@@ -197,9 +190,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(RemoveStudentFromCollectionUseCase)
       .classic(),
     saveAnswerUseCase: awilix.asClass(SaveAnswerUseCase).classic(),
-    updateNotificationUseCase: awilix
-      .asClass(UpdateNotificationUseCase)
-      .classic(),
     insertFollowerInCollectionUserCase: awilix
       .asClass(InsertFollowerInCollectionUseCase)
       .classic(),
@@ -220,10 +210,10 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     studentOutputsRepository: awilix
       .asClass(StudentOutputsRepository)
       .classic(),
-    notificationsRepository: awilix.asClass(NotificationsRepository).classic(),
-    notificationsReadRepository: awilix
-      .asClass(NotificationsReadRepository)
-      .classic(),
+    // notificationsRepository: awilix.asClass(NotificationsRepository).classic(),
+    // notificationsReadRepository: awilix
+    //   .asClass(NotificationsReadRepository)
+    //   .classic(),
     insertFollowerInCollectionUseCase: awilix
       .asClass(InsertUserInCollectionUseCase)
       .classic(),

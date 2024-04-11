@@ -2,8 +2,7 @@ import {
   IUseCase,
   UserSelectDTO,
   ICollectionsRepository,
-  ICollectionParticipationsRepository,
-} from "@interfaces";
+} from "@application/interfaces";
 
 type InputParams = {
   user: UserSelectDTO;

@@ -1,10 +1,10 @@
-import { IVerifyAccountUseCase } from "@use-cases";
+import { IVerifyAccountUseCase } from "@application/use-cases";
 import {
   HTTPController,
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
+} from "../../interfaces";
 import {
   VerifyAccountRequestBody,
   VerifyAccountResponseBody,

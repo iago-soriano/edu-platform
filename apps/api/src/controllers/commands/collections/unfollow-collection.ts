@@ -3,14 +3,14 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
+} from "../../interfaces";
 import {
   UnfollowCollectionParams,
   UnfollowCollectionRequestBody,
   UnfollowCollectionResponseBody,
 } from "@edu-platform/common";
-import { IUnfollowCollectionUseCase } from "@use-cases";
-import { parseNumberId } from "@infrastructure";
+import { IUnfollowCollectionUseCase } from "@application/use-cases";
+import { parseNumberId } from "@infrastructure/utils";
 
 type Request = TypedRequest<
   UnfollowCollectionParams,

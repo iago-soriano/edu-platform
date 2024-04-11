@@ -1,10 +1,3 @@
-import { ActivityVersion, OutputStatus, User } from "@domain";
-import {
-  CollectionNotFound,
-  StudentIsNotParticipant,
-  ActivityVersionNotFound,
-  CantCreateOutputOnPublicCollection,
-} from "@edu-platform/common";
 import {
   IUseCase,
   UserSelectDTO,
@@ -12,7 +5,7 @@ import {
   IStudentOutputsRepository,
   ICollectionsRepository,
   IActivitiesRepository,
-} from "@interfaces";
+} from "@application/interfaces";
 
 type InputParams = {
   user: UserSelectDTO;

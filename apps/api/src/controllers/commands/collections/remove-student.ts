@@ -3,7 +3,7 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
+} from "../../interfaces";
 import {
   RemoveUserFromCollectionParams,
   RemoveUserFromCollectionRequestBody,
@@ -12,8 +12,8 @@ import {
 import {
   IInsertUserInCollectionUseCase,
   IRemoveStudentFromCollectionUseCase,
-} from "@use-cases";
-import { parseNumberId } from "@infrastructure";
+} from "@application/use-cases";
+import { parseNumberId } from "@infrastructure/utils";
 
 type Request = TypedRequest<
   RemoveUserFromCollectionParams,

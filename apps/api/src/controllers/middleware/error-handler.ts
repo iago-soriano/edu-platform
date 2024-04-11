@@ -7,7 +7,7 @@ import {
   Request as TypedRequest,
   Response as TypedResponse,
   HTTPErrorController,
-} from "@interfaces";
+} from "../interfaces";
 
 type Request = TypedRequest<{}, {}, {}>;
 type Response = TypedResponse<{}>;

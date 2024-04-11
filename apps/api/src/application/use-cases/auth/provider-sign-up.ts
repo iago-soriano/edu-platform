@@ -2,10 +2,8 @@ import { HasAccountWithEmailAndPassword } from "@edu-platform/common";
 import {
   IUserRepository,
   ITokenService,
-  UserInsertDTO,
   IUseCase,
-} from "@interfaces";
-import { User } from "@domain";
+} from "@application/interfaces";
 
 type InputParams = {
   email: string;
@@ -36,7 +34,7 @@ class UseCase implements IProviderSignUpUseCase {
       throw new HasAccountWithEmailAndPassword();
 
     if (!existingUser) {
-      const userDTO: UserInsertDTO = {
+      const userDTO: any = {
         email,
         name,
         image,

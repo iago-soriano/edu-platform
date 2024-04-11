@@ -3,14 +3,14 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
+} from "../../interfaces";
 import {
   CreateStudentOutputParams,
   CreateStudentOutputRequestBody,
   CreateStudentOutputResponseBody,
 } from "@edu-platform/common";
-import { ICreateStudentOutputUseCase } from "@use-cases";
-import { parseNumberId } from "@infrastructure";
+import { ICreateStudentOutputUseCase } from "@application/use-cases";
+import { parseNumberId } from "@infrastructure/utils";
 
 type Request = TypedRequest<
   CreateStudentOutputParams,

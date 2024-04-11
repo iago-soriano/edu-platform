@@ -3,8 +3,8 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-  ICollectionsReadRepository,
-} from "@interfaces";
+} from "../../interfaces";
+import { ICollectionsReadRepository } from "@application/interfaces";
 import {
   ListParticipantsOfCollectionQuery,
   ListParticipantsOfCollectionResponseBody,

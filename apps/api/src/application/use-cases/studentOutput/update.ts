@@ -4,8 +4,7 @@ import {
   IStudentOutputsRepository,
   IEmailService,
   ICollectionsRepository,
-  INotificationsRepository,
-} from "@interfaces";
+} from "@application/interfaces";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -20,8 +19,7 @@ class UseCase implements IUpdateStudentOutputUseCase {
   constructor(
     private studentOutputsRepository: IStudentOutputsRepository,
     private emailService: IEmailService,
-    private collectionsRepository: ICollectionsRepository,
-    private notificationsRepository: INotificationsRepository
+    private collectionsRepository: ICollectionsRepository
   ) {}
 
   async execute({ user, studentOutputId }: InputParams) {

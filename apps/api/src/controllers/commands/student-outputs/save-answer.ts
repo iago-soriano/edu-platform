@@ -3,13 +3,13 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "@interfaces";
+} from "../../interfaces";
 import {
   SaveAnswerParams,
   SaveAnswerRequestBody,
   SaveAnswerResponseBody,
 } from "@edu-platform/common";
-import { ISaveAnswerUseCase } from "@use-cases";
+import { ISaveAnswerUseCase } from "@application/use-cases";
 
 type Request = TypedRequest<SaveAnswerParams, {}, SaveAnswerRequestBody>;
 type Response = TypedResponse<SaveAnswerResponseBody>;

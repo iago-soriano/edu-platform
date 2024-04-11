@@ -1,4 +1,4 @@
-import { ITokenRepository, IUseCase } from "@interfaces";
+import { ITokenRepository, IUseCase } from "@application/interfaces";
 
 type InputParams = {
   token: string;

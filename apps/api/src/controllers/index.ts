@@ -1,3 +1,4 @@
 export * from "./commands";
 export * from "./queries";
 export * from "./middleware";
+export * from "./interfaces";

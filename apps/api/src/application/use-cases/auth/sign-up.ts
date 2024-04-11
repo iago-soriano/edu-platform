@@ -3,15 +3,14 @@ import {
   IEncryptionService,
   ITokenRepository,
   IEmailService,
-  UserInsertDTO,
   IUseCase,
-} from "@interfaces";
-import { User } from "@domain";
+} from "@application/interfaces";
+import { User } from "@domain/entities";
 import {
   PasswordsDontMatchError,
   EmailAlreadySignedupError,
 } from "@edu-platform/common/errors";
-import { GetUUID } from "@infrastructure";
+import { GetUUID } from "@infrastructure/utils";
 
 type InputParams = {
   email: string;
@@ -45,7 +44,7 @@ class UseCase implements ISignUpUseCase {
 
     const token = GetUUID();
 
-    const userDTO: UserInsertDTO = {
+    const userDTO: any = {
       email: user.email!,
       name: user.name!,
       emailVerified: false,

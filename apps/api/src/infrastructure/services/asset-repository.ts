@@ -1,9 +1,7 @@
-import { IAssetRepository } from "@interfaces";
+import { IAssetRepository } from "@application/interfaces";
 
 export class AssetRepository implements IAssetRepository {
-
-    getGenericImageUrl () {
-        return `${process.env.WEB_APP_URL}/assets/image/generic_profile.png`;
-    }
-
+  getGenericImageUrl() {
+    return `${process.env.WEB_APP_URL}/assets/image/generic_profile.png`;
+  }
 }

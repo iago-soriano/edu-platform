@@ -9,7 +9,7 @@ import {
   ICollectionParticipationsRepository,
   ICollectionsRepository,
   IUserRepository,
-} from "@interfaces";
+} from "@application/interfaces";
 
 type InputParams = {
   user: UserSelectDTO;

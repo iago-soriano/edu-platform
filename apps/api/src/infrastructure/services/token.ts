@@ -1,4 +1,4 @@
-import { ITokenService, JWTPayload } from "@interfaces";
+import { ITokenService, JWTPayload } from "@application/interfaces";
 import { TokenGenerationError, Forbidden } from "@edu-platform/common/errors";
 import jwt, { JwtPayload as LibJWTPayload } from "jsonwebtoken";
 

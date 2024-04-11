@@ -1,11 +1,11 @@
+// TODO: split into get published, get draft, get archived by version
 import {
-  // TODO: split into get published, get draft, get archived by version
   HTTPController,
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-  IActivitiesReadRepository,
-} from "@interfaces";
+} from "../../interfaces";
+import { IActivitiesReadRepository } from "@application/interfaces";
 import {
   GetDraftVersionParams,
   GetDraftVersionResponseBody,
