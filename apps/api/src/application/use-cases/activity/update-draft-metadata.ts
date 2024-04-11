@@ -25,10 +25,6 @@ class UseCase implements IUpdateActivityMetadataUseCase {
     activity.updateCurrentDraftMetadata(newValues, user);
 
     await this.activitiesRepository.save(activity);
-
-    // await db.transaction(async (tx) => {
-    //   await this.activitiesRepository.updateRoot(tx, activity);
-    // });
   }
 }
 

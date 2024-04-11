@@ -3,9 +3,8 @@ import {
   UserSelectDTO,
   IActivitiesRepository,
   ICollectionsRepository,
-  IIdGenerator,
 } from "@interfaces";
-import { Activity, IActivitiesFactory } from "@domain";
+import { ActivitiesFactory } from "@domain";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -21,8 +20,7 @@ export type ICreateNewActivityUseCase = IUseCase<InputParams, Return>;
 class UseCase implements ICreateNewActivityUseCase {
   constructor(
     private activitiesRepository: IActivitiesRepository,
-    private collectionsRepository: ICollectionsRepository,
-    private activitiesFactory: IActivitiesFactory
+    private collectionsRepository: ICollectionsRepository
   ) {}
 
   async execute({ user, collectionId }: InputParams) {
@@ -31,7 +29,7 @@ class UseCase implements ICreateNewActivityUseCase {
 
     if (!collection) throw new Error("Collection not found");
 
-    const newActivity = this.activitiesFactory.from(collection, user);
+    const newActivity = ActivitiesFactory.from(collection, user);
 
     return this.activitiesRepository.save(newActivity);
   }

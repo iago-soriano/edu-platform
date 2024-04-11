@@ -1,34 +1,37 @@
-import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
 import { DomainEvent } from "../domain/abstract";
+import { ITopicService, IStorageService } from "@interfaces";
+import { mainContainer } from "index";
 
 export interface IDomainServiceRegistry {
-  publishDomainEvent: (event: DomainEvent) => Promise<void>;
-  uploadActivityContent: () => Promise<void>;
+  publishToDomainTopic: (event: DomainEvent) => Promise<void>;
+  uploadActivityContent: (
+    activityId: string,
+    versionId: string,
+    contentId: number,
+    file: Express.Multer.File
+  ) => Promise<void>;
 }
 
 export class DomainServicesRegistry implements IDomainServiceRegistry {
-  private _snsClient;
-  constructor() {
-    this._snsClient = new SNSClient({});
-  }
-  async publishDomainEvent(event: DomainEvent) {
+  constructor(
+    private storageService: IStorageService,
+    private topicService: ITopicService
+  ) {}
+  async publishToDomainTopic(event: DomainEvent) {
     if (!process.env.DOMAIN_SNS_TOPIC_ARN)
       throw new Error("domain SNS topic arn not present");
     if (process.env.DOMAIN_SNS_TOPIC_ARN === "debug") return;
 
-    await this._snsClient.send(
-      new PublishCommand({
-        MessageAttributes: {
-          eventType: {
-            StringValue: event.messageAttributes.eventType,
-            DataType: "STRING_VALUE",
-          },
-        },
-        Message: event.payload,
-        TopicArn: process.env.DOMAIN_SNS_TOPIC_ARN,
-      })
-    );
+    await this.topicService.send(event, process.env.DOMAIN_SNS_TOPIC_ARN);
   }
 
-  async uploadActivityContent() {}
+  async uploadActivityContent(
+    activityId: string,
+    versionId: string,
+    contentId: number,
+    file: Express.Multer.File
+  ) {}
 }
+
+export const resolveDomainServicesRegistry = () =>
+  mainContainer.resolve<IDomainServiceRegistry>("domainServiceRegistry");

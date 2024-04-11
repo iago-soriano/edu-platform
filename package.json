@@ -18,9 +18,5 @@
   "author": "",
   "license": "ISC",
   "packageManager": "npm@8.19.3",
-  "dependencies": {
-    "@radix-ui/react-slot": "^1.0.2",
-    "posthog-js": "^1.96.1",
-    "react-player": "^2.13.0"
-  }
+  "dependencies": {}
 }

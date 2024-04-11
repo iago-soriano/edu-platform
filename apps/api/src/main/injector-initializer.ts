@@ -61,11 +61,11 @@ import {
   BCryptEncryptionService,
   EmailService,
   JWTTokenService,
-  IdGeneratorService,
   UserRepository,
   TokenRepository,
   AssetRepository,
   S3Service,
+  TopicService,
   StudentOutputsRepository,
   ActivitiesRepository,
   ActivitiesReadRepository,
@@ -74,7 +74,7 @@ import {
   NotificationsRepository,
   NotificationsReadRepository,
 } from "@infrastructure";
-import { ActivitiesFactory } from "@domain";
+import { DomainServicesRegistry } from "@domain";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
@@ -156,13 +156,12 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     // services
     encryptionService: awilix.asClass(BCryptEncryptionService),
     emailService: awilix.asClass(EmailService),
-    idService: awilix.asClass(IdGeneratorService),
     tokenService: awilix.asClass(JWTTokenService).singleton(),
     assetRepository: awilix.asClass(AssetRepository),
     storageService: awilix.asClass(S3Service),
+    topicService: awilix.asClass(TopicService),
 
-    // factories
-    activitiesFactory: awilix.asClass(ActivitiesFactory).classic(),
+    domainServiceRegistry: awilix.asClass(DomainServicesRegistry).classic(),
 
     // use cases
     signInUseCase: awilix.asClass(SignInUseCase).classic(),

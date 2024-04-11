@@ -17,7 +17,7 @@ export class ContentFactory {
       case ContentTypes.Video:
         newContent = new VideoContent();
 
-        newContent.tracks = dto.payload?.video?.tracks || "";
+        newContent.tracks = dto.payload?.video?.tracks || "00:00:00-00:00:00";
         newContent.url = dto.payload?.video?.url || "";
         break;
 

@@ -39,6 +39,9 @@ import {
   GetCollectionResponseBody,
   ListParticipantsOfCollectionQuery,
   ListParticipantsOfCollectionResponseBody,
+  SaveQuestionParams,
+  SaveQuestionResponseBody,
+  SaveQuestionRequestBody,
 } from "./contracts";
 import { IHTTPClient } from "./interfaces";
 
@@ -54,6 +57,15 @@ export class ApiClient {
       `activities/${activityId}/versions/draft/contents`,
       body
     ) as Promise<SaveContentResponseBody>;
+  }
+  public saveQuestion({
+    activityId,
+    ...body
+  }: SaveQuestionParams & SaveQuestionRequestBody) {
+    return this._fetcher.post(
+      `activities/${activityId}/versions/draft/questions`,
+      body
+    ) as Promise<SaveQuestionResponseBody>;
   }
   public createNewActivity(body: CreateNewActivityRequestBody) {
     return this._fetcher.post(
@@ -85,7 +97,7 @@ export class ApiClient {
       ...query,
     }) as Promise<ListActivitiesForParticipantResponseBody>;
   }
-  public deleteContent({ activityId, elementId }: DeleteElementParams) {
+  public deleteElement({ activityId, elementId }: DeleteElementParams) {
     return this._fetcher.delete(
       `activities/${activityId}/versions/draft/elements/${elementId}`
     ) as Promise<DeleteElementResponseBody>;

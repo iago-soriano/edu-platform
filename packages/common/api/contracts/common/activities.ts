@@ -11,6 +11,10 @@ export enum ContentTypes {
   Text = "Text",
   Image = "Image",
 }
+export enum QuestionTypes {
+  MultipleChoice = "MultipleChoice",
+  Text = "Text",
+}
 
 export const videoPayloadSchema = z.object({
   tracks: z.string().optional(),

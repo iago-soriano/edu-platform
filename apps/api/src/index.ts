@@ -5,12 +5,12 @@ dotenv.config(); // call this before importing main, because that will use env v
 
 import { registerServer, registerDependencies } from "@main";
 
-const container = awilix.createContainer();
+export const mainContainer = awilix.createContainer();
 
-registerDependencies(container);
-registerServer(container, "/web-api");
+registerDependencies(mainContainer);
+registerServer(mainContainer, "/web-api");
 
-const server = container.resolve("server");
+const server = mainContainer.resolve("server");
 
 (async () => {
   try {

@@ -1,19 +1,19 @@
 import { Content, ContentTypes } from "./base";
-import { CustomError, ContentRequestDTO } from "@edu-platform/common";
+import { FileType, ContentRequestDTO } from "@edu-platform/common";
 import {
-  DomainServicesRegistry,
+  resolveDomainServicesRegistry,
   IDomainServiceRegistry,
 } from "../../../../domain-services";
 
 export class ImageContent extends Content {
   public url?: string;
-  public file: any;
+  public file: FileType | null = null;
 
   private _domainServiceRegistry: IDomainServiceRegistry;
 
   constructor() {
     super(ContentTypes.Image);
-    this._domainServiceRegistry = new DomainServicesRegistry();
+    this._domainServiceRegistry = resolveDomainServicesRegistry();
   }
 
   hasContent() {
@@ -26,8 +26,22 @@ export class ImageContent extends Content {
     if (newContent.payload?.image?.file !== undefined)
       this.file = newContent.payload?.image?.file;
   }
-  public async update(contentDto: ContentRequestDTO) {
+  public async update(
+    contentDto: ContentRequestDTO,
+    activityId?: string,
+    versionId?: string
+  ) {
     super.update(contentDto);
-    await this._domainServiceRegistry.uploadActivityContent();
+    if (this.file && (!activityId || !versionId || !this.id))
+      throw new Error("Missing parameters to upload file");
+
+    if (!this.file) return;
+
+    await this._domainServiceRegistry.uploadActivityContent(
+      activityId!,
+      versionId!,
+      this.id as number,
+      this.file!
+    );
   }
 }

@@ -79,7 +79,7 @@ export function IgnorePersistance() {
 
 export abstract class DomainEvent {
   constructor(
-    public messageAttributes: { eventType: string },
-    public payload: string
+    public eventType: string,
+    public payload: any
   ) {}
 }

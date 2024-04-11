@@ -140,16 +140,16 @@ export class ActivityVersion extends Entity {
     if (!currentContent && contentDto.id)
       throw new Error("Could not find specified content");
 
-    if (currentContent) {
-      if (currentContent.type !== contentDto.type)
-        throw new Error("Cannot change content type after creation");
-      await currentContent.update(contentDto);
-    } else {
-      this._canInsertElement();
+    if (currentContent && currentContent.type !== contentDto.type)
+      throw new Error("Cannot change content type after creation");
 
-      const newContent = ContentFactory.fromRequestDto(contentDto, this);
-      this.elements.push(newContent);
-    }
+    if (currentContent)
+      return currentContent.update(contentDto, this.activityId, this.id);
+
+    this._canInsertElement();
+
+    const newContent = ContentFactory.fromRequestDto(contentDto, this);
+    this.elements.push(newContent);
   }
 
   public upsertQuestion(questionDto: QuestionRequestDTO) {
@@ -162,15 +162,14 @@ export class ActivityVersion extends Entity {
     if (!currentQuestion && questionDto.id)
       throw new Error("Could not find specified question");
 
-    if (currentQuestion) {
-      if (currentQuestion.type !== questionDto.type)
-        throw new Error("Cannot change question type after creation");
-      currentQuestion.update(questionDto);
-    } else {
-      this._canInsertElement();
+    if (currentQuestion && currentQuestion?.type !== questionDto.type)
+      throw new Error("Cannot change question type after creation");
 
-      const newQuestion = QuestionFactory.fromRequestDto(questionDto, this);
-      this.elements.push(newQuestion);
-    }
+    if (currentQuestion) return currentQuestion.update(questionDto);
+
+    this._canInsertElement();
+
+    const newQuestion = QuestionFactory.fromRequestDto(questionDto, this);
+    this.elements.push(newQuestion);
   }
 }

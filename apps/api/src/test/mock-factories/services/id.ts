@@ -1,7 +1,6 @@
 import { AbstractMockBuilder } from "../abstract";
-import { IIdGenerator } from "@interfaces";
 
-export class IdGeneratorMockBuilder extends AbstractMockBuilder<IIdGenerator> {
+export class IdGeneratorMockBuilder extends AbstractMockBuilder<{}> {
   constructor() {
     super();
     this.reset();

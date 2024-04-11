@@ -9,6 +9,7 @@ import {
 import {
   ActivitySerializer,
   ActivityContentSerializer,
+  ActivityQuestionSerializer,
   ActivityVersionSerializer,
   CollectionSerializer,
   CollectionParticipationSerializer,
@@ -35,7 +36,7 @@ export const activityContentsTable: TableDefinition = {
 };
 export const activityQuestionsTable: TableDefinition = {
   table: activityQuestions,
-  serializer: ActivityContentSerializer.serialize, //TODO
+  serializer: ActivityQuestionSerializer.serialize,
 };
 export const collectionsTable: TableDefinition = {
   table: collections,

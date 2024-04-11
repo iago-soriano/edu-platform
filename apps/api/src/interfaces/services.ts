@@ -1,5 +1,6 @@
 import { FileType } from "./controller";
 import { JwtPayload as LibJWTPayload } from "jsonwebtoken";
+import { DomainEvent } from "@domain";
 
 export type JWTPayload = {
   id: string;
@@ -14,8 +15,8 @@ export interface ITokenService {
   decode: (token: string) => LibJWTPayload;
 }
 
-export interface IIdGenerator {
-  getId: () => string;
+export interface ITopicService {
+  send: (event: DomainEvent, topicArn: string) => Promise<any>;
 }
 
 export interface IEncryptionService {

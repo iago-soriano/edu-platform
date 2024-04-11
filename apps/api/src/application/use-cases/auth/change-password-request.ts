@@ -2,7 +2,6 @@ import {
   IUserRepository,
   ITokenRepository,
   IUseCase,
-  IIdGenerator,
   IEmailService,
   TokenType,
 } from "@interfaces";
@@ -11,6 +10,7 @@ import {
   UserNotFoundError,
   HasProviderAccountError,
 } from "@edu-platform/common/errors";
+import { GetUUID } from "@infrastructure";
 
 type InputParams = {
   email: string;
@@ -23,7 +23,6 @@ export type IChangePasswordRequestUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IChangePasswordRequestUseCase {
   constructor(
     private userRepository: IUserRepository,
-    private idService: IIdGenerator,
     private emailService: IEmailService,
     private tokenRepository: ITokenRepository
   ) {}
@@ -50,7 +49,7 @@ class UseCase implements IChangePasswordRequestUseCase {
       throw new ChangePasswordRequestTokenExist();
     }
 
-    const changePasswordToken = this.idService.getId();
+    const changePasswordToken = GetUUID();
 
     await this.tokenRepository.insertToken({
       value: changePasswordToken,

@@ -28,5 +28,9 @@ export abstract class BaseElement extends Entity {
   /**
    * Update = merge + validate. Receives some DTO and updates the entity
    */
-  public abstract update(args: unknown): void;
+  public abstract update(
+    args: unknown,
+    activityId?: string,
+    versionId?: string
+  ): void;
 }

@@ -1,7 +1,5 @@
 import { IUseCase, IActivitiesRepository, UserSelectDTO } from "@interfaces";
-import { IActivitiesFactory } from "@domain";
 import { ActivityNotFound } from "@edu-platform/common";
-import { db } from "@infrastructure";
 
 type InputParams = {
   activityId: string;
@@ -13,10 +11,7 @@ type Return = void;
 export type ICreateNewDraftVersionUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ICreateNewDraftVersionUseCase {
-  constructor(
-    private activitiesRepository: IActivitiesRepository,
-    private activitiesFactory: IActivitiesFactory
-  ) {}
+  constructor(private activitiesRepository: IActivitiesRepository) {}
 
   async execute({ activityId, user }: InputParams) {
     const activity =
@@ -24,11 +19,7 @@ class UseCase implements ICreateNewDraftVersionUseCase {
 
     if (!activity) throw new ActivityNotFound();
 
-    activity.throwIfCantCreateNewDraft(user);
-
-    activity.setDraftVersion(
-      this.activitiesFactory.Versions.withElementsFrom(activity.lastVersion!)
-    );
+    activity.createNewDraft(user);
 
     await this.activitiesRepository.save(activity);
   }

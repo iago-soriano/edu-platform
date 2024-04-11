@@ -1,7 +1,7 @@
 import { ActivityPublishedEvent } from "../domain-events";
 import { ActivityVersion, BaseElement, VersionStatus } from "..";
 import {
-  DomainServicesRegistry,
+  resolveDomainServicesRegistry,
   IDomainServiceRegistry,
 } from "../../../domain-services";
 import { ContentRequestDTO, QuestionRequestDTO } from "@edu-platform/common";
@@ -10,11 +10,14 @@ import {
   CollectionArray,
   PersistancePropertyName,
 } from "../../abstract";
+import { ActivitiesFactory } from "../factories";
 
 export class Activity extends Entity {
+  private _domainServiceRegistry: IDomainServiceRegistry;
+
   constructor() {
     super();
-    this._domainServiceRegistry = new DomainServicesRegistry();
+    this._domainServiceRegistry = resolveDomainServicesRegistry();
   }
 
   public id!: string;
@@ -25,8 +28,6 @@ export class Activity extends Entity {
   @PersistancePropertyName("draftVersionId")
   public draftVersion: ActivityVersion | null = null;
   public archivedVersions: ActivityVersion[] = [];
-
-  private _domainServiceRegistry: IDomainServiceRegistry;
 
   public updateCurrentDraftMetadata(
     newValues: { title?: string; description?: string; topics?: string },
@@ -45,12 +46,12 @@ export class Activity extends Entity {
     this.draftVersion = newVersion;
   }
 
-  public setLastVersion(newVersion: ActivityVersion | null) {
+  private _setLastVersion(newVersion: ActivityVersion | null) {
     if (newVersion) newVersion.activityId = this.id;
     this.lastVersion = newVersion;
   }
 
-  public throwIfCantCreateNewDraft(user: { id: number }) {
+  public createNewDraft(user: { id: number }) {
     if (this.authorId !== user.id)
       throw new Error("You are not allowed to change this activity");
     if (!this.lastVersion)
@@ -59,6 +60,10 @@ export class Activity extends Entity {
       );
 
     if (this.draftVersion) throw new Error("There is already a draft");
+
+    this.setDraftVersion(
+      ActivitiesFactory.Versions.withElementsFrom(this.lastVersion!)
+    );
   }
 
   public deleteElementOfDraft(user: { id: number }, id: number) {
@@ -82,10 +87,10 @@ export class Activity extends Entity {
 
     this.draftVersion.publish();
 
-    this.setLastVersion(this.draftVersion);
+    this._setLastVersion(this.draftVersion);
     this.setDraftVersion(null);
 
-    await this._domainServiceRegistry.publishDomainEvent(
+    await this._domainServiceRegistry.publishToDomainTopic(
       new ActivityPublishedEvent({ activity: this })
     );
   }
@@ -101,7 +106,7 @@ export class Activity extends Entity {
   public upsertContent(user: { id: number }, contentDto: ContentRequestDTO) {
     this._canUpsertElement(user);
 
-    this.draftVersion!.upsertContent(contentDto);
+    return this.draftVersion!.upsertContent(contentDto);
   }
 
   public upsertQuestion(user: { id: number }, questionDto: QuestionRequestDTO) {

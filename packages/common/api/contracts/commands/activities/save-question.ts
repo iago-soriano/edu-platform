@@ -30,7 +30,7 @@ export type QuestionRequestDTO = z.infer<typeof questionRequestSchema>;
 type ResponseBody = {
   questionId?: number;
 };
-type Params = { activityId: string; versionId: string };
+type Params = { activityId: string };
 
 export {
   QuestionRequestDTO as SaveQuestionRequestBody,

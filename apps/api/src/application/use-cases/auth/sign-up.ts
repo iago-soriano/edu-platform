@@ -2,7 +2,6 @@ import {
   IUserRepository,
   IEncryptionService,
   ITokenRepository,
-  IIdGenerator,
   IEmailService,
   UserInsertDTO,
   IUseCase,
@@ -12,6 +11,7 @@ import {
   PasswordsDontMatchError,
   EmailAlreadySignedupError,
 } from "@edu-platform/common/errors";
+import { GetUUID } from "@infrastructure";
 
 type InputParams = {
   email: string;
@@ -27,7 +27,6 @@ class UseCase implements ISignUpUseCase {
   constructor(
     private userRepository: IUserRepository,
     private encryptionService: IEncryptionService,
-    private idService: IIdGenerator,
     private emailService: IEmailService,
     private tokenRepository: ITokenRepository
   ) {}
@@ -44,7 +43,7 @@ class UseCase implements ISignUpUseCase {
 
     if (!email || !name) throw new Error("Missing name or e-mail");
 
-    const token = this.idService.getId();
+    const token = GetUUID();
 
     const userDTO: UserInsertDTO = {
       email: user.email!,

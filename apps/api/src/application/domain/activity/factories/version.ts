@@ -1,14 +1,12 @@
 import { ActivityVersion, VersionStatus } from "../version/activity-version";
 import { Content } from "../elements";
 import { ContentFactory } from "./content";
-import { IIdGenerator } from "@interfaces";
+import { GetUUID } from "@infrastructure";
 
 export class VersionFactory {
-  constructor(private idService: IIdGenerator) {}
-
   withElementsFrom(toCopyFrom: ActivityVersion) {
     const newDraft = new ActivityVersion(
-      this.idService.getId(),
+      GetUUID(),
       toCopyFrom.title.toString(),
       toCopyFrom.description.toString(),
       toCopyFrom.topics.toString(),
@@ -31,7 +29,7 @@ export class VersionFactory {
 
   emptyDraftFrom() {
     const newDraft = new ActivityVersion(
-      this.idService.getId(),
+      GetUUID(),
       null,
       null,
       null,
