@@ -56,7 +56,7 @@ export class BaseRepository implements IAbstractRepository {
         } else if (ent.isDelete) {
           await tx
             .delete(thisEntityTableDefinition.table)
-            .where(eq((thisEntityTableDefinition as any).id, ent.id));
+            .where(eq((thisEntityTableDefinition.table as any).id, ent.id));
         }
 
         for (const prop in ent) {

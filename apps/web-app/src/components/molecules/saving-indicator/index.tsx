@@ -5,7 +5,7 @@ export const SavingIndicator = ({ saveState }) => {
     if (saveState === "isLoading") return <Spinner />;
     if (saveState === "hasChanges")
       return (
-        <Tooltip content={"Há mudanças não salvas"}>
+        <Tooltip content={"There are unsaved changes"}>
           <span>
             <Icons.PENCIL_LINE size={28} />
           </span>
@@ -13,7 +13,7 @@ export const SavingIndicator = ({ saveState }) => {
       );
     if (saveState === "ready")
       return (
-        <Tooltip content={"Todas as mudanças estão salvas"}>
+        <Tooltip content={"All changes have been saved"}>
           <span>
             <Icons.CHECK size={28} />
           </span>

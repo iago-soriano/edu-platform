@@ -54,6 +54,7 @@ export const VideoContent = ({
 
   useEffect(() => {
     if (tracks !== tracksProps) {
+      console.log("saving tracks", { tracks, tracksProps });
       saveContentMutation.mutate({
         payload: {
           video: {

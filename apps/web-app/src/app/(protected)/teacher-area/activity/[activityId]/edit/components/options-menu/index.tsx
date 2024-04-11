@@ -1,16 +1,11 @@
-import {
-  Icons,
-  NewItemButton,
-  RemoveButton,
-  PublishButton,
-  ConfirmModal,
-} from "@components";
+import { Icons, NewItemButton, Button, Modal } from "@components";
 import {
   useSaveContentMutation,
+  useSaveQuestionMutation,
   usePublishDraftMutation,
   ReturnGetActivityVersion,
 } from "@endpoints";
-import { ContentTypes, VersionStatus } from "@edu-platform/common";
+import { ContentTypes, QuestionTypes } from "@edu-platform/common";
 import { useState } from "react";
 import { redirect } from "next/navigation";
 import { twMerge } from "tailwind-merge";
@@ -34,10 +29,10 @@ export const OptionsMenu = ({
   scrollToBottom,
 }: OptionsMenuProps) => {
   const publishDraftMutation = usePublishDraftMutation({
-    onSuccess: () => {
-      setOpenConfirmDeleteModal(false);
-      redirect(Router.teacherHome);
-    },
+    // onSuccess: () => {
+    //   setOpenConfirmDeleteModal(false);
+    //   redirect(Router.teacherHome);
+    // },
   });
   const saveContentMutation = useSaveContentMutation({
     onSuccess: () => {
@@ -46,7 +41,13 @@ export const OptionsMenu = ({
     },
   });
 
-  const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState(false);
+  const saveQuestionMutation = useSaveQuestionMutation({
+    onSuccess: () => {
+      onClose();
+      // scrollToBottom();
+    },
+  });
+
   const [openConfirmPublishModal, setOpenConfirmPublishModal] = useState(false);
 
   const handleOutsideClick = (e) => {
@@ -55,7 +56,6 @@ export const OptionsMenu = ({
     }
   };
 
-  const order = version?.elements?.length;
   const openClasses = isOpen
     ? "opacity-100 -translate-x-0"
     : "translate-x-3 pointer-events-none opacity-0";
@@ -122,53 +122,72 @@ export const OptionsMenu = ({
           </NewItemButton>
           <br />
           <NewItemHeader>Perguntas</NewItemHeader>
-          <NewItemButton onClick={() => {}}>Dissertativa</NewItemButton>
-          <NewItemButton onClick={() => {}}>Múltipla escolha</NewItemButton>
+          <NewItemButton
+            onClick={() =>
+              saveQuestionMutation.mutate({
+                activityId,
+                type: QuestionTypes.Text,
+              })
+            }
+          >
+            Dissertativa
+          </NewItemButton>
+          <NewItemButton
+            onClick={() =>
+              saveQuestionMutation.mutate({
+                activityId,
+                type: QuestionTypes.MultipleChoice,
+              })
+            }
+          >
+            Múltipla escolha
+          </NewItemButton>
           {/* Footer */}
           <div className="absolute bottom-0 p-2 my-3 flex justify-around w-full">
-            <RemoveButton onClick={() => setOpenConfirmDeleteModal(true)} />
-            <PublishButton
+            <Button
+              withIcon="PUBLISH"
+              variant="action"
+              size="lg"
               onClick={() => setOpenConfirmPublishModal(true)}
-              disabled={!version?.elements?.length}
-            />
+              disabled={false}
+            >
+              Publish
+            </Button>
           </div>
         </div>
       </div>
-      {/* {openConfirmDeleteModal && (
-        <ConfirmModal
-          onClose={() => setOpenConfirmDeleteModal(false)}
-          confirmAction={() =>
-            deleteVersionMutation.mutate({ activityId })
-          }
-          title="Ao remover este rascunho, todas as alterações serão perdidas"
-          children={
-            <>
-              <br />
-              <p>Deseja remover o rascunho mesmo assim?</p>
-              <br />
-            </>
-          }
-          confirmButton={{ icon: "TRASH", text: "Remover" }}
-        />
-      )} */}
       {openConfirmPublishModal && (
-        <ConfirmModal
+        <Modal
+          modalKey="confirm-publish-modal"
           onClose={() => setOpenConfirmPublishModal(false)}
-          confirmAction={() =>
-            publishDraftMutation.mutate({
-              activityId,
-            })
-          }
-          title="Publicar rascunho"
-          children={
-            <>
-              <br />
-              <p>Deseja publicar o rascunho?</p>
-              <br />
-            </>
-          }
-          confirmButton={{ icon: "PUBLISH", text: "Publicar" }}
-        />
+          className="max-w-[550px] w-[90%] p-4"
+        >
+          <h5>Are you sure you wish to publish this draft? </h5>
+          It will become public to participants or followers of this collection
+          <div className="p-2 my-3 mx-auto flex justify-evenly w-full">
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={() => setOpenConfirmPublishModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="action"
+              size="lg"
+              isLoading={publishDraftMutation.isPending}
+              onClick={async () => {
+                await publishDraftMutation.mutateAsync({
+                  activityId,
+                });
+                setOpenConfirmPublishModal(false);
+              }}
+              withIcon="PUBLISH"
+            >
+              Publish
+            </Button>
+          </div>
+        </Modal>
       )}
     </div>
   );

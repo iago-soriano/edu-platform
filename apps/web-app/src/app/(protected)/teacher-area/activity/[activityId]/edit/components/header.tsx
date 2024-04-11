@@ -56,16 +56,6 @@ export const ActivityHeaderInput = ({
   };
 
   const onInsertTopic = () => {
-    // if (
-    //   versionQuery.data?.topics?.split(",").length ===
-    //   DomainRules.ACTIVITY.TOPICS.MAX_COUNT
-    // ) {
-    //   errorToast(
-    //     `Não é permitido mais de ${DomainRules.ACTIVITY.TOPICS.MAX_COUNT} tópicos`
-    //   );
-    //   return;
-    // }
-
     const newTopics = versionQuery.data?.topics?.length
       ? `${versionQuery.data?.topics},${currentTopic}`
       : currentTopic;
@@ -98,7 +88,7 @@ export const ActivityHeaderInput = ({
     }
     onChange(false);
   };
-  //"flex flex-start p-2 border-2 border-surface3 w-fit"
+
   return (
     <>
       <ButtonLink
@@ -137,7 +127,7 @@ export const ActivityHeaderInput = ({
             <div className="w-[160px] flex">
               <input
                 name="topic"
-                placeholder="Novo tópico"
+                placeholder="New Topic"
                 disabled={!versionQuery.data}
                 className="p-2 rounded w-full bg-surface1 placeholder:opacity-80 placeholder:text-text2"
                 onChange={(e) => {
@@ -159,7 +149,7 @@ export const ActivityHeaderInput = ({
           </div>
           <GhostTextArea
             name="description"
-            placeholder="Descrição da atividade"
+            placeholder="Activity description"
             className="text-xl text-text2 text-center h-auto"
             defaultValue={versionQuery.data?.description}
             disabled={!versionQuery.data}
@@ -176,12 +166,10 @@ export const ActivityHeaderInput = ({
               size={33}
             />
             <SavingIndicator saveState={saveState} />
-            <Tooltip content="Pré-visualizar atividade. Abre uma nova aba">
+            <Tooltip content="Preview Activity. Opens a new tab">
               <span>
                 <Icons.CAN_SEE
-                  onClick={() =>
-                    openInNewTab(`/activity/${activityId}/preview`)
-                  }
+                  onClick={() => openInNewTab(Router.previewDraft(activityId))}
                   className="cursor-pointer mx-3 text-text2 text-opacity-50 p-1"
                   size={33}
                 />

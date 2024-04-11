@@ -51,7 +51,11 @@ export class QuestionFactory {
     newQuestion.question = dto.question;
 
     newQuestion.versionId = version.id;
-    newQuestion.order = version.elements.length + 1;
+    newQuestion.order =
+      version.elements.reduce(
+        (prev, curr) => (prev.order! > curr.order! ? prev : curr),
+        version.elements[0]
+      ).order! + 1;
 
     newQuestion.validateSelf();
 

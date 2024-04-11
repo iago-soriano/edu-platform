@@ -1,5 +1,7 @@
 export const Router = {
   editActivity: ({ activityId }) => `/teacher-area/activity/${activityId}/edit`,
+  previewDraft: ({ activityId }) =>
+    `/teacher-area/activity/${activityId}/preview-draft`,
   previewActivityDraft: ({ activityId }) =>
     `/teacher-area/activity/${activityId}/version/preview-draft`,
   collectionSettings: (collectionId) =>

@@ -56,6 +56,7 @@ export const useUpdateVersionMetadataMutation = (
     ...args,
   });
 
+// LIST ACTIVITIES OF COLLECTION I OWN
 type ListQueryForOwnerParams = Parameters<
   ApiClient["listActivitiesForOwner"]
 >[0];
@@ -85,6 +86,8 @@ export const useListActivitiesForOwnerQuery = ({
       }),
   });
 };
+
+// PUBLISH DRAFT
 type ParamsUpdateStatus = Parameters<ApiClient["publishDraft"]>[0];
 type ReturnUpdateStatus = Awaited<ReturnType<ApiClient["publishDraft"]>>;
 
@@ -97,6 +100,7 @@ export const usePublishDraftMutation = (
     ...args,
   });
 
+// CREATE NEW DRAFT
 type ParamsCreateNewDraft = Parameters<ApiClient["createNewDraftVersion"]>[0];
 type ReturnCreateNewDraft = Awaited<
   ReturnType<ApiClient["createNewDraftVersion"]>
@@ -107,6 +111,51 @@ export const useCreateNewDraftVersionMutation = (
   useBaseMutation<ParamsCreateNewDraft, ReturnCreateNewDraft>({
     mutationFn: (client, args) => client.createNewDraftVersion(args),
     invalidateQueries: ["versions"],
+    ...args,
+  });
+
+// SAVE CONTENT
+type ParamsSaveContent = Parameters<ApiClient["saveContent"]>[0];
+type ReturnSaveContent = Awaited<ReturnType<ApiClient["saveContent"]>>;
+
+export const useSaveContentMutation = (
+  args: UseBaseMutationCallbacksType<ParamsSaveContent, ReturnSaveContent>
+) =>
+  useBaseMutation<ParamsSaveContent, ReturnSaveContent>({
+    mutationFn: (client, args) => {
+      console.log({ args });
+      return client.saveContent(args);
+    },
+    invalidateQueries: ["version"],
+    ...args,
+  });
+
+// SAVE QUESTION
+type ParamsSaveElement = Parameters<ApiClient["saveQuestion"]>[0];
+type ReturnSaveElement = Awaited<ReturnType<ApiClient["saveQuestion"]>>;
+
+export const useSaveQuestionMutation = (
+  args: UseBaseMutationCallbacksType<ParamsSaveElement, ReturnSaveElement>
+) =>
+  useBaseMutation<ParamsSaveElement, ReturnSaveElement>({
+    mutationFn: (client, args) => {
+      console.log({ args });
+      return client.saveQuestion(args);
+    },
+    invalidateQueries: ["version"],
+    ...args,
+  });
+
+// DELETE ELEMENT
+type ParamsDelete = Parameters<ApiClient["deleteElement"]>[0];
+type ReturnDelete = Awaited<ReturnType<ApiClient["deleteElement"]>>;
+
+export const useDeleteElementMutation = (
+  args: UseBaseMutationCallbacksType<ParamsDelete, ReturnDelete>
+) =>
+  useBaseMutation<ParamsDelete, ReturnDelete>({
+    mutationFn: (client, args) => client.deleteElement(args),
+    invalidateQueries: ["versions/draft"],
     ...args,
   });
 
@@ -140,30 +189,3 @@ export const useCreateNewDraftVersionMutation = (
 //     },
 //   });
 // };
-
-type ParamsSave = Parameters<ApiClient["saveContent"]>[0];
-type ReturnSave = Awaited<ReturnType<ApiClient["saveContent"]>>;
-
-export const useSaveContentMutation = (
-  args: UseBaseMutationCallbacksType<ParamsSave, ReturnSave>
-) =>
-  useBaseMutation<ParamsSave, ReturnSave>({
-    mutationFn: (client, args) => {
-      console.log({ args });
-      return client.saveContent(args);
-    },
-    invalidateQueries: ["version"],
-    ...args,
-  });
-
-type ParamsDelete = Parameters<ApiClient["deleteContent"]>[0];
-type ReturnDelete = Awaited<ReturnType<ApiClient["deleteContent"]>>;
-
-export const useDeleteContentMutation = (
-  args: UseBaseMutationCallbacksType<ParamsDelete, ReturnDelete>
-) =>
-  useBaseMutation<ParamsDelete, ReturnDelete>({
-    mutationFn: (client, args) => client.deleteContent(args),
-    invalidateQueries: ["versions"],
-    ...args,
-  });

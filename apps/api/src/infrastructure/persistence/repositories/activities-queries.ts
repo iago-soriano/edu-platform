@@ -11,7 +11,12 @@ import { IActivitiesReadRepository } from "@application/interfaces";
 import { eq, sql, and, desc } from "drizzle-orm";
 import { VersionStatus } from "@domain/entities";
 import { alias } from "drizzle-orm/pg-core";
-import { PaginatedParamsDTO } from "@edu-platform/common";
+import {
+  PaginatedParamsDTO,
+  ElementResponseDTO,
+  ContentResponseDTO,
+  QuestionResponseDTO,
+} from "@edu-platform/common";
 
 export class ActivitiesReadRepository implements IActivitiesReadRepository {
   async listForCollectionOwner({
@@ -310,7 +315,49 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
 
     if (!fullVersion) return null;
 
-    const elements = fullVersion.map(({ contents, questions }) => {});
+    const inserted: { [order: number]: boolean } = {};
+    const elements: ElementResponseDTO[] = [];
+
+    const insertElement = (
+      element: { order: number },
+      type: "content" | "question"
+    ) => {
+      const orderThisElement = element!.order;
+      const shouldInsertElement = !inserted[orderThisElement];
+
+      if (shouldInsertElement) {
+        let insertAt = elements.length;
+        for (let i = 0; i < elements.length; i++) {
+          const elementAt = elements[i].content || elements[i].question;
+          const elementAfter =
+            elements[i + 1]?.content || elements[i + 1]?.question;
+          const elementBefore =
+            elements[i - 1]?.content || elements[i - 1]?.question;
+          if (
+            elementAt!.order < orderThisElement &&
+            (elementAfter?.order || Infinity) > orderThisElement
+          ) {
+            // insert after current
+            insertAt = i + 1;
+            break;
+          } else if (
+            elementAt!.order > orderThisElement &&
+            (elementBefore?.order || -Infinity) < orderThisElement
+          ) {
+            // insert before current
+            insertAt = i;
+          }
+        }
+        elements.splice(insertAt, 0, { [type]: element });
+        inserted[orderThisElement] = true;
+      }
+    };
+
+    for (const { contents, questions } of fullVersion) {
+      if (contents) insertElement(contents as ContentResponseDTO, "content");
+      if (questions)
+        insertElement(questions as QuestionResponseDTO, "question");
+    }
 
     return {
       title: fullVersion[0].title,
@@ -319,88 +366,7 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
       collectionName: fullVersion[0].collectionName,
       collectionId: fullVersion[0].collectionId,
       version: fullVersion[0].version,
-      elements: [],
-      // contents: {
-      //   type: activityContents.type,
-      //   description: activityContents.description,
-      //   payload: activityContents.payload,
-      //   order: activityContents.order,
-      // },
-      // questions: {
-      //   type: activityQuestions.type,
-      //   question: activityQuestions.question,
-      //   alternatives: activityQuestions.alternatives,
-      //   order: activityQuestions.order,
-      // },
+      elements,
     };
-
-    // const sortedElements = fullVersion.map(
-    //   ({ contents, questions }) => {
-    //     const content = // TODO: find better way to do this
-    //       activity_contents &&
-    //       ContentControllerDtoMapper.mapToDto(
-    //         ContentDBDtoMapper.mapFromSelectDto(activity_contents)
-    //       );
-    //     const question =
-    //       questions &&
-    //       QuestionControllerDtoMapper.mapToDto(
-    //         QuestionDBDtoMapper.mapFromSelectDto(questions)
-    //       );
-    //     return {
-    //       content,
-    //       question,
-    //       // ...question || {},
-    //     };
-    //   }
-    // );
-
-    const resp = {
-      // title: fullVersion[0].activity_versions.title || "",
-      // description: fullVersion[0].activity_versions.description || "",
-      // topics: fullVersion[0].activity_versions.topics || "",
-      // status: fullVersion[0].activity_versions.status,
-      // version: fullVersion[0].activity_versions.version,
-      // collectionName: fullVersion[0].collections?.name || "",
-      // authorId: fullVersion[0].activities.authorId,
-      // elements: sortedElements,
-    };
-
-    // const contents: Content[] = [];
-
-    // fullVersion.forEach(({ activity_contents }) => {
-    //   if (activity_contents)
-    //     contents.push(ContentDtoMapper.mapFromSelectDto(activity_contents));
-    // });
-
-    // const qs: { [questionId: number]: Question } = {};
-
-    // fullVersion.forEach(({ questions, question_alternatives }) => {
-    //   if (!questions) return;
-
-    //   if (!qs[questions.id]) {
-    //     qs[questions.id] =
-    //       QuestionDtoMapper.mapFromSelectDto(questions) ||
-    //       new MultipleChoiceQuestion();
-    //   }
-
-    //   if (question_alternatives) {
-    //     const alternative = AlternativeDtoMapper.mapFromSelectDto(
-    //       question_alternatives
-    //     );
-    //     if (alternative) qs[questions.id]?.alternatives?.push(alternative);
-    //   }
-    // });
-
-    // const questions = Object.values(qs);
-
-    // version.contents = contents;
-    // version.questions = questions;
-
-    // const version = await this.findSimpleViewById(id);
-    // if (!version) return null;
-
-    // const { questions, contents } = await this.findElementsByVersionId(id);
-
-    // return { version, questions, contents };
   }
 }

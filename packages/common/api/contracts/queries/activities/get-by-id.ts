@@ -7,19 +7,25 @@ import {
 
 export type QuestionResponseDTO = {
   id: number;
-  type: ContentTypes;
+  type: string;
   question: string;
   alternatives?: string;
+  order: number;
 };
 export type ContentResponseDTO = {
   id: number;
-  type: ContentTypes;
+  type: string;
   description: string;
-  payload: {
-    text: TextContentPayloadDTO;
-    video: VideoContentPayloadDTO;
-    image: ImageContentPayloadDTO;
-  };
+  order: number;
+  payload:
+    | TextContentPayloadDTO
+    | VideoContentPayloadDTO
+    | ImageContentPayloadDTO;
+};
+
+export type ElementResponseDTO = {
+  content?: ContentResponseDTO | null;
+  question?: QuestionResponseDTO | null;
 };
 
 type ResponseBody = {
@@ -29,10 +35,7 @@ type ResponseBody = {
   version: number;
   collectionName: string;
   collectionId: number;
-  elements?: {
-    content: ContentResponseDTO | null;
-    question?: QuestionResponseDTO;
-  }[];
+  elements?: ElementResponseDTO[];
 };
 type Params = {
   activityId: string;

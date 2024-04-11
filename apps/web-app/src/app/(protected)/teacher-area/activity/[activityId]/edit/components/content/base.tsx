@@ -4,12 +4,19 @@ import {
   ErrorCard,
   Icons,
   ContentContainer,
+  successToast,
 } from "@components";
 import { ButtonWithDropdown } from "components/atoms/buttons/with-dropdown";
 import { TextContent, VideoContent, ImageContent } from ".";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
-import { useSaveContentMutation, useDeleteContentMutation } from "@endpoints";
-import { ContentResponseDTO } from "@edu-platform/common";
+import { useSaveContentMutation, useDeleteElementMutation } from "@endpoints";
+import {
+  ContentResponseDTO,
+  TextContentPayloadDTO,
+  VideoContentPayloadDTO,
+  ImageContentPayloadDTO,
+  ContentTypes,
+} from "@edu-platform/common";
 import { twMerge } from "tailwind-merge";
 
 type BaseContentProps = {
@@ -26,14 +33,16 @@ export const BaseContent = ({
   const [isFocused, setIsFocused] = useState(false);
 
   const saveContentMutation = useSaveContentMutation({});
-  const deleteContentMutation = useDeleteContentMutation({});
+  const deleteElementMutation = useDeleteElementMutation({
+    onSuccess: () => successToast("Element removed successfully!"),
+  });
 
   const onSaveDescription = (e) => {
     if (hasChanges) {
       saveContentMutation.mutate({
         activityId,
         description: e.target.value,
-        type: contentDto.type,
+        type: contentDto.type as ContentTypes,
         id: contentDto.id,
       });
     }
@@ -55,26 +64,36 @@ export const BaseContent = ({
       saveContentMutation,
     };
 
+    console.log({ contentDto });
     switch (type) {
       case "Text":
         return (
           <TextContent
             {...commonProps}
-            payload={contentDto.payload?.text || { text: "" }}
+            payload={
+              (contentDto.payload as TextContentPayloadDTO) || { text: "" }
+            }
           />
         );
       case "Video":
         return (
           <VideoContent
             {...commonProps}
-            payload={contentDto.payload.video || { tracks: "", url: "" }}
+            payload={
+              (contentDto.payload as VideoContentPayloadDTO) || {
+                tracks: "",
+                url: "",
+              }
+            }
           />
         );
       case "Image":
         return (
           <ImageContent
             {...commonProps}
-            payload={contentDto.payload.image || { url: "" }}
+            payload={
+              (contentDto.payload as ImageContentPayloadDTO) || { url: "" }
+            }
           />
         );
     }
@@ -121,7 +140,7 @@ export const BaseContent = ({
           <ButtonWithDropdown.DrawerItem
             className="flex items-center"
             onClick={() =>
-              deleteContentMutation.mutate({
+              deleteElementMutation.mutate({
                 elementId: contentDto.id,
                 activityId,
               })

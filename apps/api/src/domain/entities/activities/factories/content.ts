@@ -42,7 +42,11 @@ export class ContentFactory {
     );
 
     newContent.versionId = version.id;
-    newContent.order = version.elements.length + 1;
+    newContent.order =
+      version.elements.reduce(
+        (prev, curr) => (prev.order! > curr.order! ? prev : curr),
+        version.elements[0]
+      ).order! + 1;
 
     newContent.validateSelf();
 
