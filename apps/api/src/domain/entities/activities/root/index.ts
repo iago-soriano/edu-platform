@@ -1,8 +1,6 @@
 import { ActivityPublishedEvent } from "@domain/events";
-import {
-  resolveDomainServicesRegistry,
-  IDomainServiceRegistry,
-} from "@domain/services";
+import { IDomainServiceRegistry } from "@domain/services";
+import { resolveDomainServicesRegistry } from "domain/services/resolve";
 import { ContentRequestDTO, QuestionRequestDTO } from "@edu-platform/common";
 import {
   Entity,

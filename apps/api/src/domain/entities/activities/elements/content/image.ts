@@ -1,9 +1,7 @@
 import { Content, ContentTypes } from "./base";
 import { FileType, ContentRequestDTO } from "@edu-platform/common";
-import {
-  resolveDomainServicesRegistry,
-  IDomainServiceRegistry,
-} from "@domain/services";
+import { IDomainServiceRegistry } from "@domain/services";
+import { resolveDomainServicesRegistry } from "domain/services/resolve";
 
 export class ImageContent extends Content {
   public url?: string;

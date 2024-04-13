@@ -1,6 +1,5 @@
 import { DomainEvent } from "@domain/abstract";
 import { ITopicService, IStorageService } from "@application/interfaces";
-import { mainContainer } from "index";
 
 export interface IDomainServiceRegistry {
   publishToDomainTopic: (event: DomainEvent) => Promise<void>;
@@ -41,6 +40,3 @@ export class DomainServicesRegistry implements IDomainServiceRegistry {
     );
   }
 }
-
-export const resolveDomainServicesRegistry = () =>
-  mainContainer.resolve<IDomainServiceRegistry>("domainServiceRegistry");
