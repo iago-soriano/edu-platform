@@ -1,12 +1,7 @@
-import {
-  StudentIsNotUser,
-  UserIsNotCollectionOwner,
-  UserIsNotTeacher,
-} from "@edu-platform/common";
+import { StudentIsNotUser } from "@edu-platform/common";
 import {
   IUseCase,
   UserSelectDTO,
-  ICollectionParticipationsRepository,
   ICollectionsRepository,
   IUserRepository,
 } from "@application/interfaces";

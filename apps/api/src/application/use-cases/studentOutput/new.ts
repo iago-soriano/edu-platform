@@ -1,7 +1,6 @@
 import {
   IUseCase,
   UserSelectDTO,
-  ICollectionParticipationsRepository,
   IStudentOutputsRepository,
   ICollectionsRepository,
   IActivitiesRepository,
@@ -19,7 +18,6 @@ export type ICreateStudentOutputUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ICreateStudentOutputUseCase {
   constructor(
-    private collectionParticipationsRepository: ICollectionParticipationsRepository,
     private collectionsRepository: ICollectionsRepository,
     private studentOutputsRepository: IStudentOutputsRepository,
     private activitiesRepository: IActivitiesRepository

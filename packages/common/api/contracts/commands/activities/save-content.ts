@@ -1,10 +1,6 @@
 import { z } from "zod";
-import {
-  ContentTypes,
-  videoPayloadSchema,
-  textPayloadSchema,
-  imagePayloadSchema,
-} from "../../common";
+import { ContentTypes } from "../../common";
+export type FileType = Express.Multer.File;
 
 const contentRequestSchema = z.object({
   id: z.coerce.number().optional(),
@@ -13,9 +9,22 @@ const contentRequestSchema = z.object({
   type: z.nativeEnum(ContentTypes),
   payload: z
     .object({
-      video: videoPayloadSchema.optional(),
-      text: textPayloadSchema.optional(),
-      image: imagePayloadSchema.optional(),
+      video: z
+        .object({
+          tracks: z.string().optional(),
+          url: z.string().optional(),
+        })
+        .optional(),
+      text: z
+        .object({
+          text: z.string().optional(),
+        })
+        .optional(),
+      image: z
+        .object({
+          file: z.custom<FileType>().optional(),
+        })
+        .optional(),
     })
     .optional(),
 });

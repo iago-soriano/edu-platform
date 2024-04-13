@@ -17,7 +17,7 @@ export class ContentFactory {
       case ContentTypes.Video:
         newContent = new VideoContent();
 
-        newContent.tracks = dto.payload?.video?.tracks || "00:00:00-00:00:00";
+        newContent.tracks = dto.payload?.video?.tracks || "-";
         newContent.url = dto.payload?.video?.url || "";
         break;
 
@@ -30,7 +30,7 @@ export class ContentFactory {
       case ContentTypes.Text:
         newContent = new TextContent();
 
-        newContent.text = dto.payload?.text?.text;
+        newContent.text = dto.payload?.text?.text || "";
         break;
 
       default:

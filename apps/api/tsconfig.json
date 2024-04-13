@@ -23,6 +23,7 @@
       "@application/use-cases": ["./application/use-cases/index.ts"],
       "@application/interfaces": ["./application/interfaces/index.ts"],
       "@controllers": ["./controllers/index.ts"],
+      "@sqs-handlers": ["./sqs-handlers/index.ts"],
       "@infrastructure/persistence": ["./infrastructure/persistence/index.ts"],
       "@infrastructure/services": ["./infrastructure/services/index.ts"],
       "@infrastructure/utils": ["./infrastructure/utils/index.ts"],

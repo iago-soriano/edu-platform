@@ -1,17 +1,16 @@
-// import { Notification } from "@domain";
-// import {
-//   ListNotificationsResponseBody,
-//   PaginatedParamsDTO,
-// } from "@edu-platform/common";
+import { Notification } from "@domain/entities";
+import {
+  ListNotificationsResponseBody,
+  PaginatedParamsDTO,
+} from "@edu-platform/common";
+import { IAbstractRepository } from "../../../infrastructure/persistence/interfaces";
 
-// export interface INotificationsRepository {
-//   insert: (notification: Notification) => Promise<{ notificationId: number }>;
-//   update: (notificationId: number, isNew: boolean) => Promise<void>;
-//   getNotificationById: (notificationId: number) => Promise<Notification>;
-// }
+export interface INotificationsRepository extends IAbstractRepository {
+  findById: (id: number) => Promise<Notification>;
+}
 
-// export interface INotificationsReadRepository {
-//   list: (
-//     args: { userId: number } & PaginatedParamsDTO
-//   ) => Promise<ListNotificationsResponseBody>;
-// }
+export interface INotificationsReadRepository {
+  list: (
+    args: { userId: number } & PaginatedParamsDTO
+  ) => Promise<ListNotificationsResponseBody>;
+}

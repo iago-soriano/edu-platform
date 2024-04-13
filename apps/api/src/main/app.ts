@@ -1,4 +1,5 @@
 import express, { Express, RequestHandler } from "express";
+import serverless from "serverless-http";
 import "express-async-errors";
 import { RouteNotFoundError } from "@edu-platform/common/errors";
 import { HTTPController, HTTPErrorController } from "@controllers";
@@ -89,5 +90,9 @@ export class ExpressServer extends AbstractServer {
     });
 
     this._app.use(errorHandler.execute);
+  }
+
+  getApiGatewayHandler() {
+    return serverless(this._app);
   }
 }

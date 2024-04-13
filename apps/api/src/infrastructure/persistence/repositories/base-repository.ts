@@ -7,6 +7,7 @@ import {
   activityQuestionsTable,
   collectionsTable,
   collectionParticipationsTable,
+  notificationsTable,
 } from "../schema/table-objects";
 import { db } from "../schema/postgres";
 import { IAbstractRepository, ChangeEventsTree } from "../interfaces";
@@ -33,6 +34,7 @@ export class BaseRepository implements IAbstractRepository {
     CollectionParticipation: collectionParticipationsTable,
     MultipleChoiceQuestion: activityQuestionsTable,
     TextQuestion: activityQuestionsTable,
+    Notification: notificationsTable,
   };
 
   constructor(private _entities: AllTablesIndexer[]) {}

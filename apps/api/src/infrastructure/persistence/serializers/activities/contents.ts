@@ -146,10 +146,9 @@ class PayloadMappingProxyFactory {
           const newPayload = { ...currentPayload, [prop]: value };
           Reflect.set(target, "payload", newPayload);
           _events["payload"] = JSON.stringify(newPayload);
-          return false;
-        } else {
-          Reflect.set(target, prop, value);
         }
+
+        Reflect.set(target, prop, value);
         return true;
       },
     });

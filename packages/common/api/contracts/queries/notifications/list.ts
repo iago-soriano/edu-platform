@@ -17,7 +17,7 @@ type NotificationDto = {
 
 type ResponseBody = PaginatedResponse<{
   notification: NotificationDto;
-  totalNew: number;
+  totalUnread: number;
 }>;
 
 type Query = PaginatedParamsDTO;

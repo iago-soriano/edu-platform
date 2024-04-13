@@ -70,8 +70,33 @@ import UpdateNotificationConfigUseCase, {
 import ImportActivityUseCase, {
   IImportActivityUseCase,
 } from "./activity/import-from-public-collection";
+import UpdateNotificationUseCase, {
+  IUpdateNotificationUseCase,
+} from "./notification/update";
+import ActivityPublishedUseCase, {
+  IActivityPublishedUseCase,
+} from "./event-handlers/activity-published";
+import FeedbackPublishedUseCase, {
+  IFeedbackPublishedUseCase,
+} from "./event-handlers/feedback-published";
+import StudentOutputPublishedUseCase, {
+  IStudentOutputPublishedUseCase,
+} from "./event-handlers/student-output-published";
+import UserCreatedUseCase, {
+  IUserCreatedUseCase,
+} from "./event-handlers/user-created";
 
 export {
+  StudentOutputPublishedUseCase,
+  IStudentOutputPublishedUseCase,
+  FeedbackPublishedUseCase,
+  IFeedbackPublishedUseCase,
+  UserCreatedUseCase,
+  IUserCreatedUseCase,
+  ActivityPublishedUseCase,
+  IActivityPublishedUseCase,
+  UpdateNotificationUseCase,
+  IUpdateNotificationUseCase,
   SignInUseCase,
   ISignInUseCase,
   SignUpUseCase,

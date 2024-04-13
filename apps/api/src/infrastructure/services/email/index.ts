@@ -23,7 +23,7 @@ export class EmailService implements IEmailService {
       port: Number(process.env.EMAIL_PORT),
       secure: false,
       auth: {
-        user: process.env.EMAIL_USER,
+        user: "iago.srm.is@gmail.com",
         pass: process.env.EMAIL_SECRET,
       },
     });

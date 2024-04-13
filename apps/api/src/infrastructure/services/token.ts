@@ -3,7 +3,6 @@ import { TokenGenerationError, Forbidden } from "@edu-platform/common/errors";
 import jwt, { JwtPayload as LibJWTPayload } from "jsonwebtoken";
 
 export class JWTTokenService implements ITokenService {
-  token_secret = process.env.TOKEN_SECRET;
   _accessTokenPrivateKey: string;
   _accessTokenPublicKey: string;
 

@@ -201,9 +201,13 @@ export const studentOutputs = pgTable("student_outputs", {
     .defaultNow()
     .notNull(),
 
-  status: studentOutputStatusEnum("status")
+  outputStatus: studentOutputStatusEnum("output_status")
     .default(OutputStatus.Draft)
     .notNull(),
+  feedbackStatus: studentOutputStatusEnum("feedback_status")
+    .default(OutputStatus.Draft)
+    .notNull(),
+
   userId: integer("user_id")
     .notNull()
     .references(() => users.id),
@@ -221,10 +225,13 @@ export const studentAnswers = pgTable("student_answers", {
     .defaultNow()
     .notNull(),
 
+  answer: varchar("answer", { length: 1000 }),
+  feedbackEmoji: varchar("answer", { length: 20 }),
+  feedbackText: varchar("answer", { length: 500 }),
+
   questionId: integer("question_id")
     .references(() => activityQuestions.id)
     .notNull(),
-  answer: varchar("answer", { length: 500 }),
   studentOutputId: integer("student_output_id")
     .references(() => studentOutputs.id)
     .notNull(),
@@ -241,11 +248,13 @@ export const notifications = pgTable("notifications", {
   id: serial("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-  userId: integer("user_id")
-    .references(() => users.id)
-    .notNull(),
-  isNew: boolean("is_new").default(true).notNull(),
+
+  isUnread: boolean("is_unread").default(true).notNull(),
   type: notificationTypeEnum("notificationType").notNull(),
   message: varchar("message", { length: 250 }).notNull(),
   details: varchar("details", { length: 500 }).notNull(),
+
+  userId: integer("user_id")
+    .references(() => users.id)
+    .notNull(),
 });

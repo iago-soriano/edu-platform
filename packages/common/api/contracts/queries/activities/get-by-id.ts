@@ -1,10 +1,13 @@
-import {
-  ContentTypes,
-  VideoContentPayloadDTO,
-  TextContentPayloadDTO,
-  ImageContentPayloadDTO,
-} from "../../common";
-
+export type TextContentResponsePayloadDTO = {
+  text: string;
+};
+export type VideoContentResponsePayloadDTO = {
+  url: string;
+  tracks: string;
+};
+export type ImageContentResponsePayloadDTO = {
+  url: string;
+};
 export type QuestionResponseDTO = {
   id: number;
   type: string;
@@ -17,7 +20,10 @@ export type ContentResponseDTO = {
   type: string;
   description: string;
   order: number;
-  payload: TextContentPayloadDTO | VideoContentPayloadDTO | { url: string };
+  payload:
+    | TextContentResponsePayloadDTO
+    | VideoContentResponsePayloadDTO
+    | ImageContentResponsePayloadDTO;
 };
 
 export type ElementResponseDTO = {

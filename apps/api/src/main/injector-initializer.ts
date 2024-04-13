@@ -53,6 +53,10 @@ import {
   InsertFollowerInCollectionUseCase,
   ImportActivityUseCase,
   PublishDraftUseCase,
+  ActivityPublishedUseCase,
+  FeedbackPublishedUseCase,
+  StudentOutputPublishedUseCase,
+  UserCreatedUseCase,
 } from "@application/use-cases";
 import {
   UserRepository,
@@ -62,8 +66,8 @@ import {
   ActivitiesReadRepository,
   CollectionsRepository,
   CollectionsReadRepository,
-  // NotificationsRepository,
-  // NotificationsReadRepository,
+  NotificationsRepository,
+  NotificationsReadRepository,
 } from "@infrastructure/persistence";
 import {
   AssetRepository,
@@ -74,6 +78,8 @@ import {
   JWTTokenService,
 } from "@infrastructure/services";
 import { DomainServicesRegistry } from "@domain/services";
+import { SqsHandler } from "@sqs-handlers";
+import { sqsHandler } from "index";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
@@ -144,6 +150,8 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(ImportActivityController)
       .classic(),
 
+    sqsHandler: awilix.asClass(SqsHandler).classic(),
+
     /** #endregion */
 
     // services
@@ -195,6 +203,16 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     importActivityUseCase: awilix.asClass(ImportActivityUseCase).classic(),
     publishDraftUseCase: awilix.asClass(PublishDraftUseCase).classic(),
+    activityPublishedUseCase: awilix
+      .asClass(ActivityPublishedUseCase)
+      .classic(),
+    feedbackPublishedUseCase: awilix
+      .asClass(FeedbackPublishedUseCase)
+      .classic(),
+    studentOutputPublishedUseCase: awilix
+      .asClass(StudentOutputPublishedUseCase)
+      .classic(),
+    userCreatedUseCase: awilix.asClass(UserCreatedUseCase).classic(),
 
     // repositories
     userRepository: awilix.asClass(UserRepository).classic(),
@@ -210,10 +228,10 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     studentOutputsRepository: awilix
       .asClass(StudentOutputsRepository)
       .classic(),
-    // notificationsRepository: awilix.asClass(NotificationsRepository).classic(),
-    // notificationsReadRepository: awilix
-    //   .asClass(NotificationsReadRepository)
-    //   .classic(),
+    notificationsRepository: awilix.asClass(NotificationsRepository).classic(),
+    notificationsReadRepository: awilix
+      .asClass(NotificationsReadRepository)
+      .classic(),
     insertFollowerInCollectionUseCase: awilix
       .asClass(InsertUserInCollectionUseCase)
       .classic(),

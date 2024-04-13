@@ -1,6 +1,6 @@
 import { Content, ContentTypes } from "./base";
 import { IgnorePersistance } from "../../../../abstract";
-import { CustomError, ContentRequestDTO } from "@edu-platform/common";
+import { InvalidStateError, ContentRequestDTO } from "@edu-platform/common";
 
 export class VideoContent extends Content {
   @IgnorePersistance()
@@ -29,9 +29,12 @@ export class VideoContent extends Content {
   }
 
   private _validateTracks() {
+    if (this.tracks === "-") return;
     const tracksArray = this.tracks.split(",");
-    if (tracksArray.length > 10)
-      throw new Error("Video content has too many tracks");
+    if (tracksArray.length > 6)
+      throw new InvalidStateError("Video can only have up to 6 tracks", {
+        fieldName: "tracks",
+      });
     for (const track of tracksArray) {
       const intervals = track.split("-");
       const hasTwoIntervals = intervals.length === 2;
@@ -39,7 +42,9 @@ export class VideoContent extends Content {
         intervals[0].split(":").length === 3 &&
         intervals[1].split(":").length === 3;
       if (!hasTwoIntervals || !hasCorrectIntervals)
-        throw new Error("Tracks format must be hh:mm:ss-hh:mm:ss,...");
+        throw new InvalidStateError(
+          "Tracks format must be hh:mm:ss-hh:mm:ss,..."
+        );
     }
   }
   private _validateVideoUrl() {
