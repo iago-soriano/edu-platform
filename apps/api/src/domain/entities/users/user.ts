@@ -6,8 +6,6 @@ import {
 import { validateEmail } from "@infrastructure/services";
 import { AuthRules, DomainRules } from "@edu-platform/common/domain";
 
-export const UserTypes = ["Teacher", "Student", "Admin"] as const;
-
 export class User {
   // public id!: number;
 

@@ -6,11 +6,7 @@ import {
   TextQuestionIsTooShort,
 } from "@edu-platform/common";
 import { BaseElement } from "../abstract-element";
-
-export enum QuestionTypes {
-  MultipleChoice = "MultipleChoice",
-  Text = "Text",
-}
+import { QuestionTypes } from "./enums";
 
 export abstract class Question extends BaseElement {
   public question?: string;

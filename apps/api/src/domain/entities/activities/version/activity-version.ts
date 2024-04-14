@@ -16,12 +16,9 @@ import {
   ContentRequestDTO,
   QuestionRequestDTO,
 } from "@edu-platform/common";
+import { VersionStatus } from "./enums";
 
-export enum VersionStatus {
-  Published = "Published",
-  Draft = "Draft",
-  Archived = "Archived",
-}
+export { VersionStatus } from "./enums";
 
 export class ActivityVersion extends Entity {
   // metadata

@@ -1,12 +1,9 @@
 import { BaseElement } from "../abstract-element";
 import { ActivitElementDescription } from "../value-objects/description";
 import { CustomError, ContentRequestDTO } from "@edu-platform/common";
+import { ContentTypes } from "./enums";
 
-export enum ContentTypes {
-  Video = "Video",
-  Text = "Text",
-  Image = "Image",
-}
+export { ContentTypes } from "./enums";
 
 export abstract class Content extends BaseElement {
   public payload: object = {};

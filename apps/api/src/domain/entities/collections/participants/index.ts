@@ -1,9 +1,5 @@
 import { Entity, CollectionArray } from "@domain/abstract";
-
-export enum ParticipationType {
-  "Follower",
-  "Student",
-}
+import { ParticipationType } from "./enums";
 
 export class CollectionParticipation extends Entity {
   public userId: number = 0;
@@ -11,3 +7,4 @@ export class CollectionParticipation extends Entity {
   public notifyOnActivityInsert: boolean = true;
   public type: ParticipationType = ParticipationType.Student;
 }
+export { ParticipationType } from "./enums";

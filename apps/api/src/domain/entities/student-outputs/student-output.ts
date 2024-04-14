@@ -1,9 +1,7 @@
 import { ActivityVersion, Collection, User } from "..";
+import { OutputStatus } from "./enums";
 
-export enum OutputStatus {
-  Draft = "Draft",
-  Completed = "Completed",
-}
+export { OutputStatus } from "./enums";
 
 export class StudentOutput {
   constructor(id: number) {

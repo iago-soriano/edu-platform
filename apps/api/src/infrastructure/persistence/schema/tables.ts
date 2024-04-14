@@ -18,7 +18,7 @@ import {
   OutputStatus,
   NotificationType,
   ParticipationType,
-} from "@domain/entities";
+} from "domain/enums";
 
 export const tokenTypeEnum = pgEnum("tokenType", [
   "VerifyAccount",

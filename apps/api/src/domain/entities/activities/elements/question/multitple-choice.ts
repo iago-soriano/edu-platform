@@ -1,6 +1,9 @@
-import { Question, QuestionTypes } from ".";
+import { Question } from ".";
 import { DomainRules, QuestionRequestDTO } from "@edu-platform/common";
 import { QuestionAlternativeFactory } from "../../factories";
+import { QuestionTypes } from "./enums";
+
+export { QuestionTypes } from "./enums";
 
 export class Alternative {
   public text: string = "";

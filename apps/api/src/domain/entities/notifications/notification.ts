@@ -1,10 +1,7 @@
 import { Entity } from "@domain/abstract";
+import { NotificationType } from "./enums";
 
-export enum NotificationType {
-  StudentOutputCompleted = "StudentOutputCompleted",
-  FeedbackCompleted = "FeedbackCompleted",
-  ActivityPublished = "ActivityPublished",
-}
+export { NotificationType } from "./enums";
 
 export class Notification extends Entity {
   public userId!: number;
