@@ -1,50 +1,19 @@
 import { CollectionArray, Entity } from "@domain/abstract";
-import {
-  activitiesTable,
-  activityVersionsTable,
-  // users,
-  activityContentsTable,
-  activityQuestionsTable,
-  collectionsTable,
-  collectionParticipationsTable,
-  notificationsTable,
-} from "../schema/table-objects";
 import { db } from "../schema/postgres";
 import { IAbstractRepository, ChangeEventsTree } from "../interfaces";
 import { eq } from "drizzle-orm";
+import { TableDefinition } from "../interfaces";
 
-export type AllTablesIndexer = keyof typeof BaseRepository.AllTables;
-
-export class BaseRepository implements IAbstractRepository {
+export class BaseRepository<T> implements IAbstractRepository {
   protected _events: ChangeEventsTree = {};
 
-  // name of the property must be the name of the class that extends Entity, and the value must be the table it is persisted in
-  static AllTables = {
-    Activity: activitiesTable,
-    ActivityVersion: activityVersionsTable,
-    // users: {
-    //   table: users,
-    //   serializer: () => {},
-    // },
-    VideoContent: activityContentsTable,
-    ImageContent: activityContentsTable,
-    TextContent: activityContentsTable,
-    Collection: collectionsTable,
-    ActivityQuestion: activityQuestionsTable,
-    CollectionParticipation: collectionParticipationsTable,
-    MultipleChoiceQuestion: activityQuestionsTable,
-    TextQuestion: activityQuestionsTable,
-    Notification: notificationsTable,
-  };
-
-  constructor(private _entities: AllTablesIndexer[]) {}
+  constructor(private _entities: { [name: string]: TableDefinition }) {}
   async save(root: Entity) {
     return db.transaction(async (tx) => {
       let result: any = {};
 
       const handleNewAndDelete = async (ent: Entity) => {
-        const thisEntityTableDefinition =
-          BaseRepository.AllTables[ent.constructor.name as AllTablesIndexer];
+        const thisEntityTableDefinition = this._entities[ent.constructor.name];
         if (ent.isNew) {
           const res = await tx
             .insert(thisEntityTableDefinition.table)
@@ -80,9 +49,8 @@ export class BaseRepository implements IAbstractRepository {
 
       // handle updates
       for (const key in this._events[root.id]) {
-        const { table } = BaseRepository.AllTables[key as AllTablesIndexer];
-        const changesToEntitiesOfThisTable =
-          this._events[root.id][key as AllTablesIndexer];
+        const { table } = this._entities[key];
+        const changesToEntitiesOfThisTable = this._events[root.id][key];
         for (let entityId in changesToEntitiesOfThisTable) {
           const changesToBeMadeToEntity =
             changesToEntitiesOfThisTable[entityId];
@@ -100,7 +68,7 @@ export class BaseRepository implements IAbstractRepository {
   }
 
   initializeEventTracking(rootId: string | number, _events: ChangeEventsTree) {
-    for (const table of this._entities) {
+    for (const table of Object.keys(this._entities)) {
       _events[rootId] = { ..._events[rootId], [table]: {} };
     }
   }

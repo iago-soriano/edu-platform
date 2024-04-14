@@ -2,13 +2,16 @@ import { INotificationsRepository } from "@application/interfaces";
 import { notifications } from "../schema";
 import { and, sql, eq } from "drizzle-orm";
 import { db } from "../schema";
-import { BaseRepository, AllTablesIndexer } from "./base-repository";
+import { BaseRepository } from "./base-repository";
 import { NotificationSerializer } from "../serializers";
+import { AllTables } from "./all-tables";
 
-export const NotificationEntityNames: AllTablesIndexer[] = ["Notification"];
+export const NotificationEntityNames = {
+  Notification: AllTables["Notification"],
+};
 
 export class NotificationsRepository
-  extends BaseRepository
+  extends BaseRepository<typeof NotificationEntityNames>
   implements INotificationsRepository
 {
   constructor() {

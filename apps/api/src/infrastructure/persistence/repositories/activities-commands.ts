@@ -7,21 +7,22 @@ import {
 } from "../schema";
 import { IActivitiesRepository } from "@application/interfaces";
 import { eq } from "drizzle-orm";
-import { BaseRepository, AllTablesIndexer } from "./base-repository";
+import { BaseRepository } from "./base-repository";
+import { AllTables } from "./all-tables";
 import { alias } from "drizzle-orm/pg-core";
 import { ActivitySerializer } from "../serializers";
 import { filterOutDuplicates } from "./utils";
 
-export const ActivityEntityNames: AllTablesIndexer[] = [
-  "Activity",
-  "ActivityVersion",
-  "VideoContent",
-  "ImageContent",
-  "TextContent",
-];
+export const ActivityEntityNames = {
+  Activity: AllTables["Activity"],
+  ActivityVersion: AllTables["ActivityVersion"],
+  VideoContent: AllTables["VideoContent"],
+  ImageContent: AllTables["ImageContent"],
+  TextContent: AllTables["TextContent"],
+};
 
 export class ActivitiesRepository
-  extends BaseRepository
+  extends BaseRepository<typeof AllTables>
   implements IActivitiesRepository
 {
   constructor() {

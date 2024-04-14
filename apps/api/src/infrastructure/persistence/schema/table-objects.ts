@@ -15,13 +15,9 @@ import {
   CollectionSerializer,
   CollectionParticipationSerializer,
 } from "../serializers";
-import { PgTable } from "drizzle-orm/pg-core";
 import { NotificationSerializer } from "../serializers/notifications";
+import { TableDefinition } from "../interfaces";
 
-type TableDefinition = {
-  table: PgTable;
-  serializer: (args: any) => any;
-};
 export const activitiesTable: TableDefinition = {
   table: activities,
   serializer: ActivitySerializer.serialize,

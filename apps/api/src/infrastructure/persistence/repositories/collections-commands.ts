@@ -4,16 +4,17 @@ import {
 } from "@application/interfaces";
 import { db, collections, collectionParticipations } from "../schema";
 import { eq, sql, desc, and } from "drizzle-orm";
-import { BaseRepository, AllTablesIndexer } from "./base-repository";
+import { BaseRepository } from "./base-repository";
 import { CollectionSerializer } from "../serializers";
+import { AllTables } from "./all-tables";
 
-export const CollectionEntityNames: AllTablesIndexer[] = [
-  "Collection",
-  "CollectionParticipation",
-];
+export const CollectionEntityNames = {
+  Collection: AllTables["Collection"],
+  CollectionParticipation: AllTables["CollectionParticipation"],
+};
 
 export class CollectionsRepository
-  extends BaseRepository
+  extends BaseRepository<typeof CollectionEntityNames>
   implements ICollectionsRepository
 {
   constructor() {
@@ -27,11 +28,8 @@ export class CollectionsRepository
         .from(collections)
         .where(eq(collections.id, collectionId))
     )[0];
-
     if (!dto) return null;
-
     super.initializeEventTracking(collectionId, this._events);
-
     return CollectionSerializer.deserialize(dto, this._events, null);
   }
 
@@ -45,9 +43,7 @@ export class CollectionsRepository
       )
       .where(eq(collections.id, collectionId));
     if (!dto) return null;
-
     super.initializeEventTracking(collectionId, this._events);
-
     return CollectionSerializer.deserialize(
       dto[0].collections,
       this._events,
@@ -63,11 +59,8 @@ export class CollectionsRepository
         .from(collections)
         .where(eq(collections.id, collectionId))
     )[0];
-
     if (!dto) return null;
-
     super.initializeEventTracking(collectionId, this._events);
-
     return CollectionSerializer.deserialize(dto, this._events, null);
   }
 }
