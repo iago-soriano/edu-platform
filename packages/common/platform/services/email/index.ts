@@ -20,7 +20,7 @@ export class EmailService implements IEmailService {
   constructor() {
     this._transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
-      port: Number(process.env.EMAIL_PORT),
+      port: 587,
       secure: false,
       auth: {
         user: "iago.srm.is@gmail.com",
