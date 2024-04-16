@@ -1,17 +1,17 @@
-import { FileType } from "../../controllers/interfaces";
+import { FileType } from "../interfaces/controllers";
 import { JwtPayload as LibJWTPayload } from "jsonwebtoken";
-import { DomainEvent } from "@domain/abstract";
+import { DomainEvent } from "../interfaces/domain";
 
 export type JWTPayload = {
-  id: string;
+  id: number;
   providerId?: string;
 };
 
 export interface ITokenService {
   generateRefreshToken: (payload: JWTPayload) => string;
   generateAccessToken: (payload: JWTPayload) => string;
-  verifyAccessToken: (token: string) => { id: string };
-  verifyRefreshToken: (token: string) => { id: string };
+  verifyAccessToken: (token: string) => { id: number };
+  verifyRefreshToken: (token: string) => { id: number };
   decode: (token: string) => LibJWTPayload;
 }
 

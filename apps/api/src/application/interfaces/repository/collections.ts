@@ -6,7 +6,7 @@ import {
   GetCollectionResponseBody,
   PaginatedParamsDTO,
 } from "@edu-platform/common";
-import { IAbstractRepository } from "../../../infrastructure/persistence/interfaces";
+import { IAbstractRepository } from "@edu-platform/common/platform";
 
 export interface ICollectionsRepository extends IAbstractRepository {
   findRootById: (collectionId: number) => Promise<Collection | null>;

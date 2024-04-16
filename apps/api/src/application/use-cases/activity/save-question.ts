@@ -2,11 +2,8 @@ import {
   QuestionRequestDTO,
   SilentInvalidStateError,
 } from "@edu-platform/common";
-import {
-  IUseCase,
-  UserSelectDTO,
-  IActivitiesRepository,
-} from "@application/interfaces";
+import { IUseCase } from "@edu-platform/common/platform";
+import { UserSelectDTO, IActivitiesRepository } from "@application/interfaces";
 
 type InputParams = {
   questionDto: QuestionRequestDTO;

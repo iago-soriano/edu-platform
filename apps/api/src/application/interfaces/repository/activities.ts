@@ -10,7 +10,7 @@ import {
   ListActivitiesForParticipantResponseBody,
   PaginatedParamsDTO,
 } from "@edu-platform/common";
-import { IAbstractRepository } from "../../../infrastructure/persistence/interfaces";
+import { IAbstractRepository } from "@edu-platform/common/platform";
 
 export interface IActivitiesRepository extends IAbstractRepository {
   findRootById: (activityId: string) => Promise<Activity | null>;

@@ -1,17 +1,17 @@
 import http, { Server as HttpServer, RequestListener } from "http";
 import { AddressInfo } from "net";
-import { ILogger } from "./logger";
-import { pgClient } from "@infrastructure/persistence";
+import { Client } from "pg";
 
-export interface IHTTPServerConstructorParams {
-  logger: ILogger;
+interface ILogger {
+  info: (message: string) => void;
+  error: (message: string) => void;
 }
 
-export abstract class Server {
+export abstract class AbstractServer {
   private _server: HttpServer = new HttpServer();
   _logger: ILogger;
 
-  constructor() {
+  constructor(private _pgClient: Client) {
     this._logger = { info: console.log, error: console.error };
   }
 
@@ -20,7 +20,7 @@ export abstract class Server {
   }
 
   async start() {
-    await pgClient.connect();
+    await this._pgClient.connect();
 
     this._server.listen(parseInt(process.env.PORT || "3000"), () => {
       const { address, port } = this._server.address() as AddressInfo;

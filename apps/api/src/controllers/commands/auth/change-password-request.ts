@@ -4,7 +4,7 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "../../interfaces";
+} from "@edu-platform/common/platform/interfaces";
 import {
   ChangePasswordRequestRequestBody,
   ChangePasswordRequestResponseBody,

@@ -1,8 +1,5 @@
-import {
-  IUseCase,
-  UserSelectDTO,
-  ICollectionsRepository,
-} from "@application/interfaces";
+import { IUseCase } from "@edu-platform/common/platform";
+import { UserSelectDTO, ICollectionsRepository } from "@application/interfaces";
 
 type InputParams = {
   user: UserSelectDTO;

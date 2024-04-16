@@ -3,7 +3,7 @@ import {
   InvalidNameError,
   InvalidEmailError,
 } from "@edu-platform/common/errors";
-import { validateEmail } from "@infrastructure/services";
+import { validateEmail } from "@edu-platform/common/platform/services";
 import { AuthRules, DomainRules } from "@edu-platform/common/domain";
 
 export class User {

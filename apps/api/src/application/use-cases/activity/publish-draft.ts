@@ -1,9 +1,5 @@
-import { ActivityNotFound } from "@edu-platform/common/";
-import {
-  IActivitiesRepository,
-  IUseCase,
-  UserSelectDTO,
-} from "@application/interfaces";
+import { IUseCase } from "@edu-platform/common/platform";
+import { IActivitiesRepository, UserSelectDTO } from "@application/interfaces";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -19,7 +15,7 @@ class UseCase implements IPublishDraftUseCase {
   async execute({ user, activityId }: InputParams) {
     const activity =
       await this.activitiesRepository.findRootByIdWithElements(activityId);
-    if (!activity) throw new ActivityNotFound();
+    if (!activity) throw new Error("Activity not found");
 
     await activity.publishCurrentDraft(user);
 

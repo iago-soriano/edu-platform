@@ -1,10 +1,7 @@
-import {
-  IUserRepository,
-  ITokenService,
-  IUseCase,
-} from "@application/interfaces";
+import { IUserRepository } from "@application/interfaces";
 import { Forbidden } from "@edu-platform/common/errors";
 import { TokenExpiredError } from "jsonwebtoken";
+import { IUseCase, ITokenService } from "@edu-platform/common/platform";
 
 type InputParams = {
   refreshToken: string;
@@ -46,11 +43,11 @@ class UseCase implements IRefreshTokenUseCase {
     // }
 
     const accessToken = this.tokenService.generateAccessToken({
-      id: `${userDTO.id}`,
+      id: userDTO.id,
     });
 
     const refreshToken = this.tokenService.generateRefreshToken({
-      id: `${userDTO.id}`,
+      id: userDTO.id,
     });
 
     // await this.userRepository.updateUser(userDTO.id, { refreshToken });

@@ -1,5 +1,4 @@
-import { Entity } from "@domain/abstract";
-// import { AllTablesIndexer } from "@infrastructure/persistence";
+import { Entity } from "./domain";
 import { PgTable } from "drizzle-orm/pg-core";
 
 export type ChangeEventsTree = {

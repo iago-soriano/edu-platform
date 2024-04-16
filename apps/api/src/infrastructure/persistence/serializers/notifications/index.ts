@@ -1,6 +1,6 @@
 import { notifications } from "../../schema";
 import { Notification, NotificationType } from "@domain/entities";
-import { ChangeEventsTree } from "../../interfaces";
+import { ChangeEventsTree } from "@edu-platform/common/platform";
 
 export class NotificationSerializer {
   static serialize(domain: Notification) {

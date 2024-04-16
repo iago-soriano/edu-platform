@@ -1,6 +1,6 @@
 import { CollectionName, CollectionDescription } from "../value-objects";
 import { CollectionParticipation } from "../participants";
-import { Entity, CollectionArray } from "@domain/abstract";
+import { Entity, CollectionArray } from "@edu-platform/common/platform";
 
 export class Collection extends Entity {
   public name: CollectionName;

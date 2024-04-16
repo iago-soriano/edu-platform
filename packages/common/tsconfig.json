@@ -12,13 +12,10 @@
     "outDir": "./build/",
     "jsx": "react",
     "sourceMap": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "paths": {}
   },
   "exclude": ["test"]
   // "include": ["./src/**/*.tsx", "./src/**/*.ts", "../common/src/", "../../application/src/interfaces/services.ts", "../../application/src/infrastructure/services/aws-s3.ts"]
 }
-// {
-//   "extends": "@edu-platform/tsconfig/api.json",
-//   "include": ["**/*.ts", "**/*.tsx"],
-//   "exclude": ["node_modules"]
-// }

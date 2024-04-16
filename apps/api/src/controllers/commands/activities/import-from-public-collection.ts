@@ -3,14 +3,14 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "../../interfaces";
+  parseNumberId,
+} from "@edu-platform/common/platform";
 import {
   ImportActivityParams,
   ImportActivityRequestBody,
   ImportActivityResponseBody,
-} from "@edu-platform/common";
+} from "@edu-platform/common/api";
 import { IImportActivityUseCase } from "@application/use-cases";
-import { parseNumberId } from "@infrastructure/utils";
 
 type Request = TypedRequest<
   ImportActivityParams,

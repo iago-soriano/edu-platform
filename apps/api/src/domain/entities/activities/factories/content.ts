@@ -24,6 +24,7 @@ export class ContentFactory {
       case ContentTypes.Image:
         newContent = new ImageContent();
 
+        newContent.url = "";
         newContent.file = dto.payload?.image?.file || null;
         break;
 

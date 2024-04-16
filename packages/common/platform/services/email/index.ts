@@ -1,4 +1,4 @@
-import { IEmailService } from "@application/interfaces";
+import { IEmailService } from "../interfaces";
 import {
   VerifyAccountEmailTemplate,
   ForgotPasswordEmailTemplate,

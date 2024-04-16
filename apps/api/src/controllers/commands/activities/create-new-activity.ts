@@ -3,12 +3,12 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "../../interfaces";
+} from "@edu-platform/common/platform/interfaces";
 import {
   parseCreateNewActivityRequestBody,
   CreateNewActivityRequestBody,
   CreateNewActivityResponseBody,
-} from "@edu-platform/common";
+} from "@edu-platform/common/api";
 import { ICreateNewActivityUseCase } from "@application/use-cases";
 
 type Request = TypedRequest<{}, {}, CreateNewActivityRequestBody>;

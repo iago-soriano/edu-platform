@@ -3,7 +3,7 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "../../interfaces";
+} from "@edu-platform/common/platform/interfaces";
 import { IActivitiesReadRepository } from "@application/interfaces";
 import {
   ListActivitiesQuery,

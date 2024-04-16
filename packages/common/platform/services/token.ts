@@ -1,4 +1,4 @@
-import { ITokenService, JWTPayload } from "@application/interfaces";
+import { ITokenService, JWTPayload } from "./interfaces";
 import { TokenGenerationError, Forbidden } from "@edu-platform/common/errors";
 import jwt, { JwtPayload as LibJWTPayload } from "jsonwebtoken";
 
@@ -58,7 +58,7 @@ export class JWTTokenService implements ITokenService {
       throw new Forbidden("Incorrect issuer in token");
 
     return {
-      id: userId,
+      id: Number(userId),
     };
   }
   verifyAccessToken(token: string) {

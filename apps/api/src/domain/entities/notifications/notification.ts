@@ -1,7 +1,5 @@
-import { Entity } from "@domain/abstract";
 import { NotificationType } from "./enums";
-
-export { NotificationType } from "./enums";
+import { Entity } from "@edu-platform/common/platform";
 
 export class Notification extends Entity {
   public userId!: number;

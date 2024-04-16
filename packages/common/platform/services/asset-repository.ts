@@ -1,4 +1,4 @@
-import { IAssetRepository } from "@application/interfaces";
+import { IAssetRepository } from "./interfaces";
 
 export class AssetRepository implements IAssetRepository {
   getGenericImageUrl() {

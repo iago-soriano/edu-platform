@@ -3,7 +3,7 @@ import {
   ListNotificationsResponseBody,
   PaginatedParamsDTO,
 } from "@edu-platform/common";
-import { IAbstractRepository } from "../../../infrastructure/persistence/interfaces";
+import { IAbstractRepository } from "@edu-platform/common/platform";
 
 export interface INotificationsRepository extends IAbstractRepository {
   findById: (id: number) => Promise<Notification>;

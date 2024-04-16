@@ -1,10 +1,7 @@
-import {
-  IUserRepository,
-  IUseCase,
-  ITokenService,
-} from "@application/interfaces";
+import { IUserRepository } from "@application/interfaces";
 import { UserNotFoundError, Forbidden } from "@edu-platform/common/errors";
 import { TokenExpiredError } from "jsonwebtoken";
+import { IUseCase, ITokenService } from "@edu-platform/common/platform";
 
 type InputParams = {
   refreshToken: string;

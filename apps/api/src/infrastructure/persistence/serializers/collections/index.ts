@@ -5,8 +5,10 @@ import {
   CollectionDescription,
   CollectionName,
 } from "@domain/entities";
-import { CollectionArray } from "@domain/abstract";
-import { ChangeEventsTree } from "../../interfaces";
+import {
+  ChangeEventsTree,
+  CollectionArray,
+} from "@edu-platform/common/platform";
 
 import { CollectionParticipationSerializer } from "./participations";
 

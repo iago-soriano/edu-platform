@@ -2,7 +2,7 @@ import { INotificationsRepository } from "@application/interfaces";
 import { notifications } from "../schema";
 import { and, sql, eq } from "drizzle-orm";
 import { db } from "../schema";
-import { BaseRepository } from "./base-repository";
+import { BaseRepository } from "@edu-platform/common/platform";
 import { NotificationSerializer } from "../serializers";
 import { AllTables } from "./all-tables";
 
@@ -15,7 +15,7 @@ export class NotificationsRepository
   implements INotificationsRepository
 {
   constructor() {
-    super(NotificationEntityNames);
+    super(NotificationEntityNames, db);
   }
 
   async findById(id: number) {

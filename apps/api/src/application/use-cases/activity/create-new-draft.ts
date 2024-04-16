@@ -1,8 +1,5 @@
-import {
-  IUseCase,
-  IActivitiesRepository,
-  UserSelectDTO,
-} from "@application/interfaces";
+import { IUseCase } from "@edu-platform/common/platform";
+import { IActivitiesRepository, UserSelectDTO } from "@application/interfaces";
 import { ActivityNotFound } from "@edu-platform/common";
 
 type InputParams = {

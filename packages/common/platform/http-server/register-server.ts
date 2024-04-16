@@ -1,11 +1,12 @@
 import * as awilix from "awilix";
-import { ExpressServer } from "./app";
-import { HTTPController } from "@controllers";
+import { ExpressServer } from "./express-server";
+import { HTTPController } from "../interfaces/controllers";
 import {
   AuthenticationMiddlewareController,
   ErrorHandlerController,
   AcceptFileMiddleware,
-} from "@controllers";
+} from "./middleware";
+import { Client } from "pg";
 
 const getControllers = (container: awilix.AwilixContainer) => {
   const controllers = [];
@@ -20,7 +21,8 @@ const getControllers = (container: awilix.AwilixContainer) => {
 
 export const registerServer = (
   container: awilix.AwilixContainer,
-  baseUrn: string
+  baseUrn: string,
+  _pgClient: Client
 ) => {
   container.register({
     authMiddleware: awilix
@@ -35,6 +37,7 @@ export const registerServer = (
         const authMiddleware = container.resolve("authMiddleware");
         const fileMiddleware = container.resolve("fileMiddleware");
         return {
+          _pgClient,
           controllers: getControllers(container).map((controller) => {
             return {
               middlewares: controller.middlewares,
@@ -43,7 +46,6 @@ export const registerServer = (
               path: controller.path,
             } as HTTPController;
           }),
-          logger: { info: console.log, error: console.error },
           middlewares: {
             auth: async (req: any, _: any, next: any) => {
               await authMiddleware.execute.bind(authMiddleware)(

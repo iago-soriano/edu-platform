@@ -1,4 +1,4 @@
-import { Entity } from "../../../abstract";
+import { Entity } from "@edu-platform/common/platform";
 import { ActivitElementDescription } from "../elements/value-objects/description";
 
 export abstract class BaseElement extends Entity {

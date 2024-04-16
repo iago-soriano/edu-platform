@@ -3,14 +3,14 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "../../interfaces";
+  parseNumberId,
+} from "@edu-platform/common/platform";
 import {
   UpdateNotificationParams,
   UpdateNotificationRequestBody,
   UpdateNotificationResponseBody,
 } from "@edu-platform/common";
 import { IUpdateNotificationUseCase } from "@application/use-cases";
-import { parseNumberId } from "@infrastructure/utils";
 
 type Request = TypedRequest<
   UpdateNotificationParams,

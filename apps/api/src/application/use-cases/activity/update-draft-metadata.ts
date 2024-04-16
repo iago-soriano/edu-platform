@@ -1,12 +1,6 @@
-import {
-  ActivityVersionIsNotDraft,
-  ActivityNotFound,
-} from "@edu-platform/common";
-import {
-  IUseCase,
-  UserSelectDTO,
-  IActivitiesRepository,
-} from "@application/interfaces";
+import { ActivityNotFound } from "@edu-platform/common";
+import { UserSelectDTO, IActivitiesRepository } from "@application/interfaces";
+import { IUseCase } from "@edu-platform/common/platform";
 
 type InputParams = {
   user: UserSelectDTO;

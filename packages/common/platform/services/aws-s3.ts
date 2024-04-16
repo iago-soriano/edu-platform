@@ -3,7 +3,7 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
-import { IStorageService } from "@application/interfaces";
+import { IStorageService } from "./interfaces";
 import { FileType } from "@edu-platform/common";
 import fs from "fs";
 
@@ -11,13 +11,7 @@ export class S3Service implements IStorageService {
   private _s3: S3Client;
 
   constructor() {
-    this._s3 = new S3Client({
-      credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
-      },
-      region: process.env.AWS_REGION,
-    });
+    this._s3 = new S3Client();
   }
 
   async uploadFile(keyName: string, file: FileType) {

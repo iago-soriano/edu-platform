@@ -1,5 +1,5 @@
+import { IUseCase } from "@edu-platform/common/platform";
 import {
-  IUseCase,
   ICollectionsRepository,
   INotificationsRepository,
 } from "@application/interfaces";

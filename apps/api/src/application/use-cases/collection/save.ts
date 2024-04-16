@@ -1,13 +1,7 @@
+import { IUseCase } from "@edu-platform/common/platform";
 import { CollectionFactory } from "@domain/entities";
-import {
-  UserIsNotCollectionOwner,
-  CollectionRequestDTO,
-} from "@edu-platform/common";
-import {
-  IUseCase,
-  UserSelectDTO,
-  ICollectionsRepository,
-} from "@application/interfaces";
+import { CollectionRequestDTO } from "@edu-platform/common";
+import { UserSelectDTO, ICollectionsRepository } from "@application/interfaces";
 
 type InputParams = {
   user: UserSelectDTO;

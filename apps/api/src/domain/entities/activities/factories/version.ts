@@ -1,7 +1,7 @@
 import { ActivityVersion, VersionStatus } from "../version/activity-version";
 import { Content } from "../elements";
 import { ContentFactory } from "./content";
-import { GetUUID } from "@infrastructure/utils";
+import { GetUUID } from "@edu-platform/common/platform";
 
 export class VersionFactory {
   withElementsFrom(toCopyFrom: ActivityVersion) {

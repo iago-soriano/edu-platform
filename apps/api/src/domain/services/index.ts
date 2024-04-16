@@ -1,5 +1,11 @@
 import { DomainEvent } from "@domain/abstract";
-import { ITopicService, IStorageService } from "@application/interfaces";
+import { ITopicService, IStorageService } from "@edu-platform/common/platform";
+import { S3Service } from "@edu-platform/common/platform/services";
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 
 export interface IDomainServiceRegistry {
   publishToDomainTopic: (event: DomainEvent) => Promise<void>;
@@ -14,21 +20,22 @@ export interface IDomainServiceRegistry {
 export class DomainServicesRegistry implements IDomainServiceRegistry {
   constructor(
     private storageService: IStorageService,
-    private topicService: ITopicService
+    private topicService: ITopicService,
+    private domainTopicArn: string
   ) {}
   async publishToDomainTopic(event: DomainEvent) {
-    if (!process.env.DOMAIN_SNS_TOPIC_ARN)
+    if (!this.domainTopicArn)
       throw new Error("domain SNS topic arn not present");
-    if (process.env.DOMAIN_SNS_TOPIC_ARN === "debug") return;
+    if (this.domainTopicArn === "debug") return;
 
-    await this.topicService.send(event, process.env.DOMAIN_SNS_TOPIC_ARN);
+    await this.topicService.send(event, this.domainTopicArn);
   }
 
   _getContentFileUrl(activityId: string, versionId: string, contentId: number) {
     return `${activityId}/${versionId}-${contentId}`;
   }
 
-  uploadActivityContent(
+  async uploadActivityContent(
     activityId: string,
     versionId: string,
     contentId: number,

@@ -3,14 +3,14 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "../../interfaces";
+  parseNumberId,
+} from "@edu-platform/common/platform";
 import {
   InsertUserInCollectionParams,
   InsertUserInCollectionResponseBody,
   InsertUserInCollectionRequestBody,
 } from "@edu-platform/common";
 import { IInsertUserInCollectionUseCase } from "@application/use-cases";
-import { parseNumberId } from "@infrastructure/utils";
 
 type Request = TypedRequest<
   InsertUserInCollectionParams,

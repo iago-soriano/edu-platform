@@ -3,8 +3,8 @@ import {
   ICollectionsReadRepository,
 } from "@application/interfaces";
 import { db, collections, collectionParticipations } from "../schema";
-import { eq, sql, desc, and } from "drizzle-orm";
-import { BaseRepository } from "./base-repository";
+import { eq } from "drizzle-orm";
+import { BaseRepository } from "@edu-platform/common/platform";
 import { CollectionSerializer } from "../serializers";
 import { AllTables } from "./all-tables";
 
@@ -18,7 +18,7 @@ export class CollectionsRepository
   implements ICollectionsRepository
 {
   constructor() {
-    super(CollectionEntityNames);
+    super(CollectionEntityNames, db);
   }
 
   async findRootById(collectionId: number) {

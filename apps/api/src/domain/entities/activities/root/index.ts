@@ -2,11 +2,8 @@ import { ActivityPublishedEvent } from "@domain/events";
 import { IDomainServiceRegistry } from "@domain/services";
 import { resolveDomainServicesRegistry } from "domain/services/resolve";
 import { ContentRequestDTO, QuestionRequestDTO } from "@edu-platform/common";
-import {
-  Entity,
-  CollectionArray,
-  PersistancePropertyName,
-} from "@domain/abstract";
+import { Entity, PersistancePropertyName } from "@edu-platform/common/platform";
+
 import { ActivityVersion, ActivitiesFactory } from "..";
 
 export class Activity extends Entity {

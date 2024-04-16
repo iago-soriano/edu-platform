@@ -1,15 +1,14 @@
-import {
-  IUserRepository,
-  ITokenRepository,
-  IUseCase,
-  IEmailService,
-} from "@application/interfaces";
+import { IUserRepository, ITokenRepository } from "@application/interfaces";
 import {
   ChangePasswordRequestTokenExist,
   UserNotFoundError,
   HasProviderAccountError,
 } from "@edu-platform/common/errors";
-import { GetUUID } from "@infrastructure/utils";
+import {
+  IUseCase,
+  IEmailService,
+  GetUUID,
+} from "@edu-platform/common/platform";
 
 type InputParams = {
   email: string;

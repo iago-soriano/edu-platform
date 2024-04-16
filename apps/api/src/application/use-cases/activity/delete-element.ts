@@ -1,9 +1,5 @@
-import {
-  IUseCase,
-  IActivitiesRepository,
-  IStorageService,
-  UserSelectDTO,
-} from "@application/interfaces";
+import { IUseCase } from "@edu-platform/common/platform";
+import { IActivitiesRepository, UserSelectDTO } from "@application/interfaces";
 import {
   ActivityNotFound,
   ActivityVersionNotFound,

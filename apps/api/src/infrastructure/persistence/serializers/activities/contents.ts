@@ -9,7 +9,7 @@ import {
   ContentTypes,
 } from "@domain/entities";
 import { ChangeTrackingProxy } from "@domain/abstract";
-import { ChangeEventsTree } from "../../interfaces";
+import { ChangeEventsTree } from "@edu-platform/common/platform";
 
 export class ActivityContentSerializer {
   static serialize(domain: Content) {

@@ -1,6 +1,5 @@
 export * from "./change-password-request";
 export * from "./change-password";
-export * from "./check-change-password-token-request";
 export * from "./provider-sign-up";
 export * from "./refresh-token";
 export * from "./sign-in";

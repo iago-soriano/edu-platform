@@ -4,10 +4,11 @@ import {
   activityQuestions,
   activityVersions,
 } from "../../schema";
-import { ChangeTrackingProxy } from "@domain/abstract";
-
 import { Activity } from "@domain/entities";
-import { ChangeEventsTree } from "../../interfaces";
+import {
+  ChangeEventsTree,
+  ChangeTrackingProxy,
+} from "@edu-platform/common/platform";
 import { ActivityVersionSerializer } from "./versions";
 import { ActivityContentSerializer } from "./contents";
 import { ActivityQuestionSerializer } from "./question";

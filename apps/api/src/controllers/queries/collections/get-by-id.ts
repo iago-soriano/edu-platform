@@ -3,13 +3,13 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "../../interfaces";
+  parseNumberId,
+} from "@edu-platform/common/platform";
 import { ICollectionsReadRepository } from "@application/interfaces";
 import {
   GetCollectionParams,
   GetCollectionResponseBody,
 } from "@edu-platform/common";
-import { parseNumberId } from "@infrastructure/utils";
 
 type Request = TypedRequest<GetCollectionParams, {}, {}>;
 type Response = TypedResponse<GetCollectionResponseBody>;

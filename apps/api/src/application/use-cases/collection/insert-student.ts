@@ -1,6 +1,6 @@
 import { StudentIsNotUser } from "@edu-platform/common";
+import { IUseCase } from "@edu-platform/common/platform";
 import {
-  IUseCase,
   UserSelectDTO,
   ICollectionsRepository,
   IUserRepository,

@@ -1,17 +1,9 @@
-import {
-  ITokenService,
-  IUserRepository,
-  JWTPayload,
-} from "@application/interfaces";
-import { Request } from "../interfaces";
+import { Request, ITokenService, JWTPayload } from "../../interfaces";
 import { Forbidden, Unauthorized } from "@edu-platform/common/errors";
 import { TokenExpiredError } from "jsonwebtoken";
 
 export class AuthenticationMiddlewareController {
-  constructor(
-    private tokenService: ITokenService,
-    private userRepository: IUserRepository
-  ) {}
+  constructor(private tokenService: ITokenService) {}
 
   async execute(req: Request<{}, {}, {}>, headers: Record<string, string>) {
     if (!headers.authorization)
@@ -36,12 +28,6 @@ export class AuthenticationMiddlewareController {
 
     // up to this point, make a client that retrieves JWT payload from headers
 
-    // get by foreignSystemId (IAM pk), create a dto with this system's id for business logic
-    const userDTO = await this.userRepository.getUserById(
-      Number(tokenPayload.id)
-    );
-    if (!userDTO) throw new Forbidden("User id in token not found");
-
-    req.user = userDTO;
+    req.user = { id: tokenPayload.id };
   }
 }

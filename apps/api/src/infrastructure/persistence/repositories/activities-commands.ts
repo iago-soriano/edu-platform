@@ -7,7 +7,7 @@ import {
 } from "../schema";
 import { IActivitiesRepository } from "@application/interfaces";
 import { eq } from "drizzle-orm";
-import { BaseRepository } from "./base-repository";
+import { BaseRepository } from "@edu-platform/common/platform";
 import { AllTables } from "./all-tables";
 import { alias } from "drizzle-orm/pg-core";
 import { ActivitySerializer } from "../serializers";
@@ -26,7 +26,7 @@ export class ActivitiesRepository
   implements IActivitiesRepository
 {
   constructor() {
-    super(ActivityEntityNames);
+    super(ActivityEntityNames, db);
   }
 
   async findRootById(activityId: string) {

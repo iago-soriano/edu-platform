@@ -16,9 +16,6 @@ import ChangePasswordRequestUseCase, {
 import ChangePasswordUseCase, {
   IChangePasswordUseCase,
 } from "./auth/change-password";
-import CheckChangePasswordTokenRequestUseCase, {
-  ICheckChangePasswordTokenRequestUseCase,
-} from "./auth/check-change-password-token-request";
 import SaveQuestionUseCase, {
   ISaveQuestionUseCase,
 } from "./activity/save-question";
@@ -111,8 +108,6 @@ export {
   IChangePasswordRequestUseCase,
   ChangePasswordUseCase,
   IChangePasswordUseCase,
-  CheckChangePasswordTokenRequestUseCase,
-  ICheckChangePasswordTokenRequestUseCase,
   SaveQuestionUseCase,
   ISaveQuestionUseCase,
   CreateNewActivityUseCase,

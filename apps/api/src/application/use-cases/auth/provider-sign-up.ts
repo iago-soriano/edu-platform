@@ -1,9 +1,5 @@
-import { HasAccountWithEmailAndPassword } from "@edu-platform/common";
-import {
-  IUserRepository,
-  ITokenService,
-  IUseCase,
-} from "@application/interfaces";
+import { IUserRepository } from "@application/interfaces";
+import { IUseCase, ITokenService } from "@edu-platform/common/platform";
 
 type InputParams = {
   email: string;
@@ -31,7 +27,9 @@ class UseCase implements IProviderSignUpUseCase {
     let userId;
 
     if (existingUser && !existingUser.provider)
-      throw new HasAccountWithEmailAndPassword();
+      throw new Error(
+        "This e-mail is already registered with an e-mail and password"
+      );
 
     if (!existingUser) {
       const userDTO: any = {
@@ -51,11 +49,11 @@ class UseCase implements IProviderSignUpUseCase {
     }
 
     const accessToken = this.tokenService.generateAccessToken({
-      id: `${userId}`,
+      id: userId,
     });
 
     const refreshToken = this.tokenService.generateRefreshToken({
-      id: `${userId}`,
+      id: userId,
     });
 
     // await this.userRepository.updateUser(userId, { refreshToken });

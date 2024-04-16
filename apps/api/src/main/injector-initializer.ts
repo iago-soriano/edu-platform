@@ -7,7 +7,6 @@ import {
   VerifyAccountController,
   ChangePasswordRequestController,
   ChangePasswordController,
-  CheckChangePasswordTokenRequestController,
   PublishDraftController,
   SaveQuestionController,
   SaveContentController,
@@ -38,7 +37,6 @@ import {
   VerifyAccountUseCase,
   ChangePasswordRequestUseCase,
   ChangePasswordUseCase,
-  CheckChangePasswordTokenRequestUseCase,
   SaveQuestionUseCase,
   CreateNewActivityUseCase,
   UpdateActivityMetadataUseCase,
@@ -76,10 +74,9 @@ import {
   BCryptEncryptionService,
   EmailService,
   JWTTokenService,
-} from "@infrastructure/services";
+} from "@edu-platform/common/platform/services";
 import { DomainServicesRegistry } from "@domain/services";
 import { SqsHandler } from "@sqs-handlers";
-import { sqsHandler } from "index";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
@@ -96,9 +93,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     changePasswordController: awilix
       .asClass(ChangePasswordController)
-      .classic(),
-    checkChangePasswordTokenRequestController: awilix
-      .asClass(CheckChangePasswordTokenRequestController)
       .classic(),
     publishDraftController: awilix.asClass(PublishDraftController).classic(),
     saveQuestionController: awilix.asClass(SaveQuestionController).classic(),
@@ -155,12 +149,14 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     /** #endregion */
 
     // services
+    domainTopicArn: awilix.asValue(process.env.DOMAIN_SNS_TOPIC_ARN),
+
     encryptionService: awilix.asClass(BCryptEncryptionService),
     emailService: awilix.asClass(EmailService),
     tokenService: awilix.asClass(JWTTokenService).singleton(),
     assetRepository: awilix.asClass(AssetRepository),
-    storageService: awilix.asClass(S3Service),
-    topicService: awilix.asClass(TopicService),
+    storageService: awilix.asClass(S3Service).classic(),
+    topicService: awilix.asClass(TopicService).classic(),
 
     domainServiceRegistry: awilix.asClass(DomainServicesRegistry).classic(),
 
@@ -174,9 +170,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(ChangePasswordRequestUseCase)
       .classic(),
     changePasswordUseCase: awilix.asClass(ChangePasswordUseCase).classic(),
-    checkChangePasswordTokenRequestUseCase: awilix
-      .asClass(CheckChangePasswordTokenRequestUseCase)
-      .classic(),
     saveQuestionUseCase: awilix.asClass(SaveQuestionUseCase).classic(),
     createNewActivityUseCase: awilix
       .asClass(CreateNewActivityUseCase)

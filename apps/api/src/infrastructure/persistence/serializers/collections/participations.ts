@@ -1,6 +1,6 @@
 import { collections, collectionParticipations } from "../../schema";
 import { CollectionParticipation, ParticipationType } from "@domain/entities";
-import { ChangeEventsTree } from "../../interfaces";
+import { ChangeEventsTree } from "@edu-platform/common/platform";
 
 export class CollectionParticipationSerializer {
   static serialize(domain: CollectionParticipation) {

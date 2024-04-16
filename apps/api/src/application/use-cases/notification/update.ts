@@ -1,6 +1,6 @@
+import { IUseCase } from "@edu-platform/common/platform";
 import {
   INotificationsRepository,
-  IUseCase,
   UserSelectDTO,
 } from "@application/interfaces";
 

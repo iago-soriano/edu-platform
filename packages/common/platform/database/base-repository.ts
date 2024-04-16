@@ -1,15 +1,21 @@
-import { CollectionArray, Entity } from "@domain/abstract";
-import { db } from "../schema/postgres";
-import { IAbstractRepository, ChangeEventsTree } from "../interfaces";
+import { CollectionArray, Entity } from "../interfaces/domain";
+import {
+  IAbstractRepository,
+  ChangeEventsTree,
+  TableDefinition,
+} from "../interfaces/database";
 import { eq } from "drizzle-orm";
-import { TableDefinition } from "../interfaces";
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
 
 export class BaseRepository<T> implements IAbstractRepository {
   protected _events: ChangeEventsTree = {};
 
-  constructor(private _entities: { [name: string]: TableDefinition }) {}
+  constructor(
+    private _entities: { [name: string]: TableDefinition },
+    private _dbClient: NodePgDatabase<Record<string, unknown>>
+  ) {}
   async save(root: Entity) {
-    return db.transaction(async (tx) => {
+    return this._dbClient.transaction(async (tx) => {
       let result: any = {};
 
       const handleNewAndDelete = async (ent: Entity) => {

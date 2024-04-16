@@ -1,8 +1,7 @@
+import { IUseCase, IEmailService } from "@edu-platform/common/platform";
 import {
-  IUseCase,
   UserSelectDTO,
   IStudentOutputsRepository,
-  IEmailService,
   ICollectionsRepository,
 } from "@application/interfaces";
 

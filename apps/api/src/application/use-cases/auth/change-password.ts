@@ -1,9 +1,5 @@
-import {
-  IUserRepository,
-  ITokenRepository,
-  IUseCase,
-  IEncryptionService,
-} from "@application/interfaces";
+import { IUseCase, IEncryptionService } from "@edu-platform/common/platform";
+import { IUserRepository, ITokenRepository } from "@application/interfaces";
 import {
   InvalidValidationTokenError,
   PasswordsDontMatchError,

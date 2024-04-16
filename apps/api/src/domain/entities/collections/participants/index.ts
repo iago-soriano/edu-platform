@@ -1,4 +1,4 @@
-import { Entity, CollectionArray } from "@domain/abstract";
+import { Entity } from "@edu-platform/common/platform";
 import { ParticipationType } from "./enums";
 
 export class CollectionParticipation extends Entity {

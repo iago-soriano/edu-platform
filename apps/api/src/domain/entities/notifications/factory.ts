@@ -1,4 +1,4 @@
-import { Notification, NotificationType } from "./notification";
+import { Notification, NotificationType } from ".";
 
 export class NotificationsFactory {
   buildActivityPublishedNotification(

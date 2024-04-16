@@ -1,10 +1,9 @@
 import {
-  // TODO: split into one controller per use-case
   HTTPController,
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "../../interfaces";
+} from "@edu-platform/common/platform/interfaces";
 import {
   PublishDraftParams,
   PublishDraftRequestBody,
@@ -19,7 +18,7 @@ export class PublishDraftController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.PATCH;
-  path = "activities/:activityId/versionS/draft/publish";
+  path = "activities/:activityId/versions/draft/publish";
   middlewares: string[] = ["auth"];
 
   constructor(private publishDraftUseCase: IPublishDraftUseCase) {}

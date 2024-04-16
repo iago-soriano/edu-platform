@@ -4,11 +4,13 @@ import {
   activityQuestions,
 } from "../../schema";
 import { ActivityVersion } from "@domain/entities";
-import { ChangeTrackingProxy } from "@domain/abstract";
-import { ChangeEventsTree } from "../../interfaces";
+import {
+  ChangeEventsTree,
+  ChangeTrackingProxy,
+} from "@edu-platform/common/platform";
 import { ActivityContentSerializer } from "./contents";
 import { ActivityQuestionSerializer } from "./question";
-import { parseVersionStatus } from "@edu-platform/common";
+import { parseVersionStatus } from "@edu-platform/common/api";
 
 export class ActivityVersionSerializer {
   static serialize(domain: ActivityVersion) {

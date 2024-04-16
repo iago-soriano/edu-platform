@@ -2,20 +2,19 @@ import express, { Express, RequestHandler } from "express";
 import serverless from "serverless-http";
 import "express-async-errors";
 import { RouteNotFoundError } from "@edu-platform/common/errors";
-import { HTTPController, HTTPErrorController } from "@controllers";
+import { HTTPController, HTTPErrorController } from "../interfaces/controllers";
 import helmet from "helmet";
 import cors from "cors";
 import { json } from "body-parser";
-import {
-  Server as AbstractServer,
-  IHTTPServerConstructorParams,
-} from "./server";
+import { AbstractServer } from "./abstract-server";
+import { Client } from "pg";
 
-interface IExpressConstructorParams extends IHTTPServerConstructorParams {
+interface IExpressConstructorParams {
   controllers: HTTPController[];
   errorHandler: HTTPErrorController;
   middlewares: { [key: string]: RequestHandler };
   baseUrn: string;
+  _pgClient: Client;
 }
 
 export class ExpressServer extends AbstractServer {
@@ -27,8 +26,9 @@ export class ExpressServer extends AbstractServer {
     errorHandler,
     middlewares,
     baseUrn,
+    _pgClient,
   }: IExpressConstructorParams) {
-    super();
+    super(_pgClient);
     this._app = express();
     this.setupServer(this._app);
     this.baseUrn = baseUrn;

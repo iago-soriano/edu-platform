@@ -1,10 +1,9 @@
-// TODO: split into get published, get draft, get archived by version
 import {
   HTTPController,
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-} from "../../interfaces";
+} from "@edu-platform/common/platform/interfaces";
 import { IActivitiesReadRepository } from "@application/interfaces";
 import {
   GetDraftVersionParams,

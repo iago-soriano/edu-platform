@@ -1,15 +1,14 @@
-import {
-  IUserRepository,
-  IEncryptionService,
-  ITokenService,
-  UserSelectDTO,
-  IUseCase,
-} from "@application/interfaces";
+import { IUserRepository, UserSelectDTO } from "@application/interfaces";
 import {
   CredentialsNotProvidedError,
   InvalidCredentialsError,
   UserNotVerifiedError,
 } from "@edu-platform/common/errors";
+import {
+  IUseCase,
+  IEncryptionService,
+  ITokenService,
+} from "@edu-platform/common/platform";
 
 type InputParams = {
   email: string;
@@ -55,11 +54,11 @@ class UseCase implements ISignInUseCase {
     }
 
     const accessToken = this.tokenService.generateAccessToken({
-      id: `${userDTO.id}`,
+      id: userDTO.id,
     });
 
     const refreshToken = this.tokenService.generateRefreshToken({
-      id: `${userDTO.id}`,
+      id: userDTO.id,
     });
 
     // await this.userRepository.updateUser(userDTO.id, { refreshToken });

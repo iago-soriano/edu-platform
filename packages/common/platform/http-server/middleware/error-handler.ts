@@ -1,13 +1,9 @@
-import {
-  CustomError,
-  SilentInvalidStateError,
-  InvalidStateError,
-} from "@edu-platform/common/errors";
+import { SilentInvalidStateError, InvalidStateError } from "../../../errors";
 import {
   Request as TypedRequest,
   Response as TypedResponse,
   HTTPErrorController,
-} from "../interfaces";
+} from "@edu-platform/common/platform/interfaces";
 
 type Request = TypedRequest<{}, {}, {}>;
 type Response = TypedResponse<{}>;

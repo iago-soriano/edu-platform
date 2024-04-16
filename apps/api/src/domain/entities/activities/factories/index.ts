@@ -1,7 +1,7 @@
 import { ContentFactory } from "./content";
 import { QuestionFactory, QuestionAlternativeFactory } from "./question";
 import { VersionFactory } from "./version";
-import { GetUUID } from "@infrastructure/utils";
+import { GetUUID } from "@edu-platform/common/platform";
 import { Collection, Activity } from "@domain/entities";
 
 export { ContentFactory, QuestionFactory, QuestionAlternativeFactory };

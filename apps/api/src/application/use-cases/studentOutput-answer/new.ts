@@ -1,6 +1,6 @@
 import { Question, StudentAnswer, OutputStatus } from "@domain/entities";
+import { IUseCase } from "@edu-platform/common/platform";
 import {
-  IUseCase,
   UserSelectDTO,
   IStudentOutputsRepository,
   IActivitiesRepository,

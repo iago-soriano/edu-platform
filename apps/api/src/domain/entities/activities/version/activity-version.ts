@@ -10,7 +10,7 @@ import {
   ActivityVersionTopics,
   ActivityVersionDescription,
 } from "./value-objects";
-import { Entity, CollectionArray } from "@domain/abstract";
+import { Entity, CollectionArray } from "@edu-platform/common/platform";
 import {
   CustomError,
   ContentRequestDTO,

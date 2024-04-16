@@ -8,8 +8,10 @@ import {
   QuestionTypes,
   Alternative,
 } from "@domain/entities";
-import { ChangeTrackingProxy } from "@domain/abstract";
-import { ChangeEventsTree } from "../../interfaces";
+import {
+  ChangeEventsTree,
+  ChangeTrackingProxy,
+} from "@edu-platform/common/platform";
 
 export class ActivityQuestionSerializer {
   static serialize(domain: Question) {

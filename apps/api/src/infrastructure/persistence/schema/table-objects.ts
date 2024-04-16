@@ -16,7 +16,7 @@ import {
   CollectionParticipationSerializer,
 } from "../serializers";
 import { NotificationSerializer } from "../serializers/notifications";
-import { TableDefinition } from "../interfaces";
+import { TableDefinition } from "@edu-platform/common/platform";
 
 export const activitiesTable: TableDefinition = {
   table: activities,
