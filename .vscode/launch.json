@@ -2,11 +2,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "cd apps/api && npm run dev",
+      "command": "cd apps/core-api && npm run dev",
       "name": "Backend",
       "request": "launch",
       "type": "node-terminal",
-      "outFiles": ["${workspaceFolder}/apps/api/build/**/*.js"],
+      "outFiles": ["${workspaceFolder}/apps/core-api/build/**/*.js"],
       "resolveSourceMapLocations": [
         "${workspaceFolder}/**",
         "!**/node_modules/**"

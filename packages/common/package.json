@@ -1,8 +1,7 @@
 {
   "name": "@edu-platform/common",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.ts",
+  "description": "Common package",
   "directories": {
     "test": "test"
   },
@@ -13,6 +12,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.461.0",
+    "@aws-sdk/client-sns": "^3.552.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.5",
+    "reflect-metadata": "^0.1.14",
+    "serverless-http": "^3.2.0",
+    "uuid": "^9.0.0",
     "zod": "^3.22.4"
   }
 }

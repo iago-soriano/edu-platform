@@ -1,14 +1,17 @@
-import * as awilix from "awilix";
 import dotenv from "dotenv";
 dotenv.config(); // call this before importing main, because that will use env variables
+
+import * as awilix from "awilix";
 import { registerServer, ExpressServer } from "@edu-platform/common/platform";
-import { registerDependencies } from "@main";
-import { SqsHandler } from "@sqs-handlers";
-import { pgClient } from "./infrastructure/persistence/schema";
+import { registerDependencies } from "./register-dependencies";
+import { registerCoreDependencies } from "../core-dependencies";
+import { pgClient } from "../../infrastructure/persistence/schema";
 
 export const mainContainer = awilix.createContainer();
 
+registerCoreDependencies(mainContainer);
 registerDependencies(mainContainer);
+
 registerServer(mainContainer, "/web-api/core", pgClient);
 
 const server = mainContainer.resolve<ExpressServer>("server");
@@ -21,7 +24,4 @@ const server = mainContainer.resolve<ExpressServer>("server");
   }
 })();
 
-export const apiGatewayHandler = server.getApiGatewayHandler();
-
-export const sqsHandler =
-  mainContainer.resolve<SqsHandler>("sqsHandler").execute;
+export const handler = server.getApiGatewayHandler();

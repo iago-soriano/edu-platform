@@ -1,4 +1,4 @@
-import { ValueObject } from "@domain/abstract";
+import { ValueObject } from "@edu-platform/common/platform";
 
 const nameMaxLength = 50;
 const nameMinLength = 5;

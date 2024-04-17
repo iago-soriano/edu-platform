@@ -1,4 +1,4 @@
-import { ValueObject } from "@domain/abstract";
+import { ValueObject } from "@edu-platform/common/platform";
 import { InvalidStateError } from "@edu-platform/common";
 
 const titleMaxLength = 50;

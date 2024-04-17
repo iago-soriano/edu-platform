@@ -1,11 +1,5 @@
-import { DomainEvent } from "@domain/abstract";
+import { DomainEvent } from "@edu-platform/common/platform";
 import { ITopicService, IStorageService } from "@edu-platform/common/platform";
-import { S3Service } from "@edu-platform/common/platform/services";
-import {
-  S3Client,
-  PutObjectCommand,
-  DeleteObjectCommand,
-} from "@aws-sdk/client-s3";
 
 export interface IDomainServiceRegistry {
   publishToDomainTopic: (event: DomainEvent) => Promise<void>;

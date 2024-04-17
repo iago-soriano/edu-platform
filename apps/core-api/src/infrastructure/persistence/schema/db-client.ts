@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import { getDrizzleClient } from "@edu-platform/common/platform";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { LogWriter as DrizzleLogWriter } from "drizzle-orm/logger";
@@ -8,7 +11,6 @@ class LogWriter implements DrizzleLogWriter {
     // console.log(message);
   }
 }
-
 const { dbClient, pgClient } = getDrizzleClient(
   process.env.DATABASE_URL!,
   schema,

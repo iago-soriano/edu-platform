@@ -1,11 +1,6 @@
 import { Client } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { DefaultLogger, LogWriter } from "drizzle-orm/logger";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
-
-// export interface IDbClient extends NodePgDatabase {
-//   connect: () => unknown;
-// }
 
 export const getDrizzleClient = (
   connectionString: string,

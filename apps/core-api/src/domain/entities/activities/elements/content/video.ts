@@ -1,5 +1,5 @@
 import { Content, ContentTypes } from "./base";
-import { IgnorePersistance } from "../../../../abstract";
+import { IgnorePersistance } from "@edu-platform/common/platform";
 import { InvalidStateError, ContentRequestDTO } from "@edu-platform/common";
 
 export class VideoContent extends Content {

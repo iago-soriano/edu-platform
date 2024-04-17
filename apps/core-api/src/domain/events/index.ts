@@ -1,4 +1,4 @@
-import { DomainEvent } from "@domain/abstract";
+import { DomainEvent } from "@edu-platform/common/platform";
 import { Activity } from "@domain/entities";
 
 export class ActivityPublishedEvent extends DomainEvent {
