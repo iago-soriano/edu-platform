@@ -9,6 +9,7 @@ import {
   UnfollowCollectionParams,
   UnfollowCollectionRequestBody,
   UnfollowCollectionResponseBody,
+  unfollowCollectionParseRequest,
 } from "@edu-platform/common";
 import { IUnfollowCollectionUseCase } from "@application/use-cases";
 
@@ -22,19 +23,23 @@ type Response = TypedResponse<UnfollowCollectionResponseBody>;
 export class UnfollowCollectionController
   implements HTTPController<Request, Response>
 {
-  method = HttpMethod.POST;
-  path: string = "collections/:collectionId/unfollow";
+  method = HttpMethod.DELETE;
+  path: string =
+    "collections/:collectionId/participation/:participationId/follower";
   middlewares: string[] = ["auth"];
 
   constructor(private unfollowCollectionUseCase: IUnfollowCollectionUseCase) {}
 
   async execute(req: Request, res: Response) {
-    const { collectionId } = parseNumberId(req.params, ["collectionId"]);
+    const { collectionId, participationId } = unfollowCollectionParseRequest(
+      req.params
+    );
     const { user } = req;
 
     await this.unfollowCollectionUseCase.execute({
       user,
       collectionId,
+      participationId,
     });
 
     res.status(200).json();

@@ -31,10 +31,9 @@ export abstract class Content extends BaseElement {
   protected abstract _mergePayload(newValues: ContentRequestDTO): void;
   public async update(contentDto: ContentRequestDTO, _?: string, __?: string) {
     if (contentDto.description) {
-      const newDesc = new ActivitElementDescription(contentDto.description);
-      this.description = newDesc;
+      this.description = new ActivitElementDescription(contentDto.description);
     }
-    this._mergePayload(contentDto);
+    this._mergePayload(contentDto);                                                 
 
     this.validateSelf();
   }

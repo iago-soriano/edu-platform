@@ -5,5 +5,3 @@ export * from "./collections-queries";
 export * from "./notifications-commands";
 export * from "./notifications-queries";
 export * from "./student-outputs";
-export * from "./token";
-export * from "./user";
