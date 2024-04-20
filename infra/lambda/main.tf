@@ -1,10 +1,10 @@
 resource "aws_lambda_function" "main" {
-  function_name = "edu-platform-api"
+  function_name = var.function_name
 
   s3_bucket = data.aws_s3_bucket.function.bucket
-  s3_key    = "api/${var.app_version}/build.zip"
+  s3_key    = "${var.function_name}/${var.app_version}/build.zip"
 
-  handler = "build/index.handler"
+  handler = "index.handler"
   runtime = "nodejs20.x"
 
   # vpc config
@@ -13,12 +13,8 @@ resource "aws_lambda_function" "main" {
     security_group_ids = [aws_security_group.sg_lambda.id]
   }
 
-  layers=[aws_lambda_layer_version.node_dependencies.id]
-
   environment {
-    variables = {
-      "DATABASE_URL" = var.database_url
-    }
+    variables = var.env_vars
   }
   
   role = "${aws_iam_role.lambda_exec.arn}"
@@ -27,9 +23,9 @@ resource "aws_lambda_function" "main" {
 # IAM role which dictates what other AWS services the Lambda function
 # may access.
 resource "aws_iam_role" "lambda_exec" {
-  name = "edu-platform-function"
+  name = var.function_name
 
-  assume_role_policy = <<EOF
+assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -46,20 +42,26 @@ resource "aws_iam_role" "lambda_exec" {
 EOF
 
   inline_policy {
-    name = "allow_vpc_access"
+    name = "policies"
 
     policy = jsonencode({
       Version = "2012-10-17"
       Statement = [
         {
-          Action   = ["logs:CreateLogGroup",
+          Action   = [
+              "logs:CreateLogGroup",
               "logs:CreateLogStream",
               "logs:PutLogEvents",
               "ec2:CreateNetworkInterface",
               "ec2:DescribeNetworkInterfaces",
               "ec2:DeleteNetworkInterface",
               "ec2:AssignPrivateIpAddresses",
-              "ec2:UnassignPrivateIpAddresses"]
+              "ec2:UnassignPrivateIpAddresses",
+              "sqs:ChangeMessageVisibility",
+              "sqs:DeleteMessage",
+              "sqs:GetQueueAttributes",
+              "sqs:ReceiveMessage"
+            ]
           Effect   = "Allow"
           Resource = "*"
         }
@@ -68,19 +70,8 @@ EOF
   }
 }
 
-resource "aws_lambda_permission" "apigw" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.main.function_name}"
-  principal     = "apigateway.amazonaws.com"
-
-  # The /*/* portion grants access from any method on any resource
-  # within the API Gateway "REST API".
-  source_arn = "${var.apigw_execution_arn}/*/*"
-}
-
 data "aws_s3_bucket" "function" {
-  bucket = "edu-platform-function"
+  bucket = "edu-platform-lambda-function-code"
 }
 
 resource "aws_security_group" "sg_lambda" {
@@ -92,12 +83,4 @@ resource "aws_security_group" "sg_lambda" {
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
   }
-}
-
-resource "aws_lambda_layer_version" "node_dependencies" {
-  s3_bucket = data.aws_s3_bucket.function.bucket
-  s3_key = "dependencies/${var.dependencies_version}/nodejs.zip"
-  layer_name = "node_dependencies"
-
-  compatible_runtimes = ["nodejs18.x"]
 }

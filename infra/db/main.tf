@@ -52,7 +52,7 @@ resource "aws_db_instance" "this" {
   apply_immediately = true
   allocated_storage      = 5
   engine                 = "postgres"
-  engine_version         = "13.10"
+  engine_version         = "13.13"
   username               = var.db_user
   password               = var.db_password
   db_subnet_group_name   = aws_db_subnet_group.this.name

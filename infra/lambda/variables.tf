@@ -3,18 +3,9 @@ variable app_version {
     default = "0.0.1"
 }
 
-variable dependencies_version {
-    type = string
-    default = "0.0.1"
-}
-
-variable database_url {
-    type = string
-}
-
-variable apigw_execution_arn {
-   type  = string
-}
+# variable apigw_execution_arn {
+#    type  = string
+# }
 
 variable subnet_id {
     type = string
@@ -22,4 +13,12 @@ variable subnet_id {
 
 variable vpc_id {
     type=string
+}
+
+variable function_name {
+    type=string
+}
+
+variable env_vars {
+    type=map
 }
