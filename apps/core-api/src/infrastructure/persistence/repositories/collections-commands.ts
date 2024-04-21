@@ -1,12 +1,10 @@
-import {
-  ICollectionsRepository,
-  ICollectionsReadRepository,
-} from "@application/interfaces";
+import { ICollectionsRepository } from "@application/interfaces";
 import { db, collections, collectionParticipations } from "../schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { BaseRepository } from "@edu-platform/common/platform";
 import { CollectionSerializer } from "../serializers";
 import { AllTables } from "./all-tables";
+import { ParticipationType } from "domain/enums";
 
 export const CollectionEntityNames = {
   Collection: AllTables["Collection"],
@@ -29,8 +27,7 @@ export class CollectionsRepository
         .where(eq(collections.id, collectionId))
     )[0];
     if (!dto) return null;
-    super.initializeEventTracking(collectionId, this._events);
-    return CollectionSerializer.deserialize(dto, this._events, null);
+    return CollectionSerializer.deserialize(dto, null);
   }
 
   async findRootByIdWithParticipants(collectionId: number) {
@@ -39,14 +36,16 @@ export class CollectionsRepository
       .from(collections)
       .leftJoin(
         collectionParticipations,
-        eq(collectionParticipations.id, collections.id)
+        and(
+          eq(collectionParticipations.id, collections.id),
+          eq(collectionParticipations.type, ParticipationType.Student)
+        )
       )
       .where(eq(collections.id, collectionId));
     if (!dto) return null;
-    super.initializeEventTracking(collectionId, this._events);
+
     return CollectionSerializer.deserialize(
       dto[0].collections,
-      this._events,
       dto.map(({ collection_participations }) => collection_participations)
     );
   }
@@ -60,7 +59,6 @@ export class CollectionsRepository
         .where(eq(collections.id, collectionId))
     )[0];
     if (!dto) return null;
-    super.initializeEventTracking(collectionId, this._events);
-    return CollectionSerializer.deserialize(dto, this._events, null);
+    return CollectionSerializer.deserialize(dto, null);
   }
 }

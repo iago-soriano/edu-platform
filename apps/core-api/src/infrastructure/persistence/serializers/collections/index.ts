@@ -8,6 +8,7 @@ import {
 import {
   ChangeEventsTree,
   CollectionArray,
+  ChangeTrackingProxy,
 } from "@edu-platform/common/platform";
 
 import { CollectionParticipationSerializer } from "./participations";
@@ -27,20 +28,18 @@ export class CollectionSerializer {
   }
 
   static deserialize(
-    collectionDto: typeof collections.$inferSelect,
-    _events: ChangeEventsTree,
+    dto: typeof collections.$inferSelect,
     participationDtos:
       | (typeof collectionParticipations.$inferSelect | null)[]
       | null
   ) {
-    const collection = new Collection(collectionDto.id || 0);
-
-    collection.isPrivate = collectionDto.isPrivate;
-    collection.notifyOwnerOnStudentOutput =
-      collectionDto.notifyOwnerOnStudentOutput;
-    collection.name = new CollectionName(collectionDto.name);
-    collection.description = new CollectionDescription(
-      collectionDto.description
+    const collection = new Collection(
+      dto.id || 0,
+      dto.name,
+      dto.description,
+      dto.isPrivate,
+      dto.notifyOwnerOnStudentOutput,
+      dto.ownerId
     );
 
     collection.participants = new CollectionArray<CollectionParticipation>();
@@ -49,26 +48,13 @@ export class CollectionSerializer {
       for (const part of participationDtos) {
         if (part)
           collection.participants.push(
-            CollectionParticipationSerializer.deserialize(part, _events)
+            CollectionParticipationSerializer.deserialize(part)
           );
       }
     }
 
     collection.isNew = false;
 
-    _events[collectionDto.id].Collection = {
-      ..._events[collectionDto.id].Collection,
-      [collectionDto.id]: {},
-    };
-
-    const proxiedEntity = new Proxy(collection, {
-      set: function (target: object, prop: string, value: any) {
-        _events[prop] = value;
-        Reflect.set(target, prop, value);
-        return true;
-      },
-    }) as Collection;
-
-    return proxiedEntity;
+    return new ChangeTrackingProxy(collection) as Collection;
   }
 }

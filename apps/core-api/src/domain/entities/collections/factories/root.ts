@@ -5,14 +5,13 @@ import {
 } from "@edu-platform/common";
 
 export class CollectionFactory {
-  static fromRequestDto(dto: CollectionRequestDTO, user: { id: number }) {
-    const collection = new Collection(dto.id || 0);
+  static default(user: { id: number }) {
+    const collection = new Collection();
 
-    collection.isPrivate = dto.isPrivate || true;
-    collection.notifyOwnerOnStudentOutput =
-      dto.notifyOwnerOnStudentOutput || true;
-    collection.name = new CollectionName(dto.name || "My collection");
-    collection.description = new CollectionDescription(dto.description || null);
+    collection.isPrivate = true;
+    collection.notifyOwnerOnStudentOutput = true;
+    collection.name = new CollectionName("My collection");
+    collection.description = new CollectionDescription(null);
 
     collection.ownerId = user.id;
 

@@ -44,13 +44,8 @@ export class ActivityQuestionSerializer {
     return question;
   }
 
-  static deserialize(
-    dto: typeof activityQuestions.$inferSelect,
-    _events: ChangeEventsTree[string]
-  ) {
+  static deserialize(dto: typeof activityQuestions.$inferSelect) {
     let newQuestion = null;
-
-    let events: { [prop: string]: string | number } = {};
 
     switch (dto.type) {
       case QuestionTypes.MultipleChoice:
@@ -64,24 +59,10 @@ export class ActivityQuestionSerializer {
             return alternative;
           }
         );
-
-        _events.MultipleChoiceQuestion = {
-          ..._events.MultipleChoiceQuestion,
-          [dto.id]: {},
-        };
-
-        events = _events.MultipleChoiceQuestion[dto.id];
         break;
       case QuestionTypes.Text:
         newQuestion = new TextQuestion();
         newQuestion.answer = dto.answer || "";
-
-        _events.TextQuestion = {
-          ..._events.TextQuestion,
-          [dto.id]: {},
-        };
-
-        events = _events.TextQuestion[dto.id];
         break;
 
       default:
@@ -98,7 +79,7 @@ export class ActivityQuestionSerializer {
 
     newQuestion.isNew = false;
 
-    const proxied = new ChangeTrackingProxy(newQuestion, events) as Content;
+    const proxied = new ChangeTrackingProxy(newQuestion) as Content;
     return proxied;
   }
 }

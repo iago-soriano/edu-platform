@@ -2,7 +2,7 @@ import { DomainEvent } from "@edu-platform/common/platform";
 import { ITopicService, IStorageService } from "@edu-platform/common/platform";
 
 export interface IDomainServiceRegistry {
-  publishToDomainTopic: (event: DomainEvent) => Promise<void>;
+  publishToDomainTopic: (event: DomainEvent<unknown>) => Promise<void>;
   uploadActivityContent: (
     activityId: string,
     versionId: string,
@@ -17,7 +17,7 @@ export class DomainServicesRegistry implements IDomainServiceRegistry {
     private topicService: ITopicService,
     private domainTopicArn: string
   ) {}
-  async publishToDomainTopic(event: DomainEvent) {
+  async publishToDomainTopic(event: DomainEvent<unknown>) {
     if (!this.domainTopicArn)
       throw new Error("domain SNS topic arn not present");
     if (this.domainTopicArn === "debug") return;

@@ -1,6 +1,6 @@
 import { notifications } from "../../schema";
 import { Notification, NotificationType } from "@domain/entities";
-import { ChangeEventsTree } from "@edu-platform/common/platform";
+import { ChangeTrackingProxy } from "@edu-platform/common/platform";
 
 export class NotificationSerializer {
   static serialize(domain: Notification) {
@@ -15,10 +15,7 @@ export class NotificationSerializer {
     return dto;
   }
 
-  static deserialize(
-    dto: typeof notifications.$inferSelect,
-    _events: ChangeEventsTree
-  ) {
+  static deserialize(dto: typeof notifications.$inferSelect) {
     const notification = new Notification();
 
     notification.id = dto.id;
@@ -30,18 +27,7 @@ export class NotificationSerializer {
 
     notification.isNew = false;
 
-    _events[dto.id].Notification = {
-      ..._events[dto.id].Notification,
-      [dto.id]: {},
-    };
-
-    const proxiedEntity = new Proxy(notification, {
-      set: function (target: object, prop: string, value: any) {
-        _events[prop] = value;
-        Reflect.set(target, prop, value);
-        return true;
-      },
-    }) as Notification;
+    const proxiedEntity = new ChangeTrackingProxy(notification) as Notification;
 
     return proxiedEntity;
   }

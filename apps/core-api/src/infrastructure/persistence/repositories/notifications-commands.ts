@@ -23,8 +23,6 @@ export class NotificationsRepository
       await db.select().from(notifications).where(eq(notifications.id, id))
     )[0];
 
-    super.initializeEventTracking(id, this._events);
-
-    return NotificationSerializer.deserialize(dto, this._events);
+    return NotificationSerializer.deserialize(dto);
   }
 }

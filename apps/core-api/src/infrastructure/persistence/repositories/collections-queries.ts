@@ -50,10 +50,7 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
         .where(
           and(
             eq(collectionParticipations.userId, userId),
-            eq(
-              collectionParticipations.type,
-              ParticipationType.Student.toString()
-            ),
+            eq(collectionParticipations.type, ParticipationType.Student),
             eq(activityVersions.status, VersionStatus.Published)
           )
         )

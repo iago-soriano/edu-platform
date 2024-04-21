@@ -1,6 +1,6 @@
 import { collections, collectionParticipations } from "../../schema";
 import { CollectionParticipation, ParticipationType } from "@domain/entities";
-import { ChangeEventsTree } from "@edu-platform/common/platform";
+import { ChangeTrackingProxy } from "@edu-platform/common/platform";
 
 export class CollectionParticipationSerializer {
   static serialize(domain: CollectionParticipation) {
@@ -13,32 +13,16 @@ export class CollectionParticipationSerializer {
     return dto;
   }
 
-  static deserialize(
-    dto: typeof collectionParticipations.$inferSelect,
-    _events: ChangeEventsTree
-  ) {
-    const domain = new CollectionParticipation();
-
-    domain.id = dto.id;
-    domain.collectionId = dto.collectionId;
-    domain.userId = dto.userId;
-    domain.type = dto.type as unknown as ParticipationType;
+  static deserialize(dto: typeof collectionParticipations.$inferSelect) {
+    const domain = new CollectionParticipation(
+      dto.userId,
+      dto.collectionId,
+      dto.type as unknown as ParticipationType,
+      dto.notifyOnActivityInsert
+    );
 
     domain.isNew = false;
 
-    _events[dto.id].CollectionParticipation = {
-      ..._events[dto.id].CollectionParticipation,
-      [dto.id]: {},
-    };
-
-    const proxiedEntity = new Proxy(domain, {
-      set: function (target: object, prop: string, value: any) {
-        _events[prop] = value;
-        Reflect.set(target, prop, value);
-        return true;
-      },
-    }) as CollectionParticipation;
-
-    return proxiedEntity;
+    return new ChangeTrackingProxy(domain) as CollectionParticipation;
   }
 }

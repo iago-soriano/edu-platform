@@ -1,4 +1,4 @@
 export enum ParticipationType {
-  "Follower",
-  "Student",
+  Follower = "Follower",
+  Student = "Student",
 }

@@ -40,11 +40,8 @@ export class ActivitiesRepository
       .leftJoin(lastVersions, eq(lastVersions.id, activities.lastVersionId))
       .where(eq(activities.id, activityId));
 
-    super.initializeEventTracking(activityId, this._events);
-
     const activity = ActivitySerializer.deserialize(
       dto[0].activities,
-      this._events,
       dto[0].draftVersions,
       dto[0].lastVersions
     );
@@ -103,11 +100,10 @@ export class ActivitiesRepository
 
       .where(eq(activities.id, activityId));
 
-    super.initializeEventTracking(activityId, this._events);
+    if (!dto.length) return null;
 
     const activity = ActivitySerializer.deserialize(
       dto[0].activities,
-      this._events,
       dto[0].draftVersions,
       dto[0].lastVersions,
       filterOutDuplicates(

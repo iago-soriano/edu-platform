@@ -7,7 +7,10 @@ export abstract class Entity {
   @IgnorePersistance()
   public isNew = true;
 
-  constructor() {}
+  public _events: { [prop: string]: string | number | null };
+  constructor() {
+    this._events = {};
+  }
   getPersistanceValue() {
     return this.id;
   }
@@ -44,22 +47,25 @@ export class CollectionArray<T extends Entity> extends Array<T> {
 }
 
 export class ChangeTrackingProxy<T> {
-  constructor(obj: T, _events: { [prop: string]: string | number | null }) {
-    return new Proxy(obj as object, {
-      set: function (target: object, prop: string, value: any) {
+  constructor(obj: T) {
+    return new Proxy(obj as Entity, {
+      set: function (target: Entity, prop: string, value: any) {
         const shouldIgnore = Reflect.getMetadata("ignore", target, prop);
-        const propertyName =
-          Reflect.getMetadata("property-name", target, prop) || prop;
-        let propertyValue = null;
-        if (value !== null) {
-          propertyValue = value.getPersistanceValue
-            ? value.getPersistanceValue()
-            : value;
-        }
 
         if (!shouldIgnore) {
-          _events[propertyName] = propertyValue;
+          let propertyValue = null;
+          if (value !== null) {
+            propertyValue = value.getPersistanceValue
+              ? value.getPersistanceValue()
+              : value;
+          }
+          Reflect.set(target, "_events", {
+            ...target._events,
+            [Reflect.getMetadata("property-name", target, prop) || prop]:
+              propertyValue,
+          });
         }
+
         Reflect.set(target, prop, value);
         return true;
       },
@@ -79,9 +85,9 @@ export function IgnorePersistance() {
   };
 }
 
-export abstract class DomainEvent {
+export abstract class DomainEvent<T> {
   constructor(
     public eventType: string,
-    public payload: any
+    public payload: T
   ) {}
 }

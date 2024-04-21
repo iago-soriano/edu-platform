@@ -8,10 +8,7 @@ import {
   TextContent,
   ContentTypes,
 } from "@domain/entities";
-import {
-  ChangeEventsTree,
-  ChangeTrackingProxy,
-} from "@edu-platform/common/platform";
+import { ChangeTrackingProxy, Entity } from "@edu-platform/common/platform";
 
 export class ActivityContentSerializer {
   static serialize(domain: Content) {
@@ -44,14 +41,9 @@ export class ActivityContentSerializer {
     return content;
   }
 
-  static deserialize(
-    dto: typeof activityContents.$inferSelect,
-    _events: ChangeEventsTree[string]
-  ) {
+  static deserialize(dto: typeof activityContents.$inferSelect) {
     let newContent = null;
     const parsedPayload = dto.payload as any;
-
-    let events: { [prop: string]: string | number } = {};
 
     switch (dto.type) {
       case ContentTypes.Video:
@@ -62,18 +54,10 @@ export class ActivityContentSerializer {
 
         newVideo.payload = parsedPayload;
 
-        _events.VideoContent = {
-          ..._events.VideoContent,
-          [dto.id]: {},
-        };
-
-        events = _events.VideoContent[dto.id];
-
-        newContent = PayloadMappingProxyFactory.from(
-          newVideo,
-          ["tracks", "url"],
-          events
-        ) as VideoContent;
+        newContent = PayloadMappingProxyFactory.from(newVideo, [
+          "tracks",
+          "url",
+        ]) as VideoContent;
 
         break;
       case ContentTypes.Image:
@@ -83,18 +67,9 @@ export class ActivityContentSerializer {
 
         newImage.payload = parsedPayload;
 
-        _events.ImageContent = {
-          ..._events.ImageContent,
-          [dto.id]: {},
-        };
-
-        events = _events.ImageContent[dto.id];
-
-        newContent = PayloadMappingProxyFactory.from(
-          newImage,
-          ["url"],
-          events
-        ) as ImageContent;
+        newContent = PayloadMappingProxyFactory.from(newImage, [
+          "url",
+        ]) as ImageContent;
 
         break;
       case ContentTypes.Text:
@@ -104,18 +79,9 @@ export class ActivityContentSerializer {
 
         newText.payload = parsedPayload;
 
-        _events.TextContent = {
-          ..._events.TextContent,
-          [dto.id]: {},
-        };
-
-        events = _events.TextContent[dto.id];
-
-        newContent = PayloadMappingProxyFactory.from(
-          newText,
-          ["text"],
-          events
-        ) as TextContent;
+        newContent = PayloadMappingProxyFactory.from(newText, [
+          "text",
+        ]) as TextContent;
 
         break;
       default:
@@ -130,24 +96,23 @@ export class ActivityContentSerializer {
 
     newContent.isNew = false;
 
-    const proxied = new ChangeTrackingProxy(newContent, events) as Content;
+    const proxied = new ChangeTrackingProxy(newContent) as Content;
     return proxied;
   }
 }
 
 class PayloadMappingProxyFactory {
-  static from(
-    obj: Content,
-    mappableProperties: string[],
-    _events: { [prop: string]: string | number }
-  ) {
+  static from(obj: Content, mappableProperties: string[]) {
     return new Proxy(obj, {
-      set: (target: object, prop: string, value: any) => {
+      set: (target: Entity, prop: string, value: any) => {
         if (mappableProperties.includes(prop)) {
           const currentPayload = (target as Content).payload;
           const newPayload = { ...currentPayload, [prop]: value };
           Reflect.set(target, "payload", newPayload);
-          _events["payload"] = JSON.stringify(newPayload);
+          Reflect.set(target, "_events", {
+            ...target._events,
+            payload: JSON.stringify(newPayload),
+          });
         }
 
         Reflect.set(target, prop, value);

@@ -33,7 +33,6 @@ export class ActivitySerializer {
 
   static deserialize(
     dto: typeof activities.$inferSelect,
-    _events: ChangeEventsTree,
     draftVersionDto: typeof activityVersions.$inferSelect | null,
     lastVersionDto: typeof activityVersions.$inferSelect | null,
     draftVersionContentsDtos?: (typeof activityContents.$inferSelect | null)[],
@@ -55,7 +54,6 @@ export class ActivitySerializer {
       draftVersionDto &&
       ActivityVersionSerializer.deserialize(
         draftVersionDto,
-        _events,
         draftVersionContentsDtos,
         draftVersionQuestionsDtos
       );
@@ -64,20 +62,11 @@ export class ActivitySerializer {
       lastVersionDto &&
       ActivityVersionSerializer.deserialize(
         lastVersionDto,
-        _events,
         lastVersionContentsDtos,
         lastVersionQuestionsDtos
       );
 
-    _events[dto.id].Activity = {
-      ..._events[dto.id].Activity,
-      [dto.id]: {},
-    };
-
-    const proxiedEntity = new ChangeTrackingProxy(
-      activity,
-      _events[dto.id].Activity[dto.id]
-    ) as Activity;
+    const proxiedEntity = new ChangeTrackingProxy(activity) as Activity;
 
     return proxiedEntity;
   }

@@ -1,4 +1,5 @@
 import {
+  usersTable,
   activitiesTable,
   activityVersionsTable,
   activityContentsTable,
@@ -21,4 +22,5 @@ export const AllTables = {
   MultipleChoiceQuestion: activityQuestionsTable,
   TextQuestion: activityQuestionsTable,
   Notification: notificationsTable,
+  User: usersTable,
 };

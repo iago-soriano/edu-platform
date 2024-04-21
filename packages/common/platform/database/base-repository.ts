@@ -18,17 +18,19 @@ export class BaseRepository<T> implements IAbstractRepository {
     return this._dbClient.transaction(async (tx) => {
       let result: any = {};
 
-      const handleNewAndDelete = async (ent: Entity) => {
+      const handleEntity = async (ent: Entity) => {
         const thisEntityTableDefinition = this._entities[ent.constructor.name];
         if (ent.isNew) {
-          const res = await tx
-            .insert(thisEntityTableDefinition.table)
-            .values((thisEntityTableDefinition.serializer as any)(ent))
-            .returning({
-              [`${ent.constructor.name}Id`]: (
-                thisEntityTableDefinition.table as any
-              ).id,
-            });
+          const res = (
+            await tx
+              .insert(thisEntityTableDefinition.table)
+              .values((thisEntityTableDefinition.serializer as any)(ent))
+              .returning({
+                [`${ent.constructor.name}Id`]: (
+                  thisEntityTableDefinition.table as any
+                ).id,
+              })
+          )[0];
           result = { ...result, ...res };
         } else if (ent.isDelete) {
           await tx
@@ -36,38 +38,31 @@ export class BaseRepository<T> implements IAbstractRepository {
             .where(eq((thisEntityTableDefinition.table as any).id, ent.id));
         }
 
+        if (Object.keys(ent._events).length) {
+          const { table } = this._entities[ent.constructor.name];
+
+          await tx
+            .update(table)
+            .set({ ...ent._events, updatedAt: new Date() })
+            .where(eq((table as any).id, ent.id));
+        }
+
         for (const prop in ent) {
           if (!ent.hasOwnProperty(prop)) continue;
 
           const val = (ent as any)[prop];
           if (val instanceof Entity) {
-            await handleNewAndDelete(val);
+            await handleEntity(val);
           }
           if (val instanceof CollectionArray) {
             for (const item of val) {
-              await handleNewAndDelete(item);
+              await handleEntity(item);
             }
           }
         }
       };
 
-      await handleNewAndDelete(root);
-
-      // handle updates
-      for (const key in this._events[root.id]) {
-        const { table } = this._entities[key];
-        const changesToEntitiesOfThisTable = this._events[root.id][key];
-        for (let entityId in changesToEntitiesOfThisTable) {
-          const changesToBeMadeToEntity =
-            changesToEntitiesOfThisTable[entityId];
-          if (Object.keys(changesToBeMadeToEntity).length) {
-            await tx
-              .update(table)
-              .set({ ...changesToBeMadeToEntity, updatedAt: new Date() })
-              .where(eq((table as any).id, entityId));
-          }
-        }
-      }
+      await handleEntity(root);
 
       return result;
     });

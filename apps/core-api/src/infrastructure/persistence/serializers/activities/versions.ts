@@ -28,7 +28,6 @@ export class ActivityVersionSerializer {
 
   static deserialize(
     dto: typeof activityVersions.$inferSelect,
-    _events: ChangeEventsTree,
     contentsDtos?: (typeof activityContents.$inferSelect | null)[],
     questionsDtos?: (typeof activityQuestions.$inferSelect | null)[]
   ) {
@@ -47,35 +46,19 @@ export class ActivityVersionSerializer {
     // TODO: order
     if (contentsDtos) {
       for (let content of contentsDtos) {
-        version.elements.push(
-          ActivityContentSerializer.deserialize(
-            content!,
-            _events[dto.activityId]
-          )
-        );
+        version.elements.push(ActivityContentSerializer.deserialize(content!));
       }
     }
 
     if (questionsDtos) {
       for (let question of questionsDtos) {
         version.elements.push(
-          ActivityQuestionSerializer.deserialize(
-            question!,
-            _events[dto.activityId]
-          )
+          ActivityQuestionSerializer.deserialize(question!)
         );
       }
     }
 
-    _events[dto.activityId].ActivityVersion = {
-      ..._events[dto.activityId].ActivityVersion,
-      [version.id]: {},
-    };
-
-    const proxiedEntity = new ChangeTrackingProxy(
-      version,
-      _events[dto.activityId].ActivityVersion[version.id]
-    ) as ActivityVersion;
+    const proxiedEntity = new ChangeTrackingProxy(version) as ActivityVersion;
 
     return proxiedEntity;
   }
