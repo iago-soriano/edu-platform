@@ -3,7 +3,8 @@ import {
   IFeedbackPublishedUseCase,
   IStudentOutputPublishedUseCase,
   IUserCreatedUseCase,
-} from "@application/use-cases";
+} from "application/use-cases/event-handlers";
+import { DomainEvent } from "@edu-platform/common/platform/interfaces";
 
 export class SqsHandler {
   constructor(
@@ -12,7 +13,14 @@ export class SqsHandler {
     private studentOutputPublishedUseCase: IStudentOutputPublishedUseCase,
     private userCreatedUseCase: IUserCreatedUseCase
   ) {}
-  execute(evnt: any) {
-    console.log(evnt);
+  async execute(evnt: DomainEvent<any>) {
+    switch (evnt.eventType) {
+      case "UserCreated":
+        await this.userCreatedUseCase.execute(evnt);
+        break;
+
+      default:
+        break;
+    }
   }
 }

@@ -1,8 +1,5 @@
 import { IUserRepository } from "@application/interfaces";
-import {
-  db,
-  users,
-} from "../../../../../core-api/src/infrastructure/persistence/schema";
+import { db, users } from "../schema";
 import { eq, and } from "drizzle-orm";
 
 export class UserRepository implements IUserRepository {

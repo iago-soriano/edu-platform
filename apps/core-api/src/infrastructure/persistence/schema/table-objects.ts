@@ -1,4 +1,5 @@
 import {
+  users,
   activities,
   activityQuestions,
   activityVersions,
@@ -14,8 +15,8 @@ import {
   ActivityVersionSerializer,
   CollectionSerializer,
   CollectionParticipationSerializer,
+  NotificationSerializer,
 } from "../serializers";
-import { NotificationSerializer } from "../serializers/notifications";
 import { TableDefinition } from "@edu-platform/common/platform";
 
 export const activitiesTable: TableDefinition = {
@@ -49,4 +50,9 @@ export const collectionParticipationsTable: TableDefinition = {
 export const notificationsTable: TableDefinition = {
   table: notifications,
   serializer: NotificationSerializer.serialize,
+};
+
+export const usersTable: TableDefinition = {
+  table: users,
+  serializer: (args) => args,
 };

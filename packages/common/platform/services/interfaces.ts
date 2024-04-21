@@ -16,7 +16,7 @@ export interface ITokenService {
 }
 
 export interface ITopicService {
-  send: (event: DomainEvent, topicArn: string) => Promise<any>;
+  send: (event: DomainEvent<unknown>, topicArn: string) => Promise<any>;
 }
 
 export interface IEncryptionService {

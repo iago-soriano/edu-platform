@@ -1,8 +1,5 @@
 import { ITokenRepository } from "@application/interfaces";
-import {
-  db,
-  tokens,
-} from "../../../../../core-api/src/infrastructure/persistence/schema";
+import { db, tokens } from "../schema";
 import { eq, and } from "drizzle-orm";
 
 export class TokenRepository implements ITokenRepository {

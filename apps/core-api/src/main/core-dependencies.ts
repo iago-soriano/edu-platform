@@ -4,7 +4,7 @@ dotenv.config(); // call this before importing main, because that will use env v
 import * as awilix from "awilix";
 
 import {
-  // UserRepository,
+  UserRepository,
   StudentOutputsRepository,
   ActivitiesRepository,
   ActivitiesReadRepository,
@@ -40,7 +40,7 @@ export const registerCoreDependencies = (
     domainServiceRegistry: awilix.asClass(DomainServicesRegistry).classic(),
 
     // repositories
-    // userRepository: awilix.asClass(UserRepository).classic(),
+    userRepository: awilix.asClass(UserRepository).classic(),
     activitiesRepository: awilix.asClass(ActivitiesRepository).classic(),
     activitiesReadRepository: awilix
       .asClass(ActivitiesReadRepository)

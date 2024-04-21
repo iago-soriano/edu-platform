@@ -1,7 +1,9 @@
 import { AxiosFetcher } from "./axios-fetcher";
 import { getServerSession, refreshToken } from "./auth";
 
-export const SSRAxios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
+export const SSRAxios = new AxiosFetcher(
+  process.env.NEXT_PUBLIC_CORE_API_HOST!
+);
 SSRAxios.setInterceptor(
   "request",
   async (config) => {
@@ -27,9 +29,8 @@ SSRAxios.setInterceptor(
         prevRequest.sent = true;
         console.log("refresh server-side");
         await refreshToken({ data: session });
-        prevRequest.headers[
-          "Authorization"
-        ] = `Bearer ${session?.user?.accessToken}`;
+        prevRequest.headers["Authorization"] =
+          `Bearer ${session?.user?.accessToken}`;
         return this._instance(prevRequest);
       }
     }

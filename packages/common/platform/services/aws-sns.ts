@@ -8,7 +8,7 @@ export class TopicService implements ITopicService {
     this._snsClient = new SNSClient();
   }
 
-  public async send(event: DomainEvent, topicArn: string) {
+  public async send(event: DomainEvent<unknown>, topicArn: string) {
     await this._snsClient.send(
       new PublishCommand({
         MessageAttributes: {

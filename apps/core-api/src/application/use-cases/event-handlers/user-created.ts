@@ -2,15 +2,24 @@ import { IUseCase } from "@edu-platform/common/platform";
 import {
   ICollectionsRepository,
   INotificationsRepository,
+  IUserRepository,
 } from "@application/interfaces";
-import { ActivityPublishedEvent } from "@domain/events";
-import { NotificationsFactory } from "@domain/entities";
+import { UserCreatedEvent } from "@edu-platform/common/domain/integration-events";
+import { User } from "@domain/entities";
 
-export type IUserCreatedUseCase = IUseCase<ActivityPublishedEvent, void>;
+export type IUserCreatedUseCase = IUseCase<UserCreatedEvent, void>;
 
 class UseCase implements IUserCreatedUseCase {
-  constructor(private collectionsRepository: ICollectionsRepository) {}
+  constructor(
+    private collectionsRepository: ICollectionsRepository,
+    private userRepository: IUserRepository
+  ) {}
 
-  async execute(args: ActivityPublishedEvent) {}
+  async execute(evnt: UserCreatedEvent) {
+    const { payload } = evnt;
+    await this.userRepository.save(
+      new User(payload.id, payload.name, payload.email)
+    );
+  }
 }
 export default UseCase;

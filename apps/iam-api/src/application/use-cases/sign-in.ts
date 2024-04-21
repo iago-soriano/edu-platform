@@ -1,4 +1,4 @@
-import { IUserRepository, UserSelectDTO } from "@application/interfaces";
+import { IUserRepository } from "@application/interfaces";
 import {
   CredentialsNotProvidedError,
   InvalidCredentialsError,
@@ -34,7 +34,7 @@ class UseCase implements ISignInUseCase {
   ) {}
 
   async execute({ email, password }: InputParams) {
-    let userDTO: UserSelectDTO | null;
+    let userDTO: any | null;
 
     if (email && password) {
       userDTO = await this.userRepository.getUserByEmail(email);

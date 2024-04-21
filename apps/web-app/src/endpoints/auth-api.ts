@@ -33,7 +33,7 @@ import {
 // import { axios } from "../infrastructure/api/axios-instance";
 // TODO: refactor to use the types above in all calls
 
-export const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
+export const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_AUTH_API_HOST!);
 
 export const useChangePasswordRequestMutation = ({
   onError,

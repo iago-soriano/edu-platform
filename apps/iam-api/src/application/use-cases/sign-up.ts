@@ -1,5 +1,6 @@
 import { IUserRepository, ITokenRepository } from "@application/interfaces";
 import { User } from "@domain/entities";
+import { UserCreatedEvent } from "@edu-platform/common/domain/integration-events";
 import {
   PasswordsDontMatchError,
   EmailAlreadySignedupError,
@@ -9,6 +10,7 @@ import {
   GetUUID,
   IEncryptionService,
   IEmailService,
+  ITopicService,
 } from "@edu-platform/common/platform";
 
 type InputParams = {
@@ -26,7 +28,9 @@ class UseCase implements ISignUpUseCase {
     private userRepository: IUserRepository,
     private encryptionService: IEncryptionService,
     private emailService: IEmailService,
-    private tokenRepository: ITokenRepository
+    private tokenRepository: ITokenRepository,
+    private topicService: ITopicService,
+    private domainTopicArn: string
   ) {}
 
   async execute({ email, password, name, confirmPassword }: InputParams) {
@@ -56,6 +60,11 @@ class UseCase implements ISignUpUseCase {
       userId,
       type: "VerifyAccount",
     });
+
+    await this.topicService.send(
+      new UserCreatedEvent({ id: userId, email, name }),
+      this.domainTopicArn
+    );
 
     await this.emailService.sendVerifyAccountEmail({
       destination: email,

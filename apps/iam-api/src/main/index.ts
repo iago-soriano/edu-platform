@@ -4,7 +4,7 @@ dotenv.config(); // call this before importing main, because that will use env v
 import * as awilix from "awilix";
 import { registerServer, ExpressServer } from "@edu-platform/common/platform";
 import { registerDependencies } from "./register-dependencies";
-import { pgClient } from "../../infrastructure/persistence/schema";
+import { pgClient } from "../infrastructure/persistence/schema";
 
 export const mainContainer = awilix.createContainer();
 

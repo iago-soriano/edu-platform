@@ -3,7 +3,7 @@ import {
   ICollectionsRepository,
   INotificationsRepository,
 } from "@application/interfaces";
-import { ActivityPublishedEvent } from "@domain/events";
+import { ActivityPublishedEvent } from "@edu-platform/common/domain/integration-events";
 import { NotificationsFactory } from "@domain/entities";
 
 export type IStudentOutputPublishedUseCase = IUseCase<

@@ -4,7 +4,7 @@ import { useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { useSignOut } from "./use-sign-out";
 
-const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
+const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_CORE_API_HOST!);
 
 export const useAxiosAuth = () => {
   const session = useSession();
@@ -16,9 +16,8 @@ export const useAxiosAuth = () => {
       "request",
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers[
-            "Authorization"
-          ] = `Bearer ${session?.data?.user.accessToken}`;
+          config.headers["Authorization"] =
+            `Bearer ${session?.data?.user.accessToken}`;
         }
         return config;
       },
@@ -34,9 +33,8 @@ export const useAxiosAuth = () => {
         if (error?.response?.status === 401 && !prevRequest?.sent) {
           prevRequest.sent = true;
           await refresh();
-          prevRequest.headers[
-            "Authorization"
-          ] = `Bearer ${session?.data?.user.accessToken}`;
+          prevRequest.headers["Authorization"] =
+            `Bearer ${session?.data?.user.accessToken}`;
           return axios._instance(prevRequest);
         }
 

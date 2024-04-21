@@ -19,6 +19,13 @@ import {
   ChangePasswordUseCase,
   RefreshTokenUseCase,
 } from "@application/use-cases";
+import {
+  BCryptEncryptionService,
+  EmailService,
+  JWTTokenService,
+  TopicService,
+} from "@edu-platform/common/platform/services";
+import { UserRepository, TokenRepository } from "@infrastructure/persistence";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
@@ -51,5 +58,17 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     changePasswordUseCase: awilix.asClass(ChangePasswordUseCase).classic(),
     refreshTokenUseCase: awilix.asClass(RefreshTokenUseCase).classic(),
+
+    // services
+    domainTopicArn: awilix.asValue(process.env.DOMAIN_SNS_TOPIC_ARN),
+
+    topicService: awilix.asClass(TopicService).classic(),
+    tokenService: awilix.asClass(JWTTokenService).singleton(),
+    encryptionService: awilix.asClass(BCryptEncryptionService),
+    emailService: awilix.asClass(EmailService),
+
+    // repositories
+    userRepository: awilix.asClass(UserRepository).classic(),
+    tokenRepository: awilix.asClass(TokenRepository).classic(),
   });
 };

@@ -1,7 +1,6 @@
 import { relations, type InferSelectModel } from "drizzle-orm";
 import {
   users,
-  tokens,
   activities,
   activityQuestions,
   activityVersions,
@@ -13,16 +12,8 @@ import {
   collections,
 } from "./tables";
 
-export const tokensRelations = relations(tokens, ({ one }) => ({
-  users: one(users, {
-    fields: [tokens.userId],
-    references: [users.id],
-  }),
-}));
-
 export const usersRelations = relations(users, ({ many }) => ({
   activities: many(activities),
-  tokens: many(tokens),
 }));
 
 export const collectionsRelations = relations(collections, ({ one, many }) => ({
