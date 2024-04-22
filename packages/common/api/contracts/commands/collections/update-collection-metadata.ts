@@ -1,8 +1,7 @@
 import { z } from "zod";
 
 export const collectionRequestSchema = z.object({
-  id: z.number().optional(),
-
+  id: z.coerce.number(),
   name: z.string().optional(),
   description: z.string().optional(),
   isPrivate: z.boolean().optional(),
@@ -12,11 +11,11 @@ export type CollectionRequestDTO = z.infer<typeof collectionRequestSchema>;
 export const parseToCollectionRequestDTO = collectionRequestSchema.parse;
 
 type RequestBody = CollectionRequestDTO;
-type ResponseBody = { CollectionId: number };
-type Params = {};
+type ResponseBody = {};
+type Params = { id: number };
 
 export {
-  RequestBody as SaveCollectionRequestBody,
-  ResponseBody as SaveCollectionResponseBody,
-  Params as SaveCollectionParams,
+  RequestBody as UpdateCollectionMetadataRequestBody,
+  ResponseBody as UpdateCollectionMetadataResponseBody,
+  Params as UpdateCollectionMetadataParams,
 };

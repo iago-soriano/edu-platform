@@ -28,7 +28,7 @@ export class CollectionSerializer {
   }
 
   static deserialize(
-    dto: typeof collections.$inferSelect,
+    dto: Partial<typeof collections.$inferSelect>,
     participationDtos:
       | (typeof collectionParticipations.$inferSelect | null)[]
       | null

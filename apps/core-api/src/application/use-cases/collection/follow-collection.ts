@@ -13,11 +13,10 @@ class UseCase implements IInsertFollowerInCollectionUseCase {
   constructor(private collectionsRepository: ICollectionsRepository) {}
 
   async execute({ user, collectionId }: InputParams) {
-    const collection =
-      await this.collectionsRepository.findRootById(collectionId);
+    const collection = await this.collectionsRepository.findById(collectionId);
     if (!collection) throw new Error("Coleção não encontrada");
 
-    // collection.insertFollower(user);
+    collection.insertFollower(user);
 
     await this.collectionsRepository.save(collection);
   }

@@ -28,9 +28,6 @@ import {
   RemoveUserFromCollectionParams,
   RemoveUserFromCollectionRequestBody,
   RemoveUserFromCollectionResponseBody,
-  SaveCollectionParams,
-  SaveCollectionRequestBody,
-  SaveCollectionResponseBody,
   ListCollectionsForParticipantQuery,
   ListCollectionsForParticipantResponseBody,
   ListCollectionsForOwnerQuery,
@@ -42,6 +39,16 @@ import {
   SaveQuestionParams,
   SaveQuestionResponseBody,
   SaveQuestionRequestBody,
+  FollowCollectionParams,
+  FollowCollectionResponseBody,
+  FollowCollectionRequestBody,
+  UnfollowCollectionParams,
+  UnfollowCollectionResponseBody,
+  CreateNewCollectionRequestBody,
+  CreateNewCollectionResponseBody,
+  UpdateCollectionMetadataParams,
+  UpdateCollectionMetadataRequestBody,
+  UpdateCollectionMetadataResponseBody,
 } from "./contracts";
 import { IHTTPClient } from "./interfaces";
 
@@ -128,11 +135,20 @@ export class ApiClient {
   }
 
   // COLLECTIONS
-  saveCollection(args: SaveCollectionRequestBody) {
+  createNewCollection(args: CreateNewCollectionRequestBody) {
     return this._fetcher.post(
       `collections`,
       args
-    ) as Promise<SaveCollectionResponseBody>;
+    ) as Promise<CreateNewCollectionResponseBody>;
+  }
+  updateCollectionMetadata({
+    id,
+    ...args
+  }: UpdateCollectionMetadataParams & UpdateCollectionMetadataRequestBody) {
+    return this._fetcher.patch(
+      `collections`,
+      args
+    ) as Promise<UpdateCollectionMetadataResponseBody>;
   }
   insertUserInCollection({
     collectionId,
@@ -148,9 +164,27 @@ export class ApiClient {
     participationId,
   }: RemoveUserFromCollectionParams) {
     return this._fetcher.delete(
-      `collections/${collectionId}/participation/${participationId}`,
+      `collections/${collectionId}/participation/${participationId}/student`,
       undefined
     ) as Promise<RemoveUserFromCollectionResponseBody>;
+  }
+  insertFollowerInCollection({
+    collectionId,
+    ...args
+  }: FollowCollectionParams & FollowCollectionRequestBody) {
+    return this._fetcher.post(
+      `collections/${collectionId}/follow`,
+      args
+    ) as Promise<FollowCollectionResponseBody>;
+  }
+  unfollowCollection({
+    collectionId,
+    participationId,
+  }: UnfollowCollectionParams) {
+    return this._fetcher.delete(
+      `collections/${collectionId}/participation/${participationId}/follower`,
+      undefined
+    ) as Promise<UnfollowCollectionResponseBody>;
   }
   public listCollectionsForParticipant(
     { page, pageSize }: ListCollectionsForParticipantQuery = {

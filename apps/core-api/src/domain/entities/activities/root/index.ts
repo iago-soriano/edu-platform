@@ -1,4 +1,4 @@
-import { ActivityPublishedEvent } from "@domain/events";
+import { ActivityPublishedEvent } from "@edu-platform/common/domain/integration-events";
 import { IDomainServiceRegistry } from "@domain/services";
 import { resolveDomainServicesRegistry } from "domain/services/resolve";
 import { ContentRequestDTO, QuestionRequestDTO } from "@edu-platform/common";
@@ -85,7 +85,7 @@ export class Activity extends Entity {
     this.setDraftVersion(null);
 
     await this._domainServiceRegistry.publishToDomainTopic(
-      new ActivityPublishedEvent({ activity: this })
+      new ActivityPublishedEvent({ activityId: this.id })
     );
   }
 

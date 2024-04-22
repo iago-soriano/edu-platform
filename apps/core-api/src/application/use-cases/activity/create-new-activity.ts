@@ -24,12 +24,18 @@ class UseCase implements ICreateNewActivityUseCase {
   ) {}
 
   async execute({ user, collectionId }: InputParams) {
-    const collection =
-      await this.collectionsRepository.findRootById(collectionId);
+    const res =
+      await this.collectionsRepository.findByIdWithActivityCount(collectionId);
 
-    if (!collection) throw new Error("Collection not found");
+    if (!res) throw new Error("Collection not found");
 
-    const newActivity = ActivitiesFactory.from(collection, user);
+    const { collection, activitiesCount } = res;
+
+    const newActivity = ActivitiesFactory.from(
+      collection,
+      activitiesCount,
+      user
+    );
 
     return this.activitiesRepository.save(newActivity);
   }

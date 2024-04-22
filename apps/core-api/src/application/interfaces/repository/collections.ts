@@ -9,12 +9,17 @@ import {
 import { IAbstractRepository } from "@edu-platform/common/platform";
 
 export interface ICollectionsRepository extends IAbstractRepository {
-  findRootById: (collectionId: number) => Promise<Collection | null>;
-  findRootByIdWithParticipants: (
+  findById: (collectionId: number) => Promise<Collection | null>;
+  findByIdWithParticipants: (
     collectionId: number
   ) => Promise<Collection | null>;
-  findRootByIdWithActivityCount: (
-    collectionId: number
+  findByIdWithActivityCount: (collectionId: number) => Promise<{
+    collection: Partial<Collection>;
+    activitiesCount: number;
+  } | null>;
+  findByIdWithAParticipation: (
+    collectionId: number,
+    participationId: number
   ) => Promise<Collection | null>;
 }
 

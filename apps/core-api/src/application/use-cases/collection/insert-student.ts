@@ -24,15 +24,13 @@ class UseCase implements IInsertUserInCollectionUseCase {
 
   async execute({ user, collectionId, studentEmail }: InputParams) {
     const collection =
-      await this.collectionsRepository.findRootByIdWithParticipants(
-        collectionId
-      );
+      await this.collectionsRepository.findByIdWithParticipants(collectionId);
     if (!collection) throw new Error("Coleção não encontrada");
 
-    const student = await this.userRepository.getUserByEmail(studentEmail);
+    const student = await this.userRepository.getByEmail(studentEmail);
     if (!student) throw new StudentIsNotUser();
 
-    // collection.insertStudent(user, student);
+    collection.insertStudent(user, student);
 
     await this.collectionsRepository.save(collection);
   }

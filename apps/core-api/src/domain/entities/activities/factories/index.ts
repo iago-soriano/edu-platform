@@ -10,10 +10,16 @@ export class ActivitiesFactory {
   public static Versions: VersionFactory = new VersionFactory();
   public static Contents: ContentFactory = new ContentFactory();
 
-  public static from(collection: Collection, user: { id: number }) {
+  public static from(
+    collection: Partial<Collection>,
+    activitiesCount: number,
+    user: { id: number }
+  ) {
     if (collection.ownerId !== user.id)
       throw new Error("You cannot add activities to this collection");
 
+    if (activitiesCount > 10)
+      throw new Error("There can only be up to 10 activities per collection");
     const activity = new Activity();
 
     activity.id = GetUUID();

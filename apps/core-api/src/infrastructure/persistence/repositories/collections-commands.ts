@@ -1,6 +1,11 @@
 import { ICollectionsRepository } from "@application/interfaces";
-import { db, collections, collectionParticipations } from "../schema";
-import { eq, and } from "drizzle-orm";
+import {
+  db,
+  collections,
+  collectionParticipations,
+  activities,
+} from "../schema";
+import { eq, and, sql } from "drizzle-orm";
 import { BaseRepository } from "@edu-platform/common/platform";
 import { CollectionSerializer } from "../serializers";
 import { AllTables } from "./all-tables";
@@ -19,7 +24,7 @@ export class CollectionsRepository
     super(CollectionEntityNames, db);
   }
 
-  async findRootById(collectionId: number) {
+  async findById(collectionId: number) {
     const dto = (
       await db
         .select()
@@ -30,7 +35,7 @@ export class CollectionsRepository
     return CollectionSerializer.deserialize(dto, null);
   }
 
-  async findRootByIdWithParticipants(collectionId: number) {
+  async findByIdWithParticipants(collectionId: number) {
     const dto = await db
       .select()
       .from(collections)
@@ -50,15 +55,50 @@ export class CollectionsRepository
     );
   }
 
-  async findRootByIdWithActivityCount(collectionId: number) {
-    //TODO
+  async findByIdWithActivityCount(collectionId: number) {
     const dto = (
       await db
-        .select()
+        .select({
+          id: collections.id,
+          ownerId: collections.ownerId,
+          activitiesCount: sql<number>`COUNT(${activities.id}) OVER ()`.as(
+            "activitiesCount"
+          ),
+        })
         .from(collections)
+        .leftJoin(activities, eq(activities.collectionId, collections.id))
         .where(eq(collections.id, collectionId))
     )[0];
+
     if (!dto) return null;
-    return CollectionSerializer.deserialize(dto, null);
+    return {
+      collection: CollectionSerializer.deserialize(dto, null),
+      activitiesCount: dto.activitiesCount,
+    };
+  }
+
+  async findByIdWithAParticipation(
+    collectionId: number,
+    participationId: number
+  ) {
+    const dto = await db
+      .select()
+      .from(collections)
+      .leftJoin(
+        collectionParticipations,
+        eq(collectionParticipations.collectionId, collections.id)
+      )
+      .where(
+        and(
+          eq(collections.id, collectionId),
+          eq(collectionParticipations.id, participationId)
+        )
+      );
+    if (!dto) return null;
+
+    return CollectionSerializer.deserialize(
+      dto[0].collections,
+      dto.map(({ collection_participations }) => collection_participations)
+    );
   }
 }

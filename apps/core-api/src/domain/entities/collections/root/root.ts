@@ -1,8 +1,9 @@
 import { CollectionName, CollectionDescription } from "../value-objects";
-import { CollectionParticipation } from "../participants";
+import { CollectionParticipation, ParticipationType } from "../participants";
 import { Entity, CollectionArray } from "@edu-platform/common/platform";
 
 export class Collection extends Entity {
+  public id: number;
   public name: CollectionName;
   public description: CollectionDescription;
   public isPrivate: boolean;
@@ -17,7 +18,8 @@ export class Collection extends Entity {
     name?: string,
     description?: string,
     isPrivate?: boolean,
-    notifyOwnerOnStudentOutput?: boolean
+    notifyOwnerOnStudentOutput?: boolean,
+    ownerId?: number
   ) {
     super();
     this.id = id || 0;
@@ -25,9 +27,10 @@ export class Collection extends Entity {
     this.description = new CollectionDescription(description || "");
     this.isPrivate = isPrivate || true;
     this.notifyOwnerOnStudentOutput = notifyOwnerOnStudentOutput || true;
+    this.ownerId = ownerId || 0;
   }
 
-  upsert(
+  updateMetadata(
     user: { id: number },
     newValues: {
       name?: string;
@@ -36,16 +39,68 @@ export class Collection extends Entity {
       notifyOwnerOnStudentOutput?: boolean;
     }
   ) {
-    if (newValues.description) {
+    if (user.id !== this.ownerId) throw new Error("User is not owner");
+
+    if (newValues.description !== undefined) {
       this.description = new CollectionDescription(newValues.description);
       this.description.validate();
     }
-    if (newValues.name) {
+    if (newValues.name !== undefined) {
       this.name = new CollectionName(newValues.name);
       this.name.validate();
     }
-    if (newValues.isPrivate !== undefined) this.isPrivate = newValues.isPrivate;
+    if (newValues.isPrivate !== undefined) {
+      this.isPrivate = newValues.isPrivate;
+    }
     if (newValues.notifyOwnerOnStudentOutput !== undefined)
       this.notifyOwnerOnStudentOutput = newValues.notifyOwnerOnStudentOutput;
+  }
+
+  insertStudent(user: { id: number }, student: { id: number }) {
+    if (user.id !== this.ownerId) throw new Error("User is not owner");
+
+    if (!this.isPrivate) throw new Error("Public collection");
+
+    if (this.participants.length >= 10)
+      throw new Error("Max number of participants reached");
+
+    const newParticipant = new CollectionParticipation(
+      student.id,
+      this.id,
+      ParticipationType.Student
+    );
+
+    this.participants.push(newParticipant);
+  }
+
+  removeStudent(user: { id: number }, participationId: number) {
+    if (user.id !== this.ownerId) throw new Error("User is not owner");
+
+    this.participants.markAsDeletedById(participationId);
+  }
+
+  insertFollower(user: { id: number }) {
+    if (this.isPrivate) throw new Error("Private collection");
+
+    const newParticipant = new CollectionParticipation(
+      user.id,
+      this.id,
+      ParticipationType.Follower
+    );
+
+    this.participants.push(newParticipant);
+  }
+
+  removeFollower(participationId: number, user: { id: number }) {
+    const participationToDelete = this.participants.filter(
+      (part) => part.id === participationId
+    )[0];
+
+    if (!participationToDelete)
+      throw new Error("Participation not found by id");
+    if (participationToDelete.userId !== user.id)
+      throw new Error("Cannot remove that participation");
+
+    this.participants.markAsDeletedById(participationId);
   }
 }

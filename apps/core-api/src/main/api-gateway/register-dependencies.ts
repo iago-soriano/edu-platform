@@ -19,6 +19,8 @@ import {
   CreateNewActivityController,
   ListActivitiesForCollectionParticipantController,
   ListActivitiesForCollectionOwnerController,
+  CreateNewCollectionController,
+  UpdateCollectionMetadataController,
 } from "@controllers";
 import {
   SaveQuestionUseCase,
@@ -33,6 +35,8 @@ import {
   InsertFollowerInCollectionUseCase,
   ImportActivityUseCase,
   PublishDraftUseCase,
+  UpdateCollectionMetadataUseCase,
+  CreateNewCollectionUseCase,
 } from "@application/use-cases";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
@@ -82,7 +86,12 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     importActivityController: awilix
       .asClass(ImportActivityController)
       .classic(),
-
+    updateCollectionMetadataController: awilix
+      .asClass(UpdateCollectionMetadataController)
+      .classic(),
+    createNewCollectionController: awilix
+      .asClass(CreateNewCollectionController)
+      .classic(),
     /** #endregion */
 
     // use cases
@@ -112,6 +121,12 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     publishDraftUseCase: awilix.asClass(PublishDraftUseCase).classic(),
     insertFollowerInCollectionUseCase: awilix
       .asClass(InsertUserInCollectionUseCase)
+      .classic(),
+    createNewCollectionUseCase: awilix
+      .asClass(CreateNewCollectionUseCase)
+      .classic(),
+    updateCollectionMetadataUseCase: awilix
+      .asClass(UpdateCollectionMetadataUseCase)
       .classic(),
   });
 };
