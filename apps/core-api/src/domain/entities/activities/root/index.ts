@@ -1,10 +1,19 @@
 import { ActivityPublishedEvent } from "@edu-platform/common/domain/integration-events";
 import { IDomainServiceRegistry } from "@domain/services";
 import { resolveDomainServicesRegistry } from "domain/services/resolve";
-import { ContentRequestDTO, QuestionRequestDTO } from "@edu-platform/common";
+import {
+  ContentRequestDTO,
+  InvalidStateError,
+  QuestionRequestDTO,
+  SilentInvalidStateError,
+} from "@edu-platform/common";
 import { Entity, PersistancePropertyName } from "@edu-platform/common/platform";
 
 import { ActivityVersion, ActivitiesFactory } from "..";
+
+const throwDraftValidationError = (message: string) => {
+  throw new InvalidStateError(message, { fieldName: "draft" });
+};
 
 export class Activity extends Entity {
   private _domainServiceRegistry: IDomainServiceRegistry;
@@ -28,9 +37,12 @@ export class Activity extends Entity {
     user: { id: number }
   ) {
     if (!this.draftVersion)
-      throw new Error("There is currently no draft to update");
+      throw new SilentInvalidStateError(
+        "There is currently no draft to update"
+      );
 
-    if (this.authorId !== user.id) throw new Error("Activity not found");
+    if (this.authorId !== user.id)
+      throw new SilentInvalidStateError("User is not activity author");
 
     this.draftVersion.updateMetadata(newValues);
   }
@@ -47,13 +59,14 @@ export class Activity extends Entity {
 
   public createNewDraft(user: { id: number }) {
     if (this.authorId !== user.id)
-      throw new Error("You are not allowed to change this activity");
+      throw new SilentInvalidStateError("User is not activity author");
     if (!this.lastVersion)
-      throw new Error(
+      throwDraftValidationError(
         "There is no currently published version to create a draft from"
       );
 
-    if (this.draftVersion) throw new Error("There is already a draft");
+    if (this.draftVersion)
+      throwDraftValidationError("There is already a draft");
 
     this.setDraftVersion(
       ActivitiesFactory.Versions.withElementsFrom(this.lastVersion!)
@@ -61,25 +74,26 @@ export class Activity extends Entity {
   }
 
   public deleteElementOfDraft(user: { id: number }, id: number) {
-    if (!this.draftVersion) throw new Error("There is no draft version");
+    if (!this.draftVersion)
+      throwDraftValidationError("There is no draft version");
     if (this.authorId !== user.id)
-      throw new Error("You are not allowed to change this activity");
+      throw new SilentInvalidStateError("User is not activity author");
 
-    return this.draftVersion.deleteElement(id);
+    return this.draftVersion!.deleteElement(id);
   }
 
   public async publishCurrentDraft(user: { id: number }) {
     if (!this.draftVersion)
-      throw new Error("There is currently no draft to publish");
+      throwDraftValidationError("There is currently no draft to publish");
     if (this.authorId !== user.id)
-      throw new Error("You are not allowed to change this activity");
+      throw new SilentInvalidStateError("User is not activity author");
 
     if (this.lastVersion) {
       this.lastVersion.archive();
       this.archivedVersions.push(this.lastVersion);
     }
 
-    this.draftVersion.publish();
+    this.draftVersion!.publish();
 
     this._setLastVersion(this.draftVersion);
     this.setDraftVersion(null);
@@ -91,10 +105,12 @@ export class Activity extends Entity {
 
   _canUpsertElement(user: { id: number }) {
     if (this.authorId !== user.id)
-      throw new Error("You are not allowed to change this activity");
+      throw new SilentInvalidStateError("User is not activity author");
 
     if (!this.draftVersion)
-      throw new Error("There is currently no draft to insert elements in");
+      throwDraftValidationError(
+        "There is currently no draft to insert elements in"
+      );
   }
 
   public upsertContent(user: { id: number }, contentDto: ContentRequestDTO) {

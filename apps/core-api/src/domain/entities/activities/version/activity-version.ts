@@ -12,13 +12,18 @@ import {
 } from "./value-objects";
 import { Entity, CollectionArray } from "@edu-platform/common/platform";
 import {
-  CustomError,
   ContentRequestDTO,
   QuestionRequestDTO,
+  SilentInvalidStateError,
+  InvalidStateError,
 } from "@edu-platform/common";
 import { VersionStatus } from "./enums";
 
 export { VersionStatus } from "./enums";
+
+const throwVersionValidationError = (message: string) => {
+  throw new InvalidStateError(message, { fieldName: "version" });
+};
 
 export class ActivityVersion extends Entity {
   // metadata
@@ -77,28 +82,29 @@ export class ActivityVersion extends Entity {
 
   public deleteElement(id: number) {
     const element = this.elements.filter((el) => el.id === Number(id))[0];
-    if (!element) throw new Error("Element of specified id not found");
+    if (!element)
+      throw new SilentInvalidStateError(`Element with id ${id} not found`);
 
     this.elements.markAsDeletedById(element.id!);
   }
 
   public publish() {
     if (this.status !== VersionStatus.Draft)
-      throw new Error("Can only publish draft versions");
+      throwVersionValidationError("Can only publish draft versions");
     if (!this.elements.length)
-      throw new Error(
-        "Não há conteúdos, não se pode publicar uma atividade vazia"
+      throwVersionValidationError(
+        "There are no contents. You can't publish an empty activity"
       );
 
     if (this.title.isEmpty() || this.description.isEmpty())
-      throw new Error("Atividade deve ter título e descrição");
+      throwVersionValidationError("Activity must have title and description");
 
     let elementsToDelete = 0;
     for (let element of this.elements) {
       if (!element.checkValidityForPublication())
-        throw new Error(
-          `The element with description ${element.description} is unfinished` //TODO: return id and scroll on the page
-        );
+        throwVersionValidationError(
+          `The element with description ${element.description} is unfinished`
+        ); //TODO: return id and scroll on the page
 
       if (element.isEmpty()) {
         elementsToDelete++;
@@ -107,21 +113,21 @@ export class ActivityVersion extends Entity {
     }
 
     if (elementsToDelete === this.elements.length)
-      throw new Error("All elements are empty, cannot publish");
+      throwVersionValidationError("All elements are empty, cannot publish");
 
     this.status = VersionStatus.Published;
   }
 
   public archive() {
     if (this.status !== VersionStatus.Published)
-      throw new Error("Can only archive published versions");
+      throwVersionValidationError("Can only archive published versions");
 
     this.status = VersionStatus.Archived;
   }
 
   private _canInsertElement() {
     if (this.elements.length === ActivityVersion.MAX_ELEMENT_COUNT) {
-      throw new Error(
+      throwVersionValidationError(
         "Maximum number of elements has been reached, cannot add any new elements"
       );
     }
@@ -135,10 +141,10 @@ export class ActivityVersion extends Entity {
     const currentContent = currentElement as Content;
 
     if (!currentContent && contentDto.id)
-      throw new Error("Could not find specified content");
+      throw new SilentInvalidStateError("Could not find specified content");
 
     if (currentContent && currentContent.type !== contentDto.type)
-      throw new Error("Cannot change content type after creation");
+      throwVersionValidationError("Cannot change content type after creation");
 
     if (currentContent)
       return currentContent.update(contentDto, this.activityId, this.id);
@@ -157,10 +163,10 @@ export class ActivityVersion extends Entity {
     const currentQuestion = currentElement as Question;
 
     if (!currentQuestion && questionDto.id)
-      throw new Error("Could not find specified question");
+      throw new SilentInvalidStateError("Could not find specified question");
 
     if (currentQuestion && currentQuestion?.type !== questionDto.type)
-      throw new Error("Cannot change question type after creation");
+      throwVersionValidationError("Cannot change question type after creation");
 
     if (currentQuestion) return currentQuestion.update(questionDto);
 

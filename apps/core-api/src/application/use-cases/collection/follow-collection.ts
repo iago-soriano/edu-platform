@@ -1,5 +1,6 @@
 import { IUseCase } from "@edu-platform/common/platform";
 import { UserSelectDTO, ICollectionsRepository } from "@application/interfaces";
+import { SilentInvalidStateError } from "@edu-platform/common";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -14,7 +15,10 @@ class UseCase implements IInsertFollowerInCollectionUseCase {
 
   async execute({ user, collectionId }: InputParams) {
     const collection = await this.collectionsRepository.findById(collectionId);
-    if (!collection) throw new Error("Coleção não encontrada");
+    if (!collection)
+      throw new SilentInvalidStateError(
+        `Collection with id ${collectionId} not found`
+      );
 
     collection.insertFollower(user);
 

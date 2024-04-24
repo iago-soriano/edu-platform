@@ -1,4 +1,7 @@
-import { ContentRequestDTO } from "@edu-platform/common";
+import {
+  ContentRequestDTO,
+  SilentInvalidStateError,
+} from "@edu-platform/common";
 import {
   ContentTypes,
   ImageContent,
@@ -35,7 +38,9 @@ export class ContentFactory {
         break;
 
       default:
-        throw new Error(`Content of type ${dto.type} does not exist`);
+        throw new SilentInvalidStateError(
+          `Content of type ${dto.type} does not exist`
+        );
     }
 
     newContent.description = new ActivitElementDescription(

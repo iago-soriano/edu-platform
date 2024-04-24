@@ -1,5 +1,9 @@
 import { Content, ContentTypes } from "./base";
-import { FileType, ContentRequestDTO } from "@edu-platform/common";
+import {
+  FileType,
+  ContentRequestDTO,
+  SilentInvalidStateError,
+} from "@edu-platform/common";
 import { IDomainServiceRegistry } from "@domain/services";
 import { resolveDomainServicesRegistry } from "domain/services/resolve";
 
@@ -31,7 +35,7 @@ export class ImageContent extends Content {
   ) {
     super.update(contentDto);
     if (this.file && (!activityId || !versionId || !this.id))
-      throw new Error("Missing parameters to upload file");
+      throw new SilentInvalidStateError("Missing parameters to upload file");
 
     if (!this.file) return;
 

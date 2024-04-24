@@ -1,5 +1,6 @@
 import { IUseCase } from "@edu-platform/common/platform";
 import { UserSelectDTO, ICollectionsRepository } from "@application/interfaces";
+import { SilentInvalidStateError } from "@edu-platform/common";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -24,7 +25,9 @@ class UseCase implements IUpdateCollectionMetadataUseCase {
       collectionDto.id
     );
     if (!existingCollection)
-      throw new Error(`Collection with id ${collectionDto.id} not found`);
+      throw new SilentInvalidStateError(
+        `Collection with id ${collectionDto.id} not found`
+      );
 
     existingCollection.updateMetadata(user, collectionDto);
 

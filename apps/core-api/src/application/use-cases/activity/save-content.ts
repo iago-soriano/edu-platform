@@ -1,6 +1,7 @@
 import { ContentRequestDTO } from "@edu-platform/common/api";
 import { IUseCase } from "@edu-platform/common/platform";
 import { UserSelectDTO, IActivitiesRepository } from "@application/interfaces";
+import { SilentInvalidStateError } from "@edu-platform/common";
 
 type InputParams = {
   contentDto: ContentRequestDTO;
@@ -18,7 +19,10 @@ class UseCase implements ISaveContentUseCase {
   async execute({ contentDto, user, activityId }: InputParams) {
     const activity =
       await this.activitiesRepository.findRootByIdWithElements(activityId);
-    if (!activity) throw new Error("Activity not found");
+    if (!activity)
+      throw new SilentInvalidStateError(
+        `Activity with id ${activityId} not found`
+      );
 
     await activity.upsertContent(user, contentDto);
 

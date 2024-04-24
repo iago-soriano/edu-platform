@@ -1,8 +1,4 @@
 import { Collection, CollectionDescription, CollectionName } from "..";
-import {
-  UserIsNotCollectionOwner,
-  CollectionRequestDTO,
-} from "@edu-platform/common";
 
 export class CollectionFactory {
   static default(user: { id: number }) {

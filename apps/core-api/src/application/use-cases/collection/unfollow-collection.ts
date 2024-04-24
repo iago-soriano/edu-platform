@@ -1,5 +1,6 @@
 import { IUseCase } from "@edu-platform/common/platform";
 import { UserSelectDTO, ICollectionsRepository } from "@application/interfaces";
+import { SilentInvalidStateError } from "@edu-platform/common";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -20,7 +21,10 @@ class UseCase implements IUnfollowCollectionUseCase {
         collectionId,
         participationId
       );
-    if (!collection) throw new Error("Coleção não encontrada");
+    if (!collection)
+      throw new SilentInvalidStateError(
+        `Collection with id ${collectionId} not found`
+      );
 
     collection.removeFollower(participationId, user);
 

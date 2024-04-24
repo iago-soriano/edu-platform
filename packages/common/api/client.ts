@@ -56,7 +56,7 @@ export class ApiClient {
   constructor(private _fetcher: IHTTPClient) {}
 
   // ACTIVITIES
-  public saveContent({
+  saveContent({
     activityId,
     ...body
   }: SaveContentParams & SaveContentRequestBody) {
@@ -65,7 +65,7 @@ export class ApiClient {
       body
     ) as Promise<SaveContentResponseBody>;
   }
-  public saveContentWithFile({
+  saveContentWithFile({
     activityId,
     formData,
   }: SaveContentParams & { formData: FormData }) {
@@ -74,7 +74,7 @@ export class ApiClient {
       formData
     ) as Promise<SaveContentResponseBody>;
   }
-  public saveQuestion({
+  saveQuestion({
     activityId,
     ...body
   }: SaveQuestionParams & SaveQuestionRequestBody) {
@@ -83,18 +83,18 @@ export class ApiClient {
       body
     ) as Promise<SaveQuestionResponseBody>;
   }
-  public createNewActivity(body: CreateNewActivityRequestBody) {
+  createNewActivity(body: CreateNewActivityRequestBody) {
     return this._fetcher.post(
       "activities",
       body
     ) as Promise<CreateNewActivityResponseBody>;
   }
-  public getDraft({ activityId }: GetDraftVersionParams) {
+  getDraft({ activityId }: GetDraftVersionParams) {
     return this._fetcher.get(
       `activities/${activityId}/versions/draft`
     ) as Promise<GetDraftVersionResponseBody>;
   }
-  public updateVersionMetadata({
+  updateVersionMetadata({
     activityId,
     ...body
   }: UpdateVersionMetadataParams & UpdateVersionMetadataRequestBody) {
@@ -103,22 +103,22 @@ export class ApiClient {
       body
     ) as Promise<UpdateVersionMetadataResponseBody>;
   }
-  public listActivitiesForOwner(query: ListActivitiesQuery) {
+  listActivitiesForOwner(query: ListActivitiesQuery) {
     return this._fetcher.get("activities/owner-view", {
       ...query,
     }) as Promise<ListActivitiesForOwnerResponseBody>;
   }
-  public listActivitiesForParticipant(query: ListActivitiesQuery) {
+  listActivitiesForParticipant(query: ListActivitiesQuery) {
     return this._fetcher.get("activities/participant-view", {
       ...query,
     }) as Promise<ListActivitiesForParticipantResponseBody>;
   }
-  public deleteElement({ activityId, elementId }: DeleteElementParams) {
+  deleteElement({ activityId, elementId }: DeleteElementParams) {
     return this._fetcher.delete(
       `activities/${activityId}/versions/draft/elements/${elementId}`
     ) as Promise<DeleteElementResponseBody>;
   }
-  public publishDraft({
+  publishDraft({
     activityId,
     ...body
   }: PublishDraftParams & PublishDraftRequestBody) {
@@ -186,7 +186,7 @@ export class ApiClient {
       undefined
     ) as Promise<UnfollowCollectionResponseBody>;
   }
-  public listCollectionsForParticipant(
+  listCollectionsForParticipant(
     { page, pageSize }: ListCollectionsForParticipantQuery = {
       page: 0,
       pageSize: 10,
@@ -196,7 +196,7 @@ export class ApiClient {
       `collections/participant-view?&page=${page}&pageSize=${pageSize}`
     ) as Promise<ListCollectionsForParticipantResponseBody>;
   }
-  public listCollectionsForOwner(
+  listCollectionsForOwner(
     { isPrivate, page, pageSize }: ListCollectionsForOwnerQuery = {
       isPrivate: true,
       page: 0,
@@ -207,12 +207,12 @@ export class ApiClient {
       `collections/owner-view?isPrivate=${isPrivate}&page=${page}&pageSize=${pageSize}`
     ) as Promise<ListCollectionsForOwnerResponseBody>;
   }
-  public async getCollection({ collectionId }: GetCollectionParams) {
+  async getCollection({ collectionId }: GetCollectionParams) {
     return this._fetcher.get(
       `collections/${collectionId}`
     ) as Promise<GetCollectionResponseBody>;
   }
-  public async listStudentsOfCollection({
+  async listStudentsOfCollection({
     collectionId,
     page,
     pageSize,

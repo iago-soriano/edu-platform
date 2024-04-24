@@ -1,4 +1,4 @@
-import { ActivityNotFound } from "@edu-platform/common";
+import { SilentInvalidStateError } from "@edu-platform/common";
 import { UserSelectDTO, IActivitiesRepository } from "@application/interfaces";
 import { IUseCase } from "@edu-platform/common/platform";
 
@@ -17,7 +17,7 @@ class UseCase implements IUpdateActivityMetadataUseCase {
 
   async execute({ user, activityId, newValues }: InputParams) {
     const activity = await this.activitiesRepository.findRootById(activityId);
-    if (!activity) throw new ActivityNotFound();
+    if (!activity) throw new SilentInvalidStateError("Activity not found");
 
     activity.updateCurrentDraftMetadata(newValues, user);
 

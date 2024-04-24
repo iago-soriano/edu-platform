@@ -8,6 +8,7 @@ import {
   TextContent,
   ContentTypes,
 } from "@domain/entities";
+import { SilentInvalidStateError } from "@edu-platform/common";
 import { ChangeTrackingProxy, Entity } from "@edu-platform/common/platform";
 
 export class ActivityContentSerializer {
@@ -31,7 +32,7 @@ export class ActivityContentSerializer {
     } else if (domain instanceof TextContent) {
       content.payload = JSON.stringify({ text: domain.text });
       content.type = ContentTypes.Text;
-    } else throw new Error();
+    } else throw new Error("Content type not found");
 
     content.updatedAt = new Date();
     content.description = domain.description?.toString();
@@ -85,7 +86,9 @@ export class ActivityContentSerializer {
 
         break;
       default:
-        throw new Error(`Content of type ${dto.type} does not exist`);
+        throw new SilentInvalidStateError(
+          `Content of type ${dto.type} does not exist`
+        );
     }
 
     newContent.id = dto.id;

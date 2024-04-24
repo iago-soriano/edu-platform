@@ -8,6 +8,7 @@ import {
   QuestionTypes,
   Alternative,
 } from "@domain/entities";
+import { SilentInvalidStateError } from "@edu-platform/common";
 import {
   ChangeEventsTree,
   ChangeTrackingProxy,
@@ -66,7 +67,9 @@ export class ActivityQuestionSerializer {
         break;
 
       default:
-        throw new Error(`Question of type ${dto.type} does not exist`);
+        throw new SilentInvalidStateError(
+          `Question of type ${dto.type} does not exist`
+        );
     }
 
     newQuestion.id = dto.id;

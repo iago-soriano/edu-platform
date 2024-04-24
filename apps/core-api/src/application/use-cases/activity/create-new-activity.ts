@@ -5,6 +5,7 @@ import {
   ICollectionsRepository,
 } from "@application/interfaces";
 import { ActivitiesFactory } from "@domain/entities";
+import { SilentInvalidStateError } from "@edu-platform/common";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -27,7 +28,10 @@ class UseCase implements ICreateNewActivityUseCase {
     const res =
       await this.collectionsRepository.findByIdWithActivityCount(collectionId);
 
-    if (!res) throw new Error("Collection not found");
+    if (!res)
+      throw new SilentInvalidStateError(
+        `Collection with id ${collectionId} not found`
+      );
 
     const { collection, activitiesCount } = res;
 

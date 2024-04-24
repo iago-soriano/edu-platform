@@ -1,6 +1,6 @@
 import { BaseElement } from "../abstract-element";
 import { ActivitElementDescription } from "../value-objects/description";
-import { CustomError, ContentRequestDTO } from "@edu-platform/common";
+import { ContentRequestDTO } from "@edu-platform/common";
 import { ContentTypes } from "./enums";
 
 export { ContentTypes } from "./enums";
@@ -33,7 +33,7 @@ export abstract class Content extends BaseElement {
     if (contentDto.description) {
       this.description = new ActivitElementDescription(contentDto.description);
     }
-    this._mergePayload(contentDto);                                                 
+    this._mergePayload(contentDto);
 
     this.validateSelf();
   }

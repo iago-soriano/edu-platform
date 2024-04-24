@@ -1,9 +1,6 @@
 import { IUseCase } from "@edu-platform/common/platform";
 import { IActivitiesRepository, UserSelectDTO } from "@application/interfaces";
-import {
-  ActivityNotFound,
-  ActivityVersionNotFound,
-} from "@edu-platform/common";
+import { SilentInvalidStateError } from "@edu-platform/common";
 
 type InputParams = {
   activityId: string;
@@ -23,7 +20,7 @@ class UseCase implements IDeleteElementUseCase {
   async execute({ user, activityId, elementId }: InputParams) {
     const activity =
       await this.activitiesRepository.findRootByIdWithElements(activityId);
-    if (!activity) throw new ActivityNotFound();
+    if (!activity) throw new SilentInvalidStateError("Activity not found");
 
     activity.deleteElementOfDraft(user, elementId);
 

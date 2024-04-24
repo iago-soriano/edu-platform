@@ -8,7 +8,7 @@ import { IActivitiesReadRepository } from "@application/interfaces";
 import {
   GetDraftVersionParams,
   GetDraftVersionResponseBody,
-  ActivityVersionNotFound,
+  InvalidStateError,
 } from "@edu-platform/common";
 
 type Request = TypedRequest<
@@ -35,8 +35,7 @@ export class GetActivityVersionController
       activityId,
       user
     );
-
-    if (!resp) throw new ActivityVersionNotFound();
+    if (!resp) throw new InvalidStateError("Activity not found");
 
     return res.status(200).json(resp);
   }

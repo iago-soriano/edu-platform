@@ -1,5 +1,6 @@
 import { IUseCase } from "@edu-platform/common/platform";
 import { IActivitiesRepository, UserSelectDTO } from "@application/interfaces";
+import { SilentInvalidStateError } from "@edu-platform/common";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -15,7 +16,10 @@ class UseCase implements IPublishDraftUseCase {
   async execute({ user, activityId }: InputParams) {
     const activity =
       await this.activitiesRepository.findRootByIdWithElements(activityId);
-    if (!activity) throw new Error("Activity not found");
+    if (!activity)
+      throw new SilentInvalidStateError(
+        `Activity with id ${activityId} not found`
+      );
 
     await activity.publishCurrentDraft(user);
 

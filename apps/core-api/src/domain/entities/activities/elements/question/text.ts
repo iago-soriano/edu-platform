@@ -2,9 +2,12 @@ import { Question, QuestionTypes } from ".";
 import {
   DomainRules,
   QuestionRequestDTO,
-  AnswerKeyTextQuestionIsTooLong,
-  AnswerKeyTextQuestionIsTooShort,
+  InvalidStateError,
 } from "@edu-platform/common";
+
+const throwQuestionValidationError = (message: string) => {
+  throw new InvalidStateError(message, { fieldName: " text" });
+};
 
 export class TextQuestion extends Question {
   public answer?: string;
@@ -24,11 +27,15 @@ export class TextQuestion extends Question {
     if (
       this.answer.length > DomainRules.QUESTION.SUGGESTED_ANSWER_TEXT.MAX_LENGTH
     ) {
-      throw new AnswerKeyTextQuestionIsTooLong();
+      throwQuestionValidationError(
+        `Text question is too long. Max length allowed is ${DomainRules.QUESTION.SUGGESTED_ANSWER_TEXT.MAX_LENGTH} characters`
+      );
     } else if (
       this.answer.length < DomainRules.QUESTION.SUGGESTED_ANSWER_TEXT.MIN_LENGTH
     ) {
-      throw new AnswerKeyTextQuestionIsTooShort();
+      throwQuestionValidationError(
+        `Text question is too short. Min length allowed is ${DomainRules.QUESTION.SUGGESTED_ANSWER_TEXT.MIN_LENGTH} characters`
+      );
     }
   }
 

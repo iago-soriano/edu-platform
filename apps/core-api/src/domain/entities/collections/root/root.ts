@@ -1,6 +1,14 @@
 import { CollectionName, CollectionDescription } from "../value-objects";
 import { CollectionParticipation, ParticipationType } from "../participants";
 import { Entity, CollectionArray } from "@edu-platform/common/platform";
+import {
+  InvalidStateError,
+  SilentInvalidStateError,
+} from "@edu-platform/common";
+
+const throwCollectionValidationError = (message: string) => {
+  throw new InvalidStateError(message, { fieldName: "collection" });
+};
 
 export class Collection extends Entity {
   public id: number;
@@ -39,7 +47,8 @@ export class Collection extends Entity {
       notifyOwnerOnStudentOutput?: boolean;
     }
   ) {
-    if (user.id !== this.ownerId) throw new Error("User is not owner");
+    if (user.id !== this.ownerId)
+      throw new SilentInvalidStateError("User is not owner");
 
     if (newValues.description !== undefined) {
       this.description = new CollectionDescription(newValues.description);
@@ -57,12 +66,13 @@ export class Collection extends Entity {
   }
 
   insertStudent(user: { id: number }, student: { id: number }) {
-    if (user.id !== this.ownerId) throw new Error("User is not owner");
+    if (user.id !== this.ownerId)
+      throw new SilentInvalidStateError("User is not owner");
 
-    if (!this.isPrivate) throw new Error("Public collection");
+    if (!this.isPrivate) throwCollectionValidationError("Public collection");
 
     if (this.participants.length >= 10)
-      throw new Error("Max number of participants reached");
+      throwCollectionValidationError("Max number of participants reached");
 
     const newParticipant = new CollectionParticipation(
       student.id,
@@ -74,13 +84,14 @@ export class Collection extends Entity {
   }
 
   removeStudent(user: { id: number }, participationId: number) {
-    if (user.id !== this.ownerId) throw new Error("User is not owner");
+    if (user.id !== this.ownerId)
+      throw new SilentInvalidStateError("User is not owner");
 
     this.participants.markAsDeletedById(participationId);
   }
 
   insertFollower(user: { id: number }) {
-    if (this.isPrivate) throw new Error("Private collection");
+    if (this.isPrivate) throwCollectionValidationError("Private collection");
 
     const newParticipant = new CollectionParticipation(
       user.id,
@@ -97,9 +108,11 @@ export class Collection extends Entity {
     )[0];
 
     if (!participationToDelete)
-      throw new Error("Participation not found by id");
+      throw new SilentInvalidStateError("Participation not found by id");
+    if (participationToDelete.type !== ParticipationType.Follower)
+      throw new SilentInvalidStateError("This user is not a follower");
     if (participationToDelete.userId !== user.id)
-      throw new Error("Cannot remove that participation");
+      throw new SilentInvalidStateError("Cannot remove that participation");
 
     this.participants.markAsDeletedById(participationId);
   }

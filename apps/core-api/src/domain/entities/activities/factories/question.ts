@@ -1,4 +1,7 @@
-import { QuestionRequestDTO } from "@edu-platform/common";
+import {
+  QuestionRequestDTO,
+  SilentInvalidStateError,
+} from "@edu-platform/common";
 import {
   QuestionTypes,
   Question,
@@ -42,7 +45,9 @@ export class QuestionFactory {
         break;
 
       default:
-        throw new Error(`Question of type ${dto.type} does not exist`);
+        throw new SilentInvalidStateError(
+          `Question of type ${dto.type} does not exist`
+        );
     }
 
     newQuestion.description = new ActivitElementDescription(

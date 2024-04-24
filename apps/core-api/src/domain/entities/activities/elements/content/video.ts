@@ -2,6 +2,10 @@ import { Content, ContentTypes } from "./base";
 import { IgnorePersistance } from "@edu-platform/common/platform";
 import { InvalidStateError, ContentRequestDTO } from "@edu-platform/common";
 
+const throwTracksValidationError = (message: string) => {
+  throw new InvalidStateError(message, { fieldName: "tracks" });
+};
+
 export class VideoContent extends Content {
   @IgnorePersistance()
   public tracks: string = "";
@@ -32,9 +36,8 @@ export class VideoContent extends Content {
     if (this.tracks === "-") return;
     const tracksArray = this.tracks.split(",");
     if (tracksArray.length > 6)
-      throw new InvalidStateError("Video can only have up to 6 tracks", {
-        fieldName: "tracks",
-      });
+      throwTracksValidationError("Video can only have up to 6 tracks");
+
     for (const track of tracksArray) {
       const intervals = track.split("-");
       const hasTwoIntervals = intervals.length === 2;
@@ -42,7 +45,7 @@ export class VideoContent extends Content {
         intervals[0].split(":").length === 3 &&
         intervals[1].split(":").length === 3;
       if (!hasTwoIntervals || !hasCorrectIntervals)
-        throw new InvalidStateError(
+        throwTracksValidationError(
           "Tracks format must be hh:mm:ss-hh:mm:ss,..."
         );
     }

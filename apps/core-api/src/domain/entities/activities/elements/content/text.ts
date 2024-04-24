@@ -1,11 +1,13 @@
 import { Content, ContentTypes } from "./base";
 import {
   DomainRules,
-  TextContentIsTooLong,
-  TextContentIsTooShort,
-  CustomError,
   ContentRequestDTO,
+  InvalidStateError,
 } from "@edu-platform/common";
+
+const throwPayloadValidationError = (message: string) => {
+  throw new InvalidStateError(message, { fieldName: "text" });
+};
 
 export class TextContent extends Content {
   public text?: string;
@@ -26,9 +28,13 @@ export class TextContent extends Content {
   _validatePayload() {
     if (!this.text) return;
     if (this.text.length > DomainRules.CONTENT.TEXT.MAX_LENGTH)
-      throw new TextContentIsTooLong();
+      throwPayloadValidationError(
+        `Text is too long. Max length allowed is ${DomainRules.CONTENT.TEXT.MAX_LENGTH} characters`
+      );
 
     if (this.text.length < DomainRules.CONTENT.TEXT.MIN_LENGTH)
-      throw new TextContentIsTooShort();
+      throwPayloadValidationError(
+        `Text is too short. Min length allowed is ${DomainRules.CONTENT.TEXT.MIN_LENGTH} characters`
+      );
   }
 }

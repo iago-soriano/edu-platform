@@ -1,7 +1,12 @@
+import { InvalidStateError } from "@edu-platform/common";
 import { ValueObject } from "@edu-platform/common/platform";
 
 const descriptionMaxLength = 50;
 const descriptionMinLength = 5;
+
+const throwDescriptionValidationError = (message: string) => {
+  throw new InvalidStateError(message, { fieldName: "description" });
+};
 
 export class ActivitElementDescription extends ValueObject {
   constructor(aData: string | null) {
@@ -11,12 +16,12 @@ export class ActivitElementDescription extends ValueObject {
   public validate() {
     if (!this._data) return;
     if (this._data.length < descriptionMinLength) {
-      throw new Error(
-        `Descrição é curta demais. Tamanho mínimo permitido é de ${descriptionMinLength} caracteres`
+      throwDescriptionValidationError(
+        `Description is too short. Min length allowed is ${descriptionMinLength} characteres`
       );
     } else if (this._data.length > descriptionMaxLength) {
-      throw new Error(
-        `Descrição é longa demais. Tamanho máximo permitido é de ${descriptionMaxLength} caracteres`
+      throwDescriptionValidationError(
+        `Description is too long. Max length allowed is ${descriptionMaxLength} characteres`
       );
     }
   }

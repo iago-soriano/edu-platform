@@ -1,9 +1,13 @@
 import { Question } from ".";
-import { DomainRules, QuestionRequestDTO } from "@edu-platform/common";
+import { InvalidStateError, QuestionRequestDTO } from "@edu-platform/common";
 import { QuestionAlternativeFactory } from "../../factories";
 import { QuestionTypes } from "./enums";
 
 export { QuestionTypes } from "./enums";
+
+const throwAlternativeValidationError = (message: string) => {
+  throw new InvalidStateError(message, { fieldName: "alternative" });
+};
 
 export class Alternative {
   public text: string = "";
@@ -11,9 +15,10 @@ export class Alternative {
   public isCorrect: boolean = false;
 
   validate() {
-    if (this.text.length > 300) throw new Error("Alternative text is too long");
+    if (this.text.length > 300)
+      throwAlternativeValidationError("Alternative text is too long");
     if (this.comment && this.comment.length > 300)
-      throw new Error("Alternative comment is too long");
+      throwAlternativeValidationError("Alternative comment is too long");
   }
 }
 

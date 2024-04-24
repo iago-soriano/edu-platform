@@ -1,5 +1,6 @@
 import { IUseCase } from "@edu-platform/common/platform";
 import { UserSelectDTO, ICollectionsRepository } from "@application/interfaces";
+import { SilentInvalidStateError } from "@edu-platform/common";
 
 type InputParams = {
   user: UserSelectDTO;
@@ -17,7 +18,10 @@ class UseCase implements IRemoveStudentFromCollectionUseCase {
   async execute({ user, collectionId, participationId }: InputParams) {
     const collection =
       await this.collectionsRepository.findByIdWithParticipants(collectionId);
-    if (!collection) throw new Error("Coleção não encontrada");
+    if (!collection)
+      throw new SilentInvalidStateError(
+        `Collection with id ${collectionId} not found`
+      );
 
     collection.removeStudent(user, participationId);
 

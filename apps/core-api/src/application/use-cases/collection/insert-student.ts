@@ -1,4 +1,7 @@
-import { StudentIsNotUser } from "@edu-platform/common";
+import {
+  InvalidStateError,
+  SilentInvalidStateError,
+} from "@edu-platform/common";
 import { IUseCase } from "@edu-platform/common/platform";
 import {
   UserSelectDTO,
@@ -25,10 +28,13 @@ class UseCase implements IInsertUserInCollectionUseCase {
   async execute({ user, collectionId, studentEmail }: InputParams) {
     const collection =
       await this.collectionsRepository.findByIdWithParticipants(collectionId);
-    if (!collection) throw new Error("Coleção não encontrada");
+    if (!collection)
+      throw new SilentInvalidStateError(
+        `Collection with id ${collectionId} not found`
+      );
 
     const student = await this.userRepository.getByEmail(studentEmail);
-    if (!student) throw new StudentIsNotUser();
+    if (!student) throw new InvalidStateError("Student is not user");
 
     collection.insertStudent(user, student);
 

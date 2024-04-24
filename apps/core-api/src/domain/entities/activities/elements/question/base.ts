@@ -1,12 +1,15 @@
 import { ActivitElementDescription } from "..";
 import {
   DomainRules,
+  InvalidStateError,
   QuestionRequestDTO,
-  TextQuestionIsTooLong,
-  TextQuestionIsTooShort,
 } from "@edu-platform/common";
 import { BaseElement } from "../abstract-element";
 import { QuestionTypes } from "./enums";
+
+const throwQuestionValidationError = (message: string) => {
+  throw new InvalidStateError(message, { fieldName: "question" });
+};
 
 export abstract class Question extends BaseElement {
   public question?: string;
@@ -22,11 +25,15 @@ export abstract class Question extends BaseElement {
   private _validateQuestionText() {
     if (!this.question) return;
     if (this.question.length > DomainRules.QUESTION.QUESTION_TEXT.MAX_LENGTH) {
-      throw new TextQuestionIsTooLong();
+      throwQuestionValidationError(
+        `Text question is too long. Max length allowed is ${DomainRules.QUESTION.QUESTION_TEXT.MAX_LENGTH} characters`
+      );
     } else if (
       this.question.length < DomainRules.QUESTION.QUESTION_TEXT.MIN_LENGTH
     ) {
-      throw new TextQuestionIsTooShort();
+      throwQuestionValidationError(
+        `Text question is too short. Min length allowed is ${DomainRules.QUESTION.QUESTION_TEXT.MIN_LENGTH} characters`
+      );
     }
   }
   public validateSelf() {
