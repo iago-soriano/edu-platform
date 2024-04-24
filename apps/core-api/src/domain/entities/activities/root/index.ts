@@ -11,10 +11,6 @@ import { Entity, PersistancePropertyName } from "@edu-platform/common/platform";
 
 import { ActivityVersion, ActivitiesFactory } from "..";
 
-const throwDraftValidationError = (message: string) => {
-  throw new InvalidStateError(message, { fieldName: "draft" });
-};
-
 export class Activity extends Entity {
   private _domainServiceRegistry: IDomainServiceRegistry;
 
@@ -61,12 +57,12 @@ export class Activity extends Entity {
     if (this.authorId !== user.id)
       throw new SilentInvalidStateError("User is not activity author");
     if (!this.lastVersion)
-      throwDraftValidationError(
+      throw new SilentInvalidStateError(
         "There is no currently published version to create a draft from"
       );
 
     if (this.draftVersion)
-      throwDraftValidationError("There is already a draft");
+      throw new SilentInvalidStateError("There is already a draft");
 
     this.setDraftVersion(
       ActivitiesFactory.Versions.withElementsFrom(this.lastVersion!)
@@ -75,7 +71,7 @@ export class Activity extends Entity {
 
   public deleteElementOfDraft(user: { id: number }, id: number) {
     if (!this.draftVersion)
-      throwDraftValidationError("There is no draft version");
+      throw new SilentInvalidStateError("There is no draft version");
     if (this.authorId !== user.id)
       throw new SilentInvalidStateError("User is not activity author");
 
@@ -84,7 +80,9 @@ export class Activity extends Entity {
 
   public async publishCurrentDraft(user: { id: number }) {
     if (!this.draftVersion)
-      throwDraftValidationError("There is currently no draft to publish");
+      throw new SilentInvalidStateError(
+        "There is currently no draft to publish"
+      );
     if (this.authorId !== user.id)
       throw new SilentInvalidStateError("User is not activity author");
 
@@ -108,7 +106,7 @@ export class Activity extends Entity {
       throw new SilentInvalidStateError("User is not activity author");
 
     if (!this.draftVersion)
-      throwDraftValidationError(
+      throw new SilentInvalidStateError(
         "There is currently no draft to insert elements in"
       );
   }

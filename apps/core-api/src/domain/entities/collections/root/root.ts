@@ -6,10 +6,6 @@ import {
   SilentInvalidStateError,
 } from "@edu-platform/common";
 
-const throwCollectionValidationError = (message: string) => {
-  throw new InvalidStateError(message, { fieldName: "collection" });
-};
-
 export class Collection extends Entity {
   public id: number;
   public name: CollectionName;
@@ -69,10 +65,10 @@ export class Collection extends Entity {
     if (user.id !== this.ownerId)
       throw new SilentInvalidStateError("User is not owner");
 
-    if (!this.isPrivate) throwCollectionValidationError("Public collection");
+    if (!this.isPrivate) throw new SilentInvalidStateError("Public collection");
 
     if (this.participants.length >= 10)
-      throwCollectionValidationError("Max number of participants reached");
+      throw new InvalidStateError("Max number of participants reached");
 
     const newParticipant = new CollectionParticipation(
       student.id,
@@ -91,7 +87,7 @@ export class Collection extends Entity {
   }
 
   insertFollower(user: { id: number }) {
-    if (this.isPrivate) throwCollectionValidationError("Private collection");
+    if (this.isPrivate) throw new SilentInvalidStateError("Private collection");
 
     const newParticipant = new CollectionParticipation(
       user.id,

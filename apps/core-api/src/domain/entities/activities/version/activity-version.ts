@@ -21,10 +21,6 @@ import { VersionStatus } from "./enums";
 
 export { VersionStatus } from "./enums";
 
-const throwVersionValidationError = (message: string) => {
-  throw new InvalidStateError(message, { fieldName: "version" });
-};
-
 export class ActivityVersion extends Entity {
   // metadata
   public title!: ActivityVersionTitle;
@@ -90,19 +86,19 @@ export class ActivityVersion extends Entity {
 
   public publish() {
     if (this.status !== VersionStatus.Draft)
-      throwVersionValidationError("Can only publish draft versions");
+      throw new SilentInvalidStateError("Can only publish draft versions");
     if (!this.elements.length)
-      throwVersionValidationError(
+      throw new InvalidStateError(
         "There are no contents. You can't publish an empty activity"
       );
 
     if (this.title.isEmpty() || this.description.isEmpty())
-      throwVersionValidationError("Activity must have title and description");
+      throw new InvalidStateError("Activity must have title and description");
 
     let elementsToDelete = 0;
     for (let element of this.elements) {
       if (!element.checkValidityForPublication())
-        throwVersionValidationError(
+        throw new InvalidStateError(
           `The element with description ${element.description} is unfinished`
         ); //TODO: return id and scroll on the page
 
@@ -113,21 +109,21 @@ export class ActivityVersion extends Entity {
     }
 
     if (elementsToDelete === this.elements.length)
-      throwVersionValidationError("All elements are empty, cannot publish");
+      throw new InvalidStateError("All elements are empty, cannot publish");
 
     this.status = VersionStatus.Published;
   }
 
   public archive() {
     if (this.status !== VersionStatus.Published)
-      throwVersionValidationError("Can only archive published versions");
+      throw new SilentInvalidStateError("Can only archive published versions");
 
     this.status = VersionStatus.Archived;
   }
 
   private _canInsertElement() {
     if (this.elements.length === ActivityVersion.MAX_ELEMENT_COUNT) {
-      throwVersionValidationError(
+      throw new InvalidStateError(
         "Maximum number of elements has been reached, cannot add any new elements"
       );
     }
@@ -144,7 +140,9 @@ export class ActivityVersion extends Entity {
       throw new SilentInvalidStateError("Could not find specified content");
 
     if (currentContent && currentContent.type !== contentDto.type)
-      throwVersionValidationError("Cannot change content type after creation");
+      throw new SilentInvalidStateError(
+        "Cannot change content type after creation"
+      );
 
     if (currentContent)
       return currentContent.update(contentDto, this.activityId, this.id);
@@ -166,7 +164,9 @@ export class ActivityVersion extends Entity {
       throw new SilentInvalidStateError("Could not find specified question");
 
     if (currentQuestion && currentQuestion?.type !== questionDto.type)
-      throwVersionValidationError("Cannot change question type after creation");
+      throw new SilentInvalidStateError(
+        "Cannot change question type after creation"
+      );
 
     if (currentQuestion) return currentQuestion.update(questionDto);
 
