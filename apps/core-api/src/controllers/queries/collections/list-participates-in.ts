@@ -18,7 +18,7 @@ export class ListCollectionsForParticipantController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path: string = "collections/participant-view";
+  path: string = "collections/participates-in";
   middlewares: string[] = ["auth"];
 
   constructor(private collectionsReadRepository: ICollectionsReadRepository) {}

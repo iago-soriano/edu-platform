@@ -46,3 +46,4 @@ nodejs
 commands.sh
 .turbo
 .tfvars
+infra/scripts/aws-support-tools

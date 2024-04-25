@@ -25,11 +25,10 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
         .select({
           id: collections.id,
           name: collections.name,
-          // totalPublishedVersionsCount?: sql<number>`COUNT(DISTINCT ${activityVersions.id})`.as(
-          //   "totalActivitiesCount"
-          // ),
-          // newPublishedVersionsCount: number;
-          // myOutputsCount: number;
+          totalActivitiesCount:
+            sql<number>`COUNT(CASE WHEN ${activityVersions.status} = ${VersionStatus.Published} THEN 1 END)`.as(
+              "totalActivitiesCount"
+            ),
           ownerName: users.name,
           totalCollectionsCount:
             sql<number>`COUNT(${collections.id}) OVER ()`.as(

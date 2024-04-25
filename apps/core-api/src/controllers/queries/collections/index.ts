@@ -1,4 +1,4 @@
 export * from "./get-by-id";
-export * from "./list-owner-view";
-export * from "./list-participant-view";
+export * from "./list-owns";
+export * from "./list-participates-in";
 export * from "./list-participants";

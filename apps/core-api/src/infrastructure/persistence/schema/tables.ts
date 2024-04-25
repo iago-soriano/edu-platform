@@ -182,9 +182,10 @@ export const studentOutputs = pgTable("student_outputs", {
     .default(OutputStatus.Draft)
     .notNull(),
 
-  userId: integer("user_id")
-    .notNull()
-    .references(() => users.id),
+  studentId: integer("student_id").notNull(),
+  // .references(() => users.id),
+  activityAuthorId: integer("activity_author_id").notNull(),
+  // .references(() => users.id),
   versionId: uuid("version_id")
     .notNull()
     .references(() => activityVersions.id),

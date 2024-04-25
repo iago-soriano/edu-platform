@@ -4,9 +4,7 @@ import { z } from "zod";
 type ResponseBody = PaginatedResponse<{
   id: number;
   name?: string | null;
-  // totalPublishedVersionsCount?: number;
-  // newPublishedVersionsCount: number;
-  // myOutputsCount: number;
+  totalActivitiesCount?: number;
   ownerName: string;
 }>;
 

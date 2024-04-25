@@ -18,7 +18,7 @@ export class ListCollectionsForOwnerController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path: string = "collections/owner-view";
+  path: string = "collections/owns";
   middlewares: string[] = ["auth"];
 
   constructor(private collectionsReadRepository: ICollectionsReadRepository) {}

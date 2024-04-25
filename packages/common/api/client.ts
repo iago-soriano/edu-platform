@@ -5,8 +5,8 @@ import {
   CreateNewActivityParams,
   CreateNewActivityRequestBody,
   CreateNewActivityResponseBody,
-  GetDraftVersionParams,
-  GetDraftVersionResponseBody,
+  GetActivityVersionParams,
+  GetActivityVersionResponseBody,
   UpdateVersionMetadataParams,
   UpdateVersionMetadataRequestBody,
   UpdateVersionMetadataResponseBody,
@@ -89,10 +89,10 @@ export class ApiClient {
       body
     ) as Promise<CreateNewActivityResponseBody>;
   }
-  getDraft({ activityId }: GetDraftVersionParams) {
+  getDraft({ activityId }: GetActivityVersionParams) {
     return this._fetcher.get(
       `activities/${activityId}/versions/draft`
-    ) as Promise<GetDraftVersionResponseBody>;
+    ) as Promise<GetActivityVersionResponseBody>;
   }
   updateVersionMetadata({
     activityId,
@@ -193,7 +193,7 @@ export class ApiClient {
     }
   ) {
     return this._fetcher.get(
-      `collections/participant-view?&page=${page}&pageSize=${pageSize}`
+      `collections/participates-in?&page=${page}&pageSize=${pageSize}`
     ) as Promise<ListCollectionsForParticipantResponseBody>;
   }
   listCollectionsForOwner(
@@ -204,7 +204,7 @@ export class ApiClient {
     }
   ) {
     return this._fetcher.get(
-      `collections/owner-view?isPrivate=${isPrivate}&page=${page}&pageSize=${pageSize}`
+      `collections/owns?isPrivate=${isPrivate}&page=${page}&pageSize=${pageSize}`
     ) as Promise<ListCollectionsForOwnerResponseBody>;
   }
   async getCollection({ collectionId }: GetCollectionParams) {
