@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "commonjs",
+    "allowJs": true,
+    "strict": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./src/",
+    "outDir": "./build/",
+    "jsx": "react",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "paths": {
+      "@core/domain/entities": ["./core/domain/entities/index.ts"],
+      "@core/domain/enums": ["./core/domain/enums.ts"],
+      "@core/application/use-cases": ["./core/application/use-cases/index.ts"],
+      "@core/application/interfaces": [
+        "./core/application/interfaces/index.ts"
+      ],
+      "@core/controllers": ["./core/adapters/controllers/index.ts"],
+      "@core/sqs-entrypoint": ["./core/adapters/sqs-entrypoint/index.ts"],
+      "@core/infrastructure/persistence": [
+        "./core/adapters/infrastructure/persistence/index.ts"
+      ],
+      "@iam/domain/entities": ["./iam/domain/entities/index.ts"],
+      "@iam/domain/enums": ["./iam/domain/enums.ts"],
+      "@iam/application/use-cases": ["./iam/application/use-cases/index.ts"],
+      "@iam/application/interfaces": ["./iam/application/interfaces/index.ts"],
+      "@iam/controllers": ["./iam/adapters/controllers/index.ts"],
+      "@iam/infrastructure/persistence": [
+        "./iam/adapters/infrastructure/persistence/index.ts"
+      ]
+    }
+  },
+  "include": ["src/**/*.ts", "node_modules/**/*.d.ts", "index.sqs.ts"],
+  "exclude": ["src/test/**/*.ts", "**/*.spec.ts"]
+}
