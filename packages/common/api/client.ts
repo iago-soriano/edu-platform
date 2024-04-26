@@ -94,6 +94,16 @@ export class ApiClient {
       `activities/${activityId}/versions/draft`
     ) as Promise<GetActivityVersionResponseBody>;
   }
+  getPublished({ activityId }: GetActivityVersionParams) {
+    return this._fetcher.get(
+      `activities/${activityId}/versions/published`
+    ) as Promise<GetActivityVersionResponseBody>;
+  }
+  getArchived({ activityId, versionNumber }: GetActivityVersionParams) {
+    return this._fetcher.get(
+      `activities/${activityId}/versions/archived/${versionNumber}`
+    ) as Promise<GetActivityVersionResponseBody>;
+  }
   updateVersionMetadata({
     activityId,
     ...body

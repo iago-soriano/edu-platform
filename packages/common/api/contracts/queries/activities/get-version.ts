@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type TextContentResponsePayloadDTO = {
   text: string;
 };
@@ -31,6 +33,28 @@ export type ElementResponseDTO = {
   question?: QuestionResponseDTO | null;
 };
 
+export enum VersionStatus {
+  Published = "Published",
+  Draft = "Draft",
+  Archived = "Archived",
+}
+
+const requestSchemaActivityId = z.object({
+  activityId: z.string(),
+});
+
+const parseActivityId = requestSchemaActivityId.parse;
+
+export { parseActivityId };
+
+const requestSchema = z
+  .object({
+    versionNumber: z.coerce.number().positive(),
+  })
+  .merge(requestSchemaActivityId);
+
+const parseGetArchivedVersionRequest = requestSchema.parse;
+
 type ResponseBody = {
   title: string;
   description: string;
@@ -38,13 +62,19 @@ type ResponseBody = {
   version: number;
   collectionName: string;
   collectionId: number;
+  author: number;
+  status: VersionStatus;
   elements?: ElementResponseDTO[];
 };
 type Params = {
   activityId: string;
+  versionNumber?: string;
 };
 
 export {
-  ResponseBody as GetDraftVersionResponseBody,
-  Params as GetDraftVersionParams,
+  ResponseBody as GetActivityVersionResponseBody,
+  Params as GetActivityVersionParams,
+  parseGetArchivedVersionRequest,
+  parseActivityId as parseGetDraftVersionRequest,
+  parseActivityId as parseGetPublishedVersionRequest,
 };

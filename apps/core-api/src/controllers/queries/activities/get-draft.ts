@@ -6,19 +6,22 @@ import {
 } from "@edu-platform/common/platform/interfaces";
 import { IActivitiesReadRepository } from "@application/interfaces";
 import {
-  GetDraftVersionParams,
-  GetDraftVersionResponseBody,
+  GetActivityVersionParams,
+  GetActivityVersionResponseBody,
   InvalidStateError,
+  SilentInvalidStateError,
+  parseGetDraftVersionRequest,
 } from "@edu-platform/common";
+import { VersionStatus } from "domain/enums";
 
 type Request = TypedRequest<
-  GetDraftVersionParams,
+  GetActivityVersionParams,
   {},
-  GetDraftVersionResponseBody
+  GetActivityVersionResponseBody
 >;
-type Response = TypedResponse<GetDraftVersionResponseBody>;
+type Response = TypedResponse<GetActivityVersionResponseBody>;
 
-export class GetActivityVersionController
+export class GetDraftVersionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
@@ -28,14 +31,17 @@ export class GetActivityVersionController
   constructor(private activitiesReadRepository: IActivitiesReadRepository) {}
 
   async execute(req: Request, res: Response) {
-    const { activityId } = req.params;
+    const { activityId } = parseGetDraftVersionRequest(req.params);
     const { user } = req;
 
-    const resp = await this.activitiesReadRepository.findFullDraftViewById(
+    const resp = await this.activitiesReadRepository.findFullVersionById(
       activityId,
-      user
+      VersionStatus.Draft
     );
     if (!resp) throw new InvalidStateError("Activity not found");
+
+    if (user.id !== resp.author)
+      throw new SilentInvalidStateError("User is not author");
 
     return res.status(200).json(resp);
   }

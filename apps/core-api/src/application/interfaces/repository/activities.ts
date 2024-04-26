@@ -3,9 +3,10 @@ import {
   Activity,
   BaseElement,
   ActivityVersion,
+  VersionStatus,
 } from "@domain/entities";
 import {
-  GetDraftVersionResponseBody,
+  GetActivityVersionResponseBody,
   ListActivitiesForOwnerResponseBody,
   ListActivitiesForParticipantResponseBody,
   PaginatedParamsDTO,
@@ -30,8 +31,9 @@ export interface IActivitiesReadRepository {
       collectionId?: number;
     } & PaginatedParamsDTO
   ) => Promise<ListActivitiesForParticipantResponseBody>;
-  findFullDraftViewById: (
+  findFullVersionById: (
     activityId: string,
-    user: { id: number }
-  ) => Promise<GetDraftVersionResponseBody | null>;
+    status: VersionStatus,
+    versionNumber?: number
+  ) => Promise<GetActivityVersionResponseBody | null>;
 }

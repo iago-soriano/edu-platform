@@ -5,7 +5,6 @@ import {
   SaveContentController,
   CreateNewDraftVersionController,
   UpdateActivityMetadataController,
-  GetActivityVersionController,
   ListCollectionsForOwnerController,
   ListCollectionsForParticipantController,
   DeleteElementController,
@@ -21,6 +20,11 @@ import {
   ListActivitiesForCollectionOwnerController,
   CreateNewCollectionController,
   UpdateCollectionMetadataController,
+  GetDraftVersionController,
+  GetPublishedVersionController,
+  GetArchivedVersionController,
+  CreateUserOutputController,
+  UpdateStudentOutputController,
 } from "@controllers";
 import {
   SaveQuestionUseCase,
@@ -49,9 +53,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     updateActivityMetadataController: awilix
       .asClass(UpdateActivityMetadataController)
-      .classic(),
-    getActivityVersionController: awilix
-      .asClass(GetActivityVersionController)
       .classic(),
     listActivitiesForCollectionParticipantController: awilix
       .asClass(ListActivitiesForCollectionParticipantController)
@@ -92,6 +93,22 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     createNewCollectionController: awilix
       .asClass(CreateNewCollectionController)
       .classic(),
+    getDraftVersionController: awilix
+      .asClass(GetDraftVersionController)
+      .classic(),
+    getPublishedVersionController: awilix
+      .asClass(GetPublishedVersionController)
+      .classic(),
+    getArchivedVersionController: awilix
+      .asClass(GetArchivedVersionController)
+      .classic(),
+    createUserOutputController: awilix
+      .asClass(CreateUserOutputController)
+      .classic(),
+    updateStudentOutputController: awilix
+      .asClass(UpdateStudentOutputController)
+      .classic(),
+
     /** #endregion */
 
     // use cases

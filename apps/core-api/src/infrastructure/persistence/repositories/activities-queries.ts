@@ -8,7 +8,7 @@ import {
   collections,
 } from "../schema";
 import { IActivitiesReadRepository } from "@application/interfaces";
-import { eq, sql, and, desc } from "drizzle-orm";
+import { eq, sql, and, desc, or } from "drizzle-orm";
 import { VersionStatus } from "@domain/entities";
 import { alias } from "drizzle-orm/pg-core";
 import {
@@ -269,7 +269,19 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
     };
   }
 
-  async findFullDraftViewById(activityId: string, user: { id: number }) {
+  async findFullVersionById(
+    activityId: string,
+    status: VersionStatus,
+    versionNumber?: number
+  ) {
+    const conditions = [
+      eq(activityVersions.status, status),
+      eq(activities.id, activityId),
+    ];
+
+    if (versionNumber)
+      conditions.push(eq(activityVersions.version, versionNumber));
+
     const fullVersion = await db
       .select({
         title: activityVersions.title,
@@ -278,6 +290,8 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
         collectionName: collections.name,
         collectionId: collections.id,
         version: activityVersions.version,
+        author: activities.authorId,
+        status: activityVersions.status,
         contents: {
           id: activityContents.id,
           type: activityContents.type,
@@ -305,13 +319,7 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
       .orderBy(activityContents.order, activityQuestions.order)
       .innerJoin(activities, eq(activities.id, activityVersions.activityId))
       .innerJoin(collections, eq(activities.collectionId, collections.id))
-      .where(
-        and(
-          eq(activityVersions.status, VersionStatus.Draft),
-          eq(activities.id, activityId),
-          eq(activities.authorId, user.id)
-        )
-      );
+      .where(and(...conditions));
 
     if (!fullVersion) return null;
 
@@ -366,6 +374,8 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
       collectionName: fullVersion[0].collectionName,
       collectionId: fullVersion[0].collectionId,
       version: fullVersion[0].version,
+      author: fullVersion[0].author,
+      status: fullVersion[0].status as VersionStatus,
       elements,
     };
   }
