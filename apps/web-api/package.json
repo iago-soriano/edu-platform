@@ -8,7 +8,7 @@
     "build:windows": "tsc -p tsconfig.json && tsc-alias",
     "debug:sqs": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn  --exit-child --ignore-watch node_modules src/main/sqs/debug.ts",
     "start": "node ./build/api-gateway/index.js",
-    "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn  --exit-child --ignore-watch node_modules src/main/api-gateway/index.ts",
+    "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn  --exit-child --ignore-watch node_modules src/index.api.ts",
     "test": "cross-env NODE_ENV=test jest --watchAll",
     "test2:ci": "cross-env NODE_ENV=test jest --no-cache --runInBand",
     "test:ci": "cross-env NODE_ENV=test echo \"Testing\"",

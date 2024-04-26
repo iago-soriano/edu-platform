@@ -37,6 +37,6 @@
       ]
     }
   },
-  "include": ["src/**/*.ts", "node_modules/**/*.d.ts", "index.sqs.ts"],
+  "include": ["src/**/*.ts", "node_modules/**/*.d.ts", "src/index.sqs.ts"],
   "exclude": ["src/test/**/*.ts", "**/*.spec.ts"]
 }

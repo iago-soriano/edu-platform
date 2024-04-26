@@ -1,5 +1,5 @@
 import { IUseCase, IEncryptionService } from "@edu-platform/common/platform";
-import { IUserRepository, ITokenRepository } from "@application/interfaces";
+import { IUserRepository, ITokenRepository } from "@iam/application/interfaces";
 import {
   InvalidStateError,
   SilentInvalidStateError,
@@ -32,7 +32,7 @@ class UseCase implements IChangePasswordUseCase {
       "ChangePasswordRequest"
     );
 
-    if (!token) throw new InvalidValidationTokenError();
+    if (!token) throw new SilentInvalidStateError("");
     if (token.expiresAt && token.expiresAt.getTime() < Date.now())
       throw new InvalidStateError("");
 
@@ -41,7 +41,7 @@ class UseCase implements IChangePasswordUseCase {
 
     const user = await this.userRepository.getUserById(token.userId || 0);
 
-    if (!user) throw new UserNotFoundError();
+    if (!user) throw new SilentInvalidStateError("");
 
     const newHashedPassword = await this.encryptionService.encrypt(newPassword);
 

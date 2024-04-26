@@ -1,5 +1,5 @@
 import { ITokenService, JWTPayload } from "./interfaces";
-import { TokenGenerationError, Forbidden } from "@edu-platform/common/errors";
+import { Forbidden } from "@edu-platform/common/errors";
 import jwt, { JwtPayload as LibJWTPayload } from "jsonwebtoken";
 
 export class JWTTokenService implements ITokenService {
@@ -26,7 +26,7 @@ export class JWTTokenService implements ITokenService {
       });
       return resp;
     } catch (e) {
-      throw new TokenGenerationError({ error: (e as Error).message });
+      throw new Error((e as Error).message);
     }
   }
 
@@ -40,7 +40,7 @@ export class JWTTokenService implements ITokenService {
       });
       return resp;
     } catch (e) {
-      throw new TokenGenerationError({ error: (e as Error).message });
+      throw new Error((e as Error).message);
     }
   }
 

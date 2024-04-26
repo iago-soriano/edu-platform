@@ -1,6 +1,6 @@
 import http, { Server as HttpServer, RequestListener } from "http";
 import { AddressInfo } from "net";
-import { Client } from "pg";
+import { Client as PostgresClient } from "pg";
 
 interface ILogger {
   info: (message: string) => void;
@@ -11,7 +11,7 @@ export abstract class AbstractServer {
   private _server: HttpServer = new HttpServer();
   _logger: ILogger;
 
-  constructor(private _pgClient: Client) {
+  constructor(private _pgClients: PostgresClient[]) {
     this._logger = { info: console.log, error: console.error };
   }
 
@@ -20,7 +20,7 @@ export abstract class AbstractServer {
   }
 
   async start() {
-    await this._pgClient.connect();
+    await Promise.all(this._pgClients.map((client) => client.connect()));
 
     this._server.listen(parseInt(process.env.PORT || "3000"), () => {
       const { address, port } = this._server.address() as AddressInfo;

@@ -1,6 +1,14 @@
 import { Request, ITokenService, JWTPayload } from "../../interfaces";
-import { Forbidden, Unauthorized } from "@edu-platform/common/errors";
+import { CustomError, Forbidden } from "@edu-platform/common/errors";
 import { TokenExpiredError } from "jsonwebtoken";
+
+class Unauthorized extends CustomError {
+  HTTPstatusCode = 401;
+  static message = "Token de acesso inválido";
+  constructor() {
+    super(Unauthorized.message);
+  }
+}
 
 export class AuthenticationMiddlewareController {
   constructor(private tokenService: ITokenService) {}

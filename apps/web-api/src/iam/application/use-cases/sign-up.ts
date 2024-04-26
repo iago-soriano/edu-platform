@@ -61,10 +61,10 @@ class UseCase implements ISignUpUseCase {
       type: "VerifyAccount",
     });
 
-    await this.topicService.send(
-      new UserCreatedEvent({ id: userId, email, name }),
-      this.domainTopicArn
-    );
+    // await this.topicService.send(
+    //   new UserCreatedEvent({ id: userId, email, name }),
+    //   this.domainTopicArn
+    // );
 
     await this.emailService.sendVerifyAccountEmail({
       destination: email,

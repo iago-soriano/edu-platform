@@ -1,6 +1,7 @@
 import { z } from "zod";
-import { UnprocessableEntity } from "@edu-platform/common";
+// import { UnprocessableEntity } from "@edu-platform/common";
 
+// TODO deprecate
 export const parseNumberId = (params: any, fields: string[]) => {
   const response: { [field: string]: number } = {};
 
@@ -9,7 +10,7 @@ export const parseNumberId = (params: any, fields: string[]) => {
     try {
       response[field] = z.coerce.number().parse(params[field]);
     } catch (ex) {
-      throw new UnprocessableEntity((ex as Error).message);
+      throw new Error((ex as Error).message);
     }
   }
 

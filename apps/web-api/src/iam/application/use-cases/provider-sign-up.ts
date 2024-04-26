@@ -1,4 +1,4 @@
-import { IUserRepository } from "@application/interfaces";
+import { IUserRepository } from "@iam/application/interfaces";
 import { IUseCase, ITokenService } from "@edu-platform/common/platform";
 
 type InputParams = {

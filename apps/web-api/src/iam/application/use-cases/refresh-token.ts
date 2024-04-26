@@ -1,5 +1,5 @@
 import { IUserRepository } from "@iam/application/interfaces";
-import { Forbidden } from "@edu-platform/common/errors";
+import { Forbidden, InvalidStateError } from "@edu-platform/common/errors";
 import { TokenExpiredError } from "jsonwebtoken";
 import { IUseCase, ITokenService } from "@edu-platform/common/platform";
 

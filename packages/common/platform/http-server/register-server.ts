@@ -22,7 +22,7 @@ const getControllers = (container: awilix.AwilixContainer) => {
 export const registerServer = (
   container: awilix.AwilixContainer,
   baseUrn: string,
-  _pgClient: Client
+  _pgClients: Client[]
 ) => {
   container.register({
     authMiddleware: awilix
@@ -37,7 +37,7 @@ export const registerServer = (
         const authMiddleware = container.resolve("authMiddleware");
         const fileMiddleware = container.resolve("fileMiddleware");
         return {
-          _pgClient,
+          _pgClients,
           controllers: getControllers(container).map((controller) => {
             return {
               middlewares: controller.middlewares,

@@ -34,3 +34,11 @@ export class SilentInvalidStateError extends CustomError {
     super("", {}, realReason);
   }
 }
+
+export class Forbidden extends CustomError {
+  HTTPstatusCode = 403;
+  static message = (realReason?: string) => `${realReason}`;
+  constructor(realReason?: string) {
+    super(Forbidden.message(realReason));
+  }
+}

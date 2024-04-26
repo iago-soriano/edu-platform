@@ -3,8 +3,8 @@ dotenv.config(); // call this before importing main, because that will use env v
 
 import * as awilix from "awilix";
 import { SqsHandler } from "@core/sqs-entrypoint";
-import { registerDependencies as registerApplicationDependencies } from "./src/core/main/sqs.register-dependencies";
-import { registerDependencies as registerCommonDependencies } from "./src/core/main/common.register-dependencies";
+import { registerDependencies as registerApplicationDependencies } from "./core/main/sqs.register-dependencies";
+import { registerDependencies as registerCommonDependencies } from "./core/main/common.register-dependencies";
 
 export const mainContainer = awilix.createContainer();
 

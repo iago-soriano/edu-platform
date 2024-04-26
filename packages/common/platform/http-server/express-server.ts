@@ -1,7 +1,6 @@
 import express, { Express, RequestHandler } from "express";
 import serverless from "serverless-http";
-import "express-async-errors";
-import { RouteNotFoundError } from "@edu-platform/common/errors";
+import { CustomError } from "@edu-platform/common/errors";
 import { HTTPController, HTTPErrorController } from "../interfaces/controllers";
 import helmet from "helmet";
 import cors from "cors";
@@ -14,7 +13,15 @@ interface IExpressConstructorParams {
   errorHandler: HTTPErrorController;
   middlewares: { [key: string]: RequestHandler };
   baseUrn: string;
-  _pgClient: Client;
+  _pgClients: Client[];
+}
+
+class RouteNotFoundError extends CustomError {
+  HTTPstatusCode = 404;
+  static message = "Rota não encontrada";
+  constructor() {
+    super(RouteNotFoundError.message);
+  }
 }
 
 export class ExpressServer extends AbstractServer {
@@ -26,9 +33,9 @@ export class ExpressServer extends AbstractServer {
     errorHandler,
     middlewares,
     baseUrn,
-    _pgClient,
+    _pgClients,
   }: IExpressConstructorParams) {
-    super(_pgClient);
+    super(_pgClients);
     this._app = express();
     this.setupServer(this._app);
     this.baseUrn = baseUrn;
