@@ -2,8 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "cd apps/core-api && npm run dev",
-      "name": "Backend",
+      "command": "cd apps/web-api && npm run dev",
+      "name": "API",
+      "request": "launch",
+      "type": "node-terminal",
+      "outFiles": ["${workspaceFolder}/apps/core-api/build/**/*.js"],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "command": "cd apps/web-api && npm run debug:sqs",
+      "name": "Event Handling",
       "request": "launch",
       "type": "node-terminal",
       "outFiles": ["${workspaceFolder}/apps/core-api/build/**/*.js"],

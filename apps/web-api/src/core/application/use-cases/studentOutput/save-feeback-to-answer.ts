@@ -13,9 +13,9 @@ type InputParams = {
 
 type Return = void;
 
-export type ISaveAnswerUseCase = IUseCase<InputParams, Return>;
+export type ISaveFeedbackToAnswerUseCase = IUseCase<InputParams, Return>;
 
-class UseCase implements ISaveAnswerUseCase {
+class UseCase implements ISaveFeedbackToAnswerUseCase {
   constructor(
     private studentOutputsRepository: IStudentOutputsRepository,
     private activitiesRepository: IActivitiesRepository

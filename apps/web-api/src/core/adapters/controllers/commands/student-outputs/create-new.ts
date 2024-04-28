@@ -3,12 +3,12 @@ import {
   HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
-  parseNumberId,
 } from "@edu-platform/common/platform";
 import {
   CreateStudentOutputParams,
   CreateStudentOutputRequestBody,
   CreateStudentOutputResponseBody,
+  parseCreateNewStudentOutputRequest,
 } from "@edu-platform/common";
 import { ICreateStudentOutputUseCase } from "@core/application/use-cases";
 
@@ -23,7 +23,7 @@ export class CreateUserOutputController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.POST;
-  path: string = "activities/:activityId/published-version/student-output";
+  path: string = "student-output/:activityId";
   middlewares: string[] = ["auth"];
 
   constructor(
@@ -33,15 +33,11 @@ export class CreateUserOutputController
   async execute(req: Request, res: Response) {
     const { user } = req;
 
-    const { activityId, versionId } = parseNumberId(req.params, [
-      "activityId",
-      "versionId",
-    ]);
+    const { activityId } = parseCreateNewStudentOutputRequest(req.params);
 
     await this.createStudentOutputUseCase.execute({
       user,
       activityId,
-      versionId,
     });
 
     res.status(200).json();

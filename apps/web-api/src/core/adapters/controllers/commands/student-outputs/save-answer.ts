@@ -9,7 +9,7 @@ import {
   SaveAnswerRequestBody,
   SaveAnswerResponseBody,
 } from "@edu-platform/common";
-import { ISaveAnswerUseCase } from "@core/application/use-cases";
+// import { ISaveAnswerUseCase } from "@core/application/use-cases";
 
 type Request = TypedRequest<SaveAnswerParams, {}, SaveAnswerRequestBody>;
 type Response = TypedResponse<SaveAnswerResponseBody>;
@@ -19,7 +19,8 @@ export class SaveAnswerController implements HTTPController<Request, Response> {
   path: string = "answer";
   middlewares: string[] = ["auth"];
 
-  constructor(private saveAnswerUseCase: ISaveAnswerUseCase) {}
+  constructor() // private saveAnswerUseCase: ISaveAnswerUseCase
+  {}
 
   async execute(req: Request, res: Response) {
     // const answerDto = parseToAnswerRequestDTO(req.body);

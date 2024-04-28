@@ -28,9 +28,9 @@ import RemoveStudentFromCollectionUseCase, {
 import CreateStudentOutputUseCase, {
   ICreateStudentOutputUseCase,
 } from "./studentOutput/create-new";
-import SaveAnswerUseCase, {
-  ISaveAnswerUseCase,
-} from "./studentOutput-answer/save-feeback-to-answer";
+import SaveFeedbackToAnswerUseCase, {
+  ISaveFeedbackToAnswerUseCase,
+} from "./studentOutput/save-feeback-to-answer";
 import UpdateStudentOutputUseCase, {
   IUpdateStudentOutputUseCase,
 } from "./studentOutput/publish";
@@ -55,8 +55,11 @@ import CreateNewCollectionUseCase, {
 import UpdateCollectionMetadataUseCase, {
   IUpdateCollectionMetadataUseCase,
 } from "./collection/update-collection-metadata";
+import { UserCreatedUseCase, IUserCreatedUseCase } from "./event-handlers";
 
 export {
+  UserCreatedUseCase,
+  IUserCreatedUseCase,
   UpdateNotificationUseCase,
   IUpdateNotificationUseCase,
   SaveQuestionUseCase,
@@ -77,8 +80,8 @@ export {
   IRemoveStudentFromCollectionUseCase,
   CreateStudentOutputUseCase,
   ICreateStudentOutputUseCase,
-  SaveAnswerUseCase,
-  ISaveAnswerUseCase,
+  SaveFeedbackToAnswerUseCase,
+  ISaveFeedbackToAnswerUseCase,
   UpdateStudentOutputUseCase,
   IUpdateStudentOutputUseCase,
   InsertFollowerInCollectionUseCase,

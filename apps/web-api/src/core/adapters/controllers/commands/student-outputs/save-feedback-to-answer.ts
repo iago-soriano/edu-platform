@@ -10,6 +10,7 @@ import {
   CreateStudentOutputRequestBody,
   CreateStudentOutputResponseBody,
 } from "@edu-platform/common";
+import { ISaveFeedbackToAnswerUseCase } from "@core/application/use-cases";
 
 type Request = TypedRequest<
   CreateStudentOutputParams,
@@ -39,8 +40,9 @@ export class SaveFeedbackToAnswerController
 
     await this.saveFeedbackToAnswerUseCase.execute({
       user,
-      activityId,
-      versionId,
+      answer: {} as any,
+      // activityId,
+      // versionId,
     });
 
     res.status(200).json();

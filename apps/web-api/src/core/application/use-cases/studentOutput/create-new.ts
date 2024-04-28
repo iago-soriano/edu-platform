@@ -5,11 +5,11 @@ import {
   ICollectionsRepository,
   IActivitiesRepository,
 } from "../../interfaces";
+import { SilentInvalidStateError } from "@edu-platform/common";
 
 type InputParams = {
   user: UserSelectDTO;
-  activityId: number;
-  versionId: number;
+  activityId: string;
 };
 
 type Return = void;
@@ -23,30 +23,18 @@ class UseCase implements ICreateStudentOutputUseCase {
     private activitiesRepository: IActivitiesRepository
   ) {}
 
-  async execute({ user, activityId, versionId }: InputParams) {
-    // const version = await this.activitiesRepository.Versions.findById(
-    //   versionId,
-    //   activityId
-    // );
-    // if (!version) throw new ActivityVersionNotFound();
-    // const collection = await this.collectionsRepository.getById(
-    //   version.activity.collection?.id
-    // );
-    // if (!collection) throw new CollectionNotFound();
-    // if (!collection.isPrivate) throw new CantCreateOutputOnPublicCollection();
-    // const studentIsParticipant =
-    //   await this.collectionParticipationsRepository.findByParticipantAndCollectionId(
-    //     user.id,
-    //     collection.id!
-    //   );
-    // if (collection.isPrivate && !studentIsParticipant)
-    //   //TODO
-    //   throw new StudentIsNotParticipant();
-    // return await this.studentOutputsRepository.insert({
-    //   user: new User(user.id),
-    //   version: new ActivityVersion(versionId),
-    //   status: OutputStatus.Draft,
-    // });
+  async execute({ user, activityId }: InputParams) {
+    const activity = await this.activitiesRepository.findRootById(activityId);
+    if (!activity || !activity.lastVersion)
+      throw new SilentInvalidStateError("Activity not found");
+
+    const collection = await this.collectionsRepository.findById(
+      activity.collectionId
+    );
+
+    if (!collection) throw new SilentInvalidStateError("Collection not found");
+    if (!collection.isPrivate)
+      throw new SilentInvalidStateError("Public collection");
   }
 }
 export default UseCase;

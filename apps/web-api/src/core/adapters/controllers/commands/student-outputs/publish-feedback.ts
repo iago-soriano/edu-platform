@@ -25,9 +25,8 @@ export class PublishStudentOutputFeedbackController
   path: string = "activities/:activityId/student-output/:id/feedback/publish";
   middlewares: string[] = ["auth"];
 
-  constructor(
-    private publishStudentOutputFeedbackUseCase: IPublishStudentOutputFeedbackUseCase
-  ) {}
+  constructor() // private publishStudentOutputFeedbackUseCase: IPublishStudentOutputFeedbackUseCase
+  {}
 
   async execute(req: Request, res: Response) {
     const { user } = req;
@@ -37,11 +36,11 @@ export class PublishStudentOutputFeedbackController
       "versionId",
     ]);
 
-    await this.publishStudentOutputFeedbackUseCase.execute({
-      user,
-      activityId,
-      versionId,
-    });
+    // await this.publishStudentOutputFeedbackUseCase.execute({
+    //   user,
+    //   activityId,
+    //   versionId,
+    // });
 
     res.status(200).json();
   }

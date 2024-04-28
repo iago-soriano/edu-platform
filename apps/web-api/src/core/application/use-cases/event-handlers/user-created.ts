@@ -10,14 +10,11 @@ import { User } from "@core/domain/entities";
 export type IUserCreatedUseCase = IUseCase<UserCreatedEvent, void>;
 
 class UseCase implements IUserCreatedUseCase {
-  constructor(
-    private collectionsRepository: ICollectionsRepository,
-    private userRepository: IUserRepository
-  ) {}
+  constructor(private coreUserRepository: IUserRepository) {}
 
   async execute(evnt: UserCreatedEvent) {
     const { payload } = evnt;
-    await this.userRepository.save(
+    await this.coreUserRepository.save(
       new User(payload.id, payload.name, payload.email)
     );
   }
