@@ -37,19 +37,19 @@ class UseCase implements ISignInUseCase {
 
     if (email && password) {
       userDTO = await this.userRepository.getUserByEmail(email);
-      if (!userDTO) throw new InvalidStateError("");
+      if (!userDTO) throw new InvalidStateError("User not found");
 
-      if (userDTO.provider) throw new InvalidStateError("");
+      if (userDTO.provider) throw new InvalidStateError("Has provider already");
 
-      if (!userDTO.emailVerified) throw new InvalidStateError("");
+      if (!userDTO.emailVerified) throw new InvalidStateError("Unverified");
 
       const passwordValid = await this.encryptionService.compare(
         password,
         userDTO?.hashedPassword || ""
       );
-      if (!passwordValid) throw new InvalidStateError("");
+      if (!passwordValid) throw new InvalidStateError("Password invalid");
     } else {
-      throw new InvalidStateError("");
+      throw new InvalidStateError("Please provide email and password");
     }
 
     const accessToken = this.tokenService.generateAccessToken({

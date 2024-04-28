@@ -13,9 +13,9 @@ resource "aws_lambda_function" "main" {
     security_group_ids = [aws_security_group.sg_lambda.id]
   }
 
-  environment {
-    variables = var.env_vars
-  }
+  # environment {
+  #   variables = var.env_vars
+  # }
   
   role = "${aws_iam_role.lambda_exec.arn}"
 }

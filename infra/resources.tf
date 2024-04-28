@@ -13,27 +13,13 @@ module "domain-topic" {
   source = "./sns-sqs"
   topic_name = "domain-topic"
   queue_name = "domain-queue"
-  lambda_arn = module.core-event-handler.lambda_arn
+  lambda_arn = module.event-handler.lambda_arn
 }
 
 module "api" {
   source = "./lambda"
   function_name = "api"
-  env_vars = {
-    DATABASE_URL = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:${module.db.rds_port}",
-    PORT = "3001",
-    EMAIL_HOST = local.email_host,
-    EMAIL_SECRET = local.email_secret,
-    WEB_APP_URL = "http://localhost:3000",
-    HOST_NAME = "edu-plataform.com",
-    NODE_ENV = "production",
-    DOMAIN_SNS_TOPIC_ARN = module.domain-topic.topic_arn
-    ACCESS_TOKEN_PRIVATE_KEY = local.access_private_key
-    ACCESS_TOKEN_PUBLIC_KEY = local.access_public_key
-    REFRESH_TOKEN_PRIVATE_KEY = local.refresh_private_key
-    REFRESH_TOKEN_PUBLIC_KEY = local.refresh_public_key
-  }
-  app_version = var.core_app_version
+  app_version = var.app_version
   subnet_id = module.vpc.private_subnet_ids[0]
   vpc_id = module.vpc.vpc_id
 }
@@ -60,15 +46,7 @@ resource "aws_lambda_permission" "apigw" {
 module "event-handler" {
   source = "./lambda"
   function_name = "event-handler"
-    env_vars = {
-      "DATABASE_URL" = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:${module.db.rds_port}",
-      "EMAIL_HOST" = local.email_host,
-      "EMAIL_SECRET" = local.email_secret,
-      "WEB_APP_URL" = "http://localhost:3000",
-      "HOST_NAME" = "edu-plataform.com",
-      NODE_ENV = "production",
-  }
-  app_version = var.core_app_version
+  app_version = var.app_version
   subnet_id = module.vpc.private_subnet_ids[0]
   vpc_id = module.vpc.vpc_id
 }

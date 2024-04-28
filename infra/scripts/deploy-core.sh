@@ -24,6 +24,6 @@ aws s3 cp build-api.zip "s3://edu-platform-lambda-function-code/api/$NEW_VERSION
 aws s3 cp build-event-handler.zip "s3://edu-platform-lambda-function-code/event-handler/$NEW_VERSION/build.zip"
 
 echo "Starting terraform apply..."
-terraform apply -var="core_app_version=$NEW_VERSION"
+terraform apply -var="app_version=$NEW_VERSION"
 
 echo "FUNCTION_VERSION=$NEW_VERSION" > ./config.sh
