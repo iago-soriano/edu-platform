@@ -1,16 +1,13 @@
 import { IUserRepository, ITokenRepository } from "@iam/application/interfaces";
+import { IUserCreatedUseCase } from "@core/application/use-cases";
 import { User } from "@iam/domain/entities";
-import { UserCreatedEvent } from "@edu-platform/common/domain/integration-events";
-import {
-  InvalidStateError,
-  SilentInvalidStateError,
-} from "@edu-platform/common/errors";
+import { InvalidStateError } from "@edu-platform/common/errors";
+import { UserCreatedEvent } from "@edu-platform/common/domain";
 import {
   IUseCase,
   GetUUID,
   IEncryptionService,
   IEmailService,
-  ITopicService,
 } from "@edu-platform/common/platform";
 
 type InputParams = {
@@ -29,8 +26,7 @@ class UseCase implements ISignUpUseCase {
     private encryptionService: IEncryptionService,
     private emailService: IEmailService,
     private tokenRepository: ITokenRepository,
-    private topicService: ITopicService,
-    private domainTopicArn: string
+    private userCreatedUseCase: IUserCreatedUseCase
   ) {}
 
   async execute({ email, password, name, confirmPassword }: InputParams) {
@@ -38,10 +34,11 @@ class UseCase implements ISignUpUseCase {
 
     const existingUser = await this.userRepository.getUserByEmail(email);
 
-    if (existingUser) throw new InvalidStateError("");
+    if (existingUser) throw new InvalidStateError("user exists");
 
     if (!password || !confirmPassword) throw new InvalidStateError("");
-    if (password !== confirmPassword) throw new InvalidStateError("");
+    if (password !== confirmPassword)
+      throw new InvalidStateError("passwords don't match");
 
     if (!email || !name) throw new Error("Missing name or e-mail");
 
@@ -61,14 +58,13 @@ class UseCase implements ISignUpUseCase {
       type: "VerifyAccount",
     });
 
-    // await this.topicService.send(
-    //   new UserCreatedEvent({ id: userId, email, name }),
-    //   this.domainTopicArn
-    // );
+    await this.userCreatedUseCase.execute(
+      new UserCreatedEvent({ id: userId, email, name })
+    );
 
     await this.emailService.sendVerifyAccountEmail({
       destination: email,
-      // url: `${process.env.WEB_APP_URL}/auth/verify-account?verificationToken=${token}`,
+      token,
     });
   }
 }

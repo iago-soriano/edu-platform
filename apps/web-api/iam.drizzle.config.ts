@@ -6,7 +6,7 @@ if (!process.env.DATABASE_URL)
   throw new Error("Please provide a 'DATABASE_URL'");
 
 export default {
-  schema: "./src/infrastructure/persistence/schema/index.ts",
+  schema: "./src/iam/adapters/infrastructure/persistence/schema/index.ts",
   out: "./drizzle",
   driver: "pg",
   strict: true,

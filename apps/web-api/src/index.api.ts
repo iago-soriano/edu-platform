@@ -5,6 +5,7 @@ import "express-async-errors";
 import * as awilix from "awilix";
 
 import { registerServer, ExpressServer } from "@edu-platform/common/platform";
+
 import { registerDependencies as registerCoreApiDependencies } from "./core/main/api.register-dependencies";
 import { registerDependencies as registerCommonCoreApiDependencies } from "./core/main/common.register-dependencies";
 import { registerDependencies as registerIAMApiDependencies } from "iam/main/register-dependencies";
@@ -18,10 +19,7 @@ registerCoreApiDependencies(mainContainer);
 registerCommonCoreApiDependencies(mainContainer);
 registerIAMApiDependencies(mainContainer);
 
-registerServer(mainContainer, "/web-api", [
-  coreModulePgClient,
-  IAMModulePgClient,
-]);
+registerServer(mainContainer, [coreModulePgClient, IAMModulePgClient]);
 
 const server = mainContainer.resolve<ExpressServer>("server");
 

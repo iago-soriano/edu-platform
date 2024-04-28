@@ -38,7 +38,9 @@ type SendEmailArgs = {
 };
 export interface IEmailService {
   sendForgotPasswordEmail: (args: SendEmailArgs) => Promise<any>;
-  sendVerifyAccountEmail: (args: SendEmailArgs) => Promise<any>;
+  sendVerifyAccountEmail: (
+    args: SendEmailArgs & { token: string }
+  ) => Promise<any>;
   sendStudentOutputCompletedEmail: (
     args: SendEmailArgs & {
       studentOutputId: number;

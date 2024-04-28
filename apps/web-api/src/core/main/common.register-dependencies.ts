@@ -38,7 +38,7 @@ export const registerDependencies = (coreContainer: awilix.AwilixContainer) => {
     domainServiceRegistry: awilix.asClass(DomainServicesRegistry).classic(),
 
     // repositories
-    userRepository: awilix.asClass(UserRepository).classic(),
+    coreUserRepository: awilix.asClass(UserRepository).classic(),
     activitiesRepository: awilix.asClass(ActivitiesRepository).classic(),
     activitiesReadRepository: awilix
       .asClass(ActivitiesReadRepository)

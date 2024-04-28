@@ -1,7 +1,7 @@
 resource "aws_api_gateway_resource" "main" {
   rest_api_id = "${var.rest_api_id}"
   parent_id   = "${var.root_id}"
-  path_part   = var.path
+  path_part   = "{proxy+}"
 }
 
 resource "aws_api_gateway_method" "main" {

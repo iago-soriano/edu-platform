@@ -1,11 +1,11 @@
 import * as esbuild from "esbuild";
 
 await esbuild.build({
-  entryPoints: ["./src/main/api-gateway/index.ts", "./src/main/sqs/index.ts"],
+  entryPoints: ["./src/index.api.ts", "./src/index.sqs.ts"],
   bundle: true,
   outdir: "build",
   platform: "node",
-  entryNames: "[dir]/index",
+  entryNames: "[dir]/[name]/index",
   target: "node20",
   minifySyntax: true,
   minifyWhitespace: true,

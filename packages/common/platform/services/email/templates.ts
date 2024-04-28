@@ -20,9 +20,9 @@ a {
 export const VerifyAccountEmailTemplate = ({ url }: { url: string }) => `
 ${styles}
 <div class="container">
-<h1>Bem-vindo(a)!</h1>
-<h3>Clique no link abaixo para começar a utilizar a plataforma</h3>
-<a target="_blank" href="${url}">Ativar conta</a>
+<h1>Welcome!</h1>
+<h3>Click the link bellow to have your first access!</h3>
+<a target="_blank" href="${url}">Activate account</a>
 </div>
 `;
 

@@ -23,7 +23,8 @@ export class EmailService implements IEmailService {
       port: 587,
       secure: false,
       auth: {
-        user: "iago.srm.is@gmail.com",
+        // user: "iago.srm.is@gmail.com",
+        user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_SECRET,
       },
     });
@@ -34,18 +35,20 @@ export class EmailService implements IEmailService {
     const resp = await this._transporter.sendMail({
       from: this.from,
       to: destination, // list of receivers
-      subject: "Altere sua senha", // Subject line
-      //text: "Altere sua senha", // plain text body
+      subject: "Change your password", // Subject line
       html: ForgotPasswordEmailTemplate({ url }), // html body
     });
   }
 
-  async sendVerifyAccountEmail({ destination }: SendEmailArgs) {
-    const url = `${process.env.WEB_APP_URL}/verify-account`;
-    const resp = await this._transporter.sendMail({
+  async sendVerifyAccountEmail({
+    destination,
+    token,
+  }: SendEmailArgs & { token: string }) {
+    const url = `${process.env.WEB_APP_URL}/verify-account/${token}`;
+    await this._transporter.sendMail({
       from: this.from,
       to: destination, // list of receivers
-      subject: "Verifique sua conta", // Subject line
+      subject: "Verify your account", // Subject line
       html: VerifyAccountEmailTemplate({ url }), // html body
     });
   }

@@ -60,7 +60,6 @@ resource "aws_db_instance" "this" {
   parameter_group_name   = aws_db_parameter_group.this.name
   publicly_accessible    = false
   skip_final_snapshot    = true
-  db_name = "eduplatform"
 
   tags = var.tags
 }

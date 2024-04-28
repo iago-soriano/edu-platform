@@ -76,6 +76,7 @@ data "aws_s3_bucket" "function" {
 
 resource "aws_security_group" "sg_lambda" {
   vpc_id      = var.vpc_id
+  name = "lambda_sg-${var.function_name}"
 
   egress {
     from_port        = 0

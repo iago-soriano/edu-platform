@@ -56,21 +56,9 @@ resource "aws_route_table_association" "public" {
 }
 
 ### private subnets routing
-data "aws_instance" "nat" {
-  instance_id = "i-041af7f63d0001881"
+data "aws_instance" "nat" { //bastion host instance
+  instance_id = "i-0b170e76f6ee7c78a"
 }
-# data "aws_eip" "this" {
-#   id = "eipalloc-0a0446f93e6ba2fe7"
-# }
-
-# resource "aws_nat_gateway" "main" {
-#   allocation_id = data.aws_eip.this.id
-#   subnet_id     = aws_subnet.public.id
-
-#   # To ensure proper ordering, it is recommended to add an explicit dependency
-#   # on the Internet Gateway for the VPC.
-#   depends_on = [aws_internet_gateway.igw]
-# }
 
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id

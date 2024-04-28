@@ -25,6 +25,8 @@ import {
   GetArchivedVersionController,
   CreateUserOutputController,
   UpdateStudentOutputController,
+  PublishStudentOutputFeedbackController,
+  SaveFeedbackToAnswerController,
 } from "@core/controllers";
 import {
   SaveQuestionUseCase,
@@ -35,7 +37,6 @@ import {
   CreateNewDraftVersionUseCase,
   InsertUserInCollectionUseCase,
   RemoveStudentFromCollectionUseCase,
-  SaveAnswerUseCase,
   InsertFollowerInCollectionUseCase,
   ImportActivityUseCase,
   PublishDraftUseCase,
@@ -48,9 +49,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     publishDraftController: awilix.asClass(PublishDraftController).classic(),
     saveQuestionController: awilix.asClass(SaveQuestionController).classic(),
     saveContentController: awilix.asClass(SaveContentController).classic(),
-    createNewActivityController: awilix
-      .asClass(CreateNewActivityController)
-      .classic(),
+    createNewActivityController: awilix.asClass(CreateNewActivityController),
     updateActivityMetadataController: awilix
       .asClass(UpdateActivityMetadataController)
       .classic(),
@@ -102,13 +101,18 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     getArchivedVersionController: awilix
       .asClass(GetArchivedVersionController)
       .classic(),
-    createUserOutputController: awilix
-      .asClass(CreateUserOutputController)
-      .classic(),
-    updateStudentOutputController: awilix
-      .asClass(UpdateStudentOutputController)
-      .classic(),
-
+    // createUserOutputController: awilix
+    //   .asClass(CreateUserOutputController)
+    //   .classic(),
+    // updateStudentOutputController: awilix
+    //   .asClass(UpdateStudentOutputController)
+    //   .classic(),
+    // publishStudentOutputFeedbackController: awilix
+    //   .asClass(PublishStudentOutputFeedbackController)
+    //   .classic(),
+    // saveFeedbackToAnswerController: awilix
+    //   .asClass(SaveFeedbackToAnswerController)
+    //   .classic(),
     /** #endregion */
 
     // use cases
@@ -130,7 +134,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     removeStudentFromCollectionUseCase: awilix
       .asClass(RemoveStudentFromCollectionUseCase)
       .classic(),
-    saveAnswerUseCase: awilix.asClass(SaveAnswerUseCase).classic(),
+    // saveAnswerUseCase: awilix.asClass(SaveAnswerUseCase).classic(),
     insertFollowerInCollectionUserCase: awilix
       .asClass(InsertFollowerInCollectionUseCase)
       .classic(),
