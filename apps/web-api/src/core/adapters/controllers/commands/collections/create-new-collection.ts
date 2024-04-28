@@ -22,7 +22,7 @@ export class CreateNewCollectionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.POST;
-  path: string = "collections";
+  path: string = "core/collections";
   middlewares: string[] = ["auth"];
 
   constructor(

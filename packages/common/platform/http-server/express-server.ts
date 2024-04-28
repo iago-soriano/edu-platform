@@ -1,4 +1,10 @@
-import express, { Express, RequestHandler } from "express";
+import express, {
+  Express,
+  RequestHandler,
+  NextFunction,
+  Request,
+  Response,
+} from "express";
 import serverless from "serverless-http";
 import { CustomError } from "@edu-platform/common/errors";
 import { HTTPController, HTTPErrorController } from "../interfaces/controllers";
@@ -26,19 +32,16 @@ class RouteNotFoundError extends CustomError {
 
 export class ExpressServer extends AbstractServer {
   _app: Express;
-  baseUrn: string;
 
   constructor({
     controllers,
     errorHandler,
     middlewares,
-    baseUrn,
     _pgClients,
   }: IExpressConstructorParams) {
     super(_pgClients);
     this._app = express();
     this.setupServer(this._app);
-    this.baseUrn = baseUrn;
 
     // CORS
     const allowlist = process.env.CORS_ALLOW?.split(" ");
@@ -64,23 +67,22 @@ export class ExpressServer extends AbstractServer {
     this._app.use(helmet());
     this._app.disable("x-powered-by");
 
-    const getPath = (path: string) => `${this.baseUrn}/${path}`;
-
     controllers.forEach((descriptor) => {
-      if (descriptor.middlewares) {
-        this._app[descriptor.method!](
-          getPath(descriptor.path!),
-          ...descriptor.middlewares.map(
-            (middleware) => middlewares[middleware]
-          ),
-          descriptor.execute
+      const pipeline: RequestHandler[] = [];
+
+      if (descriptor.validationMiddleware)
+        pipeline.push(descriptor.validationMiddleware);
+
+      if (descriptor.middlewares)
+        pipeline.push(
+          ...descriptor.middlewares.map((middleware) => middlewares[middleware])
         );
-      } else {
-        this._app[descriptor.method!](
-          getPath(descriptor.path!),
-          descriptor.execute
-        );
-      }
+
+      this._app[descriptor.method!](
+        `/web-api/${descriptor.path!}`,
+        ...pipeline,
+        descriptor.execute
+      );
     });
 
     // healthcheck

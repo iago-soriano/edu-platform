@@ -1,9 +1,14 @@
-import { SilentInvalidStateError, InvalidStateError } from "../../../errors";
+import {
+  SilentInvalidStateError,
+  InvalidStateError,
+  CustomError,
+} from "../../../errors";
 import {
   Request as TypedRequest,
   Response as TypedResponse,
   HTTPErrorController,
 } from "@edu-platform/common/platform/interfaces";
+import { ZodError } from "zod";
 
 type Request = TypedRequest<{}, {}, {}>;
 type Response = TypedResponse<{}>;
@@ -23,9 +28,17 @@ export class ErrorHandlerController
       return;
     } else if (error instanceof SilentInvalidStateError) {
       console.log(error.realReason);
+    } else if (error.name === "ZodError") {
+      const zodError = error as ZodError;
+      res.status(422).json({
+        message: `Invalid value for ${zodError.issues[0].path}: ${zodError.issues[0].message}`,
+      });
+      return;
     }
 
     // console.error(error);
-    res.status(500).json(error.toString());
+    res
+      .status((error as CustomError)?.HTTPstatusCode || 500)
+      .json(error.toString());
   }
 }

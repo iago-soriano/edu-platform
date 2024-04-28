@@ -28,13 +28,10 @@ export class AuthenticationMiddlewareController {
       tokenPayload = this.tokenService.verifyAccessToken(token);
     } catch (e) {
       if (e instanceof TokenExpiredError) {
-        // console.log(e.message, e.expiredAt);
         throw new Unauthorized();
       }
       throw e;
     }
-
-    // up to this point, make a client that retrieves JWT payload from headers
 
     req.user = { id: tokenPayload.id };
   }

@@ -8,11 +8,13 @@ import {
 } from "./middleware";
 import { Client } from "pg";
 
-const getControllers = (container: awilix.AwilixContainer) => {
+const getControllers: (
+  container: awilix.AwilixContainer
+) => HTTPController<any, any>[] = (container: awilix.AwilixContainer) => {
   const controllers = [];
   for (let registrationName in container.registrations) {
     if (registrationName.includes("Controller")) {
-      const controller = container.resolve(registrationName);
+      const controller = container.resolve<HTTPController>(registrationName);
       controllers.push(controller);
     }
   }
@@ -21,7 +23,6 @@ const getControllers = (container: awilix.AwilixContainer) => {
 
 export const registerServer = (
   container: awilix.AwilixContainer,
-  baseUrn: string,
   _pgClients: Client[]
 ) => {
   container.register({
@@ -44,7 +45,8 @@ export const registerServer = (
               method: controller.method,
               execute: controller.execute.bind(controller),
               path: controller.path,
-            } as HTTPController;
+              validationMiddleware: controller.validationMiddleware,
+            };
           }),
           middlewares: {
             auth: async (req: any, _: any, next: any) => {
@@ -60,7 +62,6 @@ export const registerServer = (
             execute: (error: Error, _: any, res: any, __: any) =>
               container.resolve("errorHandler").execute(error, _, res),
           },
-          baseUrn,
         };
       }),
   });

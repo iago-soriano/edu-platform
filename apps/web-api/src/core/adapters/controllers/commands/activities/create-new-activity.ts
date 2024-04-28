@@ -1,11 +1,14 @@
 import {
-  HTTPController,
-  HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@edu-platform/common/platform/interfaces";
 import {
-  parseCreateNewActivityRequestBody,
+  ValidateParameters,
+  Post,
+  Middlewares,
+} from "@edu-platform/common/platform/http-server/decorators";
+import {
+  createNewActivityRrequestSchema,
   CreateNewActivityRequestBody,
   CreateNewActivityResponseBody,
 } from "@edu-platform/common/api";
@@ -14,20 +17,25 @@ import { ICreateNewActivityUseCase } from "@core/application/use-cases";
 type Request = TypedRequest<{}, {}, CreateNewActivityRequestBody>;
 type Response = TypedResponse<CreateNewActivityResponseBody>;
 
-export class CreateNewActivityController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.POST;
-  path: string = "activities";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  createNewActivityUseCase: ICreateNewActivityUseCase;
+}
 
-  constructor(private createNewActivityUseCase: ICreateNewActivityUseCase) {}
+@Post("activities")
+@ValidateParameters({ bodySchema: createNewActivityRrequestSchema })
+@Middlewares(["auth"])
+export class CreateNewActivityController {
+  private _createNewActivityUseCase: ICreateNewActivityUseCase;
+
+  constructor(deps: Deps) {
+    this._createNewActivityUseCase = deps.createNewActivityUseCase;
+  }
 
   async execute(req: Request, res: Response) {
-    const { collectionId } = parseCreateNewActivityRequestBody(req.body);
+    const { collectionId } = req.body;
     const { user } = req;
 
-    const resp = await this.createNewActivityUseCase.execute({
+    const resp = await this._createNewActivityUseCase.execute({
       collectionId,
       user,
     });

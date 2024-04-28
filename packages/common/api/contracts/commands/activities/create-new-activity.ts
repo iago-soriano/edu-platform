@@ -1,10 +1,9 @@
 import { z } from "zod";
 
-const requestSchema = z.object({
+const createNewActivityRrequestSchema = z.object({
   collectionId: z.coerce.number().positive(),
 });
-type RequestBody = z.infer<typeof requestSchema>;
-const parseCreateNewActivityRequestBody = requestSchema.parse;
+type RequestBody = z.infer<typeof createNewActivityRrequestSchema>;
 
 type ResponseBody = {
   activityId: string;
@@ -15,5 +14,5 @@ export {
   RequestBody as CreateNewActivityRequestBody,
   ResponseBody as CreateNewActivityResponseBody,
   Params as CreateNewActivityParams,
-  parseCreateNewActivityRequestBody,
+  createNewActivityRrequestSchema,
 };

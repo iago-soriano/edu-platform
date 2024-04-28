@@ -39,7 +39,7 @@ type ResponseBody = {
 type Params = { activityId: string };
 
 export {
+  Params as SaveContentParams,
   RequestBody as SaveContentRequestBody,
   ResponseBody as SaveContentResponseBody,
-  Params as SaveContentParams,
 };

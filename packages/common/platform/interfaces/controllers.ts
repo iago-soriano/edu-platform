@@ -1,5 +1,9 @@
-import { Response as ExpressResponse } from "express";
-// import { UserSelectDTO } from "./repository/dtos";
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+  RequestHandler,
+  NextFunction,
+} from "express";
 
 export enum HttpMethod {
   GET = "get",
@@ -23,6 +27,7 @@ export interface HTTPController<Request = {}, Response = {}> {
   path: string;
   middlewares?: string[];
   execute: (req: Request, res: Response) => {};
+  validationMiddleware?: RequestHandler;
 }
 
 export type FileType = Express.Multer.File;

@@ -17,7 +17,7 @@ export class VerifyAccountController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.PATCH;
-  path: string = "verify-account";
+  path: string = "iam/verify-account";
 
   constructor(private verifyAccountUseCase: IVerifyAccountUseCase) {}
 
