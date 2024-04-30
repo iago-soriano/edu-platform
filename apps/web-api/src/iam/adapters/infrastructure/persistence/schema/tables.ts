@@ -1,5 +1,6 @@
 import {
   integer,
+  uuid,
   pgEnum,
   pgTable,
   serial,
@@ -26,7 +27,7 @@ export const tokens = pgTable("tokens", {
 });
 
 export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 

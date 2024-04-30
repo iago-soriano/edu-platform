@@ -1,5 +1,9 @@
 import * as awilix from "awilix";
 import {
+  AuthenticationMiddlewareController,
+  AcceptFileMiddleware,
+} from "@edu-platform/common/platform/http-server/middleware";
+import {
   PublishDraftController,
   SaveQuestionController,
   SaveContentController,
@@ -113,6 +117,11 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     // saveFeedbackToAnswerController: awilix
     //   .asClass(SaveFeedbackToAnswerController)
     //   .classic(),
+
+    authMiddleware: awilix
+      .asClass(AuthenticationMiddlewareController)
+      .classic(),
+    fileMiddleware: awilix.asValue(AcceptFileMiddleware), // objeto do multer
     /** #endregion */
 
     // use cases

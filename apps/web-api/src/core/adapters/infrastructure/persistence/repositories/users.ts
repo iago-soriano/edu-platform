@@ -18,4 +18,8 @@ export class UserRepository
   async getByEmail(email: string) {
     return (await db.select().from(users).where(eq(users.email, email)))[0];
   }
+
+  async getById(id: string) {
+    return (await db.select().from(users).where(eq(users.id, id)))[0];
+  }
 }

@@ -20,7 +20,7 @@ import {
 } from "@core/domain/enums";
 
 export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   name: varchar("name", { length: 30 }).notNull(),

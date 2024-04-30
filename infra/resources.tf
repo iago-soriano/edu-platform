@@ -18,6 +18,11 @@ module "domain-topic" {
 
 module "api" {
   source = "./lambda"
+  env_vars = {
+    DATABASE_URL = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:${module.db.rds_port}",
+    DOMAIN_SNS_TOPIC_ARN = module.domain-topic.topic_arn,
+    BUCKET_NAME = module.s3.bucket_name
+  }
   function_name = "api"
   app_version = var.app_version
   subnet_id = module.vpc.private_subnet_ids[0]
@@ -25,26 +30,18 @@ module "api" {
 }
 
 module "api-gw" {
-  source = "./api-gateway-integration"
+  source = "./api-gateway"
   lambda_invoke_arn = module.api.lambda_invoke_arn
-  rest_api_id = aws_api_gateway_rest_api.main.id
-  root_id = aws_api_gateway_resource.root.id
-}
-
-resource "aws_lambda_permission" "apigw" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = "${module.api.function_name}"
-  principal     = "apigateway.amazonaws.com"
-
-  depends_on = [ aws_api_gateway_rest_api.main ]
-  # The /*/* portion grants access from any method on any resource
-  # within the API Gateway "REST API".
-  source_arn = "${aws_api_gateway_rest_api.main.execution_arn}/*/*"
+  lambda_function_name = module.api.function_name
 }
 
 module "event-handler" {
   source = "./lambda"
+  env_vars = {
+    DATABASE_URL = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:${module.db.rds_port}",
+    DOMAIN_SNS_TOPIC_ARN = module.domain-topic.topic_arn,
+    BUCKET_NAME = module.s3.bucket_name
+  }
   function_name = "event-handler"
   app_version = var.app_version
   subnet_id = module.vpc.private_subnet_ids[0]
@@ -54,24 +51,5 @@ module "event-handler" {
 module "s3" {
   source = "./public-s3"
   bucket_name = "edu-platform-activity-contents"
-}
-
-resource "aws_api_gateway_rest_api" "main" {
-  name        = "edu-platform"
-  description = "API Gateway for Edu Platform REST API"
-}
-
-resource "aws_api_gateway_resource" "root" {
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  parent_id   = "${aws_api_gateway_rest_api.main.root_resource_id}"
-  path_part   = "web-api"
-}
-
-
-resource "aws_api_gateway_deployment" "main" {
-  depends_on = [module.api, module.api-gw.method, module.api-gw.integration ]
-
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  stage_name  = "prod"
 }
 

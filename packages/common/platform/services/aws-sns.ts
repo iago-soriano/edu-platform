@@ -14,7 +14,7 @@ export class TopicService implements ITopicService {
         MessageAttributes: {
           eventType: {
             StringValue: event.eventType,
-            DataType: "STRING_VALUE",
+            DataType: "String",
           },
         },
         Message: JSON.stringify(event.payload),

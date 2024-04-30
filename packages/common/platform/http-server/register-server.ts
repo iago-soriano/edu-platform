@@ -1,68 +1,60 @@
 import * as awilix from "awilix";
 import { ExpressServer } from "./express-server";
 import { HTTPController } from "../interfaces/controllers";
-import {
-  AuthenticationMiddlewareController,
-  ErrorHandlerController,
-  AcceptFileMiddleware,
-} from "./middleware";
 import { Client } from "pg";
 
-const getControllers: (
+const getControllersByResgistrationName = (
   container: awilix.AwilixContainer
-) => HTTPController<any, any>[] = (container: awilix.AwilixContainer) => {
-  const controllers = [];
+) => {
+  const result = [];
   for (let registrationName in container.registrations) {
     if (registrationName.includes("Controller")) {
-      const controller = container.resolve<HTTPController>(registrationName);
-      controllers.push(controller);
+      const res = container.resolve<HTTPController>(registrationName);
+      result.push(res);
     }
   }
-  return controllers;
+  return result;
 };
 
 export const registerServer = (
-  container: awilix.AwilixContainer,
-  _pgClients: Client[]
+  modules: {
+    container: awilix.AwilixContainer;
+    pgClient: Client;
+  }[]
 ) => {
-  container.register({
-    authMiddleware: awilix
-      .asClass(AuthenticationMiddlewareController)
-      .classic(),
-    fileMiddleware: awilix.asValue(AcceptFileMiddleware), // objeto do multer
-    errorHandler: awilix.asClass(ErrorHandlerController),
-    server: awilix
-      .asClass(ExpressServer)
-      .singleton()
-      .inject((container: awilix.AwilixContainer) => {
-        const authMiddleware = container.resolve("authMiddleware");
-        const fileMiddleware = container.resolve("fileMiddleware");
+  let controllers: HTTPController<any, any>[] = [];
+  let middlewares: any = { auth: undefined, file: undefined };
+
+  modules.forEach(({ container }) => {
+    controllers.push(
+      ...getControllersByResgistrationName(container).map((controller) => {
         return {
-          _pgClients,
-          controllers: getControllers(container).map((controller) => {
-            return {
-              middlewares: controller.middlewares,
-              method: controller.method,
-              execute: controller.execute.bind(controller),
-              path: controller.path,
-              validationMiddleware: controller.validationMiddleware,
-            };
-          }),
-          middlewares: {
-            auth: async (req: any, _: any, next: any) => {
-              await authMiddleware.execute.bind(authMiddleware)(
-                req,
-                req.headers
-              );
-              next();
-            },
-            file: fileMiddleware,
-          },
-          errorHandler: {
-            execute: (error: Error, _: any, res: any, __: any) =>
-              container.resolve("errorHandler").execute(error, _, res),
-          },
+          middlewares: controller.middlewares,
+          method: controller.method,
+          execute: controller.execute.bind(controller),
+          path: controller.path,
+          validationMiddleware: controller.validationMiddleware,
         };
-      }),
+      })
+    );
+
+    if (container.hasRegistration("authMiddleware")) {
+      const authMiddleware = container.resolve("authMiddleware");
+      middlewares.auth = async (req: any, _: any, next: any) => {
+        await authMiddleware.execute.bind(authMiddleware)(req, req.headers);
+        next();
+      };
+    }
+
+    if (container.hasRegistration("fileMiddleware")) {
+      const fileMiddleware = container.resolve("fileMiddleware");
+      middlewares.file = fileMiddleware;
+    }
+  });
+
+  return new ExpressServer({
+    middlewares,
+    controllers,
+    pgClients: modules.map((v) => v.pgClient),
   });
 };

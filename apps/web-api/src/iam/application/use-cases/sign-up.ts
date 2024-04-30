@@ -1,5 +1,4 @@
 import { IUserRepository, ITokenRepository } from "@iam/application/interfaces";
-import { IUserCreatedUseCase } from "@core/application/use-cases";
 import { User } from "@iam/domain/entities";
 import { InvalidStateError } from "@edu-platform/common/errors";
 import { UserCreatedEvent } from "@edu-platform/common/domain";
@@ -8,6 +7,7 @@ import {
   GetUUID,
   IEncryptionService,
   IEmailService,
+  ITopicService,
 } from "@edu-platform/common/platform";
 
 type InputParams = {
@@ -26,8 +26,12 @@ class UseCase implements ISignUpUseCase {
     private encryptionService: IEncryptionService,
     private emailService: IEmailService,
     private tokenRepository: ITokenRepository,
-    private userCreatedUseCase: IUserCreatedUseCase
-  ) {}
+    private topicService: ITopicService,
+    private domainTopicArn: string
+  ) {
+    if (!this.domainTopicArn)
+      throw new Error("domain SNS topic arn not present");
+  }
 
   async execute({ email, password, name, confirmPassword }: InputParams) {
     const user = new User(0, name, email, password);
@@ -58,8 +62,9 @@ class UseCase implements ISignUpUseCase {
       type: "VerifyAccount",
     });
 
-    await this.userCreatedUseCase.execute(
-      new UserCreatedEvent({ id: userId, email, name })
+    await this.topicService.send(
+      new UserCreatedEvent({ id: userId, email, name }),
+      this.domainTopicArn
     );
 
     await this.emailService.sendVerifyAccountEmail({

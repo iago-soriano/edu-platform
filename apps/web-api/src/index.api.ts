@@ -13,15 +13,17 @@ import { registerDependencies as registerIAMApiDependencies } from "iam/main/reg
 import { pgClient as coreModulePgClient } from "./core/adapters/infrastructure/persistence/schema/db-client";
 import { pgClient as IAMModulePgClient } from "./iam/adapters/infrastructure/persistence/schema/db-client";
 
-export const mainContainer = awilix.createContainer();
+export const coreModuleContainer = awilix.createContainer();
+export const iamModuleContainer = awilix.createContainer();
 
-registerCoreApiDependencies(mainContainer);
-registerCommonCoreApiDependencies(mainContainer);
-registerIAMApiDependencies(mainContainer);
+registerCoreApiDependencies(coreModuleContainer);
+registerCommonCoreApiDependencies(coreModuleContainer);
+registerIAMApiDependencies(iamModuleContainer);
 
-registerServer(mainContainer, [coreModulePgClient, IAMModulePgClient]);
-
-const server = mainContainer.resolve<ExpressServer>("server");
+const server = registerServer([
+  { container: coreModuleContainer, pgClient: coreModulePgClient },
+  { container: iamModuleContainer, pgClient: IAMModulePgClient },
+]);
 
 (async () => {
   try {

@@ -1,25 +1,18 @@
-import express, {
-  Express,
-  RequestHandler,
-  NextFunction,
-  Request,
-  Response,
-} from "express";
+import express, { Express, RequestHandler } from "express";
 import serverless from "serverless-http";
 import { CustomError } from "@edu-platform/common/errors";
-import { HTTPController, HTTPErrorController } from "../interfaces/controllers";
+import { HTTPController } from "../interfaces/controllers";
 import helmet from "helmet";
 import cors from "cors";
 import { json } from "body-parser";
 import { AbstractServer } from "./abstract-server";
 import { Client } from "pg";
+import { ErrorMiddleware } from "./middleware";
 
 interface IExpressConstructorParams {
   controllers: HTTPController[];
-  errorHandler: HTTPErrorController;
   middlewares: { [key: string]: RequestHandler };
-  baseUrn: string;
-  _pgClients: Client[];
+  pgClients: Client[];
 }
 
 class RouteNotFoundError extends CustomError {
@@ -35,11 +28,10 @@ export class ExpressServer extends AbstractServer {
 
   constructor({
     controllers,
-    errorHandler,
     middlewares,
-    _pgClients,
+    pgClients,
   }: IExpressConstructorParams) {
-    super(_pgClients);
+    super(pgClients);
     this._app = express();
     this.setupServer(this._app);
 
@@ -98,7 +90,7 @@ export class ExpressServer extends AbstractServer {
       throw new RouteNotFoundError();
     });
 
-    this._app.use(errorHandler.execute);
+    this._app.use(ErrorMiddleware);
   }
 
   getApiGatewayHandler() {

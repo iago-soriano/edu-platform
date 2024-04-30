@@ -5,7 +5,7 @@ import {
   StudentOutputPublishedUseCase,
   UserCreatedUseCase,
 } from "core/application/use-cases/event-handlers";
-import { SqsHandler } from "@core/sqs-entrypoint";
+import { SqsHandler } from "../adapters/sqs-entrypoint";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({

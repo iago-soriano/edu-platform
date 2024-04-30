@@ -12,11 +12,6 @@ const define = {
   "process.env.GOOGLE_CLIENT_ID": JSON.stringify(
     process.env["GOOGLE_CLIENT_ID"]
   ),
-  "process.env.DATABASE_URL": JSON.stringify(process.env["DATABASE_URL"]),
-  "process.env.BUCKET_NAME": JSON.stringify(process.env["BUCKET_NAME"]),
-  "process.env.DOMAIN_SNS_TOPIC_ARN": JSON.stringify(
-    process.env["DOMAIN_SNS_TOPIC_ARN"]
-  ),
   "process.env.ACCESS_TOKEN_PRIVATE_KEY": JSON.stringify(
     process.env["ACCESS_TOKEN_PRIVATE_KEY"]
   ),

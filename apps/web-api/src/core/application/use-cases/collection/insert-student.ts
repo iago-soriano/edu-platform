@@ -22,7 +22,7 @@ export type IInsertUserInCollectionUseCase = IUseCase<InputParams, Return>;
 class UseCase implements IInsertUserInCollectionUseCase {
   constructor(
     private collectionsRepository: ICollectionsRepository,
-    private coreUserRepository: IUserRepository
+    private userRepository: IUserRepository
   ) {}
 
   async execute({ user, collectionId, studentEmail }: InputParams) {
@@ -33,7 +33,7 @@ class UseCase implements IInsertUserInCollectionUseCase {
         `Collection with id ${collectionId} not found`
       );
 
-    const student = await this.coreUserRepository.getByEmail(studentEmail);
+    const student = await this.userRepository.getByEmail(studentEmail);
     if (!student) throw new InvalidStateError("Student is not user");
 
     collection.insertStudent(user, student);

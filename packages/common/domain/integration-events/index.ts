@@ -1,7 +1,7 @@
 import { DomainEvent } from "@edu-platform/common/platform";
 
 export class UserCreatedEvent extends DomainEvent<{
-  id: number;
+  id: string;
   email: string;
   name: string;
 }> {
@@ -10,7 +10,7 @@ export class UserCreatedEvent extends DomainEvent<{
     email,
     name,
   }: {
-    id: number;
+    id: string;
     email: string;
     name: string;
   }) {

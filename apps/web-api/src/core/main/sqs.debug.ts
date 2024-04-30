@@ -6,7 +6,7 @@ import { handler } from "../../index.sqs";
 
 (async () => {
   const event = new UserCreatedEvent({
-    id: 1,
+    id: "1",
     name: "Iago Soriano",
     email: "iago.srm.is@gmail.com",
   });

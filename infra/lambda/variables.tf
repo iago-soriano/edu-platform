@@ -19,6 +19,6 @@ variable function_name {
     type=string
 }
 
-# variable env_vars {
-#     type=map
-# }
+variable env_vars {
+    type=map
+}

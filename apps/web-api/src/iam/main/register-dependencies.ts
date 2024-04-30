@@ -29,7 +29,6 @@ import {
   UserRepository,
   TokenRepository,
 } from "@iam/infrastructure/persistence";
-import { UserCreatedUseCase } from "@core/application/use-cases";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
@@ -62,7 +61,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     changePasswordUseCase: awilix.asClass(ChangePasswordUseCase).classic(),
     refreshTokenUseCase: awilix.asClass(RefreshTokenUseCase).classic(),
-    userCreatedUseCase: awilix.asClass(UserCreatedUseCase).classic(),
 
     // services
     domainTopicArn: awilix.asValue(process.env.DOMAIN_SNS_TOPIC_ARN),

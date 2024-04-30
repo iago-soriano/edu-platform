@@ -6,7 +6,7 @@
     "gen-env": "gen-env-types .env -o src/env.d.ts -e .",
     "build:ci": "rm -rf build && node ./build.mjs",
     "build:windows": "tsc -p tsconfig.json && tsc-alias",
-    "debug:sqs": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn  --exit-child --ignore-watch node_modules src/main/sqs/debug.ts",
+    "debug:sqs": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn  --exit-child --ignore-watch node_modules src/core/main/sqs.debug.ts",
     "start": "node ./build/index.api/index.js",
     "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn  --exit-child --ignore-watch node_modules src/index.api.ts",
     "test": "cross-env NODE_ENV=test jest --watchAll",

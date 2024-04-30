@@ -3,11 +3,11 @@ import { db, users } from "../schema";
 import { eq, and } from "drizzle-orm";
 
 export class UserRepository implements IUserRepository {
-  async getUserById(id: number) {
+  async getUserById(id: string) {
     return (await db.select().from(users).where(eq(users.id, id)))[0];
   }
 
-  async getUserByIdAndRefreshToken(id: number, refreshToken: string) {
+  async getUserByIdAndRefreshToken(id: string, refreshToken: string) {
     return (
       await db
         .select()
@@ -39,7 +39,7 @@ export class UserRepository implements IUserRepository {
     )[0];
   }
 
-  async updateUser(id: number, user: Partial<any>) {
+  async updateUser(id: string, user: Partial<any>) {
     return !!(
       await db
         .update(users)
