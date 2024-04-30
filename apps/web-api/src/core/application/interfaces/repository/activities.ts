@@ -15,13 +15,13 @@ export interface IActivitiesRepository extends IAbstractRepository {
 export interface IActivitiesReadRepository {
   listForCollectionOwner: (
     args: {
-      userId: number;
+      userId: string;
       collectionId?: number;
     } & PaginatedParamsDTO
   ) => Promise<ListActivitiesForOwnerResponseBody>;
   listForCollectionParticipant: (
     args: {
-      userId: number;
+      userId: string;
       collectionId?: number;
     } & PaginatedParamsDTO
   ) => Promise<ListActivitiesForParticipantResponseBody>;

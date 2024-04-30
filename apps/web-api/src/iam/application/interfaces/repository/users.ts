@@ -1,9 +1,9 @@
 // import { UserInsertDTO, UserSelectDTO } from "./dtos";
 
 export interface IUserRepository {
-  getUserById: (id: number) => Promise<any | null>;
+  getUserById: (id: string) => Promise<any | null>;
   getUserByIdAndRefreshToken: (
-    id: number,
+    id: string,
     refreshToken: string
   ) => Promise<any | null>;
   getUserByProviderId: (id: string) => Promise<any | null>;
@@ -12,6 +12,6 @@ export interface IUserRepository {
     email: string,
     provider: string
   ) => Promise<any | null>;
-  insertUser: (user: any) => Promise<{ userId: number }>;
-  updateUser: (id: number, user: Partial<any>) => Promise<boolean>;
+  insertUser: (user: any) => Promise<{ userId: string }>;
+  updateUser: (id: string, user: Partial<any>) => Promise<boolean>;
 }

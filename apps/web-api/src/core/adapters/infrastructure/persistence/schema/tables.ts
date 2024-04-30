@@ -32,7 +32,7 @@ export const activities = pgTable("activities", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
-  authorId: integer("author_id")
+  authorId: uuid("author_id")
     .references(() => users.id)
     .notNull(),
   collectionId: integer("collection_id")
@@ -122,7 +122,7 @@ export const collections = pgTable("collections", {
   name: varchar("name", { length: 50 }).default("").notNull(),
   description: varchar("description", { length: 200 }).default("").notNull(),
 
-  ownerId: integer("owner_id")
+  ownerId: uuid("owner_id")
     .references(() => users.id)
     .notNull(),
   isPrivate: boolean("is_private").default(true).notNull(),
@@ -144,7 +144,7 @@ export const collectionParticipations = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
-    userId: integer("user_id")
+    userId: uuid("user_id")
       .notNull()
       .references(() => users.id),
     collectionId: integer("collection_id")
@@ -182,9 +182,9 @@ export const studentOutputs = pgTable("student_outputs", {
     .default(OutputStatus.Draft)
     .notNull(),
 
-  studentId: integer("student_id").notNull(),
+  studentId: uuid("student_id").notNull(),
   // .references(() => users.id),
-  activityAuthorId: integer("activity_author_id").notNull(),
+  activityAuthorId: uuid("activity_author_id").notNull(),
   // .references(() => users.id),
   versionId: uuid("version_id")
     .notNull()
@@ -229,7 +229,7 @@ export const notifications = pgTable("notifications", {
   message: varchar("message", { length: 250 }).notNull(),
   details: varchar("details", { length: 500 }).notNull(),
 
-  userId: integer("user_id")
+  userId: uuid("user_id")
     .references(() => users.id)
     .notNull(),
 });

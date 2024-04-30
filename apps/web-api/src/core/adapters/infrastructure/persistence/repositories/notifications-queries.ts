@@ -11,7 +11,7 @@ export class NotificationsReadRepository
     userId,
     page,
     pageSize,
-  }: { userId: number } & PaginatedParamsDTO) {
+  }: { userId: string } & PaginatedParamsDTO) {
     const sq = db.$with("sq").as(
       db
         .select({

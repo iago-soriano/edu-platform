@@ -23,7 +23,6 @@
         "./core/application/interfaces/index.ts"
       ],
       "@core/controllers": ["./core/adapters/controllers/index.ts"],
-      "@core/sqs-entrypoint": ["./core/adapters/sqs-entrypoint/index.ts"],
       "@core/infrastructure/persistence": [
         "./core/adapters/infrastructure/persistence/index.ts"
       ],

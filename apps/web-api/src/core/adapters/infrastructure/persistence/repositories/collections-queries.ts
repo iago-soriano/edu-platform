@@ -19,7 +19,7 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
     userId,
     page,
     pageSize,
-  }: { userId: number } & PaginatedParamsDTO) {
+  }: { userId: string } & PaginatedParamsDTO) {
     const sq = db.$with("sq").as(
       db
         .select({
@@ -75,7 +75,7 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
     isPrivate,
     page,
     pageSize,
-  }: { userId: number; isPrivate: boolean } & PaginatedParamsDTO) {
+  }: { userId: string; isPrivate: boolean } & PaginatedParamsDTO) {
     const sq = db.$with("sq").as(
       db
         .select({
@@ -186,7 +186,7 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
     };
   }
 
-  async findByIdForOwner(collectionId: number, user: { id: number }) {
+  async findByIdForOwner(collectionId: number, user: { id: string }) {
     const dto = (
       await db
         .select({

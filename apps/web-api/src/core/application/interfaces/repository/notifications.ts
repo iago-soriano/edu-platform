@@ -11,6 +11,6 @@ export interface INotificationsRepository extends IAbstractRepository {
 
 export interface INotificationsReadRepository {
   list: (
-    args: { userId: number } & PaginatedParamsDTO
+    args: { userId: string } & PaginatedParamsDTO
   ) => Promise<ListNotificationsResponseBody>;
 }

@@ -25,7 +25,7 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
     page,
     pageSize,
   }: {
-    userId: number;
+    userId: string;
     collectionId?: number;
   } & PaginatedParamsDTO) {
     const draftVersions = alias(activityVersions, "draftVersions");
@@ -174,7 +174,7 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
     page,
     pageSize,
   }: {
-    userId: number;
+    userId: string;
     collectionId?: number;
   } & PaginatedParamsDTO) {
     const publishedVersions = alias(activityVersions, "publishedVersions");
@@ -290,7 +290,7 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
         collectionName: collections.name,
         collectionId: collections.id,
         version: activityVersions.version,
-        author: activities.authorId,
+        authorId: activities.authorId,
         status: activityVersions.status,
         contents: {
           id: activityContents.id,
@@ -374,7 +374,7 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
       collectionName: fullVersion[0].collectionName,
       collectionId: fullVersion[0].collectionId,
       version: fullVersion[0].version,
-      author: fullVersion[0].author,
+      authorId: fullVersion[0].authorId,
       status: fullVersion[0].status as VersionStatus,
       elements,
     };

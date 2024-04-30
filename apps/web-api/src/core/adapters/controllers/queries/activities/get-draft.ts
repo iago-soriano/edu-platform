@@ -40,7 +40,7 @@ export class GetDraftVersionController
     );
     if (!resp) throw new InvalidStateError("Activity not found");
 
-    if (user.id !== resp.author)
+    if (user.id !== resp.authorId)
       throw new SilentInvalidStateError("User is not author");
 
     return res.status(200).json(resp);

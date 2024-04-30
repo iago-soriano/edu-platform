@@ -12,7 +12,7 @@ export class TokenRepository implements ITokenRepository {
     )[0];
   }
 
-  getTokensByUserId(userId: number, type: any) {
+  getTokensByUserId(userId: string, type: any) {
     return db
       .select()
       .from(tokens)

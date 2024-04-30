@@ -2,7 +2,7 @@ import { NotificationType } from "./enums";
 import { Entity } from "@edu-platform/common/platform";
 
 export class Notification extends Entity {
-  public userId!: number;
+  public userId!: string;
   public isUnread!: boolean;
   public type!: NotificationType;
   public message!: string;

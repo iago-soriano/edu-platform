@@ -27,10 +27,11 @@ export class ListNotificationsController
   ) {}
 
   async execute(req: Request, res: Response) {
+    const { user } = req;
     const { page, pageSize } = parseToPaginatedParamsDTO(req.query);
 
     const notificationsList = await this.notificationsReadRepository.list({
-      userId: req.user.id,
+      userId: user.id,
       page,
       pageSize,
     });

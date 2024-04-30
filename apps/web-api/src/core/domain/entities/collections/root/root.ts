@@ -13,7 +13,7 @@ export class Collection extends Entity {
   public isPrivate: boolean;
   public notifyOwnerOnStudentOutput: boolean;
 
-  public ownerId!: number;
+  public ownerId!: string;
   public participants: CollectionArray<CollectionParticipation> =
     new CollectionArray();
 
@@ -23,7 +23,7 @@ export class Collection extends Entity {
     description?: string,
     isPrivate?: boolean,
     notifyOwnerOnStudentOutput?: boolean,
-    ownerId?: number
+    ownerId?: string
   ) {
     super();
     this.id = id || 0;
@@ -31,11 +31,11 @@ export class Collection extends Entity {
     this.description = new CollectionDescription(description || "");
     this.isPrivate = isPrivate || true;
     this.notifyOwnerOnStudentOutput = notifyOwnerOnStudentOutput || true;
-    this.ownerId = ownerId || 0;
+    this.ownerId = ownerId || "0";
   }
 
   updateMetadata(
-    user: { id: number },
+    user: { id: string },
     newValues: {
       name?: string;
       description?: string;
@@ -61,7 +61,7 @@ export class Collection extends Entity {
       this.notifyOwnerOnStudentOutput = newValues.notifyOwnerOnStudentOutput;
   }
 
-  insertStudent(user: { id: number }, student: { id: number }) {
+  insertStudent(user: { id: string }, student: { id: string }) {
     if (user.id !== this.ownerId)
       throw new SilentInvalidStateError("User is not owner");
 
@@ -79,14 +79,14 @@ export class Collection extends Entity {
     this.participants.push(newParticipant);
   }
 
-  removeStudent(user: { id: number }, participationId: number) {
+  removeStudent(user: { id: string }, participationId: number) {
     if (user.id !== this.ownerId)
       throw new SilentInvalidStateError("User is not owner");
 
     this.participants.markAsDeletedById(participationId);
   }
 
-  insertFollower(user: { id: number }) {
+  insertFollower(user: { id: string }) {
     if (this.isPrivate) throw new SilentInvalidStateError("Private collection");
 
     const newParticipant = new CollectionParticipation(
@@ -98,7 +98,7 @@ export class Collection extends Entity {
     this.participants.push(newParticipant);
   }
 
-  removeFollower(participationId: number, user: { id: number }) {
+  removeFollower(participationId: number, user: { id: string }) {
     const participationToDelete = this.participants.filter(
       (part) => part.id === participationId
     )[0];

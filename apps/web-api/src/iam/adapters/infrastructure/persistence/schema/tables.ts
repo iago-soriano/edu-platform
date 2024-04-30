@@ -22,7 +22,7 @@ export const tokens = pgTable("tokens", {
 
   value: varchar("value", { length: 256 }),
   type: tokenTypeEnum("token_type"),
-  userId: integer("user_id").references(() => users.id),
+  userId: uuid("user_id").references(() => users.id),
   expiresAt: timestamp("expires_at", { withTimezone: true }).defaultNow(),
 });
 

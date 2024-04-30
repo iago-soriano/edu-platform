@@ -20,7 +20,7 @@ export class Activity extends Entity {
   }
 
   public id!: string;
-  public authorId!: number;
+  public authorId!: string;
   public collectionId!: number;
   @PersistancePropertyName("lastVersionId")
   public lastVersion: ActivityVersion | null = null;
@@ -30,7 +30,7 @@ export class Activity extends Entity {
 
   public updateCurrentDraftMetadata(
     newValues: { title?: string; description?: string; topics?: string },
-    user: { id: number }
+    user: { id: string }
   ) {
     if (!this.draftVersion)
       throw new SilentInvalidStateError(
@@ -53,7 +53,7 @@ export class Activity extends Entity {
     this.lastVersion = newVersion;
   }
 
-  public createNewDraft(user: { id: number }) {
+  public createNewDraft(user: { id: string }) {
     if (this.authorId !== user.id)
       throw new SilentInvalidStateError("User is not activity author");
     if (!this.lastVersion)
@@ -69,7 +69,7 @@ export class Activity extends Entity {
     );
   }
 
-  public deleteElementOfDraft(user: { id: number }, id: number) {
+  public deleteElementOfDraft(user: { id: string }, id: number) {
     if (!this.draftVersion)
       throw new SilentInvalidStateError("There is no draft version");
     if (this.authorId !== user.id)
@@ -78,7 +78,7 @@ export class Activity extends Entity {
     return this.draftVersion!.deleteElement(id);
   }
 
-  public async publishCurrentDraft(user: { id: number }) {
+  public async publishCurrentDraft(user: { id: string }) {
     if (!this.draftVersion)
       throw new SilentInvalidStateError(
         "There is currently no draft to publish"
@@ -101,7 +101,7 @@ export class Activity extends Entity {
     );
   }
 
-  _canUpsertElement(user: { id: number }) {
+  _canUpsertElement(user: { id: string }) {
     if (this.authorId !== user.id)
       throw new SilentInvalidStateError("User is not activity author");
 
@@ -111,13 +111,13 @@ export class Activity extends Entity {
       );
   }
 
-  public upsertContent(user: { id: number }, contentDto: ContentRequestDTO) {
+  public upsertContent(user: { id: string }, contentDto: ContentRequestDTO) {
     this._canUpsertElement(user);
 
     return this.draftVersion!.upsertContent(contentDto);
   }
 
-  public upsertQuestion(user: { id: number }, questionDto: QuestionRequestDTO) {
+  public upsertQuestion(user: { id: string }, questionDto: QuestionRequestDTO) {
     this._canUpsertElement(user);
 
     this.draftVersion!.upsertQuestion(questionDto);

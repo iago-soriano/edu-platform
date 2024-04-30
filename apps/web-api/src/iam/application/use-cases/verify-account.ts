@@ -25,10 +25,11 @@ class UseCase implements IVerifyAccountUseCase {
       "VerifyAccount"
     );
 
-    if (!verificationToken) throw new InvalidStateError("");
+    if (!verificationToken || !verificationToken.userId)
+      throw new InvalidStateError("Invalid verification token");
 
     const user = await this.userRepository.getUserById(
-      verificationToken.userId || 0
+      verificationToken.userId
     );
     if (!user) throw new InvalidStateError("");
 

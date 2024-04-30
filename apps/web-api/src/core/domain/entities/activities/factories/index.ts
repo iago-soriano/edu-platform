@@ -18,7 +18,7 @@ export class ActivitiesFactory {
   public static from(
     collection: Partial<Collection>,
     activitiesCount: number,
-    user: { id: number }
+    user: { id: string }
   ) {
     if (collection.ownerId !== user.id)
       throw new SilentInvalidStateError(

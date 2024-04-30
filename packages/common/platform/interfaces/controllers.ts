@@ -17,7 +17,7 @@ export type Request<Params = {}, Query = {}, Body = {}> = {
   params: Params;
   query: Query;
   body: Body;
-  user: { id: number };
+  user: { id: string };
   files?: { image?: FileType[] };
 };
 export type Response<Body> = ExpressResponse<Body>;

@@ -29,9 +29,7 @@ class UseCase implements IRefreshTokenUseCase {
       throw new Forbidden(`Unexpected error verifying refresh_token: ${ex}`);
     }
 
-    const userDTO = await this.userRepository.getUserById(
-      Number(tokenPayload.id)
-    );
+    const userDTO = await this.userRepository.getUserById(`${tokenPayload.id}`);
     if (!userDTO) throw new InvalidStateError("");
 
     // TODO

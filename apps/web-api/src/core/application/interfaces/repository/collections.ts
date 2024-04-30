@@ -25,16 +25,16 @@ export interface ICollectionsRepository extends IAbstractRepository {
 
 export interface ICollectionsReadRepository {
   listByParticipation: (
-    args: { userId: number } & PaginatedParamsDTO
+    args: { userId: string } & PaginatedParamsDTO
   ) => Promise<ListCollectionsForParticipantResponseBody>;
   listByOwnership: (
-    args: { userId: number; isPrivate: boolean } & PaginatedParamsDTO
+    args: { userId: string; isPrivate: boolean } & PaginatedParamsDTO
   ) => Promise<ListCollectionsForOwnerResponseBody>;
   listStudents: (
     args: { collectionId: number } & PaginatedParamsDTO
   ) => Promise<ListParticipantsOfCollectionResponseBody>;
   findByIdForOwner: (
     collectionId: number,
-    user: { id: number }
+    user: { id: string }
   ) => Promise<GetCollectionResponseBody | null>;
 }

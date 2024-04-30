@@ -28,9 +28,7 @@ class UseCase implements ISignOutUseCase {
 
     const tokenPayload = this.tokenService.decode(refreshToken);
 
-    const userDTO = await this.userRepository.getUserById(
-      Number(tokenPayload.sub)
-    );
+    const userDTO = await this.userRepository.getUserById(`${tokenPayload.id}`);
     if (!userDTO) throw new InvalidStateError("");
 
     // if (refreshToken == userDTO.refreshToken) {

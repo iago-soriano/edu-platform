@@ -5,15 +5,22 @@ import { OutputStatus } from "./enums";
 export { OutputStatus } from "./enums";
 
 export class StudentOutput extends Entity {
-  constructor(id: number) {
-    super();
-    this.id = id;
-  }
   public id: number;
-  public studentId!: number;
-  public versionId!: number;
-  public activityAuthorId!: number;
-  public statusOutput!: OutputStatus;
-  public statusFeedback!: OutputStatus;
+  public studentId!: string;
+  public versionId!: string;
+  public activityAuthorId!: string;
+  public outputStatus: OutputStatus;
+  public feedbackStatus: OutputStatus;
   public answers!: CollectionArray<StudentAnswer>;
+
+  constructor(
+    id?: number,
+    outputStatus?: OutputStatus,
+    feedbackStatus?: OutputStatus
+  ) {
+    super();
+    this.id = id || 0;
+    this.outputStatus = outputStatus || OutputStatus.Draft;
+    this.feedbackStatus = feedbackStatus || OutputStatus.Draft;
+  }
 }

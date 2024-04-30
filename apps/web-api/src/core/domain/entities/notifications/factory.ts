@@ -5,7 +5,7 @@ export class NotificationsFactory {
     versionId: number,
     collectionName: string,
     activityTitle: string,
-    notificationRecipientId: number
+    notificationRecipientId: string
   ) {
     const notification = new Notification();
 
@@ -20,7 +20,7 @@ export class NotificationsFactory {
     studentOutputId: number,
     activityTitle: string,
     completedBy: string,
-    notificationRecipientId: number
+    notificationRecipientId: string
   ) {
     const notification = new Notification();
 
@@ -35,7 +35,7 @@ export class NotificationsFactory {
     studentOutputId: number,
     activityTitle: string,
     feedbackBy: string,
-    notificationRecipientId: number
+    notificationRecipientId: string
   ) {
     const notification = new Notification();
 

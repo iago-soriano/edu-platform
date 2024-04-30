@@ -56,7 +56,7 @@ export class JWTTokenService implements ITokenService {
       throw new Forbidden("Incorrect issuer in token");
 
     return {
-      id: Number(userId),
+      id: userId,
     };
   }
   verifyAccessToken(token: string) {

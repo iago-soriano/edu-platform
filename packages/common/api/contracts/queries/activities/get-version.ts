@@ -62,7 +62,7 @@ type ResponseBody = {
   version: number;
   collectionName: string;
   collectionId: number;
-  author: number;
+  authorId: string;
   status: VersionStatus;
   elements?: ElementResponseDTO[];
 };

@@ -3,15 +3,15 @@ import { JwtPayload as LibJWTPayload } from "jsonwebtoken";
 import { DomainEvent } from "../interfaces/domain";
 
 export type JWTPayload = {
-  id: number;
+  id: string;
   providerId?: string;
 };
 
 export interface ITokenService {
   generateRefreshToken: (payload: JWTPayload) => string;
   generateAccessToken: (payload: JWTPayload) => string;
-  verifyAccessToken: (token: string) => { id: number };
-  verifyRefreshToken: (token: string) => { id: number };
+  verifyAccessToken: (token: string) => JWTPayload;
+  verifyRefreshToken: (token: string) => JWTPayload;
   decode: (token: string) => LibJWTPayload;
 }
 

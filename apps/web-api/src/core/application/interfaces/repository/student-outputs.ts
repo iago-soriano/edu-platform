@@ -1,7 +1,10 @@
-import { Collection, StudentOutput } from "@core/domain/entities";
+import { StudentOutput } from "@core/domain/entities";
+import { IAbstractRepository } from "@edu-platform/common/platform";
 
-export interface IStudentOutputsRepository {
-  // insert: (output: StudentOutput) => Promise<{ outputId: number }>;
-  // getById: (outputId: number) => Promise<StudentOutput>;
-  // update: (studentOutput: StudentOutput) => Promise<void>;
+export interface IStudentOutputsRepository extends IAbstractRepository {
+  findById: (id: number) => Promise<StudentOutput | null>;
+  findByUserAndVersion: (
+    userId: string,
+    versionId: string
+  ) => /* Promise<StudentOutput | null> */ void;
 }
