@@ -1,17 +1,20 @@
 import { GhostTextArea } from "@components";
-import { TextContentPayloadDTO, ContentTypes } from "@edu-platform/common";
+import {
+  TextContentResponsePayloadDTO,
+  ContentTypes,
+} from "@edu-platform/common";
 import { CommmonContentProps } from "./types";
 
 export const TextContent = ({
   payload: { text },
+  activityId,
   saveContentMutation,
   contentId,
   hasChanges,
   onChange,
-}: { payload: TextContentPayloadDTO } & CommmonContentProps) => {
+}: { payload: TextContentResponsePayloadDTO } & CommmonContentProps) => {
   const onSaveContent = (e) => {
     if (hasChanges) {
-      console.log();
       saveContentMutation.mutate({
         payload: {
           text: {
@@ -20,6 +23,7 @@ export const TextContent = ({
         },
         type: ContentTypes.Text,
         id: contentId,
+        activityId,
       });
     }
     onChange(false);

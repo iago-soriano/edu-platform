@@ -12,9 +12,9 @@ import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { useSaveContentMutation, useDeleteElementMutation } from "@endpoints";
 import {
   ContentResponseDTO,
-  TextContentPayloadDTO,
-  VideoContentPayloadDTO,
-  ImageContentPayloadDTO,
+  TextContentResponsePayloadDTO,
+  VideoContentResponsePayloadDTO,
+  ImageContentResponsePayloadDTO,
   ContentTypes,
 } from "@edu-platform/common";
 import { twMerge } from "tailwind-merge";
@@ -71,7 +71,9 @@ export const BaseContent = ({
           <TextContent
             {...commonProps}
             payload={
-              (contentDto.payload as TextContentPayloadDTO) || { text: "" }
+              (contentDto.payload as TextContentResponsePayloadDTO) || {
+                text: "",
+              }
             }
           />
         );
@@ -80,7 +82,7 @@ export const BaseContent = ({
           <VideoContent
             {...commonProps}
             payload={
-              (contentDto.payload as VideoContentPayloadDTO) || {
+              (contentDto.payload as VideoContentResponsePayloadDTO) || {
                 tracks: "",
                 url: "",
               }
@@ -91,7 +93,11 @@ export const BaseContent = ({
         return (
           <ImageContent
             {...commonProps}
-            payload={(contentDto.payload as { url: string }) || { url: "" }}
+            payload={
+              (contentDto.payload as ImageContentResponsePayloadDTO) || {
+                url: "",
+              }
+            }
           />
         );
     }

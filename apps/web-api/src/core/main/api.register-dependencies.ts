@@ -46,6 +46,11 @@ import {
   PublishDraftUseCase,
   UpdateCollectionMetadataUseCase,
   CreateNewCollectionUseCase,
+  SaveAnswerUseCase,
+  CreateStudentOutputUseCase,
+  PublishFeedbackUseCase,
+  UpdateNotificationUseCase,
+  SaveFeedbackToAnswerUseCase,
 } from "@core/application/use-cases";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
@@ -105,18 +110,18 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     getArchivedVersionController: awilix
       .asClass(GetArchivedVersionController)
       .classic(),
-    // createUserOutputController: awilix
-    //   .asClass(CreateUserOutputController)
-    //   .classic(),
-    // updateStudentOutputController: awilix
-    //   .asClass(UpdateStudentOutputController)
-    //   .classic(),
-    // publishStudentOutputFeedbackController: awilix
-    //   .asClass(PublishStudentOutputFeedbackController)
-    //   .classic(),
-    // saveFeedbackToAnswerController: awilix
-    //   .asClass(SaveFeedbackToAnswerController)
-    //   .classic(),
+    createUserOutputController: awilix
+      .asClass(CreateUserOutputController)
+      .classic(),
+    updateStudentOutputController: awilix
+      .asClass(UpdateStudentOutputController)
+      .classic(),
+    publishStudentOutputFeedbackController: awilix
+      .asClass(PublishStudentOutputFeedbackController)
+      .classic(),
+    saveFeedbackToAnswerController: awilix
+      .asClass(SaveFeedbackToAnswerController)
+      .classic(),
 
     authMiddleware: awilix
       .asClass(AuthenticationMiddlewareController)
@@ -143,7 +148,17 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     removeStudentFromCollectionUseCase: awilix
       .asClass(RemoveStudentFromCollectionUseCase)
       .classic(),
-    // saveAnswerUseCase: awilix.asClass(SaveAnswerUseCase).classic(),
+    saveAnswerUseCase: awilix.asClass(SaveAnswerUseCase).classic(),
+    createStudentOutputUseCase: awilix
+      .asClass(CreateStudentOutputUseCase)
+      .classic(),
+    publishFeedbackUseCase: awilix.asClass(PublishFeedbackUseCase).classic(),
+    updateStudentOutputUseCase: awilix
+      .asClass(UpdateNotificationUseCase)
+      .classic(),
+    saveFeedbackToAnswerUseCase: awilix
+      .asClass(SaveFeedbackToAnswerUseCase)
+      .classic(),
     insertFollowerInCollectionUserCase: awilix
       .asClass(InsertFollowerInCollectionUseCase)
       .classic(),

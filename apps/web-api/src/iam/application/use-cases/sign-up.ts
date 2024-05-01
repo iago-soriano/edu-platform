@@ -49,6 +49,7 @@ class UseCase implements ISignUpUseCase {
     const token = GetUUID();
 
     const userDTO: any = {
+      id: GetUUID(),
       email: user.email!,
       name: user.name!,
       emailVerified: false,

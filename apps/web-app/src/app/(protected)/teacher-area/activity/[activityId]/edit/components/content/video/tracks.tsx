@@ -105,6 +105,7 @@ export const Track = ({
   };
 
   const onClickRemoveTrack = () => {
+    if (tracks.split(",").length === 1) return; //TODO: add fail toast
     const newTracks = tracks
       .split(",")
       .filter((_, i) => i !== index)

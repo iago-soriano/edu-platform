@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { ImageContentPayloadDTO, ContentTypes } from "@edu-platform/common";
+import {
+  ImageContentResponsePayloadDTO,
+  ContentTypes,
+} from "@edu-platform/common";
 import { CommmonContentProps } from "./types";
 import { useSaveImageContentMutation } from "@endpoints";
 
@@ -7,7 +10,7 @@ export const ImageContent = ({
   payload: { url },
   activityId,
   contentId,
-}: { payload: { url: string } } & CommmonContentProps) => {
+}: { payload: ImageContentResponsePayloadDTO } & CommmonContentProps) => {
   const [selectedImg, setSelectedImg] = useState<File>();
   const saveContentMutation = useSaveImageContentMutation({});
   const onFileUpload = async (e) => {

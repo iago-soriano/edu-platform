@@ -9,7 +9,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { parseNumberToTimeLabel } from "@infrastructure";
 import { AddTrackButton, Track } from "./tracks";
 import {
-  VideoContentPayloadDTO,
+  VideoContentResponsePayloadDTO,
   ContentTypes,
   DomainRules,
 } from "@edu-platform/common";
@@ -17,13 +17,14 @@ import { CommmonContentProps } from "../types";
 
 export const VideoContent = ({
   contentId,
+  activityId,
   payload: { url: urlProps, tracks: tracksProps },
   saveContentMutation,
   onChange,
-}: { payload: VideoContentPayloadDTO } & CommmonContentProps) => {
+}: { payload: VideoContentResponsePayloadDTO } & CommmonContentProps) => {
   const [player, setPlayer] = useState<LibYoutubePlayer | null>(null);
   const [videoDuration, setVideoDuration] = useState<string>();
-  const [tracks, setTracks] = useState(tracksProps || "-");
+  const [tracks, setTracks] = useState(tracksProps);
   const [videoUrl, setVideoUrl] = useState(urlProps);
 
   const onBlurUrl = (e) => {
@@ -32,9 +33,10 @@ export const VideoContent = ({
     setVideoUrl(newUrl?.split("&")[0]);
 
     saveContentMutation.mutate({
+      activityId,
       payload: {
         video: {
-          tracks,
+          tracks: "-",
           url: newUrl,
         },
       },
@@ -53,9 +55,15 @@ export const VideoContent = ({
   }, [videoUrl]);
 
   useEffect(() => {
+    console.log(
+      "current",
+      tracks.split(",").length,
+      "coming",
+      tracksProps.split(",").length
+    );
     if (tracks !== tracksProps) {
-      console.log("saving tracks", { tracks, tracksProps });
       saveContentMutation.mutate({
+        activityId,
         payload: {
           video: {
             tracks,
@@ -85,23 +93,27 @@ export const VideoContent = ({
     }
   }, [videoDuration]);
 
+  useEffect(() => {
+    console.log(
+      "current",
+      tracks.split(",").length,
+      "coming",
+      tracksProps.split(",").length
+    );
+    if (tracks !== tracksProps) setTracks(tracksProps);
+  }, [tracksProps]);
+
   const onClickAddTrack = () => {
     if (!videoUrl) {
       errorToast("Favor inserir uma URL");
       return;
     }
     const tracksArray = tracks.split(",");
-    // if (tracksArray.length >= DomainRules.CONTENT.VIDEO.TRACKS_MAX_NUM) {
-    //   errorToast(
-    //     `Não se pode adicionar mais de ${DomainRules.CONTENT.VIDEO.TRACKS_MAX_NUM} faixas`
-    //   );
-    //   return;
-    // }
     const lastTrackEnd = tracksArray[tracksArray.length - 1].split("-")[1];
     setTracks((tracks) => `${tracks},${lastTrackEnd}-${videoDuration}`);
   };
 
-  const addTracksError = saveContentMutation.error?.errors?.["tracks"];
+  // const addTracksError = saveContentMutation.error?.errors?.["tracks"];
 
   return (
     <div>
@@ -114,23 +126,20 @@ export const VideoContent = ({
         // error={saveContentMutation.error?.errors?.["url"]} // TODO: run validations on video url
         onChange={() => onChange(true)}
       />
-      <div className={addTracksError && "border-error border-2"}>
-        {tracks?.split(",").map((track, i) => (
-          <Track
-            key={`${i}-${track}`}
-            index={i}
-            tracks={tracks}
-            setTracks={setTracks}
-            disabled={false}
-            getPlayerCurrTime={getPlayerCurrTime}
-            videoDuration={videoDuration}
-            // saveMutation={saveTracks}
-            hasUrl={!!videoUrl}
-          />
-        ))}
-      </div>
-      {addTracksError && <p className="text-error mb-2">{addTracksError}</p>}
-      <AddTrackButton onClick={onClickAddTrack} disabled={!!addTracksError} />
+      {tracks?.split(",").map((track, i) => (
+        <Track
+          key={`${i}-${track}`}
+          index={i}
+          tracks={tracks}
+          setTracks={setTracks}
+          disabled={false}
+          getPlayerCurrTime={getPlayerCurrTime}
+          videoDuration={videoDuration}
+          // saveMutation={saveTracks}
+          hasUrl={!!videoUrl}
+        />
+      ))}
+      <AddTrackButton onClick={onClickAddTrack} />
       <div className="p-2 flex justify-center">
         <YoutubePlayer
           videoUrl={videoUrl || ""}
@@ -138,12 +147,6 @@ export const VideoContent = ({
           setDuration={setVideoDuration}
           fallbackMessage="Insira uma URL do youtube acima"
         />
-        {/* {videoUrl ? (
-            
-          ) : (
-            <h6>Insira uma URL e o video aparecerá aqui</h6>
-          )}
-        </div>  */}
       </div>
     </div>
   );

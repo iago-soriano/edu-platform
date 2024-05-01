@@ -9,6 +9,7 @@ export class TopicService implements ITopicService {
   }
 
   public async send(event: DomainEvent<unknown>, topicArn: string) {
+    if (topicArn === "debug") return;
     await this._snsClient.send(
       new PublishCommand({
         MessageAttributes: {

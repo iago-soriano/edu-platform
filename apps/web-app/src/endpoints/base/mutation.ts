@@ -13,19 +13,26 @@ import { errorToast } from "@components";
 type ErrorCallback<V> = (
   e: ServerError,
   variables: V,
-  context: unknown
+  context?: unknown
 ) => unknown;
 
 type SuccessCallback<V, D> = (
-  data?: D,
-  variables?: V,
+  data: D,
+  variables: V,
+  context?: unknown
+) => unknown;
+
+type SettledCallback<V, D> = (
+  data: D,
+  e: ServerError,
+  variables: V,
   context?: unknown
 ) => unknown;
 
 export type UseBaseMutationCallbacksType<Req, Res> = {
   onError?: ErrorCallback<Req>;
   onSuccess?: SuccessCallback<Req, Res>;
-  onSettled?: (args: unknown) => unknown;
+  onSettled?: SettledCallback<Req, Res>;
 };
 
 export const useBaseMutation = <Req, Res>({
@@ -45,12 +52,6 @@ export const useBaseMutation = <Req, Res>({
   return useMutation<Res, ServerError, Req>({
     mutationFn: (args) => mutationFn(client, args),
     onSuccess: async (d, v, c) => {
-      console.log(invalidateQueries);
-      invalidateQueries?.map((ivalidate) =>
-        queryClient.invalidateQueries({
-          queryKey: [ivalidate],
-        })
-      );
       onSuccess && onSuccess(d, v, c);
     },
     onError: (e, v, c) => {
@@ -59,6 +60,13 @@ export const useBaseMutation = <Req, Res>({
       errorToast(e.message);
       onError && onError(e, v, c);
     },
-    onSettled,
+    onSettled: (d, e, v, c) => {
+      invalidateQueries?.map((invalidate) =>
+        queryClient.invalidateQueries({
+          queryKey: [invalidate],
+        })
+      );
+      onSettled && onSettled(d!, e!, v, c);
+    },
   });
 };
