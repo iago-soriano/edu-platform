@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { AuthRules } from "@edu-platform/common";
+import { AuthRules } from "@edu-platform/common/domain/auth/rules";
 
 export const nameValidation = yup.string().required("Favor inserir um nome");
 

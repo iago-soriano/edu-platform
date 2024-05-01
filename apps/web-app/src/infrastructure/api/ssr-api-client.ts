@@ -1,9 +1,7 @@
 import { AxiosFetcher } from "./axios-fetcher";
 import { getServerSession, refreshToken } from "./auth";
 
-export const SSRAxios = new AxiosFetcher(
-  process.env.NEXT_PUBLIC_CORE_API_HOST!
-);
+export const SSRAxios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
 SSRAxios.setInterceptor(
   "request",
   async (config) => {

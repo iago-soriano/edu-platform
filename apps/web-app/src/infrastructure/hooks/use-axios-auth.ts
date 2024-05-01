@@ -4,7 +4,7 @@ import { useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { useSignOut } from "./use-sign-out";
 
-const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_CORE_API_HOST!);
+const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
 
 export const useAxiosAuth = () => {
   const session = useSession();

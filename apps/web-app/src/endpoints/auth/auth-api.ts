@@ -23,17 +23,17 @@ import {
   CheckChangePasswordTokenResponseBody,
 } from "@edu-platform/common/api";
 import { ServerError } from "@edu-platform/common";
-import { AxiosFetcher } from "../infrastructure/api/axios-fetcher";
-import { nextAuthSignIn } from "../infrastructure/api/next-auth-wraper";
+import { AxiosFetcher } from "../../infrastructure/api/axios-fetcher";
+import { nextAuthSignIn } from "../../infrastructure/api/next-auth-wraper";
 import {
   ErrorCallback,
   MutationArgsType,
   MutationArgsDefaultValue,
-} from "../infrastructure/api/types";
+} from "../../infrastructure/api/types";
 // import { axios } from "../infrastructure/api/axios-instance";
 // TODO: refactor to use the types above in all calls
 
-export const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_AUTH_API_HOST!);
+export const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
 
 export const useChangePasswordRequestMutation = ({
   onError,

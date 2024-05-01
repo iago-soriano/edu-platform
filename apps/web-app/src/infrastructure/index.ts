@@ -1,6 +1,6 @@
 export * from "./browser";
 export * from "./api";
-export * from "../endpoints/auth-api";
+export * from "../endpoints/auth/auth-api";
 export * from "./form-validations";
 export * from "./hooks";
 export * from "./api/auth/get-server-session";

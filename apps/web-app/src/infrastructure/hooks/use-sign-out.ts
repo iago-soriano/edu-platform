@@ -5,7 +5,7 @@ import { AxiosFetcher } from "../api/axios-fetcher";
 export const useSignOut = () => {
   const router = useRouter();
   const session = useSession();
-  const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_AUTH_API_HOST!);
+  const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
 
   const doSignOut = () => {
     signOut({

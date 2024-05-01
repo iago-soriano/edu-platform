@@ -1,3 +1,3 @@
 export * from "./base";
-export * from "./activity";
-export * from "./collection";
+export * from "./activity/activity";
+export * from "./collection/collection";

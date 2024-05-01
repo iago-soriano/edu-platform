@@ -1,4 +1,4 @@
-import { ServerError, ApiClient } from "@edu-platform/common";
+import { ServerError, ApiClient } from "@edu-platform/common/api";
 import { useAxiosAuth } from "@infrastructure";
 import {
   useMutation,
