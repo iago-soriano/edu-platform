@@ -1,10 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import {
-  useSaveCollectionMutation,
-  useGetCollectionQuery,
-  useCreateNewActivityMutation,
-} from "@endpoints";
+import { useGetCollectionQuery, useUpdateCollectionMutation } from "@endpoints";
 import {
   Form,
   Input,
@@ -44,7 +40,7 @@ const Page = ({ params: { collectionId: strId } }) => {
       });
   }, [collectionQuery?.data]);
 
-  const saveCollectionMutation = useSaveCollectionMutation({
+  const saveCollectionMutation = useUpdateCollectionMutation({
     onSuccess: () => {
       successToast("Collection saved successfully!");
     },

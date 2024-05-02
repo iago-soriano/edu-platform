@@ -1,5 +1,5 @@
 "use client";
-import { useGetActivityVersionQuery } from "@endpoints";
+import { useGetActivityPublishedQuery } from "@endpoints";
 import { useEffect, useState } from "react";
 import {
   QuestionContainer,
@@ -8,8 +8,8 @@ import {
   ActivityHeader,
 } from "@components";
 
-const Page = ({ params: { activityId, versionId } }) => {
-  const versionQuery = useGetActivityVersionQuery({ activityId, versionId });
+const Page = ({ params: { activityId } }) => {
+  const versionQuery = useGetActivityPublishedQuery({ activityId });
   const [showAuxHeader, setShowAuxHeader] = useState(false);
   const [saveState, setSaveState] = useState("");
 
@@ -28,28 +28,25 @@ const Page = ({ params: { activityId, versionId } }) => {
 
   return (
     <div>
-      <ActivityHeader activityId={activityId} versionId={versionId} />
+      <ActivityHeader activityId={activityId} />
       <StickyHeader
         onOpenOptionsMenu={() => {}}
-        show={showAuxHeader}
-        activity={versionQuery}
+        activity={versionQuery?.data}
         saveState={saveState}
       />
       <div>
-        {versionQuery.data?.elements.length &&
+        {versionQuery.data?.elements?.length &&
           versionQuery.data?.elements.map((element) => {
             if (element.content && !element.question) {
               return (
                 <BaseContent
                   key={`c-${element.content.id}`}
-                  versionId={versionId}
-                  activityId={activityId}
                   contentDto={element.content}
                 />
               );
             } else if (!element.content && element.question) {
               return (
-                <QuestionContainer key={`q-${element?.content?.id || 0}`} />
+                <QuestionContainer key={`q-${element?.question?.id || 0}`} />
               );
             }
             return <h1>What is this</h1>;

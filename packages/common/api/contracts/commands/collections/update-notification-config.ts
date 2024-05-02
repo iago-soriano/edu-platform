@@ -4,7 +4,7 @@ type Params = {
   collectionId: string;
 };
 
-export {
+export type {
   RequestBody as UpdateNotificationConfigRequestBody,
   ResponseBody as UpdateNotificationConfigResponseBody,
   Params as UpdateNotificationConfigParams,

@@ -6,7 +6,7 @@ type Params = {
   contentId: string;
 };
 
-export {
+export type {
   RequestBody as DeleteQuestionRequestBody,
   ResponseBody as DeleteQuestionResponseBody,
   Params as DeleteQuestionParams,

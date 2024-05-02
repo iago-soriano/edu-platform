@@ -6,7 +6,7 @@ import {
 import Client from "./client";
 import posthog from "posthog-js";
 import { SSRAxios } from "@infrastructure";
-import { ApiClient } from "@edu-platform/common";
+import { ApiClient } from "@edu-platform/common/api";
 
 const Page = async ({ params: { activityId } }) => {
   const queryClient = new QueryClient();

@@ -9,7 +9,6 @@ import {
   ButtonLink,
   Tag,
 } from "@components";
-import { DomainRules } from "@edu-platform/common";
 import { useState, useEffect } from "react";
 import {
   useGetActivityDraftQuery,

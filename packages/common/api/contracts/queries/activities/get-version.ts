@@ -45,8 +45,6 @@ const requestSchemaActivityId = z.object({
 
 const parseActivityId = requestSchemaActivityId.parse;
 
-export { parseActivityId };
-
 const requestSchema = z
   .object({
     versionNumber: z.coerce.number().positive(),
@@ -71,10 +69,13 @@ type Params = {
   versionNumber?: string;
 };
 
-export {
+export type {
   ResponseBody as GetActivityVersionResponseBody,
   Params as GetActivityVersionParams,
-  parseGetArchivedVersionRequest,
+};
+
+export {
   parseActivityId as parseGetDraftVersionRequest,
   parseActivityId as parseGetPublishedVersionRequest,
+  parseGetArchivedVersionRequest,
 };

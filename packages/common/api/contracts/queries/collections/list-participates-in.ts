@@ -13,8 +13,8 @@ const querySchema = paginatedParamsSchema;
 type Query = z.infer<typeof querySchema>;
 const parseListCollectionsForParticipantQuery = querySchema.parse;
 
-export {
+export type {
   ResponseBody as ListCollectionsForParticipantResponseBody,
   Query as ListCollectionsForParticipantQuery,
-  parseListCollectionsForParticipantQuery,
 };
+export { parseListCollectionsForParticipantQuery };

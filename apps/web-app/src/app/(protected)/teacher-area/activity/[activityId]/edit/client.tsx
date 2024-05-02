@@ -69,7 +69,6 @@ const Page = ({ params: { activityId } }) => {
           setOpenOptionsMenu(false);
         }}
         activityId={activityId}
-        version={versionQuery?.data}
       />
     </div>
   );

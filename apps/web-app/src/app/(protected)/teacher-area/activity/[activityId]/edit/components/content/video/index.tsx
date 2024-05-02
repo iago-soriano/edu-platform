@@ -11,8 +11,7 @@ import { AddTrackButton, Track } from "./tracks";
 import {
   VideoContentResponsePayloadDTO,
   ContentTypes,
-  DomainRules,
-} from "@edu-platform/common";
+} from "@edu-platform/common/api";
 import { CommmonContentProps } from "../types";
 
 export const VideoContent = ({

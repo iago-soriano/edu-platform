@@ -4,7 +4,7 @@ type Params = {
   activityId: number;
 };
 
-export {
+export type {
   RequestBody as ArchiveActivityRequestBody,
   ResponseBody as ArchiveActivityResponseBody,
   Params as ArchiveActivityParams,

@@ -5,7 +5,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { SSRAxios } from "@infrastructure";
-import { ApiClient } from "@edu-platform/common";
+import { ApiClient } from "@edu-platform/common/api";
 
 const Page = async ({ children, params }) => {
   const queryClient = new QueryClient();

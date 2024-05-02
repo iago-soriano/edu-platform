@@ -8,7 +8,7 @@ import {
 import {
   useCreateNewActivityMutation,
   useListCollectionsForOwnerQuery,
-  useSaveCollectionMutation,
+  useCreateNewCollectionMutation,
 } from "@endpoints";
 import {
   Spinner,
@@ -58,7 +58,7 @@ export default function CollectionsLayout({
     pageSize,
   });
 
-  const createCollectionMutation = useSaveCollectionMutation({
+  const createCollectionMutation = useCreateNewCollectionMutation({
     onSuccess: (args) => {
       console.log({ args });
       router.push(Router.collectionSettings(args?.CollectionId));

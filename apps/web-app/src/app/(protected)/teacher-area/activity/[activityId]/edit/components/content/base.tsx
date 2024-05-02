@@ -16,7 +16,7 @@ import {
   VideoContentResponsePayloadDTO,
   ImageContentResponsePayloadDTO,
   ContentTypes,
-} from "@edu-platform/common";
+} from "@edu-platform/common/api";
 import { twMerge } from "tailwind-merge";
 
 type BaseContentProps = {

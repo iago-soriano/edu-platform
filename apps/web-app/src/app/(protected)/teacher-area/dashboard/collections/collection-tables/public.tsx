@@ -1,5 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { CollectionListOwnerResponse } from "@endpoints";
+import { ListCollectionsForOwnerResponse } from "@endpoints";
 import {
   LinkWithIcon,
   CenteredCell,
@@ -10,7 +10,7 @@ import {
 import { Router, getLocaleDateTimeFromISO } from "@infrastructure";
 
 const columnHelper =
-  createColumnHelper<CollectionListOwnerResponse["data"][number]>();
+  createColumnHelper<ListCollectionsForOwnerResponse["data"][number]>();
 export const publicCollectionColumns = [
   columnHelper.accessor("name", {
     header: () => <LeftHeader name="Name" />,

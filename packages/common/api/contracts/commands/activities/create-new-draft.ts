@@ -4,7 +4,7 @@ type Params = {
   activityId: string;
 };
 
-export {
+export type {
   RequestBody as CreateNewDraftVersionRequestBody,
   ResponseBody as CreateNewDraftVersionResponseBody,
   Params as CreateNewDraftVersionParams,

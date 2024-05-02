@@ -1,11 +1,10 @@
-import { Icons, NewItemButton, Button, Modal } from "@components";
+import { Icons, Button, Modal } from "@components";
 import {
   useSaveContentMutation,
   useSaveQuestionMutation,
   usePublishDraftMutation,
-  ReturnGetActivityVersion,
 } from "@endpoints";
-import { ContentTypes, QuestionTypes } from "@edu-platform/common";
+import { ContentTypes, QuestionTypes } from "@edu-platform/common/api";
 import { useState } from "react";
 import { redirect } from "next/navigation";
 import { twMerge } from "tailwind-merge";
@@ -14,7 +13,6 @@ import { Router } from "@infrastructure";
 const NewItemHeader = ({ children }) => <h5 className="p-2">{children}</h5>;
 
 interface OptionsMenuProps {
-  version?: ReturnGetActivityVersion;
   onClose: () => void;
   activityId: any;
   isOpen: boolean;
@@ -24,7 +22,6 @@ interface OptionsMenuProps {
 export const OptionsMenu = ({
   onClose,
   activityId,
-  version,
   isOpen,
   scrollToBottom,
 }: OptionsMenuProps) => {
@@ -87,7 +84,11 @@ export const OptionsMenu = ({
         <div className="h-full">
           <br />
           <NewItemHeader>Conteúdos</NewItemHeader>
-          <NewItemButton
+          <Button
+            withIcon="PLUS"
+            variant="action"
+            size="lg"
+            disabled={false}
             onClick={() =>
               saveContentMutation.mutate({
                 activityId,
@@ -97,8 +98,12 @@ export const OptionsMenu = ({
             }
           >
             Vídeo
-          </NewItemButton>
-          <NewItemButton
+          </Button>
+          <Button
+            withIcon="PLUS"
+            variant="action"
+            size="lg"
+            disabled={false}
             onClick={() =>
               saveContentMutation.mutate({
                 activityId,
@@ -108,8 +113,12 @@ export const OptionsMenu = ({
             }
           >
             Texto
-          </NewItemButton>
-          <NewItemButton
+          </Button>
+          <Button
+            withIcon="PLUS"
+            variant="action"
+            size="lg"
+            disabled={false}
             onClick={() =>
               saveContentMutation.mutate({
                 activityId,
@@ -119,10 +128,14 @@ export const OptionsMenu = ({
             }
           >
             Imagem
-          </NewItemButton>
+          </Button>
           <br />
           <NewItemHeader>Perguntas</NewItemHeader>
-          <NewItemButton
+          <Button
+            withIcon="PLUS"
+            variant="action"
+            size="lg"
+            disabled={false}
             onClick={() =>
               saveQuestionMutation.mutate({
                 activityId,
@@ -131,8 +144,12 @@ export const OptionsMenu = ({
             }
           >
             Dissertativa
-          </NewItemButton>
-          <NewItemButton
+          </Button>
+          <Button
+            withIcon="PLUS"
+            variant="action"
+            size="lg"
+            disabled={false}
             onClick={() =>
               saveQuestionMutation.mutate({
                 activityId,
@@ -141,7 +158,7 @@ export const OptionsMenu = ({
             }
           >
             Múltipla escolha
-          </NewItemButton>
+          </Button>
           {/* Footer */}
           <div className="absolute bottom-0 p-2 my-3 flex justify-around w-full">
             <Button

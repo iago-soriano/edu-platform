@@ -3,8 +3,6 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { SSRAxios } from "@infrastructure";
-import { ApiClient } from "@edu-platform/common";
 import Version from "./client";
 import posthog from "posthog-js";
 
@@ -21,7 +19,7 @@ const Page = async ({ params: { activityId, versionId } }) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Version params={{ activityId, versionId }} />
+      <Version params={{ activityId }} />
     </HydrationBoundary>
   );
 };

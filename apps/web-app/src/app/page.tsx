@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default async ({ children }) => {
+export default async () => {
   redirect("/home");
 };

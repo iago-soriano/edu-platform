@@ -2,7 +2,6 @@
 import { usePathname } from "next/navigation";
 import { SideNav } from "@components";
 import {
-  useSaveCollectionMutation,
   useGetCollectionQuery,
   useCreateNewActivityMutation,
 } from "@endpoints";

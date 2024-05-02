@@ -14,7 +14,7 @@ type RequestBody = CollectionRequestDTO;
 type ResponseBody = {};
 type Params = { id: number };
 
-export {
+export type {
   RequestBody as UpdateCollectionMetadataRequestBody,
   ResponseBody as UpdateCollectionMetadataResponseBody,
   Params as UpdateCollectionMetadataParams,

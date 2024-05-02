@@ -8,7 +8,7 @@ export type CollectionResponseDTO = {
 type Params = { collectionId: number };
 type ResponseBody = CollectionResponseDTO;
 
-export {
+export type {
   ResponseBody as GetCollectionResponseBody,
   Params as GetCollectionParams,
 };

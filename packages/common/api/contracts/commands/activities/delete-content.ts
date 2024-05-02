@@ -5,7 +5,7 @@ type Params = {
   elementId: number;
 };
 
-export {
+export type {
   RequestBody as DeleteElementRequestBody,
   ResponseBody as DeleteElementResponseBody,
   Params as DeleteElementParams,

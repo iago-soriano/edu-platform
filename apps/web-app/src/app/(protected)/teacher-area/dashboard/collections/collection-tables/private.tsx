@@ -1,5 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { CollectionListOwnerResponse } from "@endpoints";
+import { ListCollectionsForOwnerResponse } from "@endpoints";
 import {
   Icons,
   Tooltip,
@@ -13,7 +13,7 @@ import {
 import { Router } from "@infrastructure";
 
 const columnHelper =
-  createColumnHelper<CollectionListOwnerResponse["data"][number]>();
+  createColumnHelper<ListCollectionsForOwnerResponse["data"][number]>();
 
 export const privateCollectionColumns = [
   columnHelper.accessor("name", {

@@ -24,7 +24,6 @@ const Page = ({ params: { activityId } }) => {
                 <div>
                   <BaseContent
                     key={`c-${element.content.id}`}
-                    activityId={activityId}
                     contentDto={element.content}
                   />
                   <br className="my-5" />

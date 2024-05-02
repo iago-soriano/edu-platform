@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   ImageContentResponsePayloadDTO,
   ContentTypes,
-} from "@edu-platform/common";
+} from "@edu-platform/common/api";
 import { CommmonContentProps } from "./types";
 import { useSaveImageContentMutation } from "@endpoints";
 

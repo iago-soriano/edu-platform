@@ -1,18 +1,18 @@
 import { z } from "zod";
 
-const createNewActivityRrequestSchema = z.object({
+const createNewActivityRequestSchema = z.object({
   collectionId: z.coerce.number().positive(),
 });
-type RequestBody = z.infer<typeof createNewActivityRrequestSchema>;
+type RequestBody = z.infer<typeof createNewActivityRequestSchema>;
 
 type ResponseBody = {
   activityId: string;
 };
 type Params = void;
 
-export {
+export type {
   RequestBody as CreateNewActivityRequestBody,
   ResponseBody as CreateNewActivityResponseBody,
   Params as CreateNewActivityParams,
-  createNewActivityRrequestSchema,
 };
+export { createNewActivityRequestSchema };

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useVerifyAccountMutation, LocalStorageHelper } from "@infrastructure";
-import { ServerError } from "@edu-platform/common";
+import { ServerError } from "@edu-platform/common/api";
 import { Spinner } from "@components";
 
 const Page = () => {

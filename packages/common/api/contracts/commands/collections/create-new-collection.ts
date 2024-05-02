@@ -4,7 +4,7 @@ type RequestBody = {};
 type ResponseBody = { CollectionId: number };
 type Params = {};
 
-export {
+export type {
   RequestBody as CreateNewCollectionRequestBody,
   ResponseBody as CreateNewCollectionResponseBody,
   Params as CreateNewCollectionParams,

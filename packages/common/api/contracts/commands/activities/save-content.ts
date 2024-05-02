@@ -38,7 +38,7 @@ type ResponseBody = {
 };
 type Params = { activityId: string };
 
-export {
+export type {
   Params as SaveContentParams,
   RequestBody as SaveContentRequestBody,
   ResponseBody as SaveContentResponseBody,

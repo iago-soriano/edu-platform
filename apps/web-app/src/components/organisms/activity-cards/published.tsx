@@ -1,10 +1,10 @@
 import { twMerge } from "tailwind-merge";
-import { VersionResponseDTO } from "@edu-platform/common";
+// import { VersionResponseDTO } from "@edu-platform/common";
 import { Badge, Icons, Tooltip } from "@components";
 import { Title, Description, Date } from "./common";
 
 export const PublishedVersionActivityCard = ({
-  version: { title, description, topics, version },
+  // version: { title, description, topics, version },
   onClick,
   archivedCount,
   hasDraft,
@@ -12,7 +12,7 @@ export const PublishedVersionActivityCard = ({
   onClickSeeDraft,
   collection,
 }: {
-  version: Partial<VersionResponseDTO>;
+  // version: Partial<VersionResponseDTO>;
   hasDraft: boolean;
   archivedCount: number;
   onClick: () => any;

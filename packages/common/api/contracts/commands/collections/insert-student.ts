@@ -2,7 +2,7 @@ type RequestBody = { studentEmail: string };
 type ResponseBody = {};
 type Params = { collectionId: number };
 
-export {
+export type {
   RequestBody as InsertUserInCollectionRequestBody,
   ResponseBody as InsertUserInCollectionResponseBody,
   Params as InsertUserInCollectionParams,

@@ -1,4 +1,4 @@
-import { ServerError } from "@edu-platform/common";
+import { ServerError } from "@edu-platform/common/api";
 
 export type ErrorCallback<V> = (
   e: ServerError,

@@ -1,6 +1,6 @@
 "use client";
 
-export const ActivityHeader = ({ activityId, versionId }) => {
+export const ActivityHeader = ({ activityId }) => {
   return (
     <div
       id="activity-header-input"

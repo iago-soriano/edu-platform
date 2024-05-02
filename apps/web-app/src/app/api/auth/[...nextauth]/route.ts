@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import {
   ProviderSignUpRequestBody,
   ProviderSignUpResponseBody,
-} from "@edu-platform/common";
+} from "@edu-platform/common/api";
 import { AxiosFetcher } from "../../../../infrastructure/api/axios-fetcher";
 
 export const authOptions: AuthOptions = {

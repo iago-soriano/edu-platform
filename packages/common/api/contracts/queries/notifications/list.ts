@@ -1,5 +1,4 @@
 import { PaginatedParamsDTO, PaginatedResponse } from "../../common";
-import { z } from "zod";
 
 enum NotificationType {
   StudentOutputCompleted = "StudentOutputCompleted",
@@ -22,7 +21,7 @@ type ResponseBody = PaginatedResponse<{
 
 type Query = PaginatedParamsDTO;
 
-export {
+export type {
   ResponseBody as ListNotificationsResponseBody,
   Query as ListNotificationsQuery,
 };

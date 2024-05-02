@@ -10,11 +10,15 @@ import {
   ImageView,
   TextContentView,
 } from ".";
-import { ContentResponseDTO } from "@edu-platform/common";
+import {
+  ContentResponseDTO,
+  TextContentResponsePayloadDTO,
+  VideoContentResponsePayloadDTO,
+  ImageContentResponsePayloadDTO,
+} from "@edu-platform/common/api";
 
 type BaseContentProps = {
   contentDto: ContentResponseDTO;
-  activityId: string;
 };
 export const BaseContent = ({ contentDto }: BaseContentProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -23,17 +27,25 @@ export const BaseContent = ({ contentDto }: BaseContentProps) => {
     switch (type) {
       case "Text":
         return (
-          <TextContentView>{contentDto.payload?.text?.text}</TextContentView>
+          <TextContentView>
+            {(contentDto.payload as TextContentResponsePayloadDTO)?.text}
+          </TextContentView>
         );
       case "Video":
         return (
           <VideoContent
-            url={contentDto.payload?.video?.url}
-            tracks={contentDto.payload?.video?.tracks?.split(",")}
+            url={(contentDto.payload as VideoContentResponsePayloadDTO)?.url}
+            tracks={(
+              contentDto.payload as VideoContentResponsePayloadDTO
+            )?.tracks?.split(",")}
           />
         );
       case "Image":
-        return <ImageView src={contentDto.payload?.image?.url} />;
+        return (
+          <ImageView
+            src={(contentDto.payload as ImageContentResponsePayloadDTO)?.url}
+          />
+        );
     }
   };
 

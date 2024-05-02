@@ -10,9 +10,9 @@ type ResponseBody = {};
 type Params = z.infer<typeof paramsSchema>;
 
 const parseRequest = paramsSchema.parse;
-export {
+export type {
   RequestBody as UnfollowCollectionRequestBody,
   ResponseBody as UnfollowCollectionResponseBody,
   Params as UnfollowCollectionParams,
-  parseRequest as unfollowCollectionParseRequest,
 };
+export { parseRequest as unfollowCollectionParseRequest };

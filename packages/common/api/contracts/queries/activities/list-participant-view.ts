@@ -13,4 +13,4 @@ type ResponseBody = PaginatedResponse<{
   published: ActivityVersionDto;
 }>;
 
-export { ResponseBody as ListActivitiesForParticipantResponseBody };
+export type { ResponseBody as ListActivitiesForParticipantResponseBody };

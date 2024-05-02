@@ -2,7 +2,7 @@ import { GhostTextArea } from "@components";
 import {
   TextContentResponsePayloadDTO,
   ContentTypes,
-} from "@edu-platform/common";
+} from "@edu-platform/common/api";
 import { CommmonContentProps } from "./types";
 
 export const TextContent = ({

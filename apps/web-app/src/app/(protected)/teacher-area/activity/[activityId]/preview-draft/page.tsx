@@ -20,7 +20,7 @@ const Page = async ({ params: { activityId, versionId } }) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Version params={{ activityId, versionId }} />
+      <Version params={{ activityId }} />
     </HydrationBoundary>
   );
 };

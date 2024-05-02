@@ -15,13 +15,12 @@ export const NavButton = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  const hStyles = highlighted ? "text-accent font-bold" : "";
   return (
     <Link
-      href={href}
+      href={href!}
       className={twMerge(
         "my-0 mx-auto flex h-full items-center text-center justify-center cursor-pointer hover:opacity-70 px-2",
-        hStyles,
+        highlighted ? "text-accent font-bold" : "",
         className
       )}
     >

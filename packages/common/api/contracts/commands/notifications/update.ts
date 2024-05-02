@@ -4,7 +4,7 @@ type Params = {
   notificationId: string;
 };
 
-export {
+export type {
   RequestBody as UpdateNotificationRequestBody,
   ResponseBody as UpdateNotificationResponseBody,
   Params as UpdateNotificationParams,

@@ -32,7 +32,7 @@ type ResponseBody = {
 };
 type Params = { activityId: string };
 
-export {
+export type {
   QuestionRequestDTO as SaveQuestionRequestBody,
   ResponseBody as SaveQuestionResponseBody,
   Params as SaveQuestionParams,

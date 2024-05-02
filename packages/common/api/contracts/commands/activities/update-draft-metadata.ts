@@ -14,7 +14,7 @@ type Params = {
   activityId: string;
 };
 
-export {
+export type {
   VersionRequestDTO as UpdateVersionMetadataRequestBody,
   ResponseBody as UpdateVersionMetadataResponseBody,
   Params as UpdateVersionMetadataParams,

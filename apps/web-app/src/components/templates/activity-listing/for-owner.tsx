@@ -32,7 +32,7 @@ export function ActivityListingOwnership({
         return (
           <PublishedVersionActivityCard
             key={activityId}
-            version={published}
+            // version={published}
             hasDraft={!!draft}
             archivedCount={archivedVersionsCount}
             collection={collectionName}

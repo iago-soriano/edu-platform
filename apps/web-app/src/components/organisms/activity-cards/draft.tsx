@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge";
-import { ListActivitiesForOwnerResponseBody } from "@edu-platform/common";
+import { ListActivitiesForOwnerResponseBody } from "@edu-platform/common/api";
 import { Badge, Icons, Tooltip, Tag } from "@components";
 import {
   Title,

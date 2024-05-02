@@ -29,8 +29,8 @@ const querySchema = z
 type Query = z.infer<typeof querySchema>;
 const parseListCollectionsForOwnerQuery = querySchema.parse;
 
-export {
+export type {
   ResponseBody as ListCollectionsForOwnerResponseBody,
   Query as ListCollectionsForOwnerQuery,
-  parseListCollectionsForOwnerQuery,
 };
+export { parseListCollectionsForOwnerQuery };

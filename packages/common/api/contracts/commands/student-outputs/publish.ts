@@ -6,7 +6,7 @@ type Params = {
   studentOutputId: string;
 };
 
-export {
+export type {
   RequestBody as UpdateStudentOutputRequestBody,
   ResponseBody as UpdateStudentOutputResponseBody,
   Params as UpdateStudentOutputParams,

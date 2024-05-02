@@ -1,7 +1,7 @@
 "use client";
 import { twMerge } from "tailwind-merge";
 import { SavingIndicator, Icons, Tag } from "@components";
-import { ReturnGetActivityVersion } from "@endpoints";
+import { GetActivityPublishedReturn } from "@endpoints";
 import { useEffect, useState, useRef, useCallback } from "react";
 
 export const StickyHeader = ({
@@ -9,7 +9,7 @@ export const StickyHeader = ({
   saveState,
   onOpenOptionsMenu,
 }: {
-  activity?: ReturnGetActivityVersion;
+  activity?: GetActivityPublishedReturn;
   saveState: any;
   onOpenOptionsMenu: () => any;
 }) => {
@@ -46,10 +46,7 @@ export const StickyHeader = ({
           .map((topic, index) => <Tag key={index} text={topic} />)}
       </div>
       <div className="flex xl:col-start-16 lg:col-start-10 col-start-5 col-span-1 justify-self-end">
-        <SavingIndicator
-          hasChanges={saveState === "hasChanges"}
-          isLoading={saveState === "isLoading"}
-        />
+        <SavingIndicator saveState={saveState} />
         <Icons.LIST
           onClick={onOpenOptionsMenu}
           className="cursor-pointer mx-3 p-1 text-accent"

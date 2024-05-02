@@ -4,7 +4,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { SSRAxios } from "@infrastructure";
-import { ApiClient } from "@edu-platform/common";
+import { ApiClient } from "@edu-platform/common/api";
 import Client from "./client";
 
 const pageSize = 10;

@@ -16,8 +16,8 @@ type ResponseBody = PaginatedResponse<{
   email: string;
 }>;
 
-export {
+export type {
   ResponseBody as ListParticipantsOfCollectionResponseBody,
   Query as ListParticipantsOfCollectionQuery,
-  parseListParticipantsOfCollectionQuery,
 };
+export { parseListParticipantsOfCollectionQuery };

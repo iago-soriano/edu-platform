@@ -10,9 +10,9 @@ const requestSchema = z.object({
 
 const parseActivityId = requestSchema.parse;
 
-export {
+export type {
   RequestBody as CreateStudentOutputRequestBody,
   ResponseBody as CreateStudentOutputResponseBody,
   Params as CreateStudentOutputParams,
-  parseActivityId as parseCreateNewStudentOutputRequest,
 };
+export { parseActivityId as parseCreateNewStudentOutputRequest };

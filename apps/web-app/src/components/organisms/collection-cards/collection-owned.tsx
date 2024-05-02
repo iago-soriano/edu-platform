@@ -1,4 +1,4 @@
-import { CollectionResponseDTO } from "@edu-platform/common";
+import { CollectionResponseDTO } from "@edu-platform/common/api";
 import { Badge, Icons, Tooltip } from "@components";
 import { MainContainer, Name, Description, EmptyDescription } from "./common";
 

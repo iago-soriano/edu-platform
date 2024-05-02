@@ -1,5 +1,5 @@
 import { MainContainer, Name, Description, EmptyDescription } from "./common";
-import { CollectionResponseDTO } from "@edu-platform/common";
+import { CollectionResponseDTO } from "@edu-platform/common/api";
 
 export const CollectionParticipatesInCard = ({
   onClick,

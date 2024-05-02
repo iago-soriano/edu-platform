@@ -26,8 +26,8 @@ const querySchema = z
 type Query = z.infer<typeof querySchema>;
 const parseListActivityVersionsQuery = querySchema.parse;
 
-export {
+export type {
   ResponseBody as ListActivitiesForOwnerResponseBody,
   Query as ListActivitiesQuery,
-  parseListActivityVersionsQuery,
 };
+export { parseListActivityVersionsQuery };
