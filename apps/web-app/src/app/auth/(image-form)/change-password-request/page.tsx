@@ -2,17 +2,16 @@
 import {
   Input,
   Form,
-  FormButton,
   ErrorAlert,
   SuccessAlert,
   errorToast,
   successToast,
+  Button,
 } from "@components";
 import {
   useChangePasswordRequestMutation,
   changePasswordRequestSchema,
 } from "@infrastructure";
-import Link from "next/link";
 
 const Page = () => {
   const mutation = useChangePasswordRequestMutation({
@@ -23,23 +22,6 @@ const Page = () => {
     onSuccess: () =>
       successToast("E-mail de troca de senha enviado com sucesso"),
   });
-  const hasError = () => mutation.error;
-  const getError = () => {
-    console.log(mutation.error?.message);
-    if (mutation.error?.message === "USER_NOT_FOUND")
-      return (
-        <p>
-          E-mail não encontrado. Já tem uma conta?{" "}
-          <Link
-            className="hover:opacity-70 inline-block py-3 px-1 underline"
-            href="/auth/sign-up"
-          >
-            Criar conta
-          </Link>
-        </p>
-      );
-    return mutation.error?.message;
-  };
 
   return (
     <>
@@ -47,7 +29,7 @@ const Page = () => {
       <p>
         Você receberá em seu e-mail um link para continuar com a troca de senha
       </p>
-      {hasError() && <ErrorAlert>{getError()}</ErrorAlert>}
+      {mutation.error && <ErrorAlert>{mutation.error?.message}</ErrorAlert>}
 
       {mutation.isSuccess && (
         <SuccessAlert>
@@ -58,18 +40,23 @@ const Page = () => {
 
       <Form onSubmit={mutation.mutate} schema={changePasswordRequestSchema}>
         <Input
+          className="w-full"
+          autoComplete="email"
           name="email"
           inputLabel={{ text: "E-mail", mandatory: true }}
           placeholder="Digite aqui seu e-mail"
           type="email"
         />
         <br />
-
-        <FormButton
-          label="Enviar"
-          loading={mutation.isPending}
+        <Button
+          type="submit"
+          variant="action"
+          size="full"
+          isLoading={mutation.isPending}
           disabled={mutation.isSuccess}
-        />
+        >
+          Enviar
+        </Button>
       </Form>
     </>
   );

@@ -1,7 +1,6 @@
 import { ServerError, ApiClient } from "@edu-platform/common/api";
-import { useAxiosAuth } from "@infrastructure";
-import { useQuery } from "@tanstack/react-query";
 import { useBaseMutation, UseBaseMutationCallbacksType } from "../base";
+import { queryKeys } from "./query-key-factory";
 
 type Request = Parameters<ApiClient["createNewCollection"]>[0];
 type Return = Awaited<ReturnType<ApiClient["createNewCollection"]>>;
@@ -11,6 +10,6 @@ export const useCreateNewCollectionMutation = (
 ) =>
   useBaseMutation<Request, Return>({
     mutationFn: (client, args) => client.createNewCollection(args),
-    invalidateQueries: ["collection", "collections"],
+    invalidateQueries: queryKeys.teacherList({ page: 0, isPrivate: true }),
     ...args,
   });

@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Icons } from "@components";
 import { getSession } from "next-auth/react";
+import { Router } from "@infrastructure";
 
 const FooterLink = ({ href, children }) => (
   <Link className="text-text2 hover:opacity-70 p-1 w-max" href={href}>
@@ -13,7 +14,7 @@ const FooterHeading = ({ children }) => (
   <h6 className="text-text2 p-1 font-bold">{children}</h6>
 );
 export const Footer = async () => {
-  const session = await getSession();
+  // const session = await getSession();
   // console.log(session);
   // const isAuthenticated = session?.status == "authenticated";
   const isAuthenticated = false; // TODO get server session
@@ -38,9 +39,9 @@ export const Footer = async () => {
         </div>
         <div className="[&>a]:block lg:col-span-3 lg:col-start-7 md:col-span-5 md:col-start-12 col-span-4">
           <FooterHeading>Navegação</FooterHeading>
-          <FooterLink href="/">Home</FooterLink>
+          <FooterLink href="/home">Home</FooterLink>
           {isAuthenticated && (
-            <FooterLink href="/dashboard/my-activities">Minha área</FooterLink>
+            <FooterLink href={Router.teacherActivities}>Minha área</FooterLink>
           )}
           <FooterLink href="/faq">Como funciona</FooterLink>
           {!isAuthenticated && (
@@ -52,7 +53,9 @@ export const Footer = async () => {
         </div>
         <div className="[&>a]:block lg:col-span-3 md:col-span-7 md:col-start-1 col-span-8">
           <FooterHeading>Comece a usar</FooterHeading>
-          <FooterLink href="/new-activity">Criar atividade</FooterLink>
+          <FooterLink href={Router.teacherActivities}>
+            Criar atividade
+          </FooterLink>
         </div>
         <div className="[&>a]:block lg:col-span-3 md:col-span-7 md:col-start-10 col-span-8">
           <FooterHeading>Contato</FooterHeading>
@@ -62,10 +65,10 @@ export const Footer = async () => {
           </p>
         </div>
       </div>
-      <div className="flex justify-between p-4 bg-surface4">
+      {/* <div className="flex justify-between p-4 bg-surface4">
         <p className="text-text2">Copyright</p>
         <FooterLink href="/privacy-policy">Política de Privacidade</FooterLink>
-      </div>
+      </div> */}
     </footer>
   );
 };

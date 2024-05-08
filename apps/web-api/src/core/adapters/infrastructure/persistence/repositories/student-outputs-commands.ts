@@ -1,12 +1,13 @@
 import { IStudentOutputsRepository } from "@core/application/interfaces";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { AllTables } from "./all-tables";
 import { BaseRepository } from "@edu-platform/common/platform";
-import { db, studentOutputs } from "../schema";
+import { db, studentAnswers, studentOutputs } from "../schema";
 import { StudentOutputSerializer } from "../serializers";
 
 export const StudentOutputEntityNames = {
   StudentOutput: AllTables["StudentOutput"],
+  StudentAnswer: AllTables["StudentAnswer"],
 };
 
 export class StudentOutputsRepository
@@ -20,11 +21,35 @@ export class StudentOutputsRepository
     const dto = await db
       .select()
       .from(studentOutputs)
+      .leftJoin(
+        studentAnswers,
+        eq(studentAnswers.studentOutputId, studentOutputs.id)
+      )
       .where(eq(studentOutputs.id, id));
 
-    const output = StudentOutputSerializer.deserialize(dto[0]);
-
-    return output;
+    return StudentOutputSerializer.deserialize(
+      dto[0].student_outputs,
+      dto.map(({ student_answers }) => student_answers)
+    );
   }
-  async findByUserAndVersion(userId: string, versionId: string) {}
+  async findByUserAndVersion(
+    userId: string,
+    activityId: string,
+    versionNumber: number
+  ) {
+    const dto = (
+      await db
+        .select()
+        .from(studentOutputs)
+        .where(
+          and(
+            eq(studentOutputs.studentId, userId),
+            eq(studentOutputs.activityId, activityId),
+            eq(studentOutputs.versionNumber, versionNumber)
+          )
+        )
+    )[0];
+
+    return StudentOutputSerializer.deserialize(dto, null);
+  }
 }

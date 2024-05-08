@@ -61,7 +61,7 @@ export class ApiClient {
     ...body
   }: SaveContentParams & SaveContentRequestBody) {
     return this._fetcher.post(
-      `activities/${activityId}/versions/draft/contents`,
+      `core/activities/${activityId}/versions/draft/contents`,
       body
     ) as Promise<SaveContentResponseBody>;
   }
@@ -70,7 +70,7 @@ export class ApiClient {
     formData,
   }: SaveContentParams & { formData: FormData }) {
     return this._fetcher.post(
-      `activities/${activityId}/versions/draft/contents`,
+      `core/activities/${activityId}/versions/draft/contents`,
       formData
     ) as Promise<SaveContentResponseBody>;
   }
@@ -79,29 +79,29 @@ export class ApiClient {
     ...body
   }: SaveQuestionParams & SaveQuestionRequestBody) {
     return this._fetcher.post(
-      `activities/${activityId}/versions/draft/questions`,
+      `core/activities/${activityId}/versions/draft/questions`,
       body
     ) as Promise<SaveQuestionResponseBody>;
   }
   createNewActivity(body: CreateNewActivityRequestBody) {
     return this._fetcher.post(
-      "activities",
+      "core/activities",
       body
     ) as Promise<CreateNewActivityResponseBody>;
   }
   getDraft({ activityId }: GetActivityVersionParams) {
     return this._fetcher.get(
-      `activities/${activityId}/versions/draft`
+      `core/activities/${activityId}/versions/draft`
     ) as Promise<GetActivityVersionResponseBody>;
   }
   getPublished({ activityId }: GetActivityVersionParams) {
     return this._fetcher.get(
-      `activities/${activityId}/versions/published`
+      `core/activities/${activityId}/versions/published`
     ) as Promise<GetActivityVersionResponseBody>;
   }
   getArchived({ activityId, versionNumber }: GetActivityVersionParams) {
     return this._fetcher.get(
-      `activities/${activityId}/versions/archived/${versionNumber}`
+      `core/activities/${activityId}/versions/archived/${versionNumber}`
     ) as Promise<GetActivityVersionResponseBody>;
   }
   updateVersionMetadata({
@@ -109,23 +109,23 @@ export class ApiClient {
     ...body
   }: UpdateVersionMetadataParams & UpdateVersionMetadataRequestBody) {
     return this._fetcher.patch(
-      `activities/${activityId}/versions/draft/metadata`,
+      `core/activities/${activityId}/versions/draft/metadata`,
       body
     ) as Promise<UpdateVersionMetadataResponseBody>;
   }
   listActivitiesForOwner(query: ListActivitiesQuery) {
-    return this._fetcher.get("activities/owner-view", {
+    return this._fetcher.get("core/activities/owner-view", {
       ...query,
     }) as Promise<ListActivitiesForOwnerResponseBody>;
   }
   listActivitiesForParticipant(query: ListActivitiesQuery) {
-    return this._fetcher.get("activities/participant-view", {
+    return this._fetcher.get("core/activities/participant-view", {
       ...query,
     }) as Promise<ListActivitiesForParticipantResponseBody>;
   }
   deleteElement({ activityId, elementId }: DeleteElementParams) {
     return this._fetcher.delete(
-      `activities/${activityId}/versions/draft/elements/${elementId}`
+      `core/activities/${activityId}/versions/draft/elements/${elementId}`
     ) as Promise<DeleteElementResponseBody>;
   }
   publishDraft({
@@ -133,13 +133,13 @@ export class ApiClient {
     ...body
   }: PublishDraftParams & PublishDraftRequestBody) {
     return this._fetcher.patch(
-      `activities/${activityId}/versions/draft/publish`,
+      `core/activities/${activityId}/versions/draft/publish`,
       body
     ) as Promise<PublishDraftResponseBody>;
   }
   createNewDraftVersion({ activityId }: CreateNewDraftVersionParams) {
     return this._fetcher.post(
-      `activities/${activityId}/versions/draft`,
+      `core/activities/${activityId}/versions/draft`,
       undefined
     ) as Promise<CreateNewDraftVersionResponseBody>;
   }
@@ -147,7 +147,7 @@ export class ApiClient {
   // COLLECTIONS
   createNewCollection(args: CreateNewCollectionRequestBody) {
     return this._fetcher.post(
-      `collections`,
+      `core/collections`,
       args
     ) as Promise<CreateNewCollectionResponseBody>;
   }
@@ -156,7 +156,7 @@ export class ApiClient {
     ...args
   }: UpdateCollectionMetadataParams & UpdateCollectionMetadataRequestBody) {
     return this._fetcher.patch(
-      `collections`,
+      `core/collections/${id}`,
       args
     ) as Promise<UpdateCollectionMetadataResponseBody>;
   }
@@ -165,7 +165,7 @@ export class ApiClient {
     ...args
   }: InsertUserInCollectionParams & InsertUserInCollectionRequestBody) {
     return this._fetcher.post(
-      `collections/${collectionId}/participation`,
+      `core/collections/${collectionId}/participation`,
       args
     ) as Promise<InsertUserInCollectionResponseBody>;
   }
@@ -174,7 +174,7 @@ export class ApiClient {
     participationId,
   }: RemoveUserFromCollectionParams) {
     return this._fetcher.delete(
-      `collections/${collectionId}/participation/${participationId}/student`,
+      `core/collections/${collectionId}/participation/${participationId}/student`,
       undefined
     ) as Promise<RemoveUserFromCollectionResponseBody>;
   }
@@ -183,7 +183,7 @@ export class ApiClient {
     ...args
   }: FollowCollectionParams & FollowCollectionRequestBody) {
     return this._fetcher.post(
-      `collections/${collectionId}/follow`,
+      `core/collections/${collectionId}/follow`,
       args
     ) as Promise<FollowCollectionResponseBody>;
   }
@@ -192,7 +192,7 @@ export class ApiClient {
     participationId,
   }: UnfollowCollectionParams) {
     return this._fetcher.delete(
-      `collections/${collectionId}/participation/${participationId}/follower`,
+      `core/collections/${collectionId}/participation/${participationId}/follower`,
       undefined
     ) as Promise<UnfollowCollectionResponseBody>;
   }
@@ -203,7 +203,7 @@ export class ApiClient {
     }
   ) {
     return this._fetcher.get(
-      `collections/participates-in?&page=${page}&pageSize=${pageSize}`
+      `core/collections/participates-in?&page=${page}&pageSize=${pageSize || 10}`
     ) as Promise<ListCollectionsForParticipantResponseBody>;
   }
   listCollectionsForOwner(
@@ -214,12 +214,12 @@ export class ApiClient {
     }
   ) {
     return this._fetcher.get(
-      `collections/owns?isPrivate=${isPrivate}&page=${page}&pageSize=${pageSize}`
+      `core/collections/owns?isPrivate=${isPrivate}&page=${page}&pageSize=${pageSize || 10}`
     ) as Promise<ListCollectionsForOwnerResponseBody>;
   }
   async getCollection({ collectionId }: GetCollectionParams) {
     return this._fetcher.get(
-      `collections/${collectionId}`
+      `core/collections/${collectionId}`
     ) as Promise<GetCollectionResponseBody>;
   }
   async listStudentsOfCollection({
@@ -228,7 +228,7 @@ export class ApiClient {
     pageSize,
   }: ListParticipantsOfCollectionQuery) {
     return this._fetcher.get(
-      `collections/${collectionId}/participants?page=${page}&pageSize=${pageSize}`
+      `core/collections/${collectionId}/participants?page=${page}&pageSize=${pageSize || 10}`
     ) as Promise<ListParticipantsOfCollectionResponseBody>;
   }
 }

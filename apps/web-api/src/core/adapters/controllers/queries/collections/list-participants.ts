@@ -18,7 +18,7 @@ export class ListUsersInCollectionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path: string = "collections/:collectionId/participants";
+  path: string = "core/collections/:collectionId/participants";
   middlewares: string[] = ["auth"];
 
   constructor(private collectionsReadRepository: ICollectionsReadRepository) {}

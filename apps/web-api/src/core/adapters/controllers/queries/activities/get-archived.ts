@@ -10,7 +10,6 @@ import {
   GetActivityVersionResponseBody,
   InvalidStateError,
   SilentInvalidStateError,
-  parseActivityId,
   parseGetArchivedVersionRequest,
 } from "@edu-platform/common";
 import { VersionStatus } from "@core/domain/enums";
@@ -26,7 +25,7 @@ export class GetArchivedVersionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path = "activities/:activityId/versions/archived/:versionNumber";
+  path = "core/activities/:activityId/versions/archived/:versionNumber";
   middlewares: string[] = ["auth"];
 
   constructor(private activitiesReadRepository: IActivitiesReadRepository) {}

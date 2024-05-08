@@ -3,6 +3,7 @@
 @layer base {
   h1 {
     @apply text-6xl;
+    margin-bottom: 2rem;
   }
 
   h2 {
@@ -19,6 +20,7 @@
 
   h5 {
     @apply text-2xl;
+    margin-bottom: 2rem;
   }
   input[type="time"]::-webkit-calendar-picker-indicator {
     background: none;

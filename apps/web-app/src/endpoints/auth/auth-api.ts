@@ -22,7 +22,7 @@ import {
   CheckChangePasswordTokenRequestQueryParams,
   CheckChangePasswordTokenResponseBody,
 } from "@edu-platform/common/api";
-import { ServerError } from "@edu-platform/common";
+import { ServerError } from "@edu-platform/common/api";
 import { AxiosFetcher } from "../../infrastructure/api/axios-fetcher";
 import { nextAuthSignIn } from "../../infrastructure/api/next-auth-wraper";
 import {

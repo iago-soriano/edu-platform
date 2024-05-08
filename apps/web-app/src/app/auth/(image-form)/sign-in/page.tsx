@@ -2,8 +2,7 @@
 import {
   Input,
   Form,
-  Footer,
-  FormButton,
+  Button,
   ErrorAlert,
   GoogleSignInButton,
   errorToast,
@@ -42,6 +41,8 @@ const Page = () => {
       <br />
       <Form onSubmit={credentialsSignInMutation.mutate} schema={signInSchema}>
         <Input
+          className="w-full"
+          autoComplete="username"
           name="email"
           inputLabel={{ text: "E-mail", mandatory: true }}
           placeholder="Digite aqui seu e-mail"
@@ -49,6 +50,8 @@ const Page = () => {
         />
         <br />
         <PasswordInput
+          className="w-full"
+          autoComplete="current-password"
           name="password"
           inputLabel={{ text: "Senha", mandatory: true }}
           placeholder="Digite aqui sua senha"
@@ -61,10 +64,14 @@ const Page = () => {
           Esqueceu sua senha?
         </Link>
         <br />
-        <FormButton
-          label="Entrar"
-          loading={credentialsSignInMutation.isPending}
-        />
+        <Button
+          type="submit"
+          variant="action"
+          size="full"
+          isLoading={credentialsSignInMutation.isPending}
+        >
+          Entrar
+        </Button>
       </Form>
     </>
   );

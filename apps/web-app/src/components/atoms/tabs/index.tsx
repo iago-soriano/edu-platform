@@ -9,8 +9,8 @@ export const TabsLink = ({ tabs }) => {
   return (
     <div
       className={twMerge(
-        "grid w-full m-0 lg:w-[60%] lg:mr-auto h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
-        `grid-cols-${tabs.length}`
+        "grid w-full m-0 lg:w-[50%] lg:mx-auto h-10 items-center justify-center rounded-md bg-muted my-5 p-1 text-muted-foreground",
+        `grid-cols-3`
       )}
     >
       {tabs.map(({ title, route }, i) => (

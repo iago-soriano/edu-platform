@@ -4,11 +4,8 @@ import { useGetCollectionQuery, useUpdateCollectionMutation } from "@endpoints";
 import {
   Form,
   Input,
-  FormButton,
   Toggle,
-  Tooltip,
   Button,
-  RadioButton,
   RadioGroup,
   successToast,
 } from "@components";
@@ -40,7 +37,7 @@ const Page = ({ params: { collectionId: strId } }) => {
       });
   }, [collectionQuery?.data]);
 
-  const saveCollectionMutation = useUpdateCollectionMutation({
+  const saveCollectionMutation = useUpdateCollectionMutation(collectionId, {
     onSuccess: () => {
       successToast("Collection saved successfully!");
     },
@@ -62,7 +59,7 @@ const Page = ({ params: { collectionId: strId } }) => {
         <Input
           name="name"
           placeholder="The name of this collection"
-          className="lg:w-[45%] md:w-[60%] w-[95%]"
+          className="lg:w-[45%] md:w-[60%] w-[95%] mb-5"
           value={collection.name}
           inputLabel={{ text: "Name", mandatory: true }}
           onChange={(e) => {
@@ -75,7 +72,7 @@ const Page = ({ params: { collectionId: strId } }) => {
         <Input
           name="description"
           placeholder="An optional text that describes this collection"
-          className="lg:w-[50%] md:w-[70%] w-[95%]"
+          className="lg:w-[50%] md:w-[70%] w-[95%] mb-5"
           inputLabel={{ text: "Description", mandatory: false }}
           value={collection.description}
           onChange={(e) => {
@@ -85,7 +82,7 @@ const Page = ({ params: { collectionId: strId } }) => {
             }));
           }}
         />
-        <label className="m-3">
+        <label className="mb-10">
           <span className="text-lg">Privacy</span>
           <RadioGroup
             value={collection.isPrivate}
@@ -113,7 +110,7 @@ const Page = ({ params: { collectionId: strId } }) => {
             ]}
           />
         </label>
-        <label className="m-3">
+        <label className="mb-10">
           {collection?.isPrivate && (
             <label className="flex flex-row items-center min-h-11">
               <Toggle
@@ -132,7 +129,11 @@ const Page = ({ params: { collectionId: strId } }) => {
             </label>
           )}
         </label>
-        <Button size="lg" isLoading={saveCollectionMutation.isPending}>
+        <Button
+          size="lg"
+          variant="action"
+          isLoading={saveCollectionMutation.isPending}
+        >
           Save
         </Button>
       </Form>

@@ -3,38 +3,21 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { SSRAxios } from "@infrastructure";
+import { preFetchPublic, preFetchPrivate } from "@endpoints";
 import { ApiClient } from "@edu-platform/common/api";
 import Client from "./client";
 
-const pageSize = 10;
+const queryClient = new QueryClient();
 
 const Page = async ({ searchParams }) => {
-  const queryClient = new QueryClient();
-
+  //searchParams opts into dynamic rendering
   const pagePrivate = Number(searchParams?.pagePrivate) || 0;
 
-  await queryClient.prefetchQuery({
-    queryKey: ["collections", { isPrivate: true, page: pagePrivate, pageSize }],
-    queryFn: () =>
-      new ApiClient(SSRAxios).listCollectionsForOwner({
-        isPrivate: true,
-        page: pagePrivate,
-        pageSize,
-      }),
-  });
+  await preFetchPrivate(queryClient, pagePrivate);
 
   const pagePublic = Number(searchParams?.pagePublic) || 0;
 
-  await queryClient.prefetchQuery({
-    queryKey: ["collections", { isPrivate: false, page: pagePublic, pageSize }],
-    queryFn: () =>
-      new ApiClient(SSRAxios).listCollectionsForOwner({
-        isPrivate: false,
-        page: pagePublic,
-        pageSize,
-      }),
-  });
+  await preFetchPublic(queryClient, pagePublic);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

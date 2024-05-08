@@ -18,7 +18,7 @@ export class ListCollectionsForOwnerController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path: string = "collections/owns";
+  path: string = "core/collections/owns";
   middlewares: string[] = ["auth"];
 
   constructor(private collectionsReadRepository: ICollectionsReadRepository) {}
@@ -30,6 +30,7 @@ export class ListCollectionsForOwnerController
       req.query
     );
 
+    console.log("fetch with", { page, pageSize, isPrivate }, Date.now());
     const result = await this.collectionsReadRepository.listByOwnership({
       userId: user.id,
       isPrivate,

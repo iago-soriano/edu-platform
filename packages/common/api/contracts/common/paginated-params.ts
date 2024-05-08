@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const paginatedParamsSchema = z.object({
   page: z.coerce.number().nonnegative(),
-  pageSize: z.coerce.number().positive(),
+  pageSize: z.coerce.number().positive().optional(),
 });
 
 export type PaginatedParamsDTO = z.infer<typeof paginatedParamsSchema>;

@@ -6,7 +6,6 @@ import { IInputProps } from "./interface";
 
 export const PasswordInput = ({ label, placeholder, ...rest }: IInputProps) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-
   return (
     <Input
       {...rest}

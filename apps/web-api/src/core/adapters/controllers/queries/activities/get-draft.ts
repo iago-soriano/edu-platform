@@ -25,7 +25,7 @@ export class GetDraftVersionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path = "activities/:activityId/versions/draft";
+  path = "core/activities/:activityId/versions/draft";
   middlewares: string[] = ["auth"];
 
   constructor(private activitiesReadRepository: IActivitiesReadRepository) {}

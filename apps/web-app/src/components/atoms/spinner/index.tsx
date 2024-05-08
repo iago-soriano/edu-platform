@@ -5,5 +5,5 @@ export const Spinner = ({
   className,
   ...rest
 }: React.ButtonHTMLAttributes<HTMLDivElement>) => (
-  <Icons.SPINNER className={twMerge("w-full h-full animate-spin", className)} />
+  <Icons.SPINNER className={twMerge("animate-spin", className)} />
 );

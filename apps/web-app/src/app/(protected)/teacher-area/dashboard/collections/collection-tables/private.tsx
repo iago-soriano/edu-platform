@@ -3,7 +3,7 @@ import { ListCollectionsForOwnerResponse } from "@endpoints";
 import {
   Icons,
   Tooltip,
-  LinkWithIcon,
+  ButtonLink,
   CenteredCell,
   CenteredDateCell,
   LeftHeader,
@@ -81,9 +81,9 @@ export const privateCollectionColumns = [
     header: () => <span>Edit</span>,
     cell: (info) => (
       <p className="flex flex-row justify-center">
-        <LinkWithIcon
+        <ButtonLink
           href={Router.collectionSettings(info.getValue())}
-          icon="CAN_SEE"
+          withIcon="CAN_SEE"
         />
       </p>
     ),

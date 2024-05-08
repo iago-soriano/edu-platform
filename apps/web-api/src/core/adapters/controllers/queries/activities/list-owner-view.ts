@@ -18,7 +18,7 @@ export class ListActivitiesForCollectionOwnerController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path = "activities/owner-view";
+  path = "core/activities/owner-view";
   middlewares: string[] = ["auth"];
 
   constructor(private activitiesReadRepository: IActivitiesReadRepository) {}

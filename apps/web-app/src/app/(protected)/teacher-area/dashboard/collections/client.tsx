@@ -11,7 +11,6 @@ import {
   useCreateNewCollectionMutation,
 } from "@endpoints";
 import {
-  Spinner,
   Frame,
   LoadingErrorData,
   Icons,
@@ -30,9 +29,9 @@ import {
 
 const pageSize = 10;
 
-const CollectionsFrame = ({ children }) => (
-  <Frame className="md:w-[80%] w-[95%]">{children}</Frame>
-);
+// const CollectionsFrame = ({ children }) => (
+//   <Frame className="md:w-[80%] w-[95%]">{children}</Frame>
+// );
 export default function CollectionsLayout({
   currActiveTab,
   pagePublic,
@@ -66,76 +65,76 @@ export default function CollectionsLayout({
   });
 
   return (
-    <div className="min-h-[70vh] flex justify-between">
-      <Tabs
-        value={params?.activeTab}
-        onValueChange={(e) => {
-          setParams({ ...params, activeTab: e });
-        }}
-        className="w-full"
-      >
-        <div className="w-[90%] flex justify-between flex-wrap my-2">
-          <TabsList>
-            <TabsTrigger value={"private"}>Private Collections</TabsTrigger>
-            <TabsTrigger value={"public"}>Public Collections</TabsTrigger>
-          </TabsList>
-          <Button
-            withIcon="PLUS"
-            variant="action"
-            size="lg"
-            isLoading={createCollectionMutation.isPending}
-            onClick={() => createCollectionMutation.mutate({})}
-          >
-            New Collection
-          </Button>
-        </div>
-        <TabsContent value={"private"} className="">
-          <LoadingErrorData
-            loading={privateCollectionsQuery.isPending}
-            error={privateCollectionsQuery.error}
-            hasData={!!privateCollectionsQuery?.data?.data?.length}
-            data={
-              <CollectionsFrame>
-                <DataTable
-                  columns={privateCollectionColumns}
-                  data={privateCollectionsQuery.data?.data || []}
-                  pagination={{
-                    totalRowCount:
-                      privateCollectionsQuery.data?.pagination?.totalCount || 0,
-                    pageSize,
-                    currentPage: Number(params.pagePrivate),
-                    setCurrentPage: (e) =>
-                      setParams({ ...params, pagePrivate: e }),
-                  }}
-                />
-              </CollectionsFrame>
-            }
-          />
-        </TabsContent>
-        <TabsContent value={"public"}>
-          <LoadingErrorData
-            loading={publicCollectionsQuery.isPending}
-            error={publicCollectionsQuery.error}
-            hasData={!!publicCollectionsQuery?.data?.data?.length}
-            data={
-              <CollectionsFrame>
-                <DataTable
-                  columns={publicCollectionColumns}
-                  data={publicCollectionsQuery?.data?.data || []}
-                  pagination={{
-                    totalRowCount:
-                      publicCollectionsQuery.data?.pagination?.totalCount || 0,
-                    pageSize,
-                    currentPage: Number(params.pagePublic),
-                    setCurrentPage: (e) =>
-                      setParams({ ...params, pagePublic: e }),
-                  }}
-                />
-              </CollectionsFrame>
-            }
-          />
-        </TabsContent>
-      </Tabs>
-    </div>
+    // <div className="min-h-[70vh] flex justify-between">
+    <Tabs
+      value={params?.activeTab}
+      onValueChange={(e) => {
+        setParams({ ...params, activeTab: e });
+      }}
+      className="lg:w-[70%] w-full mx-auto"
+    >
+      <div className="flex justify-between flex-wrap my-8">
+        <TabsList>
+          <TabsTrigger value={"private"}>Private Collections</TabsTrigger>
+          <TabsTrigger value={"public"}>Public Collections</TabsTrigger>
+        </TabsList>
+        <Button
+          withIcon="PLUS"
+          variant="action"
+          size="lg"
+          isLoading={createCollectionMutation.isPending}
+          onClick={() => createCollectionMutation.mutate({})}
+        >
+          New Collection
+        </Button>
+      </div>
+      <TabsContent value={"private"} className="">
+        <LoadingErrorData
+          loading={privateCollectionsQuery.isPending}
+          error={privateCollectionsQuery.error}
+          hasData={!!privateCollectionsQuery?.data?.data?.length}
+          data={
+            <Frame className="w-full">
+              <DataTable
+                columns={privateCollectionColumns}
+                data={privateCollectionsQuery.data?.data || []}
+                pagination={{
+                  totalRowCount:
+                    privateCollectionsQuery.data?.pagination?.totalCount || 0,
+                  pageSize,
+                  currentPage: Number(params.pagePrivate),
+                  setCurrentPage: (e) =>
+                    setParams({ ...params, pagePrivate: e }),
+                }}
+              />
+            </Frame>
+          }
+        />
+      </TabsContent>
+      <TabsContent value={"public"}>
+        <LoadingErrorData
+          loading={publicCollectionsQuery.isPending}
+          error={publicCollectionsQuery.error}
+          hasData={!!publicCollectionsQuery?.data?.data?.length}
+          data={
+            <Frame>
+              <DataTable
+                columns={publicCollectionColumns}
+                data={publicCollectionsQuery?.data?.data || []}
+                pagination={{
+                  totalRowCount:
+                    publicCollectionsQuery.data?.pagination?.totalCount || 0,
+                  pageSize,
+                  currentPage: Number(params.pagePublic),
+                  setCurrentPage: (e) =>
+                    setParams({ ...params, pagePublic: e }),
+                }}
+              />
+            </Frame>
+          }
+        />
+      </TabsContent>
+    </Tabs>
+    // </div>
   );
 }

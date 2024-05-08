@@ -59,8 +59,8 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
       .with(sq)
       .select()
       .from(sq)
-      .limit(pageSize)
-      .offset(page * pageSize);
+      .limit(pageSize || 10)
+      .offset(page * (pageSize || 10));
 
     return {
       data: dto,
@@ -133,8 +133,8 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
       .with(sq)
       .select()
       .from(sq)
-      .limit(pageSize)
-      .offset(page * pageSize);
+      .limit(pageSize || 10)
+      .offset(page * (pageSize || 10));
 
     return {
       data: dto,
@@ -175,8 +175,8 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
       .with(qry)
       .select()
       .from(qry)
-      .limit(pageSize)
-      .offset(page * pageSize);
+      .limit(pageSize || 10)
+      .offset(page * (pageSize || 10));
 
     return {
       data: dto,

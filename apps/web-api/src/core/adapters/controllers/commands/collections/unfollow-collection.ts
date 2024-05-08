@@ -25,7 +25,7 @@ export class UnfollowCollectionController
 {
   method = HttpMethod.DELETE;
   path: string =
-    "collections/:collectionId/participation/:participationId/follower";
+    "core/collections/:collectionId/participation/:participationId/follower";
   middlewares: string[] = ["auth"];
 
   constructor(private unfollowCollectionUseCase: IUnfollowCollectionUseCase) {}

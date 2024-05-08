@@ -1,19 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import {
-  StudentAreaButton,
-  TeacherAreaButton,
-  CollectionsButton,
-  SignInButton,
-  SignUpButton,
-  HomeButton,
-  Logo,
-  NavButton,
-} from "../components";
-import { ActionLink } from "@components";
 import { ProfileImageButton } from "./profile-image-button";
 import { ProfileDropDown } from "./profile-dropdown";
 import { useClickOutside } from "@infrastructure";
+import { ModeToggle, Logo } from "../components";
+import { BaseNavbarButton } from "../base-button";
+import { Router } from "@infrastructure";
 
 const AuthenticatedSectionContainer = ({ children }) => (
   <div className="min-w-[100px] flex flex-row my-0 mx-2 justify-center">
@@ -21,20 +13,13 @@ const AuthenticatedSectionContainer = ({ children }) => (
   </div>
 );
 
-export const Button = ({ children, ...rest }) => (
-  <NavButton {...rest} className={"mx-3 max-w-[100px]"}>
-    {children}
-  </NavButton>
+const ButtonContainer = ({ children }) => (
+  <li className="flex items-center">{children}</li>
 );
 
-export const BigScreenNavbar = ({
-  currentPath,
-  modeToggle,
-  user,
-  isAuthenticated,
-  signOut,
-}) => {
+export const BigScreenNavbar = ({ user, isAuthenticated, signOut }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const handleSignOut = () => {
     signOut();
     setIsDropdownOpen(false);
@@ -47,23 +32,27 @@ export const BigScreenNavbar = ({
     if (!isAuthenticated)
       return (
         <AuthenticatedSectionContainer>
-          <li>
-            <SignInButton currentPath={currentPath} Component={Button} />
-          </li>
-          <li className="flex items-center">
-            <SignUpButton currentPath={currentPath} Component={ActionLink} />
-          </li>
+          <ButtonContainer>
+            <BaseNavbarButton path="/auth/sign-in" withIcon="USER">
+              Sign In
+            </BaseNavbarButton>
+          </ButtonContainer>
+          <ButtonContainer>
+            <BaseNavbarButton path="/auth/sign-up" variant="action">
+              Sign Up
+            </BaseNavbarButton>
+          </ButtonContainer>
         </AuthenticatedSectionContainer>
       );
     return (
       <AuthenticatedSectionContainer>
-        <li>
+        <ButtonContainer>
           <ProfileImageButton
             user={user}
             ref={addRef}
             setIsDropdownOpen={setIsDropdownOpen}
           />
-        </li>
+        </ButtonContainer>
       </AuthenticatedSectionContainer>
     );
   };
@@ -72,35 +61,26 @@ export const BigScreenNavbar = ({
     <>
       <nav className="max-w-full h-[6.7rem]">
         <ul className="h-full flex flex-row justify-between overflow-x-hidden">
-          <li>
+          <ButtonContainer>
             <Logo />
-          </li>
+          </ButtonContainer>
           <div className="flex flex-row w-full justify-start">
-            {/* {isAuthenticated ? ( */}
-            <li>
-              <HomeButton
-                isHighlighted={(cp) => cp.startsWith("/home")}
-                currentPath={currentPath}
-                Component={Button}
-              />
-            </li>
-            <li>
-              <TeacherAreaButton
-                isHighlighted={(cp) => cp.startsWith("/teacher-area")}
-                currentPath={currentPath}
-                Component={Button}
-              />
-            </li>
-            <li>
-              <StudentAreaButton
-                isHighlighted={(cp) => cp.startsWith("/student-area")}
-                currentPath={currentPath}
-                Component={Button}
-              />
-            </li>
+            <ButtonContainer>
+              <BaseNavbarButton path="/home">Home</BaseNavbarButton>
+            </ButtonContainer>
+            <ButtonContainer>
+              <BaseNavbarButton path={Router.teacherHome}>
+                Teacher Area
+              </BaseNavbarButton>
+            </ButtonContainer>
+            <ButtonContainer>
+              <BaseNavbarButton path={Router.studentHome}>
+                Student Area
+              </BaseNavbarButton>
+            </ButtonContainer>
           </div>
           <div className="flex">
-            {modeToggle}
+            {/* <ModeToggle /> */}
             {getAuthenticatedSection()}
           </div>
         </ul>
@@ -109,7 +89,6 @@ export const BigScreenNavbar = ({
         isDropdownOpen={isDropdownOpen}
         addClickOutsideRef={addRef}
         handleSignOut={handleSignOut}
-        currentPath={currentPath}
       />
     </>
   );

@@ -23,7 +23,7 @@ export class UpdateCollectionMetadataController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.PATCH;
-  path: string = "collections/:id";
+  path: string = "core/collections/:id";
   middlewares: string[] = ["auth"];
 
   constructor(

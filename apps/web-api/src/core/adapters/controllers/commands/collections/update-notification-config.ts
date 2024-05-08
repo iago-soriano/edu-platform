@@ -23,7 +23,7 @@ export class UpdateNotificationConfigController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.PATCH;
-  path: string = "collections/:collectionId/notification-config";
+  path: string = "core/collections/:collectionId/notification-config";
   middlewares: string[] = ["auth"];
 
   constructor(

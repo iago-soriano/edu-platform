@@ -19,7 +19,7 @@ const Page = async ({ children, params }) => {
   return (
     <div className="grid md:grid-cols-4 grid-cols-1">
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <aside className="col-span-1 mx-2">
+        <aside className="col-span-1 mr-10">
           <CollectionsSideNav collectionId={collectionId} />
         </aside>
         <div className="col-span-3">{children}</div>

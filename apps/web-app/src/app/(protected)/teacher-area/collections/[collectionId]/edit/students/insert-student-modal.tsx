@@ -9,7 +9,7 @@ interface InsertStudentModalProps {
 export const InsertStudentModal = ({
   collectionId,
 }: InsertStudentModalProps) => {
-  const insertMutation = useInsertUserInCollectionMutation({
+  const insertMutation = useInsertUserInCollectionMutation(collectionId, {
     onSuccess: () => successToast("New stuent inserted successfully!"),
   });
   const [email, setEmail] = useState("");

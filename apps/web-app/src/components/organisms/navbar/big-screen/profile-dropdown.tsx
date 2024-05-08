@@ -1,23 +1,25 @@
-import { SignOutButton, MyProfileButton, NavButton } from "../components";
-import { Dropdown } from "@components";
+import { Dropdown, Button } from "@components";
+import { BaseNavbarButton } from "../base-button";
+
+const SignOutButton = ({ signOut }) => (
+  <Button
+    onClick={signOut}
+    className="hover:underline hover:opacity-70 hover:cursor-pointer flex flex-row items-center mx-auto w-full justify-center"
+    withIcon="SIGN_OUT"
+  >
+    Sair
+  </Button>
+);
 
 export const ProfileDropDown = ({
   isDropdownOpen,
   handleSignOut,
   addClickOutsideRef,
-  currentPath,
 }) => {
   return (
     <div ref={addClickOutsideRef} className="w-full flex flex-row justify-end">
       <Dropdown className="w-[200px] flex flex-col" open={isDropdownOpen}>
-        <MyProfileButton
-          currentPath={currentPath}
-          Component={({ children, ...rest }) => (
-            <NavButton {...rest} className={"w-full p-4"}>
-              {children}
-            </NavButton>
-          )}
-        />
+        <BaseNavbarButton path="/auth/my-profile" label="Minha conta" />
         <SignOutButton signOut={handleSignOut} />
       </Dropdown>
     </div>

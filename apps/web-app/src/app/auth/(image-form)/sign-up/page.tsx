@@ -28,7 +28,7 @@ const Page = () => {
       />
       <Separator> Ou </Separator>
       <CredentialsSignInButton
-        onClick={() => router.push("/auth/sign-up/credentials")}
+        onClick={() => router.push("/auth/sign-up/with-credentials")}
       />
     </div>
   );

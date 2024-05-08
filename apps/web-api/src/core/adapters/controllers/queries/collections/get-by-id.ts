@@ -18,7 +18,7 @@ export class GetCollectionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path = "collections/:collectionId";
+  path = "core/collections/:collectionId";
   middlewares: string[] = ["auth"];
 
   constructor(private collectionsReadRepository: ICollectionsReadRepository) {}

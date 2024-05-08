@@ -1,33 +1,23 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ActionLink } from "@components";
 import { HamburguerButton } from "./hamburguer";
-import {
-  MyProfileButton,
-  StudentAreaButton,
-  TeacherAreaButton,
-  SignInButton,
-  SignUpButton,
-  HomeButton,
-  SignOutButton,
-  Logo,
-  NavButton,
-} from "../components";
+import { BaseNavbarButton } from "../base-button";
+import { Router } from "@infrastructure";
+
 import { Dropdown } from "@components";
 import { useClickOutside } from "@infrastructure";
+import { ModeToggle, Logo } from "../components";
+import { usePathname } from "next/navigation";
 
-export const DrawerMenuItem = ({ children, ...rest }) => (
-  <NavButton {...rest} className={"w-full p-4"}>
+const DrawerButton = ({ children, path, ...rest }) => (
+  <BaseNavbarButton path={path} {...rest} variant={"drawer"} size="full">
     {children}
-  </NavButton>
+  </BaseNavbarButton>
 );
 
-export const SmallScreenNavbar = ({
-  currentPath,
-  modeToggle,
-  isAuthenticated,
-  signOut,
-}) => {
+export const SmallScreenNavbar = ({ isAuthenticated, signOut }) => {
+  const pathName = usePathname();
+
   const [burguerOpen, setBurguerOpen] = useState(false);
   const addRef = useClickOutside(() => {
     setBurguerOpen(false);
@@ -35,7 +25,7 @@ export const SmallScreenNavbar = ({
 
   useEffect(() => {
     setBurguerOpen(false);
-  }, [currentPath]);
+  }, [pathName]);
 
   return (
     <>
@@ -46,7 +36,7 @@ export const SmallScreenNavbar = ({
           </li>
           <li>
             <div className="flex flex-row h-full items-center">
-              {modeToggle}
+              {/* <ModeToggle /> */}
               <HamburguerButton
                 ref={addRef}
                 open={burguerOpen}
@@ -57,24 +47,27 @@ export const SmallScreenNavbar = ({
         </ul>
       </nav>
       <div ref={addRef}>
-        <Dropdown className="w-full" open={burguerOpen}>
+        <Dropdown
+          className="w-full flex flex-col items-center py-2"
+          open={burguerOpen}
+        >
           <>
-            <TeacherAreaButton
-              currentPath={currentPath}
-              Component={DrawerMenuItem}
+            <DrawerButton path="/auth/sign-in" withIcon="USER">
+              Sign In
+            </DrawerButton>
+            <BaseNavbarButton path="/auth/sign-up" variant="action" size="lg">
+              Sign Up
+            </BaseNavbarButton>
+            {/* <TeacherAreaButton
             />
             <StudentAreaButton
-              currentPath={currentPath}
-              Component={DrawerMenuItem}
             />
             <hr />
-            <HomeButton currentPath={currentPath} Component={DrawerMenuItem} />
+            <HomeButton  />
             <hr />
             <MyProfileButton
-              currentPath={currentPath}
-              Component={DrawerMenuItem}
             />
-            <SignOutButton signOut={signOut} />
+            <SignOutButton signOut={signOut} /> */}
           </>
         </Dropdown>
       </div>

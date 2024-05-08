@@ -23,7 +23,7 @@ export class InsertUserInCollectionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.POST;
-  path: string = "collections/:collectionId/participation";
+  path: string = "core/collections/:collectionId/participation";
   middlewares: string[] = ["auth"];
 
   constructor(

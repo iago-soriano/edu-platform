@@ -1,16 +1,16 @@
 import { Navbar, Toast } from "@components";
 import {
   ThemeProvider,
-  AuthProvider,
   TanstackQueryProvider,
-  NextAuthProvider,
   PHProvider,
+  NextAuthProvider,
 } from "@contexts";
 import "react-toastify/dist/ReactToastify.css";
 import "tippy.js/dist/tippy.css";
 import "../styles/global.css";
 import { ThemedHtml } from "./_themed_html";
 import { getServerSession } from "@infrastructure";
+import { Footer } from "@components";
 
 export const metadata = {
   title: "Edu Platform",
@@ -28,10 +28,11 @@ export default async function RootLayout(context) {
           <TanstackQueryProvider>
             <PHProvider>
               <NextAuthProvider session={serverSession}>
-                <AuthProvider>
-                  <Navbar />
+                <Navbar />
+                <main className="min-h-[87vh] px-7 py-2">
                   {context.children}
-                </AuthProvider>
+                </main>
+                <Footer />
               </NextAuthProvider>
             </PHProvider>
             <Toast />

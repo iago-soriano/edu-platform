@@ -34,8 +34,8 @@ export class NotificationsReadRepository
       .with(sq)
       .select()
       .from(sq)
-      .limit(pageSize)
-      .offset(page * pageSize);
+      .limit(pageSize || 10)
+      .offset(page * (pageSize || 10));
 
     return {
       data: dtos.map((dto) => ({

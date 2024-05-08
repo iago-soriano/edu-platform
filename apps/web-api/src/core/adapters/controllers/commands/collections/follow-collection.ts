@@ -23,7 +23,7 @@ export class InsertFollowerInCollectionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.POST;
-  path: string = "collections/:collectionId/follow";
+  path: string = "core/collections/:collectionId/follow";
   middlewares: string[] = ["auth"];
 
   constructor(

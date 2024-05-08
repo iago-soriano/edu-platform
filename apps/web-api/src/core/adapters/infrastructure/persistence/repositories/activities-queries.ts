@@ -144,8 +144,8 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
       .orderBy(
         desc(sql`GREATEST(${sq.draft.updatedAt}, ${sq.published.updatedAt})`)
       )
-      .limit(pageSize)
-      .offset(page * pageSize);
+      .limit(pageSize || 10)
+      .offset(page * (pageSize || 10));
 
     return {
       data: resp.map((dto) => ({
@@ -253,8 +253,8 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
         sq.published.version
       )
       .orderBy(desc(sql`${sq.published.updatedAt}`))
-      .limit(pageSize)
-      .offset(page * pageSize);
+      .limit(pageSize || 10)
+      .offset(page * (pageSize || 10));
 
     return {
       data: resp.map((dto) => ({

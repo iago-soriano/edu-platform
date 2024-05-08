@@ -18,7 +18,7 @@ export class ListActivitiesForCollectionParticipantController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path = "activities/participant-view";
+  path = "core/activities/participant-view";
   middlewares: string[] = ["auth"];
 
   constructor(private activitiesReadRepository: IActivitiesReadRepository) {}
@@ -40,7 +40,7 @@ export class ListActivitiesForCollectionParticipantController
       userId,
       collectionId,
       page: page || 0,
-      pageSize: pageSize || 100,
+      pageSize: pageSize || 10,
     });
 
     res.status(200).json(result);

@@ -7,12 +7,14 @@ import { cn } from "@infrastructure";
 import { twMerge } from "tailwind-merge";
 import Link from "next/link";
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
         action: "bg-accent text-primary-foreground shadow hover:bg-accent/90",
+        actionActive:
+          "bg-accent text-primary-foreground shadow hover:bg-accent/90 font-bold",
         default:
           "bg-primary text-primary-foreground shadow hover:bg-primary/90",
         destructive:
@@ -22,12 +24,19 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "text-primary underline-offset-4 hover:underline hover:opacity-70",
+        linkActive:
+          "text-primary underline-offset-4 hover:underline hover:opacity-70 text-accent font-bold",
+        drawerActive:
+          "hover:opacity-70 active:bg-accent active:bg-opacity-70 active:opacity-100 text-accent font-bold",
+        drawer:
+          "hover:opacity-70 active:bg-accent active:bg-opacity-70 active:opacity-100",
       },
       size: {
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8 py-2 min-w-[140px]",
+        full: "w-full p-3",
         icon: "h-9 w-9",
       },
     },
@@ -46,7 +55,7 @@ export interface ButtonProps
   withIcon?: keyof typeof Icons;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
@@ -96,30 +105,46 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-export { Button, buttonVariants };
-
-interface LinkWithIconProps {
-  // extends React.AnchorHTMLAttributes<HTMLAnchorElement>
-  icon: keyof typeof Icons;
+interface ButtonLinkProps extends ButtonProps {
   href: string;
+  active?: boolean;
 }
-export const LinkWithIcon = ({ icon, href }: LinkWithIconProps) => {
-  const Icon = icon && Icons[icon];
-  return (
-    <Button variant={"link"} size={"icon"} asChild>
-      <Link href={href}>
-        <Icon />
-      </Link>
-    </Button>
-  );
-};
+export const ButtonLink = ({
+  href,
+  children,
+  className,
+  withIcon,
+  variant,
+  size,
+  active,
+}: ButtonLinkProps) => {
+  const Icon = withIcon && Icons[withIcon];
 
-interface ButtonLinkProps
-  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {}
-export const ButtonLink = ({ href, children, className }: ButtonLinkProps) => {
+  const variantClass = variant || "link";
+  const variantClassWithActive = active
+    ? `${variant || "link"}Active`
+    : variantClass;
+
   return (
-    <Button asChild variant="link" className={className}>
-      <Link href={href || ""}>{children}</Link>
-    </Button>
+    <Link
+      className={cn(
+        buttonVariants({
+          variant: variantClassWithActive as any,
+          className,
+          size,
+        }),
+        className
+      )}
+      href={href}
+    >
+      {withIcon ? (
+        <>
+          {Icon && <Icon className="mx-2" size={20} />}
+          {children}
+        </>
+      ) : (
+        children
+      )}
+    </Link>
   );
 };

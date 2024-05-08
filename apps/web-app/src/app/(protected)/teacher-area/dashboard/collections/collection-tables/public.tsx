@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { ListCollectionsForOwnerResponse } from "@endpoints";
 import {
-  LinkWithIcon,
+  ButtonLink,
   CenteredCell,
   CenteredDateCell,
   LeftHeader,
@@ -41,9 +41,9 @@ export const publicCollectionColumns = [
   columnHelper.accessor("id", {
     header: () => <span>Edit</span>,
     cell: (info) => (
-      <LinkWithIcon
+      <ButtonLink
         href={Router.collectionSettings(info.getValue())}
-        icon="CAN_SEE"
+        withIcon="CAN_SEE"
       />
     ),
     size: cellSizes.sm,

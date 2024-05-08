@@ -24,7 +24,7 @@ export class GetPublishedVersionController
   implements HTTPController<Request, Response>
 {
   method = HttpMethod.GET;
-  path = "activities/:activityId/versions/published";
+  path = "core/activities/:activityId/versions/published";
   middlewares: string[] = ["auth"];
 
   constructor(private activitiesReadRepository: IActivitiesReadRepository) {}

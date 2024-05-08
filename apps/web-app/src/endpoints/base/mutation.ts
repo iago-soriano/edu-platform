@@ -43,7 +43,7 @@ export const useBaseMutation = <Req, Res>({
   onSettled,
 }: {
   mutationFn: (client: ApiClient, args: Req) => Promise<Res>;
-  invalidateQueries?: string[];
+  invalidateQueries?: readonly any[];
 } & UseBaseMutationCallbacksType<Req, Res>) => {
   const queryClient = useQueryClient();
   const axios = useAxiosAuth();
@@ -61,11 +61,13 @@ export const useBaseMutation = <Req, Res>({
       onError && onError(e, v, c);
     },
     onSettled: (d, e, v, c) => {
-      invalidateQueries?.map((invalidate) =>
-        queryClient.invalidateQueries({
-          queryKey: [invalidate],
-        })
-      );
+      // invalidateQueries?.map((invalidate) =>
+      //   queryClient.invalidateQueries({
+      //     queryKey: [invalidate],
+      //   })
+      // );
+      if (invalidateQueries)
+        queryClient.invalidateQueries({ queryKey: invalidateQueries });
       onSettled && onSettled(d!, e!, v, c);
     },
   });

@@ -1,22 +1,20 @@
 import { ServerError, ApiClient } from "@edu-platform/common/api";
 import { useAxiosAuth } from "@infrastructure";
 import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "./query-key-factory";
 
-type Response = Awaited<ReturnType<ApiClient["listCollectionsForOwner"]>>;
+type Response = Awaited<ReturnType<ApiClient["listCollectionsForParticipant"]>>;
 
-export const useListCollectionsForParticipantQuery = ({
-  pageSize,
-  page,
-  isPrivate,
-}) => {
+export const useListCollectionsForParticipantQuery = ({ pageSize, page }) => {
   const axios = useAxiosAuth();
   const client = new ApiClient(axios);
 
   return useQuery<Response, ServerError>({
-    queryKey: ["collections", { isPrivate, page, pageSize }],
+    queryKey: queryKeys.studentList({
+      page,
+    }),
     // placeholderData: keepPreviousData,
-    queryFn: () =>
-      client.listCollectionsForOwner({ isPrivate, page, pageSize }),
+    queryFn: () => client.listCollectionsForParticipant({ page, pageSize }),
   });
 };
 export type { Response as ListCollectionsForParticipantResponse };

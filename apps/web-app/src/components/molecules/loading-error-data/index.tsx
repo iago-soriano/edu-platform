@@ -26,12 +26,11 @@ export const LoadingErrorData = ({
     }
   }
 
-  // console.log({ hasData, error, loading });
   return (
-    <div className="p-3 flex justify-center">
-      {/* {error && <ErrorCard message={errorMessage} />} */}
+    <div className="flex justify-center">
       {!error && !hasData && !loading && (noData || <NoDataCard />)}
       {!error && !loading && hasData && data}
+      {error && !loading && !hasData && <h3>{errorMessage}</h3>}
       <Loading show={loading} />
     </div>
   );

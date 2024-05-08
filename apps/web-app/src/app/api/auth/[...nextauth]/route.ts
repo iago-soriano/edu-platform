@@ -31,9 +31,10 @@ export const authOptions: AuthOptions = {
         // const axios = axiosBase.create({
         //   url: process.env.NEXT_PUBLIC_API_HOST!,
         // });
+        console.log(_, req);
         const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
 
-        return await axios.post.bind(axios)("sign-in", {
+        return await axios.post.bind(axios)("iam/sign-in", {
           email: req.query?.email,
           password: req.query?.password,
         });
@@ -114,7 +115,7 @@ export const authOptions: AuthOptions = {
   },
   secret: process.env.AUTH_SECRET,
   pages: {
-    error: "/auth/sign-in",
+    error: "/iam/sign-in",
   },
   // jwt: {
   //   async encode(params: {

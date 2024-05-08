@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Web App",
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS='--inspect=9230' next dev",
+    "dev": "cross-env NODE_OPTIONS='--inspect=9230' next dev -p 3002",
     "build": "next build",
     "start": "next start",
     "storybook": "storybook dev -p 6006",
