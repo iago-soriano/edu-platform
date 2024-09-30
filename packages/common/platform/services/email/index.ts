@@ -1,8 +1,11 @@
+import { ActivityVersionTitle } from "./../../../../../apps/web-api/src/core/domain/entities/activities/version/value-objects/title";
 import { IEmailService } from "../interfaces";
 import {
   VerifyAccountEmailTemplate,
   ForgotPasswordEmailTemplate,
-  NewStudentOutputEmailTemplate,
+  NewStudentOutputCreatedEmailTemplate,
+  StudentOutputCompletedEmailTemplate,
+  FeedbackToAnswerEmailTemplate,
 } from "./templates";
 import nodemailer from "nodemailer";
 import * as EmailValidator from "email-validator";
@@ -53,6 +56,25 @@ export class EmailService implements IEmailService {
     });
   }
 
+  async sendStudentOutputCreatedEmail({
+    destination,
+    studentOutputId,
+    studentName,
+    activityTitle,
+  }: SendEmailArgs & {
+    studentOutputId: number;
+    studentName: string;
+    activityTitle: string;
+  }) {
+    const url = `${process.env.WEB_APP_URL}/teacher-area/dashboard/student-outputs/${studentOutputId}`; //não sei o path desse aqui
+    const resp = await this._transporter.sendMail({
+      from: this.from,
+      to: destination, // list of receivers
+      subject: `New output from ${studentName} to ${activityTitle} was created`, // Subject line
+      html: NewStudentOutputCreatedEmailTemplate({ url }), // html body TODO olha o template
+    });
+  }
+
   async sendStudentOutputCompletedEmail({
     destination,
     studentOutputId,
@@ -68,7 +90,26 @@ export class EmailService implements IEmailService {
       from: this.from,
       to: destination, // list of receivers
       subject: `New output from ${studentName} to ${activityTitle}`, // Subject line
-      html: NewStudentOutputEmailTemplate({ url }), // html body
+      html: StudentOutputCompletedEmailTemplate({ url }), // html body
+    });
+  }
+
+  async sendFeedbackToAnswerPublishedEmail({
+    destination,
+    studentOutputId,
+    activityTitle,
+    authorName,
+  }: SendEmailArgs & {
+    studentOutputId: number;
+    activityTitle: string;
+    authorName: string;
+  }) {
+    const url = `${process.env.WEB_APP_URL}/teacher-area/dashboard/student-outputs/${studentOutputId}`; //não sei o path desse aqui
+    const resp = await this._transporter.sendMail({
+      from: this.from,
+      to: destination, // list of receivers
+      subject: `New feedback from ${authorName} to ${activityTitle} output`, // Subject line
+      html: FeedbackToAnswerEmailTemplate({ url }), // html body
     });
   }
 }

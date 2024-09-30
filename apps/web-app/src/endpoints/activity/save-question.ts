@@ -1,8 +1,8 @@
 import { useBaseMutation, UseBaseMutationCallbacksType } from "../base";
-import { ServerError, ApiClient } from "@edu-platform/common/api";
+import { ServerError, CoreClient } from "@edu-platform/common/api";
 
-type Params = Parameters<ApiClient["saveQuestion"]>[0];
-type Return = Awaited<ReturnType<ApiClient["saveQuestion"]>>;
+type Params = Parameters<CoreClient["saveQuestion"]>[0];
+type Return = Awaited<ReturnType<CoreClient["saveQuestion"]>>;
 
 export const useSaveQuestionMutation = (
   args: UseBaseMutationCallbacksType<Params, Return>

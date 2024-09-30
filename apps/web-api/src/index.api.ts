@@ -21,8 +21,16 @@ registerCommonCoreApiDependencies(coreModuleContainer);
 registerIAMApiDependencies(iamModuleContainer);
 
 const server = registerServer([
-  { container: coreModuleContainer, pgClient: coreModulePgClient },
-  { container: iamModuleContainer, pgClient: IAMModulePgClient },
+  {
+    container: coreModuleContainer,
+    pgClient: coreModulePgClient,
+    basePath: "core/",
+  },
+  {
+    container: iamModuleContainer,
+    pgClient: IAMModulePgClient,
+    basePath: "iam/",
+  },
 ]);
 
 (async () => {

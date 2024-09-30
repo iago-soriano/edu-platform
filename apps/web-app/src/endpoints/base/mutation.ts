@@ -1,4 +1,4 @@
-import { ServerError, ApiClient } from "@edu-platform/common/api";
+import { ServerError, CoreClient } from "@edu-platform/common/api";
 import { useAxiosAuth } from "@infrastructure";
 import {
   useMutation,
@@ -42,12 +42,12 @@ export const useBaseMutation = <Req, Res>({
   onError,
   onSettled,
 }: {
-  mutationFn: (client: ApiClient, args: Req) => Promise<Res>;
+  mutationFn: (client: CoreClient, args: Req) => Promise<Res>;
   invalidateQueries?: readonly any[];
 } & UseBaseMutationCallbacksType<Req, Res>) => {
   const queryClient = useQueryClient();
   const axios = useAxiosAuth();
-  const client = new ApiClient(axios);
+  const client = new CoreClient(axios);
 
   return useMutation<Res, ServerError, Req>({
     mutationFn: (args) => mutationFn(client, args),

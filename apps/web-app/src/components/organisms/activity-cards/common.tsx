@@ -17,7 +17,7 @@ export const Title = ({ children }) => (
 );
 export const EmptyTitle = () => <h5 className="text-text2">No title</h5>;
 
-const descriptionClasses = "self-center truncate";
+const descriptionClasses = "self-start truncate";
 export const Description = ({ children }) => (
   <p className={descriptionClasses}>{children}</p>
 );

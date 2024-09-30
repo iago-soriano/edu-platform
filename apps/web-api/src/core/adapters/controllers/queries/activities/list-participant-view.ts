@@ -8,39 +8,43 @@ import { IActivitiesReadRepository } from "@core/application/interfaces";
 import {
   ListActivitiesQuery,
   ListActivitiesForParticipantResponseBody,
-  parseListActivityVersionsQuery,
 } from "@edu-platform/common";
+import { Get, Middlewares } from "@edu-platform/common/platform";
 
 type Request = TypedRequest<{}, ListActivitiesQuery, {}>;
 type Response = TypedResponse<ListActivitiesForParticipantResponseBody>;
 
-export class ListActivitiesForCollectionParticipantController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.GET;
-  path = "core/activities/participant-view";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  activitiesReadRepository: IActivitiesReadRepository;
+}
 
-  constructor(private activitiesReadRepository: IActivitiesReadRepository) {}
+@Get("activities/participant-view")
+@Middlewares(["auth"])
+export class ListActivitiesForCollectionParticipantController {
+  private _activitiesReadRepository: IActivitiesReadRepository;
+
+  constructor(deps: Deps) {
+    this._activitiesReadRepository = deps.activitiesReadRepository;
+  }
 
   async execute(req: Request, res: Response) {
     const {
       user: { id: userId },
     } = req;
-    const { collectionId, page, pageSize } = parseListActivityVersionsQuery(
-      req.query
-    );
+    // const { collectionId, page, pageSize } = parseListActivityVersionsQuery(
+    //   req.query
+    // );
 
     let result: ListActivitiesForParticipantResponseBody = {
       data: [],
       pagination: { totalCount: 0 },
     };
 
-    result = await this.activitiesReadRepository.listForCollectionParticipant({
+    result = await this._activitiesReadRepository.listForCollectionParticipant({
       userId,
-      collectionId,
-      page: page || 0,
-      pageSize: pageSize || 10,
+      collectionId: 9,
+      page: 0,
+      pageSize: 10,
     });
 
     res.status(200).json(result);

@@ -48,7 +48,7 @@ export const useChangePasswordRequestMutation = ({
     ChangePasswordRequestRequestBody
   >({
     mutationFn: (args: ChangePasswordRequestRequestBody) =>
-      axios.post.bind(axios)("change-password-request", args),
+      axios.post.bind(axios)("iam/change-password-request", args),
     onError,
     // onSuccess,
   });
@@ -71,7 +71,7 @@ export const useChangePasswordMutation = (
     ChangePasswordRequestBody
   >({
     mutationFn: (args: ChangePasswordRequestBody) =>
-      axios.put.bind(axios)("change-password", args),
+      axios.put.bind(axios)("iam/change-password", args),
     onError,
     onSuccess,
   });
@@ -91,7 +91,7 @@ export const useVerifyAccountMutation = (
   useMutation<VerifyAccountResponseBody, ServerError, VerifyAccountRequestBody>(
     {
       mutationFn: (args: VerifyAccountResponseBody) =>
-        axios.patch.bind(axios)("verify-account", args),
+        axios.patch.bind(axios)("iam/verify-account", args),
       onError,
       onSuccess,
     }
@@ -115,7 +115,10 @@ export const useCheckChangePasswordTokenMutation = (
     CheckChangePasswordTokenRequestQueryParams
   >({
     mutationFn: (args: CheckChangePasswordTokenRequestQueryParams) =>
-      axios.get.bind(axios)(`check-token-validity?token=${args.token}`, args),
+      axios.get.bind(axios)(
+        `iam/check-token-validity?token=${args.token}`,
+        args
+      ),
     onError,
     onSuccess,
   });
@@ -190,7 +193,7 @@ export const useCredentialsSignUpMutation = (
 ) =>
   useMutation<void, ServerError, SignUpRequestBody>({
     mutationFn: (args: SignUpRequestBody) =>
-      axios.post.bind(axios)("sign-up", args),
+      axios.post.bind(axios)("iam/sign-up", args),
     onError,
     onSuccess,
   });

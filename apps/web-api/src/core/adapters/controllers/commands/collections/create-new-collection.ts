@@ -1,6 +1,4 @@
 import {
-  HTTPController,
-  HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@edu-platform/common/platform/interfaces";
@@ -10,6 +8,7 @@ import {
   CreateNewCollectionResponseBody,
 } from "@edu-platform/common";
 import { ICreateNewCollectionUseCase } from "@core/application/use-cases";
+import { Middlewares, Post } from "@edu-platform/common/platform";
 
 type Request = TypedRequest<
   CreateNewCollectionParams,
@@ -18,21 +17,23 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<CreateNewCollectionResponseBody>;
 
-export class CreateNewCollectionController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.POST;
-  path: string = "core/collections";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  createNewCollectionUseCase: ICreateNewCollectionUseCase;
+}
 
-  constructor(
-    private createNewCollectionUseCase: ICreateNewCollectionUseCase
-  ) {}
+@Post("collections")
+@Middlewares(["auth"])
+export class CreateNewCollectionController {
+  private _createNewCollectionUseCase: ICreateNewCollectionUseCase;
+
+  constructor(deps: Deps) {
+    this._createNewCollectionUseCase = deps.createNewCollectionUseCase;
+  }
 
   async execute(req: Request, res: Response) {
     const { user } = req;
 
-    const resp = await this.createNewCollectionUseCase.execute({
+    const resp = await this._createNewCollectionUseCase.execute({
       user,
     });
 

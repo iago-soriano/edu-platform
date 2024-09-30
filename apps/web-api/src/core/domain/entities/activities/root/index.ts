@@ -2,9 +2,8 @@ import { ActivityPublishedEvent } from "@edu-platform/common/domain/integration-
 import { IDomainServiceRegistry } from "../../../services";
 import { resolveDomainServicesRegistry } from "../../../services/resolve";
 import {
-  ContentRequestDTO,
-  InvalidStateError,
-  QuestionRequestDTO,
+  SaveContentRequestBody,
+  SaveQuestionRequestBody,
   SilentInvalidStateError,
 } from "@edu-platform/common";
 import { Entity, PersistancePropertyName } from "@edu-platform/common/platform";
@@ -111,13 +110,19 @@ export class Activity extends Entity {
       );
   }
 
-  public upsertContent(user: { id: string }, contentDto: ContentRequestDTO) {
+  public upsertContent(
+    user: { id: string },
+    contentDto: SaveContentRequestBody
+  ) {
     this._canUpsertElement(user);
 
     return this.draftVersion!.upsertContent(contentDto);
   }
 
-  public upsertQuestion(user: { id: string }, questionDto: QuestionRequestDTO) {
+  public upsertQuestion(
+    user: { id: string },
+    questionDto: SaveQuestionRequestBody
+  ) {
     this._canUpsertElement(user);
 
     this.draftVersion!.upsertQuestion(questionDto);

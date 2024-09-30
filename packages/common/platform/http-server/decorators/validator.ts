@@ -18,7 +18,8 @@ export function ValidateParameters<
         next: NextFunction
       ) => {
         const { paramsSchema, bodySchema } = args;
-        if (paramsSchema) paramsSchema.parse({ ...req.query, ...req.params });
+        req.query = { ...req.query, ...req.params };
+        if (paramsSchema) paramsSchema.parse(req.query);
         if (bodySchema) bodySchema.parse({ ...req.body });
         next();
       };

@@ -8,6 +8,7 @@ import {
   collections,
   notifications,
   studentOutputs,
+  studentAnswers,
 } from "./tables";
 import {
   ActivitySerializer,
@@ -20,6 +21,7 @@ import {
   StudentOutputSerializer,
 } from "../serializers";
 import { TableDefinition } from "@edu-platform/common/platform";
+import { StudentAnswerSerializer } from "../serializers/student-output/student-answer";
 
 export const activitiesTable: TableDefinition = {
   table: activities,
@@ -62,4 +64,9 @@ export const usersTable: TableDefinition = {
 export const studentOutputsTable: TableDefinition = {
   table: studentOutputs,
   serializer: StudentOutputSerializer.serialize,
+};
+
+export const studentAnswersTable: TableDefinition = {
+  table: studentAnswers,
+  serializer: StudentAnswerSerializer.serialize,
 };

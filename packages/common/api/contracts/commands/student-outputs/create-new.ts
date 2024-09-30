@@ -1,18 +1,19 @@
 import { z } from "zod";
 
-type RequestBody = void;
-type ResponseBody = { outputId: number };
-type Params = { activityId: number };
-
-const requestSchema = z.object({
-  activityId: z.string(),
+const createNewStudentOutputParamsSchema = z.object({
+  activityId: z.string().uuid(),
 });
 
-const parseActivityId = requestSchema.parse;
+type Params = z.infer<typeof createNewStudentOutputParamsSchema>;
+
+type RequestBody = void;
+interface ResponseBody {
+  outputId: number;
+}
 
 export type {
   RequestBody as CreateStudentOutputRequestBody,
   ResponseBody as CreateStudentOutputResponseBody,
   Params as CreateStudentOutputParams,
 };
-export { parseActivityId as parseCreateNewStudentOutputRequest };
+export { createNewStudentOutputParamsSchema };

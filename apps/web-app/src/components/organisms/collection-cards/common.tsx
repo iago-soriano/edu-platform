@@ -8,7 +8,7 @@ export const MainContainer = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     {...rest}
-    className="grid grid-rows-3 p-3 m-2 bg-surface1 border-accent/70 border-2 bg-opacity-70 w-full rounded-lg hover:scale-[1.01] transition-all cursor-pointer h-fit"
+    className="flex flex-col  p-3 m-2 bg-surface1 border-accent/70 border-2 bg-opacity-70 w-full rounded-lg hover:scale-[1.01] transition-all cursor-pointer h-fit"
   >
     {children}
   </div>

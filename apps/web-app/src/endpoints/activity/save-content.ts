@@ -1,8 +1,8 @@
 import { useBaseMutation, UseBaseMutationCallbacksType } from "../base";
-import { ServerError, ApiClient } from "@edu-platform/common/api";
+import { ServerError, CoreClient } from "@edu-platform/common/api";
 
-type ParamsSaveContent = Parameters<ApiClient["saveContent"]>[0];
-type ReturnSaveContent = Awaited<ReturnType<ApiClient["saveContent"]>>;
+type ParamsSaveContent = Parameters<CoreClient["saveContent"]>[0];
+type ReturnSaveContent = Awaited<ReturnType<CoreClient["saveContent"]>>;
 
 export const useSaveContentMutation = (
   args: UseBaseMutationCallbacksType<ParamsSaveContent, ReturnSaveContent>
@@ -14,9 +14,9 @@ export const useSaveContentMutation = (
     invalidateQueries: ["versions/draft"],
     ...args,
   });
-type ParamsSaveImageContent = Parameters<ApiClient["saveContentWithFile"]>[0];
+type ParamsSaveImageContent = Parameters<CoreClient["saveContentWithFile"]>[0];
 type ReturnSaveImageContent = Awaited<
-  ReturnType<ApiClient["saveContentWithFile"]>
+  ReturnType<CoreClient["saveContentWithFile"]>
 >;
 
 export const useSaveImageContentMutation = (

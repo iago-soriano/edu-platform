@@ -7,7 +7,7 @@ import {
 
 export const ConfirmRemoveStudentModal = ({ participation, collectionId }) => {
   const [open, setOpen] = useState(false);
-  const removeMutation = useRemoveUserFromCollectionMutation({});
+  const removeMutation = useRemoveUserFromCollectionMutation(collectionId);
 
   return (
     <>

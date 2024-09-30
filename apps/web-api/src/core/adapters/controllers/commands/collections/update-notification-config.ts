@@ -1,14 +1,15 @@
 import {
-  HTTPController,
-  HttpMethod,
+  Middlewares,
+  Patch,
   Request as TypedRequest,
   Response as TypedResponse,
-  parseNumberId,
+  ValidateParameters,
 } from "@edu-platform/common/platform";
 import {
   UpdateNotificationConfigParams,
   UpdateNotificationConfigRequestBody,
   UpdateNotificationConfigResponseBody,
+  updateNotificationConfigParamsSchema as paramsSchema,
 } from "@edu-platform/common";
 import { IUpdateNotificationConfigUseCase } from "@core/application/use-cases";
 
@@ -19,22 +20,28 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<UpdateNotificationConfigResponseBody>;
 
-export class UpdateNotificationConfigController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.PATCH;
-  path: string = "core/collections/:collectionId/notification-config";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  updateNotificationConfigUseCase: IUpdateNotificationConfigUseCase;
+}
 
-  constructor(
-    private updateNotificationConfigUseCase: IUpdateNotificationConfigUseCase
-  ) {}
+@Patch("collections/:collectionId/notification-config")
+@ValidateParameters({
+  paramsSchema,
+})
+@Middlewares(["auth"])
+export class UpdateNotificationConfigController {
+  private _updateNotificationConfigUseCase: IUpdateNotificationConfigUseCase;
+
+  constructor(deps: Deps) {
+    this._updateNotificationConfigUseCase =
+      deps.updateNotificationConfigUseCase;
+  }
 
   async execute(req: Request, res: Response) {
-    const { collectionId } = parseNumberId(req.params, ["collectionId"]);
+    const { collectionId } = req.params;
     const { user } = req;
 
-    await this.updateNotificationConfigUseCase.execute({
+    await this._updateNotificationConfigUseCase.execute({
       user,
       collectionId,
     });

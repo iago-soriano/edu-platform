@@ -7,7 +7,7 @@ import {
 
 type InputParams = {
   user: UserSelectDTO;
-  activityId: number;
+  activityId: string;
   destinationCollection: number;
 };
 

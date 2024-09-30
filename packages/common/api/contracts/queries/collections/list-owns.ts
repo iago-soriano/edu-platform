@@ -16,7 +16,7 @@ type ResponseBody = PaginatedResponse<{
   // feedbackGivenStudentOutputsCount: number;
 }>;
 
-const querySchema = z
+const listCollectionsForOwnerQuerySchema = z
   .object({
     isPrivate: z
       .string()
@@ -26,11 +26,10 @@ const querySchema = z
   })
   .merge(paginatedParamsSchema);
 
-type Query = z.infer<typeof querySchema>;
-const parseListCollectionsForOwnerQuery = querySchema.parse;
+type Query = z.infer<typeof listCollectionsForOwnerQuerySchema>;
 
 export type {
   ResponseBody as ListCollectionsForOwnerResponseBody,
   Query as ListCollectionsForOwnerQuery,
 };
-export { parseListCollectionsForOwnerQuery };
+export { listCollectionsForOwnerQuerySchema };

@@ -15,7 +15,7 @@ type Response = TypedResponse<SignUpResponseBody>;
 
 export class SignUpController implements HTTPController<Request, Response> {
   method = HttpMethod.POST;
-  path: string = "iam/sign-up";
+  path: string = "sign-up";
 
   constructor(private signUpUseCase: ISignUpUseCase) {}
 

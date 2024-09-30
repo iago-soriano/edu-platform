@@ -2,6 +2,10 @@ export const DomainRules = {
   FEEDBACK: {
     MAX_LENGTH: 500, // in characters
   },
+  ANSWER: {
+    MIN_LENGTH: 10,
+    MAX_LENGTH: 500,
+  },
   CONTENT: {
     TITLE: {
       MIN_LENGTH: 5,

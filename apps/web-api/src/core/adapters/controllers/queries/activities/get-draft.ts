@@ -1,40 +1,45 @@
 import {
-  HTTPController,
-  HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@edu-platform/common/platform/interfaces";
 import { IActivitiesReadRepository } from "@core/application/interfaces";
 import {
-  GetActivityVersionParams,
-  GetActivityVersionResponseBody,
+  GetDraftParams,
+  GetDraftResponseBody,
+  getDraftParamsSchema as paramsSchema,
   InvalidStateError,
   SilentInvalidStateError,
-  parseGetDraftVersionRequest,
+  // parseGetDraftVersionRequest,
 } from "@edu-platform/common";
 import { VersionStatus } from "@core/domain/enums";
+import {
+  Get,
+  Middlewares,
+  ValidateParameters,
+} from "@edu-platform/common/platform";
 
-type Request = TypedRequest<
-  GetActivityVersionParams,
-  {},
-  GetActivityVersionResponseBody
->;
-type Response = TypedResponse<GetActivityVersionResponseBody>;
+type Request = TypedRequest<GetDraftParams, {}, {}>;
+type Response = TypedResponse<GetDraftResponseBody>;
 
-export class GetDraftVersionController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.GET;
-  path = "core/activities/:activityId/versions/draft";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  activitiesReadRepository: IActivitiesReadRepository;
+}
 
-  constructor(private activitiesReadRepository: IActivitiesReadRepository) {}
+@Get("activities/:activityId/versions/draft")
+@ValidateParameters({ paramsSchema })
+@Middlewares(["auth"])
+export class GetDraftVersionController {
+  private _activitiesReadRepository: IActivitiesReadRepository;
+
+  constructor(deps: Deps) {
+    this._activitiesReadRepository = deps.activitiesReadRepository;
+  }
 
   async execute(req: Request, res: Response) {
-    const { activityId } = parseGetDraftVersionRequest(req.params);
+    const { activityId } = req.params;
     const { user } = req;
 
-    const resp = await this.activitiesReadRepository.findFullVersionById(
+    const resp = await this._activitiesReadRepository.findFullVersionById(
       activityId,
       VersionStatus.Draft
     );

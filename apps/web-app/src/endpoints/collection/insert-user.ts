@@ -1,9 +1,9 @@
-import { ServerError, ApiClient } from "@edu-platform/common/api";
+import { ServerError, CoreClient } from "@edu-platform/common/api";
 import { useBaseMutation, UseBaseMutationCallbacksType } from "../base";
 import { queryKeys } from "./query-key-factory";
 
-type Params = Parameters<ApiClient["insertUserInCollection"]>[0];
-type Return = Awaited<ReturnType<ApiClient["insertUserInCollection"]>>;
+type Params = Parameters<CoreClient["insertUserInCollection"]>[0];
+type Return = Awaited<ReturnType<CoreClient["insertUserInCollection"]>>;
 
 export const useInsertUserInCollectionMutation = (
   collectionId: any,

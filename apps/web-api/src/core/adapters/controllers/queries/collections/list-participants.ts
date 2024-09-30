@@ -8,27 +8,36 @@ import { ICollectionsReadRepository } from "@core/application/interfaces";
 import {
   ListParticipantsOfCollectionQuery,
   ListParticipantsOfCollectionResponseBody,
-  parseListParticipantsOfCollectionQuery,
+  listUsersInCollectionQuerySchema as paramsSchema,
 } from "@edu-platform/common";
+import {
+  Get,
+  Middlewares,
+  ValidateParameters,
+} from "@edu-platform/common/platform";
 
-type Request = TypedRequest<ListParticipantsOfCollectionQuery, {}, {}>;
+type Request = TypedRequest<{}, ListParticipantsOfCollectionQuery, {}>;
 type Response = TypedResponse<ListParticipantsOfCollectionResponseBody>;
 
-export class ListUsersInCollectionController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.GET;
-  path: string = "core/collections/:collectionId/participants";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  collectionsReadRepository: ICollectionsReadRepository;
+}
 
-  constructor(private collectionsReadRepository: ICollectionsReadRepository) {}
+@Get("collections/:collectionId/participants")
+@ValidateParameters({ paramsSchema })
+@Middlewares(["auth"])
+export class ListUsersInCollectionController {
+  private _collectionsReadRepository: ICollectionsReadRepository;
+
+  constructor(deps: Deps) {
+    this._collectionsReadRepository = deps.collectionsReadRepository;
+  }
 
   async execute(req: Request, res: Response) {
     const { user } = req;
-    const { collectionId, page, pageSize } =
-      parseListParticipantsOfCollectionQuery({ ...req.params, ...req.query });
+    const { collectionId, page, pageSize } = req.query;
 
-    const resp = await this.collectionsReadRepository.listStudents({
+    const resp = await this._collectionsReadRepository.listStudents({
       collectionId,
       page,
       pageSize,

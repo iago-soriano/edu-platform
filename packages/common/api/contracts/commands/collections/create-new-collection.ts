@@ -1,8 +1,8 @@
-import { z } from "zod";
-
-type RequestBody = {};
-type ResponseBody = { CollectionId: number };
 type Params = {};
+type RequestBody = {};
+interface ResponseBody {
+  CollectionId: number;
+}
 
 export type {
   RequestBody as CreateNewCollectionRequestBody,

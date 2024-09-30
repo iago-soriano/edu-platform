@@ -1,6 +1,9 @@
 import { Content, ContentTypes } from "./base";
 import { IgnorePersistance } from "@edu-platform/common/platform";
-import { InvalidStateError, ContentRequestDTO } from "@edu-platform/common";
+import {
+  InvalidStateError,
+  SaveContentRequestBody,
+} from "@edu-platform/common";
 
 const throwTracksValidationError = (message: string) => {
   throw new InvalidStateError(message, { fieldName: "tracks" });
@@ -20,7 +23,7 @@ export class VideoContent extends Content {
     return !!this.url;
   }
 
-  protected _mergePayload(newValues: ContentRequestDTO) {
+  protected _mergePayload(newValues: SaveContentRequestBody) {
     const payload = newValues.payload?.video;
     if (!payload) return;
 

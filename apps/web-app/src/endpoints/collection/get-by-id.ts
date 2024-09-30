@@ -1,20 +1,11 @@
-import { ServerError, ApiClient } from "@edu-platform/common/api";
-import { useAxiosAuth } from "@infrastructure";
-import { useQuery } from "@tanstack/react-query";
-import { queryKeys } from "./query-key-factory";
+import { CoreClient } from "@edu-platform/common/api";
+import { cache } from "react";
+import { SSRAxios } from "@infrastructure";
 
-type Params = Parameters<ApiClient["getCollection"]>[0];
-type Response = Awaited<ReturnType<ApiClient["getCollection"]>>;
+export const getCollectionById = cache<
+  (collectionId: number) => ReturnType<CoreClient["getCollection"]>
+>((collectionId) => new CoreClient(SSRAxios).getCollection({ collectionId }));
 
-export const useGetCollectionQuery = ({ collectionId }: Params) => {
-  const axios = useAxiosAuth();
-  const client = new ApiClient(axios);
-
-  return useQuery<Response, ServerError>({
-    queryKey: queryKeys.detail(collectionId),
-    queryFn: () => client.getCollection({ collectionId }),
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-  });
-};
+export type GetCollectionByIdResponse = Awaited<
+  ReturnType<typeof getCollectionById>
+>;

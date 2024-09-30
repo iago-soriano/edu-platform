@@ -1,5 +1,5 @@
 import {
-  QuestionRequestDTO,
+  SaveQuestionRequestBody,
   SilentInvalidStateError,
 } from "@edu-platform/common";
 import {
@@ -13,7 +13,7 @@ import { ActivitElementDescription } from "../elements/value-objects/description
 import { ActivityVersion } from "../version";
 
 export class QuestionAlternativeFactory {
-  static fromRequestDto(dtos: QuestionRequestDTO["alternatives"]) {
+  static fromRequestDto(dtos: SaveQuestionRequestBody["alternatives"]) {
     if (!dtos) return [];
     return dtos.map((dto) => {
       const alternative = new Alternative();
@@ -25,7 +25,10 @@ export class QuestionAlternativeFactory {
   }
 }
 export class QuestionFactory {
-  static fromRequestDto(dto: QuestionRequestDTO, version: ActivityVersion) {
+  static fromRequestDto(
+    dto: SaveQuestionRequestBody,
+    version: ActivityVersion
+  ) {
     let newQuestion = null;
 
     switch (dto.type) {

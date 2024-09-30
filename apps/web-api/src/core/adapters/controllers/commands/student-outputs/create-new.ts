@@ -1,14 +1,15 @@
 import {
-  HTTPController,
-  HttpMethod,
+  Middlewares,
+  Post,
   Request as TypedRequest,
   Response as TypedResponse,
+  ValidateParameters,
 } from "@edu-platform/common/platform";
 import {
   CreateStudentOutputParams,
   CreateStudentOutputRequestBody,
   CreateStudentOutputResponseBody,
-  parseCreateNewStudentOutputRequest,
+  createNewStudentOutputParamsSchema as paramsSchema,
 } from "@edu-platform/common";
 import { ICreateStudentOutputUseCase } from "@core/application/use-cases";
 
@@ -19,23 +20,28 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<CreateStudentOutputResponseBody>;
 
-export class CreateUserOutputController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.POST;
-  path: string = "student-output/:activityId";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  createStudentOutputUseCase: ICreateStudentOutputUseCase;
+}
 
-  constructor(
-    private createStudentOutputUseCase: ICreateStudentOutputUseCase
-  ) {}
+@Post("student-output/:activityId")
+@ValidateParameters({
+  paramsSchema,
+})
+@Middlewares(["auth"])
+export class CreateStudentOutputController {
+  private _createStudentOutputUseCase: ICreateStudentOutputUseCase;
+
+  constructor(deps: Deps) {
+    this._createStudentOutputUseCase = deps.createStudentOutputUseCase;
+  }
 
   async execute(req: Request, res: Response) {
     const { user } = req;
 
-    const { activityId } = parseCreateNewStudentOutputRequest(req.params);
+    const { activityId } = req.params;
 
-    await this.createStudentOutputUseCase.execute({
+    await this._createStudentOutputUseCase.execute({
       user,
       activityId,
     });

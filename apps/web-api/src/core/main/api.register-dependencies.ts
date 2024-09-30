@@ -27,9 +27,9 @@ import {
   GetDraftVersionController,
   GetPublishedVersionController,
   GetArchivedVersionController,
-  CreateUserOutputController,
-  UpdateStudentOutputController,
-  PublishStudentOutputFeedbackController,
+  CreateStudentOutputController,
+  PublishStudentOutputController,
+  PublishFeedbackController,
   SaveFeedbackToAnswerController,
 } from "@core/controllers";
 import {
@@ -49,79 +49,71 @@ import {
   SaveAnswerUseCase,
   CreateStudentOutputUseCase,
   PublishFeedbackUseCase,
-  UpdateNotificationUseCase,
+  PublishStudentOutputUseCase,
   SaveFeedbackToAnswerUseCase,
 } from "@core/application/use-cases";
 
 export const registerDependencies = (container: awilix.AwilixContainer) => {
   container.register({
-    publishDraftController: awilix.asClass(PublishDraftController).classic(),
-    saveQuestionController: awilix.asClass(SaveQuestionController).classic(),
-    saveContentController: awilix.asClass(SaveContentController).classic(),
+    publishDraftController: awilix.asClass(PublishDraftController),
+    saveQuestionController: awilix.asClass(SaveQuestionController),
+    saveContentController: awilix.asClass(SaveContentController),
     createNewActivityController: awilix.asClass(CreateNewActivityController),
-    updateActivityMetadataController: awilix
-      .asClass(UpdateActivityMetadataController)
-      .classic(),
-    listActivitiesForCollectionParticipantController: awilix
-      .asClass(ListActivitiesForCollectionParticipantController)
-      .classic(),
-    listActivitiesForCollectionOwnerController: awilix
-      .asClass(ListActivitiesForCollectionOwnerController)
-      .classic(),
-    deleteElementController: awilix.asClass(DeleteElementController).classic(),
-    createNewDraftVersionController: awilix
-      .asClass(CreateNewDraftVersionController)
-      .classic(),
-    insertUserInCollectionController: awilix
-      .asClass(InsertUserInCollectionController)
-      .classic(),
-    removeStudentFromCollectionController: awilix
-      .asClass(RemoveStudentFromCollectionController)
-      .classic(),
-    listCollectionsForOwnerController: awilix
-      .asClass(ListCollectionsForOwnerController)
-      .classic(),
-    listCollectionsForParticipantController: awilix
-      .asClass(ListCollectionsForParticipantController)
-      .classic(),
-    getCollectionController: awilix.asClass(GetCollectionController).classic(),
-    listUsersInCollectionController: awilix
-      .asClass(ListUsersInCollectionController)
-      .classic(),
-    saveAnswerController: awilix.asClass(SaveAnswerController).classic(),
-    insertFollowerInCollectionController: awilix
-      .asClass(InsertFollowerInCollectionController)
-      .classic(),
-    importActivityController: awilix
-      .asClass(ImportActivityController)
-      .classic(),
-    updateCollectionMetadataController: awilix
-      .asClass(UpdateCollectionMetadataController)
-      .classic(),
-    createNewCollectionController: awilix
-      .asClass(CreateNewCollectionController)
-      .classic(),
-    getDraftVersionController: awilix
-      .asClass(GetDraftVersionController)
-      .classic(),
-    getPublishedVersionController: awilix
-      .asClass(GetPublishedVersionController)
-      .classic(),
-    getArchivedVersionController: awilix
-      .asClass(GetArchivedVersionController)
-      .classic(),
-    createUserOutputController: awilix
-      .asClass(CreateUserOutputController)
-      .classic(),
-    updateStudentOutputController: awilix
-      .asClass(UpdateStudentOutputController)
-      .classic(),
-    publishStudentOutputFeedbackController: awilix
-      .asClass(PublishStudentOutputFeedbackController)
-      .classic(),
-    saveFeedbackToAnswerController: awilix
-      .asClass(SaveFeedbackToAnswerController)
-      .classic(),
+    updateActivityMetadataController: awilix.asClass(
+      UpdateActivityMetadataController
+    ),
+    listActivitiesForCollectionParticipantController: awilix.asClass(
+      ListActivitiesForCollectionParticipantController
+    ),
+    listActivitiesForCollectionOwnerController: awilix.asClass(
+      ListActivitiesForCollectionOwnerController
+    ),
+    deleteElementController: awilix.asClass(DeleteElementController),
+    createNewDraftVersionController: awilix.asClass(
+      CreateNewDraftVersionController
+    ),
+    insertUserInCollectionController: awilix.asClass(
+      InsertUserInCollectionController
+    ),
+    removeStudentFromCollectionController: awilix.asClass(
+      RemoveStudentFromCollectionController
+    ),
+    listCollectionsForOwnerController: awilix.asClass(
+      ListCollectionsForOwnerController
+    ),
+    listCollectionsForParticipantController: awilix.asClass(
+      ListCollectionsForParticipantController
+    ),
+    getCollectionController: awilix.asClass(GetCollectionController),
+    listUsersInCollectionController: awilix.asClass(
+      ListUsersInCollectionController
+    ),
+    saveAnswerController: awilix.asClass(SaveAnswerController),
+    insertFollowerInCollectionController: awilix.asClass(
+      InsertFollowerInCollectionController
+    ),
+    importActivityController: awilix.asClass(ImportActivityController),
+    updateCollectionMetadataController: awilix.asClass(
+      UpdateCollectionMetadataController
+    ),
+    createNewCollectionController: awilix.asClass(
+      CreateNewCollectionController
+    ),
+    getDraftVersionController: awilix.asClass(GetDraftVersionController),
+    getPublishedVersionController: awilix.asClass(
+      GetPublishedVersionController
+    ),
+    getArchivedVersionController: awilix.asClass(GetArchivedVersionController),
+    createStudentOutputController: awilix.asClass(
+      CreateStudentOutputController
+    ),
+    publishStudentOutputController: awilix.asClass(
+      PublishStudentOutputController
+    ),
+    publishFeedbackController: awilix.asClass(PublishFeedbackController),
+    saveFeedbackToAnswerController: awilix.asClass(
+      SaveFeedbackToAnswerController
+    ),
 
     authMiddleware: awilix
       .asClass(AuthenticationMiddlewareController)
@@ -153,8 +145,8 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .asClass(CreateStudentOutputUseCase)
       .classic(),
     publishFeedbackUseCase: awilix.asClass(PublishFeedbackUseCase).classic(),
-    updateStudentOutputUseCase: awilix
-      .asClass(UpdateNotificationUseCase)
+    publishStudentOutputUseCase: awilix
+      .asClass(PublishStudentOutputUseCase)
       .classic(),
     saveFeedbackToAnswerUseCase: awilix
       .asClass(SaveFeedbackToAnswerUseCase)

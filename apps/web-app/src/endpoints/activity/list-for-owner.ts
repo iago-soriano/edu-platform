@@ -1,4 +1,4 @@
-import { useBaseMutation, UseBaseMutationCallbacksType } from "../base";
+/* import { useBaseMutation, UseBaseMutationCallbacksType } from "../base";
 import {
   useMutation,
   useQuery,
@@ -6,12 +6,12 @@ import {
   UseQueryResult,
   UseInfiniteQueryResult,
   InfiniteData,
-} from "@tanstack/react-query";
-import { ServerError, ApiClient } from "@edu-platform/common/api";
-import { useAxiosAuth } from "@infrastructure";
+} from "@tanstack/react-query"; */
+import { CoreClient } from "@edu-platform/common/api";
+import { SSRAxios } from "@infrastructure";
 
-type Params = Parameters<ApiClient["listActivitiesForOwner"]>[0];
-type Return = Awaited<ReturnType<ApiClient["listActivitiesForOwner"]>>;
+/* type Params = Parameters<CoreClient["listActivitiesForOwner"]>[0];
+type Return = Awaited<ReturnType<CoreClient["listActivitiesForOwner"]>>;
 export type ListQueryForOwnerReturn = UseQueryResult<Return, ServerError>;
 
 export const useListActivitiesForOwnerQuery = ({
@@ -20,7 +20,7 @@ export const useListActivitiesForOwnerQuery = ({
   collectionId,
 }: Params) => {
   const axios = useAxiosAuth();
-  const client = new ApiClient(axios);
+  const client = new CoreClient(axios);
 
   return useQuery<Return, ServerError>({
     queryKey: ["activities", { page, pageSize }],
@@ -31,4 +31,19 @@ export const useListActivitiesForOwnerQuery = ({
         page,
       }),
   });
-};
+}; */
+
+export const listActivitiesForOwnerByCollectionId = (
+  page,
+  pageSize,
+  collectionId
+) =>
+  new CoreClient(SSRAxios).listActivitiesForOwner({
+    page,
+    collectionId,
+    pageSize,
+  });
+
+export type ListActivitiesForOwnerResponse = Awaited<
+  ReturnType<typeof listActivitiesForOwnerByCollectionId>
+>;

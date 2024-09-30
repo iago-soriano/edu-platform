@@ -3,19 +3,23 @@ import { Icons } from "../icons";
 import { Tooltip } from "../tooltip";
 import { IInputProps } from "./interface";
 import { twMerge } from "tailwind-merge";
+import { inputVariants } from "./variants";
+import { cn } from "@infrastructure";
 
 export function Input(args: IInputProps) {
   const {
     register,
     name,
     errors,
+    error,
     inputLabel,
     icon,
-    placeholder,
     instructions,
     tooltipExplanation,
     hidden,
     className,
+    variant,
+    tamanheza,
     ...rest
   } = args;
   const mandatoryTooltip = (
@@ -33,9 +37,20 @@ export function Input(args: IInputProps) {
     </Tooltip>
   );
 
+  const variantClass = variant || "default";
+  const variantClassWithError = error
+    ? `${variant || "default"}Error`
+    : variantClass;
+
   return (
     <label
-      className={twMerge("block relative w-fit", className)}
+      className={cn(
+        inputVariants({
+          tamanheza,
+        }),
+        "block relative w-fit"
+      )}
+      // className={twMerge("block relative w-fit", className)}
       style={{ display: hidden ? "none" : "block" }}
     >
       <span className="flex flex-row mb-4">
@@ -46,19 +61,27 @@ export function Input(args: IInputProps) {
         </div>
       </span>
       <input
-        className={twMerge(
-          "block p-4 rounded w-full bg-surface3 placeholder:opacity-80 placeholder:text-text2"
+        className={cn(
+          inputVariants({
+            variant: variantClassWithError as any,
+            // tamanheza,
+          })
         )}
+        // className={twMerge(
+        //   "block p-4 rounded w-full bg-surface3 placeholder:opacity-80 placeholder:text-text2",
+        //   (errors && name && errors[name]) || error ? "border border-error" : ""
+        // )}
         {...(register && register(name))}
         {...rest}
-        placeholder={placeholder}
-        // error={errors && errors[name]} // ??
+        name={name}
       />
       <span className="absolute top-14 right-3 text-text1">{icon}</span>
-      {errors && (
+      {errors ? (
         <p className="text-left py-1 mt-2 mb-0 text-error">
           {errors && name && errors[name]?.message}
         </p>
+      ) : (
+        error && <p className="text-left py-1 mt-2 mb-0 text-error">{error}</p>
       )}
     </label>
   );

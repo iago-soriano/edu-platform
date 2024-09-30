@@ -1,14 +1,15 @@
 import {
-  HTTPController,
-  HttpMethod,
+  Middlewares,
+  Post,
   Request as TypedRequest,
   Response as TypedResponse,
-  parseNumberId,
+  ValidateParameters,
 } from "@edu-platform/common/platform";
 import {
   FollowCollectionParams,
   FollowCollectionRequestBody,
   FollowCollectionResponseBody,
+  followCollectionParamsSchema as paramsSchema,
 } from "@edu-platform/common";
 import { IInsertFollowerInCollectionUseCase } from "@core/application/use-cases";
 
@@ -19,22 +20,28 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<FollowCollectionResponseBody>;
 
-export class InsertFollowerInCollectionController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.POST;
-  path: string = "core/collections/:collectionId/follow";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  insertFollowerInCollectionUseCase: IInsertFollowerInCollectionUseCase;
+}
 
-  constructor(
-    private insertFollowerInCollectionUseCase: IInsertFollowerInCollectionUseCase
-  ) {}
+@Post("collections/:collectionId/follow")
+@ValidateParameters({
+  paramsSchema,
+})
+@Middlewares(["auth"])
+export class InsertFollowerInCollectionController {
+  private _insertFollowerInCollectionUseCase: IInsertFollowerInCollectionUseCase;
+
+  constructor(deps: Deps) {
+    this._insertFollowerInCollectionUseCase =
+      deps.insertFollowerInCollectionUseCase;
+  }
 
   async execute(req: Request, res: Response) {
-    const { collectionId } = parseNumberId(req.params, ["collectionId"]);
+    const { collectionId } = req.params;
     const { user } = req;
 
-    await this.insertFollowerInCollectionUseCase.execute({
+    await this._insertFollowerInCollectionUseCase.execute({
       user,
       collectionId,
     });

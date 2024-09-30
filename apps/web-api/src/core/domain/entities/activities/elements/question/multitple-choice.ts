@@ -1,5 +1,8 @@
 import { Question } from ".";
-import { InvalidStateError, QuestionRequestDTO } from "@edu-platform/common";
+import {
+  InvalidStateError,
+  SaveQuestionRequestBody,
+} from "@edu-platform/common";
 import { QuestionAlternativeFactory } from "../../factories";
 import { QuestionTypes } from "./enums";
 
@@ -29,7 +32,7 @@ export class MultipleChoiceQuestion extends Question {
     super(QuestionTypes.MultipleChoice);
   }
 
-  public update(questionDto: QuestionRequestDTO) {
+  public update(questionDto: SaveQuestionRequestBody) {
     this._merge(questionDto);
     if (questionDto.alternatives)
       this.alternatives = QuestionAlternativeFactory.fromRequestDto(

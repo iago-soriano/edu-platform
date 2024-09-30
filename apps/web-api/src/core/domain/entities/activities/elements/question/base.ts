@@ -2,7 +2,7 @@ import { ActivitElementDescription } from "..";
 import {
   DomainRules,
   InvalidStateError,
-  QuestionRequestDTO,
+  SaveQuestionRequestBody,
 } from "@edu-platform/common";
 import { BaseElement } from "../abstract-element";
 import { QuestionTypes } from "./enums";
@@ -41,14 +41,14 @@ export abstract class Question extends BaseElement {
     this._validateQuestionText();
   }
 
-  protected _merge(questionDto: QuestionRequestDTO) {
+  protected _merge(questionDto: SaveQuestionRequestBody) {
     if (questionDto.description) {
       const newDesc = new ActivitElementDescription(questionDto.description);
       this.description = newDesc;
     }
     if (questionDto.question) this.question = questionDto.question;
   }
-  abstract update(questionDto: QuestionRequestDTO): void;
+  abstract update(questionDto: SaveQuestionRequestBody): void;
 
   public checkValidityForPublication(): boolean {
     return this.isEmpty();

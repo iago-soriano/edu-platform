@@ -1,34 +1,39 @@
 import {
-  HTTPController,
-  HttpMethod,
+  Get,
+  Middlewares,
   Request as TypedRequest,
   Response as TypedResponse,
-  parseNumberId,
+  ValidateParameters,
 } from "@edu-platform/common/platform";
 import { ICollectionsReadRepository } from "@core/application/interfaces";
 import {
-  GetCollectionParams,
-  GetCollectionResponseBody,
-} from "@edu-platform/common";
+  Params,
+  ResponseBody,
+  paramsSchema,
+} from "@edu-platform/common/api/contracts/queries/collections/get-by-id";
 
-type Request = TypedRequest<GetCollectionParams, {}, {}>;
-type Response = TypedResponse<GetCollectionResponseBody>;
+type Request = TypedRequest<Params, {}, {}>;
+type Response = TypedResponse<ResponseBody>;
 
-export class GetCollectionController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.GET;
-  path = "core/collections/:collectionId";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  collectionsReadRepository: ICollectionsReadRepository;
+}
 
-  constructor(private collectionsReadRepository: ICollectionsReadRepository) {}
+@Get("collections/:collectionId")
+@ValidateParameters({ paramsSchema })
+@Middlewares(["auth"])
+export class GetCollectionController {
+  private _collectionsReadRepository: ICollectionsReadRepository;
+
+  constructor(deps: Deps) {
+    this._collectionsReadRepository = deps.collectionsReadRepository;
+  }
 
   async execute(req: Request, res: Response) {
     const { user } = req;
+    const { collectionId } = req.query;
 
-    const { collectionId } = parseNumberId(req.params, ["collectionId"]);
-
-    const collection = await this.collectionsReadRepository.findByIdForOwner(
+    const collection = await this._collectionsReadRepository.findByIdForOwner(
       collectionId,
       user
     );

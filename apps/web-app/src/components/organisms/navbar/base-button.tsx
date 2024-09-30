@@ -1,5 +1,5 @@
 import { usePathname } from "next/navigation";
-import { ButtonLink, ButtonProps } from "@components";
+import { Link, ButtonProps } from "@components";
 
 export interface BaseNavbarButtonProps extends ButtonProps {
   path: string;
@@ -12,8 +12,8 @@ export const BaseNavbarButton = ({
 }: BaseNavbarButtonProps) => {
   const currentPath = usePathname();
   return (
-    <ButtonLink href={path} active={currentPath.startsWith(path)} {...rest}>
+    <Link href={path} active={currentPath.startsWith(path)} {...rest}>
       {children}
-    </ButtonLink>
+    </Link>
   );
 };

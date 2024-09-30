@@ -1,21 +1,25 @@
 import { z } from "zod";
 
-export const versionMetadataRequestSchema = z.object({
+const updateDraftMetadataParamsSchema = z.object({
+  activityId: z.string().uuid(),
+});
+
+type Params = z.infer<typeof updateDraftMetadataParamsSchema>;
+
+const updateDraftMetadataRequestSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   topics: z.string().optional(),
 });
 
-export type VersionRequestDTO = z.infer<typeof versionMetadataRequestSchema>;
-export const parseToVersionRequestDto = versionMetadataRequestSchema.parse;
+type RequestBody = z.infer<typeof updateDraftMetadataRequestSchema>;
 
-type ResponseBody = void;
-type Params = {
-  activityId: string;
-};
+interface ResponseBody {}
 
 export type {
-  VersionRequestDTO as UpdateVersionMetadataRequestBody,
+  RequestBody as UpdateVersionMetadataRequestBody,
   ResponseBody as UpdateVersionMetadataResponseBody,
   Params as UpdateVersionMetadataParams,
 };
+
+export { updateDraftMetadataParamsSchema, updateDraftMetadataRequestSchema };

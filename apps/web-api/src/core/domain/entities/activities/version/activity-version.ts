@@ -12,8 +12,8 @@ import {
 } from "./value-objects";
 import { Entity, CollectionArray } from "@edu-platform/common/platform";
 import {
-  ContentRequestDTO,
-  QuestionRequestDTO,
+  SaveContentRequestBody,
+  SaveQuestionRequestBody,
   SilentInvalidStateError,
   InvalidStateError,
 } from "@edu-platform/common";
@@ -129,7 +129,7 @@ export class ActivityVersion extends Entity {
     }
   }
 
-  public async upsertContent(contentDto: ContentRequestDTO) {
+  public async upsertContent(contentDto: SaveContentRequestBody) {
     const currentElement = this.elements
       .filter((el) => el.elementType === "Content")
       .filter((cntnt) => cntnt.id === contentDto.id)[0];
@@ -153,7 +153,7 @@ export class ActivityVersion extends Entity {
     this.elements.push(newContent);
   }
 
-  public upsertQuestion(questionDto: QuestionRequestDTO) {
+  public upsertQuestion(questionDto: SaveQuestionRequestBody) {
     const currentElement = this.elements
       .filter((el) => el.elementType === "Question")
       .filter((cntnt) => cntnt.id === questionDto.id)[0];

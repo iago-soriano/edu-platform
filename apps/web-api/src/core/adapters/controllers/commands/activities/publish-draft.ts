@@ -1,6 +1,4 @@
 import {
-  HTTPController,
-  HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@edu-platform/common/platform/interfaces";
@@ -8,26 +6,37 @@ import {
   PublishDraftParams,
   PublishDraftRequestBody,
   PublishDraftResponseBody,
+  publishDraftParamsSchema as paramsSchema,
 } from "@edu-platform/common";
 import { IPublishDraftUseCase } from "@core/application/use-cases";
+import {
+  Middlewares,
+  Patch,
+  ValidateParameters,
+} from "@edu-platform/common/platform";
 
 type Request = TypedRequest<PublishDraftParams, {}, PublishDraftRequestBody>;
 type Response = TypedResponse<PublishDraftResponseBody>;
 
-export class PublishDraftController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.PATCH;
-  path = "activities/:activityId/versions/draft/publish";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  publishDraftUseCase: IPublishDraftUseCase;
+}
 
-  constructor(private publishDraftUseCase: IPublishDraftUseCase) {}
+@Patch("activities/:activityId/versions/draft/publish")
+@ValidateParameters({ paramsSchema })
+@Middlewares(["auth"])
+export class PublishDraftController {
+  private _publishDraftUseCase: IPublishDraftUseCase;
+
+  constructor(deps: Deps) {
+    this._publishDraftUseCase = deps.publishDraftUseCase;
+  }
 
   async execute(req: Request, res: Response) {
     const { activityId } = req.params;
     const { user } = req;
 
-    await this.publishDraftUseCase.execute({
+    await this._publishDraftUseCase.execute({
       user,
       activityId,
     });

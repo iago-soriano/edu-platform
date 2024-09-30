@@ -190,12 +190,23 @@ export class CollectionsReadRepository implements ICollectionsReadRepository {
     const dto = (
       await db
         .select({
+          id: collections.id,
           name: collections.name,
           description: collections.description,
           isPrivate: collections.isPrivate,
           notifyOwnerOnStudentOutput: collections.notifyOwnerOnStudentOutput,
+          activitiesCount: sql<number>`COUNT(DISTINCT ${activities.id})`.as(
+            "totalActivitiesCount"
+          ),
         })
         .from(collections)
+        .leftJoin(activities, eq(activities.collectionId, collections.id))
+        // .leftJoin(
+        //   collectionParticipations,
+        //   eq(collections.id, collectionParticipations.collectionId)
+        //   // eq(collectionParticipations.type,  "Student")
+        // )
+        .groupBy(collections.id)
         .where(
           and(
             eq(collections.id, collectionId),

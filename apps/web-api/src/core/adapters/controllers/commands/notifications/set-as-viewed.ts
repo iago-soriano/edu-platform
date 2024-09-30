@@ -1,14 +1,15 @@
 import {
-  HTTPController,
-  HttpMethod,
+  Middlewares,
+  Patch,
   Request as TypedRequest,
   Response as TypedResponse,
-  parseNumberId,
+  ValidateParameters,
 } from "@edu-platform/common/platform";
 import {
   UpdateNotificationParams,
   UpdateNotificationRequestBody,
   UpdateNotificationResponseBody,
+  updateNotificationParamsSchema as paramsSchema,
 } from "@edu-platform/common";
 import { IUpdateNotificationUseCase } from "@core/application/use-cases";
 
@@ -19,19 +20,26 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<UpdateNotificationResponseBody>;
 
-export class UpdateNotificationController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.PATCH;
-  path = "notifications/:notificationId/set-as-viewed";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  updateNotificationUseCase: IUpdateNotificationUseCase;
+}
 
-  constructor(private updateNotificationUseCase: IUpdateNotificationUseCase) {}
+@Patch("notifications/:notificationId/set-as-viewed")
+@ValidateParameters({
+  paramsSchema,
+})
+@Middlewares(["auth"])
+export class UpdateNotificationController {
+  private _updateNotificationUseCase: IUpdateNotificationUseCase;
+
+  constructor(deps: Deps) {
+    this._updateNotificationUseCase = deps.updateNotificationUseCase;
+  }
 
   async execute(req: Request, res: Response) {
-    const { notificationId } = parseNumberId(req.params, ["notificationId"]);
+    const { notificationId } = req.params;
 
-    await this.updateNotificationUseCase.execute({
+    await this._updateNotificationUseCase.execute({
       user: req.user,
       notificationId,
     });

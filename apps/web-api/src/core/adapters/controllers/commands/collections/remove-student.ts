@@ -1,19 +1,17 @@
 import {
-  HTTPController,
-  HttpMethod,
+  Delete,
+  Middlewares,
   Request as TypedRequest,
   Response as TypedResponse,
-  parseNumberId,
+  ValidateParameters,
 } from "@edu-platform/common/platform";
 import {
   RemoveUserFromCollectionParams,
   RemoveUserFromCollectionRequestBody,
   RemoveUserFromCollectionResponseBody,
+  removeUserParamsSchema as paramsSchema,
 } from "@edu-platform/common";
-import {
-  IInsertUserInCollectionUseCase,
-  IRemoveStudentFromCollectionUseCase,
-} from "@core/application/use-cases";
+import { IRemoveStudentFromCollectionUseCase } from "@core/application/use-cases";
 
 type Request = TypedRequest<
   RemoveUserFromCollectionParams,
@@ -22,26 +20,28 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<RemoveUserFromCollectionResponseBody>;
 
-export class RemoveStudentFromCollectionController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.DELETE;
-  path: string =
-    "core/collections/:collectionId/participation/:participationId/student";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  removeStudentFromCollectionUseCase: IRemoveStudentFromCollectionUseCase;
+}
 
-  constructor(
-    private removeStudentFromCollectionUseCase: IRemoveStudentFromCollectionUseCase
-  ) {}
+@Delete("collections/:collectionId/participation/:participationId/student")
+@ValidateParameters({
+  paramsSchema,
+})
+@Middlewares(["auth"])
+export class RemoveStudentFromCollectionController {
+  private _removeStudentFromCollectionUseCase: IRemoveStudentFromCollectionUseCase;
+
+  constructor(deps: Deps) {
+    this._removeStudentFromCollectionUseCase =
+      deps.removeStudentFromCollectionUseCase;
+  }
 
   async execute(req: Request, res: Response) {
-    const { collectionId, participationId } = parseNumberId(req.params, [
-      "collectionId",
-      "participationId",
-    ]);
+    const { collectionId, participationId } = req.params;
     const { user } = req;
 
-    await this.removeStudentFromCollectionUseCase.execute({
+    await this._removeStudentFromCollectionUseCase.execute({
       user,
       collectionId,
       participationId,

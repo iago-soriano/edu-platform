@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import { ListActivitiesForOwnerResponseBody } from "@edu-platform/common/api";
-import { Badge, Icons, Tooltip, Tag } from "@components";
+import { Badge, Icons, Tooltip, Tag, Link } from "@components";
 import {
   Title,
   EmptyTitle,
@@ -11,17 +11,17 @@ import {
 
 export const DraftVersionActivityCard = ({
   version,
-  onClick,
+  //onClick,
   collection,
 }: {
   version: ListActivitiesForOwnerResponseBody["data"][number]["draft"];
-  onClick: (args: any) => any;
+  //onClick: (args: any) => any;
   collection: string;
 }) => {
   if (!version) return <></>;
   return (
-    <div
-      onClick={onClick}
+    <Link
+      href={""}
       className={twMerge(
         "p-3 m-2 md:w-[80%] w-[95%] rounded-lg hover:scale-[1.01] transition-all cursor-pointer h-fit bg-surface4"
       )}
@@ -55,6 +55,6 @@ export const DraftVersionActivityCard = ({
             </span>
           ))}
       </div>
-    </div>
+    </Link>
   );
 };

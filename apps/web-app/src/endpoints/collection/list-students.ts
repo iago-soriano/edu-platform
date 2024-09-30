@@ -1,10 +1,10 @@
-import { ServerError, ApiClient } from "@edu-platform/common/api";
+import { ServerError, CoreClient } from "@edu-platform/common/api";
 import { useAxiosAuth } from "@infrastructure";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "./query-key-factory";
 
-type Params = Parameters<ApiClient["listStudentsOfCollection"]>[0];
-type Response = Awaited<ReturnType<ApiClient["listStudentsOfCollection"]>>;
+type Params = Parameters<CoreClient["listStudentsOfCollection"]>[0];
+type Response = Awaited<ReturnType<CoreClient["listStudentsOfCollection"]>>;
 
 export const useListStudentsOfCollectionQuery = ({
   collectionId,
@@ -12,7 +12,7 @@ export const useListStudentsOfCollectionQuery = ({
   page,
 }: Params) => {
   const axios = useAxiosAuth();
-  const client = new ApiClient(axios);
+  const client = new CoreClient(axios);
 
   return useQuery<Response, ServerError>({
     queryKey: queryKeys.participants(collectionId),

@@ -8,30 +8,36 @@ import { ICollectionsReadRepository } from "@core/application/interfaces";
 import {
   ListCollectionsForOwnerQuery,
   ListCollectionsForOwnerResponseBody,
-  parseListCollectionsForOwnerQuery,
+  listCollectionsForOwnerQuerySchema as paramsSchema,
 } from "@edu-platform/common";
+import {
+  Get,
+  Middlewares,
+  ValidateParameters,
+} from "@edu-platform/common/platform";
 
 type Request = TypedRequest<{}, ListCollectionsForOwnerQuery, {}>;
 type Response = TypedResponse<ListCollectionsForOwnerResponseBody>;
 
-export class ListCollectionsForOwnerController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.GET;
-  path: string = "core/collections/owns";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  collectionsReadRepository: ICollectionsReadRepository;
+}
 
-  constructor(private collectionsReadRepository: ICollectionsReadRepository) {}
+@Get("collections/owns")
+@ValidateParameters({ paramsSchema })
+@Middlewares(["auth"])
+export class ListCollectionsForOwnerController {
+  private _collectionsReadRepository: ICollectionsReadRepository;
+  constructor(deps: Deps) {
+    this._collectionsReadRepository = deps.collectionsReadRepository;
+  }
 
   async execute(req: Request, res: Response) {
     const { user } = req;
 
-    const { page, pageSize, isPrivate } = parseListCollectionsForOwnerQuery(
-      req.query
-    );
+    const { page, pageSize, isPrivate } = req.query;
 
-    console.log("fetch with", { page, pageSize, isPrivate }, Date.now());
-    const result = await this.collectionsReadRepository.listByOwnership({
+    const result = await this._collectionsReadRepository.listByOwnership({
       userId: user.id,
       isPrivate,
       page,

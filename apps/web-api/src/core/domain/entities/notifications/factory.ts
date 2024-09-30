@@ -1,7 +1,7 @@
 import { Notification, NotificationType } from ".";
 
 export class NotificationsFactory {
-  buildActivityPublishedNotification(
+  static buildActivityPublishedNotification(
     versionId: number,
     collectionName: string,
     activityTitle: string,
@@ -16,7 +16,24 @@ export class NotificationsFactory {
 
     return notification;
   }
-  buildStudentOutputCompletedNotification(
+
+  static buildStudentOutputCreatedNotification(
+    studentOutputId: number,
+    activityTitle: string,
+    createdBy: string,
+    notificationRecipientId: string
+  ) {
+    const notification = new Notification();
+
+    notification.type = NotificationType.StudentOutputCreated;
+    notification.details = JSON.stringify({ studentOutputId });
+    notification.message = `${createdBy} has started to answer activity ${activityTitle}!`;
+    notification.userId = notificationRecipientId;
+
+    return notification;
+  }
+
+  static buildStudentOutputCompletedNotification(
     studentOutputId: number,
     activityTitle: string,
     completedBy: string,
@@ -31,7 +48,8 @@ export class NotificationsFactory {
 
     return notification;
   }
-  buildFeedbackCompletedNotification(
+
+  static buildFeedbackPublishedNotification(
     studentOutputId: number,
     activityTitle: string,
     feedbackBy: string,

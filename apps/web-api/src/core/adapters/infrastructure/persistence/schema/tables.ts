@@ -166,30 +166,35 @@ export const studentOutputStatusEnum = pgEnum(
   Object.values(OutputStatus || {}).filter((v) => isNaN(Number(v))) as [string]
 );
 
-export const studentOutputs = pgTable("student_outputs", {
-  id: serial("id").primaryKey(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
+export const studentOutputs = pgTable(
+  "student_outputs",
+  {
+    id: serial("id").primaryKey(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
 
-  outputStatus: studentOutputStatusEnum("output_status")
-    .default(OutputStatus.Draft)
-    .notNull(),
-  feedbackStatus: studentOutputStatusEnum("feedback_status")
-    .default(OutputStatus.Draft)
-    .notNull(),
+    outputStatus: studentOutputStatusEnum("output_status")
+      .default(OutputStatus.Draft)
+      .notNull(),
+    feedbackStatus: studentOutputStatusEnum("feedback_status")
+      .default(OutputStatus.Draft)
+      .notNull(),
 
-  studentId: uuid("student_id").notNull(),
-  // .references(() => users.id),
-  activityAuthorId: uuid("activity_author_id").notNull(),
-  // .references(() => users.id),
-  versionId: uuid("version_id")
-    .notNull()
-    .references(() => activityVersions.id),
-});
+    studentId: uuid("student_id").notNull(),
+    // .references(() => users.id),
+    activityAuthorId: uuid("activity_author_id").notNull(),
+    // .references(() => users.id),
+    versionNumber: integer("version_number").notNull(),
+    activityId: varchar("activity_id")
+      .references(() => activities.id)
+      .notNull(),
+  },
+  (t) => ({ unq: unique().on(t.activityId, t.studentId, t.versionNumber) })
+);
 
 export const studentAnswers = pgTable("student_answers", {
   id: serial("id").primaryKey(),

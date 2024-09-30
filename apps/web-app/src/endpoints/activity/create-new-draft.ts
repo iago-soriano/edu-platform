@@ -1,8 +1,8 @@
 import { useBaseMutation, UseBaseMutationCallbacksType } from "../base";
-import { ServerError, ApiClient } from "@edu-platform/common/api";
+import { ServerError, CoreClient } from "@edu-platform/common/api";
 
-type Params = Parameters<ApiClient["createNewDraftVersion"]>[0];
-type Return = Awaited<ReturnType<ApiClient["createNewDraftVersion"]>>;
+type Params = Parameters<CoreClient["createNewDraftVersion"]>[0];
+type Return = Awaited<ReturnType<CoreClient["createNewDraftVersion"]>>;
 export const useCreateNewDraftVersionMutation = (
   args: UseBaseMutationCallbacksType<Params, Return>
 ) =>

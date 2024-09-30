@@ -41,11 +41,25 @@ export interface IEmailService {
   sendVerifyAccountEmail: (
     args: SendEmailArgs & { token: string }
   ) => Promise<any>;
+  sendStudentOutputCreatedEmail: (
+    args: SendEmailArgs & {
+      studentOutputId: number;
+      studentName: string;
+      activityTitle: string;
+    }
+  ) => Promise<any>;
   sendStudentOutputCompletedEmail: (
     args: SendEmailArgs & {
       studentOutputId: number;
       studentName: string;
       activityTitle: string;
+    }
+  ) => Promise<any>;
+  sendFeedbackToAnswerPublishedEmail: (
+    args: SendEmailArgs & {
+      studentOutputId: number;
+      activityTitle: string;
+      authorName: string;
     }
   ) => Promise<any>;
 }

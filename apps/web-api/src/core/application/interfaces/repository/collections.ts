@@ -3,9 +3,9 @@ import {
   ListCollectionsForParticipantResponseBody,
   ListCollectionsForOwnerResponseBody,
   ListParticipantsOfCollectionResponseBody,
-  GetCollectionResponseBody,
   PaginatedParamsDTO,
 } from "@edu-platform/common";
+import { ResponseBody as GetCollectionResponseBody } from "@edu-platform/common/api/contracts/queries/collections/get-by-id";
 import { IAbstractRepository } from "@edu-platform/common/platform";
 
 export interface ICollectionsRepository extends IAbstractRepository {

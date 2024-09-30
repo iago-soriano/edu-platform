@@ -1,15 +1,15 @@
 import {
-  HTTPController,
-  HttpMethod,
+  Delete,
+  Middlewares,
   Request as TypedRequest,
   Response as TypedResponse,
-  parseNumberId,
+  ValidateParameters,
 } from "@edu-platform/common/platform";
 import {
   UnfollowCollectionParams,
   UnfollowCollectionRequestBody,
   UnfollowCollectionResponseBody,
-  unfollowCollectionParseRequest,
+  unfollowCollectionParamsSchema as paramsSchema,
 } from "@edu-platform/common";
 import { IUnfollowCollectionUseCase } from "@core/application/use-cases";
 
@@ -20,23 +20,27 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<UnfollowCollectionResponseBody>;
 
-export class UnfollowCollectionController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.DELETE;
-  path: string =
-    "core/collections/:collectionId/participation/:participationId/follower";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  unfollowCollectionUseCase: IUnfollowCollectionUseCase;
+}
 
-  constructor(private unfollowCollectionUseCase: IUnfollowCollectionUseCase) {}
+@Delete("collections/:collectionId/participation/:participationId/follower")
+@ValidateParameters({
+  paramsSchema,
+})
+@Middlewares(["auth"])
+export class UnfollowCollectionController {
+  private _unfollowCollectionUseCase: IUnfollowCollectionUseCase;
+
+  constructor(deps: Deps) {
+    this._unfollowCollectionUseCase = deps.unfollowCollectionUseCase;
+  }
 
   async execute(req: Request, res: Response) {
-    const { collectionId, participationId } = unfollowCollectionParseRequest(
-      req.params
-    );
+    const { collectionId, participationId } = req.params;
     const { user } = req;
 
-    await this.unfollowCollectionUseCase.execute({
+    await this._unfollowCollectionUseCase.execute({
       user,
       collectionId,
       participationId,

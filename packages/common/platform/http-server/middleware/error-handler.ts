@@ -18,7 +18,7 @@ export function ErrorMiddleware(
 ) {
   if (error instanceof InvalidStateError) {
     console.log(
-      `ERRO ${error.fieldErrors} ${error.HTTPstatusCode} ${error.message}}`
+      `ERRO ${JSON.stringify(error.fieldErrors)} ${error.HTTPstatusCode} ${error.message}`
     );
 
     res
@@ -37,5 +37,5 @@ export function ErrorMiddleware(
 
   res
     .status((error as CustomError)?.HTTPstatusCode || 500)
-    .json(error.toString());
+    .json({ message: error.message || error.toString() });
 }

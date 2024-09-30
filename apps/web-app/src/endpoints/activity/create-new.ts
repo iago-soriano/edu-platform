@@ -1,8 +1,8 @@
 import { useBaseMutation, UseBaseMutationCallbacksType } from "../base";
-import { ServerError, ApiClient } from "@edu-platform/common/api";
+import { ServerError, CoreClient } from "@edu-platform/common/api";
 
-type Request = Parameters<ApiClient["createNewActivity"]>[0];
-type Return = Awaited<ReturnType<ApiClient["createNewActivity"]>>;
+type Request = Parameters<CoreClient["createNewActivity"]>[0];
+type Return = Awaited<ReturnType<CoreClient["createNewActivity"]>>;
 
 export const useCreateNewActivityMutation = (
   args: UseBaseMutationCallbacksType<Request, Return>
@@ -13,3 +13,5 @@ export const useCreateNewActivityMutation = (
     invalidateQueries: ["activities"],
     ...args,
   });
+
+//export const createNewActivity = () =>

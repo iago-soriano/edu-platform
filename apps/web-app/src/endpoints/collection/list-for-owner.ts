@@ -1,11 +1,11 @@
-import { ServerError, ApiClient } from "@edu-platform/common/api";
+import { ServerError, CoreClient } from "@edu-platform/common/api";
 import { useAxiosAuth } from "@infrastructure";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "./query-key-factory";
 import { SSRAxios } from "@infrastructure";
 
 export type Response = Awaited<
-  ReturnType<ApiClient["listCollectionsForOwner"]>
+  ReturnType<CoreClient["listCollectionsForOwner"]>
 >;
 
 export const useListCollectionsForOwnerQuery = ({
@@ -14,7 +14,7 @@ export const useListCollectionsForOwnerQuery = ({
   isPrivate,
 }) => {
   const axios = useAxiosAuth();
-  const client = new ApiClient(axios);
+  const client = new CoreClient(axios);
 
   return useQuery<Response, ServerError>({
     queryKey: queryKeys.teacherList({
@@ -38,7 +38,7 @@ export const preFetchPrivate = (queryClient, page) => {
       isPrivate: true,
     }),
     queryFn: () =>
-      new ApiClient(SSRAxios).listCollectionsForOwner({
+      new CoreClient(SSRAxios).listCollectionsForOwner({
         isPrivate: true,
         page,
       }),
@@ -52,7 +52,7 @@ export const preFetchPublic = (queryClient, page) => {
       isPrivate: false,
     }),
     queryFn: () =>
-      new ApiClient(SSRAxios).listCollectionsForOwner({
+      new CoreClient(SSRAxios).listCollectionsForOwner({
         isPrivate: false,
         page,
       }),

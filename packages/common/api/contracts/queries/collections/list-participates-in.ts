@@ -8,13 +8,12 @@ type ResponseBody = PaginatedResponse<{
   ownerName: string;
 }>;
 
-const querySchema = paginatedParamsSchema;
+const listCollectionsForParticipantsQuerySchema = paginatedParamsSchema;
 
-type Query = z.infer<typeof querySchema>;
-const parseListCollectionsForParticipantQuery = querySchema.parse;
+type Query = z.infer<typeof listCollectionsForParticipantsQuerySchema>;
 
 export type {
   ResponseBody as ListCollectionsForParticipantResponseBody,
   Query as ListCollectionsForParticipantQuery,
 };
-export { parseListCollectionsForParticipantQuery };
+export { listCollectionsForParticipantsQuerySchema };

@@ -6,34 +6,42 @@ import {
 } from "@edu-platform/common/platform/interfaces";
 import { IActivitiesReadRepository } from "@core/application/interfaces";
 import {
-  GetActivityVersionParams,
-  GetActivityVersionResponseBody,
+  GetPublishedParams,
+  GetPublishedResponseBody,
+  getPublishedParamsSchema as paramsSchema,
   InvalidStateError,
-  parseGetPublishedVersionRequest,
+  // parseGetPublishedVersionRequest,
 } from "@edu-platform/common";
 import { VersionStatus } from "@core/domain/enums";
+import {
+  Get,
+  Middlewares,
+  ValidateParameters,
+} from "@edu-platform/common/platform";
 
-type Request = TypedRequest<
-  GetActivityVersionParams,
-  {},
-  GetActivityVersionResponseBody
->;
-type Response = TypedResponse<GetActivityVersionResponseBody>;
+type Request = TypedRequest<GetPublishedParams, {}, {}>;
+type Response = TypedResponse<GetPublishedResponseBody>;
 
-export class GetPublishedVersionController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.GET;
-  path = "core/activities/:activityId/versions/published";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  activitiesReadRepository: IActivitiesReadRepository;
+}
 
-  constructor(private activitiesReadRepository: IActivitiesReadRepository) {}
+@Get("activities/:activityId/versions/published")
+@ValidateParameters({ paramsSchema })
+@Middlewares(["auth"])
+export class GetPublishedVersionController {
+  private _activitiesReadRepository: IActivitiesReadRepository;
+
+  constructor(deps: Deps) {
+    this._activitiesReadRepository = deps.activitiesReadRepository;
+  }
 
   async execute(req: Request, res: Response) {
-    const { activityId } = parseGetPublishedVersionRequest(req.params);
+    // const { activityId } = parseGetPublishedVersionRequest(req.params);
 
-    const resp = await this.activitiesReadRepository.findFullVersionById(
-      activityId,
+    const resp = await this._activitiesReadRepository.findFullVersionById(
+      // activityId,
+      "9",
       VersionStatus.Published
     );
     if (!resp) throw new InvalidStateError("Activity not found");

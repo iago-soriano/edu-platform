@@ -1,6 +1,5 @@
 import { Router, getLocaleDateTimeFromISO } from "@infrastructure";
-import { ButtonLink } from "@components";
-import Link from "next/link";
+import { Link } from "@components";
 
 export const CenteredCell = (info) => (
   <p className="text-center">{info.getValue()}</p>
@@ -8,7 +7,7 @@ export const CenteredCell = (info) => (
 
 export const CenteredCellWithLink = ({ value, href }) => (
   <div className="flex justify-center">
-    <ButtonLink href={href}>{value}</ButtonLink>
+    <Link href={href}>{value}</Link>
   </div>
 );
 

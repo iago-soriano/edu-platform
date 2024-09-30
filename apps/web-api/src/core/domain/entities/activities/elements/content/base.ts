@@ -1,6 +1,6 @@
 import { BaseElement } from "../abstract-element";
 import { ActivitElementDescription } from "../value-objects/description";
-import { ContentRequestDTO } from "@edu-platform/common";
+import { SaveContentRequestBody } from "@edu-platform/common";
 import { ContentTypes } from "./enums";
 
 export { ContentTypes } from "./enums";
@@ -28,8 +28,12 @@ export abstract class Content extends BaseElement {
     this._validatePayload();
   }
 
-  protected abstract _mergePayload(newValues: ContentRequestDTO): void;
-  public async update(contentDto: ContentRequestDTO, _?: string, __?: string) {
+  protected abstract _mergePayload(newValues: SaveContentRequestBody): void;
+  public async update(
+    contentDto: SaveContentRequestBody,
+    _?: string,
+    __?: string
+  ) {
     if (contentDto.description) {
       this.description = new ActivitElementDescription(contentDto.description);
     }

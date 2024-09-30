@@ -11,12 +11,12 @@ import { IActivitiesReadRepository } from "@core/application/interfaces";
 import { eq, sql, and, desc, or } from "drizzle-orm";
 import { VersionStatus } from "@core/domain/enums";
 import { alias } from "drizzle-orm/pg-core";
+import { PaginatedParamsDTO } from "@edu-platform/common";
 import {
-  PaginatedParamsDTO,
   ElementResponseDTO,
   ContentResponseDTO,
   QuestionResponseDTO,
-} from "@edu-platform/common";
+} from "@edu-platform/common/api/contracts/index";
 
 export class ActivitiesReadRepository implements IActivitiesReadRepository {
   async listForCollectionOwner({

@@ -1,16 +1,20 @@
 import {
-  HTTPController,
-  HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@edu-platform/common/platform/interfaces";
 import {
-  parseToCollectionRequestDTO,
   UpdateCollectionMetadataParams,
   UpdateCollectionMetadataRequestBody,
   UpdateCollectionMetadataResponseBody,
+  updateCollectionParamsSchema as paramsSchema,
+  updateCollectionRequestSchema as bodySchema,
 } from "@edu-platform/common";
 import { IUpdateCollectionMetadataUseCase } from "@core/application/use-cases";
+import {
+  Middlewares,
+  Patch,
+  ValidateParameters,
+} from "@edu-platform/common/platform";
 
 type Request = TypedRequest<
   UpdateCollectionMetadataParams,
@@ -19,25 +23,32 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<UpdateCollectionMetadataResponseBody>;
 
-export class UpdateCollectionMetadataController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.PATCH;
-  path: string = "core/collections/:id";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  updateCollectionMetadataUseCase: IUpdateCollectionMetadataUseCase;
+}
 
-  constructor(
-    private updateCollectionMetadataUseCase: IUpdateCollectionMetadataUseCase
-  ) {}
+@Patch("collections/:id")
+@ValidateParameters({
+  paramsSchema,
+  bodySchema,
+})
+@Middlewares(["auth"])
+export class UpdateCollectionMetadataController {
+  private _updateCollectionMetadataUseCase: IUpdateCollectionMetadataUseCase;
+
+  constructor(deps: Deps) {
+    this._updateCollectionMetadataUseCase =
+      deps.updateCollectionMetadataUseCase;
+  }
 
   async execute(req: Request, res: Response) {
-    const collectionDto = parseToCollectionRequestDTO({
+    const collectionDto = {
       ...req.body,
       ...req.params,
-    });
+    };
     const { user } = req;
 
-    await this.updateCollectionMetadataUseCase.execute({
+    await this._updateCollectionMetadataUseCase.execute({
       user,
       collectionDto,
     });

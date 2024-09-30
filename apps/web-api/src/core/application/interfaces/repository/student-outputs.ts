@@ -5,6 +5,7 @@ export interface IStudentOutputsRepository extends IAbstractRepository {
   findById: (id: number) => Promise<StudentOutput | null>;
   findByUserAndVersion: (
     userId: string,
-    versionId: string
-  ) => /* Promise<StudentOutput | null> */ void;
+    activityId: string,
+    versionNumber: number
+  ) => Promise<StudentOutput | null>;
 }

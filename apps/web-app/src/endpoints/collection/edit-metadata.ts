@@ -1,9 +1,9 @@
-import { ServerError, ApiClient } from "@edu-platform/common/api";
+import { ServerError, CoreClient } from "@edu-platform/common/api";
 import { useBaseMutation, UseBaseMutationCallbacksType } from "../base";
 import { queryKeys } from "./query-key-factory";
 
-type Request = Parameters<ApiClient["updateCollectionMetadata"]>[0];
-type Return = Awaited<ReturnType<ApiClient["updateCollectionMetadata"]>>;
+type Request = Parameters<CoreClient["updateCollectionMetadata"]>[0];
+type Return = Awaited<ReturnType<CoreClient["updateCollectionMetadata"]>>;
 
 export const useUpdateCollectionMutation = (
   collectionId: any,

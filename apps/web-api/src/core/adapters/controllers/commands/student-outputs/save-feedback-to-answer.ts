@@ -1,48 +1,54 @@
 import {
-  HTTPController,
-  HttpMethod,
+  Middlewares,
+  Post,
   Request as TypedRequest,
   Response as TypedResponse,
-  parseNumberId,
+  ValidateParameters,
 } from "@edu-platform/common/platform";
 import {
-  CreateStudentOutputParams,
-  CreateStudentOutputRequestBody,
-  CreateStudentOutputResponseBody,
+  SaveFeedbackToAnswerParams,
+  SaveFeedbackToAnswerRequestBody,
+  SaveFeedbackToAnswerResponseBody,
+  saveFeedbackToAnswerParamsSchema as paramsSchema,
+  saveFeedbackToAnswerRequestSchema as bodySchema,
 } from "@edu-platform/common";
 import { ISaveFeedbackToAnswerUseCase } from "@core/application/use-cases";
 
 type Request = TypedRequest<
-  CreateStudentOutputParams,
+  SaveFeedbackToAnswerParams,
   {},
-  CreateStudentOutputRequestBody
+  SaveFeedbackToAnswerRequestBody
 >;
-type Response = TypedResponse<CreateStudentOutputResponseBody>;
+type Response = TypedResponse<SaveFeedbackToAnswerResponseBody>;
 
-export class SaveFeedbackToAnswerController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.POST;
-  path: string = "activities/:activityId/student-output/:id/feedback/publish";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  saveFeedbackToAnswerUseCase: ISaveFeedbackToAnswerUseCase;
+}
 
-  constructor(
-    private saveFeedbackToAnswerUseCase: ISaveFeedbackToAnswerUseCase
-  ) {}
+@Post("student-output/:studentOutputId/answers/:answerId/feedbacks")
+@ValidateParameters({
+  paramsSchema,
+  bodySchema,
+})
+@Middlewares(["auth"])
+export class SaveFeedbackToAnswerController {
+  private _saveFeedbackToAnswerUseCase: ISaveFeedbackToAnswerUseCase;
+
+  constructor(deps: Deps) {
+    this._saveFeedbackToAnswerUseCase = deps.saveFeedbackToAnswerUseCase;
+  }
 
   async execute(req: Request, res: Response) {
     const { user } = req;
+    const { studentOutputId, answerId } = req.params;
+    const { feedbackEmoji, feedbackText } = req.body;
 
-    const { activityId, versionId } = parseNumberId(req.params, [
-      "activityId",
-      "versionId",
-    ]);
-
-    await this.saveFeedbackToAnswerUseCase.execute({
+    await this._saveFeedbackToAnswerUseCase.execute({
       user,
-      answer: {} as any,
-      // activityId,
-      // versionId,
+      studentOutputId,
+      answerId,
+      feedbackEmoji,
+      feedbackText,
     });
 
     res.status(200).json();

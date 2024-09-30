@@ -5,7 +5,7 @@ import { Spinner } from "../spinner";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@infrastructure";
 import { twMerge } from "tailwind-merge";
-import Link from "next/link";
+import NextLink from "next/link";
 
 export const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
@@ -105,18 +105,24 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-interface ButtonLinkProps extends ButtonProps {
-  href: string;
+interface ButtonLinkProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
+    VariantProps<typeof buttonVariants> {
+  disabled?: boolean;
   active?: boolean;
+  withIcon?: keyof typeof Icons;
+  href: string;
 }
-export const ButtonLink = ({
+export const Link = ({
   href,
-  children,
   className,
   withIcon,
   variant,
   size,
   active,
+  disabled,
+  children,
+  ...rest
 }: ButtonLinkProps) => {
   const Icon = withIcon && Icons[withIcon];
 
@@ -125,8 +131,9 @@ export const ButtonLink = ({
     ? `${variant || "link"}Active`
     : variantClass;
 
-  return (
-    <Link
+  return disabled ? (
+    <Button
+      disabled={true}
       className={cn(
         buttonVariants({
           variant: variantClassWithActive as any,
@@ -135,7 +142,6 @@ export const ButtonLink = ({
         }),
         className
       )}
-      href={href}
     >
       {withIcon ? (
         <>
@@ -145,6 +151,28 @@ export const ButtonLink = ({
       ) : (
         children
       )}
-    </Link>
+    </Button>
+  ) : (
+    <NextLink
+      className={cn(
+        buttonVariants({
+          variant: variantClassWithActive as any,
+          className,
+          size,
+        }),
+        className
+      )}
+      href={href}
+      {...rest}
+    >
+      {withIcon ? (
+        <>
+          {Icon && <Icon className="mx-2" size={20} />}
+          {children}
+        </>
+      ) : (
+        children
+      )}
+    </NextLink>
   );
 };

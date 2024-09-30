@@ -19,7 +19,7 @@ export const ProfileDropDown = ({
   return (
     <div ref={addClickOutsideRef} className="w-full flex flex-row justify-end">
       <Dropdown className="w-[200px] flex flex-col" open={isDropdownOpen}>
-        <BaseNavbarButton path="/auth/my-profile" label="Minha conta" />
+        <BaseNavbarButton path="/auth/my-profile">Minha conta</BaseNavbarButton>
         <SignOutButton signOut={handleSignOut} />
       </Dropdown>
     </div>

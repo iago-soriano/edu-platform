@@ -13,20 +13,19 @@ export const RadioButton = ({
   subText,
   value,
   onChange, //   ...rest
+  name,
 }: IRadioButtonProps) => {
-  //   console.log(onChange);
   return (
     <label
       className={twMerge(
-        "flex flex-row items-center p-1 rounded hover:bg-muted",
-        selected ? "" : ""
+        "flex flex-row items-center p-1 rounded hover:bg-muted"
       )}
     >
       <input
         onChange={onChange}
         className="mx-2"
         type="radio"
-        value={value}
+        defaultValue={value}
         checked={selected}
       />
       <span className="p-2">{text}</span>
@@ -36,7 +35,7 @@ export const RadioButton = ({
 };
 
 interface IRadioGroupProps {
-  onChange: any;
+  onChange?: any;
   value: any;
   options: {
     text: string;
@@ -46,13 +45,12 @@ interface IRadioGroupProps {
 }
 
 export const RadioGroup = ({ onChange, value, options }: IRadioGroupProps) => {
-  // console.log(value);
   return options.map((opt, i) => {
     return (
       <RadioButton
         key={i}
         {...opt}
-        selected={opt.value?.toString() === value.toString()}
+        selected={opt.value?.toString() === value?.toString()}
         onChange={onChange}
       />
     );

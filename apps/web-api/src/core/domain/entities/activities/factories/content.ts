@@ -1,5 +1,5 @@
 import {
-  ContentRequestDTO,
+  SaveContentRequestBody,
   SilentInvalidStateError,
 } from "@edu-platform/common";
 import {
@@ -13,7 +13,7 @@ import { ActivitElementDescription } from "../elements/value-objects/description
 import { ActivityVersion } from "../version";
 
 export class ContentFactory {
-  static fromRequestDto(dto: ContentRequestDTO, version: ActivityVersion) {
+  static fromRequestDto(dto: SaveContentRequestBody, version: ActivityVersion) {
     let newContent = null;
 
     switch (dto.type) {

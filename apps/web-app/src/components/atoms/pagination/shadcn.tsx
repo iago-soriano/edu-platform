@@ -2,6 +2,7 @@ import * as React from "react";
 import { buttonVariants } from "../buttons";
 import { Icons } from "../icons";
 import { cn } from "@infrastructure";
+import { Link } from "@components";
 
 const PaginationRoot = ({
   className,
@@ -44,24 +45,25 @@ PaginationItem.displayName = "PaginationItem";
 
 type PaginationLinkProps = {
   isActive?: boolean;
-} & React.ComponentProps<"button">;
+  href: string;
+  disabled?: boolean;
+} & React.ComponentProps<"a">;
 
 const PaginationLink = ({
-  className,
+  children,
   isActive,
-  ...props
+  href,
+  disabled,
 }: PaginationLinkProps) => (
-  <button
+  <Link
+    href={href}
     aria-current={isActive ? "page" : undefined}
-    className={cn(
-      buttonVariants({
-        variant: isActive ? "outline" : "ghost",
-        size: "default",
-      }),
-      className
-    )}
-    {...props}
-  />
+    variant={isActive ? "outline" : "ghost"}
+    size="default"
+    disabled={disabled}
+  >
+    {children}
+  </Link>
 );
 PaginationLink.displayName = "PaginationLink";
 
@@ -78,6 +80,7 @@ const PaginationPrevious = ({
     <span>Previous</span>
   </PaginationLink>
 );
+
 PaginationPrevious.displayName = "PaginationPrevious";
 
 const PaginationNext = ({

@@ -1,14 +1,19 @@
-export type CollectionResponseDTO = {
+import { z } from "zod";
+
+const paramsSchema = z.object({
+  collectionId: z.coerce.number(),
+});
+
+type Params = z.infer<typeof paramsSchema>;
+
+type ResponseBody = {
+  id: number;
   name: string;
   description: string;
   isPrivate: boolean;
   notifyOwnerOnStudentOutput: boolean;
+  activitiesCount: number;
 };
 
-type Params = { collectionId: number };
-type ResponseBody = CollectionResponseDTO;
-
-export type {
-  ResponseBody as GetCollectionResponseBody,
-  Params as GetCollectionParams,
-};
+export type { ResponseBody, Params };
+export { paramsSchema };

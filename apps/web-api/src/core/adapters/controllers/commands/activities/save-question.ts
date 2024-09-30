@@ -1,36 +1,48 @@
 import {
-  HTTPController,
-  HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@edu-platform/common/platform/interfaces";
 import {
-  parseToQuestionRequestDTO,
   SaveQuestionParams,
   SaveQuestionResponseBody,
   SaveQuestionRequestBody,
+  saveQuestionParamsSchema as paramsSchema,
+  saveQuestionRequestSchema as bodySchema,
 } from "@edu-platform/common";
 import { ISaveQuestionUseCase } from "@core/application/use-cases";
+import {
+  Middlewares,
+  Post,
+  ValidateParameters,
+} from "@edu-platform/common/platform";
 
 type Request = TypedRequest<SaveQuestionParams, {}, SaveQuestionRequestBody>;
 type Response = TypedResponse<SaveQuestionResponseBody>;
 
-export class SaveQuestionController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.POST;
-  path: string = "activities/:activityId/versions/draft/questions";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  saveQuestionUseCase: ISaveQuestionUseCase;
+}
 
-  constructor(private saveQuestionUseCase: ISaveQuestionUseCase) {}
+@Post("activities/:activityId/versions/draft/questions")
+@ValidateParameters({
+  paramsSchema,
+  bodySchema,
+})
+@Middlewares(["auth"])
+export class SaveQuestionController {
+  private _saveQuestionUseCase: ISaveQuestionUseCase;
+
+  constructor(deps: Deps) {
+    this._saveQuestionUseCase = deps.saveQuestionUseCase;
+  }
 
   async execute(req: Request, res: Response) {
-    const questionDto = parseToQuestionRequestDTO(req.body);
+    const questionDto = req.body;
 
     const { activityId } = req.params;
     const { user } = req;
 
-    await this.saveQuestionUseCase.execute({
+    await this._saveQuestionUseCase.execute({
       questionDto,
       user,
       activityId,

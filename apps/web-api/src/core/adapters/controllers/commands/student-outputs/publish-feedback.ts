@@ -1,46 +1,49 @@
 import {
-  HTTPController,
-  HttpMethod,
+  Middlewares,
+  Put,
   Request as TypedRequest,
   Response as TypedResponse,
-  parseNumberId,
+  ValidateParameters,
 } from "@edu-platform/common/platform";
 import {
-  CreateStudentOutputParams,
-  CreateStudentOutputRequestBody,
-  CreateStudentOutputResponseBody,
+  publishFeedbackParamsSchema as paramsSchema,
+  PublishFeedbackRequestBody,
+  PublishFeedbackResponseBody,
+  PublishFeedbackParams,
 } from "@edu-platform/common";
+import { IPublishFeedbackUseCase } from "@core/application/use-cases";
 
 type Request = TypedRequest<
-  CreateStudentOutputParams,
+  PublishFeedbackParams,
   {},
-  CreateStudentOutputRequestBody
+  PublishFeedbackRequestBody
 >;
-type Response = TypedResponse<CreateStudentOutputResponseBody>;
+type Response = TypedResponse<PublishFeedbackResponseBody>;
 
-export class PublishStudentOutputFeedbackController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.PUT;
-  path: string = "activities/:activityId/student-output/:id/feedback/publish";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  publishFeedbackUseCase: IPublishFeedbackUseCase;
+}
 
-  constructor() // private publishStudentOutputFeedbackUseCase: IPublishStudentOutputFeedbackUseCase
-  {}
+@Put("student-output/:studentOutputId/feedback/publish")
+@ValidateParameters({
+  paramsSchema,
+})
+@Middlewares(["auth"])
+export class PublishFeedbackController {
+  private _publishFeedbackUseCase: IPublishFeedbackUseCase;
+
+  constructor(deps: Deps) {
+    this._publishFeedbackUseCase = deps.publishFeedbackUseCase;
+  }
 
   async execute(req: Request, res: Response) {
     const { user } = req;
+    const { studentOutputId } = req.params;
 
-    const { activityId, versionId } = parseNumberId(req.params, [
-      "activityId",
-      "versionId",
-    ]);
-
-    // await this.publishStudentOutputFeedbackUseCase.execute({
-    //   user,
-    //   activityId,
-    //   versionId,
-    // });
+    await this._publishFeedbackUseCase.execute({
+      user,
+      studentOutputId,
+    });
 
     res.status(200).json();
   }

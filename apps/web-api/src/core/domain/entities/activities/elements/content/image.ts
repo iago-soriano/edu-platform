@@ -1,7 +1,7 @@
 import { Content, ContentTypes } from "./base";
 import {
   FileType,
-  ContentRequestDTO,
+  SaveContentRequestBody,
   SilentInvalidStateError,
 } from "@edu-platform/common";
 import { IDomainServiceRegistry } from "../../../../services";
@@ -24,12 +24,12 @@ export class ImageContent extends Content {
 
   _validatePayload() {}
 
-  _mergePayload(newContent: ContentRequestDTO) {
+  _mergePayload(newContent: SaveContentRequestBody) {
     if (newContent.payload?.image?.file !== undefined)
       this.file = newContent.payload?.image?.file;
   }
   public async update(
-    contentDto: ContentRequestDTO,
+    contentDto: SaveContentRequestBody,
     activityId?: string,
     versionId?: string
   ) {

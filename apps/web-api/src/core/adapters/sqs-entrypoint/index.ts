@@ -3,8 +3,9 @@ import {
   IFeedbackPublishedUseCase,
   IStudentOutputPublishedUseCase,
   IUserCreatedUseCase,
-} from "core/application/use-cases/event-handlers";
+} from "core/application/event-handlers";
 import { DomainEvent } from "@edu-platform/common/platform/interfaces";
+import { SQSHandler, SQSEvent } from "aws-lambda";
 
 export class SqsHandler {
   constructor(
@@ -13,14 +14,25 @@ export class SqsHandler {
     private studentOutputPublishedUseCase: IStudentOutputPublishedUseCase,
     private userCreatedUseCase: IUserCreatedUseCase
   ) {}
-  async execute(evnt: DomainEvent<any>) {
-    switch (evnt.eventType) {
-      case "UserCreated":
-        await this.userCreatedUseCase.execute(evnt);
-        break;
+  async execute(evnt: SQSEvent) {
+    for (const record of evnt.Records) {
+      const evntType = record.messageAttributes["eventType"].stringValue;
+      const payload = JSON.parse(record.body);
 
-      default:
-        break;
+      console.log("Event:", { evntType, payload });
+
+      switch (evntType) {
+        case "UserCreated":
+          await this.userCreatedUseCase.execute({
+            id: payload["id"],
+            email: payload["email"],
+            name: payload["name"],
+          });
+          break;
+
+        default:
+          break;
+      }
     }
   }
 }

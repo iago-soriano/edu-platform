@@ -1,15 +1,13 @@
 import { paginatedParamsSchema, PaginatedResponse } from "../../common";
 import { z } from "zod";
 
-const querySchema = z
+const listUsersInCollectionQuerySchema = z
   .object({
     collectionId: z.coerce.number().positive(),
   })
   .merge(paginatedParamsSchema);
 
-const parseListParticipantsOfCollectionQuery = querySchema.parse;
-
-type Query = z.infer<typeof querySchema>;
+type Query = z.infer<typeof listUsersInCollectionQuerySchema>;
 type ResponseBody = PaginatedResponse<{
   id: number;
   name: string;
@@ -20,4 +18,4 @@ export type {
   ResponseBody as ListParticipantsOfCollectionResponseBody,
   Query as ListParticipantsOfCollectionQuery,
 };
-export { parseListParticipantsOfCollectionQuery };
+export { listUsersInCollectionQuerySchema };

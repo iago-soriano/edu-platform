@@ -1,10 +1,10 @@
-import { ContentRequestDTO } from "@edu-platform/common/api";
+import { SaveContentRequestBody } from "@edu-platform/common/api";
 import { IUseCase } from "@edu-platform/common/platform";
 import { UserSelectDTO, IActivitiesRepository } from "../../interfaces";
 import { SilentInvalidStateError } from "@edu-platform/common";
 
 type InputParams = {
-  contentDto: ContentRequestDTO;
+  contentDto: SaveContentRequestBody;
   user: UserSelectDTO;
   activityId: string;
 };

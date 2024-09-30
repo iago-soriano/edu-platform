@@ -6,7 +6,7 @@ import {
   Tooltip,
   Icons,
   errorToast,
-  ButtonLink,
+  Link,
   Tag,
 } from "@components";
 import { useState, useEffect } from "react";
@@ -89,13 +89,13 @@ export const ActivityHeaderInput = ({
 
   return (
     <>
-      <ButtonLink
+      <Link
         href={Router.collectionActivities(versionQuery.data?.collectionId)}
         className="mx-1 flex flex-row w-fit"
       >
         <Icons.CARET_LEFT size={19} />
         {versionQuery.data?.collectionName}
-      </ButtonLink>
+      </Link>
       <div
         id="activity-header-input"
         className="grid sm:grid-cols-10 grid-cols-16 bg-surface3 p-2"

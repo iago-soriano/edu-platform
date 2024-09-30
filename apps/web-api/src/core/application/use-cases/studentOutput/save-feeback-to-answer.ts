@@ -1,14 +1,14 @@
 import { Question, StudentAnswer, OutputStatus } from "@core/domain/entities";
 import { IUseCase } from "@edu-platform/common/platform";
-import {
-  UserSelectDTO,
-  IStudentOutputsRepository,
-  IActivitiesRepository,
-} from "../../interfaces";
+import { UserSelectDTO, IStudentOutputsRepository } from "../../interfaces";
+import { SilentInvalidStateError } from "@edu-platform/common";
 
 type InputParams = {
   user: UserSelectDTO;
-  answer: StudentAnswer;
+  studentOutputId: number;
+  answerId: number;
+  feedbackEmoji?: string;
+  feedbackText?: string;
 };
 
 type Return = void;
@@ -16,31 +16,22 @@ type Return = void;
 export type ISaveFeedbackToAnswerUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements ISaveFeedbackToAnswerUseCase {
-  constructor(
-    private studentOutputsRepository: IStudentOutputsRepository,
-    private activitiesRepository: IActivitiesRepository
-  ) {}
+  constructor(private studentOutputsRepository: IStudentOutputsRepository) {}
 
-  async execute({ user, answer }: InputParams) {
-    // const output = await this.studentOutputsRepository.getById(
-    //   answer.studentOutput.id!
-    // );
-    // if (!output) throw new OutputNotFound();
-    // if (output.status !== OutputStatus.Draft) {
-    //   throw new OutputIsNotDraft();
-    // }
-    // if (output.user.id !== user.id) {
-    //   throw new StudentIsNotOutputAuthor();
-    // }
-    // const question = await this.activitiesRepository.Questions.findById(
-    //   answer.question.id!
-    // );
-    // if (!question) throw new ActivityQuestionNotFound();
-    // await this.studentAnswersRepository.insert({
-    //   question,
-    //   answer: answer.answer,
-    //   studentOutput: output,
-    // });
+  async execute({
+    user,
+    studentOutputId,
+    answerId,
+    feedbackEmoji,
+    feedbackText,
+  }: InputParams) {
+    const output =
+      await this.studentOutputsRepository.findById(studentOutputId);
+    if (!output) throw new SilentInvalidStateError("Student Output not found");
+
+    output.FeedbackToAnswer(user.id, answerId, feedbackEmoji, feedbackText);
+
+    await this.studentOutputsRepository.save(output);
   }
 }
 export default UseCase;

@@ -6,7 +6,7 @@ import {
 import Client from "./client";
 import posthog from "posthog-js";
 import { SSRAxios } from "@infrastructure";
-import { ApiClient } from "@edu-platform/common/api";
+import { CoreClient } from "@edu-platform/common/api";
 
 const Page = async ({ params: { activityId } }) => {
   const queryClient = new QueryClient();
@@ -16,7 +16,7 @@ const Page = async ({ params: { activityId } }) => {
   await queryClient.prefetchQuery({
     queryKey: ["versions/draft", { activityId }],
     queryFn: () =>
-      new ApiClient(SSRAxios).getDraft({
+      new CoreClient(SSRAxios).getDraft({
         activityId,
       }),
   });

@@ -1,14 +1,16 @@
 import {
-  HTTPController,
-  HttpMethod,
+  Middlewares,
+  Post,
   Request as TypedRequest,
   Response as TypedResponse,
-  parseNumberId,
+  ValidateParameters,
 } from "@edu-platform/common/platform";
 import {
   InsertUserInCollectionParams,
   InsertUserInCollectionResponseBody,
   InsertUserInCollectionRequestBody,
+  insertStudentParamsSchema as paramsSchema,
+  insertStudentRequestBodySchema as bodySchema,
 } from "@edu-platform/common";
 import { IInsertUserInCollectionUseCase } from "@core/application/use-cases";
 
@@ -19,23 +21,29 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<InsertUserInCollectionResponseBody>;
 
-export class InsertUserInCollectionController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.POST;
-  path: string = "core/collections/:collectionId/participation";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  insertUserInCollectionUseCase: IInsertUserInCollectionUseCase;
+}
 
-  constructor(
-    private insertUserInCollectionUseCase: IInsertUserInCollectionUseCase
-  ) {}
+@Post("collections/:collectionId/participation")
+@ValidateParameters({
+  paramsSchema,
+  bodySchema,
+})
+@Middlewares(["auth"])
+export class InsertUserInCollectionController {
+  private _insertUserInCollectionUseCase: IInsertUserInCollectionUseCase;
+
+  constructor(deps: Deps) {
+    this._insertUserInCollectionUseCase = deps.insertUserInCollectionUseCase;
+  }
 
   async execute(req: Request, res: Response) {
-    const { studentEmail } = req.body; // TODO: parseDTO thingy
-    const { collectionId } = parseNumberId(req.params, ["collectionId"]);
+    const { studentEmail } = req.body;
+    const { collectionId } = req.params;
     const { user } = req;
 
-    await this.insertUserInCollectionUseCase.execute({
+    await this._insertUserInCollectionUseCase.execute({
       user,
       collectionId,
       studentEmail,

@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { ServerError, ApiClient } from "@edu-platform/common/api";
+import { ServerError, CoreClient } from "@edu-platform/common/api";
 import { useAxiosAuth } from "@infrastructure";
 
-type Params = Parameters<ApiClient["getPublished"]>[0];
-type Return = Awaited<ReturnType<ApiClient["getPublished"]>>;
+type Params = Parameters<CoreClient["getPublished"]>[0];
+type Return = Awaited<ReturnType<CoreClient["getPublished"]>>;
 
 export const useGetActivityPublishedQuery = ({ activityId }: Params) => {
   const axios = useAxiosAuth();
-  const client = new ApiClient(axios);
+  const client = new CoreClient(axios);
 
   return useQuery<Return, ServerError>({
     queryKey: ["versions/published", { activityId }],

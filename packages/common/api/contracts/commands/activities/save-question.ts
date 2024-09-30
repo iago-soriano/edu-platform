@@ -1,11 +1,17 @@
 import { z } from "zod";
 
+const saveQuestionParamsSchema = z.object({
+  activityId: z.string().uuid(),
+});
+
+type Params = z.infer<typeof saveQuestionParamsSchema>;
+
 enum QuestionTypes {
   MultipleChoice = "MultipleChoice",
   Text = "Text",
 }
 
-const questionRequestSchema = z.object({
+const saveQuestionRequestSchema = z.object({
   id: z.number().optional(),
 
   type: z.nativeEnum(QuestionTypes),
@@ -24,16 +30,16 @@ const questionRequestSchema = z.object({
     .optional(),
 });
 
-export const parseToQuestionRequestDTO = questionRequestSchema.parse;
-export type QuestionRequestDTO = z.infer<typeof questionRequestSchema>;
+type RequestBody = z.infer<typeof saveQuestionRequestSchema>;
 
-type ResponseBody = {
+interface ResponseBody {
   questionId?: number;
-};
-type Params = { activityId: string };
+}
 
 export type {
-  QuestionRequestDTO as SaveQuestionRequestBody,
+  RequestBody as SaveQuestionRequestBody,
   ResponseBody as SaveQuestionResponseBody,
   Params as SaveQuestionParams,
 };
+
+export { saveQuestionParamsSchema, saveQuestionRequestSchema };

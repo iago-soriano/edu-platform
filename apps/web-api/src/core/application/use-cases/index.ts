@@ -31,9 +31,15 @@ import CreateStudentOutputUseCase, {
 import SaveFeedbackToAnswerUseCase, {
   ISaveFeedbackToAnswerUseCase,
 } from "./studentOutput/save-feeback-to-answer";
-import UpdateStudentOutputUseCase, {
-  IUpdateStudentOutputUseCase,
-} from "./studentOutput/publish";
+import PublishStudentOutputUseCase, {
+  IPublishStudentOutputUseCase,
+} from "./studentOutput/publish-output";
+import PublishFeedbackUseCase, {
+  IPublishFeedbackUseCase,
+} from "./studentOutput/publish-feedback";
+import SaveAnswerUseCase, {
+  ISaveAnswerUseCase,
+} from "./studentOutput/save-answer";
 import InsertFollowerInCollectionUseCase, {
   IInsertFollowerInCollectionUseCase,
 } from "./collection/follow-collection";
@@ -55,7 +61,7 @@ import CreateNewCollectionUseCase, {
 import UpdateCollectionMetadataUseCase, {
   IUpdateCollectionMetadataUseCase,
 } from "./collection/update-collection-metadata";
-import { UserCreatedUseCase, IUserCreatedUseCase } from "./event-handlers";
+import { UserCreatedUseCase, IUserCreatedUseCase } from "../event-handlers";
 
 export {
   UserCreatedUseCase,
@@ -82,8 +88,8 @@ export {
   ICreateStudentOutputUseCase,
   SaveFeedbackToAnswerUseCase,
   ISaveFeedbackToAnswerUseCase,
-  UpdateStudentOutputUseCase,
-  IUpdateStudentOutputUseCase,
+  PublishStudentOutputUseCase,
+  IPublishStudentOutputUseCase,
   InsertFollowerInCollectionUseCase,
   IInsertFollowerInCollectionUseCase,
   UnfollowCollectionUseCase,
@@ -98,4 +104,8 @@ export {
   ICreateNewCollectionUseCase,
   UpdateCollectionMetadataUseCase,
   IUpdateCollectionMetadataUseCase,
+  PublishFeedbackUseCase,
+  IPublishFeedbackUseCase,
+  SaveAnswerUseCase,
+  ISaveAnswerUseCase,
 };

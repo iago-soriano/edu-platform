@@ -17,15 +17,16 @@ import {
 } from "@components";
 import { twMerge } from "tailwind-merge";
 export * from "./config";
+import { usePathname } from "next/navigation";
 
 interface PaginationProps {
   totalRowCount: number;
   pageSize: number;
   currentPage: number;
-  setCurrentPage: (page: number) => unknown;
+  setCurrentPage?: (page: number) => unknown;
 }
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData> {
   columns: any[]; // TODO: fix this type when this issue is resolved https://github.com/TanStack/table/issues/5423
   data: TData[];
   pagination: PaginationProps;
@@ -35,9 +36,9 @@ interface DataTableProps<TData, TValue> {
 export const DataTable = <TData, TValue>({
   data,
   columns,
-  pagination: { totalRowCount, pageSize, currentPage, setCurrentPage },
+  pagination: { totalRowCount, pageSize, currentPage },
   className,
-}: DataTableProps<TData, TValue>) => {
+}: DataTableProps<TData>) => {
   const table = useReactTable({
     data,
     columns,
@@ -49,6 +50,7 @@ export const DataTable = <TData, TValue>({
     },
     columnResizeMode: "onChange",
   });
+  const pathName = usePathname();
 
   return (
     <div
@@ -107,7 +109,7 @@ export const DataTable = <TData, TValue>({
       </Table>
       <Pagination
         currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        path={pathName}
         totalRowCount={totalRowCount}
         pageSize={pageSize}
       />

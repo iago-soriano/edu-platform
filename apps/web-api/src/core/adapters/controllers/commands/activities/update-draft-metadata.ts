@@ -1,6 +1,4 @@
 import {
-  HTTPController,
-  HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@edu-platform/common/platform/interfaces";
@@ -8,9 +6,15 @@ import {
   UpdateVersionMetadataParams,
   UpdateVersionMetadataRequestBody,
   UpdateVersionMetadataResponseBody,
+  updateDraftMetadataParamsSchema as paramsSchema,
+  updateDraftMetadataRequestSchema as bodySchema,
 } from "@edu-platform/common";
 import { IUpdateActivityMetadataUseCase } from "@core/application/use-cases";
-import { parseToVersionRequestDto } from "@edu-platform/common";
+import {
+  Middlewares,
+  Patch,
+  ValidateParameters,
+} from "@edu-platform/common/platform";
 
 type Request = TypedRequest<
   UpdateVersionMetadataParams,
@@ -19,24 +23,30 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<UpdateVersionMetadataResponseBody>;
 
-export class UpdateActivityMetadataController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.PATCH;
-  path = "activities/:activityId/versions/draft/metadata";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  updateActivityMetadataUseCase: IUpdateActivityMetadataUseCase;
+}
 
-  constructor(
-    private updateActivityMetadataUseCase: IUpdateActivityMetadataUseCase
-  ) {}
+@Patch("activities/:activityId/versions/draft/metadata")
+@ValidateParameters({
+  paramsSchema,
+  bodySchema,
+})
+@Middlewares(["auth"])
+export class UpdateActivityMetadataController {
+  private _updateActivityMetadataUseCase: IUpdateActivityMetadataUseCase;
+
+  constructor(deps: Deps) {
+    this._updateActivityMetadataUseCase = deps.updateActivityMetadataUseCase;
+  }
 
   async execute(req: Request, res: Response) {
-    const newValues = parseToVersionRequestDto(req.body);
+    const newValues = req.body;
 
     const { activityId } = req.params;
     const { user } = req;
 
-    await this.updateActivityMetadataUseCase.execute({
+    await this._updateActivityMetadataUseCase.execute({
       user,
       activityId,
       newValues,

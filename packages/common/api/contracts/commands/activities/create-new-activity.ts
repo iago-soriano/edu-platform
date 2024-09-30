@@ -1,18 +1,19 @@
 import { z } from "zod";
 
+type Params = void;
+
 const createNewActivityRequestSchema = z.object({
   collectionId: z.coerce.number().positive(),
 });
 type RequestBody = z.infer<typeof createNewActivityRequestSchema>;
 
-type ResponseBody = {
+interface ResponseBody {
   activityId: string;
-};
-type Params = void;
+}
 
 export type {
+  Params as CreateNewActivityParams,
   RequestBody as CreateNewActivityRequestBody,
   ResponseBody as CreateNewActivityResponseBody,
-  Params as CreateNewActivityParams,
 };
-export { createNewActivityRequestSchema };
+export { createNewActivityRequestSchema }; // o que vai ser passado pro decorator de Validate Parameters

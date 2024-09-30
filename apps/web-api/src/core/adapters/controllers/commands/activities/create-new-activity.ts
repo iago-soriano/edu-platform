@@ -8,7 +8,7 @@ import {
   Middlewares,
 } from "@edu-platform/common/platform/http-server/decorators";
 import {
-  createNewActivityRrequestSchema,
+  createNewActivityRequestSchema as bodySchema,
   CreateNewActivityRequestBody,
   CreateNewActivityResponseBody,
 } from "@edu-platform/common/api";
@@ -22,7 +22,7 @@ interface Deps {
 }
 
 @Post("activities")
-@ValidateParameters({ bodySchema: createNewActivityRrequestSchema })
+@ValidateParameters({ bodySchema })
 @Middlewares(["auth"])
 export class CreateNewActivityController {
   private _createNewActivityUseCase: ICreateNewActivityUseCase;

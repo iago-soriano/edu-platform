@@ -1,11 +1,18 @@
+import { z } from "zod";
+
+const updateNotificationParamsSchema = z.object({
+  notificationId: z.coerce.number(),
+});
+
+type Params = z.infer<typeof updateNotificationParamsSchema>;
+
 type RequestBody = {};
-type ResponseBody = {};
-type Params = {
-  notificationId: string;
-};
+interface ResponseBody {}
 
 export type {
   RequestBody as UpdateNotificationRequestBody,
   ResponseBody as UpdateNotificationResponseBody,
   Params as UpdateNotificationParams,
 };
+
+export { updateNotificationParamsSchema };

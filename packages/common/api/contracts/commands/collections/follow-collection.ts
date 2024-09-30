@@ -1,9 +1,18 @@
+import { z } from "zod";
+
+const followCollectionParamsSchema = z.object({
+  collectionId: z.coerce.number(),
+});
+
+type Params = z.infer<typeof followCollectionParamsSchema>;
+
 type RequestBody = {};
-type ResponseBody = {};
-type Params = { collectionId: number };
+interface ResponseBody {}
 
 export type {
   RequestBody as FollowCollectionRequestBody,
   ResponseBody as FollowCollectionResponseBody,
   Params as FollowCollectionParams,
 };
+
+export { followCollectionParamsSchema };

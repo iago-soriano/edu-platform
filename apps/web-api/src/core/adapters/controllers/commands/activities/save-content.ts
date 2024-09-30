@@ -1,31 +1,43 @@
 import {
-  HTTPController,
-  HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@edu-platform/common/platform/interfaces";
 import {
-  parseToContentRequestDTO,
   SaveContentParams,
+  saveContentParamsSchema as paramsSchema,
   SaveContentRequestBody,
+  saveContentRequestSchema as bodySchema,
   SaveContentResponseBody,
 } from "@edu-platform/common";
 import { ISaveContentUseCase } from "@core/application/use-cases";
+import {
+  Middlewares,
+  Post,
+  ValidateParameters,
+} from "@edu-platform/common/platform";
 
 type Request = TypedRequest<SaveContentParams, {}, SaveContentRequestBody>;
 type Response = TypedResponse<SaveContentResponseBody>;
 
-export class SaveContentController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.POST;
-  path: string = "activities/:activityId/versions/draft/contents";
-  middlewares: string[] = ["auth", "file"];
+interface Deps {
+  saveContentUseCase: ISaveContentUseCase;
+}
 
-  constructor(private saveContentUseCase: ISaveContentUseCase) {}
+@Post("activities/:activityId/versions/draft/contents")
+@ValidateParameters({
+  paramsSchema,
+  bodySchema,
+})
+@Middlewares(["auth"])
+export class SaveContentController {
+  private _saveContentUseCase: ISaveContentUseCase;
+
+  constructor(deps: Deps) {
+    this._saveContentUseCase = deps.saveContentUseCase;
+  }
 
   async execute(req: Request, res: Response) {
-    const contentDto = parseToContentRequestDTO(req.body);
+    const contentDto = req.body;
 
     if (req.files?.image?.[0]) {
       if (!contentDto.payload) contentDto.payload = { image: undefined };
@@ -35,7 +47,7 @@ export class SaveContentController
     const { activityId } = req.params;
     const { user } = req;
 
-    await this.saveContentUseCase.execute({
+    await this._saveContentUseCase.execute({
       contentDto,
       user,
       activityId,

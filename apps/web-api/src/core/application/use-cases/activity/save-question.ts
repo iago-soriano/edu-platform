@@ -1,12 +1,12 @@
 import {
-  QuestionRequestDTO,
+  SaveQuestionRequestBody,
   SilentInvalidStateError,
 } from "@edu-platform/common";
 import { IUseCase } from "@edu-platform/common/platform";
 import { UserSelectDTO, IActivitiesRepository } from "../../interfaces";
 
 type InputParams = {
-  questionDto: QuestionRequestDTO;
+  questionDto: SaveQuestionRequestBody;
   user: UserSelectDTO;
   activityId: string;
 };

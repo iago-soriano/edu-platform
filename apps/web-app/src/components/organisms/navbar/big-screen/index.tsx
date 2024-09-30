@@ -69,7 +69,7 @@ export const BigScreenNavbar = ({ user, isAuthenticated, signOut }) => {
               <BaseNavbarButton path="/home">Home</BaseNavbarButton>
             </ButtonContainer>
             <ButtonContainer>
-              <BaseNavbarButton path={Router.teacherHome}>
+              <BaseNavbarButton path={Router.teacherPrivateCollections}>
                 Teacher Area
               </BaseNavbarButton>
             </ButtonContainer>

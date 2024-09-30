@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  // outputFileTracing: false,
+  experimental: {
+    staleTimes: {
+      dynamic: 3600,
+    },
+  },
   logging: {
     fetches: {
       fullUrl: true,

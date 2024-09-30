@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { errorToast } from "@components";
 
@@ -9,7 +10,8 @@ interface IForm extends React.ButtonHTMLAttributes<HTMLFormElement> {
     [key: string]: string;
   };
   children: any;
-  onSubmit: (args: any) => any;
+  onSubmit?: (args: any) => any;
+  action?: (args: any) => any;
   schema?: any;
   error?: any;
 }
@@ -19,6 +21,7 @@ export function Form({
   onSubmit,
   schema,
   error,
+  // action,
   ...rest
 }: IForm) {
   const defaults = defaultValues || {};
@@ -35,9 +38,12 @@ export function Form({
   return (
     <form
       {...rest}
-      onSubmit={handleSubmit(onSubmit, () =>
-        errorToast("Favor inserir valores válidos")
-      )}
+      onSubmit={
+        onSubmit &&
+        handleSubmit(onSubmit, () =>
+          errorToast("Favor inserir valores válidos")
+        )
+      }
     >
       {React.Children.map(children, (child) => {
         return child.props.name

@@ -20,19 +20,20 @@ export const registerServer = (
   modules: {
     container: awilix.AwilixContainer;
     pgClient: Client;
+    basePath: string;
   }[]
 ) => {
   let controllers: HTTPController<any, any>[] = [];
   let middlewares: any = { auth: undefined, file: undefined };
 
-  modules.forEach(({ container }) => {
+  modules.forEach(({ container, basePath }) => {
     controllers.push(
       ...getControllersByResgistrationName(container).map((controller) => {
         return {
           middlewares: controller.middlewares,
           method: controller.method,
           execute: controller.execute.bind(controller),
-          path: controller.path,
+          path: `${basePath}${controller.path}`,
           validationMiddleware: controller.validationMiddleware,
         };
       })

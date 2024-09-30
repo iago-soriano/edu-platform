@@ -1,6 +1,4 @@
 import {
-  HTTPController,
-  HttpMethod,
   Request as TypedRequest,
   Response as TypedResponse,
 } from "@edu-platform/common/platform/interfaces";
@@ -8,30 +6,48 @@ import {
   SaveAnswerParams,
   SaveAnswerRequestBody,
   SaveAnswerResponseBody,
+  saveAnswerParamsSchema as paramsSchema,
+  saveAnswerRequestSchema as bodySchema,
 } from "@edu-platform/common";
-// import { ISaveAnswerUseCase } from "@core/application/use-cases";
+import {
+  Middlewares,
+  Post,
+  ValidateParameters,
+} from "@edu-platform/common/platform";
+import { ISaveAnswerUseCase } from "@core/application/use-cases";
 
 type Request = TypedRequest<SaveAnswerParams, {}, SaveAnswerRequestBody>;
 type Response = TypedResponse<SaveAnswerResponseBody>;
 
-export class SaveAnswerController implements HTTPController<Request, Response> {
-  method = HttpMethod.POST;
-  path: string = "answer";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  saveAnswerUseCase: ISaveAnswerUseCase;
+}
 
-  constructor() // private saveAnswerUseCase: ISaveAnswerUseCase
-  {}
+@Post("student-output/:studentOutputId/answers")
+@ValidateParameters({
+  paramsSchema,
+  bodySchema,
+})
+@Middlewares(["auth"])
+export class SaveAnswerController {
+  private _saveAnswerUseCase: ISaveAnswerUseCase;
+
+  constructor(deps: Deps) {
+    this._saveAnswerUseCase = deps.saveAnswerUseCase;
+  }
 
   async execute(req: Request, res: Response) {
-    // const answerDto = parseToAnswerRequestDTO(req.body);
-    // const { user } = req;
+    const { studentOutputId } = req.params;
+    const { answer, questionId, answerId } = req.body;
+    const { user } = req;
 
-    // const answer = StudentAnswerDtoMapper.mapFromDto(answerDto);
-
-    // await this.saveAnswerUseCase.execute({
-    //   user,
-    //   answer,
-    // });
+    await this._saveAnswerUseCase.execute({
+      user,
+      studentOutputId,
+      questionId,
+      answer,
+      answerId,
+    });
 
     res.status(200).json();
   }

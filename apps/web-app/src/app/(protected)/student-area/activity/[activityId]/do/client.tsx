@@ -9,7 +9,10 @@ import {
 } from "@components";
 
 const Page = ({ params: { activityId } }) => {
-  const versionQuery = useGetActivityPublishedQuery({ activityId });
+  const versionQuery = useGetActivityPublishedQuery({
+    activityId,
+    versionNumber: 9,
+  });
   const [showAuxHeader, setShowAuxHeader] = useState(false);
   const [saveState, setSaveState] = useState("");
 

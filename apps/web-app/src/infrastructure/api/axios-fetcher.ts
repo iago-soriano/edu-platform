@@ -6,12 +6,6 @@ export class AxiosFetcher implements IHTTPClient {
 
   constructor(baseURL: string) {
     this._instance = axiosClient.create({ baseURL });
-    // instance.interceptors.request.use((config) => {
-    //   if(config.url?.includes('auth')) config.url = '';
-
-    //   return config
-    // });
-    // this._instance = instance;
   }
 
   private _successHandler(res) {
@@ -19,6 +13,7 @@ export class AxiosFetcher implements IHTTPClient {
   }
 
   private _errorHandler(e) {
+    // TODO: review if this is needed
     console.log("axios error", e.message);
     if (e.response) {
       throw {

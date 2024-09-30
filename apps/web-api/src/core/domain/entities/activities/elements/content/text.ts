@@ -1,7 +1,7 @@
 import { Content, ContentTypes } from "./base";
 import {
   DomainRules,
-  ContentRequestDTO,
+  SaveContentRequestBody,
   InvalidStateError,
 } from "@edu-platform/common";
 
@@ -20,7 +20,7 @@ export class TextContent extends Content {
     return !!this.text;
   }
 
-  _mergePayload(newValues: ContentRequestDTO) {
+  _mergePayload(newValues: SaveContentRequestBody) {
     if (newValues.payload?.text?.text !== undefined)
       this.text = newValues.payload.text.text;
   }

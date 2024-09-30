@@ -2,6 +2,7 @@ import * as awilix from "awilix";
 import {
   ActivityPublishedUseCase,
   FeedbackPublishedUseCase,
+  StudentOutputCreatedUseCase,
   StudentOutputPublishedUseCase,
   UserCreatedUseCase,
 } from "core/application/event-handlers";
@@ -19,6 +20,9 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       .classic(),
     studentOutputPublishedUseCase: awilix
       .asClass(StudentOutputPublishedUseCase)
+      .classic(),
+    studentOutputCreatedUseCase: awilix
+      .asClass(StudentOutputCreatedUseCase)
       .classic(),
     userCreatedUseCase: awilix.asClass(UserCreatedUseCase).classic(),
   });

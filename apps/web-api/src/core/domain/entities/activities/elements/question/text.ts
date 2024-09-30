@@ -1,7 +1,7 @@
 import { Question, QuestionTypes } from ".";
 import {
   DomainRules,
-  QuestionRequestDTO,
+  SaveQuestionRequestBody,
   InvalidStateError,
 } from "@edu-platform/common";
 
@@ -16,7 +16,7 @@ export class TextQuestion extends Question {
     super(QuestionTypes.Text);
   }
 
-  public update(questionDto: QuestionRequestDTO) {
+  public update(questionDto: SaveQuestionRequestBody) {
     this._merge(questionDto);
     if (questionDto.answer) this.answer = questionDto.answer;
     this.validateSelf();

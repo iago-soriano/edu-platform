@@ -8,8 +8,14 @@ import {
   CreateNewDraftVersionParams,
   CreateNewDraftVersionRequestBody,
   CreateNewDraftVersionResponseBody,
+  createNewDraftParamsSchema as paramsSchema,
 } from "@edu-platform/common";
 import { ICreateNewDraftVersionUseCase } from "@core/application/use-cases";
+import {
+  Middlewares,
+  Post,
+  ValidateParameters,
+} from "@edu-platform/common/platform";
 
 type Request = TypedRequest<
   CreateNewDraftVersionParams,
@@ -18,22 +24,24 @@ type Request = TypedRequest<
 >;
 type Response = TypedResponse<CreateNewDraftVersionResponseBody>;
 
-export class CreateNewDraftVersionController
-  implements HTTPController<Request, Response>
-{
-  method = HttpMethod.POST;
-  path: string = "activities/:activityId/versions/draft";
-  middlewares: string[] = ["auth"];
+interface Deps {
+  createNewDraftVersionUseCase: ICreateNewDraftVersionUseCase;
+}
 
-  constructor(
-    private createNewDraftVersionUseCase: ICreateNewDraftVersionUseCase
-  ) {}
+@Post("activities/:activityId/versions/draft")
+@ValidateParameters({ paramsSchema })
+@Middlewares(["auth"])
+export class CreateNewDraftVersionController {
+  private _createNewDraftVersionUseCase: ICreateNewDraftVersionUseCase;
+  constructor(deps: Deps) {
+    this._createNewDraftVersionUseCase = deps.createNewDraftVersionUseCase;
+  }
 
   async execute(req: Request, res: Response) {
     const { activityId } = req.params;
     const { user } = req;
 
-    await this.createNewDraftVersionUseCase.execute({
+    await this._createNewDraftVersionUseCase.execute({
       activityId,
       user,
     });

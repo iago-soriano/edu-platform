@@ -16,7 +16,7 @@ class UseCase implements ICreateNewCollectionUseCase {
   async execute({ user }: InputParams) {
     const newCollection = CollectionFactory.default(user);
 
-    return (await this.collectionsRepository.save(newCollection))[0];
+    return this.collectionsRepository.save(newCollection);
   }
 }
 export default UseCase;

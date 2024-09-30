@@ -9,7 +9,7 @@ import {
 
 export const Pagination = ({
   currentPage,
-  setCurrentPage,
+  path,
   totalRowCount,
   pageSize = 10,
 }) => {
@@ -21,7 +21,7 @@ export const Pagination = ({
         <PaginationItem>
           <PaginationPrevious
             disabled={currentPage === 0}
-            onClick={() => setCurrentPage(currentPage - 1)}
+            href={`${path}?page=${currentPage - 1}`}
           />
         </PaginationItem>
         {Array.from({ length: totalPages }, (_, index) => index + 1).map(
@@ -29,7 +29,7 @@ export const Pagination = ({
             <PaginationItem key={pageNumber}>
               <PaginationLink
                 isActive={currentPage + 1 === pageNumber}
-                onClick={() => setCurrentPage(pageNumber - 1)}
+                href={`${path}?page=${pageNumber - 1}`}
               >
                 {pageNumber}
               </PaginationLink>
@@ -39,7 +39,7 @@ export const Pagination = ({
         <PaginationItem>
           <PaginationNext
             disabled={Math.min(currentPage + 1, totalRowCount) === totalPages}
-            onClick={() => setCurrentPage(currentPage + 1)}
+            href={`${path}?page=${currentPage + 1}`}
           />
         </PaginationItem>
       </PaginationContent>

@@ -19,9 +19,57 @@ export class UserCreatedEvent extends DomainEvent<{
 }
 
 export class ActivityPublishedEvent extends DomainEvent<{
-  activityId: number | string;
+  activityId: string;
 }> {
-  constructor(payload: { activityId: number | string }) {
+  constructor(payload: { activityId: string }) {
     super("ActivityPublished", payload);
+  }
+}
+
+export class StudentOutputCreatedEvent extends DomainEvent<{
+  studentOutputId: number;
+  studentId: string;
+  activityAuthorId: string;
+  activityTitle: string;
+}> {
+  constructor(payload: {
+    studentOutputId: number;
+    studentId: string;
+    activityAuthorId: string;
+    activityTitle: string;
+  }) {
+    super("StudentOutputCreated", payload);
+  }
+}
+
+export class StudentOutputPublishedEvent extends DomainEvent<{
+  studentOutputId: number;
+  studentId: string;
+  activityAuthorId: string;
+  activityTitle: string;
+}> {
+  constructor(payload: {
+    studentOutputId: number;
+    studentId: string;
+    activityAuthorId: string;
+    activityTitle: string;
+  }) {
+    super("StudentOutputPublished", payload);
+  }
+}
+
+export class FeedbackToAnswerPublishedEvent extends DomainEvent<{
+  studentOutputId: number;
+  studentId: string;
+  activityAuthorId: string;
+  activityTitle: string;
+}> {
+  constructor(payload: {
+    studentOutputId: number;
+    studentId: string;
+    activityAuthorId: string;
+    activityTitle: string;
+  }) {
+    super("FeedbackToAnswerPublished", payload);
   }
 }

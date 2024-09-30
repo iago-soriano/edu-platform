@@ -15,7 +15,7 @@ type Response = TypedResponse<SignInResponseBody>;
 
 export class SignInController implements HTTPController<Request, Response> {
   method = HttpMethod.POST;
-  path: string = "iam/sign-in";
+  path: string = "sign-in";
 
   constructor(private signInUseCase: ISignInUseCase) {}
 

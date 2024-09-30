@@ -1,9 +1,15 @@
-import { PaginatedParamsDTO, PaginatedResponse } from "../../common";
+import { z } from "zod";
+import {
+  PaginatedParamsDTO,
+  PaginatedResponse,
+  paginatedParamsSchema,
+} from "../../common";
 
 enum NotificationType {
   StudentOutputCompleted = "StudentOutputCompleted",
   FeedbackCompleted = "FeedbackCompleted",
   ActivityPublished = "ActivityPublished",
+  StudentOutputCreated = "StudentOutputCreated",
 }
 
 type NotificationDto = {
@@ -19,9 +25,13 @@ type ResponseBody = PaginatedResponse<{
   totalUnread: number;
 }>;
 
-type Query = PaginatedParamsDTO;
+const listNotificationQuerySchema = paginatedParamsSchema;
+
+type Query = z.infer<typeof listNotificationQuerySchema>;
 
 export type {
   ResponseBody as ListNotificationsResponseBody,
   Query as ListNotificationsQuery,
 };
+
+export { listNotificationQuerySchema };
