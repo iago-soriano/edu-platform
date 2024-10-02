@@ -4,7 +4,7 @@ import {
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { IStorageService } from "./interfaces";
-import { FileType } from "@edu-platform/common";
+import { FileType } from "../interfaces";
 import fs from "fs";
 
 export class S3Service implements IStorageService {
