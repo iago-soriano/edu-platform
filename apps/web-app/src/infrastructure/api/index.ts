@@ -1,2 +1,1 @@
-// export * from "./axios-fetcher";
-export * from "./ssr-api-client";
+export * from "./fetcher";

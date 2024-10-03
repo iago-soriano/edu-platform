@@ -39,7 +39,7 @@ export class CollectionArray<T extends Entity> extends Array<T> {
 
   markAsDeletedById(id: string | number) {
     const index = this.findIndex(
-      (el) => (el as unknown as { id: number | string }).id === id
+      (el) => (el as unknown as { id: number | string }).id === id,
     );
     this[index].isDelete = true;
     this[index].isNew = false;
@@ -49,7 +49,7 @@ export class CollectionArray<T extends Entity> extends Array<T> {
 export class ChangeTrackingProxy<T> {
   constructor(obj: T) {
     return new Proxy(obj as Entity, {
-      set: function (target: Entity, prop: string, value: any) {
+      set: function(target: Entity, prop: string, value: any) {
         const shouldIgnore = Reflect.getMetadata("ignore", target, prop);
 
         if (!shouldIgnore) {
@@ -74,13 +74,13 @@ export class ChangeTrackingProxy<T> {
 }
 
 export function PersistancePropertyName(metadata: any) {
-  return function (target: any, propertyKey: string | symbol) {
+  return function(target: any, propertyKey: string | symbol) {
     Reflect.defineMetadata("property-name", metadata, target, propertyKey);
   };
 }
 
 export function IgnorePersistance() {
-  return function (target: any, propertyKey: string | symbol) {
+  return function(target: any, propertyKey: string | symbol) {
     Reflect.defineMetadata("ignore", true, target, propertyKey);
   };
 }
@@ -88,6 +88,6 @@ export function IgnorePersistance() {
 export abstract class DomainEvent<T> {
   constructor(
     public eventType: string,
-    public payload: T
+    public payload: T,
   ) {}
 }

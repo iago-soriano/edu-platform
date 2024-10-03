@@ -20,7 +20,7 @@ export class AuthenticationMiddlewareController {
     const [header, token] = headers.authorization.split(" ");
     if (header !== "Bearer")
       throw new Forbidden(
-        `Authorization header present but incorrect form: ${header}`
+        `Authorization header present but incorrect form: ${header}`,
       );
 
     let tokenPayload: JWTPayload;

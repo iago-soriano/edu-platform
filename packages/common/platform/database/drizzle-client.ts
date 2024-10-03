@@ -5,7 +5,7 @@ import { DefaultLogger, LogWriter } from "drizzle-orm/logger";
 export const getDrizzleClient = (
   connectionString: string,
   schema: Record<string, unknown>,
-  writer: LogWriter
+  writer: LogWriter,
 ) => {
   const pgClient = new Client({
     connectionString,

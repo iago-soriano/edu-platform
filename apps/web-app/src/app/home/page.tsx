@@ -5,7 +5,6 @@ import {
   FeatureSection,
   FeatureTextContainer,
 } from "./components";
-import { Footer } from "@components";
 
 export default function Home() {
   return (
@@ -78,7 +77,6 @@ export default function Home() {
           </ul>
         </FeatureTextContainer>
       </FeatureSection>
-      <Footer />
     </main>
   );
 }

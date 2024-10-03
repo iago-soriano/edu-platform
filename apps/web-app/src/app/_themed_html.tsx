@@ -1,5 +1,5 @@
-"use client";
-import { useColorTheme } from "@contexts";
+/* 'use client';
+import { useColorTheme } from '@contexts';
 export const ThemedHtml = ({ children }) => {
   const { mode } = useColorTheme();
   return (
@@ -8,3 +8,4 @@ export const ThemedHtml = ({ children }) => {
     </html>
   );
 };
+ */

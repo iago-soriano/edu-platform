@@ -1,5 +1,5 @@
-"use client";
-import { Footer } from "@components";
+'use client';
+import { Footer } from '@components';
 
 export default () => {
   return (

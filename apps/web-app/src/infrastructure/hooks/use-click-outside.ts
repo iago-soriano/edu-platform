@@ -1,4 +1,4 @@
-import { useRef, useEffect, RefObject } from "react";
+import { useRef, useEffect, RefObject } from 'react';
 
 export function useClickOutside(callback) {
   const callbackRef = useRef<(args: unknown) => unknown>(null); // initialize mutable ref, which stores callback
@@ -13,14 +13,14 @@ export function useClickOutside(callback) {
   });
 
   useEffect(() => {
-    document.addEventListener("click", handleClick);
-    return () => document.removeEventListener("click", handleClick);
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
     function handleClick(e) {
       if (
         callbackRef.current &&
         !Array.from(refs).reduce(
           (acc, curr) => (curr as any).contains(e.target) || acc,
-          false
+          false,
         )
       ) {
         callbackRef.current(e);

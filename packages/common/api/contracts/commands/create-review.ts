@@ -5,7 +5,11 @@ const createReviewRequestBodySchema = z.object({
   review: z.string(),
 });
 
-type Params = void;
+const createReviewParamsSchema = z.object({
+  studentOutputId: z.string().uuid(),
+});
+
+type Params = z.infer<typeof createReviewParamsSchema>;
 
 type RequestBody = z.infer<typeof createReviewRequestBodySchema>;
 

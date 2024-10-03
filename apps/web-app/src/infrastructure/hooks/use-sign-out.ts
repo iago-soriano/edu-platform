@@ -1,11 +1,11 @@
-import { useSession, signOut } from "next-auth/react";
+/* import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { AxiosFetcher } from "../api/axios-fetcher";
+import { Fetcher } from "../api/fetcher";
 
 export const useSignOut = () => {
   const router = useRouter();
   const session = useSession();
-  const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
+  const axios = new Fetcher(process.env.NEXT_PUBLIC_API_HOST!);
 
   const doSignOut = () => {
     signOut({
@@ -21,3 +21,4 @@ export const useSignOut = () => {
 
   return doSignOut;
 };
+ */

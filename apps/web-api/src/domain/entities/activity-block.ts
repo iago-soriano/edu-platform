@@ -1,4 +1,4 @@
-import { Entity } from '@edu-platform/common/platform';
+import { Entity } from "@edu-platform/common/platform";
 
 export class ActivityBlock extends Entity {
   constructor() {

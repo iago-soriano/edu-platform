@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export const TanstackQueryProvider = ({ children }) => {
   const [queryClient] = useState(
@@ -15,10 +15,10 @@ export const TanstackQueryProvider = ({ children }) => {
             retry: false,
           },
           mutations: {
-            throwOnError: (e) => e.message === "NEXT_REDIRECT",
+            throwOnError: (e) => e.message === 'NEXT_REDIRECT',
           },
         },
-      })
+      }),
   );
 
   return (

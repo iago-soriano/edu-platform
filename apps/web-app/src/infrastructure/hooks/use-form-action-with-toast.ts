@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import { useFormState } from "react-dom";
-import { errorToast, successToast } from "@components";
+//import { errorToast, successToast } from '@components';
 
 export const useFormStateActionWithToast = (
   data,
-  doMutation
+  doMutation,
 ): [
-  {
-    payload: any;
-    success: boolean;
-    message: string;
-    hasSubmitted: boolean;
-    errors: any;
-  },
-  (args: any) => any,
-] => {
+    {
+      payload: any;
+      success: boolean;
+      message: string;
+      hasSubmitted: boolean;
+      errors: any;
+    },
+    (args: any) => any,
+  ] => {
   const [state, formAction] = useFormState(doMutation, {
     payload: data,
     success: true,
@@ -25,8 +25,8 @@ export const useFormStateActionWithToast = (
 
   useEffect(() => {
     if (!state.hasSubmitted) return;
-    if (!state?.success) errorToast(state.message);
-    else successToast("Collection updated successfully");
+    //if (!state?.success) errorToast(state.message);
+    //else successToast('Collection updated successfully');
   }, [state]);
 
   return [state, formAction];

@@ -37,7 +37,7 @@ export class ExpressServer extends AbstractServer {
 
     // CORS
     const allowlist = process.env.CORS_ALLOW?.split(" ");
-    const corsOptionsDelegate = function (req: any, callback: any) {
+    const corsOptionsDelegate = function(req: any, callback: any) {
       let corsOptions;
       if (process.env.CORS_ALLOW === "*") {
         callback(null, { origin: true });
@@ -67,13 +67,13 @@ export class ExpressServer extends AbstractServer {
 
       if (descriptor.middlewares)
         pipeline.push(
-          ...descriptor.middlewares.map((middleware) => middlewares[middleware])
+          ...descriptor.middlewares.map((middleware) => middlewares[middleware]),
         );
 
       this._app[descriptor.method!](
         `/web-api/${descriptor.path!}`,
         ...pipeline,
-        descriptor.execute
+        descriptor.execute,
       );
     });
 

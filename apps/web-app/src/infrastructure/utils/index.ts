@@ -24,7 +24,7 @@ export const getLocaleDateTimeFromISO = (dateString: string) => {
 
 export const getChildrenOnDisplayName = (children, displayName) => {
   return React.Children.map(children, (child) =>
-    child.type.displayName === displayName ? child : null
+    child.type.displayName === displayName ? child : null,
   );
 };
 
@@ -58,5 +58,5 @@ export function openInNewTab(href: string) {
   }).click();
 }
 
-export * from "../api/auth/refresh-token";
+//export * from '../api/auth/refresh-token';
 export * from "./shadcn";

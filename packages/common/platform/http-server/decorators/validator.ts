@@ -10,12 +10,12 @@ export function ValidateParameters<
   paramsSchema?: { parse: (args: any) => any };
   bodySchema?: { parse: (args: any) => any };
 }) {
-  return function (constructor: T) {
+  return function(constructor: T) {
     return class extends constructor {
       validationMiddleware = (
         req: ExpressRequest,
         res: ExpressResponse,
-        next: NextFunction
+        next: NextFunction,
       ) => {
         const { paramsSchema, bodySchema } = args;
         req.query = { ...req.query, ...req.params };

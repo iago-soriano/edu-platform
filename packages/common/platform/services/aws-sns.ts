@@ -20,7 +20,7 @@ export class TopicService implements ITopicService {
         },
         Message: JSON.stringify(event.payload),
         TopicArn: topicArn,
-      })
+      }),
     );
   }
 }

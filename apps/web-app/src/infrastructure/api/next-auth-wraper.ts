@@ -1,4 +1,4 @@
-import { signIn } from "next-auth/react";
+import { signIn } from 'next-auth/react';
 
 export const nextAuthSignIn = async (provider, options = {}, args = {}) => {
   try {

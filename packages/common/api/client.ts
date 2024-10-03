@@ -15,7 +15,7 @@ import {
 
 import { IHTTPClient } from "./interfaces";
 
-export class CoreClient {
+export class Client {
   public baseUrl: string = "core";
 
   constructor(private _fetcher: IHTTPClient) {}
@@ -24,7 +24,7 @@ export class CoreClient {
   createNewActivity(body: CreateNewActivityRequestBody) {
     return this._fetcher.post(
       `${this.baseUrl}/activities`,
-      body
+      body,
     ) as Promise<CreateNewActivityResponseBody>;
   }
 
@@ -32,7 +32,7 @@ export class CoreClient {
   createNewStudentOutput(body: CreateStudentOutputRequestBody) {
     return this._fetcher.post(
       `${this.baseUrl}/student-output`,
-      body
+      body,
     ) as Promise<CreateStudentOutputResponseBody>;
   }
 
@@ -42,7 +42,18 @@ export class CoreClient {
   }: UpdateStudentOutputParams & UpdateStudentOutputRequestBody) {
     return this._fetcher.put(
       `${this.baseUrl}/student-output/${studentOutputId}`,
-      body
-    ) as Promise<CreateStudentOutputResponseBody>;
+      body,
+    ) as Promise<UpdateStudentOutputResponseBody>;
+  }
+
+  // REVIEW
+  createReview({
+    studentOutputId,
+    ...body
+  }: CreateReviewParams & CreateReviewRequestBody) {
+    return this._fetcher.put(
+      `${this.baseUrl}/student-output/${studentOutputId}/review`,
+      body,
+    ) as Promise<CreateReviewResponseBody>;
   }
 }

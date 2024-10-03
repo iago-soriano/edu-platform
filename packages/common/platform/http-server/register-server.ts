@@ -4,10 +4,10 @@ import { HTTPController } from "../interfaces/controllers";
 import { Client } from "pg";
 
 const getControllersByResgistrationName = (
-  container: awilix.AwilixContainer
+  container: awilix.AwilixContainer,
 ) => {
   const result = [];
-  for (let registrationName in container.registrations) {
+  for (const registrationName in container.registrations) {
     if (registrationName.includes("Controller")) {
       const res = container.resolve<HTTPController>(registrationName);
       result.push(res);
@@ -21,10 +21,10 @@ export const registerServer = (
     container: awilix.AwilixContainer;
     pgClient: Client;
     basePath: string;
-  }[]
+  }[],
 ) => {
-  let controllers: HTTPController<any, any>[] = [];
-  let middlewares: any = { auth: undefined, file: undefined };
+  const controllers: HTTPController<any, any>[] = [];
+  const middlewares: any = { auth: undefined, file: undefined };
 
   modules.forEach(({ container, basePath }) => {
     controllers.push(
@@ -36,7 +36,7 @@ export const registerServer = (
           path: `${basePath}${controller.path}`,
           validationMiddleware: controller.validationMiddleware,
         };
-      })
+      }),
     );
 
     if (container.hasRegistration("authMiddleware")) {

@@ -1,15 +1,15 @@
 import multer from "multer";
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function(req, file, cb) {
     cb(null, "./tmp/files");
   },
-  filename: function (req, file, cb) {
+  filename: function(req, file, cb) {
     // console.log({ file });
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(
       null,
-      `${file.fieldname}-${uniqueSuffix}.${file.mimetype.split("/")[1]}`
+      `${file.fieldname}-${uniqueSuffix}.${file.mimetype.split("/")[1]}`,
     );
   },
 });

@@ -10,12 +10,12 @@ export const Router = {
     `/teacher-area/collections/${collectionId}/edit/activities`,
   collectionStudents: (collectionId) =>
     `/teacher-area/collections/${collectionId}/edit/students`,
-  teacherBaseRoute: "/teacher-area/dashboard/collections",
+  teacherBaseRoute: '/teacher-area/dashboard/collections',
   teacherPrivateCollections:
-    "/teacher-area/dashboard/collections/private?page=0",
-  teacherPublicCollections: "/teacher-area/dashboard/collections/public?page=0",
-  teacherActivities: "/teacher-area/dashboard/activities",
-  teacherStudentOutputs: "/teacher-area/dashboard/student-outputs",
+    '/teacher-area/dashboard/collections/private?page=0',
+  teacherPublicCollections: '/teacher-area/dashboard/collections/public?page=0',
+  teacherActivities: '/teacher-area/dashboard/activities',
+  teacherStudentOutputs: '/teacher-area/dashboard/student-outputs',
 
-  studentHome: "/student-area",
+  studentHome: '/student-area',
 };

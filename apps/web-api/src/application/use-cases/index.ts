@@ -1,14 +1,11 @@
 import CreateNewActivityUseCase, {
   ICreateNewActivityUseCase,
-} from './create-new-activity';
+} from "./create-new-activity";
 import CreateStudentOutputUseCase, {
   ICreateStudentOutputUseCase,
-} from './studentOutput/create-new';
-import { UserCreatedUseCase, IUserCreatedUseCase } from '../event-handlers';
+} from "./create-new-student-output";
 
 export {
-  UserCreatedUseCase,
-  IUserCreatedUseCase,
   CreateNewActivityUseCase,
   ICreateNewActivityUseCase,
   CreateStudentOutputUseCase,

@@ -1,5 +1,5 @@
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
 export const useParamsState = (initialParams: { [key: string]: string }) => {
   const router = useRouter();
@@ -15,7 +15,7 @@ export const useParamsState = (initialParams: { [key: string]: string }) => {
     const currentParams = new URLSearchParams(searchParams);
 
     // update with what is in url
-    for (let [key, value] of currentParams.entries()) {
+    for (const [key, value] of currentParams.entries()) {
       newParams[key] = value;
     }
 
@@ -26,16 +26,16 @@ export const useParamsState = (initialParams: { [key: string]: string }) => {
   const updateParams = (newParams) => {
     const params = new URLSearchParams();
 
-    for (let key in newParams) {
+    for (const key in newParams) {
       if (newParams.hasOwnProperty(key)) {
         params.set(key, newParams[key]);
-        if (typeof window != "undefined") {
+        if (typeof window != 'undefined') {
           localStorage.setItem(key, newParams[key]);
         }
       }
     }
 
-    router.replace(pathName + "?" + params.toString());
+    router.replace(pathName + '?' + params.toString());
   };
 
   return { params: current, setParams: updateParams };

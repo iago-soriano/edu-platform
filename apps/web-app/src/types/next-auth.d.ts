@@ -37,5 +37,5 @@ declare module "next-auth" {
     given_name: string;
   }
 
-  interface UserCredentialsConfig {}
+  //interface UserCredentialsConfig {}
 }

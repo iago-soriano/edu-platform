@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export const useLocalStorageState = <T extends { toString(): string }>(
   name: string,
-  initialValue: T
+  initialValue: T,
 ) => {
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     const [current, setCurrent] = useState<T>(
-      (localStorage.getItem(name) as T) || initialValue
+      (localStorage.getItem(name) as T) || initialValue,
     );
 
     useEffect(() => {

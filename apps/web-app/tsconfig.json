@@ -63,7 +63,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-    // "../../api/src/client/index.ts",
+, "src/contexts/session-provider.js"    // "../../api/src/client/index.ts",
     // "../../common/interfaces/index.ts"
   ],
   "exclude": [

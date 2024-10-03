@@ -1,141 +1,69 @@
 import NextAuth, { AuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
-// import axiosBase from "axios";
-import {
-  ProviderSignUpRequestBody,
-  ProviderSignUpResponseBody,
-} from "@edu-platform/common/api";
-import { AxiosFetcher } from "../../../../infrastructure/api/axios-fetcher";
+import KeycloakProvider from "next-auth/providers/keycloak";
 
-export const authOptions: AuthOptions = {
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      // authorization: {
-      //   params: {
-      //     prompt: "consent",
-      //     access_type: "offline",
-      //     response_type: "code",
-      //   },
-      // },
+async function refreshAccessToken(token) {
+  const resp = await fetch(`${process.env.REFRESH_TOKEN_URL}`, {
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      user_id: process.env.USER_ID,
+      user_secret: process.env.USER_SECRET,
+      grant_type: "refresh_token",
+      refresh_token: token.refresh_token,
     }),
-    CredentialsProvider({
-      credentials: {
-        email: {},
-        password: {},
-      },
-      id: "credentials",
-      async authorize(_, req) {
-        // const axios = axiosBase.create({
-        //   url: process.env.NEXT_PUBLIC_API_HOST!,
-        // });
-        console.log(_, req);
-        const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
+    method: "POST",
+  });
 
-        return await axios.post.bind(axios)("iam/sign-in", {
-          email: req.query?.email,
-          password: req.query?.password,
-        });
-      },
+  const refreshToken = await resp.json();
+  if (!resp.ok) throw refreshToken;
+
+  return {
+    ...token,
+    access_token: refreshToken.access_token,
+    id_token: refreshToken.id_token,
+    expires_at: Math.floor(Date.now() / 1000) + refreshToken.expires_in,
+    refresh_token: refreshToken.refresh_token,
+  };
+}
+
+export const authOptions = {
+  providers: [
+    KeycloakProvider({
+      userId: `${process.env.USER_ID}`,
+      userSecret: `${process.env.USER_SECRET}`,
+      issuer: `${process.env.AUTH_ISSUER}`,
     }),
   ],
-  // session: {
-  //   strategy: ,
-  // },
+
   callbacks: {
-    // after signin, REDIRECT -> JWT -> SESSION at every page refocus
-    async signIn({ user, account, profile, email, credentials }) {
-      // happens on sign-in of existing and of new users
-      // console.log("SIGN IN");
-      // console.log({ user, account, profile, email, credentials });
-      if (account?.provider == "google") {
-        // const axios = axiosBase.create({
-        //   url: process.env.NEXT_PUBLIC_API_HOST!,
-        // });
-        const axios = new AxiosFetcher(process.env.NEXT_PUBLIC_API_HOST!);
+    async jwt({ token, account }) {
+      const nowTimeStamp = Math.floor(Date.now() / 1000);
 
-        const { refreshToken, accessToken } = (await axios.post.bind(axios)(
-          "sign-up/provider",
-          {
-            email: user.email,
-            name: user.name,
-            image: user.image,
-            provider: "google",
-          } as ProviderSignUpRequestBody
-        )) as ProviderSignUpResponseBody;
+      if (account) {
+        token.access_token = account.access_token;
+        token.id_token = account.id_token;
+        token.expires_at = account.expires_at;
+        token.refresh_token = account.refresh_token;
 
-        user.accessToken = accessToken;
-        user.refreshToken = refreshToken;
+        return token;
+      } else if (nowTimeStamp < token.expires_at) {
+        return token;
+      } else {
+        try {
+          const refreshedToken = await refreshAccessToken(token);
+          return refreshedToken;
+        } catch (error) {
+          return { ...token, error: "RefreshAccessTokenError" };
+        }
       }
-
-      return true;
     },
-    async redirect({ url, baseUrl }) {
-      // console.log('REDIRECT');
-      // console.log({ url, baseUrl });
-      return baseUrl;
-    },
-    async jwt({ token, account, profile, user, trigger, session }) {
-      // happens whenever application mounts or page refocuses
-      // account, user and profile only on signin. on refocus, only token.
-      // console.log('JWT');
-      // console.log({ token, account, profile, user });
 
-      if (trigger === "update") {
-        return { ...token, ...session.user };
-      }
-
-      if (user) {
-        return {
-          ...user,
-          accessToken: user.accessToken,
-          refreshToken: user.refreshToken,
-          name: profile?.given_name || user.name,
-          provider: account?.provider,
-        };
-      }
-
-      return token;
-    },
-    async session({ session, token, user /** only for database */ }) {
-      // happens whenever application mounts or page refocuses
-      // console.log("SESSION");
-      // console.log({ session, token });
-      // whatever property is added here goes to session.data in FE
-      // const { accessToken, refreshToken, ...rest } = token;
-
-      // (session as any).accessToken = accessToken;
-      // (session as any).refreshToken = refreshToken;
-      (session as any).user = token;
-
+    async session({ session, token }) {
+      session.access_token = token.access_token;
+      session.id_token = token.id_token;
+      session.error = token.error;
       return session;
     },
   },
-  secret: process.env.AUTH_SECRET,
-  pages: {
-    error: "/iam/sign-in",
-  },
-  // jwt: {
-  //   async encode(params: {
-  //     token: JWT;
-  //     secret: string;
-  //     maxAge: number;
-  //   }): Promise<string> {
-  //     console.log({ token: params.token });
-  //     // return a custom encoded JWT string
-
-  //     return params.token.jwt as string;
-  //   },
-  //   async decode(params: {
-  //     token: string;
-  //     secret: string;
-  //   }): Promise<JWT | null> {
-  //     // return a `JWT` object, or `null` if decoding failed
-  //     return { jwt: params.token };
-  //   },
-  // },
 };
 
 const handler = NextAuth(authOptions);

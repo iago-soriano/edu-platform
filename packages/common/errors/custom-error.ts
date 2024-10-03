@@ -5,7 +5,7 @@ export abstract class CustomError extends Error {
   constructor(
     public message: string = "",
     public fieldErrors: FieldError = {},
-    public realReason: string | undefined = undefined
+    public realReason: string | undefined = undefined,
   ) {
     super(message);
   }
@@ -15,7 +15,7 @@ export class InvalidStateError extends CustomError {
   HTTPstatusCode = 400;
   constructor(
     message: string,
-    opts?: { fieldErrors?: FieldError; fieldName?: string }
+    opts?: { fieldErrors?: FieldError; fieldName?: string },
   ) {
     let fieldErrors = {};
     if (opts) {
