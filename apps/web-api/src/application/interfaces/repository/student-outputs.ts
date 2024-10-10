@@ -1,15 +1,20 @@
-import { IAbstractRepository } from '@edu-platform/common/platform';
+import { IAbstractRepository } from "@edu-platform/common/platform";
 import {
   GetStudentOutputByIdResponseBody,
   PaginatedParamsDTO,
-} from '@edu-platform/common';
+} from "@edu-platform/common";
+import { StudentOutput } from "@domain/entities";
 
 export interface IStudentOutputsRepository extends IAbstractRepository {
-  findStudentOutputById: (id: string) => Promise<void>;
+  findStudentOutputByActivityId: (
+    activityId: string,
+    studentEmail: string
+  ) => Promise<StudentOutput>;
+  findStudentOutputById: (studentOutputId: string) => Promise<StudentOutput>;
 }
 
 export interface IStudentOutputsReadRepository {
   getStudentOutputById: (
-    args: { studentOutputId: string } & PaginatedParamsDTO
-  ) => Promise<void>;
+    studentOutputId: string
+  ) => Promise<GetStudentOutputByIdResponseBody>;
 }

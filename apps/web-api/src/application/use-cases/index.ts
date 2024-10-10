@@ -1,13 +1,31 @@
+import CreateNewGeneratedActivityUseCase, {
+  ICreateNewGeneratedActivityUseCase,
+} from "./create-new-generated-activity";
 import CreateNewActivityUseCase, {
   ICreateNewActivityUseCase,
 } from "./create-new-activity";
-import CreateStudentOutputUseCase, {
-  ICreateStudentOutputUseCase,
+import CreateNewStudentOutputUseCase, {
+  ICreateNewStudentOutputUseCase,
 } from "./create-new-student-output";
+import CreateUserUseCase, { ICreateUserUseCase } from "./create-user";
+import UpdateStudentOutputAnswerUseCase, {
+  IUpdateStudentOutputAnswerUseCase,
+} from "./update-student-output-answer";
+import UpdateStudentOutputReviewUseCase, {
+  IUpdateStudentOutputReviewUseCase,
+} from "./update-student-output-review";
 
 export {
+  CreateNewGeneratedActivityUseCase,
+  ICreateNewGeneratedActivityUseCase,
   CreateNewActivityUseCase,
   ICreateNewActivityUseCase,
-  CreateStudentOutputUseCase,
-  ICreateStudentOutputUseCase,
+  CreateNewStudentOutputUseCase,
+  ICreateNewStudentOutputUseCase,
+  CreateUserUseCase,
+  ICreateUserUseCase,
+  UpdateStudentOutputAnswerUseCase,
+  IUpdateStudentOutputAnswerUseCase,
+  UpdateStudentOutputReviewUseCase,
+  IUpdateStudentOutputReviewUseCase,
 };

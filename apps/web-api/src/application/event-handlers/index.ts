@@ -1,5 +1,5 @@
-import ActivityGeneratedUseCase, {
-  IActivityGeneratedUseCase,
-} from './generate-activity-gpt';
+import GenerateActivityUseCase, {
+  IGenerateActivityUseCase,
+} from "./generate-activity-gpt";
 
-export { ActivityGeneratedUseCase, IActivityGeneratedUseCase };
+export { GenerateActivityUseCase, IGenerateActivityUseCase };
