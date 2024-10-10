@@ -1,12 +1,12 @@
 {
-  "name": "@edu-platform/core-api",
+  "name": "@edu-platform/web-api",
   "version": "1.0.0",
-  "description": "Core domain API",
+  "description": "Web API",
   "scripts": {
     "gen-env": "gen-env-types .env -o src/env.d.ts -e .",
     "build:ci": "rm -rf build && node ./build.mjs",
     "build:windows": "tsc -p tsconfig.json && tsc-alias",
-    "debug:sqs": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn  --exit-child --ignore-watch node_modules src/core/main/sqs.debug.ts",
+    "debug:sqs": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn  --exit-child --ignore-watch node_modules src/main/sqs.debug.ts",
     "start": "node ./build/index.api/index.js",
     "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn  --exit-child --ignore-watch node_modules src/index.api.ts",
     "test": "cross-env NODE_ENV=test jest --watchAll",
@@ -16,8 +16,7 @@
     "format": "npx prettier --write .",
     "format:ci": "npx prettier --config ../eslint-config/.prettierrc.json --ignore-path ../eslint-config/.prettierignore --check .",
     "db:gen:migration": "npm drizzle-kit generate:mysql --schema=./src/schema.ts",
-    "db:push:core": "drizzle-kit push:pg --config core.drizzle.config.ts",
-    "db:push:iam": "drizzle-kit push:pg --config iam.drizzle.config.ts",
+    "db:push": "drizzle-kit push:pg --config drizzle.config.ts",
     "db:studio": "npx drizzle-kit studio",
     "docker:build": "docker build -t language-app/web-api -f ./Dockerfile ../..",
     "docker:exec": "docker exec -ti language-app-web-api /bin/bash"
@@ -27,12 +26,16 @@
   "license": "ISC",
   "dependencies": {
     "@edu-platform/common": "workspace:*",
+    "@keycloak/keycloak-admin-client": "^26.0.0",
+    "@paralleldrive/cuid2": "^2.2.2",
     "awilix": "^7.0.3",
     "dotenv": "^16.0.1",
     "drizzle-orm": "^0.30.1",
     "email-validator": "^2.0.4",
     "google-auth-library": "^9.1.0",
-    "pg": "^8.11.3"
+    "openai": "^4.67.2",
+    "pg": "^8.11.3",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@dotenv-run/esbuild": "^1.3.5",
@@ -60,5 +63,5 @@
     "tsconfig-paths": "^3.12.0",
     "typescript": "^5.3.3"
   },
-   "packageManager": "pnpm@9.12.0"
+  "packageManager": "pnpm@9.12.0"
 }
