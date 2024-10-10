@@ -1,6 +1,6 @@
 "use client";
 
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
@@ -33,7 +33,7 @@ type FormFieldContextValue<
 };
 
 const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue,
+  {} as FormFieldContextValue
 );
 
 const FormField = <
@@ -77,7 +77,7 @@ type FormItemContextValue = {
 };
 
 const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue,
+  {} as FormItemContextValue
 );
 
 const FormItem = React.forwardRef<
@@ -108,7 +108,7 @@ const FormLabel = React.forwardRef<
       className={cx(
         { "text-destructive": error },
         { 'after:ml-0.5 after:text-destructive after:content-["*"]': required },
-        className,
+        className
       )}
       htmlFor={formItemId}
       {...props}

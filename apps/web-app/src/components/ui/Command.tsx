@@ -4,7 +4,7 @@ import { Command as CommandPrimitive } from "cmdk";
 import { Search } from "lucide-react";
 
 import { Dialog, DialogContent } from "./Dialog";
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -14,7 +14,7 @@ const Command = React.forwardRef<
     ref={ref}
     className={cx(
       "flex h-full w-full flex-col overflow-hidden rounded-md bg-white text-slate-950 ",
-      className,
+      className
     )}
     {...props}
   />
@@ -43,7 +43,7 @@ const CommandInput = React.forwardRef<
     ref={ref}
     className={cx(
       "relative block w-full appearance-none rounded-md border px-2.5 py-2 outline-none transition sm:text-sm bg-white dark:bg-gray-900 placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-gray-50 border-gray-300 dark:border-gray-800",
-      className,
+      className
     )}
     {...props}
   />
@@ -85,7 +85,7 @@ const CommandGroup = React.forwardRef<
     ref={ref}
     className={cx(
       "overflow-hidden p-1 text-slate-950  [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-slate-500",
-      className,
+      className
     )}
     {...props}
   />
@@ -113,7 +113,7 @@ const CommandItem = React.forwardRef<
     ref={ref}
     className={cx(
       "relative flex cursor-pointer select-none items-center rounded-md px-3 py-2 text-sm outline-none aria-selected:bg-gray-100 aria-selected:dark:bg-gray-950 aria-selected:text-gray-900 aria-selected:dark:text-gray-50 text-gray-900 dark:text-gray-50 data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50",
-      className,
+      className
     )}
     {...props}
   />
@@ -129,7 +129,7 @@ const CommandShortcut = ({
     <span
       className={cx(
         "ml-auto text-xs tracking-widest text-slate-500",
-        className,
+        className
       )}
       {...props}
     />

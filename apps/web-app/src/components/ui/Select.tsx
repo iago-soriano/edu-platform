@@ -1,6 +1,6 @@
 "use client";
 
-import { cx, focusInput, hasErrorInput } from "styles/styles";
+import { cx, focusInput, hasErrorInput } from "styles/utils";
 import * as SelectPrimitives from "@radix-ui/react-select";
 import {
   RiArrowDownSLine,
@@ -36,7 +36,7 @@ const selectTriggerStyles = [
     // disabled
     "data-[disabled]:bg-gray-100 data-[disabled]:text-gray-400",
     "data-[disabled]:dark:border-gray-700 data-[disabled]:dark:bg-gray-800 data-[disabled]:dark:text-gray-500",
-    focusInput,
+    focusInput
     // invalid (optional)
     // "aria-[invalid=true]:dark:ring-red-400/20 aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-red-200 aria-[invalid=true]:border-red-500 invalid:ring-2 invalid:ring-red-200 invalid:border-red-500"
   ),
@@ -54,7 +54,7 @@ const SelectTrigger = React.forwardRef<
       className={cx(
         selectTriggerStyles,
         hasError ? hasErrorInput : "",
-        className,
+        className
       )}
       {...props}
     >
@@ -67,7 +67,7 @@ const SelectTrigger = React.forwardRef<
             // text color
             "text-gray-400 dark:text-gray-600",
             // disabled
-            "group-data-[disabled]/trigger:text-gray-300 group-data-[disabled]/trigger:dark:text-gray-600",
+            "group-data-[disabled]/trigger:text-gray-300 group-data-[disabled]/trigger:dark:text-gray-600"
           )}
         />
       </SelectPrimitives.Icon>
@@ -85,7 +85,7 @@ const SelectScrollUpButton = React.forwardRef<
     ref={forwardedRef}
     className={cx(
       "flex cursor-default items-center justify-center py-1",
-      className,
+      className
     )}
     {...props}
   >
@@ -102,7 +102,7 @@ const SelectScrollDownButton = React.forwardRef<
     ref={forwardedRef}
     className={cx(
       "flex cursor-default items-center justify-center py-1",
-      className,
+      className
     )}
     {...props}
   >
@@ -125,7 +125,7 @@ const SelectContent = React.forwardRef<
       collisionPadding = 10,
       ...props
     },
-    forwardedRef,
+    forwardedRef
   ) => (
     <SelectPrimitives.Portal>
       <SelectPrimitives.Content
@@ -148,7 +148,7 @@ const SelectContent = React.forwardRef<
           // "data-[state=open]:animate-slideDownAndFade",
           "data-[state=closed]:animate-hide",
           "data-[side=bottom]:animate-slideDownAndFade data-[side=left]:animate-slideLeftAndFade data-[side=right]:animate-slideRightAndFade data-[side=top]:animate-slideUpAndFade",
-          className,
+          className
         )}
         sideOffset={sideOffset}
         position={position}
@@ -160,7 +160,7 @@ const SelectContent = React.forwardRef<
           className={cx(
             "p-1",
             position === "popper" &&
-              "h-[var(--radix-select-trigger-height)] w-full min-w-[calc(var(--radix-select-trigger-width))]",
+              "h-[var(--radix-select-trigger-height)] w-full min-w-[calc(var(--radix-select-trigger-width))]"
           )}
         >
           {children}
@@ -168,7 +168,7 @@ const SelectContent = React.forwardRef<
         <SelectScrollDownButton />
       </SelectPrimitives.Content>
     </SelectPrimitives.Portal>
-  ),
+  )
 );
 
 SelectContent.displayName = "SelectContent";
@@ -184,7 +184,7 @@ const SelectGroupLabel = React.forwardRef<
       "px-3 py-2 text-xs font-medium tracking-wide",
       // text color
       "text-gray-500 dark:text-gray-500",
-      className,
+      className
     )}
     {...props}
   />
@@ -210,7 +210,7 @@ const SelectItem = React.forwardRef<
         "focus-visible:bg-gray-100 focus-visible:dark:bg-gray-900",
         // hover
         "hover:bg-gray-100 hover:dark:bg-gray-950",
-        className,
+        className
       )}
       {...props}
     >
@@ -240,7 +240,7 @@ const SelectSeparator = React.forwardRef<
       "-mx-1 my-1 h-px",
       // background color
       "bg-gray-300 dark:bg-gray-700",
-      className,
+      className
     )}
     {...props}
   />

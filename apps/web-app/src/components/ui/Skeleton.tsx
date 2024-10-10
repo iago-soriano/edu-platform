@@ -1,4 +1,4 @@
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 
 function Skeleton({
   className,

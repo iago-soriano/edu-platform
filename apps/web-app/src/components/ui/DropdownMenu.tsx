@@ -11,7 +11,7 @@ import {
   RiRadioButtonFill,
 } from "@remixicon/react";
 
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 
 const DropdownMenu = DropdownMenuPrimitives.Root;
 DropdownMenu.displayName = "DropdownMenu";
@@ -46,7 +46,7 @@ const DropdownMenuSubMenuTrigger = React.forwardRef<
       // hover
       "hover:bg-gray-100 hover:dark:bg-gray-950",
       //
-      className,
+      className
     )}
     {...props}
   >
@@ -82,7 +82,7 @@ const DropdownMenuSubMenuContent = React.forwardRef<
         // "data-[state=open]:animate-slideDownAndFade",
         "data-[state=closed]:animate-hide",
         "data-[side=bottom]:animate-slideDownAndFade data-[side=left]:animate-slideLeftAndFade data-[side=right]:animate-slideRightAndFade data-[side=top]:animate-slideUpAndFade",
-        className,
+        className
       )}
       {...props}
     />
@@ -103,7 +103,7 @@ const DropdownMenuContent = React.forwardRef<
       loop = true,
       ...props
     },
-    forwardedRef,
+    forwardedRef
   ) => (
     <DropdownMenuPrimitives.Portal>
       <DropdownMenuPrimitives.Content
@@ -125,7 +125,7 @@ const DropdownMenuContent = React.forwardRef<
           "will-change-[transform,opacity]",
           "data-[state=closed]:animate-hide",
           "data-[side=bottom]:animate-slideDownAndFade data-[side=left]:animate-slideLeftAndFade data-[side=right]:animate-slideRightAndFade data-[side=top]:animate-slideUpAndFade",
-          className,
+          className
         )}
         sideOffset={sideOffset}
         align={align}
@@ -134,7 +134,7 @@ const DropdownMenuContent = React.forwardRef<
         {...props}
       />
     </DropdownMenuPrimitives.Portal>
-  ),
+  )
 );
 DropdownMenuContent.displayName = "DropdownMenuContent";
 
@@ -158,7 +158,7 @@ const DropdownMenuItem = React.forwardRef<
       "focus-visible:bg-gray-100 focus-visible:dark:bg-gray-950",
       // hover
       "hover:bg-gray-100 hover:dark:bg-gray-950",
-      className,
+      className
     )}
     {...props}
   >
@@ -190,7 +190,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
 >(
   (
     { className, hint, shortcut, children, checked, ...props },
-    forwardedRef,
+    forwardedRef
   ) => (
     <DropdownMenuPrimitives.CheckboxItem
       ref={forwardedRef}
@@ -205,7 +205,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
         "focus-visible:bg-gray-100 focus-visible:dark:bg-gray-950",
         // hover
         "hover:bg-gray-100 hover:dark:bg-gray-950",
-        className,
+        className
       )}
       checked={checked}
       {...props}
@@ -222,7 +222,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
       {hint && (
         <span
           className={cx(
-            "ml-auto text-sm font-normal text-gray-400 dark:text-gray-600",
+            "ml-auto text-sm font-normal text-gray-400 dark:text-gray-600"
           )}
         >
           {hint}
@@ -231,14 +231,14 @@ const DropdownMenuCheckboxItem = React.forwardRef<
       {shortcut && (
         <span
           className={cx(
-            "ml-auto text-sm font-normal tracking-widest text-gray-400 dark:border-gray-800 dark:text-gray-600",
+            "ml-auto text-sm font-normal tracking-widest text-gray-400 dark:border-gray-800 dark:text-gray-600"
           )}
         >
           {shortcut}
         </span>
       )}
     </DropdownMenuPrimitives.CheckboxItem>
-  ),
+  )
 );
 DropdownMenuCheckboxItem.displayName = "DropdownMenuCheckboxItem";
 
@@ -262,7 +262,7 @@ const DropdownMenuRadioItem = React.forwardRef<
       "focus-visible:bg-gray-100 focus-visible:dark:bg-gray-950",
       // hover
       "hover:bg-gray-100 hover:dark:bg-gray-950",
-      className,
+      className
     )}
     {...props}
   >
@@ -280,7 +280,7 @@ const DropdownMenuRadioItem = React.forwardRef<
     {hint && (
       <span
         className={cx(
-          "ml-auto text-sm font-normal text-gray-400 dark:text-gray-600",
+          "ml-auto text-sm font-normal text-gray-400 dark:text-gray-600"
         )}
       >
         {hint}
@@ -289,7 +289,7 @@ const DropdownMenuRadioItem = React.forwardRef<
     {shortcut && (
       <span
         className={cx(
-          "ml-auto text-sm font-normal tracking-widest text-gray-400 dark:border-gray-800 dark:text-gray-600",
+          "ml-auto text-sm font-normal tracking-widest text-gray-400 dark:border-gray-800 dark:text-gray-600"
         )}
       >
         {shortcut}
@@ -310,7 +310,7 @@ const DropdownMenuLabel = React.forwardRef<
       "px-2 py-2 text-xs font-medium tracking-wide",
       // text color
       " text-gray-500 dark:text-gray-500",
-      className,
+      className
     )}
     {...props}
   />
@@ -325,7 +325,7 @@ const DropdownMenuSeparator = React.forwardRef<
     ref={forwardedRef}
     className={cx(
       "-mx-1 my-1 h-px border-t border-gray-200 dark:border-gray-800",
-      className,
+      className
     )}
     {...props}
   />
@@ -343,7 +343,7 @@ const DropdownMenuIconWrapper = ({
         "text-gray-600 dark:text-gray-400",
         // disabled
         "group-data-[disabled]/DropdownMenuItem:text-gray-400 group-data-[disabled]/DropdownMenuItem:dark:text-gray-700",
-        className,
+        className
       )}
       {...props}
     />

@@ -1,4 +1,4 @@
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 import { Slot } from "@radix-ui/react-slot";
 import { ComponentPropsWithoutRef, forwardRef } from "react";
 import { tv, VariantProps } from "tailwind-variants";
@@ -18,7 +18,7 @@ const strongVariants = tv({
 
 interface StrongProps
   extends ComponentPropsWithoutRef<"strong">,
-  VariantProps<typeof strongVariants> {
+    VariantProps<typeof strongVariants> {
   asChild?: boolean;
   truncate?: boolean;
 }
@@ -26,7 +26,7 @@ interface StrongProps
 const Strong = forwardRef<HTMLSpanElement, StrongProps>(
   (
     { children, className, asChild, align, truncate = false, ...props },
-    forwardedRef,
+    forwardedRef
   ) => {
     return (
       <Slot
@@ -34,14 +34,14 @@ const Strong = forwardRef<HTMLSpanElement, StrongProps>(
         className={cx(
           { truncate: truncate },
           strongVariants({ align }),
-          className,
+          className
         )}
         {...props}
       >
         {asChild ? children : <strong>{children}</strong>}
       </Slot>
     );
-  },
+  }
 );
 
 Strong.displayName = "Strong";

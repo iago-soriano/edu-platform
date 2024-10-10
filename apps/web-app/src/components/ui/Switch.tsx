@@ -4,7 +4,7 @@ import React from "react";
 import * as SwitchPrimitives from "@radix-ui/react-switch";
 import { tv, VariantProps } from "tailwind-variants";
 
-import { cx, focusRing } from "styles/styles";
+import { cx, focusRing } from "styles/utils";
 
 const switchVariants = tv({
   slots: {
@@ -63,10 +63,10 @@ const switchVariants = tv({
 
 interface SwitchProps
   extends Omit<
-    React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>,
-    "asChild"
-  >,
-  VariantProps<typeof switchVariants> {}
+      React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>,
+      "asChild"
+    >,
+    VariantProps<typeof switchVariants> {}
 
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,

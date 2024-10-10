@@ -1,5 +1,5 @@
-import { Icons } from '@components';
-import { twMerge } from 'tailwind-merge';
+import { twMerge } from "tailwind-merge";
+import { Icons } from "../icons";
 
 interface IModalProps extends React.HTMLAttributes<HTMLDivElement> {
   header?: string;
@@ -27,8 +27,8 @@ export const Modal = ({
     >
       <div
         className={twMerge(
-          'rounded-lg bg-surface2 border-2 border-text1',
-          className,
+          "rounded-lg bg-surface2 border-2 border-text1",
+          className
         )}
         role="dialog"
       >

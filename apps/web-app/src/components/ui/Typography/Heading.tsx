@@ -1,4 +1,4 @@
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 import { Slot } from "@radix-ui/react-slot";
 import { ComponentPropsWithoutRef, forwardRef } from "react";
 import { tv, VariantProps } from "tailwind-variants";
@@ -45,7 +45,7 @@ const headingVariants = tv({
 
 interface HeadingProps
   extends ComponentPropsWithoutRef<"h1">,
-  VariantProps<typeof headingVariants> {
+    VariantProps<typeof headingVariants> {
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   asChild?: boolean;
   truncate?: boolean;
@@ -65,7 +65,7 @@ const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
       truncate = false,
       ...props
     },
-    forwardedRef,
+    forwardedRef
   ) => {
     return (
       <Slot
@@ -73,14 +73,14 @@ const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
         className={cx(
           { truncate: truncate },
           headingVariants({ size, weight, align, variant }),
-          className,
+          className
         )}
         {...props}
       >
         {asChild ? children : <Tag>{children}</Tag>}
       </Slot>
     );
-  },
+  }
 );
 
 Heading.displayName = "Heading";

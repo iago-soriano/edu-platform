@@ -3,13 +3,13 @@
 import React from "react";
 import * as TabsPrimitives from "@radix-ui/react-tabs";
 
-import { cx, focusRing } from "styles/styles";
+import { cx, focusRing } from "styles/utils";
 
 const Tabs = (
   props: Omit<
     React.ComponentPropsWithoutRef<typeof TabsPrimitives.Root>,
     "orientation"
-  >,
+  >
 ) => {
   return <TabsPrimitives.Root tremor-id="tremor-raw" {...props} />;
 };
@@ -30,13 +30,13 @@ const variantStyles: Record<TabsListVariant, string> = {
     // base
     "flex items-center justify-start border-b",
     // border color
-    "border-gray-200 dark:border-gray-800",
+    "border-gray-200 dark:border-gray-800"
   ),
   solid: cx(
     // base
     "inline-flex items-center justify-center rounded-md p-1",
     // background color
-    "bg-gray-100 dark:bg-gray-900",
+    "bg-gray-100 dark:bg-gray-900"
   ),
 };
 
@@ -74,7 +74,7 @@ function getVariantStyles(tabVariant: TabsListVariant) {
         "data-[state=active]:dark:border-gray-50 data-[state=active]:dark:text-gray-50",
         // disabled
         "data-[disabled]:pointer-events-none",
-        "data-[disabled]:text-gray-300 data-[disabled]:dark:text-gray-700",
+        "data-[disabled]:text-gray-300 data-[disabled]:dark:text-gray-700"
       );
     case "solid":
       return cx(
@@ -90,7 +90,7 @@ function getVariantStyles(tabVariant: TabsListVariant) {
         "data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow",
         "data-[state=active]:dark:bg-gray-900 data-[state=active]:dark:text-gray-50",
         // disabled
-        "data-[disabled]:pointer-events-none data-[disabled]:text-gray-400 data-[disabled]:opacity-50 data-[disabled]:dark:text-gray-600",
+        "data-[disabled]:pointer-events-none data-[disabled]:text-gray-400 data-[disabled]:opacity-50 data-[disabled]:dark:text-gray-600"
       );
   }
 }

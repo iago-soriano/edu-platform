@@ -1,6 +1,7 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
-import { HamburguerButton } from "./hamburguer";
+import { HamburguerButton } from "../../Navbar copy/hamburguer";
 import { BaseNavbarButton } from "../base-button";
 import { Router } from "@infrastructure";
 
@@ -15,7 +16,7 @@ const DrawerButton = ({ children, path, ...rest }) => (
   </BaseNavbarButton>
 );
 
-export const SmallScreenNavbar = ({ isAuthenticated, signOut }) => {
+export const SmallScreenNavbar = () => {
   const pathName = usePathname();
 
   const [burguerOpen, setBurguerOpen] = useState(false);

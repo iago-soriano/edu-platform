@@ -2,7 +2,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 import Link, { LinkProps } from "next/link";
 
 const Breadcrumb = React.forwardRef<
@@ -21,7 +21,7 @@ const BreadcrumbList = React.forwardRef<
     ref={ref}
     className={cx(
       "flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5",
-      className,
+      className
     )}
     {...props}
   />
@@ -54,7 +54,7 @@ const BreadcrumbLink = React.forwardRef<
       ref={ref}
       className={cx(
         "transition-colors hover:text-primary-foreground",
-        className,
+        className
       )}
       {...props}
     />

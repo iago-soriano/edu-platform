@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 
 const Card = React.forwardRef<
   HTMLDivElement,
@@ -10,7 +10,7 @@ const Card = React.forwardRef<
     ref={ref}
     className={cx(
       "rounded-lg border bg-card dark:bg-card/25 text-card-foreground shadow-sm",
-      className,
+      className
     )}
     {...props}
   />
@@ -33,7 +33,7 @@ const CardTitle = React.forwardRef<
     ref={ref}
     className={cx(
       "text-xl font-semibold leading-none tracking-tight",
-      className,
+      className
     )}
     {...props}
   />

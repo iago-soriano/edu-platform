@@ -5,7 +5,7 @@
 import * as React from "react";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 
-import { cx, focusRing } from "styles/styles";
+import { cx, focusRing } from "styles/utils";
 
 interface SliderProps
   extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> {
@@ -29,7 +29,7 @@ const Slider = React.forwardRef<
         "data-[orientation='vertical']:h-full data-[orientation='vertical']:w-fit data-[orientation='vertical']:justify-center",
         // disabled
         "data-[disabled]:pointer-events-none",
-        className,
+        className
       )}
       {...props}
     >
@@ -41,7 +41,7 @@ const Slider = React.forwardRef<
           "data-[orientation='horizontal']:h-1.5 data-[orientation='horizontal']:w-full",
           "data-[orientation='vertical']:h-full data-[orientation='vertical']:w-1.5",
           // disabled
-          "data-[disabled]:bg-gray-100 dark:data-[disabled]:bg-gray-800",
+          "data-[disabled]:bg-gray-100 dark:data-[disabled]:bg-gray-800"
         )}
       >
         <SliderPrimitive.Range
@@ -52,7 +52,7 @@ const Slider = React.forwardRef<
             "data-[orientation='horizontal']:h-full",
             "data-[orientation='vertical']:w-full",
             // disabled
-            "data-[disabled]:bg-gray-300 dark:data-[disabled]:bg-gray-700",
+            "data-[disabled]:bg-gray-300 dark:data-[disabled]:bg-gray-700"
           )}
         />
       </SliderPrimitive.Track>
@@ -69,7 +69,7 @@ const Slider = React.forwardRef<
             // disabled
             "data-[disabled]:pointer-events-none data-[disabled]:bg-gray-300 dark:data-[disabled]:border-gray-500 dark:data-[disabled]:bg-gray-600",
             focusRing,
-            "outline-offset-0",
+            "outline-offset-0"
           )}
           aria-label={ariaLabelThumb}
         />

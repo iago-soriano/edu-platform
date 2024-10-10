@@ -3,7 +3,7 @@
 import React from "react";
 import * as CheckboxPrimitives from "@radix-ui/react-checkbox";
 
-import { cx, focusRing } from "styles/styles";
+import { cx, focusRing } from "styles/utils";
 
 const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitives.Root>,
@@ -32,7 +32,7 @@ const Checkbox = React.forwardRef<
         "enabled:data-[state=indeterminate]:bg-blue-500 enabled:data-[state=indeterminate]:ring-0 enabled:data-[state=indeterminate]:ring-transparent",
         // focus
         focusRing,
-        className,
+        className
       )}
     >
       <CheckboxPrimitives.Indicator

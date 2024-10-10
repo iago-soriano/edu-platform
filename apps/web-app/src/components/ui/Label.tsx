@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { tv, type VariantProps } from "tailwind-variants";
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 
 const labelVariants = tv({
   base: "text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",

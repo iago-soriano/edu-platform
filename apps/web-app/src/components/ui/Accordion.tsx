@@ -3,7 +3,7 @@
 import React from "react";
 import * as AccordionPrimitives from "@radix-ui/react-accordion";
 import { RiAddLine } from "@remixicon/react";
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 
 const Accordion = AccordionPrimitives.Root;
 
@@ -24,7 +24,7 @@ const AccordionTrigger = React.forwardRef<
         "data-[disabled]:cursor-default data-[disabled]:text-gray-400 dark:data-[disabled]:text-gray-600",
         //focus
         "focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500",
-        className,
+        className
       )}
       {...props}
       ref={forwardedRef}
@@ -37,7 +37,7 @@ const AccordionTrigger = React.forwardRef<
           // text color
           "text-gray-400 dark:text-gray-600",
           // disabled
-          "group-data-[disabled]:text-gray-300 group-data-[disabled]:dark:text-gray-700",
+          "group-data-[disabled]:text-gray-300 group-data-[disabled]:dark:text-gray-700"
         )}
         aria-hidden="true"
         focusable="false"
@@ -55,7 +55,7 @@ const AccordionContent = React.forwardRef<
   <AccordionPrimitives.Content
     ref={forwardedRef}
     className={cx(
-      "transform-gpu data-[state=closed]:animate-accordionClose data-[state=open]:animate-accordionOpen",
+      "transform-gpu data-[state=closed]:animate-accordionClose data-[state=open]:animate-accordionOpen"
     )}
     {...props}
   >
@@ -65,7 +65,7 @@ const AccordionContent = React.forwardRef<
         "pb-4 text-sm",
         // text color
         "text-gray-700 dark:text-gray-200",
-        className,
+        className
       )}
     >
       {children}
@@ -86,7 +86,7 @@ const AccordionItem = React.forwardRef<
       "border-b first:mt-0",
       // border color
       "border-gray-200 dark:border-gray-800",
-      className,
+      className
     )}
     {...props}
   />

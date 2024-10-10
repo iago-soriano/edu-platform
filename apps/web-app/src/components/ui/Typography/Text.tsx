@@ -1,4 +1,4 @@
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 import { Slot } from "@radix-ui/react-slot";
 import { ComponentPropsWithoutRef, forwardRef } from "react";
 import { tv, VariantProps } from "tailwind-variants";
@@ -44,7 +44,7 @@ const textVariants = tv({
 
 interface TextProps
   extends ComponentPropsWithoutRef<"p">,
-  VariantProps<typeof textVariants> {
+    VariantProps<typeof textVariants> {
   as?: "p" | "span" | "small";
   asChild?: boolean;
   truncate?: boolean;
@@ -65,7 +65,7 @@ const Text = forwardRef<HTMLParagraphElement, TextProps>(
       transform,
       ...props
     },
-    forwardedRef,
+    forwardedRef
   ) => {
     return (
       <Slot
@@ -73,14 +73,14 @@ const Text = forwardRef<HTMLParagraphElement, TextProps>(
         className={cx(
           { truncate: truncate },
           textVariants({ variant, size, weight, align, transform }),
-          className,
+          className
         )}
         {...props}
       >
         {asChild ? children : <Tag>{children}</Tag>}
       </Slot>
     );
-  },
+  }
 );
 
 Text.displayName = "Text";

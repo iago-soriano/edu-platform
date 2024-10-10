@@ -10,7 +10,7 @@ import {
   RiLoader2Fill,
 } from "@remixicon/react";
 
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 
 const ToastProvider = ToastPrimitives.Provider;
 ToastProvider.displayName = "ToastProvider";

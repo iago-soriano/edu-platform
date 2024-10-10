@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { cx, focusInput, hasErrorInput } from "styles/styles";
+import { cx, focusInput, hasErrorInput } from "styles/utils";
 
 interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -34,12 +34,12 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           hasError ? hasErrorInput : "",
           // invalid (optional)
           // "aria-[invalid=true]:dark:ring-red-400/20 aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-red-200 aria-[invalid=true]:border-red-500 invalid:ring-2 invalid:ring-red-200 invalid:border-red-500"
-          className,
+          className
         )}
         {...props}
       />
     );
-  },
+  }
 );
 Textarea.displayName = "Textarea";
 

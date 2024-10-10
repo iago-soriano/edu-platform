@@ -1,4 +1,4 @@
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 import { Slot } from "@radix-ui/react-slot";
 import { RiLoader2Fill } from "@remixicon/react";
 import Link, { LinkProps } from "next/link";
@@ -30,7 +30,7 @@ const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
       rightIcon,
       ...props
     }: LinkButtonProps,
-    forwardedRef,
+    forwardedRef
   ) => {
     const Component = asChild ? Slot : Link;
 
@@ -60,7 +60,7 @@ const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
         )}
       </Component>
     );
-  },
+  }
 );
 
 LinkButton.displayName = "LinkButton";

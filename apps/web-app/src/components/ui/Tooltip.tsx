@@ -5,14 +5,14 @@
 import React from "react";
 import * as TooltipPrimitives from "@radix-ui/react-tooltip";
 
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 
 interface TooltipProps
   extends Omit<TooltipPrimitives.TooltipContentProps, "content" | "onClick">,
-  Pick<
-    TooltipPrimitives.TooltipProps,
+    Pick<
+      TooltipPrimitives.TooltipProps,
       "open" | "defaultOpen" | "onOpenChange" | "delayDuration"
-  > {
+    > {
   content: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   side?: "bottom" | "left" | "top" | "right";
@@ -40,7 +40,7 @@ const Tooltip = React.forwardRef<
       triggerAsChild = false,
       ...props
     }: TooltipProps,
-    forwardedRef,
+    forwardedRef
   ) => {
     return (
       <TooltipPrimitives.Provider delayDuration={150}>
@@ -70,7 +70,7 @@ const Tooltip = React.forwardRef<
                 // transition
                 "will-change-[transform,opacity]",
                 "data-[side=bottom]:animate-slideDownAndFade data-[side=left]:animate-slideLeftAndFade data-[side=right]:animate-slideRightAndFade data-[side=top]:animate-slideUpAndFade data-[state=closed]:animate-hide",
-                className,
+                className
               )}
               {...props}
             >
@@ -88,7 +88,7 @@ const Tooltip = React.forwardRef<
         </TooltipPrimitives.Root>
       </TooltipPrimitives.Provider>
     );
-  },
+  }
 );
 
 Tooltip.displayName = "Tooltip";

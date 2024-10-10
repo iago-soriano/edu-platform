@@ -3,7 +3,7 @@
 import React from "react";
 import * as RadioGroupPrimitives from "@radix-ui/react-radio-group";
 
-import { cx, focusRing } from "styles/styles";
+import { cx, focusRing } from "styles/utils";
 
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitives.Root>,
@@ -38,7 +38,7 @@ const RadioGroupIndicator = React.forwardRef<
           // indicator
           "bg-white",
           // disabled
-          "group-data-[disabled]:bg-gray-400 group-data-[disabled]:dark:bg-gray-500",
+          "group-data-[disabled]:bg-gray-400 group-data-[disabled]:dark:bg-gray-500"
         )}
       />
     </RadioGroupPrimitives.Indicator>
@@ -56,7 +56,7 @@ const RadioGroupItem = React.forwardRef<
       ref={forwardedRef}
       className={cx(
         "group relative flex size-4 appearance-none items-center justify-center outline-none",
-        className,
+        className
       )}
       {...props}
     >
@@ -75,7 +75,7 @@ const RadioGroupItem = React.forwardRef<
           "group-data-[disabled]:border-gray-300 group-data-[disabled]:bg-gray-100 group-data-[disabled]:text-gray-400",
           "group-data-[disabled]:dark:border-gray-700 group-data-[disabled]:dark:bg-gray-800",
           // focus
-          focusRing,
+          focusRing
         )}
       >
         <RadioGroupIndicator />

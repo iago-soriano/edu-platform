@@ -4,7 +4,7 @@ import React from "react";
 import { RiEyeFill, RiEyeOffFill, RiSearchLine } from "@remixicon/react";
 import { tv, type VariantProps } from "tailwind-variants";
 
-import { cx, focusInput, focusRing, hasErrorInput } from "styles/styles";
+import { cx, focusInput, focusRing, hasErrorInput } from "styles/utils";
 import { Plus, SendHorizonal } from "lucide-react";
 
 const inputStyles = tv({
@@ -50,7 +50,7 @@ const inputStyles = tv({
 
 interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
-  VariantProps<typeof inputStyles> {
+    VariantProps<typeof inputStyles> {
   inputClassName?: string;
   submitForm?: boolean;
 }
@@ -66,7 +66,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       submitForm,
       ...props
     }: InputProps,
-    forwardedRef,
+    forwardedRef
   ) => {
     const [typeState, setTypeState] = React.useState(type);
 
@@ -84,7 +84,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               "pl-8": isSearch,
               "pr-10": isPassword,
             },
-            inputClassName,
+            inputClassName
           )}
           {...props}
         />
@@ -94,7 +94,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               // base
               "pointer-events-none absolute bottom-0 left-2 flex h-full items-center justify-center",
               // text color
-              "text-gray-400 dark:text-gray-600",
+              "text-gray-400 dark:text-gray-600"
             )}
           >
             <RiSearchLine
@@ -106,7 +106,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {!submitForm && isPassword && (
           <div
             className={cx(
-              "absolute bottom-0 right-0 flex h-full items-center justify-center px-3",
+              "absolute bottom-0 right-0 flex h-full items-center justify-center px-3"
             )}
           >
             <button
@@ -118,7 +118,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 "text-gray-400 dark:text-gray-600",
                 // hover
                 "hover:text-gray-500 hover:dark:text-gray-500",
-                focusRing,
+                focusRing
               )}
               type="button"
               onClick={() => {
@@ -140,7 +140,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {submitForm && (
           <div
             className={cx(
-              "absolute bottom-0 right-0 flex h-full items-center justify-center px-3",
+              "absolute bottom-0 right-0 flex h-full items-center justify-center px-3"
             )}
           >
             <button
@@ -152,7 +152,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 "text-gray-600 dark:text-gray-300",
                 // hover
                 "hover:text-gray-500 hover:dark:text-gray-100",
-                focusRing,
+                focusRing
               )}
             >
               <Plus className="size-4" />
@@ -161,7 +161,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
 Input.displayName = "Input";

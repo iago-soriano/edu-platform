@@ -1,4 +1,4 @@
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 import Image from "next/image";
 import React from "react";
 
@@ -20,7 +20,7 @@ const LoadingImage = React.forwardRef<HTMLImageElement, LoadingImageProps>(
           height={"200"}
           className={cx(
             "w-auto h-auto dark:hidden animate-loadingImage",
-            className,
+            className
           )}
           alt={alt ?? "TrueBuilt logo"}
           ref={forwardedRef}
@@ -33,7 +33,7 @@ const LoadingImage = React.forwardRef<HTMLImageElement, LoadingImageProps>(
           height={"200"}
           className={cx(
             "w-auto h-auto hidden dark:block animate-loadingImage",
-            className,
+            className
           )}
           alt={alt ?? "TrueBuilt logo"}
           ref={forwardedRef}
@@ -41,7 +41,7 @@ const LoadingImage = React.forwardRef<HTMLImageElement, LoadingImageProps>(
         />
       </>
     );
-  },
+  }
 );
 
 LoadingImage.displayName = "LoadingImage";

@@ -3,11 +3,11 @@
 import React from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 
 const badgeVariants = tv({
   base: cx(
-    "inline-flex items-center gap-x-1 whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset capitalize",
+    "inline-flex items-center gap-x-1 whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset capitalize"
   ),
   variants: {
     variant: {
@@ -40,7 +40,7 @@ const badgeVariants = tv({
 
 interface BadgeProps
   extends React.ComponentPropsWithoutRef<"span">,
-  VariantProps<typeof badgeVariants> {}
+    VariantProps<typeof badgeVariants> {}
 
 const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
   ({ className, variant, ...props }: BadgeProps, forwardedRef) => {
@@ -51,7 +51,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         {...props}
       />
     );
-  },
+  }
 );
 
 Badge.displayName = "Badge";

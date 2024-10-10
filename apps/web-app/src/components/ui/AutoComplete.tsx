@@ -1,4 +1,4 @@
-import { cx } from "styles/styles";
+import { cx } from "styles/utils";
 import { Command as CommandPrimitive } from "cmdk";
 import { Check, Loader } from "lucide-react";
 import { useCallback, useRef, useState, type KeyboardEvent } from "react";
@@ -50,7 +50,7 @@ export const AutoComplete = ({
 
       if (event.key === "Enter" && input.value !== "") {
         const optionToSelect = options.find(
-          (option) => option.label === input.value,
+          (option) => option.label === input.value
         );
         if (optionToSelect) {
           setSelected(optionToSelect);
@@ -62,7 +62,7 @@ export const AutoComplete = ({
         input.blur();
       }
     },
-    [isOpen, options, onValueChange],
+    [isOpen, options, onValueChange]
   );
 
   const handleBlur = useCallback(() => {
@@ -80,7 +80,7 @@ export const AutoComplete = ({
         inputRef?.current?.blur();
       }, 0);
     },
-    [onValueChange],
+    [onValueChange]
   );
 
   return (
@@ -100,7 +100,7 @@ export const AutoComplete = ({
         <div
           className={cx(
             "animate-in fade-in-0 zoom-in-95 absolute top-0 z-10 w-full rounded-md bg-white dark:bg-gray-900 outline-none shadow-xl shadow-black/[2.5%]",
-            isOpen ? "block" : "hidden",
+            isOpen ? "block" : "hidden"
           )}
         >
           <CommandList className="border rounded-md">
