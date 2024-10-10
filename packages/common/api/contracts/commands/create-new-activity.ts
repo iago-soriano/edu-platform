@@ -1,24 +1,28 @@
 import { z } from "zod";
+
 import {
-  languagesSchema,
-  activityFormatSchema,
-  activityLevelSchema,
-} from "../common";
+  ActivityBlockType,
+  ActivityStatus,
+} from "../../../domain/domain/enums";
 
 type Params = void;
 
+const ActivityBlocksSchema = z.object({
+  type: z.nativeEnum(ActivityBlockType),
+  data: z.string(),
+});
+
 const createNewActivityRequestSchema = z.object({
-  language: languagesSchema,
-  topics: z.string().array(),
-  format: activityFormatSchema,
-  level: activityLevelSchema,
-  userEmail: z.string(),
+  generatedActivityId: z.string(),
+  blocks: z.array(ActivityBlocksSchema),
+  title: z.string(),
 });
 
 type RequestBody = z.infer<typeof createNewActivityRequestSchema>;
 
 interface ResponseBody {
-  activityId: string;
+  id: string;
+  status: ActivityStatus;
 }
 
 export type {

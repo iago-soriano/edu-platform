@@ -1,20 +1,17 @@
 import {
-  ActivityFormat,
   ActivityLevel,
-  ActivityStatus,
+  ActivityType,
   Languages,
-  paginatedParamsSchema,
-  PaginatedResponse,
-} from "../common";
+} from "../../../domain/domain/enums";
+import { paginatedParamsSchema, PaginatedResponse } from "../common";
 import { z } from "zod";
 
 type ResponseBody = PaginatedResponse<{
   id: string;
-  requestingUserId: string;
   language: Languages;
-  format: ActivityFormat;
+  type: ActivityType;
   level: ActivityLevel;
-  status: ActivityStatus;
+  topics: string[];
 }>;
 
 const getActivitiesQuerySchema = z.object({}).merge(paginatedParamsSchema);

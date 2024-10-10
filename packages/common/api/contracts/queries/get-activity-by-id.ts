@@ -1,32 +1,37 @@
+import { z } from "zod";
 import {
-  ActivityFormat,
+  ActivityBlockType,
   ActivityLevel,
   ActivityStatus,
+  ActivityType,
   Languages,
-  paginatedParamsSchema,
-  PaginatedResponse,
-} from "../common";
-import { z } from "zod";
+} from "../../../domain/domain/enums";
 
-type ResponseBody = PaginatedResponse<{
-  id: string;
-  requestingUserId: string;
-  language: Languages;
-  format: ActivityFormat;
-  level: ActivityLevel;
-  status: ActivityStatus;
-}>;
+type ResponseBody = {
+  activityGenerated: {
+    id: string;
+    language: Languages;
+    topics: string[];
+    type: ActivityType;
+    level: ActivityLevel;
+    status: ActivityStatus;
 
-const getActivityByIdQuerySchema = z
-  .object({
-    activityId: z.string(),
-  })
-  .merge(paginatedParamsSchema);
+    activityBlocks: {
+      id: string;
+      type: ActivityBlockType;
+      data: any;
+    }[];
+  };
+};
 
-type Query = z.infer<typeof getActivityByIdQuerySchema>;
+const getActivityByIdParamsSchema = z.object({
+  activityId: z.string(),
+});
+
+type Params = z.infer<typeof getActivityByIdParamsSchema>;
 
 export type {
   ResponseBody as GetActivityByIdResponseBody,
-  Query as GetActivityByIdQuery,
+  Params as GetActivityByIdParams,
 };
-export { getActivityByIdQuerySchema };
+export { getActivityByIdParamsSchema };

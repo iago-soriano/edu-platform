@@ -1,34 +1,18 @@
 import { z } from "zod";
-
-export enum Languages {}
-
-export enum ActivityFormat {
-  READING = "READING",
-  LISTENING = "LISTENING",
-}
-
-export enum ActivityLevel {
-  BASIC = "BASIC",
-  INTERMEDIATE = "INTERMEDIATE",
-  ADVANCED = "ADVANCED",
-}
-
-export enum ActivityStatus {
-  PENDING = "PENDING",
-  READY = "READY",
-}
-
-export enum OutputStatus {
-  PENDING = "PENDING",
-  READY = "READY",
-  REVIEWED = "REVIEWED",
-}
+import {
+  Languages,
+  ActivityType,
+  ActivityLevel,
+  ActivityStatus,
+  OutputStatus,
+  ActivityBlockType,
+} from "../../../domain/domain/enums";
 
 export const languagesSchema = z.nativeEnum(Languages);
 export const languages = languagesSchema.parse;
 
-export const activityFormatSchema = z.nativeEnum(ActivityFormat);
-export const activityFormat = activityFormatSchema.parse;
+export const activityTypeSchema = z.nativeEnum(ActivityType);
+export const activityType = activityTypeSchema.parse;
 
 export const activityLevelSchema = z.nativeEnum(ActivityLevel);
 export const activityLevel = activityLevelSchema.parse;
@@ -38,6 +22,9 @@ export const activityStatus = activityStatusSchema.parse;
 
 export const outputStatusSchema = z.nativeEnum(OutputStatus);
 export const outputStatus = outputStatusSchema.parse;
+
+export const activityBlockTypeSchema = z.nativeEnum(ActivityBlockType);
+export const activityBlockType = activityBlockTypeSchema.parse;
 
 export const paginatedParamsSchema = z.object({
   page: z.coerce.number().nonnegative(),

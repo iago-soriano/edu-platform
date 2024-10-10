@@ -1,9 +1,5 @@
-import {
-  OutputStatus,
-  paginatedParamsSchema,
-  PaginatedResponse,
-} from "../common";
 import { z } from "zod";
+import { OutputStatus } from "../../../domain/domain/enums";
 
 type Answer = {
   id: string;
@@ -12,25 +8,23 @@ type Answer = {
   review: string;
 };
 
-type ResponseBody = PaginatedResponse<{
+type ResponseBody = {
   id: string;
   requestingUserId: string;
   activityId: string;
   studentEmail: string;
   status: OutputStatus;
   answers: Answer[];
-}>;
+};
 
-const getStudentOutputByIdQuerySchema = z
-  .object({
-    studentOutputId: z.string(),
-  })
-  .merge(paginatedParamsSchema);
+const getStudentOutputByIdParamsSchema = z.object({
+  studentOutputId: z.string(),
+});
 
-type Query = z.infer<typeof getStudentOutputByIdQuerySchema>;
+type Params = z.infer<typeof getStudentOutputByIdParamsSchema>;
 
 export type {
   ResponseBody as GetStudentOutputByIdResponseBody,
-  Query as GetStudentOutputByIdQuery,
+  Params as GetStudentOutputByIdParams,
 };
-export { getStudentOutputByIdQuerySchema };
+export { getStudentOutputByIdParamsSchema };
