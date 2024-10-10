@@ -12,6 +12,14 @@ export default tseslint.config(
     plugins: {
       "@stylistic/ts": stylisticTs,
     },
+    extends: [
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
+      "prettier",
+      "plugin:prettier/recommended",
+      "plugin:import/recommended"
+    ],
+    parser: "@typescript-eslint/parser",
     rules: {
       // Translated prettier rules to stylistic
       "@stylistic/ts/indent": ["error", 2],
