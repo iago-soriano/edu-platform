@@ -1,15 +1,15 @@
-import { Entity } from '@edu-platform/common/platform';
+import { CollectionArray } from "./../../../../../packages/common/platform/interfaces/domain";
+import { Entity } from "@edu-platform/common/platform";
+import { ActivityBlock } from "./activity-block";
 
 export class Activity extends Entity {
-  constructor() {
+  constructor(
+    public id: string,
+    public requestingUserId: string,
+    public activityGeneratedId: string,
+    public title: string,
+    public blocks: CollectionArray<ActivityBlock>
+  ) {
     super();
   }
-
-  public id!: string;
-  public requestingUserId!: string;
-  public language!: string;
-  public topics!: string[];
-  public format!: string;
-  public level!: string;
-  public status!: string;
 }
