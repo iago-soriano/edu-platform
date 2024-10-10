@@ -12,7 +12,7 @@ export class BaseRepository<T> implements IAbstractRepository {
 
   constructor(
     private _entities: { [name: string]: TableDefinition },
-    private _dbClient: NodePgDatabase<Record<string, unknown>>,
+    private _dbClient: NodePgDatabase<Record<string, unknown>>
   ) {}
   async save(root: Entity) {
     return this._dbClient.transaction(async (tx) => {

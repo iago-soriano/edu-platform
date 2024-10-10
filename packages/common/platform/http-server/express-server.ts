@@ -1,6 +1,6 @@
 import express, { Express, RequestHandler } from "express";
 import serverless from "serverless-http";
-import { CustomError } from "@edu-platform/common/errors";
+import { CustomError } from "../../errors";
 import { HTTPController } from "../interfaces/controllers";
 import helmet from "helmet";
 import cors from "cors";
@@ -8,6 +8,7 @@ import { json } from "body-parser";
 import { AbstractServer } from "./abstract-server";
 import { Client } from "pg";
 import { ErrorMiddleware } from "./middleware";
+import { keycloak } from "./keycloak";
 
 interface IExpressConstructorParams {
   controllers: HTTPController[];
@@ -35,9 +36,27 @@ export class ExpressServer extends AbstractServer {
     this._app = express();
     this.setupServer(this._app);
 
+    // KEYCLOAK MIDDLEWARE
+    /*     this._app.use(session({
+      secret: '123456',
+      resave: false, 
+      saveInitialized: true,
+      store: memoryStorage,
+      cookie: {
+        maxAge: 1000 * 60 * 10
+      }
+    })) */
+
+    // this._app.use(
+    //   keycloak.middleware({
+    //     logout: "/logout",
+    //     admin: "/",
+    //   })
+    // );
+
     // CORS
     const allowlist = process.env.CORS_ALLOW?.split(" ");
-    const corsOptionsDelegate = function(req: any, callback: any) {
+    const corsOptionsDelegate = function (req: any, callback: any) {
       let corsOptions;
       if (process.env.CORS_ALLOW === "*") {
         callback(null, { origin: true });
@@ -67,13 +86,13 @@ export class ExpressServer extends AbstractServer {
 
       if (descriptor.middlewares)
         pipeline.push(
-          ...descriptor.middlewares.map((middleware) => middlewares[middleware]),
+          ...descriptor.middlewares.map((middleware) => middlewares[middleware])
         );
 
       this._app[descriptor.method!](
         `/web-api/${descriptor.path!}`,
         ...pipeline,
-        descriptor.execute,
+        descriptor.execute
       );
     });
 

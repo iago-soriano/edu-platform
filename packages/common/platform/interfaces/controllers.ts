@@ -12,12 +12,11 @@ export enum HttpMethod {
   PUT = "put",
   DELETE = "delete",
 }
-// TODO: remover argumento Query, e pegar query + params de req.query em todos os controllers
+
 export type Request<Params = {}, Query = {}, Body = {}> = {
-  query: Params & Query;
+  query: Query;
   params: Params;
   body: Body;
-  user: { id: string };
   files?: { image?: FileType[] };
 };
 export type Response<Body> = ExpressResponse<Body>;

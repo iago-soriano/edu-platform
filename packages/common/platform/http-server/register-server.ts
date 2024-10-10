@@ -4,11 +4,14 @@ import { HTTPController } from "../interfaces/controllers";
 import { Client } from "pg";
 
 const getControllersByResgistrationName = (
-  container: awilix.AwilixContainer,
+  container: awilix.AwilixContainer
 ) => {
   const result = [];
   for (const registrationName in container.registrations) {
-    if (registrationName.includes("Controller")) {
+    if (
+      registrationName.includes("Controller") ||
+      registrationName.includes("Webhook")
+    ) {
       const res = container.resolve<HTTPController>(registrationName);
       result.push(res);
     }
@@ -20,8 +23,8 @@ export const registerServer = (
   modules: {
     container: awilix.AwilixContainer;
     pgClient: Client;
-    basePath: string;
-  }[],
+    basePath?: string;
+  }[]
 ) => {
   const controllers: HTTPController<any, any>[] = [];
   const middlewares: any = { auth: undefined, file: undefined };
@@ -33,16 +36,24 @@ export const registerServer = (
           middlewares: controller.middlewares,
           method: controller.method,
           execute: controller.execute.bind(controller),
-          path: `${basePath}${controller.path}`,
+          path: basePath ? `${basePath}${controller.path}` : controller.path,
           validationMiddleware: controller.validationMiddleware,
         };
-      }),
+      })
     );
 
     if (container.hasRegistration("authMiddleware")) {
       const authMiddleware = container.resolve("authMiddleware");
       middlewares.auth = async (req: any, _: any, next: any) => {
         await authMiddleware.execute.bind(authMiddleware)(req, req.headers);
+        next();
+      };
+    }
+
+    if (container.hasRegistration("webhookSignature")) {
+      const webhookSignature = container.resolve("webhookSignature");
+      middlewares.webhookSignature = async (req: any, _: any, next: any) => {
+        await webhookSignature.execute.bind(webhookSignature)(req, req.headers);
         next();
       };
     }

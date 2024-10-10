@@ -8,11 +8,11 @@ export type JWTPayload = {
 };
 
 export interface ITokenService {
-  generateRefreshToken: (payload: JWTPayload) => string;
-  generateAccessToken: (payload: JWTPayload) => string;
-  verifyAccessToken: (token: string) => JWTPayload;
-  verifyRefreshToken: (token: string) => JWTPayload;
-  decode: (token: string) => LibJWTPayload;
+  verify: (
+    token: string,
+    issuer: string,
+    publicKey: string
+  ) => { userEmail: string };
 }
 
 export interface ITopicService {
@@ -41,4 +41,12 @@ export interface IEmailService {
   sendVerifyAccountEmail: (
     args: SendEmailArgs & { token: string }
   ) => Promise<any>;
+}
+
+export interface IKeycloakAdmin {
+  createUser(
+    username: string,
+    email: string,
+    password: string
+  ): Promise<{ id: string }>;
 }

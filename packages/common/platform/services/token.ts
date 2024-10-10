@@ -1,73 +1,25 @@
 import { ITokenService, JWTPayload } from "./interfaces";
-import { Forbidden } from "@edu-platform/common/errors";
+import { Forbidden } from "../../errors";
 import jwt, { JwtPayload as LibJWTPayload } from "jsonwebtoken";
 
 export class JWTTokenService implements ITokenService {
-  _accessTokenPrivateKey: string;
-  _accessTokenPublicKey: string;
+  constructor() {}
 
-  _refreshTokenPrivateKey: string;
-  _refreshTokenPublicKey: string;
-
-  constructor() {
-    this._accessTokenPrivateKey = process.env.ACCESS_TOKEN_PRIVATE_KEY || "";
-    this._accessTokenPublicKey = process.env.ACCESS_TOKEN_PUBLIC_KEY || "";
-    this._refreshTokenPrivateKey = process.env.REFRESH_TOKEN_PRIVATE_KEY || "";
-    this._refreshTokenPublicKey = process.env.REFRESH_TOKEN_PUBLIC_KEY || "";
-  }
-
-  generateRefreshToken({ id }: JWTPayload) {
-    try {
-      const resp = jwt.sign({}, this._refreshTokenPrivateKey, {
-        issuer: process.env.HOST_NAME,
-        algorithm: "RS256",
-        expiresIn: "0.5y",
-        subject: `${id}`,
-      });
-      return resp;
-    } catch (e) {
-      throw new Error((e as Error).message);
-    }
-  }
-
-  generateAccessToken({ id }: JWTPayload) {
-    try {
-      const resp = jwt.sign({}, this._accessTokenPrivateKey, {
-        issuer: process.env.HOST_NAME,
-        algorithm: "RS256",
-        expiresIn: "1y",
-        subject: `${id}`,
-      });
-      return resp;
-    } catch (e) {
-      throw new Error((e as Error).message);
-    }
-  }
-
-  _verifyToken(token: string, secret: string) {
-    const tokenPayload = jwt.verify(token, secret) as LibJWTPayload;
+  verify(token: string, validIssuer: string, publicKey: string) {
+    if (!publicKey) throw new Error("Access token public key not found");
+    const tokenPayload = jwt.verify(token, publicKey, {
+      algorithms: ["RS256"],
+    }) as any;
+    // console.log("got token payload", tokenPayload);
     const issuer = (tokenPayload as LibJWTPayload)?.iss;
-    const userId = (tokenPayload as LibJWTPayload)?.sub;
 
     if (!issuer) throw new Forbidden("No issuer in token");
-    if (!userId) throw new Forbidden("No subject in token");
 
-    if (issuer !== process.env.HOST_NAME)
+    if (issuer !== validIssuer)
       throw new Forbidden("Incorrect issuer in token");
 
     return {
-      id: userId,
+      userEmail: tokenPayload.email,
     };
-  }
-  verifyAccessToken(token: string) {
-    return this._verifyToken(token, this._accessTokenPublicKey);
-  }
-
-  verifyRefreshToken(token: string) {
-    return this._verifyToken(token, this._refreshTokenPublicKey);
-  }
-
-  decode(token: string) {
-    return jwt.decode(token) as JWTPayload;
   }
 }

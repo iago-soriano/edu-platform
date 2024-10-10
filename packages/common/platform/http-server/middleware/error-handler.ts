@@ -14,11 +14,11 @@ export function ErrorMiddleware(
   error: Error,
   _: ExpressRequest,
   res: ExpressResponse,
-  __: NextFunction,
+  __: NextFunction
 ) {
   if (error instanceof InvalidStateError) {
     console.log(
-      `ERRO ${JSON.stringify(error.fieldErrors)} ${error.HTTPstatusCode} ${error.message}`,
+      `ERRO ${JSON.stringify(error.fieldErrors)} ${error.HTTPstatusCode} ${error.message}`
     );
 
     res
@@ -35,6 +35,7 @@ export function ErrorMiddleware(
     return;
   }
 
+  console.error(`Unknown error ${error}`);
   res
     .status((error as CustomError)?.HTTPstatusCode || 500)
     .json({ message: error.message || error.toString() });
