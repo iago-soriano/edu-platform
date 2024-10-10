@@ -1,8 +1,8 @@
-import "react-toastify/dist/ReactToastify.css";
-import "../styles/global.css";
+// import "react-toastify/dist/ReactToastify.css";
+import "../styles/globals.css";
 
-import { Navbar } from "components/navbar";
-import { Footer } from "components/footer";
+import { Navbar } from "@components/ui/Navbar copy";
+import { Footer } from "components/ui/footer";
 import RootProviders from "contexts/providers";
 
 export const metadata = {
@@ -14,13 +14,9 @@ export const metadata = {
 export default function RootLayout(context) {
   return (
     <RootProviders>
-      <html lang="pt-BR">
-        <body suppressHydrationWarning className="bg-surface2 text-text1">
-          <Navbar />
-          <main className="min-h-[87vh] px-7 py-2">{context.children}</main>
-          <Footer />
-        </body>
-      </html>
+      <Navbar />
+      <main className="min-h-[87vh] px-7 py-2">{context.children}</main>
+      <Footer />
     </RootProviders>
   );
 }

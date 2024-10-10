@@ -9,7 +9,10 @@ import {
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
-      <section className="grid lg:grid-cols-2 grid-cols-1 items-center w-full bg-surface2 h-[calc(100vh-6.7rem)]">
+      <section
+        id="hero"
+        className="grid lg:grid-cols-2 grid-cols-1 items-center w-full bg-surface2 h-[calc(100vh-6.7rem)]"
+      >
         <div className="text-center h-full flex flex-col justify-center items-center">
           <h1 className="my-5">O problema que resolvemos</h1>
           <p className="">Uma breve descrição de como resolvemos o problema</p>
@@ -32,7 +35,7 @@ export default function Home() {
           />
         </div>
       </section>
-      <section>
+      <section id="how-it-works">
         <div className="flex flex-col justify-center items-center">
           <h6>Como funciona</h6>
           <h3>Crie atividades para os seus estudantes</h3>
@@ -55,7 +58,7 @@ export default function Home() {
           />
         </div>
       </section>
-      <FeatureSection>
+      <FeatureSection id="features">
         <FeatureTextContainer>
           <h3 className="my-5">Crie atividades interativas</h3>
           <ul className="list-disc">
