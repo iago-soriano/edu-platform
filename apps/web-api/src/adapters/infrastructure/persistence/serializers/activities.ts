@@ -1,35 +1,39 @@
-import { activities } from '../schema';
-import { Activity } from 'domain/entities';
+import { activities, activitiesBlocks } from "../schema";
+import { Activity, ActivityBlock } from "domain/entities";
 import {
   ChangeEventsTree,
   ChangeTrackingProxy,
-} from '@edu-platform/common/platform';
+  CollectionArray,
+} from "@edu-platform/common/platform";
 
 export class ActivitySerializer {
   static serialize = (domain: Activity) => {
     const dto: typeof activities.$inferInsert = {
       id: domain.id,
       requestingUserId: domain.requestingUserId,
-      language: domain.language,
-      topics: domain.topics,
-      format: domain.format,
-      level: domain.level,
-      status: domain.status,
+      activityGeneratedId: domain.activityGeneratedId,
+      title: domain.title,
     };
 
     return dto;
   };
 
-  static deserialize(dto: typeof activities.$inferSelect) {
-    const activity = new Activity();
+  static deserialize(
+    dto: typeof activities.$inferSelect,
+    blocksDto: (typeof activitiesBlocks.$inferSelect)[]
+  ) {
+    const activity = new Activity(
+      dto.id,
+      dto.requestingUserId,
+      dto.activityGeneratedId,
+      dto.title || "",
+      new CollectionArray<ActivityBlock>()
+    );
 
     activity.id = dto.id;
     activity.requestingUserId = dto.requestingUserId;
-    activity.language = dto.language;
-    activity.topics = dto.topics;
-    activity.format = dto.format;
-    activity.level = dto.level;
-    activity.status = dto.status;
+    activity.activityGeneratedId = dto.activityGeneratedId;
+    activity.title = dto.title || "";
 
     const proxiedEntity = new ChangeTrackingProxy(activity) as Activity;
 

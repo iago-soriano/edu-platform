@@ -1,11 +1,12 @@
-import { IUserRepository } from 'application/interfaces';
-import { db, users } from '../schema';
-import { eq } from 'drizzle-orm';
-import { AllTables } from './all-tables';
-import { BaseRepository } from '@edu-platform/common/platform';
+import { IUserRepository } from "application/interfaces";
+import { db, users } from "../schema";
+import { eq } from "drizzle-orm";
+import { AllTables } from "./all-tables";
+import { BaseRepository } from "@edu-platform/common/platform";
+import { User } from "@domain/entities";
 
 export const EntityNames = {
-  User: AllTables['User'],
+  User: AllTables["User"],
 };
 
 export class UserRepository
@@ -16,10 +17,38 @@ export class UserRepository
     super(EntityNames, db);
   }
   async getByEmail(email: string) {
-    return (await db.select().from(users).where(eq(users.email, email)))[0];
+    const dto = (
+      await db.select().from(users).where(eq(users.email, email))
+    )[0];
+
+    if (!dto) return null;
+
+    const user = new User(
+      dto.id,
+      dto.firstName,
+      dto.lastName,
+      dto.email,
+      dto.counter!,
+      dto.subscriptionEndsAt ?? new Date()
+    );
+
+    return user;
   }
 
   async getById(id: string) {
-    return (await db.select().from(users).where(eq(users.id, id)))[0];
+    const dto = (await db.select().from(users).where(eq(users.id, id)))[0];
+
+    if (!dto) return null;
+
+    const user = new User(
+      dto.id,
+      dto.firstName,
+      dto.lastName,
+      dto.email,
+      dto.counter!,
+      dto.subscriptionEndsAt ?? new Date()
+    );
+
+    return user;
   }
 }

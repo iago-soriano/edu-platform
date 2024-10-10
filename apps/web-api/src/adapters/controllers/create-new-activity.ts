@@ -1,18 +1,16 @@
+import { Response as TypedResponse } from "@edu-platform/common/platform/interfaces";
+import { Request as TypedRequest } from "../interfaces";
 import {
-  Request as TypedRequest,
-  Response as TypedResponse,
-} from '@edu-platform/common/platform/interfaces';
-import {
-  ValidateParameters,
   Post,
   Middlewares,
-} from '@edu-platform/common/platform/http-server/decorators';
+  ValidateParameters,
+} from "@edu-platform/common/platform/http-server/decorators";
 import {
   createNewActivityRequestSchema as bodySchema,
   CreateNewActivityRequestBody,
   CreateNewActivityResponseBody,
-} from '@edu-platform/common/api';
-import { ICreateNewActivityUseCase } from 'application/use-cases';
+} from "@edu-platform/common/api";
+import { ICreateNewActivityUseCase } from "application/use-cases";
 
 type Request = TypedRequest<{}, {}, CreateNewActivityRequestBody>;
 type Response = TypedResponse<CreateNewActivityResponseBody>;
@@ -21,9 +19,9 @@ interface Deps {
   createNewActivityUseCase: ICreateNewActivityUseCase;
 }
 
-@Post('activities')
+@Post("activities/new")
 @ValidateParameters({ bodySchema })
-@Middlewares(['auth'])
+@Middlewares(["auth"])
 export class CreateNewActivityController {
   private _createNewActivityUseCase: ICreateNewActivityUseCase;
 
@@ -32,9 +30,17 @@ export class CreateNewActivityController {
   }
 
   async execute(req: Request, res: Response) {
-    const { language, topics, format, level, userEmail } = req.body;
-    const { user } = req;
+    const { generatedActivityId, blocks, title } = req.body;
 
-    res.status(200).json();
+    const user = req.user;
+
+    const resp = await this._createNewActivityUseCase.execute({
+      generatedActivityId,
+      blocks,
+      title,
+      user,
+    });
+
+    res.status(200).json(resp);
   }
 }

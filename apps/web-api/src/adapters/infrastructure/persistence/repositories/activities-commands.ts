@@ -1,12 +1,11 @@
-import { db, activities } from '../schema';
-import { IActivitiesRepository } from 'application/interfaces';
-import { eq } from 'drizzle-orm';
-import { BaseRepository } from '@edu-platform/common/platform';
-import { AllTables } from './all-tables';
-import { ActivitySerializer } from '../serializers';
+import { db, activitiesGenerated, activitiesBlocks } from "../schema";
+import { IActivitiesRepository } from "application/interfaces";
+import { eq, and } from "drizzle-orm";
+import { BaseRepository } from "@edu-platform/common/platform";
+import { AllTables } from "./all-tables";
 
-export const ActivityEntityNames = {
-  Activity: AllTables['Activity'],
+const ActivityEntityNames = {
+  Activity: AllTables["Activity"],
 };
 
 export class ActivitiesRepository
@@ -16,8 +15,4 @@ export class ActivitiesRepository
   constructor() {
     super(ActivityEntityNames, db);
   }
-
-  async findActivities() {}
-
-  async findActivityById(activityId: string) {}
 }

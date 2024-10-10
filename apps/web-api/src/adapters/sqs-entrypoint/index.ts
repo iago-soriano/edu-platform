@@ -1,21 +1,18 @@
-import { SQSHandler, SQSEvent } from 'aws-lambda';
+import { SQSHandler, SQSEvent } from "aws-lambda";
+import { IGenerateActivityUseCase } from "application/event-handlers";
 
 export class SqsHandler {
-  constructor() {}
+  constructor(private generateActivityUseCase: IGenerateActivityUseCase) {}
   async execute(evnt: SQSEvent) {
     for (const record of evnt.Records) {
-      const evntType = record.messageAttributes['eventType'].stringValue;
+      const evntType = record.messageAttributes["eventType"].stringValue;
       const payload = JSON.parse(record.body);
 
-      console.log('Event:', { evntType, payload });
-
       switch (evntType) {
-        case 'UserCreated':
-          /*      await this.userCreatedUseCase.execute({
-            id: payload["id"],
-            email: payload["email"],
-            name: payload["name"],
-          }); */
+        case "ActivityCreated":
+          await this.generateActivityUseCase.execute({
+            ...payload,
+          });
           break;
 
         default:

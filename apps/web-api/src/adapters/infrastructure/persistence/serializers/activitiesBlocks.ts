@@ -1,14 +1,17 @@
-import { activitiesBlocks } from '../schema';
-import { ActivityBlock } from 'domain/entities';
+import { activitiesBlocks } from "../schema";
+import { ActivityBlock } from "domain/entities";
 import {
   ChangeEventsTree,
   ChangeTrackingProxy,
-} from '@edu-platform/common/platform';
+} from "@edu-platform/common/platform";
+import { ActivityBlockType } from "@edu-platform/common/domain/domain/enums";
 
 export class ActivityBlockSerializer {
   static serialize = (domain: ActivityBlock) => {
     const dto: typeof activitiesBlocks.$inferInsert = {
       id: domain.id,
+      activityGeneratedId: domain.activityGeneratedId,
+      activityId: domain.activityId,
       type: domain.type,
       data: domain.data,
     };
@@ -17,11 +20,13 @@ export class ActivityBlockSerializer {
   };
 
   static deserialize(dto: typeof activitiesBlocks.$inferSelect) {
-    const activity = new ActivityBlock();
-
-    activity.id = dto.id;
-    activity.type = dto.type;
-    activity.data = dto.data;
+    const activity = new ActivityBlock(
+      dto.id,
+      dto.type as ActivityBlockType,
+      dto.data,
+      dto.activityGeneratedId,
+      dto.activityId
+    );
 
     const proxiedEntity = new ChangeTrackingProxy(activity) as ActivityBlock;
 

@@ -2,16 +2,26 @@ import {
   users,
   activities,
   activitiesBlocks,
-  answers,
   studentOutputs,
-} from './tables';
-import { ActivitySerializer, ActivityBlockSerializer } from '../serializers';
-import { TableDefinition } from '@edu-platform/common/platform';
-import { StudentOutputSerializer } from '../serializers/studentOutput';
+  activitiesGenerated,
+} from "./tables";
+import {
+  ActivitySerializer,
+  ActivityBlockSerializer,
+  ActivityGeneratedSerializer,
+  UserSerializer,
+} from "../serializers";
+import { TableDefinition } from "@edu-platform/common/platform";
+import { StudentOutputSerializer } from "../serializers/studentOutput";
 
 export const usersTable: TableDefinition = {
   table: users,
-  serializer: (args) => args,
+  serializer: UserSerializer.serialize,
+};
+
+export const activitiesGeneratedTable: TableDefinition = {
+  table: activitiesGenerated,
+  serializer: ActivityGeneratedSerializer.serialize,
 };
 
 export const activitiesTable: TableDefinition = {
@@ -21,11 +31,6 @@ export const activitiesTable: TableDefinition = {
 
 export const activitiesBlocksTable: TableDefinition = {
   table: activitiesBlocks,
-  serializer: ActivityBlockSerializer.serialize,
-};
-
-export const answersTable: TableDefinition = {
-  table: answers,
   serializer: ActivityBlockSerializer.serialize,
 };
 
