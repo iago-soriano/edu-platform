@@ -1,4 +1,4 @@
-import { ActivityBlockType } from "@edu-platform/common/domain/domain/enums";
+import { ActivityBlockType } from "@edu-platform/common/domain/enums";
 import { Entity } from "@edu-platform/common/platform";
 
 export class ActivityBlock extends Entity {

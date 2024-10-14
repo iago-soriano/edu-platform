@@ -1,13 +1,18 @@
-import { IUseCase } from "@edu-platform/common/platform";
+import {
+  IUseCase,
+  ISQSService,
+  CollectionArray,
+} from "@edu-platform/common/platform";
+import { GenerateActivityGPTEvent } from "@edu-platform/common/domain";
 import { IActivitiesGeneratedRepository, IUserRepository } from "../interfaces";
-import { ActivityGenerated } from "@domain/entities";
+import { ActivityBlock, ActivityGenerated } from "@domain/entities";
 import { createId } from "@paralleldrive/cuid2";
 import {
   ActivityStatus,
   ActivityType,
   ActivityLevel,
   Languages,
-} from "@edu-platform/common/domain/domain/enums";
+} from "@edu-platform/common/domain/enums";
 
 type InputParams = {
   language: Languages;
@@ -27,7 +32,8 @@ export type ICreateNewGeneratedActivityUseCase = IUseCase<InputParams, Return>;
 class UseCase implements ICreateNewGeneratedActivityUseCase {
   constructor(
     private activitiesGeneratedRepository: IActivitiesGeneratedRepository,
-    private userRepository: IUserRepository
+    private userRepository: IUserRepository,
+    private sqsService: ISQSService
   ) {}
 
   async execute({ language, topics, type, level, userId }: InputParams) {
@@ -51,13 +57,15 @@ class UseCase implements ICreateNewGeneratedActivityUseCase {
         topics,
         type as ActivityType,
         level as ActivityLevel,
-        ActivityStatus.PENDING
+        ActivityStatus.PENDING,
+        new CollectionArray<ActivityBlock>()
       );
 
       const created =
         await this.activitiesGeneratedRepository.save(newActivity);
 
-      // TODO: publicar no SQS
+      await this.sqsService.send(new GenerateActivityGPTEvent(created.id));
+
       return { id: newId, status: ActivityStatus.PENDING };
     }
 

@@ -48,6 +48,9 @@ export class AccessTokenMiddlewareController {
       user = await this.userRepository.getByEmail(userEmail);
 
       if (!user) throw new Error("User not found");
+
+      user.isNew = false;
+      user.isDelete = false;
     } catch (e) {
       if (e instanceof TokenExpiredError) {
         throw new Unauthorized();

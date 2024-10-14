@@ -1,5 +1,5 @@
 import { Answer, StudentOutput } from "@domain/entities";
-import { OutputStatus } from "@edu-platform/common/domain/domain/enums";
+import { OutputStatus } from "@edu-platform/common/domain/enums";
 import { IUseCase } from "@edu-platform/common/platform";
 import { createId } from "@paralleldrive/cuid2";
 import {
@@ -32,7 +32,9 @@ class UseCase implements ICreateNewStudentOutputUseCase {
 
     if (!existingStudentOutput) {
       const activity =
-        await this.activitiesReadRepository.getActivityById(activityId);
+        await this.activitiesReadRepository.getGeneratedActivityById(
+          activityId
+        );
 
       const answersArray = activity?.activityGenerated.activityBlocks.map(
         (block) =>
@@ -53,6 +55,7 @@ class UseCase implements ICreateNewStudentOutputUseCase {
         answersArray
       );
 
+      // TODO: send e-mail to student w/ link to student-output
       await this.studentOutputsRepository.save(newOutput);
     }
   }

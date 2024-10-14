@@ -4,7 +4,7 @@ import {
   ChangeEventsTree,
   ChangeTrackingProxy,
 } from "@edu-platform/common/platform";
-import { ActivityBlockType } from "@edu-platform/common/domain/domain/enums";
+import { ActivityBlockType } from "@edu-platform/common/domain/enums";
 
 export class ActivityBlockSerializer {
   static serialize = (domain: ActivityBlock) => {
@@ -20,7 +20,7 @@ export class ActivityBlockSerializer {
   };
 
   static deserialize(dto: typeof activitiesBlocks.$inferSelect) {
-    const activity = new ActivityBlock(
+    const block = new ActivityBlock(
       dto.id,
       dto.type as ActivityBlockType,
       dto.data,
@@ -28,7 +28,10 @@ export class ActivityBlockSerializer {
       dto.activityId
     );
 
-    const proxiedEntity = new ChangeTrackingProxy(activity) as ActivityBlock;
+    block.isNew = false;
+    block.isDelete = false;
+
+    const proxiedEntity = new ChangeTrackingProxy(block) as ActivityBlock;
 
     return proxiedEntity;
   }

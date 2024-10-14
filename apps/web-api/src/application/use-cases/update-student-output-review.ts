@@ -1,12 +1,10 @@
-import { StudentOutput } from "@domain/entities";
-import { OutputStatus } from "@edu-platform/common/domain/domain/enums";
+import { OutputStatus } from "@edu-platform/common/domain/enums";
 import { IUseCase } from "@edu-platform/common/platform";
-import { createId } from "@paralleldrive/cuid2";
+import { EmailService } from "@edu-platform/common/platform/services";
 import { IStudentOutputsRepository } from "application/interfaces";
 
 type InputParams = {
-  blockId: string;
-  review: string;
+  newReviews: { review: string; blockId: string }[];
   studentOutputId: string;
 };
 
@@ -15,15 +13,25 @@ type Return = void;
 export type IUpdateStudentOutputReviewUseCase = IUseCase<InputParams, Return>;
 
 class UseCase implements IUpdateStudentOutputReviewUseCase {
-  constructor(private studentOutputsRepository: IStudentOutputsRepository) {}
+  constructor(
+    private studentOutputsRepository: IStudentOutputsRepository,
+    private emailService: EmailService
+  ) {}
 
-  async execute({ blockId, review, studentOutputId }: InputParams) {
+  async execute({ newReviews, studentOutputId }: InputParams) {
     const studentOutput =
       await this.studentOutputsRepository.findStudentOutputById(
         studentOutputId
       );
 
-    studentOutput.updateReview(review, blockId);
+    if (studentOutput.status !== OutputStatus.READY)
+      throw new Error("Student Output not ready");
+
+    studentOutput.updateReviews(newReviews);
+
+    await this.emailService.sendOutputReviewToStudent(
+      studentOutput.studentEmail
+    );
 
     await this.studentOutputsRepository.save(studentOutput);
   }

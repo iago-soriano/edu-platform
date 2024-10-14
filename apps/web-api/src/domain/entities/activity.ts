@@ -1,5 +1,4 @@
-import { CollectionArray } from "./../../../../../packages/common/platform/interfaces/domain";
-import { Entity } from "@edu-platform/common/platform";
+import { Entity, CollectionArray } from "@edu-platform/common/platform";
 import { ActivityBlock } from "./activity-block";
 
 export class Activity extends Entity {

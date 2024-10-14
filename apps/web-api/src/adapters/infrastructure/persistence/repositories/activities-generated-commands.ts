@@ -4,14 +4,10 @@ import { eq, and } from "drizzle-orm";
 import { BaseRepository } from "@edu-platform/common/platform";
 import { AllTables } from "./all-tables";
 import { ActivityGeneratedSerializer } from "../serializers";
-import {
-  ActivityLevel,
-  ActivityType,
-  Languages,
-} from "@edu-platform/common/domain/domain/enums";
 
 export const ActivityEntityNames = {
   ActivityGenerated: AllTables["ActivityGenerated"],
+  ActivityBlock: AllTables["ActivityBlock"],
 };
 
 export class ActivitiesGeneratedRepository
@@ -31,6 +27,8 @@ export class ActivitiesGeneratedRepository
         eq(activitiesGenerated.id, activitiesBlocks.activityGeneratedId)
       )
       .where(and(eq(activitiesGenerated.id, activityId)));
+
+    if (!dto[0]) return null;
 
     const baseActivity = ActivityGeneratedSerializer.deserialize(
       dto[0].activitiesGenerated

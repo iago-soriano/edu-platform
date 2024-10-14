@@ -1,7 +1,7 @@
 import { activitiesGenerated, activitiesBlocks } from "../schema";
-import { ActivityGenerated } from "domain/entities";
+import { ActivityGenerated, ActivityBlock } from "domain/entities";
 import {
-  ChangeEventsTree,
+  CollectionArray,
   ChangeTrackingProxy,
 } from "@edu-platform/common/platform";
 import {
@@ -9,7 +9,8 @@ import {
   ActivityStatus,
   ActivityType,
   Languages,
-} from "@edu-platform/common/domain/domain/enums";
+} from "@edu-platform/common/domain/enums";
+import { ActivityBlockSerializer } from "./activitiesBlocks";
 
 export class ActivityGeneratedSerializer {
   static serialize = (domain: ActivityGenerated) => {
@@ -35,8 +36,15 @@ export class ActivityGeneratedSerializer {
       activityDto.topics,
       activityDto.type as ActivityType,
       activityDto.level as ActivityLevel,
-      activityDto.status as ActivityStatus
+      activityDto.status as ActivityStatus,
+      new CollectionArray<ActivityBlock>(
+        ...(blocksDto?.map((dto) => ActivityBlockSerializer.deserialize(dto)) ??
+          [])
+      )
     );
+
+    activity.isNew = false;
+    activity.isDelete = false;
 
     const proxiedEntity = new ChangeTrackingProxy(
       activity

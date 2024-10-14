@@ -25,6 +25,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-sqs": "^3.669.0",
     "@edu-platform/common": "workspace:*",
     "@keycloak/keycloak-admin-client": "^26.0.0",
     "@paralleldrive/cuid2": "^2.2.2",

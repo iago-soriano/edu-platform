@@ -1,5 +1,10 @@
 import GenerateActivityUseCase, {
   IGenerateActivityUseCase,
 } from "./generate-activity-gpt";
+import GenerateReadingActivity from "./reading-strategy";
 
-export { GenerateActivityUseCase, IGenerateActivityUseCase };
+export {
+  GenerateActivityUseCase,
+  IGenerateActivityUseCase,
+  GenerateReadingActivity,
+};

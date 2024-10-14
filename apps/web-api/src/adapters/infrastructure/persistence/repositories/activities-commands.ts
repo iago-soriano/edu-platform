@@ -6,6 +6,7 @@ import { AllTables } from "./all-tables";
 
 const ActivityEntityNames = {
   Activity: AllTables["Activity"],
+  ActivityBlock: AllTables["ActivityBlock"],
 };
 
 export class ActivitiesRepository

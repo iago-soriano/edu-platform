@@ -5,7 +5,7 @@ import {
   ActivityType,
   Languages,
   OutputStatus,
-} from "@edu-platform/common/domain/domain/enums";
+} from "@edu-platform/common/domain/enums";
 import {
   integer,
   pgEnum,

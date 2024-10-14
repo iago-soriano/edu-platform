@@ -10,19 +10,20 @@ import {
 } from "@edu-platform/common/platform/http-server/decorators";
 import {
   GetActivityByIdParams,
+  GetActivityByIdQuery,
   GetActivityByIdResponseBody,
   getActivityByIdParamsSchema as paramsSchema,
 } from "@edu-platform/common/api";
 import { IActivitiesReadRepository } from "@application/interfaces";
 
-type Request = TypedRequest<GetActivityByIdParams, {}, {}>;
+type Request = TypedRequest<GetActivityByIdParams, GetActivityByIdQuery, {}>;
 type Response = TypedResponse<GetActivityByIdResponseBody>;
 
 interface Deps {
   activitiesReadRepository: IActivitiesReadRepository;
 }
 
-@Get("activities/:activityId")
+@Get("activities/generated/:activityId")
 @ValidateParameters({ paramsSchema })
 @Middlewares(["auth"])
 export class GetActivitiesByIdController {
@@ -35,8 +36,10 @@ export class GetActivitiesByIdController {
   async execute(req: Request, res: Response) {
     const { activityId } = req.params;
 
-    const resp =
-      await this._activitiesReadRepository.getActivityById(activityId);
+    let resp: GetActivityByIdResponseBody | undefined;
+
+    resp =
+      await this._activitiesReadRepository.getGeneratedActivityById(activityId);
 
     res.status(200).json(resp);
   }

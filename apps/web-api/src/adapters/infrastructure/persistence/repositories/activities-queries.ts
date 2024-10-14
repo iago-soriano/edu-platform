@@ -14,7 +14,8 @@ import {
   ActivityStatus,
   ActivityType,
   Languages,
-} from "@edu-platform/common/domain/domain/enums";
+} from "@edu-platform/common/domain/enums";
+import { sortActivityBlocks } from "./utils";
 
 export class ActivitiesReadRepository implements IActivitiesReadRepository {
   async listGeneratedActivities({ page, pageSize }: PaginatedParamsDTO) {
@@ -43,7 +44,7 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
         type: act.type as ActivityType,
         level: act.level as ActivityLevel,
       })),
-      pagination: { totalCount: activityList[0].totalActivitiesCount },
+      pagination: { totalCount: activityList[0]?.totalActivitiesCount },
     };
   }
 
@@ -85,11 +86,11 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
         level: act.level as ActivityLevel,
         type: act.type as ActivityType,
       })),
-      pagination: { totalCount: activityList[0].totalActivitiesCount },
+      pagination: { totalCount: activityList[0]?.totalActivitiesCount ?? 0 },
     };
   }
 
-  async getActivityById(activityId: string) {
+  async getGeneratedActivityById(activityId: string) {
     const activity = await db
       .select()
       .from(activitiesGenerated)
@@ -108,11 +109,13 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
         level: activity[0].activitiesGenerated.level as ActivityLevel,
         status: activity[0].activitiesGenerated.status as ActivityStatus,
 
-        activityBlocks: activity.map((activity) => ({
-          id: activity.activitiesBlocks?.id || "",
-          type: activity.activitiesBlocks?.type as ActivityBlockType,
-          data: activity.activitiesBlocks?.data as string,
-        })),
+        activityBlocks: sortActivityBlocks(
+          activity.map((activity) => ({
+            id: activity.activitiesBlocks?.id || "",
+            type: activity.activitiesBlocks?.type as ActivityBlockType,
+            data: activity.activitiesBlocks?.data as string,
+          }))
+        ),
       },
     };
   }

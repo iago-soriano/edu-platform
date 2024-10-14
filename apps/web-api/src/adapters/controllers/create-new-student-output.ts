@@ -20,7 +20,7 @@ interface Deps {
   createNewStudentOutputUseCase: ICreateNewStudentOutputUseCase;
 }
 
-@Post("student-output")
+@Post("student-outputs")
 @ValidateParameters({ bodySchema })
 @Middlewares(["auth"])
 export class CreateNewStudentOutputController {
@@ -36,8 +36,8 @@ export class CreateNewStudentOutputController {
     const userId = req.user.id;
 
     await this._createNewStudentOutputUseCase.execute({
-      activityId,
-      userId,
+      activityId, // my activity
+      userId, // logged user, teacher
       studentEmail,
     });
 

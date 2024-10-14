@@ -41,11 +41,14 @@ import {
   BCryptEncryptionService,
   EmailService,
   JWTTokenService,
-  KeycloakAdmin,
+  SQSService,
 } from "@edu-platform/common/platform/services";
 import { DomainServicesRegistry } from "domain/services";
 
-import { GenerateActivityUseCase } from "application/event-handlers";
+import {
+  GenerateActivityUseCase,
+  GenerateReadingActivity,
+} from "application/event-handlers";
 import { SqsHandler } from "../adapters/sqs-entrypoint";
 import { CreateNewActivityController } from "adapters/controllers/create-new-activity";
 
@@ -97,7 +100,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     createNewGeneratedActivityUseCase: awilix
       .asClass(CreateNewGeneratedActivityUseCase)
       .classic(),
-    domainTopicArn: awilix.asValue(process.env.DOMAIN_SNS_TOPIC_ARN),
 
     // services
     // keycloakAdmin: awilix.asClass(KeycloakAdmin),
@@ -107,6 +109,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     assetRepository: awilix.asClass(AssetRepository),
     storageService: awilix.asClass(S3Service).classic(),
     topicService: awilix.asClass(TopicService).classic(),
+    sqsService: awilix.asClass(SQSService).classic(),
 
     domainServiceRegistry: awilix.asClass(DomainServicesRegistry).classic(),
 
@@ -129,5 +132,6 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     sqsHandler: awilix.asClass(SqsHandler).classic(),
 
     generateActivityUseCase: awilix.asClass(GenerateActivityUseCase).classic(),
+    readingStrategy: awilix.asClass(GenerateReadingActivity).classic(),
   });
 };

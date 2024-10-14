@@ -1,10 +1,10 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
-import { getDrizzleClient } from '@edu-platform/common/platform/database/drizzle-client';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { LogWriter as DrizzleLogWriter } from 'drizzle-orm/logger';
-import * as schema from '.';
+import { getDrizzleClient } from "@edu-platform/common/platform/database/drizzle-client";
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { LogWriter as DrizzleLogWriter } from "drizzle-orm/logger";
+import * as schema from ".";
 
 class LogWriter implements DrizzleLogWriter {
   write(message: string) {
@@ -14,7 +14,7 @@ class LogWriter implements DrizzleLogWriter {
 const { dbClient, pgClient } = getDrizzleClient(
   `${process.env.DATABASE_URL}`!,
   schema,
-  new LogWriter(),
+  new LogWriter()
 );
 
 const db = dbClient as NodePgDatabase<typeof schema>;

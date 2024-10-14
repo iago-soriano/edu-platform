@@ -1,3 +1,4 @@
+import { OutputStatus } from "@edu-platform/common/domain/enums";
 import { Entity } from "@edu-platform/common/platform";
 
 export type Answer = {
@@ -12,25 +13,29 @@ export class StudentOutput extends Entity {
     public requestingUserId: string,
     public activityId: string,
     public studentEmail: string,
-    public status: string,
+    public status: OutputStatus,
     public answers: Answer[]
   ) {
     super();
   }
 
-  public updateAnswer(newAnswer: string, blockId: string) {
+  public updateAnswers(newAnswers: { answer: string; blockId: string }[]) {
     this.answers.forEach((ans) => {
-      if (ans.blockId === blockId) {
-        ans.answer = newAnswer;
-      }
+      newAnswers.map((newAns) => {
+        if (newAns.blockId === ans.blockId) {
+          ans.answer = newAns.answer;
+        }
+      });
     });
   }
 
-  public updateReview(newReview: string, blockId: string) {
+  public updateReviews(newReviews: { review: string; blockId: string }[]) {
     this.answers.forEach((ans) => {
-      if (ans.blockId === blockId) {
-        ans.review = newReview;
-      }
+      newReviews.map((newRvw) => {
+        if (newRvw.blockId === ans.blockId) {
+          ans.review = newRvw.review;
+        }
+      });
     });
   }
 }

@@ -1,3 +1,1 @@
-export * from './repository';
-
-export type UserSelectDTO = any;
+export * from "./repository";

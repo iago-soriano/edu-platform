@@ -10,9 +10,9 @@ import { handler } from "index.sqs";
         messageId: "6855c8dd-46dc-4fc0-9d6f-472e2ebb3bcf",
         receiptHandle:
           "AQEBdzFMbMVXVt2J/1IQ5FEjsFWDUe5fxA1h8GTVyvg7GxwWwfgMxMWdKupULjnLxSNmSfSQdAvjvPSdiBGH9F0w4WnRPD5ynLaGO/cHAufdgBwoHxITRPBvoPWON7eoa9K7BvIo/M53CNtFqeCzGLLdV2sbPW3tVUNK3ik6uV/JRIH+otxWdGNRx70HXyv/qc11R9WB9jXqXYMWXIbMi9yQRikDOqVAU3Erz/rzumJvT2nuZgTqcE1bNYzYPAceTlOOi15CECTBVDxy18jV31rLGOyX6LhLQSYNyqgE9YZPGbvxt12BYPHXVzIQyZ6lpebBtCit7mjVI7+z4iXsIJropPkyUjp/zi6fPRK/+OHZrZsSTXHhwpnX3pI8N7aj/sA2fmfBl2yu1lNOSpE11rAm0Q==",
-        body: '{"id":"187f4bcb-d1bc-4110-a095-112404171c8e","email":"iago.srm.iss084@gmail.com","name":"iagão"}',
+        body: '{"activityId":"mksjgmb02q7trud6612yrioh"}',
         messageAttributes: {
-          eventType: { stringValue: "UserCreated", dataType: "String" },
+          eventType: { stringValue: "ActivityCreated", dataType: "String" },
         },
         attributes: {
           ApproximateReceiveCount: "",

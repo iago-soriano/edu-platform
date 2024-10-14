@@ -37,14 +37,13 @@ export class UpdateStudentOutputAnswerController {
   }
 
   async execute(req: Request, res: Response) {
-    const { blockId, answer } = req.body;
+    const newAnswers = req.body;
     const { studentOutputId } = req.params;
 
     const userId = req.user.id;
 
     await this._updateStudentOutputAnswerUseCase.execute({
-      blockId,
-      answer,
+      newAnswers,
       studentOutputId,
     });
 

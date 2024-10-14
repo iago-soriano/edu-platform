@@ -19,7 +19,7 @@ interface Deps {
   createNewGeneratedActivityUseCase: ICreateNewGeneratedActivityUseCase;
 }
 
-@Post("activities")
+@Post("activities/generated")
 @ValidateParameters({ bodySchema })
 @Middlewares(["auth"])
 export class CreateNewGeneratedActivityController {

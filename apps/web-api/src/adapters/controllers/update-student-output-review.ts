@@ -25,7 +25,7 @@ interface Deps {
   updateStudentOutputReviewUseCase: IUpdateStudentOutputReviewUseCase;
 }
 
-@Put("student-output/:studentOutputId/answer")
+@Put("student-output/:studentOutputId/review")
 @ValidateParameters({ bodySchema, paramsSchema })
 @Middlewares(["auth"])
 export class UpdateStudentOutputReviewController {
@@ -37,14 +37,13 @@ export class UpdateStudentOutputReviewController {
   }
 
   async execute(req: Request, res: Response) {
-    const { blockId, review } = req.body;
+    const newReviews = req.body;
     const { studentOutputId } = req.params;
 
     const userId = req.user.id;
 
     await this._updateStudentOutputReviewUseCase.execute({
-      blockId,
-      review,
+      newReviews,
       studentOutputId,
     });
 

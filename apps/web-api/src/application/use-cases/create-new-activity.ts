@@ -3,7 +3,7 @@ import { IUseCase } from "@edu-platform/common/platform";
 import { IActivitiesRepository, IUserRepository } from "../interfaces";
 import { Activity, ActivityBlock, User } from "@domain/entities";
 import { createId } from "@paralleldrive/cuid2";
-import { ActivityStatus } from "@edu-platform/common/domain/domain/enums";
+import { ActivityStatus } from "@edu-platform/common/domain/enums";
 import { CreateNewActivityRequestBody } from "@edu-platform/common/api";
 
 type InputParams = {
@@ -33,13 +33,7 @@ class UseCase implements ICreateNewActivityUseCase {
     const activityId = createId();
 
     const actBlocks = blocks.map((b) => {
-      return new ActivityBlock(
-        createId(),
-        b.type,
-        b.data,
-        generatedActivityId,
-        activityId
-      );
+      return new ActivityBlock(createId(), b.type, b.data, null, activityId);
     });
 
     const newActivity = new Activity(
@@ -50,13 +44,7 @@ class UseCase implements ICreateNewActivityUseCase {
       new CollectionArray<ActivityBlock>(
         ...actBlocks.map(
           (bl) =>
-            new ActivityBlock(
-              createId(),
-              bl.type,
-              bl.data,
-              generatedActivityId,
-              activityId
-            )
+            new ActivityBlock(createId(), bl.type, bl.data, null, activityId)
         )
       )
     );

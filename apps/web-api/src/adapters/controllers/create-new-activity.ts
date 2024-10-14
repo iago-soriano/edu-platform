@@ -19,7 +19,7 @@ interface Deps {
   createNewActivityUseCase: ICreateNewActivityUseCase;
 }
 
-@Post("activities/new")
+@Post("activities/my")
 @ValidateParameters({ bodySchema })
 @Middlewares(["auth"])
 export class CreateNewActivityController {

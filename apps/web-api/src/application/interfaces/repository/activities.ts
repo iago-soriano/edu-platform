@@ -6,11 +6,6 @@ import {
   PaginatedParamsDTO,
 } from "@edu-platform/common";
 import { IAbstractRepository } from "@edu-platform/common/platform";
-import {
-  ActivityLevel,
-  ActivityType,
-  Languages,
-} from "@edu-platform/common/domain/domain/enums";
 
 export interface IActivitiesGeneratedRepository extends IAbstractRepository {
   findGeneratedActivityById: (
@@ -33,5 +28,7 @@ export interface IActivitiesReadRepository {
   listMyActivities: (
     args: { userId: string } & PaginatedParamsDTO
   ) => Promise<ListMyActivitiesResponseBody>;
-  getActivityById: (activityId: string) => Promise<GetActivityByIdResponseBody>;
+  getGeneratedActivityById: (
+    activityId: string
+  ) => Promise<GetActivityByIdResponseBody>;
 }

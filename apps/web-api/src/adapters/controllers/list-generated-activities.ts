@@ -37,7 +37,6 @@ export class GetActivitiesController {
       pageSize,
     });
 
-    console.log(resp);
     res.status(200).json(resp);
   }
 }
