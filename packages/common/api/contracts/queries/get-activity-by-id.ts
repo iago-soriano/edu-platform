@@ -5,7 +5,7 @@ import {
   ActivityStatus,
   ActivityType,
   Languages,
-} from "../../../domain/domain/enums";
+} from "../../../domain/enums";
 
 type ResponseBody = {
   activityGenerated: {
@@ -30,8 +30,15 @@ const getActivityByIdParamsSchema = z.object({
 
 type Params = z.infer<typeof getActivityByIdParamsSchema>;
 
+const getActivityByIdQuerySchema = z.object({
+  isGenerated: z.boolean(),
+});
+
+type Query = z.infer<typeof getActivityByIdQuerySchema>;
+
 export type {
   ResponseBody as GetActivityByIdResponseBody,
   Params as GetActivityByIdParams,
+  Query as GetActivityByIdQuery,
 };
 export { getActivityByIdParamsSchema };

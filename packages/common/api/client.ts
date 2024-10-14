@@ -1,3 +1,5 @@
+// "use server";
+
 import {
   CreateNewActivityRequestBody,
   CreateNewActivityResponseBody,
@@ -17,6 +19,11 @@ import {
   GetActivitiesResponseBody,
   CreateNewGeneratedActivityRequestBody,
   CreateNewGeneratedActivityResponseBody,
+  GetActivityByIdQuery,
+  GetActivityByIdParams,
+  GetActivityByIdResponseBody,
+  GetStudentOutputByIdParams,
+  GetStudentOutputByIdResponseBody,
 } from "./contracts";
 
 import { IHTTPClient } from "./interfaces";
@@ -29,21 +36,21 @@ export class Client {
   // ACTIVITIES
   createNewActivity(body: CreateNewActivityRequestBody) {
     return this._fetcher.post(
-      `${this.baseUrl}/activities/new`,
+      `${this.baseUrl}/activities/my`,
       body
     ) as Promise<CreateNewActivityResponseBody>;
   }
 
   createNewGeneratedActivity(body: CreateNewGeneratedActivityRequestBody) {
     return this._fetcher.post(
-      `${this.baseUrl}/activities`,
+      `${this.baseUrl}/activities/generated`,
       body
     ) as Promise<CreateNewGeneratedActivityResponseBody>;
   }
 
   listMyActivities(query: ListMyActivitiesQuery) {
     return this._fetcher.get(
-      `${this.baseUrl}/activities/my`
+      `${this.baseUrl}/activities/my?page=${query.page}&pageSize=${query.pageSize}`
     ) as Promise<ListMyActivitiesResponseBody>;
   }
 
@@ -53,10 +60,19 @@ export class Client {
     ) as Promise<GetActivitiesResponseBody>;
   }
 
+  getGeneratedActivityById(
+    query: GetActivityByIdQuery,
+    params: GetActivityByIdParams
+  ) {
+    return this._fetcher.get(
+      `${this.baseUrl}/activities/generated/${params.activityId}`
+    ) as Promise<GetActivityByIdResponseBody>;
+  }
+
   // STUDENT OUTPUT
   createNewStudentOutput(body: CreateStudentOutputRequestBody) {
     return this._fetcher.post(
-      `${this.baseUrl}/student-output`,
+      `${this.baseUrl}/student-outputs`,
       body
     ) as Promise<CreateStudentOutputResponseBody>;
   }
@@ -79,6 +95,12 @@ export class Client {
       `${this.baseUrl}/student-output/${studentOutputId}/review`,
       body
     ) as Promise<UpdateStudentOutputReviewResponseBody>;
+  }
+
+  getStudentOutputById(params: GetStudentOutputByIdParams) {
+    return this._fetcher.get(
+      `${this.baseUrl}/student-output/${params.studentOutputId}`
+    ) as Promise<GetStudentOutputByIdResponseBody>;
   }
 
   // USER

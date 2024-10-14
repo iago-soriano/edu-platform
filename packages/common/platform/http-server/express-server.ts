@@ -36,24 +36,6 @@ export class ExpressServer extends AbstractServer {
     this._app = express();
     this.setupServer(this._app);
 
-    // KEYCLOAK MIDDLEWARE
-    /*     this._app.use(session({
-      secret: '123456',
-      resave: false, 
-      saveInitialized: true,
-      store: memoryStorage,
-      cookie: {
-        maxAge: 1000 * 60 * 10
-      }
-    })) */
-
-    // this._app.use(
-    //   keycloak.middleware({
-    //     logout: "/logout",
-    //     admin: "/",
-    //   })
-    // );
-
     // CORS
     const allowlist = process.env.CORS_ALLOW?.split(" ");
     const corsOptionsDelegate = function (req: any, callback: any) {

@@ -5,7 +5,7 @@ import {
   activityLevelSchema,
   activityStatusSchema,
 } from "../common";
-import { ActivityStatus } from "../../../domain/domain/enums";
+import { ActivityStatus } from "../../../domain/enums";
 
 type Params = void;
 

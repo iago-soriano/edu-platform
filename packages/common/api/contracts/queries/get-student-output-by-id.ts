@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { OutputStatus } from "../../../domain/domain/enums";
+import { ActivityBlockType, OutputStatus } from "../../../domain/enums";
 
 type Answer = {
   id: string;
@@ -15,6 +15,13 @@ type ResponseBody = {
   studentEmail: string;
   status: OutputStatus;
   answers: Answer[];
+  title: string;
+
+  activityBlocks: {
+    id: string;
+    type: ActivityBlockType;
+    data: any;
+  }[];
 };
 
 const getStudentOutputByIdParamsSchema = z.object({

@@ -19,6 +19,10 @@ export interface ITopicService {
   send: (event: DomainEvent<unknown>, topicArn: string) => Promise<any>;
 }
 
+export interface ISQSService {
+  send: (event: DomainEvent<unknown>) => Promise<any>;
+}
+
 export interface IEncryptionService {
   encrypt: (plain: string) => Promise<string>;
   compare: (plain: string, hash: string) => Promise<boolean>;
@@ -33,14 +37,10 @@ export interface IAssetRepository {
   getGenericImageUrl: () => string;
 }
 
-type SendEmailArgs = {
-  destination: string;
-};
 export interface IEmailService {
-  sendForgotPasswordEmail: (args: SendEmailArgs) => Promise<any>;
-  sendVerifyAccountEmail: (
-    args: SendEmailArgs & { token: string }
-  ) => Promise<any>;
+  sendActivityLinkToStudent: (studentEmail: string) => Promise<any>;
+  sendStudentOutputLinkToTeacher: (requestingUserEmail: string) => Promise<any>;
+  sendOutputReviewToStudent: (studentEmail: string) => Promise<any>;
 }
 
 export interface IKeycloakAdmin {

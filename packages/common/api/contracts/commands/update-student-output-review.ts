@@ -6,10 +6,12 @@ const updateStudentOutputReviewParamsSchema = z.object({
 
 type Params = z.infer<typeof updateStudentOutputReviewParamsSchema>;
 
-const updateStudentOutputReviewRequestBodySchema = z.object({
-  blockId: z.string(),
-  review: z.string(),
-});
+const updateStudentOutputReviewRequestBodySchema = z
+  .object({
+    blockId: z.string(),
+    review: z.string(),
+  })
+  .array();
 
 type RequestBody = z.infer<typeof updateStudentOutputReviewRequestBodySchema>;
 

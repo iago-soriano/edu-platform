@@ -6,7 +6,7 @@ import {
   ActivityStatus,
   OutputStatus,
   ActivityBlockType,
-} from "../../../domain/domain/enums";
+} from "../../../domain/enums";
 
 export const languagesSchema = z.nativeEnum(Languages);
 export const languages = languagesSchema.parse;

@@ -1,9 +1,6 @@
 import { z } from "zod";
 
-import {
-  ActivityBlockType,
-  ActivityStatus,
-} from "../../../domain/domain/enums";
+import { ActivityBlockType, ActivityStatus } from "../../../domain/enums";
 
 type Params = void;
 

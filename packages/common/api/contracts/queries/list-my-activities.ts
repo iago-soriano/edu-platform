@@ -1,10 +1,6 @@
 import { z } from "zod";
 import { paginatedParamsSchema, PaginatedResponse } from "../common";
-import {
-  ActivityLevel,
-  ActivityType,
-  Languages,
-} from "../../../domain/domain/enums";
+import { ActivityLevel, ActivityType, Languages } from "../../../domain/enums";
 
 type ResponseBody = PaginatedResponse<{
   id: string;

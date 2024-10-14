@@ -1,8 +1,4 @@
-import {
-  ActivityLevel,
-  ActivityType,
-  Languages,
-} from "../../../domain/domain/enums";
+import { ActivityLevel, ActivityType, Languages } from "../../../domain/enums";
 import { paginatedParamsSchema, PaginatedResponse } from "../common";
 import { z } from "zod";
 
