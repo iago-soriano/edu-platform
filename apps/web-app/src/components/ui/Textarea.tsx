@@ -2,17 +2,46 @@
 
 import React from "react";
 
-import { cx, focusInput, hasErrorInput } from "styles/utils";
+import { cx, hasErrorInput } from "styles/utils";
+import { useEffect } from "react";
 
 interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   hasError?: boolean;
+  isHeightSelfAdjusting?: boolean;
+  id?: string;
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, hasError, ...props }: TextareaProps, forwardedRef) => {
+  (
+    {
+      className,
+      hasError,
+      isHeightSelfAdjusting,
+      id,
+      value,
+      ...props
+    }: TextareaProps,
+    forwardedRef
+  ) => {
+    const handleResize = () => {
+      if (!id) throw new Error("Self-adjusting textare must have an id");
+
+      const textarea = document.getElementById(id);
+      if (!textarea) return;
+
+      textarea.style.height = "auto"; // Reset height to auto to properly calculate new height
+      textarea.style.height = textarea.scrollHeight + "px"; // Set new height
+    };
+
+    useEffect(() => {
+      isHeightSelfAdjusting && handleResize();
+    }, [value]);
+
     return (
       <textarea
+        id={id ?? "textarea"}
+        onInput={isHeightSelfAdjusting ? handleResize : () => {}}
         ref={forwardedRef}
         className={cx(
           // base
@@ -29,7 +58,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           "disabled:border-gray-300 disabled:bg-gray-100 disabled:text-gray-300",
           "disabled:dark:border-gray-700 disabled:dark:bg-gray-800 disabled:dark:text-gray-500",
           // focus
-          focusInput,
+          //focusInput,
           // error
           hasError ? hasErrorInput : "",
           // invalid (optional)

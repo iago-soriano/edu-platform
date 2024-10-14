@@ -20,8 +20,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./Select";
-import { Textarea } from "./Textarea";
+import { Textarea, TextareaProps } from "./Textarea";
 import { Label } from "./Label";
+import { Switch } from "@components/ui/Switch";
 
 const Form = FormProvider;
 
@@ -192,32 +193,48 @@ const FormTextField = React.forwardRef<
     type?: string;
     disabled?: boolean;
     submitForm?: boolean;
+    inputClassName?: string;
   }
->(({ name, label, placeholder, required, type, className, ...props }, ref) => {
-  const { control } = useFormContext();
-  return (
-    <FormField
-      control={control}
-      name={name}
-      render={({ field, fieldState }) => (
-        <FormItem className={cx(className)}>
-          {label && <FormLabel required={required}>{label}</FormLabel>}
-          <FormControl>
-            <Input
-              placeholder={placeholder}
-              hasError={!!fieldState.error}
-              type={type}
-              {...field}
-              ref={ref}
-              {...props}
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  );
-});
+>(
+  (
+    {
+      name,
+      label,
+      placeholder,
+      required,
+      type,
+      className,
+      inputClassName,
+      ...props
+    },
+    ref
+  ) => {
+    const { control } = useFormContext();
+    return (
+      <FormField
+        control={control}
+        name={name}
+        render={({ field, fieldState }) => (
+          <FormItem className={cx(className)}>
+            {label && <FormLabel required={required}>{label}</FormLabel>}
+            <FormControl>
+              <Input
+                placeholder={placeholder}
+                hasError={!!fieldState.error}
+                inputClassName={cx(inputClassName)}
+                type={type}
+                {...field}
+                ref={ref}
+                {...props}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    );
+  }
+);
 
 const FormSelectField = <TFieldValues extends FieldValues = FieldValues>({
   name,
@@ -285,6 +302,8 @@ const FormTextAreaField = <TFieldValues extends FieldValues = FieldValues>({
   required,
   className,
   rows,
+  textAreaClassName,
+  ...props
 }: {
   name: FieldPath<TFieldValues>;
   label?: string;
@@ -292,9 +311,9 @@ const FormTextAreaField = <TFieldValues extends FieldValues = FieldValues>({
   required?: boolean;
   className?: string;
   rows?: number;
-}) => {
+  textAreaClassName?: string;
+} & TextareaProps) => {
   const { control } = useFormContext();
-
   return (
     <FormField
       control={control}
@@ -306,9 +325,63 @@ const FormTextAreaField = <TFieldValues extends FieldValues = FieldValues>({
             <Textarea
               placeholder={placeholder}
               hasError={!!fieldState.error}
-              rows={rows ?? 3}
+              className={textAreaClassName}
+              // rows={rows ?? 3}
               {...field}
+              {...props}
             />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
+
+const FormSwitchField = <TFieldValues extends FieldValues = FieldValues>({
+  name,
+  label,
+  // placeholder,
+  // options,
+  // required,
+  // className,
+  defaultChecked,
+  labelOnTop,
+  ...props
+}: {
+  name: FieldPath<TFieldValues>;
+  label?: string;
+  placeholder?: string;
+  required?: boolean;
+  className?: string;
+  defaultValue?: string;
+} & { defaultChecked?: boolean; labelOnTop?: boolean }) => {
+  const { control } = useFormContext();
+
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => (
+        <FormItem>
+          <FormControl
+            className={cx(
+              "flex items-center justify-center gap-2",
+              labelOnTop ? "flex-col" : "flex-row"
+            )}
+          >
+            <Label htmlFor={name}>
+              {label}
+              <Switch
+                id={name}
+                defaultChecked={defaultChecked}
+                size="small"
+                checked={field.value}
+                onCheckedChange={field.onChange}
+                {...field}
+                {...props}
+              />
+            </Label>
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -329,4 +402,5 @@ export {
   FormTextAreaField,
   FormTextField,
   useFormField,
+  FormSwitchField,
 };

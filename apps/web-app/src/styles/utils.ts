@@ -43,7 +43,12 @@ export function generateBackgroundColor(
   lastName: string
 ): string {
   // Combine first and last name to generate a unique value
-  const fullName = firstName.toLowerCase() + lastName.toLowerCase();
+  const firstNameString =
+    typeof firstName === "string" ? firstName.toLowerCase() : "";
+  const lastNameString =
+    typeof lastName === "string" ? lastName.toLowerCase() : "";
+
+  const fullName = firstNameString + lastNameString;
 
   // Calculate a deterministic hash (simple sum of ASCII values for demo)
   let hash = 0;

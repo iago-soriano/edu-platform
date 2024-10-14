@@ -7,7 +7,7 @@ import { RiAlignLeft } from "@remixicon/react";
 import { Text } from "../../ui/Typography/Text";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
-import { getNavButtons } from "./utils";
+import { getNavButtons } from "./get-nav-buttons";
 import { SignOutMobileButton } from "./SignOutButton";
 import { SignInButton } from "./SignInButton";
 import { HamburguerButton } from "./hamburguer";
@@ -24,14 +24,12 @@ export async function MobileNavbar() {
 
       <Sheet>
         <SheetTrigger asChild>
-          {/* <Button type="button" variant="outline" size="icon"> */}
           <HamburguerButton />
-          {/* </Button> */}
         </SheetTrigger>
         <SheetContent className="pt-20">
           <Logo className="absolute top-4 left-6" />
 
-          {navButtons.map((item, index) => (
+          {[...navButtons.left, ...navButtons.right].map((item) => (
             <div key={item.route}>
               <SheetClose asChild>
                 <LinkButton
@@ -47,7 +45,11 @@ export async function MobileNavbar() {
             </div>
           ))}
 
-          {session ? <SignOutMobileButton /> : <SignInButton />}
+          <Divider className="my-2" />
+
+          <SheetClose asChild>
+            {session ? <SignOutMobileButton /> : <SignInButton />}
+          </SheetClose>
         </SheetContent>
       </Sheet>
     </div>

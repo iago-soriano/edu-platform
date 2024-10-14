@@ -1,15 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import {
-  ListMyActivitiesQuery,
-  ListMyActivitiesResponseBody,
-  listMyActivitiesQuerySchema as paramsSchema,
-} from "@edu-platform/common/api";
-
-// import {
-//   Button
-// } from '@components/ui/Button'
-import Link from "next/link";
-import { Router, getLocaleDateTimeFromISO } from "@infrastructure";
+import { ListMyActivitiesResponseBody } from "@edu-platform/common/api";
 import { cellSizes } from "@components/ui/table/config";
 import {
   LanguageCell,
@@ -43,15 +33,4 @@ export const columns = [
     cell: TopicsCell,
     size: cellSizes.md,
   }),
-
-  // columnHelper.accessor("id", {
-  //   header: () => <span>Edit</span>,
-  //   cell: (info) => (
-  //     <Link
-  //       href={Router.collectionSettings(info.getValue())}
-  //       // withIcon="CAN_SEE"
-  //     />
-  //   ),
-  //   size: cellSizes.sm,
-  // }),
 ];

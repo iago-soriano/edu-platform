@@ -59,7 +59,7 @@ const DialogContent = React.forwardRef<
           className={cx(
             "flex flex-col",
             // base
-            "fixed left-1/2 top-1/2 z-50 w-[95vw] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-md border p-6 shadow-lg",
+            "fixed left-1/2 top-1/2 z-50 w-[95vw] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-md border p-6 shadow-lg",
             // background color
             " bg-white dark:bg-[#090E1A]",
             // transition
@@ -126,7 +126,8 @@ const DialogFooter = ({
   return (
     <div
       className={cx(
-        "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 mt-6",
+        "flex flex-col sm:space-x-2 mt-6",
+        // sm:flex-row sm:justify-end
         className
       )}
       {...props}

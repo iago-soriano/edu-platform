@@ -8,7 +8,6 @@ import { Text } from "../Typography/Text";
 
 export function SignOutMenuItem() {
   const handleSignOut = async () => {
-    // await fetch(`/api/auth/logout`, { method: "GET" });
     signOut();
   };
 
@@ -26,15 +25,15 @@ export function SignOutMenuItem() {
 
 export function SignOutMobileButton() {
   const handleSignOut = async () => {
-    // await fetch(`/api/auth/logout`, { method: "GET" });
     signOut();
   };
 
   return (
     <SheetClose asChild onClick={handleSignOut}>
-      <RiLogoutBoxRLine className="size-4" />
-
-      <Text className="flex-1">Sign out</Text>
+      <span className="flex items-center gap-x-2">
+        <RiLogoutBoxRLine className="size-4" />
+        <Text className="flex-1">Sign out</Text>
+      </span>
     </SheetClose>
   );
 }

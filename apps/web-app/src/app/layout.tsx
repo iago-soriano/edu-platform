@@ -1,7 +1,7 @@
 // import "react-toastify/dist/ReactToastify.css";
 import "../styles/globals.css";
 
-import { Navbar } from "@components/ui/Navbar copy";
+import { Navbar } from "@components/ui/navbar";
 import { Footer } from "components/ui/footer";
 import RootProviders from "contexts/providers";
 
@@ -15,7 +15,7 @@ export default function RootLayout(context) {
   return (
     <RootProviders>
       <Navbar />
-      <main className="min-h-[87vh] px-7 py-2">{context.children}</main>
+      <main className="min-h-[87vh] px-7 py-2 mt-20">{context.children}</main>
       <Footer />
     </RootProviders>
   );

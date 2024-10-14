@@ -20,13 +20,13 @@ export async function ProfileDropDown({ user }: ProfileDropDownProps) {
       user?.firstName ?? "Edu",
       user?.lastName ?? "Platform"
     ),
-    initials: `${user.firstName?.[0] ?? "E"} ${user.lastName?.[0] ?? "P"}`,
+    initials: `${user.firstName?.[0]?.toLocaleUpperCase() ?? "E"}${user.lastName?.[0]?.toLocaleUpperCase() ?? "P"}`,
   };
 
   // TODO: horizontal overflow when dropdown is open
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="text-sm font-semibold rounded-full mr-5 focus:none">
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger className="text-sm font-semibold rounded-full focus:none">
         <Avatar>
           <AvatarFallback
             style={{ backgroundColor: currentUser?.color }}

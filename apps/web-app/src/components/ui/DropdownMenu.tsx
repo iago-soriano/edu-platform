@@ -97,9 +97,9 @@ const DropdownMenuContent = React.forwardRef<
   (
     {
       className,
-      sideOffset = 8,
+      sideOffset = 5,
       collisionPadding = 8,
-      align = "center",
+      align = "end",
       loop = true,
       ...props
     },

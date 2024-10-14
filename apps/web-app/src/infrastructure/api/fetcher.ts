@@ -13,7 +13,7 @@ export interface FetchResponse<T> {
 
 const headersHandler = async () => {
   const token = await getServerSession(authOptions);
-  //console.log({ token });
+  // console.log({ token });
   return {
     Authorization: `Bearer ${token.access_token}`,
     "Content-Type": "application/json",
@@ -30,9 +30,7 @@ export class Fetcher implements IHTTPClient {
       console.error("Error status", response.status);
 
       if (response.status === 401) {
-        // await doKeycloakSignOut();
-        // await signOut();
-        redirect("/auth/logout");
+        redirect("/auth/logout-redirect");
       }
 
       throw new Error(resp);

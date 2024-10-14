@@ -5,7 +5,7 @@ export default async ({ children }) => {
   const session = await getServerSession();
   if (!session || !session.user) {
     // TODO: redirect to keycloak
-    redirect("/auth/sign-in");
+    redirect("/auth/sign-in-redirect");
   }
 
   return children;

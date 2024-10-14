@@ -8,7 +8,6 @@ import {
   TableHead,
   TableRow,
   TableCell,
-  TableCaption,
 } from "./shadcn";
 import { Pagination } from "../pagination";
 import {
@@ -17,10 +16,12 @@ import {
   useReactTable,
   ColumnDef,
   ColumnDefBase,
+  Row,
 } from "@tanstack/react-table";
 import { twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";
 import { EmptyGridWarning } from "./config";
+import { cx } from "@styles/utils";
 
 interface PaginationProps {
   totalRowCount: number;
@@ -33,6 +34,7 @@ interface DataTableProps<TData> {
   columns: any[]; // TODO: fix this type when this issue is resolved https://github.com/TanStack/table/issues/5423
   data: TData[];
   pagination: PaginationProps;
+  handleRowClick?: (args: Row<TData>) => void;
   className?: string;
   emptyGridMessage?: string;
 }
@@ -41,6 +43,7 @@ export const DataTable = <TData, TValue>({
   data,
   columns,
   pagination: { totalRowCount, pageSize, currentPage },
+  handleRowClick,
   className,
   emptyGridMessage,
 }: DataTableProps<TData>) => {
@@ -95,7 +98,13 @@ export const DataTable = <TData, TValue>({
         <TableBody>
           {table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow
+                key={row.id}
+                onClick={() => handleRowClick?.(row)}
+                className={cx(
+                  handleRowClick ? "cursor-pointer" : "pointer-events-auto"
+                )}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}

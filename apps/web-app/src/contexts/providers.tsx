@@ -1,6 +1,6 @@
 "use client";
 
-import { TanstackQueryProvider, PHProvider, NextAuthProvider } from ".";
+import { QueryClientProvider, PHProvider, NextAuthProvider } from ".";
 import "react-toastify/dist/ReactToastify.css";
 import { Toaster } from "components/ui/Toaster";
 
@@ -14,12 +14,12 @@ export default function RootProviders({ children }) {
   return (
     <html lang="pt-BR">
       <body suppressHydrationWarning className="bg-surface2 text-text1">
-        <TanstackQueryProvider>
+        <QueryClientProvider>
           <PHProvider>
             <NextAuthProvider>{children}</NextAuthProvider>
           </PHProvider>
           <Toaster />
-        </TanstackQueryProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
