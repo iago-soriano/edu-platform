@@ -3,7 +3,7 @@ import Image from "next/image";
 export const FeatureSection = ({ children, ...props }) => (
   <section
     {...props}
-    className="grid lg:grid-cols-2 grid-cols-1 items-center w-full min-h-[80vh] bg-surface3"
+    className="grid lg:grid-cols-2 grid-cols-1 items-center w-full min-h-[80vh]"
   >
     {children}
   </section>

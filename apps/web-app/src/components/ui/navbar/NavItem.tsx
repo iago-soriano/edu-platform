@@ -11,20 +11,27 @@ type NavItemProps = {
 };
 
 export function NavItem({ href, children }: NavItemProps) {
-  // const pathname = usePathname();
-  // const pathSplit = href.split("#")[0].split("/");
-  // const path = `/${pathSplit[pathSplit.length - 1]}`;
+  //if (typeof window === "undefined") return;
+  //   return (
+  //     <Link
+  //       href={href}
+  //       className={cx(
+  //         "border-transparent hover:border-primary-foreground text-primary-foreground hover:text-primary-foreground",
+  //         "border-b-2 font-medium whitespace-nowrap leading-[64px] h-16 transition block"
+  //       )}
+  //     >
+  //       {children}
+  //     </Link>
+  //   );
 
-  // console.log(pathname, pathSplit, path);
-  // Used to trigger the side effect responsible of updating the path state
   const refreshCurrentPath = useSearchParams();
 
-  const isAnchorLink = window.location.hash.at(0) === "#";
+  const isAnchorLink = window?.location.hash.at(0) === "#";
 
   const [path, setPath] = useState(
     isAnchorLink
-      ? decodeURIComponent(window.location.hash)
-      : window.location.pathname
+      ? decodeURIComponent(window?.location.hash)
+      : window?.location.pathname
   );
 
   const isActive = useMemo(
@@ -36,8 +43,8 @@ export function NavItem({ href, children }: NavItemProps) {
   useEffect(() => {
     setPath(
       isAnchorLink
-        ? decodeURIComponent(window.location.hash)
-        : window.location.pathname
+        ? decodeURIComponent(window?.location.hash)
+        : window?.location.pathname
     );
   }, [refreshCurrentPath, isAnchorLink]);
 
@@ -47,8 +54,8 @@ export function NavItem({ href, children }: NavItemProps) {
       href={href}
       className={cx(
         isActive
-          ? "border-accent hover:border-accent text-accent"
-          : "border-transparent hover:border-text2 text-text2 hover:text-text2",
+          ? "border-primary hover:border-primary text-primary"
+          : "border-transparent hover:border-primary-foreground text-primary-foreground hover:text-primary-foreground",
         "border-b-2 font-medium whitespace-nowrap leading-[64px] h-16 transition block"
       )}
     >

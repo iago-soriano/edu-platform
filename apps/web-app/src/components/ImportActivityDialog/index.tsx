@@ -24,19 +24,21 @@ import {
   DialogDescription,
 } from "@components/ui/Dialog";
 import { Divider } from "@components/ui/Divider";
-import { listGeneratedActivities, createNewMyActivity } from "./actions";
+import { getGeneratedActivityById, createNewMyActivity } from "./actions";
 
 import { useQuery } from "@tanstack/react-query";
 import { Dispatch, SetStateAction } from "react";
 import { Spinner } from "@components/ui/spinner";
 
-import { GetActivityByIdResponseBody } from "@edu-platform/common";
+import { GetGeneratedActivityByIdResponseBody } from "@edu-platform/common";
 import { ActivityBlockType } from "@edu-platform/common/domain/enums";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
+import { toast } from "@components/ui/useToast";
+import { navigate } from "@components/navigate";
 
 const EditActivitySchema = z.object({
   title: TitleInputSchema,
@@ -58,10 +60,11 @@ export const ImportActivityDialog = ({
 }: ActivityDialogProps) => {
   const resp = useQuery({
     queryKey: [selectedActivityId],
-    queryFn: () => listGeneratedActivities(selectedActivityId ?? ""),
+    queryFn: () => getGeneratedActivityById(selectedActivityId ?? ""),
     enabled: !!selectedActivityId,
   });
 
+  console.log(selectedActivityId);
   const form = useForm<EditActivityValues>({
     // TODO
     // resolver: (...args) => {
@@ -76,7 +79,7 @@ export const ImportActivityDialog = ({
     setValue,
   } = form;
 
-  console.log(form.formState.errors);
+  // console.log(form.formState.errors);
 
   useEffect(() => {
     if (!resp?.data?.activityGenerated) return;
@@ -109,26 +112,39 @@ export const ImportActivityDialog = ({
 
   const onSubmit = async (values: EditActivityValues) => {
     console.log({ values });
-    await createNewMyActivity({
-      title: values.title ?? "No title",
-      blocks: [
-        { data: values.text, type: ActivityBlockType.TEXT },
-        { data: values.openQuestion, type: ActivityBlockType.OPEN_QUESTION },
-        ...values.multipleChoiceQuestions.map((mcq) => ({
-          data: JSON.stringify({
-            question: mcq.text,
-            alternatives: mcq.alternatives.map((x) => x.text),
-            correctAnswer: mcq.alternatives.findIndex((x) => x.isCorrect),
-          }),
-          type: ActivityBlockType.MULTIPLE_CHOICE_QUESTION,
-        })),
-      ],
-      generatedActivityId: selectedActivityId ?? "",
-    });
+    try {
+      await createNewMyActivity({
+        title: values.title ?? "No title",
+        blocks: [
+          { data: values.text, type: ActivityBlockType.TEXT },
+          { data: values.openQuestion, type: ActivityBlockType.OPEN_QUESTION },
+          ...values.multipleChoiceQuestions.map((mcq) => ({
+            data: JSON.stringify({
+              question: mcq.text,
+              alternatives: mcq.alternatives.map((x) => x.text),
+              correctAnswer: mcq.alternatives.findIndex((x) => x.isCorrect),
+            }),
+            type: ActivityBlockType.MULTIPLE_CHOICE_QUESTION,
+          })),
+        ],
+        generatedActivityId: selectedActivityId ?? "",
+      });
+      toast({
+        title: "Activity imported successfully!",
+        variant: "success",
+      });
+      navigate("/activities/my");
+    } catch (e) {
+      toast({
+        title: "There was an error importing the activity",
+        description: e.message,
+        variant: "error",
+      });
+    }
   };
 
   const parseContent = (
-    data: GetActivityByIdResponseBody["activityGenerated"]
+    data: GetGeneratedActivityByIdResponseBody["activityGenerated"]
   ) => {
     // console.log(data.activityBlocks);
     return data.activityBlocks.map((bl, idx, blocks) => {
@@ -159,9 +175,12 @@ export const ImportActivityDialog = ({
       open={!!selectedActivityId}
       onOpenChange={(open) => setOpen(open ? (selectedActivityId ?? "") : null)}
     >
-      <DialogContent className="border-box h-[100vh] min-w-[75ch] max-w-[100ch] justify-between">
+      <DialogContent className="border-box h-[95vh] my-auto md:w-[100ch] sm:w-full justify-between">
         <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-6 h-full flex flex-col justify-between"
+          >
             <DialogHeader className="mb-6">
               <DialogTitle>Edit and Import activity</DialogTitle>
               <DialogDescription>
@@ -169,7 +188,9 @@ export const ImportActivityDialog = ({
               </DialogDescription>
             </DialogHeader>
             {resp.isLoading ? (
-              <Spinner className=" w-32 h-32" />
+              <div className="flex flex-col justify-center">
+                <Spinner className="w-32 h-32" />
+              </div>
             ) : (
               resp.data?.activityGenerated && (
                 <div>
@@ -179,8 +200,8 @@ export const ImportActivityDialog = ({
               )
             )}
 
-            <DialogFooter
-            //className="h-[40px]"
+            <DialogFooter //TODO: make it sticky at the bottom
+              className="p-2"
             >
               <Divider />
               <div className="flex flex-row justify-end">

@@ -1,5 +1,10 @@
 import OpenAI from "openai";
-import { ActivityFormat, ActivityBlock } from "@domain/entities";
+import {
+  ActivityFormat,
+  ActivityBlock,
+  multiple_choice_question_count,
+  open_question_count,
+} from "@domain/entities";
 import { createId } from "@paralleldrive/cuid2";
 import { zodResponseFormat } from "openai/helpers/zod";
 import {
@@ -8,8 +13,6 @@ import {
 } from "@edu-platform/common/domain/enums";
 import { DomainRules } from "@edu-platform/common/domain/rules";
 import { IActivityGenerator, ActivityGeneratorInputParams } from "./interfaces";
-
-const MULTIPLE_ANSWER_COUNT = 2;
 
 class GenerateReadingActivity implements IActivityGenerator {
   private _openAiApi;
@@ -25,7 +28,13 @@ class GenerateReadingActivity implements IActivityGenerator {
     let completion = null;
     const { topics, language, level } = activityGenerated;
 
-    const prompt = `You are a language teacher writing a comprehension actiity. Fill activity_format in ${language.toLocaleLowerCase()}. Step 1: 'text' is a text between ${DomainRules.ACTIVITY_BLOCKS.TEXT.MIN_LENGTH_WORDS} and ${DomainRules.ACTIVITY_BLOCKS.TEXT.MAX_LENGTH_WORDS} words on the topics ${topics.map((t) => t.toLocaleLowerCase()).join(", ")} and vocabulary dificulty of ${level.toLocaleLowerCase()}. Step 2: openQuestion is a comprehension question regarding the text you've made, between ${DomainRules.ACTIVITY_BLOCKS.OPEN_QUESTION.MIN_LENGTH_CHARACTERS} and ${DomainRules.ACTIVITY_BLOCKS.OPEN_QUESTION.MAX_LENGTH_CHARACTERS} characters. Step 3: ${MULTIPLE_ANSWER_COUNT} multiple choice questions with thre alternatives each, in which only one is correct. Also inform which alternative is the correct one in the field answer of each alternative.`;
+    const minWords = DomainRules.ACTIVITY_BLOCKS.TEXT.MIN_LENGTH_WORDS[level];
+    const maxWords = DomainRules.ACTIVITY_BLOCKS.TEXT.MAX_LENGTH_WORDS[level];
+
+    const openQuestionsCount = open_question_count[level];
+    const multipleChoiceQuestionCount = multiple_choice_question_count[level];
+
+    const prompt = `You are a language teacher writing a comprehension actiity. Fill activity_format in ${language.toLocaleLowerCase()}. Step 1: 'text' is a text between ${minWords} and ${maxWords} words on the topics ${topics.map((t) => t.toLocaleLowerCase()).join(", ")} and vocabulary dificulty of ${level.toLocaleLowerCase()}. Step 2: openQuestions is ${openQuestionsCount} comprehension questions regarding the text you've made, between ${DomainRules.ACTIVITY_BLOCKS.OPEN_QUESTION.MIN_LENGTH_CHARACTERS} and ${DomainRules.ACTIVITY_BLOCKS.OPEN_QUESTION.MAX_LENGTH_CHARACTERS} characters. Step 3: ${multipleChoiceQuestionCount} multiple choice questions with thre alternatives each, in which only one is correct. Also inform which alternative is the correct one in the field answer of each alternative.`;
 
     try {
       completion = await this._openAiApi.beta.chat.completions.parse({

@@ -5,6 +5,7 @@ import {
   ChangeTrackingProxy,
   CollectionArray,
 } from "@edu-platform/common/platform";
+import { ActivityBlockSerializer } from "./activitiesBlocks";
 
 export class ActivitySerializer {
   static serialize = (domain: Activity) => {
@@ -20,20 +21,18 @@ export class ActivitySerializer {
 
   static deserialize(
     dto: typeof activities.$inferSelect,
-    blocksDto: (typeof activitiesBlocks.$inferSelect)[]
+    blocksDto?: (typeof activitiesBlocks.$inferSelect)[]
   ) {
     const activity = new Activity(
       dto.id,
       dto.requestingUserId,
       dto.activityGeneratedId,
       dto.title || "",
-      new CollectionArray<ActivityBlock>()
+      new CollectionArray<ActivityBlock>(
+        ...(blocksDto?.map((dto) => ActivityBlockSerializer.deserialize(dto)) ??
+          [])
+      )
     );
-
-    activity.id = dto.id;
-    activity.requestingUserId = dto.requestingUserId;
-    activity.activityGeneratedId = dto.activityGeneratedId;
-    activity.title = dto.title || "";
 
     const proxiedEntity = new ChangeTrackingProxy(activity) as Activity;
 

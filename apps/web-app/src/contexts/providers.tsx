@@ -13,7 +13,7 @@ export const metadata = {
 export default function RootProviders({ children }) {
   return (
     <html lang="pt-BR">
-      <body suppressHydrationWarning className="bg-surface2 text-text1">
+      <body suppressHydrationWarning>
         <QueryClientProvider>
           <PHProvider>
             <NextAuthProvider>{children}</NextAuthProvider>

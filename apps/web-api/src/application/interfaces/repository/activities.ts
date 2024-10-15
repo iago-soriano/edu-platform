@@ -1,7 +1,8 @@
-import { ActivityGenerated } from "domain/entities";
+import { Activity, ActivityGenerated } from "domain/entities";
 import {
   GetActivitiesResponseBody,
-  GetActivityByIdResponseBody,
+  GetGeneratedActivityByIdResponseBody,
+  GetMyActivityByIdResponseBody,
   ListMyActivitiesResponseBody,
   PaginatedParamsDTO,
 } from "@edu-platform/common";
@@ -19,7 +20,9 @@ export interface IActivitiesGeneratedRepository extends IAbstractRepository {
   ) => Promise<ActivityGenerated | null>;
 }
 
-export interface IActivitiesRepository extends IAbstractRepository {}
+export interface IActivitiesRepository extends IAbstractRepository {
+  findMyActivityById: (activityId: string) => Promise<Activity | null>;
+}
 
 export interface IActivitiesReadRepository {
   listGeneratedActivities: (
@@ -30,5 +33,8 @@ export interface IActivitiesReadRepository {
   ) => Promise<ListMyActivitiesResponseBody>;
   getGeneratedActivityById: (
     activityId: string
-  ) => Promise<GetActivityByIdResponseBody>;
+  ) => Promise<GetGeneratedActivityByIdResponseBody | null>;
+  getMyActivityById: (
+    activityId: string
+  ) => Promise<GetMyActivityByIdResponseBody | null>;
 }

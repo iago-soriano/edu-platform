@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Icons } from "../icons";
 import { cn } from "@infrastructure";
-import { Button } from "../Button";
+import { LinkButton } from "../LinkButton";
+import { Text } from "../Typography";
 
 const PaginationRoot = ({
   className,
@@ -54,15 +55,15 @@ const PaginationLink = ({
   href,
   //disabled,
 }: PaginationLinkProps) => (
-  <Button
-    // href={href}
+  <LinkButton
+    href={href}
     aria-current={isActive ? "page" : undefined}
     variant={isActive ? "outline" : "ghost"}
     size="default"
     //disabled={disabled}
   >
     {children}
-  </Button>
+  </LinkButton>
 );
 PaginationLink.displayName = "PaginationLink";
 
@@ -150,9 +151,11 @@ export const Pagination = ({
       </PaginationContent>
       <div className="md:col-start-3 col-span-1 flex flex-row items-center md:justify-end justify-center mr-3">
         {/* pagination summary */}
-        Showing {Math.min(currentPage * pageSize + 1, totalRowCount)} to{" "}
-        {Math.min((currentPage + 1) * pageSize, totalRowCount)} of{" "}
-        {totalRowCount}
+        <Text variant="secondary">
+          Showing {Math.min(currentPage * pageSize + 1, totalRowCount)} to{" "}
+          {Math.min((currentPage + 1) * pageSize, totalRowCount)} of{" "}
+          {totalRowCount}
+        </Text>
       </div>
     </PaginationRoot>
   );

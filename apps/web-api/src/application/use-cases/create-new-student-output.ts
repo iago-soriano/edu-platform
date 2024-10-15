@@ -13,7 +13,7 @@ type InputParams = {
   studentEmail: string;
 };
 
-type Return = void;
+type Return = string;
 
 export type ICreateNewStudentOutputUseCase = IUseCase<InputParams, Return>;
 
@@ -25,18 +25,18 @@ class UseCase implements ICreateNewStudentOutputUseCase {
 
   async execute({ activityId, userId, studentEmail }: InputParams) {
     const existingStudentOutput =
-      this.studentOutputsRepository.findStudentOutputByActivityId(
+      await this.studentOutputsRepository.findStudentOutputByActivityId(
         activityId,
         studentEmail
       );
 
     if (!existingStudentOutput) {
       const activity =
-        await this.activitiesReadRepository.getGeneratedActivityById(
-          activityId
-        );
+        await this.activitiesReadRepository.getMyActivityById(activityId);
 
-      const answersArray = activity?.activityGenerated.activityBlocks.map(
+      if (!activity) throw new Error("Activity not found");
+
+      const answersArray = activity?.activity.activityBlocks.map(
         (block) =>
           ({
             id: createId(),
@@ -52,12 +52,16 @@ class UseCase implements ICreateNewStudentOutputUseCase {
         activityId,
         studentEmail,
         OutputStatus.PENDING,
-        answersArray
+        answersArray ?? []
       );
 
       // TODO: send e-mail to student w/ link to student-output
       await this.studentOutputsRepository.save(newOutput);
+
+      return newOutput.id;
     }
+
+    return existingStudentOutput.id;
   }
 }
 export default UseCase;

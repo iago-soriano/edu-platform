@@ -1,5 +1,20 @@
 export enum Languages {
   ENGLISH = "ENGLISH",
+  ITALIAN = "ITALIAN",
+  FRENCH = "FRENCH",
+  GERMAN = "GERMAN",
+  SPANISH = "SPANISH",
+  PORTUGUESE = "PORTUGUESE",
+}
+
+export enum ActivityTopics {
+  BOOKS = "BOOKS",
+  MOVIES = "MOVIES",
+  SPORTS = "SPORTS",
+  CURRENT_AFFAIRS = "CURRENT_AFFAIRS",
+  SCIENCE_AND_TECHNOLOGY = "SCIENCE_AND_TECHNOLOGY",
+  CULTURE = "CULTURE",
+  POLITICS = "POLITICS",
 }
 
 export enum ActivityType {

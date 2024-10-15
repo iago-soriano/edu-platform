@@ -11,18 +11,14 @@ export default function Home() {
     <main className="flex min-h-screen flex-col">
       <section
         id="hero"
-        className="grid lg:grid-cols-2 grid-cols-1 items-center w-full bg-surface2 h-[calc(100vh-6.7rem)]"
+        className="grid lg:grid-cols-2 grid-cols-1 items-center w-full h-[calc(100vh-6.7rem)]"
       >
         <div className="text-center h-full flex flex-col justify-center items-center">
           <h1 className="my-5">O problema que resolvemos</h1>
           <p className="">Uma breve descrição de como resolvemos o problema</p>
           <div className="flex justify-between p-2">
-            <button className="bg-accent text-surface2  p-3 m-3 rounded-md">
-              Botão de ação 1
-            </button>
-            <button className="bg-surface3 m-3 p-3 rounded-md">
-              Botão de ação 2
-            </button>
+            <button className="p-3 m-3 rounded-md">Botão de ação 1</button>
+            <button className="m-3 p-3 rounded-md">Botão de ação 2</button>
           </div>
         </div>
         <div className="lg:flex hidden justify-center items-center">

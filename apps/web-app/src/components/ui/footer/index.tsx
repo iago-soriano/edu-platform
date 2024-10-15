@@ -5,12 +5,12 @@ import { Router } from "@infrastructure";
 import { Icons } from "../icons";
 
 const FooterLink = ({ href, children }) => (
-  <Link className="text-text2 hover:opacity-70 p-1 w-max" href={href}>
+  <Link className="hover:opacity-70 p-1 w-max" href={href}>
     {children}
   </Link>
 );
 const FooterHeading = ({ children }) => (
-  <h6 className="text-text2 p-1 font-bold">{children}</h6>
+  <h6 className="p-1 font-bold">{children}</h6>
 );
 export const Footer = async () => {
   // const session = await getSession();
@@ -20,7 +20,7 @@ export const Footer = async () => {
 
   return (
     <footer className="">
-      <div className="bg-surface1 grid grid-cols-16 p-10 gap-y-3">
+      {/* <div className="grid grid-cols-16 p-10 gap-y-3">
         <div className="lg:col-span-5 md:col-span-10 col-span-12">
           <Image
             className="m-2"
@@ -63,11 +63,11 @@ export const Footer = async () => {
             <span className="px-2 inline-block">iago.srm.is@gmail.com</span>
           </p>
         </div>
-      </div>
-      {/* <div className="flex justify-between p-4 bg-surface4">
+      </div> */}
+      <div className="flex justify-between p-4">
         <p className="text-text2">Copyright</p>
         <FooterLink href="/privacy-policy">Política de Privacidade</FooterLink>
-      </div> */}
+      </div>
     </footer>
   );
 };

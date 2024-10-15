@@ -14,6 +14,9 @@ import UpdateStudentOutputAnswerUseCase, {
 import UpdateStudentOutputReviewUseCase, {
   IUpdateStudentOutputReviewUseCase,
 } from "./update-student-output-review";
+import UpdateMyActivityUseCase, {
+  IUpdateMyActivityUseCase,
+} from "./update-my-activity";
 
 export {
   CreateNewGeneratedActivityUseCase,
@@ -28,4 +31,6 @@ export {
   IUpdateStudentOutputAnswerUseCase,
   UpdateStudentOutputReviewUseCase,
   IUpdateStudentOutputReviewUseCase,
+  UpdateMyActivityUseCase,
+  IUpdateMyActivityUseCase,
 };

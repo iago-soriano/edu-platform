@@ -37,6 +37,8 @@ export class StudentOutputsRepository
         )
       );
 
+    if (!dto?.[0]) return null;
+
     const studentOutput = StudentOutputSerializer.deserialize(dto[0]);
 
     return studentOutput;

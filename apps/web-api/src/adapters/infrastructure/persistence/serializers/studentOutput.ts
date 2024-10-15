@@ -30,10 +30,10 @@ export class StudentOutputSerializer {
       studentOutputDto.activityId!,
       studentOutputDto.studentEmail!,
       studentOutputDto.status! as OutputStatus,
-      JSON.parse(studentOutputDto.answers as string) as Answer[]
+      studentOutputDto.answers as Answer[]
     );
 
-    output.isNew = true;
+    output.isNew = false;
     output.isDelete = false;
 
     const proxiedEntity = new ChangeTrackingProxy({

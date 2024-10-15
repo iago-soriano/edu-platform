@@ -7,6 +7,7 @@ import {
 import {
   ActivityLevel,
   ActivityStatus,
+  ActivityTopics,
   ActivityType,
   Languages,
 } from "@edu-platform/common/domain/enums";
@@ -33,7 +34,7 @@ export class ActivityGeneratedSerializer {
     const activity = new ActivityGenerated(
       activityDto.id,
       activityDto.language as Languages,
-      activityDto.topics,
+      activityDto.topics as ActivityTopics[],
       activityDto.type as ActivityType,
       activityDto.level as ActivityLevel,
       activityDto.status as ActivityStatus,

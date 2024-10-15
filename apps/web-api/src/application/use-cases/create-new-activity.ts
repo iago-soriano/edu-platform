@@ -28,7 +28,9 @@ class UseCase implements ICreateNewActivityUseCase {
 
   async execute({ generatedActivityId, blocks, title, user }: InputParams) {
     if (!user.canUserCreateActivities())
-      throw new Error("User can't create activities.");
+      throw new Error(
+        "Cannot create any more activities. Upgrade to pro to create more!"
+      );
 
     const activityId = createId();
 

@@ -27,13 +27,13 @@ export class Fetcher implements IHTTPClient {
     const resp = await response.json();
 
     if (!response.ok) {
-      console.error("Error status", response.status);
+      console.error("Error:", response.status, resp);
 
       if (response.status === 401) {
         redirect("/auth/logout-redirect");
       }
 
-      throw new Error(resp);
+      throw new Error(resp.message ?? resp);
     }
 
     return resp;

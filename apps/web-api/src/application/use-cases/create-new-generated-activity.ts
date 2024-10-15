@@ -12,13 +12,14 @@ import {
   ActivityType,
   ActivityLevel,
   Languages,
+  ActivityTopics,
 } from "@edu-platform/common/domain/enums";
 
 type InputParams = {
   language: Languages;
-  topics: string[];
+  topics: ActivityTopics[];
   type: ActivityType;
-  level: string;
+  level: ActivityLevel;
   userId: string;
 };
 
@@ -64,7 +65,9 @@ class UseCase implements ICreateNewGeneratedActivityUseCase {
       const created =
         await this.activitiesGeneratedRepository.save(newActivity);
 
-      await this.sqsService.send(new GenerateActivityGPTEvent(created.id));
+      await this.sqsService.send(
+        new GenerateActivityGPTEvent(created.ActivityGeneratedId)
+      );
 
       return { id: newId, status: ActivityStatus.PENDING };
     }

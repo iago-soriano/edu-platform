@@ -2,7 +2,6 @@
 
 import { DataTable } from "@components/ui/table";
 import { columns } from "./columns";
-import { useState } from "react";
 import { ImportActivityDialog } from "@components/ImportActivityDialog";
 import { useSearchParams } from "next/navigation";
 

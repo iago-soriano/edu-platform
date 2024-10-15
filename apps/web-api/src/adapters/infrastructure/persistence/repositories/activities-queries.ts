@@ -74,6 +74,7 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
         eq(activities.activityGeneratedId, activitiesGenerated.id)
       )
       .where(eq(activities.requestingUserId, userId))
+      .orderBy(desc(activities.updatedAt))
       .limit(pageSize || 10)
       .offset(page * (pageSize || 10));
 
@@ -100,6 +101,8 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
         eq(activitiesGenerated.id, activitiesBlocks.activityGeneratedId)
       );
 
+    if (!activity[0]) return null;
+
     return {
       activityGenerated: {
         id: activity[0].activitiesGenerated.id,
@@ -108,6 +111,35 @@ export class ActivitiesReadRepository implements IActivitiesReadRepository {
         type: activity[0].activitiesGenerated.type as ActivityType,
         level: activity[0].activitiesGenerated.level as ActivityLevel,
         status: activity[0].activitiesGenerated.status as ActivityStatus,
+
+        activityBlocks: sortActivityBlocks(
+          activity.map((activity) => ({
+            id: activity.activitiesBlocks?.id || "",
+            type: activity.activitiesBlocks?.type as ActivityBlockType,
+            data: activity.activitiesBlocks?.data as string,
+          }))
+        ),
+      },
+    };
+  }
+
+  async getMyActivityById(activityId: string) {
+    const activity = await db
+      .select()
+      .from(activities)
+      .where(eq(activities.id, activityId))
+      .leftJoin(
+        activitiesBlocks,
+        eq(activities.id, activitiesBlocks.activityId)
+      );
+
+    if (!activity[0]) return null;
+
+    return {
+      activity: {
+        id: activity[0].activities.id,
+        requestingUserId: activity[0].activities.requestingUserId,
+        title: activity[0].activities.title ?? "",
 
         activityBlocks: sortActivityBlocks(
           activity.map((activity) => ({

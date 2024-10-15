@@ -244,6 +244,7 @@ const FormSelectField = <TFieldValues extends FieldValues = FieldValues>({
   required,
   className,
   defaultValue,
+  disabled,
 }: {
   name: FieldPath<TFieldValues>;
   label?: string;
@@ -252,11 +253,13 @@ const FormSelectField = <TFieldValues extends FieldValues = FieldValues>({
   required?: boolean;
   className?: string;
   defaultValue?: string;
+  disabled?: boolean;
 }) => {
   const { control } = useFormContext();
 
   return (
     <FormField
+      disabled={disabled}
       control={control}
       name={name}
       render={({ field, fieldState }) => (

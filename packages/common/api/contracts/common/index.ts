@@ -6,6 +6,7 @@ import {
   ActivityStatus,
   OutputStatus,
   ActivityBlockType,
+  ActivityTopics,
 } from "../../../domain/enums";
 
 export const languagesSchema = z.nativeEnum(Languages);
@@ -13,6 +14,9 @@ export const languages = languagesSchema.parse;
 
 export const activityTypeSchema = z.nativeEnum(ActivityType);
 export const activityType = activityTypeSchema.parse;
+
+export const activityTopicsSchema = z.nativeEnum(ActivityTopics);
+export const activityTopics = activityTopicsSchema.parse;
 
 export const activityLevelSchema = z.nativeEnum(ActivityLevel);
 export const activityLevel = activityLevelSchema.parse;

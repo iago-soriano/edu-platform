@@ -4,6 +4,7 @@ import {
   activityTypeSchema,
   activityLevelSchema,
   activityStatusSchema,
+  activityTopicsSchema,
 } from "../common";
 import { ActivityStatus } from "../../../domain/enums";
 
@@ -11,7 +12,7 @@ type Params = void;
 
 const createNewGeneratedActivityRequestSchema = z.object({
   language: languagesSchema,
-  topics: z.string().array(),
+  topics: activityTopicsSchema.array(),
   type: activityTypeSchema,
   level: activityLevelSchema,
   //status: activityStatusSchema,

@@ -7,18 +7,18 @@ export const getNavButtons = (session) => {
     right: [],
   };
 
-  if (session) {
-    navButtons.right.push({ header: "My Activities", route: "/activities/my" });
-    navButtons.right.push({
-      header: "Trending Activities",
-      route: "/activities/trending",
-    });
-  } else {
-    navButtons.left.push(
-      { header: "How it works", route: "/home#how-it-works" },
-      { header: "Features", route: "/home#features" }
-    );
-  }
+  // if (session) {
+  navButtons.right.push({ header: "My Activities", route: "/activities/my" });
+  navButtons.right.push({
+    header: "Trending Activities",
+    route: "/activities/trending",
+  });
+  // } else {
+  navButtons.left.push(
+    { header: "How it works", route: "/home#how-it-works" },
+    { header: "Features", route: "/home#features" }
+  );
+  // }
 
   return navButtons;
 };

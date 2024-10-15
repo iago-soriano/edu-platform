@@ -31,16 +31,16 @@ export class CreateNewStudentOutputController {
   }
 
   async execute(req: Request, res: Response) {
-    const { activityId, studentEmail, requestingUserEmail } = req.body;
+    const { activityId, studentEmail } = req.body;
 
     const userId = req.user.id;
 
-    await this._createNewStudentOutputUseCase.execute({
+    const resp = await this._createNewStudentOutputUseCase.execute({
       activityId, // my activity
       userId, // logged user, teacher
       studentEmail,
     });
 
-    res.sendStatus(200);
+    res.status(200).send({ outputId: resp });
   }
 }

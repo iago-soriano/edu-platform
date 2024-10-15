@@ -10,13 +10,15 @@ import { AccessTokenMiddlewareController } from "adapters/middlewares/access-tok
 import {
   CreateNewGeneratedActivityController,
   CreateNewStudentOutputController,
-  GetActivitiesByIdController,
+  GetGeneratedActivityByIdController,
+  GetMyActivityByIdController,
   GetActivitiesController,
   GetStudentOutputByIdController,
   RegisterUserWebhook,
   UpdateStudentOutputAnswerController,
   UpdateStudentOutputReviewController,
   ListMyActivitiesController,
+  UpdateMyActivityController,
 } from "adapters/controllers";
 import {
   CreateNewActivityUseCase,
@@ -25,6 +27,7 @@ import {
   CreateUserUseCase,
   UpdateStudentOutputAnswerUseCase,
   UpdateStudentOutputReviewUseCase,
+  UpdateMyActivityUseCase,
 } from "application/use-cases";
 import {
   UserRepository,
@@ -68,11 +71,15 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
       UpdateStudentOutputReviewController
     ),
     getActivitiesController: awilix.asClass(GetActivitiesController),
-    getActivitiesByIdController: awilix.asClass(GetActivitiesByIdController),
+    getGeneratedActivityByIdController: awilix.asClass(
+      GetGeneratedActivityByIdController
+    ),
+    getMyActivityByIdController: awilix.asClass(GetMyActivityByIdController),
     getStudentOutputByIdController: awilix.asClass(
       GetStudentOutputByIdController
     ),
     listMyActivitiesController: awilix.asClass(ListMyActivitiesController),
+    updateMyActivityController: awilix.asClass(UpdateMyActivityController),
 
     registerUserWebhook: awilix.asClass(RegisterUserWebhook),
 
@@ -100,6 +107,7 @@ export const registerDependencies = (container: awilix.AwilixContainer) => {
     createNewGeneratedActivityUseCase: awilix
       .asClass(CreateNewGeneratedActivityUseCase)
       .classic(),
+    updateMyActivityUseCase: awilix.asClass(UpdateMyActivityUseCase).classic(),
 
     // services
     // keycloakAdmin: awilix.asClass(KeycloakAdmin),

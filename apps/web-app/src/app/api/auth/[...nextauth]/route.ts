@@ -96,7 +96,7 @@ export const authOptions = {
     },
 
     async session({ session, token }) {
-      // console.log("session", { session, token });
+      console.log("session", token.access_token);
 
       session.access_token = token.access_token;
       session.id_token = token.id_token;

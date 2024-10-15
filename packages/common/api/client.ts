@@ -19,11 +19,12 @@ import {
   GetActivitiesResponseBody,
   CreateNewGeneratedActivityRequestBody,
   CreateNewGeneratedActivityResponseBody,
-  GetActivityByIdQuery,
-  GetActivityByIdParams,
-  GetActivityByIdResponseBody,
+  GetGeneratedActivityByIdParams,
+  GetGeneratedActivityByIdResponseBody,
   GetStudentOutputByIdParams,
   GetStudentOutputByIdResponseBody,
+  GetMyActivityByIdParams,
+  GetMyActivityByIdResponseBody,
 } from "./contracts";
 
 import { IHTTPClient } from "./interfaces";
@@ -60,13 +61,16 @@ export class Client {
     ) as Promise<GetActivitiesResponseBody>;
   }
 
-  getGeneratedActivityById(
-    query: GetActivityByIdQuery,
-    params: GetActivityByIdParams
-  ) {
+  getGeneratedActivityById(params: GetGeneratedActivityByIdParams) {
     return this._fetcher.get(
       `${this.baseUrl}/activities/generated/${params.activityId}`
-    ) as Promise<GetActivityByIdResponseBody>;
+    ) as Promise<GetGeneratedActivityByIdResponseBody>;
+  }
+
+  getMyActivityById(params: GetMyActivityByIdParams) {
+    return this._fetcher.get(
+      `${this.baseUrl}/activities/my/${params.activityId}`
+    ) as Promise<GetMyActivityByIdResponseBody>;
   }
 
   // STUDENT OUTPUT

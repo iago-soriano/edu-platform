@@ -4,6 +4,11 @@ import { eq } from "drizzle-orm";
 import { AllTables } from "./all-tables";
 import { BaseRepository } from "@edu-platform/common/platform";
 import { User } from "@domain/entities";
+import {
+  ChangeEventsTree,
+  ChangeTrackingProxy,
+  CollectionArray,
+} from "@edu-platform/common/platform";
 
 export const EntityNames = {
   User: AllTables["User"],
@@ -32,7 +37,9 @@ export class UserRepository
       dto.subscriptionEndsAt ?? new Date()
     );
 
-    return user;
+    const proxiedEntity = new ChangeTrackingProxy(user) as User;
+
+    return proxiedEntity;
   }
 
   async getById(id: string) {

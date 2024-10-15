@@ -7,6 +7,11 @@ import {
 } from "@components/ui/Form";
 import { z } from "zod";
 import { DomainRules } from "@edu-platform/common/domain/rules";
+import {
+  RadioGroup,
+  RadioGroupIndicator,
+  RadioGroupItem,
+} from "@components/ui/RadioGroup";
 
 const AlternativeInputSchema = z.object({
   text: z
@@ -64,14 +69,31 @@ const MultipleChoiceQuestionContainer = ({ children }) => (
 );
 
 const MultipleChoiceQuestionInstruction = () => (
-  <Text className="font-bold">Choose the correct alternative</Text>
+  <Text className="font-semibold">Choose the correct alternative</Text>
 );
 
-export const MultipleChoiceQuestion = ({ children }) => {
+type DisplaProps = {
+  data: ResponseMultipleChoiceQuestionType;
+  disabled?: boolean;
+};
+
+export const MultipleChoiceQuestion = ({ data, disabled }: DisplaProps) => {
   return (
     <MultipleChoiceQuestionContainer>
       <MultipleChoiceQuestionInstruction />
-      <Text>{children}</Text>
+      <Text>{data.question}</Text>
+      <MultipleChoiceAlternativesGroupContainer>
+        <RadioGroup>
+          {data.alternatives.map((alt, idx) => (
+            <MultipleChoiceAlternativeContainer key={idx}>
+              <RadioGroupItem value={alt} id={alt} disabled={disabled}>
+                <RadioGroupIndicator />
+              </RadioGroupItem>
+              <label htmlFor={alt}>{alt}</label>
+            </MultipleChoiceAlternativeContainer>
+          ))}
+        </RadioGroup>
+      </MultipleChoiceAlternativesGroupContainer>
     </MultipleChoiceQuestionContainer>
   );
 };

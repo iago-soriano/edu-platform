@@ -21,7 +21,9 @@ const TitleContainer = ({ children }) => (
 export const Title = ({ children }) => {
   return (
     <TitleContainer>
-      <Heading as="h4">{children}</Heading>
+      <Heading as="h4" className="sm:text-2xl">
+        {children}
+      </Heading>
     </TitleContainer>
   );
 };

@@ -9,15 +9,14 @@ import {
   ValidateParameters,
 } from "@edu-platform/common/platform/http-server/decorators";
 import {
-  GetActivityByIdParams,
-  GetActivityByIdQuery,
-  GetActivityByIdResponseBody,
-  getActivityByIdParamsSchema as paramsSchema,
+  GetGeneratedActivityByIdParams,
+  GetGeneratedActivityByIdResponseBody,
+  getGeneratedActivityByIdParamsSchema as paramsSchema,
 } from "@edu-platform/common/api";
 import { IActivitiesReadRepository } from "@application/interfaces";
 
-type Request = TypedRequest<GetActivityByIdParams, GetActivityByIdQuery, {}>;
-type Response = TypedResponse<GetActivityByIdResponseBody>;
+type Request = TypedRequest<GetGeneratedActivityByIdParams, {}, {}>;
+type Response = TypedResponse<GetGeneratedActivityByIdResponseBody>;
 
 interface Deps {
   activitiesReadRepository: IActivitiesReadRepository;
@@ -26,7 +25,7 @@ interface Deps {
 @Get("activities/generated/:activityId")
 @ValidateParameters({ paramsSchema })
 @Middlewares(["auth"])
-export class GetActivitiesByIdController {
+export class GetGeneratedActivityByIdController {
   private _activitiesReadRepository: IActivitiesReadRepository;
 
   constructor(deps: Deps) {
@@ -36,11 +35,11 @@ export class GetActivitiesByIdController {
   async execute(req: Request, res: Response) {
     const { activityId } = req.params;
 
-    let resp: GetActivityByIdResponseBody | undefined;
+    let resp: GetGeneratedActivityByIdResponseBody | null;
 
     resp =
       await this._activitiesReadRepository.getGeneratedActivityById(activityId);
 
-    res.status(200).json(resp);
+    res.status(200).json(resp ?? undefined);
   }
 }

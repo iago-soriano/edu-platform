@@ -1,9 +1,8 @@
 import { z } from "zod";
 
 const createNewStudentOutputRequestBodySchema = z.object({
-  activityId: z.string().uuid(),
+  activityId: z.string(),
   studentEmail: z.string(),
-  requestingUserEmail: z.string(),
 });
 
 type Params = void;
@@ -11,7 +10,7 @@ type Params = void;
 type RequestBody = z.infer<typeof createNewStudentOutputRequestBodySchema>;
 
 interface ResponseBody {
-  outputId: number;
+  outputId: string;
 }
 
 export type {

@@ -32,7 +32,7 @@ export async function Navbar() {
           </div>
           {/* </div>
           <div> */}
-          <div className="flex flex-row gap-4">
+          <div className="flex flex-row items-center gap-4">
             {navButtons.right.map(({ route, header }) => (
               <NavItem key={route} href={route}>
                 {header}

@@ -8,7 +8,7 @@ export const Tag = ({
   onClickDelete?: () => any;
 }) => {
   return (
-    <div className="flex rounded-full px-3 py-1 items-center bg-surface3 w-fit h-fit  mx-1">
+    <div className="flex rounded-full px-3 py-1 items-center w-fit h-fit  mx-1">
       {text}
       {onClickDelete && (
         <Icons.X

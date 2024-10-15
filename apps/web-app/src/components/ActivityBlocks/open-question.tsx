@@ -19,7 +19,7 @@ const OpenQuestionContainer = ({ children }) => (
 );
 
 const OpenQuestionInstruction = () => (
-  <Text className="font-bold">
+  <Text className="font-semibold">
     Answer the following question in your own words
   </Text>
 );

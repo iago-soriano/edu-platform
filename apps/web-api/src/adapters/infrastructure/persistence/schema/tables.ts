@@ -2,6 +2,7 @@ import {
   ActivityBlockType,
   ActivityLevel,
   ActivityStatus,
+  ActivityTopics,
   ActivityType,
   Languages,
   OutputStatus,
@@ -34,6 +35,13 @@ export const languagesEnum = pgEnum(
   Object.values(Languages || {}).filter((v) => isNaN(Number(v))) as [string]
 );
 
+export const topicsEnum = pgEnum(
+  "topics",
+  Object.values(ActivityTopics || {}).filter((v) => isNaN(Number(v))) as [
+    string,
+  ]
+);
+
 export const typeEnum = pgEnum(
   "type",
   Object.values(ActivityType || {}).filter((v) => isNaN(Number(v))) as [string]
@@ -57,7 +65,7 @@ export const activitiesGenerated = pgTable("activitiesGenerated", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
   language: languagesEnum("language").notNull(),
-  topics: varchar("topics").array().notNull(),
+  topics: topicsEnum("topics").array().notNull(),
   type: typeEnum("type").notNull(),
   level: levelEnum("level").notNull(),
   status: statusEnum("status").notNull(),

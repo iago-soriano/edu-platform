@@ -24,21 +24,14 @@ type ResponseBody = {
   };
 };
 
-const getActivityByIdParamsSchema = z.object({
+const getGeneratedActivityByIdParamsSchema = z.object({
   activityId: z.string(),
 });
 
-type Params = z.infer<typeof getActivityByIdParamsSchema>;
-
-const getActivityByIdQuerySchema = z.object({
-  isGenerated: z.boolean(),
-});
-
-type Query = z.infer<typeof getActivityByIdQuerySchema>;
+type Params = z.infer<typeof getGeneratedActivityByIdParamsSchema>;
 
 export type {
-  ResponseBody as GetActivityByIdResponseBody,
-  Params as GetActivityByIdParams,
-  Query as GetActivityByIdQuery,
+  ResponseBody as GetGeneratedActivityByIdResponseBody,
+  Params as GetGeneratedActivityByIdParams,
 };
-export { getActivityByIdParamsSchema };
+export { getGeneratedActivityByIdParamsSchema };

@@ -18,8 +18,7 @@ fonte poppins bold, poppins light
     /* gray-50 */
     --foreground: 210 20% 98%;
 
-    /* green-700 */
-    --primary: 142.4 71.8% 29.2%;
+    --primary: 20 90% 40%;
 
     /* gray-950 */
     --primary-foreground: 224 71.4% 4.1%;
@@ -90,6 +89,6 @@ fonte poppins bold, poppins light
     @apply border-border;
   }
   body {
-    @apply bg-background text-primary-foreground;
+    @apply bg-foreground text-primary-foreground;
   }
 }
