@@ -17,6 +17,5 @@ export const createNewStudentOutput = async (
   args: CreateStudentOutputRequestBody
 ) => {
   const resp = await client.createNewStudentOutput(args);
-  revalidatePath("/activities/my");
   return resp;
 };

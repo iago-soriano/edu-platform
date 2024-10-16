@@ -10,7 +10,7 @@ export type Answer = {
 export class StudentOutput extends Entity {
   constructor(
     public id: string,
-    public requestingUserId: string,
+    public reviewerEmail: string,
     public activityId: string,
     public studentEmail: string,
     public status: OutputStatus,
@@ -20,22 +20,18 @@ export class StudentOutput extends Entity {
   }
 
   public updateAnswers(newAnswers: { answer: string; blockId: string }[]) {
-    this.answers.forEach((ans) => {
-      newAnswers.map((newAns) => {
-        if (newAns.blockId === ans.blockId) {
-          ans.answer = newAns.answer;
-        }
-      });
+    this.answers = this.answers.map((ans) => {
+      const newAnswer = newAnswers.find((x) => x.blockId === ans.blockId);
+      if (newAnswer) ans.answer = newAnswer?.answer;
+      return ans;
     });
   }
 
   public updateReviews(newReviews: { review: string; blockId: string }[]) {
-    this.answers.forEach((ans) => {
-      newReviews.map((newRvw) => {
-        if (newRvw.blockId === ans.blockId) {
-          ans.review = newRvw.review;
-        }
-      });
+    this.answers = this.answers.map((ans) => {
+      const newAnswer = newReviews.find((x) => x.blockId === ans.blockId);
+      if (newAnswer) ans.review = newAnswer?.review;
+      return ans;
     });
   }
 }

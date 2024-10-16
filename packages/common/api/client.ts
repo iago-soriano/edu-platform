@@ -81,20 +81,20 @@ export class Client {
     ) as Promise<CreateStudentOutputResponseBody>;
   }
 
-  updateStudentOutputAnswer({
-    studentOutputId,
-    ...body
-  }: UpdateStudentOutputAnswerParams & UpdateStudentOutputAnswerRequestBody) {
+  updateStudentOutputAnswer(
+    studentOutputId: UpdateStudentOutputAnswerParams["studentOutputId"],
+    body: UpdateStudentOutputAnswerRequestBody
+  ) {
     return this._fetcher.put(
       `${this.baseUrl}/student-output/${studentOutputId}/answer`,
       body
     ) as Promise<UpdateStudentOutputAnswerResponseBody>;
   }
 
-  updateStudentOutputReview({
-    studentOutputId,
-    ...body
-  }: UpdateStudentOutputReviewParams & UpdateStudentOutputReviewRequestBody) {
+  updateStudentOutputReview(
+    studentOutputId: UpdateStudentOutputReviewParams["studentOutputId"],
+    body: UpdateStudentOutputReviewRequestBody
+  ) {
     return this._fetcher.put(
       `${this.baseUrl}/student-output/${studentOutputId}/review`,
       body

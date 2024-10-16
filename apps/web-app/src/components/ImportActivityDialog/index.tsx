@@ -23,15 +23,20 @@ import {
   DialogClose,
   DialogDescription,
 } from "@components/ui/Dialog";
+import { Text } from "@components/ui/Typography";
+
 import { Divider } from "@components/ui/Divider";
 import { getGeneratedActivityById, createNewMyActivity } from "./actions";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Dispatch, SetStateAction } from "react";
 import { Spinner } from "@components/ui/spinner";
 
 import { GetGeneratedActivityByIdResponseBody } from "@edu-platform/common";
-import { ActivityBlockType } from "@edu-platform/common/domain/enums";
+import {
+  ActivityBlockType,
+  ActivityStatus,
+} from "@edu-platform/common/domain/enums";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -58,28 +63,29 @@ export const ImportActivityDialog = ({
   setOpen,
   selectedActivityId,
 }: ActivityDialogProps) => {
+  const queryClient = useQueryClient();
+
   const resp = useQuery({
     queryKey: [selectedActivityId],
-    queryFn: () => getGeneratedActivityById(selectedActivityId ?? ""),
+    queryFn: async () => {
+      console.log("fetching...");
+      const resp = await getGeneratedActivityById(selectedActivityId ?? "");
+
+      if (resp.activityGenerated.status === ActivityStatus.PENDING) {
+        setTimeout(() => {
+          queryClient.invalidateQueries({ queryKey: [selectedActivityId] });
+        }, 7500);
+      }
+
+      return resp;
+    },
     enabled: !!selectedActivityId,
   });
 
-  console.log(selectedActivityId);
   const form = useForm<EditActivityValues>({
-    // TODO
-    // resolver: (...args) => {
-    //   console.log(args);
-    //   return zodResolver(EditActivitySchema)(...args);
-    // },
+    resolver: zodResolver(EditActivitySchema),
   });
-  const {
-    // control,
-    handleSubmit,
-    // formState: { isSubmitting, errors },
-    setValue,
-  } = form;
-
-  // console.log(form.formState.errors);
+  const { handleSubmit, setValue } = form;
 
   useEffect(() => {
     if (!resp?.data?.activityGenerated) return;
@@ -94,7 +100,6 @@ export const ImportActivityDialog = ({
           (blocks.findIndex(
             (x) => x.type === ActivityBlockType.MULTIPLE_CHOICE_QUESTION
           ) ?? 0);
-        // console.log("setting", idx, bl.data);
         setValue(`multipleChoiceQuestions.${mcqIdx}.text`, bl.data.question);
         (bl.data.alternatives as string[]).forEach((alt: string, j) => {
           setValue(
@@ -111,7 +116,6 @@ export const ImportActivityDialog = ({
   }, [resp.data?.activityGenerated]);
 
   const onSubmit = async (values: EditActivityValues) => {
-    console.log({ values });
     try {
       await createNewMyActivity({
         title: values.title ?? "No title",
@@ -191,13 +195,17 @@ export const ImportActivityDialog = ({
               <div className="flex flex-col justify-center">
                 <Spinner className="w-32 h-32" />
               </div>
+            ) : resp.data?.activityGenerated &&
+              resp.data.activityGenerated.status === ActivityStatus.READY ? (
+              <div>
+                <TitleInput />
+                {parseContent(resp.data?.activityGenerated)}
+              </div>
             ) : (
-              resp.data?.activityGenerated && (
-                <div>
-                  <TitleInput />
-                  {parseContent(resp.data?.activityGenerated)}
-                </div>
-              )
+              <Text>
+                Our robots are working on your activity. Please wait a few
+                seconds...
+              </Text>
             )}
 
             <DialogFooter //TODO: make it sticky at the bottom

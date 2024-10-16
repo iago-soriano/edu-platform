@@ -50,6 +50,8 @@ export class StudentOutputsRepository
       .from(studentOutputs)
       .where(eq(studentOutputs.id, studentOutputId));
 
+    if (!dto?.[0]) return null;
+
     const studentOutput = StudentOutputSerializer.deserialize(dto[0]);
 
     return studentOutput;

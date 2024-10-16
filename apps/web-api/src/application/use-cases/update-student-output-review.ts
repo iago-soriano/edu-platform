@@ -4,7 +4,7 @@ import { EmailService } from "@edu-platform/common/platform/services";
 import { IStudentOutputsRepository } from "application/interfaces";
 
 type InputParams = {
-  newReviews: { review: string; blockId: string }[];
+  reviews: { review: string; blockId: string }[];
   studentOutputId: string;
 };
 
@@ -18,16 +18,18 @@ class UseCase implements IUpdateStudentOutputReviewUseCase {
     private emailService: EmailService
   ) {}
 
-  async execute({ newReviews, studentOutputId }: InputParams) {
+  async execute({ reviews, studentOutputId }: InputParams) {
     const studentOutput =
       await this.studentOutputsRepository.findStudentOutputById(
         studentOutputId
       );
 
+    if (!studentOutput) throw new Error("Student Output not found");
+
     if (studentOutput.status !== OutputStatus.READY)
       throw new Error("Student Output not ready");
 
-    studentOutput.updateReviews(newReviews);
+    studentOutput.updateReviews(reviews);
 
     await this.emailService.sendOutputReviewToStudent(
       studentOutput.studentEmail

@@ -10,7 +10,9 @@ export interface IStudentOutputsRepository extends IAbstractRepository {
     activityId: string,
     studentEmail: string
   ) => Promise<StudentOutput | null>;
-  findStudentOutputById: (studentOutputId: string) => Promise<StudentOutput>;
+  findStudentOutputById: (
+    studentOutputId: string
+  ) => Promise<StudentOutput | null>;
 }
 
 export interface IStudentOutputsReadRepository {

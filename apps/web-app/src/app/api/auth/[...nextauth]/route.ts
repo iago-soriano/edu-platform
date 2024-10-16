@@ -87,8 +87,6 @@ export const authOptions = {
           const refreshedToken = await refreshAccessToken(token);
           return refreshedToken;
         } catch (error) {
-          //doKeycloakSignOut();
-          // signOut();
           console.log("RefreshAccessTokenError", error);
           return { ...token, error: "RefreshAccessTokenError" };
         }
@@ -110,7 +108,6 @@ export const authOptions = {
           lastName: token.lastName,
         },
       };
-      // return session;
     },
     async redirect({ url, baseUrl }) {
       return baseUrl;

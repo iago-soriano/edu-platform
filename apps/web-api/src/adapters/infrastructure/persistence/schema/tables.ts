@@ -115,7 +115,7 @@ export const studentOutputs = pgTable("studentOutput", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 
-  requestingUserId: varchar("request_user_id").notNull(),
+  reviewerEmail: varchar("reviewer_email").notNull(),
   activityId: varchar("activityId")
     .references(() => activities.id)
     .notNull(),

@@ -33,8 +33,8 @@ export const studentOutputRelations = relations(
       references: [activities.id],
     }),
     requestingUserId: one(users, {
-      fields: [studentOutputs.requestingUserId],
-      references: [users.id],
+      fields: [studentOutputs.reviewerEmail],
+      references: [users.email],
     }),
   })
 );

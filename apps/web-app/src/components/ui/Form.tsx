@@ -23,6 +23,11 @@ import {
 import { Textarea, TextareaProps } from "./Textarea";
 import { Label } from "./Label";
 import { Switch } from "@components/ui/Switch";
+import {
+  RadioGroup,
+  RadioGroupIndicator,
+  RadioGroupItem,
+} from "@components/ui/RadioGroup";
 
 const Form = FormProvider;
 
@@ -393,6 +398,83 @@ const FormSwitchField = <TFieldValues extends FieldValues = FieldValues>({
   );
 };
 
+const FormRadioGroupField = <TFieldValues extends FieldValues = FieldValues>({
+  name,
+  label,
+  placeholder,
+  options,
+  required,
+  className,
+  defaultValue,
+  disabled,
+  checkedIndex,
+}: {
+  name: FieldPath<TFieldValues>;
+  label?: string;
+  checkedIndex?: number;
+  options: { value: string; label: string; isCorrect?: boolean }[];
+  placeholder?: string;
+  required?: boolean;
+  className?: string;
+  defaultValue?: string;
+  disabled?: boolean;
+}) => {
+  const { control } = useFormContext();
+  // console.log(options);
+  return (
+    <FormField
+      disabled={disabled}
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => (
+        <FormItem className={cx(className)}>
+          {label && (
+            <FormLabel required={required} htmlFor={name}>
+              {label}
+            </FormLabel>
+          )}
+          <FormControl>
+            <RadioGroup
+              onChange={(e) => {
+                if ((e.target as any).checked) field.onChange(e);
+              }}
+            >
+              {options.map((opt, idx) => {
+                const item = disabled ? (
+                  <RadioGroupItem
+                    checked={idx === checkedIndex}
+                    value={opt.value}
+                    id={opt.value}
+                    disabled={true}
+                  >
+                    <RadioGroupIndicator />
+                  </RadioGroupItem>
+                ) : (
+                  <RadioGroupItem value={opt.value} id={opt.value}>
+                    <RadioGroupIndicator />
+                  </RadioGroupItem>
+                );
+                return (
+                  <div
+                    className={cx(
+                      "flex flex-row items-center gap-x-2 ml-2 p-1"
+                    )}
+                    key={idx}
+                  >
+                    {item}
+                    <label htmlFor={opt.value}>{opt.label}</label>
+                  </div>
+                );
+              })}
+            </RadioGroup>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
+
 export {
   Form,
   FormControl,
@@ -406,4 +488,5 @@ export {
   FormTextField,
   useFormField,
   FormSwitchField,
+  FormRadioGroupField,
 };

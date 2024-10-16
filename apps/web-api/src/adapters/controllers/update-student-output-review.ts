@@ -37,16 +37,16 @@ export class UpdateStudentOutputReviewController {
   }
 
   async execute(req: Request, res: Response) {
-    const newReviews = req.body;
+    const { reviews } = req.body;
     const { studentOutputId } = req.params;
 
     const userId = req.user.id;
 
     await this._updateStudentOutputReviewUseCase.execute({
-      newReviews,
+      reviews,
       studentOutputId,
     });
 
-    res.sendStatus(200);
+    res.status(200).send({ outputId: studentOutputId });
   }
 }

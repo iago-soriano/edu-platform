@@ -13,7 +13,7 @@ export class StudentOutputSerializer {
   static serialize = (domain: StudentOutput) => {
     const dto: typeof studentOutputs.$inferInsert = {
       id: domain.id,
-      requestingUserId: domain.requestingUserId,
+      reviewerEmail: domain.reviewerEmail,
       activityId: domain.activityId,
       studentEmail: domain.studentEmail,
       status: domain.status,
@@ -26,7 +26,7 @@ export class StudentOutputSerializer {
   static deserialize(studentOutputDto: typeof studentOutputs.$inferSelect) {
     const output = new StudentOutput(
       studentOutputDto.id,
-      studentOutputDto.requestingUserId!,
+      studentOutputDto.reviewerEmail!,
       studentOutputDto.activityId!,
       studentOutputDto.studentEmail!,
       studentOutputDto.status! as OutputStatus,
@@ -36,10 +36,6 @@ export class StudentOutputSerializer {
     output.isNew = false;
     output.isDelete = false;
 
-    const proxiedEntity = new ChangeTrackingProxy({
-      output,
-    }) as StudentOutput;
-
-    return proxiedEntity;
+    return new ChangeTrackingProxy(output) as StudentOutput;
   }
 }

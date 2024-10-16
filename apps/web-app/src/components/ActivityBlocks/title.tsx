@@ -6,12 +6,12 @@ import { DomainRules } from "@edu-platform/common/domain/rules";
 export const TitleInputSchema = z
   .string()
   .min(
-    DomainRules.TITLE.MIN_LENGTH_WORDS,
-    `Text must have at least ${DomainRules.TITLE.MIN_LENGTH_WORDS} characters`
+    DomainRules.TITLE.MIN_LENGTH,
+    `Text must have at least ${DomainRules.TITLE.MIN_LENGTH} characters`
   )
   .max(
-    DomainRules.TITLE.MAX_LENGTH_WORDS,
-    `Text cannot have more than ${DomainRules.TITLE.MAX_LENGTH_WORDS} characters`
+    DomainRules.TITLE.MAX_LENGTH,
+    `Text cannot have more than ${DomainRules.TITLE.MAX_LENGTH} characters`
   );
 
 const TitleContainer = ({ children }) => (

@@ -33,11 +33,11 @@ export class CreateNewStudentOutputController {
   async execute(req: Request, res: Response) {
     const { activityId, studentEmail } = req.body;
 
-    const userId = req.user.id;
+    const userEmail = req.user.email;
 
     const resp = await this._createNewStudentOutputUseCase.execute({
       activityId, // my activity
-      userId, // logged user, teacher
+      userEmail, // logged user, teacher
       studentEmail,
     });
 

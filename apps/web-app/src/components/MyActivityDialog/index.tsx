@@ -5,7 +5,7 @@ import { TextBlock } from "@components/ActivityBlocks/text";
 import { Title } from "@components/ActivityBlocks/title";
 
 import { OpenQuestion } from "@components/ActivityBlocks/open-question";
-import { MultipleChoiceQuestion } from "@components/ActivityBlocks/multiple-choice-question";
+import { MultipleChoiceQuestionDisplay } from "@components/ActivityBlocks/multiple-choice-question";
 
 import { Button } from "@components/ui/Button";
 import {
@@ -28,6 +28,7 @@ import { GetMyActivityByIdResponseBody } from "@edu-platform/common";
 import { ActivityBlockType } from "@edu-platform/common/domain/enums";
 
 import { RequestStudentEmailDialog } from "./RequestStudentEmailDialog";
+import { LoadingErrorData } from "@components/ui/ErrorLoadingData";
 
 type ActivityDialogProps = {
   setOpen: Dispatch<SetStateAction<string | null>>;
@@ -46,19 +47,27 @@ export const MyActivityDialog = ({
 
   const [isRequestStudentEmailDialogOpen, setIsRequestStudentEmailDialogOpen] =
     useState(false);
+
   const parseContent = (data: GetMyActivityByIdResponseBody["activity"]) => {
     // console.log(data.activityBlocks);
     return data.activityBlocks.map((bl, idx, blocks) => {
       if (bl.type === ActivityBlockType.TEXT)
         return <TextBlock key={bl.id}>{bl.data}</TextBlock>;
       if (bl.type === ActivityBlockType.OPEN_QUESTION)
-        return <OpenQuestion key={bl.id}>{bl.data} </OpenQuestion>;
+        return (
+          <OpenQuestion key={bl.id} disabled>
+            {bl.data}{" "}
+          </OpenQuestion>
+        );
       if (bl.type === ActivityBlockType.MULTIPLE_CHOICE_QUESTION) {
-        return <MultipleChoiceQuestion key={bl.id} data={bl.data} disabled />;
+        return (
+          <MultipleChoiceQuestionDisplay key={bl.id} data={bl.data} disabled />
+        );
       }
     });
   };
 
+  console.log(resp);
   return (
     <>
       <RequestStudentEmailDialog
@@ -77,16 +86,17 @@ export const MyActivityDialog = ({
             <DialogTitle>Share activity</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
-          {resp.isLoading ? (
-            <Spinner className=" w-32 h-32" />
-          ) : (
-            resp.data?.activity && (
+          <LoadingErrorData
+            loading={resp.isLoading}
+            error={resp.error}
+            hasData={!!resp.data?.activity}
+            data={
               <div>
                 <Title>{resp.data?.activity?.title}</Title>
-                {parseContent(resp.data?.activity)}
+                {resp.data?.activity && parseContent(resp.data?.activity!)}
               </div>
-            )
-          )}
+            }
+          />
 
           <DialogFooter
           //className="fixed bottom-0"
@@ -102,7 +112,6 @@ export const MyActivityDialog = ({
                 onClick={() => {
                   setIsRequestStudentEmailDialogOpen(true);
                 }}
-                //isLoading={form.formState.isSubmitting}
               >
                 Share
               </Button>

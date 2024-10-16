@@ -1,5 +1,8 @@
 import { Answer, StudentOutput } from "@domain/entities";
-import { OutputStatus } from "@edu-platform/common/domain/enums";
+import {
+  ActivityBlockType,
+  OutputStatus,
+} from "@edu-platform/common/domain/enums";
 import { IUseCase } from "@edu-platform/common/platform";
 import { createId } from "@paralleldrive/cuid2";
 import {
@@ -9,7 +12,7 @@ import {
 
 type InputParams = {
   activityId: string;
-  userId: string;
+  userEmail: string;
   studentEmail: string;
 };
 
@@ -23,7 +26,7 @@ class UseCase implements ICreateNewStudentOutputUseCase {
     private activitiesReadRepository: IActivitiesReadRepository
   ) {}
 
-  async execute({ activityId, userId, studentEmail }: InputParams) {
+  async execute({ activityId, userEmail, studentEmail }: InputParams) {
     const existingStudentOutput =
       await this.studentOutputsRepository.findStudentOutputByActivityId(
         activityId,
@@ -36,19 +39,22 @@ class UseCase implements ICreateNewStudentOutputUseCase {
 
       if (!activity) throw new Error("Activity not found");
 
-      const answersArray = activity?.activity.activityBlocks.map(
-        (block) =>
-          ({
-            id: createId(),
-            blockId: block.id,
-            answer: "",
-            review: "",
-          }) as Answer
-      );
+      // TODO: refactor it into domain entity
+      const answersArray = activity?.activity.activityBlocks
+        .filter((bl) => bl.type !== ActivityBlockType.TEXT)
+        .map(
+          (block) =>
+            ({
+              id: createId(),
+              blockId: block.id,
+              answer: "",
+              review: "",
+            }) as Answer
+        );
 
       const newOutput = new StudentOutput(
         createId(),
-        userId,
+        userEmail,
         activityId,
         studentEmail,
         OutputStatus.PENDING,

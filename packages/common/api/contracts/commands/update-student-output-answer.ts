@@ -6,17 +6,19 @@ const updateStudentOutputAnswerParamsSchema = z.object({
 
 type Params = z.infer<typeof updateStudentOutputAnswerParamsSchema>;
 
-const updateStudentOutputAnswerRequestBodySchema = z
-  .object({
-    blockId: z.string(),
-    answer: z.string(),
-  })
-  .array();
+const updateStudentOutputAnswerRequestBodySchema = z.object({
+  answers: z
+    .object({
+      blockId: z.string(),
+      answer: z.string(),
+    })
+    .array(),
+});
 
 type RequestBody = z.infer<typeof updateStudentOutputAnswerRequestBodySchema>;
 
 interface ResponseBody {
-  outputId: number;
+  outputId: string;
 }
 
 export type {

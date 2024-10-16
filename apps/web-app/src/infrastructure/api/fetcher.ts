@@ -49,6 +49,7 @@ export class Fetcher implements IHTTPClient {
   }
 
   async put(endpoint: string, body: unknown) {
+    console.log(body);
     const response = await fetch(endpoint, {
       method: "PUT",
       headers: await headersHandler(),

@@ -2,7 +2,6 @@ import { z } from "zod";
 import { ActivityBlockType, OutputStatus } from "../../../domain/enums";
 
 type Answer = {
-  id: string;
   blockId: string;
   answer: string;
   review: string;
@@ -10,7 +9,7 @@ type Answer = {
 
 type ResponseBody = {
   id: string;
-  requestingUserId: string;
+  reviewerEmail: string;
   activityId: string;
   studentEmail: string;
   status: OutputStatus;

@@ -9,7 +9,7 @@ import {
 } from "application/interfaces";
 
 type InputParams = {
-  newAnswers: { answer: string; blockId: string }[];
+  answers: { answer: string; blockId: string }[];
   studentOutputId: string;
 };
 
@@ -24,22 +24,22 @@ class UseCase implements IUpdateStudentOutputAnswerUseCase {
     private emailService: EmailService
   ) {}
 
-  async execute({ newAnswers, studentOutputId }: InputParams) {
+  async execute({ answers, studentOutputId }: InputParams) {
     const studentOutput =
       await this.studentOutputsRepository.findStudentOutputById(
         studentOutputId
       );
 
-    // update all answers
-    studentOutput.updateAnswers(newAnswers);
+    if (!studentOutput) throw new Error("Student Output not found");
 
-    // set std output to READY
+    studentOutput.updateAnswers(answers);
     studentOutput.status = OutputStatus.READY;
 
     // get teacher from repo using this id, send him e-mail
-    const teacher = await this.userRepository.getById(
-      studentOutput.requestingUserId
+    const teacher = await this.userRepository.getByEmail(
+      studentOutput.reviewerEmail
     );
+    if (!teacher) throw new Error("Requesting user not found");
 
     await this.emailService.sendStudentOutputLinkToTeacher(teacher!.email);
 

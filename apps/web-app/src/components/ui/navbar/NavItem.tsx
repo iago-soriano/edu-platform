@@ -48,7 +48,7 @@ export function NavItem({ href, children }: NavItemProps) {
     );
   }, [refreshCurrentPath, isAnchorLink]);
 
-  console.log({ isAnchorLink, path, isActive, href });
+  // console.log({ isAnchorLink, path, isActive, href });
   return (
     <Link
       href={href}
