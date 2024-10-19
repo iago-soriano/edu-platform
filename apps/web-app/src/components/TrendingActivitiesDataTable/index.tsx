@@ -19,7 +19,7 @@ export const TrendingActivitiesDataTable = ({ data, page, pageSize }) => {
   };
 
   return (
-    <>
+    <div className="h-[190vh]">
       <DataTable
         columns={columns}
         data={data?.data || []}
@@ -38,6 +38,6 @@ export const TrendingActivitiesDataTable = ({ data, page, pageSize }) => {
         setOpen={setSelectedActivityId}
         selectedActivityId={selectedActivityId}
       />
-    </>
+    </div>
   );
 };

@@ -20,7 +20,7 @@ export const Footer = async () => {
 
   return (
     <footer className="">
-      {/* <div className="grid grid-cols-16 p-10 gap-y-3">
+      <div className="grid grid-cols-16 p-10 gap-y-3">
         <div className="lg:col-span-5 md:col-span-10 col-span-12">
           <Image
             className="m-2"
@@ -63,7 +63,7 @@ export const Footer = async () => {
             <span className="px-2 inline-block">iago.srm.is@gmail.com</span>
           </p>
         </div>
-      </div> */}
+      </div>
       <div className="flex justify-between p-4">
         <p className="text-text2">Copyright</p>
         <FooterLink href="/privacy-policy">Política de Privacidade</FooterLink>

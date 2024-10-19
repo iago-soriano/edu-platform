@@ -4,26 +4,22 @@ dotenv.config();
 
 const define = {
   'process.env.PORT': JSON.stringify(process.env['PORT']),
-  'process.env.EMAIL_HOST': JSON.stringify(process.env['EMAIL_HOST']),
-  'process.env.EMAIL_SECRET': JSON.stringify(process.env['EMAIL_SECRET']),
-  'process.env.EMAIL_USER': JSON.stringify(process.env['EMAIL_USER']),
+
   'process.env.WEB_APP_URL': JSON.stringify(process.env['WEB_APP_URL']),
-  'process.env.HOST_NAME': JSON.stringify(process.env['HOST_NAME']),
-  'process.env.GOOGLE_CLIENT_ID': JSON.stringify(
-    process.env['GOOGLE_CLIENT_ID'],
-  ),
-  'process.env.ACCESS_TOKEN_PRIVATE_KEY': JSON.stringify(
-    process.env['ACCESS_TOKEN_PRIVATE_KEY'],
-  ),
-  'process.env.REFRESH_TOKEN_PRIVATE_KEY': JSON.stringify(
-    process.env['REFRESH_TOKEN_PRIVATE_KEY'],
-  ),
-  'process.env.REFRESH_TOKEN_PUBLIC_KEY': JSON.stringify(
-    process.env['REFRESH_TOKEN_PUBLIC_KEY'],
-  ),
-  'process.env.ACCESS_TOKEN_PUBLIC_KEY': JSON.stringify(
-    process.env['ACCESS_TOKEN_PUBLIC_KEY'],
-  ),
+
+  'process.env.DATABASE_URL': JSON.stringify(process.env['DATABASE_URL']),
+  
+  'process.env.QUEUE_URL': JSON.stringify(process.env['QUEUE_URL']),
+
+  'process.env.KEYCLOAK_CLIENT_ID': JSON.stringify(process.env['KEYCLOAK_CLIENT_ID']),
+  'process.env.KEYCLOAK_CLIENT_SECRET': JSON.stringify(process.env['KEYCLOAK_CLIENT_SECRET']),
+  'process.env.KEYCLOAK_CLIENT_SECRET': JSON.stringify(process.env['KEYCLOAK_CLIENT_SECRET']),
+  'process.env.KEYCLOAK_URL': JSON.stringify(process.env['KEYCLOAK_URL']),
+  'process.env.KEYCLOAK_WEBHOOK_SECRET': JSON.stringify(process.env['KEYCLOAK_WEBHOOK_SECRET']),
+  'process.env.KEYCLOAK_RSA_PUBLIC_KEY': JSON.stringify(process.env['KEYCLOAK_RSA_PUBLIC_KEY']),
+
+  'process.env.OPEN_AI_KEY': JSON.stringify(process.env['OPEN_AI_KEY']),
+
 };
 
 await esbuild.build({

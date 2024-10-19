@@ -5,6 +5,7 @@ import { StudentOutputReviewForm } from "@components/StudentOutputReviewForm";
 import { authOptions } from "../../../api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { PendingBanner, SuccessBanner } from "@components/ui/FixedAlerts";
+import { redirect } from "next/navigation";
 
 type Props = {
   params: {
@@ -26,6 +27,10 @@ const Page = async ({ params }: Props) => {
   const isAnswered = stdOutput.answers.every(({ answer }) => answer.length);
   const isReviwed = stdOutput.answers.every(({ review }) => review.length);
 
+  console.log(isAnswered);
+  if (role === "student" && !isAnswered)
+    redirect(`/student-outputs/${params.id}/do`);
+
   return (
     <div className="w-[90%] md:w-[75ch] lg:w-[70%] p-3 mx-auto">
       {role === "reviewer" && !isAnswered && (
@@ -33,6 +38,7 @@ const Page = async ({ params }: Props) => {
           This activity has not been answered yet. Check back soon!
         </PendingBanner>
       )}
+
       {role === "student" && !isReviwed && (
         <PendingBanner>
           This activity has not been reviewed yet. Check back soon!

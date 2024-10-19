@@ -5,12 +5,13 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GetStudentOutputByIdResponseBody } from "@edu-platform/common";
-import { useSession } from "next-auth/react";
 import { ActivityBlockType } from "@edu-platform/common/domain/enums";
 
 import { TextBlock } from "@components/ActivityBlocks/text";
-import { OpenQuestionWithReview } from "@components/ActivityBlocks/open-question";
-import { MultipleChoiceQuestionWithReview } from "@components/ActivityBlocks/multiple-choice-question";
+import { OpenQuestionWithAnswer } from "@components/ActivityBlocks/open-question";
+import { MultipleChoiceQuestionWithAnswer } from "@components/ActivityBlocks/multiple-choice-question";
+import { WithReview } from "@components/ActivityBlocks/with-review";
+
 import { Button } from "@components/ui/Button";
 import { toast } from "@components/ui/useToast";
 
@@ -92,28 +93,56 @@ export const StudentOutputReviewForm = ({
           .map((bl, idx, blocks) => {
             if (bl.type === ActivityBlockType.OPEN_QUESTION) {
               return (
-                <OpenQuestionWithReview
-                  key={bl.id}
-                  index={idx}
-                  // data={data}
-                  blockId={bl.id}
-                  answers={studentOutput.answers}
+                // <OpenQuestionWithReview
+                //   key={bl.id}
+                //   index={idx}
+                //   // data={data}
+                //   blockId={bl.id}
+                //   answers={studentOutput.answers}
+                //   role={role}
+                // >
+                //   {bl.data}
+                // </OpenQuestionWithReview>
+                <WithReview
                   role={role}
-                >
-                  {bl.data}
-                </OpenQuestionWithReview>
+                  index={idx}
+                  review={
+                    studentOutput.answers.find((ans) => ans.blockId === bl.id)
+                      ?.review
+                  }
+                  renderQuestion={() => (
+                    <OpenQuestionWithAnswer
+                      question={bl.data}
+                      answer={
+                        studentOutput.answers.find(
+                          (ans) => ans.blockId === bl.id
+                        )?.answer ?? ""
+                      }
+                    />
+                  )}
+                />
               );
             }
             if (bl.type === ActivityBlockType.MULTIPLE_CHOICE_QUESTION) {
               const data = bl.data as MultipleChoiceQuestion;
               return (
-                <MultipleChoiceQuestionWithReview
-                  key={bl.id}
-                  index={idx}
-                  data={data}
-                  blockId={bl.id}
-                  answers={studentOutput.answers}
+                <WithReview
                   role={role}
+                  index={idx}
+                  review={
+                    studentOutput.answers.find((ans) => ans.blockId === bl.id)
+                      ?.review
+                  }
+                  renderQuestion={() => (
+                    <MultipleChoiceQuestionWithAnswer
+                      data={data}
+                      givenAnswer={
+                        studentOutput.answers.find(
+                          (ans) => ans.blockId === bl.id
+                        )?.answer
+                      }
+                    />
+                  )}
                 />
               );
             }

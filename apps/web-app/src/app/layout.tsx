@@ -15,7 +15,7 @@ export default function RootLayout(context) {
   return (
     <RootProviders>
       <Navbar />
-      <main className="min-h-[87vh] px-7 py-2 mt-20">{context.children}</main>
+      <main className="min-h-screen px-7 py-2 mt-20">{context.children}</main>
       <Footer />
     </RootProviders>
   );

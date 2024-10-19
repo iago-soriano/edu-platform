@@ -26,27 +26,40 @@ export function NavItem({ href, children }: NavItemProps) {
 
   const refreshCurrentPath = useSearchParams();
 
-  const isAnchorLink = window?.location.hash.at(0) === "#";
+  const isClient = typeof window !== "undefined";
 
-  const [path, setPath] = useState(
+  const isAnchorLink = isClient && window?.location.hash.at(0) === "#";
+
+  /*   const [path, setPath] = useState(
     isAnchorLink
       ? decodeURIComponent(window?.location.hash)
       : window?.location.pathname
-  );
+  ); */
+
+  const [path, setPath] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (isClient) {
+      const currentPath = isAnchorLink
+        ? decodeURIComponent(window.location.hash)
+        : window.location.pathname;
+      setPath(currentPath);
+    }
+  }, [refreshCurrentPath, isAnchorLink]);
 
   const isActive = useMemo(
     () =>
-      isAnchorLink ? path.split("#")[1] === href.split("#")[1] : path === href,
+      isAnchorLink ? path?.split("#")[1] === href.split("#")[1] : path === href,
     [path, href, isAnchorLink]
   );
 
-  useEffect(() => {
+  /*   useEffect(() => {
     setPath(
       isAnchorLink
         ? decodeURIComponent(window?.location.hash)
         : window?.location.pathname
     );
-  }, [refreshCurrentPath, isAnchorLink]);
+  }, [refreshCurrentPath, isAnchorLink]); */
 
   // console.log({ isAnchorLink, path, isActive, href });
   return (

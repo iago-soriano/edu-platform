@@ -21,7 +21,7 @@ export async function Navbar() {
         </Link>
 
         {/* <div className="w-full flex flex-row justify-between items-center"> */}
-        <nav className="w-full flex flex-row justify-between items-center gap-8 mb-[1px] text-sm">
+        <nav className="w-full flex flex-row justify-between items-center gap-8 mb-[1px] text-sm ">
           {/* <div > */}
           <div className="flex flex-row gap-4">
             {navButtons.left.map(({ route, header }) => (

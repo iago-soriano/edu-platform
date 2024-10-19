@@ -220,6 +220,10 @@ export const ImportActivityDialog = ({
                   type="submit"
                   variant="primary"
                   isLoading={form.formState.isSubmitting}
+                  disabled={
+                    resp?.data?.activityGenerated.status !==
+                    ActivityStatus.READY
+                  }
                 >
                   Save
                 </Button>

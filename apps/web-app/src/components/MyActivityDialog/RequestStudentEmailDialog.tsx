@@ -1,44 +1,24 @@
 "use client";
 
-import { TextBlock } from "@components/ActivityBlocks/text";
-import { Title } from "@components/ActivityBlocks/title";
-
-import { OpenQuestion } from "@components/ActivityBlocks/open-question";
-import { MultipleChoiceQuestion } from "@components/ActivityBlocks/multiple-choice-question";
-
 import { Button } from "@components/ui/Button";
 import {
   Dialog,
-  DialogHeader,
-  DialogContent,
-  DialogTitle,
-  DialogFooter,
   DialogClose,
+  DialogContent,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@components/ui/Dialog";
 import { Divider } from "@components/ui/Divider";
-import { getMydActivityById, createNewStudentOutput } from "./actions";
+import { createNewStudentOutput } from "./actions";
 
-import {
-  Form,
-  FormControl,
-  FormItem,
-  FormLabel,
-  FormSelectField,
-  FormTextField,
-} from "@components/ui/Form";
+import { Form, FormTextField } from "@components/ui/Form";
 
-import { useMutation } from "@tanstack/react-query";
 import { Dispatch, SetStateAction } from "react";
-import { Spinner } from "@components/ui/spinner";
 import { z } from "zod";
 
-import { GetMyActivityByIdResponseBody } from "@edu-platform/common";
-import { ActivityBlockType } from "@edu-platform/common/domain/enums";
-
-import { useEffect } from "react";
 import { toast } from "@components/ui/useToast";
-import { navigate } from "@components/navigate";
 
 import { useForm } from "react-hook-form";
 

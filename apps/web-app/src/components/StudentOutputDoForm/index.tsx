@@ -8,8 +8,8 @@ import { GetStudentOutputByIdResponseBody } from "@edu-platform/common";
 import { ActivityBlockType } from "@edu-platform/common/domain/enums";
 
 import { TextBlock } from "@components/ActivityBlocks/text";
-import { OpenQuestion } from "@components/ActivityBlocks/open-question";
-import { MultipleChoiceQuestion } from "@components/ActivityBlocks/multiple-choice-question";
+import { OpenQuestionDoForm } from "@components/ActivityBlocks/open-question";
+import { MultipleChoiceQuestionDoForm } from "@components/ActivityBlocks/multiple-choice-question";
 import { Button } from "@components/ui/Button";
 import { toast } from "@components/ui/useToast";
 import { navigate } from "@components/navigate";
@@ -99,9 +99,9 @@ export const StudentOutputDoForm = ({ studentOutput }: Props) => {
                 (x) => x.type === ActivityBlockType.OPEN_QUESTION
               ) ?? 0);
             return (
-              <OpenQuestion key={bl.id} index={oqIdx}>
+              <OpenQuestionDoForm key={bl.id} index={oqIdx}>
                 {bl.data}
-              </OpenQuestion>
+              </OpenQuestionDoForm>
             );
           }
           if (bl.type === ActivityBlockType.MULTIPLE_CHOICE_QUESTION) {
@@ -111,7 +111,7 @@ export const StudentOutputDoForm = ({ studentOutput }: Props) => {
                 (x) => x.type === ActivityBlockType.MULTIPLE_CHOICE_QUESTION
               ) ?? 0);
             return (
-              <MultipleChoiceQuestion
+              <MultipleChoiceQuestionDoForm
                 key={bl.id}
                 data={bl.data}
                 index={mcqIdx}

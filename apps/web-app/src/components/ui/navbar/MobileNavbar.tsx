@@ -17,7 +17,7 @@ export async function MobileNavbar() {
   const navButtons = getNavButtons(session);
 
   return (
-    <div className="fixed top-0 left-0 w-full flex items-center justify-between container h-16 border-b md:hidden bg-gray-50 dark:bg-background">
+    <div className="fixed top-0 left-0 w-full bg-gray-50 flex items-center justify-between container h-16 border-b md:hidden  dark:bg-background">
       <Link href="/home">
         <Logo />
       </Link>
@@ -27,7 +27,9 @@ export async function MobileNavbar() {
           <HamburguerButton />
         </SheetTrigger>
         <SheetContent className="pt-20">
-          <Logo className="absolute top-4 left-6" />
+          <span className="absolute top-4 left-6 m-2">
+            <Logo />
+          </span>
 
           {[...navButtons.left, ...navButtons.right].map((item) => (
             <div key={item.route}>
@@ -44,8 +46,6 @@ export async function MobileNavbar() {
               <Divider className="my-2" />
             </div>
           ))}
-
-          <Divider className="my-2" />
 
           <SheetClose asChild>
             {session ? <SignOutMobileButton /> : <SignInButton />}

@@ -4,8 +4,8 @@ import { useState } from "react";
 import { TextBlock } from "@components/ActivityBlocks/text";
 import { Title } from "@components/ActivityBlocks/title";
 
-import { OpenQuestion } from "@components/ActivityBlocks/open-question";
-import { MultipleChoiceQuestionDisplay } from "@components/ActivityBlocks/multiple-choice-question";
+import { OpenQuestionWithAnswer } from "@components/ActivityBlocks/open-question";
+import { MultipleChoiceQuestionWithAnswer } from "@components/ActivityBlocks/multiple-choice-question";
 
 import { Button } from "@components/ui/Button";
 import {
@@ -54,15 +54,9 @@ export const MyActivityDialog = ({
       if (bl.type === ActivityBlockType.TEXT)
         return <TextBlock key={bl.id}>{bl.data}</TextBlock>;
       if (bl.type === ActivityBlockType.OPEN_QUESTION)
-        return (
-          <OpenQuestion key={bl.id} disabled>
-            {bl.data}{" "}
-          </OpenQuestion>
-        );
+        return <OpenQuestionWithAnswer key={bl.id} question={bl.data} />;
       if (bl.type === ActivityBlockType.MULTIPLE_CHOICE_QUESTION) {
-        return (
-          <MultipleChoiceQuestionDisplay key={bl.id} data={bl.data} disabled />
-        );
+        return <MultipleChoiceQuestionWithAnswer key={bl.id} data={bl.data} />;
       }
     });
   };
