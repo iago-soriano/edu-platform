@@ -3,15 +3,16 @@ module "vpc" {
 }
 
 module "db" {
-  source = "./db"
-  vpc_id            = module.vpc.vpc_id
+  source             = "./db"
+  vpc_id             = module.vpc.vpc_id
   private_subnet_ids = module.vpc.private_subnet_ids
-  db_password       = local.db_password
+  public_subnet_ids  = [module.vpc.public_subnet_id]
+  db_password        = local.db_password
+  db_user            = local.db_user
 }
 
-module "domain-topic" {
-  source = "./sns-sqs"
-  topic_name = "domain-topic"
+module "queue" {
+  source     = "./sqs"
   queue_name = "domain-queue"
   lambda_arn = module.event-handler.lambda_arn
 }
@@ -19,37 +20,27 @@ module "domain-topic" {
 module "api" {
   source = "./lambda"
   env_vars = {
-    DATABASE_URL = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:${module.db.rds_port}",
-    DOMAIN_SNS_TOPIC_ARN = module.domain-topic.topic_arn,
-    BUCKET_NAME = module.s3.bucket_name
+    #   DATABASE_URL = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:${module.db.rds_port}/edu-platform",
   }
   function_name = "api"
-  app_version = var.app_version
-  subnet_id = module.vpc.private_subnet_ids[0]
-  vpc_id = module.vpc.vpc_id
+  app_version   = var.app_version
+  subnet_id     = module.vpc.public_subnet_id
+  vpc_id        = module.vpc.vpc_id
 }
 
 module "api-gw" {
-  source = "./api-gateway"
-  lambda_invoke_arn = module.api.lambda_invoke_arn
+  source               = "./api-gateway"
+  lambda_invoke_arn    = module.api.lambda_invoke_arn
   lambda_function_name = module.api.function_name
 }
 
 module "event-handler" {
   source = "./lambda"
   env_vars = {
-    DATABASE_URL = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:${module.db.rds_port}",
-    DOMAIN_SNS_TOPIC_ARN = module.domain-topic.topic_arn,
-    BUCKET_NAME = module.s3.bucket_name
+    # DATABASE_URL = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:${module.db.rds_port}",
   }
   function_name = "event-handler"
-  app_version = var.app_version
-  subnet_id = module.vpc.private_subnet_ids[0]
-  vpc_id = module.vpc.vpc_id
+  app_version   = var.app_version
+  subnet_id     = module.vpc.public_subnet_id
+  vpc_id        = module.vpc.vpc_id
 }
-
-module "s3" {
-  source = "./public-s3"
-  bucket_name = "edu-platform-activity-contents"
-}
-

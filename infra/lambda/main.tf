@@ -7,7 +7,7 @@ resource "aws_lambda_function" "main" {
   handler = "index.handler"
   runtime = "nodejs20.x"
 
-  timeout = 30
+  timeout     = 30
   memory_size = 256
 
   # vpc config
@@ -19,8 +19,8 @@ resource "aws_lambda_function" "main" {
   environment {
     variables = var.env_vars
   }
-  
-  role = "${aws_iam_role.lambda_exec.arn}"
+
+  role = aws_iam_role.lambda_exec.arn
 }
 
 # IAM role which dictates what other AWS services the Lambda function
@@ -28,7 +28,7 @@ resource "aws_lambda_function" "main" {
 resource "aws_iam_role" "lambda_exec" {
   name = var.function_name
 
-assume_role_policy = <<EOF
+  assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -51,21 +51,21 @@ EOF
       Version = "2012-10-17"
       Statement = [
         {
-          Action   = [
-              "logs:CreateLogGroup",
-              "logs:CreateLogStream",
-              "logs:PutLogEvents",
-              "ec2:CreateNetworkInterface",
-              "ec2:DescribeNetworkInterfaces",
-              "ec2:DeleteNetworkInterface",
-              "ec2:AssignPrivateIpAddresses",
-              "ec2:UnassignPrivateIpAddresses",
-              "sqs:ChangeMessageVisibility",
-              "sqs:DeleteMessage",
-              "sqs:GetQueueAttributes",
-              "sqs:ReceiveMessage",
-              "sns:*"
-            ]
+          Action = [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+            "ec2:CreateNetworkInterface",
+            "ec2:DescribeNetworkInterfaces",
+            "ec2:DeleteNetworkInterface",
+            "ec2:AssignPrivateIpAddresses",
+            "ec2:UnassignPrivateIpAddresses",
+            "sqs:ChangeMessageVisibility",
+            "sqs:DeleteMessage",
+            "sqs:GetQueueAttributes",
+            "sqs:ReceiveMessage",
+            "sns:*"
+          ]
           Effect   = "Allow"
           Resource = "*"
         }
@@ -75,17 +75,17 @@ EOF
 }
 
 data "aws_s3_bucket" "function" {
-  bucket = "edu-platform-lambda-function-code"
+  bucket = "edu-platform-lambda-function-build-output"
 }
 
 resource "aws_security_group" "sg_lambda" {
-  vpc_id      = var.vpc_id
-  name = "lambda_sg-${var.function_name}"
+  vpc_id = var.vpc_id
+  name   = "lambda_sg-${var.function_name}"
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }

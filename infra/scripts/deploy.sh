@@ -12,16 +12,18 @@ npm run build:ci
 
 echo "Zipping api..."
 rm -f ../../infra/build-api.zip
-zip -rj ../../infra/build-api.zip ./build/index.api/index.js
+cd ../../apps/web-api/build/index.api
+tar -acf ../../../../infra/build-api.zip index.js
 
 echo "Zipping event-handler..."
-rm -f ../../infra/build-event-handler.zip
-zip -rj ../../infra/build-event-handler.zip ./build/index.sqs/index.js
+cd ../index.sqs
+rm -f ../../../../infra/build-event-handler.zip
+tar -acf ../../../../infra/build-event-handler.zip index.js
 
 echo "Uploading packages to S3..."
-cd ../../infra
-aws s3 cp build-api.zip "s3://edu-platform-lambda-function-code/api/$NEW_VERSION/build.zip"
-aws s3 cp build-event-handler.zip "s3://edu-platform-lambda-function-code/event-handler/$NEW_VERSION/build.zip"
+cd ../../../../infra
+aws s3 cp build-api.zip "s3://edu-platform-lambda-function-build-output/api/$NEW_VERSION/build.zip"
+aws s3 cp build-event-handler.zip "s3://edu-platform-lambda-function-build-output/event-handler/$NEW_VERSION/build.zip"
 
 echo "Starting terraform apply..."
 terraform apply -var="app_version=$NEW_VERSION"

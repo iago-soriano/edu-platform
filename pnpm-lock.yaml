@@ -184,6 +184,9 @@ importers:
       awilix:
         specifier: ^7.0.3
         version: 7.0.3
+      body-parser:
+        specifier: ^1.20.3
+        version: 1.20.3
       dotenv:
         specifier: ^16.0.1
         version: 16.4.5
@@ -193,15 +196,24 @@ importers:
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
-      google-auth-library:
-        specifier: ^9.1.0
-        version: 9.14.1
+      express:
+        specifier: ^4.18.2
+        version: 4.21.0
+      express-async-errors:
+        specifier: ^3.1.1
+        version: 3.1.1(express@4.21.0)
+      jsonwebtoken:
+        specifier: ^9.0.1
+        version: 9.0.2
       openai:
         specifier: ^4.67.2
         version: 4.67.2(zod@3.23.8)
       pg:
         specifier: ^8.11.3
         version: 8.13.0
+      serverless-http:
+        specifier: ^3.2.0
+        version: 3.2.0
       zod:
         specifier: ^3.22.4
         version: 3.23.8
@@ -394,10 +406,10 @@ importers:
         version: 0.344.0(react@18.3.1)
       next:
         specifier: ^14.2.3
-        version: 14.2.14(@babel/core@7.25.7)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 14.2.14(@babel/core@7.25.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-auth:
         specifier: ^4.24.8
-        version: 4.24.8(next@14.2.14(@babel/core@7.25.7)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(nodemailer@6.9.15)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 4.24.8(next@14.2.14(@babel/core@7.25.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(nodemailer@6.9.15)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-nprogress-bar:
         specifier: ^2.3.13
         version: 2.3.13
@@ -4414,8 +4426,8 @@ packages:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
     engines: {node: '>= 8.10.0'}
 
-  chromedriver@129.0.4:
-    resolution: {integrity: sha512-j5I55cQwodFJUaYa1tWUmj2ss9KcPRBWmUa5Qonq3X8kqv2ASPyTboFYb4YB/YLztkYTUUw2E43txXw0wYzT/A==}
+  chromedriver@130.0.0:
+    resolution: {integrity: sha512-1g1eMoKF22Uh6l8DTFOPvWLovINPrkAMw7yDHlF6Rx+4W4JI9aGdCZ2Cx7c181hUgALU1oSKGH3uKNryYM5DaQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -13302,7 +13314,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  chromedriver@129.0.4:
+  chromedriver@130.0.0:
     dependencies:
       '@testim/chrome-version': 1.1.4
       axios: 1.7.7
@@ -13989,7 +14001,7 @@ snapshots:
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.30.0)(eslint@8.57.1)
-      eslint-plugin-import: 2.30.0(@typescript-eslint/parser@8.0.0-alpha.62(eslint@8.57.1)(typescript@5.6.2))(eslint@8.57.1)
+      eslint-plugin-import: 2.30.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.0(eslint@8.57.1)
       eslint-plugin-react: 7.37.1(eslint@8.57.1)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
@@ -14024,7 +14036,7 @@ snapshots:
       is-bun-module: 1.2.1
       is-glob: 4.0.3
     optionalDependencies:
-      eslint-plugin-import: 2.30.0(@typescript-eslint/parser@8.0.0-alpha.62(eslint@8.57.1)(typescript@5.6.2))(eslint@8.57.1)
+      eslint-plugin-import: 2.30.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1)
     transitivePeerDependencies:
       - '@typescript-eslint/parser'
       - eslint-import-resolver-node
@@ -14042,17 +14054,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@8.0.0-alpha.62(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint@8.57.1):
-    dependencies:
-      debug: 3.2.7
-    optionalDependencies:
-      '@typescript-eslint/parser': 8.0.0-alpha.62(eslint@8.57.1)(typescript@5.6.2)
-      eslint: 8.57.1
-      eslint-import-resolver-node: 0.3.9
-    transitivePeerDependencies:
-      - supports-color
-
-  eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.0.0-alpha.62(eslint@8.57.1)(typescript@5.6.2))(eslint@8.57.1):
+  eslint-plugin-import@2.30.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -14063,7 +14065,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.0.0-alpha.62(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint@8.57.1)
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1)
       hasown: 2.0.2
       is-core-module: 2.15.1
       is-glob: 4.0.3
@@ -14074,7 +14076,7 @@ snapshots:
       semver: 6.3.1
       tsconfig-paths: 3.15.0
     optionalDependencies:
-      '@typescript-eslint/parser': 8.0.0-alpha.62(eslint@8.57.1)(typescript@5.6.2)
+      '@typescript-eslint/parser': 7.2.0(eslint@8.57.1)(typescript@5.6.2)
     transitivePeerDependencies:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
@@ -15536,7 +15538,7 @@ snapshots:
     dependencies:
       jwk-to-pem: 2.0.6
     optionalDependencies:
-      chromedriver: 129.0.4
+      chromedriver: 130.0.0
     transitivePeerDependencies:
       - debug
       - supports-color
@@ -15834,13 +15836,13 @@ snapshots:
   netmask@2.0.2:
     optional: true
 
-  next-auth@4.24.8(next@14.2.14(@babel/core@7.25.7)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(nodemailer@6.9.15)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next-auth@4.24.8(next@14.2.14(@babel/core@7.25.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(nodemailer@6.9.15)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.25.7
       '@panva/hkdf': 1.2.1
       cookie: 0.5.0
       jose: 4.15.9
-      next: 14.2.14(@babel/core@7.25.7)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 14.2.14(@babel/core@7.25.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       oauth: 0.9.15
       openid-client: 5.7.0
       preact: 10.24.1
@@ -15862,7 +15864,7 @@ snapshots:
 
   next-tick@1.1.0: {}
 
-  next@14.2.14(@babel/core@7.25.7)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next@14.2.14(@babel/core@7.25.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@next/env': 14.2.14
       '@swc/helpers': 0.5.5
@@ -15872,7 +15874,7 @@ snapshots:
       postcss: 8.4.31
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      styled-jsx: 5.1.1(@babel/core@7.25.7)(babel-plugin-macros@3.1.0)(react@18.3.1)
+      styled-jsx: 5.1.1(@babel/core@7.25.7)(react@18.3.1)
     optionalDependencies:
       '@next/swc-darwin-arm64': 14.2.14
       '@next/swc-darwin-x64': 14.2.14
@@ -16952,13 +16954,12 @@ snapshots:
 
   strnum@1.0.5: {}
 
-  styled-jsx@5.1.1(@babel/core@7.25.7)(babel-plugin-macros@3.1.0)(react@18.3.1):
+  styled-jsx@5.1.1(@babel/core@7.25.7)(react@18.3.1):
     dependencies:
       client-only: 0.0.1
       react: 18.3.1
     optionalDependencies:
       '@babel/core': 7.25.7
-      babel-plugin-macros: 3.1.0
 
   stylis@4.2.0: {}
 

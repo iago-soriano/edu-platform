@@ -35,7 +35,7 @@ resource "aws_subnet" "private_b" {
 ### public subnet routing
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
-  tags = var.tags
+  tags   = var.tags
 }
 
 
@@ -56,28 +56,28 @@ resource "aws_route_table_association" "public" {
 }
 
 ### private subnets routing
-data "aws_instance" "nat" { //bastion host instance
-  instance_id = "i-0b170e76f6ee7c78a"
-}
+# data "aws_instance" "bastion" { //bastion host instance
+#   instance_id = "i-074d2beb58ffd25a6"
+# }
 
-resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.main.id
+# resource "aws_route_table" "private" {
+#   vpc_id = aws_vpc.main.id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    network_interface_id = data.aws_instance.nat.network_interface_id
-    # network_interface_id = data.aws_instance.bastion.network_interface_id
-  }
+#   route {
+#     cidr_block           = "0.0.0.0/0"
+#     network_interface_id = data.aws_instance.nat.network_interface_id
+#     # network_interface_id = data.aws_instance.bastion.network_interface_id
+#   }
 
-  tags = var.tags
-}
+#   tags = var.tags
+# }
 
-resource "aws_route_table_association" "private_a" {
-  subnet_id      = aws_subnet.private_a.id
-  route_table_id = aws_route_table.private.id
-}
+# resource "aws_route_table_association" "private_a" {
+#   subnet_id      = aws_subnet.private_a.id
+#   route_table_id = aws_route_table.private.id
+# }
 
-resource "aws_route_table_association" "private_b" {
-  subnet_id      = aws_subnet.private_b.id
-  route_table_id = aws_route_table.private.id
-}
+# resource "aws_route_table_association" "private_b" {
+#   subnet_id      = aws_subnet.private_b.id
+#   route_table_id = aws_route_table.private.id
+# }
