@@ -2,7 +2,7 @@ import { Client } from "@edu-platform/common/api";
 import { Fetcher } from "@infrastructure";
 import { Title } from "@components/ActivityBlocks/title";
 import { StudentOutputReviewForm } from "@components/StudentOutputReviewForm";
-import { authOptions } from "../../../../api/auth/[...nextauth]/route";
+import { authOptions } from "../../../../api/auth/[...nextauth]/auth-options";
 import { getServerSession } from "next-auth";
 import { PendingBanner, SuccessBanner } from "@components/ui/FixedAlerts";
 import { redirect } from "next/navigation";
@@ -22,7 +22,7 @@ const Page = async ({ params }: Props) => {
   const session = await getServerSession(authOptions);
 
   let role: "student" | "reviewer" = "student";
-  if (session.user.email === stdOutput.reviewerEmail) role = "reviewer";
+  if (session?.user.email === stdOutput.reviewerEmail) role = "reviewer";
 
   const isAnswered = stdOutput.answers.every(({ answer }) => answer.length);
   const isReviwed = stdOutput.answers.every(({ review }) => review.length);

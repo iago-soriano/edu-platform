@@ -2,6 +2,22 @@
 import { ReactNode } from "react";
 import { Spinner } from "@components/ui/spinner";
 import { Text } from "@components/ui/Typography";
+import Image from "next/image";
+
+const ErrorCard = ({ message }) => {
+  return (
+    <div>
+      <p className="py-5 text-center">{message}</p>
+      <Image
+        className="my-auto"
+        src={`/assets/images/doodles/messy.svg`}
+        width={600}
+        height={800}
+        alt={"Cartoon of a man dropping his papers"}
+      />
+    </div>
+  );
+};
 
 interface ErrorLoadingDataProps {
   error?: { message: string } | null;

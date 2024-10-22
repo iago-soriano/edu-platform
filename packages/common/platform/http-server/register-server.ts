@@ -6,7 +6,7 @@ import { Client } from "pg";
 const getControllersByResgistrationName = (
   container: awilix.AwilixContainer
 ) => {
-  const result = [];
+  const result: HTTPController<{}, {}>[] = [];
   for (const registrationName in container.registrations) {
     if (
       registrationName.includes("Controller") ||

@@ -1,7 +1,6 @@
 import { IHTTPClient } from "@edu-platform/common/api";
-import { authOptions } from "../../app/api/auth/[...nextauth]/route";
+import { authOptions } from "../../app/api/auth/[...nextauth]/auth-options";
 import { getServerSession } from "next-auth";
-import { doKeycloakSignOut } from "../../app/api/auth/logout/route";
 import { redirect } from "next/navigation";
 
 export interface FetchResponse<T> {

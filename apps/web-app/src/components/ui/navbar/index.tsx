@@ -6,7 +6,7 @@ import { ProfileDropDown } from "./ProfileDropDown";
 import { SignInButton } from "./SignInButton";
 import { getServerSession } from "next-auth";
 import { getNavButtons } from "./get-nav-buttons";
-import { authOptions } from "../../../app/api/auth/[...nextauth]/route";
+import { authOptions } from "../../../app/api/auth/[...nextauth]/auth-options";
 
 export async function Navbar() {
   const session = await getServerSession(authOptions);

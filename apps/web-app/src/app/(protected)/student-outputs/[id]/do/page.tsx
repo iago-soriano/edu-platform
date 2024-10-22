@@ -2,7 +2,7 @@ import { Client } from "@edu-platform/common/api";
 import { Fetcher } from "@infrastructure";
 import { Title } from "@components/ActivityBlocks/title";
 import { StudentOutputDoForm } from "@components/StudentOutputDoForm";
-import { authOptions } from "../../../../api/auth/[...nextauth]/route";
+import { authOptions } from "../../../../api/auth/[...nextauth]/auth-options";
 import { getServerSession } from "next-auth";
 import { ErrorBanner } from "@components/ui/FixedAlerts";
 
@@ -20,7 +20,7 @@ const Page = async ({ params }: Props) => {
 
   const session = await getServerSession(authOptions);
 
-  if (session.user.email !== stdOutput.studentEmail)
+  if (session?.user.email !== stdOutput.studentEmail)
     return (
       <ErrorBanner>
         It does't look like this activity was made for you!
