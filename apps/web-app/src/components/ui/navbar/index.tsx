@@ -16,7 +16,7 @@ export async function Navbar() {
   return (
     <>
       <div className="fixed top-0 left-0 border-b w-full bg-gray-50 dark:bg-black/10 shadow-sm px-6 lg:px-10 h-16 hidden md:flex items-center gap-12">
-        <Link href="/home">
+        <Link href="/">
           <Logo className="w-20 flex flex-col justify-center items-center h-full transition-opacity hover:opacity-80 focus-visible:opacity-80" />
         </Link>
 

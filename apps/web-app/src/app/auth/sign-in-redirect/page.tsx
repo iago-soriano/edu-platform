@@ -3,9 +3,10 @@
 import { useEffect } from "react";
 import { signOut } from "next-auth/react";
 
-export default function LogOutPage() {
+export default function Page() {
   useEffect(() => {
     // TODO: make it redirect to where user was before
-    signOut({ redirect: true, callbackUrl: "/home" });
+    signOut();
+    window.location.href = "/home#hero";
   }, []);
 }

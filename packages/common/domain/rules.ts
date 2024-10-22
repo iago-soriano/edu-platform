@@ -12,16 +12,8 @@ export const DomainRules = {
   },
   ACTIVITY_BLOCKS: {
     TEXT: {
-      MIN_LENGTH_WORDS: {
-        BASIC: 100,
-        INTERMEDIATE: 200,
-        ADVANCED: 300,
-      },
-      MAX_LENGTH_WORDS: {
-        BASIC: 300,
-        INTERMEDIATE: 400,
-        ADVANCED: 500,
-      },
+      MIN_LENGTH: 100,
+      MAX_LENGTH: 5000,
     },
     OPEN_QUESTION: {
       MIN_LENGTH_CHARACTERS: 30,

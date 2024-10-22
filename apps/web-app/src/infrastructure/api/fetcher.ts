@@ -14,6 +14,8 @@ export interface FetchResponse<T> {
 const headersHandler = async () => {
   const token = await getServerSession(authOptions);
   // console.log({ token });
+  if (!token) redirect("/auth/logout-redirect");
+
   return {
     Authorization: `Bearer ${token.access_token}`,
     "Content-Type": "application/json",
@@ -49,7 +51,6 @@ export class Fetcher implements IHTTPClient {
   }
 
   async put(endpoint: string, body: unknown) {
-    console.log(body);
     const response = await fetch(endpoint, {
       method: "PUT",
       headers: await headersHandler(),

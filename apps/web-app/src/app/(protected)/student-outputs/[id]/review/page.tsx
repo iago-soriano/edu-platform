@@ -2,7 +2,7 @@ import { Client } from "@edu-platform/common/api";
 import { Fetcher } from "@infrastructure";
 import { Title } from "@components/ActivityBlocks/title";
 import { StudentOutputReviewForm } from "@components/StudentOutputReviewForm";
-import { authOptions } from "../../../api/auth/[...nextauth]/route";
+import { authOptions } from "../../../../api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { PendingBanner, SuccessBanner } from "@components/ui/FixedAlerts";
 import { redirect } from "next/navigation";
@@ -27,7 +27,6 @@ const Page = async ({ params }: Props) => {
   const isAnswered = stdOutput.answers.every(({ answer }) => answer.length);
   const isReviwed = stdOutput.answers.every(({ review }) => review.length);
 
-  console.log(isAnswered);
   if (role === "student" && !isAnswered)
     redirect(`/student-outputs/${params.id}/do`);
 

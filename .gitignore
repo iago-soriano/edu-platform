@@ -26,7 +26,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env
+.env*
 
 # vercel
 .vercel
@@ -47,3 +47,4 @@ commands.sh
 .turbo
 .tfvars
 infra/scripts/aws-support-tools
+docker-compose.prod.yml

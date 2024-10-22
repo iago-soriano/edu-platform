@@ -1,11 +1,12 @@
 import NextAuth from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import jwt, { JwtPayload as LibJWTPayload } from "jsonwebtoken";
+import { redirect } from "next/navigation";
 
 export const doKeycloakSignOut = async (token) => {
   if (!token) return;
 
-  const url = `${process.env.KEYCLOAK_URL}/protocol/openid-connect/logout?id_token_hint=${token?.id_token}&post_logout_redirect_uri=${encodeURIComponent(process.env.NEXTAUTH_URL!)}`;
+  const url = `${process.env.KEYCLOAK_URL}/protocol/openid-connect/logout?id_token_hint=${token?.id_token}&post_logout_redirect_uri=${encodeURIComponent(`${process.env.NEXTAUTH_URL!}/home#hero`)}`;
   const resp = await fetch(url, { method: "GET" });
   console.error("Keycloak sign out response", resp.status);
 };
@@ -50,7 +51,6 @@ export const authOptions = {
       issuer: process.env.KEYCLOAK_URL,
     }),
   ],
-
   events: {
     async signOut({ session, token }) {
       console.log("Logging out keycloak...", token);
@@ -88,13 +88,13 @@ export const authOptions = {
           return refreshedToken;
         } catch (error) {
           console.log("RefreshAccessTokenError", error);
-          return { ...token, error: "RefreshAccessTokenError" };
+          redirect("/auth/logout-redirect");
         }
       }
     },
 
     async session({ session, token }) {
-      console.log("session", token.access_token);
+      // console.log("session", token.access_token);
 
       session.access_token = token.access_token;
       session.id_token = token.id_token;
@@ -110,7 +110,8 @@ export const authOptions = {
       };
     },
     async redirect({ url, baseUrl }) {
-      return baseUrl;
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      return url;
     },
   },
 };

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { signOut } from "next-auth/react";
 
-export default function LogOutPage() {
+export default function Page() {
   useEffect(() => {
     signOut({ redirect: true, callbackUrl: "/home#hero" });
   }, []);
