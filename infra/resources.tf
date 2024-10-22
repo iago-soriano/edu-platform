@@ -3,12 +3,12 @@ module "vpc" {
 }
 
 module "db" {
-  source             = "./db"
-  vpc_id             = module.vpc.vpc_id
-  private_subnet_ids = module.vpc.private_subnet_ids
-  public_subnet_ids  = [module.vpc.public_subnet_id]
-  db_password        = local.db_password
-  db_user            = local.db_user
+  source = "./db"
+  vpc_id = module.vpc.vpc_id
+  # private_subnet_ids = module.vpc.private_subnet_ids
+  public_subnet_ids = module.vpc.public_subnet_ids
+  db_password       = local.db_password
+  db_user           = local.db_user
 }
 
 module "queue" {
@@ -24,7 +24,7 @@ module "api" {
   }
   function_name = "api"
   app_version   = var.app_version
-  subnet_id     = module.vpc.public_subnet_id
+  subnet_id     = module.vpc.public_subnet_ids[0]
   vpc_id        = module.vpc.vpc_id
 }
 
@@ -41,6 +41,6 @@ module "event-handler" {
   }
   function_name = "event-handler"
   app_version   = var.app_version
-  subnet_id     = module.vpc.public_subnet_id
+  subnet_id     = module.vpc.public_subnet_ids[0]
   vpc_id        = module.vpc.vpc_id
 }

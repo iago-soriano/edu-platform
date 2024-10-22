@@ -16,7 +16,8 @@
     "format": "npx prettier --write .",
     "format:ci": "npx prettier --config ../eslint-config/.prettierrc.json --ignore-path ../eslint-config/.prettierignore --check .",
     "db:gen:migration": "npm drizzle-kit generate:mysql --schema=./src/schema.ts",
-    "db:push": "drizzle-kit push:pg --config drizzle.config.ts",
+    "db:push:dev": "cross-env NODE_ENV=development drizzle-kit push:pg --config drizzle.config.ts",
+    "db:push:prod": "cross-env NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED='0' drizzle-kit push:pg --config drizzle.config.ts",
     "db:studio": "npx drizzle-kit studio",
     "docker:build": "docker build -t language-app/web-api -f ./Dockerfile ../..",
     "docker:exec": "docker exec -ti language-app-web-api /bin/bash"

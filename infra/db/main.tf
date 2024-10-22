@@ -1,13 +1,13 @@
-resource "aws_db_subnet_group" "this" {
-  name       = "main"
-  subnet_ids = var.private_subnet_ids
+resource "aws_db_subnet_group" "main" {
+  name       = "main1"
+  subnet_ids = var.public_subnet_ids
 
   tags = var.tags
 }
 
 resource "aws_db_parameter_group" "this" {
   name   = "main"
-  family = "postgres13"
+  family = "postgres16"
 
   parameter {
     name  = "log_connections"
@@ -47,19 +47,21 @@ resource "aws_security_group" "pgsecgrp" {
 }
 
 resource "aws_db_instance" "this" {
-  identifier             = "main"
-  instance_class         = "db.t3.micro"
-  apply_immediately      = true
-  allocated_storage      = 5
-  engine                 = "postgres"
-  engine_version         = "13.13"
-  username               = var.db_user
-  password               = var.db_password
-  db_subnet_group_name   = aws_db_subnet_group.this.name
-  vpc_security_group_ids = [aws_security_group.pgsecgrp.id]
-  parameter_group_name   = aws_db_parameter_group.this.name
-  publicly_accessible    = true
-  skip_final_snapshot    = true
+  identifier                  = "main"
+  instance_class              = "db.t3.micro"
+  db_name                     = "eduplatform"
+  apply_immediately           = true
+  allocated_storage           = 5
+  engine                      = "postgres"
+  engine_version              = "16"
+  allow_major_version_upgrade = "true"
+  username                    = var.db_user
+  password                    = var.db_password
+  db_subnet_group_name        = aws_db_subnet_group.main.name
+  vpc_security_group_ids      = [aws_security_group.pgsecgrp.id]
+  parameter_group_name        = aws_db_parameter_group.this.name
+  publicly_accessible         = true
+  skip_final_snapshot         = true
 
   tags = var.tags
 }

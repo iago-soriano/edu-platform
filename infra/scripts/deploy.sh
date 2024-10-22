@@ -13,12 +13,12 @@ npm run build:ci
 echo "Zipping api..."
 rm -f ../../infra/build-api.zip
 cd ../../apps/web-api/build/index.api
-tar -acf ../../../../infra/build-api.zip index.js
+7z a -tzip ../../../../infra/build-api.zip index.js
 
 echo "Zipping event-handler..."
 cd ../index.sqs
 rm -f ../../../../infra/build-event-handler.zip
-tar -acf ../../../../infra/build-event-handler.zip index.js
+7z a -tzip ../../../../infra/build-event-handler.zip index.js
 
 echo "Uploading packages to S3..."
 cd ../../../../infra

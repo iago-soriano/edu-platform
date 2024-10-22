@@ -1,6 +1,8 @@
 import type { Config } from "drizzle-kit";
 import * as dotenv from "dotenv";
-dotenv.config();
+dotenv.config({
+  path: process.env.NODE_ENV === "production" ? "./.env.prod" : "./.env.local",
+});
 
 if (!process.env.DATABASE_URL)
   throw new Error("Please provide a 'DATABASE_URL'");

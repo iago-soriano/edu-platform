@@ -1,6 +1,8 @@
 import * as esbuild from 'esbuild';
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({
+  path: './.env.prod'
+});
 
 const define = {
   'process.env.PORT': JSON.stringify(process.env['PORT']),

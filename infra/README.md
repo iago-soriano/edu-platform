@@ -8,7 +8,10 @@ Create an assume role policy for terraform-cli and give it S3 permissions. Pass 
 create resources in console: bastion-host, function code bucket and terraform state bucket
 _Data resources must be in the same region as terraform_
 
-Recreate bastion host after the first apply, so that you can create it in the same vpc
-Deploy functions before apply, so that terraform finds th build.zip files in S3
+Deploy functions before terraform apply, so that terraform finds the build.zip files in S3. It executes terraform apply.
+
+Recreate bastion host after the first apply, so that you can create it in the same vpc. _Do Amazon Linux 2_
+
+In order to SSH into the instance, check commands2.sh
 
 _RDS username cannot have dashes_
