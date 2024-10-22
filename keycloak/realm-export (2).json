@@ -343,6 +343,7 @@
       "security-admin-console": [],
       "admin-cli": [],
       "account-console": [],
+      "admin-rest1": [],
       "idp-wizard": [],
       "admin-portal": [],
       "broker": [
@@ -518,6 +519,28 @@
       },
       "notBefore": 0,
       "groups": []
+    },
+    {
+      "id": "0a75d62d-fc6b-4aeb-8166-56fecde29cf9",
+      "username": "service-account-admin-rest1",
+      "emailVerified": false,
+      "createdTimestamp": 1728223475715,
+      "enabled": true,
+      "totp": false,
+      "serviceAccountClientId": "admin-rest1",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-edu-platform"
+      ],
+      "clientRoles": {
+        "realm-management": [
+          "realm-admin",
+          "manage-realm"
+        ]
+      },
+      "notBefore": 0,
+      "groups": []
     }
   ],
   "scopeMappings": [
@@ -662,7 +685,9 @@
       "publicClient": true,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
-      "attributes": {},
+      "attributes": {
+        "post.logout.redirect.uris": "+"
+      },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
@@ -691,6 +716,7 @@
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
       "redirectUris": [
         "/realms/edu-platform/portal/*"
       ],
@@ -792,8 +818,9 @@
         "oidc.ciba.grant.enabled": "false",
         "client.secret.creation.time": "1728213704",
         "backchannel.logout.session.required": "true",
-        "oauth2.device.authorization.grant.enabled": "false",
+        "post.logout.redirect.uris": "+",
         "display.on.consent.screen": "false",
+        "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false"
       },
       "authenticationFlowBindingOverrides": {},
@@ -808,8 +835,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "clientHost",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientHost",
             "jsonType.label": "String"
@@ -817,6 +845,109 @@
         },
         {
           "id": "b18010dd-18cd-401c-95b0-0588c6e07656",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "3c2663dc-a746-4025-b28c-f72360df03c6",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "client_id",
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "client_id",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
+      "id": "0e585ab1-4932-42d0-95b1-fbf7fd2bfcd8",
+      "clientId": "admin-rest1",
+      "name": "admin-rest1",
+      "description": "",
+      "rootUrl": "",
+      "adminUrl": "",
+      "baseUrl": "",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [
+        "/*"
+      ],
+      "webOrigins": [
+        "/*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "oidc.ciba.grant.enabled": "false",
+        "client.secret.creation.time": "1728223475",
+        "backchannel.logout.session.required": "true",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "833a2b0d-a508-42f3-8bc5-d15ad4e21748",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "client_id",
+            "id.token.claim": "true",
+            "introspection.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "client_id",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "be26954b-17b2-4194-85eb-9d2227e7ce68",
           "name": "Client IP Address",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-usersessionmodel-note-mapper",
@@ -831,17 +962,17 @@
           }
         },
         {
-          "id": "3c2663dc-a746-4025-b28c-f72360df03c6",
-          "name": "Client ID",
+          "id": "9f3ebdf2-3179-45ef-9e68-e89afc3e7392",
+          "name": "Client Host",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-usersessionmodel-note-mapper",
           "consentRequired": false,
           "config": {
-            "user.session.note": "client_id",
+            "user.session.note": "clientHost",
             "id.token.claim": "true",
             "introspection.token.claim": "true",
             "access.token.claim": "true",
-            "claim.name": "client_id",
+            "claim.name": "clientHost",
             "jsonType.label": "String"
           }
         }
@@ -881,7 +1012,9 @@
       "publicClient": false,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
-      "attributes": {},
+      "attributes": {
+        "post.logout.redirect.uris": "+"
+      },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
@@ -910,6 +1043,7 @@
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
       "redirectUris": [
         "/realms/edu-platform/wizard/*"
       ],
@@ -998,7 +1132,9 @@
       "publicClient": false,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
-      "attributes": {},
+      "attributes": {
+        "post.logout.redirect.uris": "+"
+      },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
@@ -1113,12 +1249,23 @@
       "frontchannelLogout": true,
       "protocol": "openid-connect",
       "attributes": {
-        "oidc.ciba.grant.enabled": "false",
-        "client.secret.creation.time": "1728212739",
-        "backchannel.logout.session.required": "true",
+        "access.token.lifespan": "2592000",
+        "client.secret.creation.time": "1728245296",
+        "client.introspection.response.allow.jwt.claim.enabled": "false",
         "post.logout.redirect.uris": "http://localhost:3002/*",
         "oauth2.device.authorization.grant.enabled": "false",
-        "backchannel.logout.revoke.offline.tokens": "false"
+        "use.jwks.url": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "use.refresh.tokens": "true",
+        "oidc.ciba.grant.enabled": "false",
+        "client.use.lightweight.access.token.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "client_credentials.use_refresh_token": "false",
+        "acr.loa.map": "{}",
+        "require.pushed.authorization.requests": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "display.on.consent.screen": "false",
+        "token.response.type.bearer.lower-case": "false"
       },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
@@ -1247,8 +1394,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "AUTH_TIME",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "auth_time",
             "jsonType.label": "long"
@@ -1509,6 +1657,7 @@
           "config": {
             "introspection.token.claim": "true",
             "multivalued": "true",
+            "userinfo.token.claim": "true",
             "user.attribute": "foo",
             "id.token.claim": "true",
             "access.token.claim": "true",
@@ -1622,7 +1771,8 @@
           "config": {
             "id.token.claim": "true",
             "introspection.token.claim": "true",
-            "access.token.claim": "true"
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
           }
         }
       ]
@@ -1741,6 +1891,10 @@
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
   "smtpServer": {},
+  "loginTheme": "attributes",
+  "accountTheme": "portal",
+  "adminTheme": "phasetwo.v2",
+  "emailTheme": "mustache",
   "eventsEnabled": false,
   "eventsListeners": [
     "jboss-logging",
@@ -1916,13 +2070,13 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-user-attribute-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-address-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
             "oidc-usermodel-property-mapper",
+            "oidc-usermodel-attribute-mapper",
             "oidc-full-name-mapper",
             "saml-role-list-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "saml-user-attribute-mapper",
+            "oidc-address-mapper",
             "saml-user-property-mapper"
           ]
         }
@@ -1935,14 +2089,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-user-property-mapper",
             "oidc-usermodel-property-mapper",
-            "oidc-full-name-mapper",
-            "saml-user-attribute-mapper",
             "oidc-usermodel-attribute-mapper",
             "oidc-address-mapper",
-            "saml-role-list-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "saml-user-attribute-mapper",
+            "oidc-full-name-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "saml-user-property-mapper",
+            "saml-role-list-mapper"
           ]
         }
       }
@@ -2954,8 +3108,8 @@
   "attributes": {
     "cibaBackchannelTokenDeliveryMode": "poll",
     "cibaAuthRequestedUserHint": "login_hint",
-    "oauth2DevicePollingInterval": "5",
     "clientOfflineSessionMaxLifespan": "0",
+    "oauth2DevicePollingInterval": "5",
     "clientSessionIdleTimeout": "0",
     "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5",
@@ -2964,7 +3118,8 @@
     "oauth2DeviceCodeLifespan": "600",
     "parRequestUriLifespan": "60",
     "clientSessionMaxLifespan": "0",
-    "organizationsEnabled": "false"
+    "organizationsEnabled": "false",
+    "_providerConfig.assets.login.css": "/* Patternfly CSS places a \"bg-login.jpg\" as the background on this \".login-pf\" class.\n   This clashes with the \"keycloak-bg.png' background defined on the body below.\n   Therefore the Patternfly background must be set to none. */\n.login-pf {\n    background: none;\n}\n\n.login-pf body {\n    background: url(\"../img/keycloak-bg.png\") no-repeat center center fixed;\n    background-size: cover;\n    height: 100%;\n}\n\ntextarea.pf-c-form-control {\n\theight: auto;\n}\n\n.pf-c-alert__title {\n    font-size: var(--pf-global--FontSize--xs);\n}\n\np.instruction {\n    margin: 5px 0;\n}\n\n.pf-c-button.pf-m-control {\n    border-color: rgba(230, 230, 230, 0.5);\n}\n\nh1#kc-page-title {\n    margin-top: 10px;\n}\n\n#kc-locale ul {\n    background-color: var(--pf-global--BackgroundColor--100);\n    display: none;\n    top: 20px;\n    min-width: 100px;\n    padding: 0;\n}\n\n#kc-locale-dropdown{\n    display: inline-block;\n}\n\n#kc-locale-dropdown:hover ul {\n    display:block;\n}\n\n#kc-locale-dropdown a {\n    color: var(--pf-global--Color--200);\n    text-align: right;\n    font-size: var(--pf-global--FontSize--sm);\n}\n\n#kc-locale-dropdown button {\n    background: none;\n    border: none;\n    padding: 0;\n    cursor: pointer;\n    color: var(--pf-global--Color--200);\n    text-align: right;\n    font-size: var(--pf-global--FontSize--sm);\n}\n\nbutton#kc-current-locale-link::after {\n    content: \"\\2c5\";\n    margin-left: var(--pf-global--spacer--xs)\n}\n\n.login-pf .container {\n    padding-top: 40px;\n}\n\n.login-pf a:hover {\n    color: #0099d3;\n}\n\n#kc-logo {\n    width: 100%;\n}\n\ndiv.kc-logo-text {\n    background-image: url(../img/keycloak-logo-text.png);\n    background-repeat: no-repeat;\n    height: 63px;\n    width: 300px;\n    margin: 0 auto;\n}\n\ndiv.kc-logo-text span {\n    display: none;\n}\n\n#kc-header {\n    color: #ededed;\n    overflow: visible;\n    white-space: nowrap;\n}\n\n#kc-header-wrapper {\n    font-size: 29px;\n    text-transform: uppercase;\n    letter-spacing: 3px;\n    line-height: 1.2em;\n    padding: 62px 10px 20px;\n    white-space: normal;\n}\n\n#kc-content {\n    width: 100%;\n}\n\n#kc-attempted-username {\n    font-size: 20px;\n    font-family: inherit;\n    font-weight: normal;\n    padding-right: 10px;\n}\n\n#kc-username {\n    text-align: center;\n    margin-bottom:-10px;\n}\n\n#kc-webauthn-settings-form {\n    padding-top: 8px;\n}\n\n#kc-form-webauthn .select-auth-box-parent {\n    pointer-events: none;\n}\n\n#kc-form-webauthn .select-auth-box-desc {\n    color: var(--pf-global--palette--black-600);\n}\n\n#kc-form-webauthn .select-auth-box-headline {\n    color: var(--pf-global--Color--300);\n}\n\n#kc-form-webauthn .select-auth-box-icon {\n    flex: 0 0 3em;\n}\n\n#kc-form-webauthn .select-auth-box-icon-properties {\n    margin-top: 10px;\n    font-size: 1.8em;\n}\n\n#kc-form-webauthn .select-auth-box-icon-properties.unknown-transport-class {\n    margin-top: 3px;\n}\n\n#kc-form-webauthn .pf-l-stack__item {\n    margin: -1px 0;\n}\n\n#kc-content-wrapper {\n    margin-top: 20px;\n}\n\n#kc-form-wrapper {\n    margin-top: 10px;\n}\n\n#kc-info {\n    margin: 20px -40px -30px;\n}\n\n#kc-info-wrapper {\n    font-size: 13px;\n    padding: 15px 35px;\n    background-color: #F0F0F0;\n}\n\n#kc-form-options span {\n    display: block;\n}\n\n#kc-form-options .checkbox {\n    margin-top: 0;\n    color: #72767b;\n}\n\n#kc-terms-text {\n    margin-bottom: 20px;\n}\n\n#kc-registration-terms-text {\n    max-height: 100px;\n    overflow-y: auto;\n    overflow-x: hidden;\n    margin: 5px;\n}\n\n#kc-registration {\n    margin-bottom: 0;\n}\n\n/* TOTP */\n\n.subtitle {\n    text-align: right;\n    margin-top: 30px;\n    color: #909090;\n}\n\n.required {\n    color: var(--pf-global--danger-color--200);\n}\n\nol#kc-totp-settings {\n    margin: 0;\n    padding-left: 20px;\n}\n\nul#kc-totp-supported-apps {\n    margin-bottom: 10px;\n}\n\n#kc-totp-secret-qr-code {\n    max-width:150px;\n    max-height:150px;\n}\n\n#kc-totp-secret-key {\n    background-color: #fff;\n    color: #333333;\n    font-size: 16px;\n    padding: 10px 0;\n}\n\n/* OAuth */\n\n#kc-oauth h3 {\n    margin-top: 0;\n}\n\n#kc-oauth ul {\n    list-style: none;\n    padding: 0;\n    margin: 0;\n}\n\n#kc-oauth ul li {\n    border-top: 1px solid rgba(255, 255, 255, 0.1);\n    font-size: 12px;\n    padding: 10px 0;\n}\n\n#kc-oauth ul li:first-of-type {\n    border-top: 0;\n}\n\n#kc-oauth .kc-role {\n    display: inline-block;\n    width: 50%;\n}\n\n/* Code */\n#kc-code textarea {\n    width: 100%;\n    height: 8em;\n}\n\n/* Social */\n.kc-social-links {\n    margin-top: 20px;\n}\n\n.kc-social-links li {\n    width: 100%;\n}\n\n.kc-social-provider-logo {\n    font-size: 23px;\n    width: 30px;\n    height: 25px;\n    float: left;\n}\n\n.kc-social-gray {\n    color: var(--pf-global--Color--200);\n}\n\n.kc-social-gray h2 {\n    font-size: 1em;\n}\n\n.kc-social-item {\n    margin-bottom: var(--pf-global--spacer--sm);\n    font-size: 15px;\n    text-align: center;\n}\n\n.kc-social-provider-name {\n    position: relative;\n}\n\n.kc-social-icon-text {\n    left: -15px;\n}\n\n.kc-social-grid {\n    display:grid;\n    grid-column-gap: 10px;\n    grid-row-gap: 5px;\n    grid-column-end: span 6;\n    --pf-l-grid__item--GridColumnEnd: span 6;\n}\n\n.kc-social-grid .kc-social-icon-text {\n    left: -10px;\n}\n\n.kc-login-tooltip {\n    position: relative;\n    display: inline-block;\n}\n\n.kc-social-section {\n    text-align: center;\n}\n\n.kc-social-section hr{\n    margin-bottom: 10px\n}\n\n.kc-login-tooltip .kc-tooltip-text{\n    top:-3px;\n    left:160%;\n    background-color: black;\n    visibility: hidden;\n    color: #fff;\n\n    min-width:130px;\n    text-align: center;\n    border-radius: 2px;\n    box-shadow:0 1px 8px rgba(0,0,0,0.6);\n    padding: 5px;\n\n    position: absolute;\n    opacity:0;\n    transition:opacity 0.5s;\n}\n\n/* Show tooltip */\n.kc-login-tooltip:hover .kc-tooltip-text {\n    visibility: visible;\n    opacity:0.7;\n}\n\n/* Arrow for tooltip */\n.kc-login-tooltip .kc-tooltip-text::after {\n    content: \" \";\n    position: absolute;\n    top: 15px;\n    right: 100%;\n    margin-top: -5px;\n    border-width: 5px;\n    border-style: solid;\n    border-color: transparent black transparent transparent;\n}\n\n@media (min-width: 768px) {\n    #kc-container-wrapper {\n        position: absolute;\n        width: 100%;\n    }\n\n    .login-pf .container {\n        padding-right: 80px;\n    }\n\n    #kc-locale {\n        position: relative;\n        text-align: right;\n        z-index: 9999;\n    }\n}\n\n@media (max-width: 767px) {\n\n    .login-pf body {\n        background: white;\n    }\n\n    #kc-header {\n        padding-left: 15px;\n        padding-right: 15px;\n        float: none;\n        text-align: left;\n    }\n\n    #kc-header-wrapper {\n        font-size: 16px;\n        font-weight: bold;\n        padding: 20px 60px 0 0;\n        color: #72767b;\n        letter-spacing: 0;\n    }\n\n    div.kc-logo-text {\n        margin: 0;\n        width: 150px;\n        height: 32px;\n        background-size: 100%;\n    }\n\n    #kc-form {\n        float: none;\n    }\n\n    #kc-info-wrapper {\n        border-top: 1px solid rgba(255, 255, 255, 0.1);\n        background-color: transparent;\n    }\n\n    .login-pf .container {\n        padding-top: 15px;\n        padding-bottom: 15px;\n    }\n\n    #kc-locale {\n        position: absolute;\n        width: 200px;\n        top: 20px;\n        right: 20px;\n        text-align: right;\n        z-index: 9999;\n    }\n}\n\n@media (min-height: 646px) {\n    #kc-container-wrapper {\n        bottom: 12%;\n    }\n}\n\n@media (max-height: 645px) {\n    #kc-container-wrapper {\n        padding-top: 50px;\n        top: 20%;\n    }\n}\n\n.card-pf form.form-actions .btn {\n    float: right;\n    margin-left: 10px;\n}\n\n#kc-form-buttons {\n    margin-top: 20px;\n}\n\n.login-pf-page .login-pf-brand {\n    margin-top: 20px;\n    max-width: 360px;\n    width: 40%;\n}\n\n.select-auth-box-arrow{\n    display: flex;\n    align-items: center;\n    margin-right: 2rem;\n}\n\n.select-auth-box-icon{\n    display: flex;\n    flex: 0 0 2em;\n    justify-content: center;\n    margin-right: 1rem;\n    margin-left: 3rem;\n}\n\n.select-auth-box-parent{\n    border-top: 1px solid var(--pf-global--palette--black-200);\n    padding-top: 1rem;\n    padding-bottom: 1rem;\n    cursor: pointer;\n    text-align: left;\n    align-items: unset;\n    background-color: unset;\n    border-right: unset;\n    border-bottom: unset;\n    border-left: unset;\n}\n\n.select-auth-box-parent:hover{\n    background-color: #f7f8f8;\n}\n\n.select-auth-container {\n    padding-bottom: 0px !important;\n}\n\n.select-auth-box-headline {\n    font-size: var(--pf-global--FontSize--md);\n    color: var(--pf-global--primary-color--100);\n    font-weight: bold;\n}\n\n.select-auth-box-desc {\n    font-size: var(--pf-global--FontSize--sm);\n}\n\n.select-auth-box-paragraph {\n    text-align: center;\n    font-size: var(--pf-global--FontSize--md);\n    margin-bottom: 5px;\n}\n\n.card-pf {\n    margin: 0 auto;\n    box-shadow: var(--pf-global--BoxShadow--lg);\n    padding: 0 20px;\n    max-width: 500px;\n    border-top: 4px solid;\n    border-color: var(--pf-global--primary-color--100);\n}\n\n/*phone*/\n@media (max-width: 767px) {\n    .login-pf-page .card-pf {\n        max-width: none;\n        margin-left: 0;\n        margin-right: 0;\n        padding-top: 0;\n        border-top: 0;\n        box-shadow: 0 0;\n    }\n\n    .kc-social-grid {\n        grid-column-end: 12;\n        --pf-l-grid__item--GridColumnEnd: span 12;\n    }\n\n    .kc-social-grid .kc-social-icon-text {\n        left: -15px;\n    }\n}\n\n.login-pf-page .login-pf-signup {\n    font-size: 15px;\n    color: #72767b;\n}\n#kc-content-wrapper .row {\n    margin-left: 0;\n    margin-right: 0;\n}\n\n.login-pf-page.login-pf-page-accounts {\n    margin-left: auto;\n    margin-right: auto;\n}\n\n.login-pf-page .btn-primary {\n    margin-top: 0;\n}\n\n.login-pf-page .list-view-pf .list-group-item {\n    border-bottom: 1px solid #ededed;\n}\n\n.login-pf-page .list-view-pf-description {\n    width: 100%;\n}\n\n#kc-form-login div.form-group:last-of-type,\n#kc-register-form div.form-group:last-of-type,\n#kc-update-profile-form div.form-group:last-of-type,\n#kc-update-email-form div.form-group:last-of-type{\n    margin-bottom: 0px;\n}\n\n.no-bottom-margin {\n    margin-bottom: 0;\n}\n\n#kc-back {\n    margin-top: 5px;\n}\n\n/* Recovery codes */\n.kc-recovery-codes-warning {\n    margin-bottom: 32px;\n}\n.kc-recovery-codes-warning .pf-c-alert__description p {\n    font-size: 0.875rem;\n}\n.kc-recovery-codes-list {\n    list-style: none;\n    columns: 2;\n    margin: 16px 0;\n    padding: 16px 16px 8px 16px;\n    border: 1px solid #D2D2D2;\n}\n.kc-recovery-codes-list li {\n    margin-bottom: 8px;\n    font-size: 11px;\n}\n.kc-recovery-codes-list li span {\n    color: #6A6E73;\n    width: 16px;\n    text-align: right;\n    display: inline-block;\n    margin-right: 1px;\n}\n\n.kc-recovery-codes-actions {\n    margin-bottom: 24px;\n}\n.kc-recovery-codes-actions button {\n    padding-left: 0;\n}\n.kc-recovery-codes-actions button i {\n    margin-right: 8px;\n}\n\n.kc-recovery-codes-confirmation {\n    align-items: baseline;\n    margin-bottom: 16px;\n}\n\n#certificate_subjectDN {\n    overflow-wrap: break-word\n}\n/* End Recovery codes */"
   },
   "keycloakVersion": "25.0.6",
   "userManagedAccessAllowed": false,

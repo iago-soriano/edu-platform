@@ -44,6 +44,7 @@ nodejs
 *.zip
 *.tgz
 commands.sh
+commands2.sh
 .turbo
 .tfvars
 infra/scripts/aws-support-tools
