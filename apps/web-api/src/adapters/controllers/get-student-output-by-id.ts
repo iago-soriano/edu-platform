@@ -31,6 +31,7 @@ export class GetStudentOutputByIdController {
   }
 
   async execute(req: Request, res: Response) {
+    // throw new Error("Test");
     const { studentOutputId } = req.params;
 
     const resp =

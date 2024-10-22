@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
-dotenv.config(); // call this before importing main, because that will use env variables
+dotenv.config({
+  path: "./.env.local",
+}); // call this before importing main, because that will use env variables
 import "express-async-errors";
 
 import * as awilix from "awilix";

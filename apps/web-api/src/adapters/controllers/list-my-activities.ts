@@ -30,6 +30,7 @@ export class ListMyActivitiesController {
   }
 
   async execute(req: Request, res: Response) {
+    // throw new Error("Test");
     const userId = req.user.id;
 
     const { page, pageSize } = req.query;

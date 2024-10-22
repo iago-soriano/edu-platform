@@ -28,13 +28,16 @@ class GenerateReadingActivity implements IActivityGenerator {
     let completion = null;
     const { topics, language, level } = activityGenerated;
 
-    const minWords = DomainRules.ACTIVITY_BLOCKS.TEXT.MIN_LENGTH_WORDS[level];
-    const maxWords = DomainRules.ACTIVITY_BLOCKS.TEXT.MAX_LENGTH_WORDS[level];
-
     const openQuestionsCount = open_question_count[level];
     const multipleChoiceQuestionCount = multiple_choice_question_count[level];
+    const wordCount = 800;
 
-    const prompt = `You are a language teacher writing a comprehension actiity. Fill activity_format in ${language.toLocaleLowerCase()}. Step 1: 'text' is a text between ${minWords} and ${maxWords} words on the topics ${topics.map((t) => t.toLocaleLowerCase()).join(", ")} and vocabulary dificulty of ${level.toLocaleLowerCase()}. Step 2: openQuestions is ${openQuestionsCount} comprehension questions regarding the text you've made, between ${DomainRules.ACTIVITY_BLOCKS.OPEN_QUESTION.MIN_LENGTH_CHARACTERS} and ${DomainRules.ACTIVITY_BLOCKS.OPEN_QUESTION.MAX_LENGTH_CHARACTERS} characters. Step 3: ${multipleChoiceQuestionCount} multiple choice questions with thre alternatives each, in which only one is correct. Also inform which alternative is the correct one in the field answer of each alternative.`;
+    const promptIntro = `You are a language teacher writing a comprehension actiity. Fill activity_format in ${language.toLocaleLowerCase()}.`;
+    const step1 = `Step 1: 'text' is a text of ${wordCount} words on the topics ${topics.map((t) => t.toLocaleLowerCase()).join(", ")} and vocabulary dificulty of ${level.toLocaleLowerCase()}. Structure the text into 3 separate paragraphs, being: introduction, text body and conclusion.`;
+    const step2 = `Step 2: openQuestions is ${openQuestionsCount} comprehension questions regarding the text you've made, between ${DomainRules.ACTIVITY_BLOCKS.OPEN_QUESTION.MIN_LENGTH_CHARACTERS} and ${DomainRules.ACTIVITY_BLOCKS.OPEN_QUESTION.MAX_LENGTH_CHARACTERS} characters.`;
+    const step3 = `Step 3: ${multipleChoiceQuestionCount} multiple choice questions with thre alternatives each, in which only one is correct. Also inform which alternative is the correct one in the field answer of each alternative.`;
+
+    const prompt = [promptIntro, step1, step2, step3].join("");
 
     try {
       completion = await this._openAiApi.beta.chat.completions.parse({
