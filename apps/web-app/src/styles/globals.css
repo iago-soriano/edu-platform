@@ -86,7 +86,7 @@ fonte poppins bold, poppins light
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border m-0 p-0 box-border;
   }
   body {
     @apply bg-foreground text-primary-foreground;

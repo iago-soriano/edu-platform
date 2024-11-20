@@ -17,7 +17,7 @@ export async function MobileNavbar() {
   const navButtons = getNavButtons(session);
 
   return (
-    <div className="fixed top-0 left-0 w-full bg-gray-50 flex items-center justify-between container h-16 border-b md:hidden  dark:bg-background">
+    <div className="z-[999] fixed top-0 left-0 w-full bg-gray-50 flex items-center justify-between container h-16 border-b md:hidden  dark:bg-background">
       <Link href="/home">
         <Logo />
       </Link>

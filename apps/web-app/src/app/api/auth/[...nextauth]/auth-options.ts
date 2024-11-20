@@ -81,7 +81,7 @@ export const authOptions: AuthOptions = {
           return refreshedToken;
         } catch (error) {
           console.log("RefreshAccessTokenError", error);
-          redirect("/auth/logout-redirect");
+          redirect("/auth/sign-in-redirect");
         }
       }
     },

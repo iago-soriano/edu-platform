@@ -19,7 +19,7 @@ export const Footer = async () => {
   const isAuthenticated = false; // TODO get server session
 
   return (
-    <footer className="">
+    <footer className="bottom-0">
       <div className="grid grid-cols-16 p-10 gap-y-3">
         <div className="lg:col-span-5 md:col-span-10 col-span-12">
           <Image

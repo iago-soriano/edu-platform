@@ -16,7 +16,7 @@ export default function RootLayout(context) {
   return (
     <RootProviders>
       <Navbar />
-      <main className="h-[90vh] px-7 py-2 mt-20">
+      <main className="min-h-[90vh] px-7 py-2 mt-20 flex justify-center">
         <Suspense
           fallback={
             <div className="h-full flex flex-col items-center justify-center">

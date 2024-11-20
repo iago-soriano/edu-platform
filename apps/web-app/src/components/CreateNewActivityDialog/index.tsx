@@ -25,9 +25,15 @@ import {
 } from "@edu-platform/common/domain/enums";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";
-import { captalize, uncaptalize } from "utils/helpers";
+import {
+  captalize,
+  flags,
+  uncaptalize,
+  typesIcons,
+  topicsIcons,
+} from "utils/helpers";
 import { z } from "zod";
 import { generateNewActivity } from "./actions";
 import { DialogDescription } from "@radix-ui/react-dialog";
@@ -57,13 +63,17 @@ export const CreateNewActivityDialog = () => {
 
   const { handleSubmit, register, reset, watch } = form;
 
-  function handleEnums<T extends Record<string, string | number>>(options: T) {
+  function handleEnums<T extends Record<string, string | number>>(
+    options: T,
+    iconObject: any
+  ) {
     let optionsArray = Object.values(options).map((opt) => {
       let option = captalize(opt.toString());
 
       return {
         label: option,
         value: option,
+        icon: iconObject[option],
       };
     });
 
@@ -120,7 +130,7 @@ export const CreateNewActivityDialog = () => {
               {...register("language")}
               name="language"
               label="Language"
-              options={handleEnums(Languages)}
+              options={handleEnums(Languages, flags)}
               placeholder="Choose a language..."
               required
             />
@@ -129,7 +139,7 @@ export const CreateNewActivityDialog = () => {
               {...register("type")}
               name="type"
               label="Type"
-              options={handleEnums(ActivityType)}
+              options={handleEnums(ActivityType, typesIcons)}
               placeholder="Reading"
               //disabled={true}
               required
@@ -139,7 +149,7 @@ export const CreateNewActivityDialog = () => {
               {...register("topics")}
               name="topics"
               label="Topics"
-              options={handleEnums(ActivityTopics)}
+              options={handleEnums(ActivityTopics, topicsIcons)}
               placeholder="Choose a topic..."
               required
             />
@@ -154,7 +164,7 @@ export const CreateNewActivityDialog = () => {
               <div className="flex items-start justify-start gap-8 mt-2">
                 <FormRadioGroupField
                   name="level"
-                  options={handleEnums(ActivityLevel)}
+                  options={handleEnums(ActivityLevel, {})}
                   required
                 />
               </div>

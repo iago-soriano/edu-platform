@@ -6,11 +6,18 @@ resource "aws_vpc" "main" {
   tags = var.tags
 }
 
+resource "aws_vpc_ipv6_cidr_block_association" "ipv6_vpc_assoc" {
+  vpc_id                           = aws_vpc.main.id
+  assign_generated_ipv6_cidr_block = true
+
+}
+
 ### subnets
 resource "aws_subnet" "public_a" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.1.0/24"
-  map_public_ip_on_launch = true
+  ipv6_cidr_block         = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 0)
+  map_public_ip_on_launch = false
   availability_zone       = "us-east-1a"
 
   tags = var.tags
@@ -19,7 +26,8 @@ resource "aws_subnet" "public_a" {
 resource "aws_subnet" "public_b" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.4.0/24"
-  map_public_ip_on_launch = true
+  ipv6_cidr_block         = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 1)
+  map_public_ip_on_launch = false
   availability_zone       = "us-east-1b"
 
   tags = var.tags
@@ -54,6 +62,11 @@ resource "aws_route_table" "public" {
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
+  }
+
+  route {
+    ipv6_cidr_block = "::/0"
+    gateway_id      = aws_internet_gateway.igw.id
   }
 
   tags = var.tags

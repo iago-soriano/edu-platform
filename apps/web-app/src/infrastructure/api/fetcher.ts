@@ -13,7 +13,7 @@ export interface FetchResponse<T> {
 const headersHandler = async () => {
   const token = await getServerSession(authOptions);
   // console.log({ token });
-  if (!token) redirect("/auth/logout-redirect");
+  if (!token) redirect("/auth/sign-in-redirect");
 
   return {
     Authorization: `Bearer ${token.access_token}`,
@@ -31,7 +31,7 @@ export class Fetcher implements IHTTPClient {
       console.error("Error:", response.status, resp);
 
       if (response.status === 401) {
-        redirect("/auth/logout-redirect");
+        redirect("/auth/sign-in-redirect");
       }
 
       throw new Error(resp.message ?? resp);

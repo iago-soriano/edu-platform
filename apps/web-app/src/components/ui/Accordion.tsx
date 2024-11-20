@@ -29,7 +29,6 @@ const AccordionTrigger = React.forwardRef<
       {...props}
       ref={forwardedRef}
     >
-      {children}
       <RiAddLine
         className={cx(
           // base
@@ -42,6 +41,7 @@ const AccordionTrigger = React.forwardRef<
         aria-hidden="true"
         focusable="false"
       />
+      {children}
     </AccordionPrimitives.Trigger>
   </AccordionPrimitives.Header>
 ));

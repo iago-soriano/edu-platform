@@ -253,7 +253,7 @@ const FormSelectField = <TFieldValues extends FieldValues = FieldValues>({
 }: {
   name: FieldPath<TFieldValues>;
   label?: string;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; icon: any }[];
   placeholder?: string;
   required?: boolean;
   className?: string;
@@ -288,9 +288,12 @@ const FormSelectField = <TFieldValues extends FieldValues = FieldValues>({
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>
-                {options.map(({ value, label }) => (
+                {options.map(({ value, label, icon }) => (
                   <SelectItem key={value} value={value}>
-                    {label}
+                    <div className="flex gap-2 items-center">
+                      <span>{icon}</span>
+                      {label}
+                    </div>
                   </SelectItem>
                 ))}
               </SelectContent>
