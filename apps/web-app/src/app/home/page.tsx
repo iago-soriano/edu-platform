@@ -153,7 +153,7 @@ export default function Home() {
         <h2 className="text-2xl text-primary font-semibold mb-14 text-center">
           Frequently asked questions{" "}
         </h2>{" "}
-        <div className="flex flex-col gap-3 font-body">
+        <div className="flex flex-col gap-3">
           <FAQQuestion question="Como fazer atividade?" answer="pipipipopopo" />
           <FAQQuestion
             question="Como se cadastrar na plataforma?"

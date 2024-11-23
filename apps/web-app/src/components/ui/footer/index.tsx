@@ -21,7 +21,7 @@ export const Footer = async () => {
   return (
     <footer className="bottom-0">
       <div className="grid grid-cols-16 p-10 gap-y-3">
-        <div className="lg:col-span-5 md:col-span-10 col-span-12">
+        <div className="lg:col-span-5 md:col-span-10 col-span-16">
           <Image
             className="m-2"
             src="https://picsum.photos/50/50"
@@ -36,7 +36,7 @@ export const Footer = async () => {
             odit cumque maxime repellendus
           </p>
         </div>
-        <div className="[&>a]:block lg:col-span-3 lg:col-start-7 md:col-span-5 md:col-start-12 col-span-4">
+        <div className="[&>a]:block lg:col-span-3 lg:col-start-7 md:col-span-5 md:col-start-12 col-span-8">
           <FooterHeading>Navegação</FooterHeading>
           <FooterLink href="/home">Home</FooterLink>
           {isAuthenticated && (
