@@ -6,17 +6,11 @@ import RootProviders from "contexts/providers";
 import { Suspense } from "react";
 import { Spinner } from "@components/ui/spinner";
 
-export const metadata = {
-  title: "Edu Platform",
-  description: "Uma plataforma para professores de idiomas",
-  referrer: "no-referrer-when-downgrade",
-};
-
 export default function RootLayout(context) {
   return (
     <RootProviders>
       <Navbar />
-      <main className="min-h-[90vh] px-7 py-2 mt-20 flex justify-center">
+      <main className="min-h-[90vh] w-full mt-[4rem]">
         <Suspense
           fallback={
             <div className="h-full flex flex-col items-center justify-center">
@@ -29,6 +23,5 @@ export default function RootLayout(context) {
       </main>
       <Footer />
     </RootProviders>
-    // </ErrorBoundary>
   );
 }

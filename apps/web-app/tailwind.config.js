@@ -3,6 +3,10 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
+      fontFamily: {
+        headings: ['var(--font-roboto)'],
+        body: ['var(--font-mulish)'],
+      },
       boxShadow: {
         outline: '0px -2px 0px #c40 inset',
         hover: '0 0 5px #c40 inset',

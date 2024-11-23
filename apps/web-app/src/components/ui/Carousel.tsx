@@ -154,6 +154,7 @@ const Carousel = forwardRef<
     );
 
     const onSelect = useCallback(() => {
+      console.log("reInit", emblaMainApi, emblaThumbsApi);
       if (!emblaMainApi || !emblaThumbsApi) return;
       const selected = emblaMainApi.selectedScrollSnap();
       setActiveIndex(selected);
@@ -270,7 +271,7 @@ const SliderMainItem = forwardRef<
       {...props}
       ref={ref}
       className={cn(
-        `min-w-0 shrink-0 grow-0 basis-full bg-background p-1 ${
+        `min-w-0 shrink-0 grow-0 basis-[40%] bg-background p-1 ${
           orientation === "vertical" ? "pb-1" : "pr-1"
         }`,
         className

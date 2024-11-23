@@ -13,7 +13,7 @@ const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitives.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitives.Trigger>
 >(({ className, children, ...props }, forwardedRef) => (
-  <AccordionPrimitives.Header className="flex">
+  <AccordionPrimitives.Header className="flex font-body">
     <AccordionPrimitives.Trigger
       className={cx(
         // base

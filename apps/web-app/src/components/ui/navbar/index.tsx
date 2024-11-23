@@ -15,14 +15,11 @@ export async function Navbar() {
 
   return (
     <>
-      <div className="z-[999] fixed top-0 left-0 border-b w-full bg-gray-50 dark:bg-black/10 shadow-sm px-6 lg:px-10 h-16 hidden md:flex items-center gap-12">
-        <Link href="/">
+      <div className="z-[999] box-border fixed top-0 left-0 border-b w-full bg-gray-50 dark:bg-black/10 shadow-sm px-6 lg:px-10 h-16 hidden md:flex items-center gap-12">
+        <Link href="/home#hero">
           <Logo className="w-20 flex flex-col justify-center items-center h-full transition-opacity hover:opacity-80 focus-visible:opacity-80" />
         </Link>
-
-        {/* <div className="w-full flex flex-row justify-between items-center"> */}
         <nav className="w-full flex flex-row justify-between items-center gap-8 mb-[1px] text-sm ">
-          {/* <div > */}
           <div className="flex flex-row gap-4">
             {navButtons.left.map(({ route, header }) => (
               <NavItem key={route} href={route}>
@@ -30,8 +27,6 @@ export async function Navbar() {
               </NavItem>
             ))}
           </div>
-          {/* </div>
-          <div> */}
           <div className="flex flex-row items-center gap-4">
             {navButtons.right.map(({ route, header }) => (
               <NavItem key={route} href={route}>
@@ -44,12 +39,8 @@ export async function Navbar() {
               <SignInButton />
             )}
           </div>
-
-          {/* </div> */}
         </nav>
       </div>
-      {/* </div> */}
-
       <MobileNavbar />
     </>
   );

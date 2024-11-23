@@ -6,12 +6,10 @@ export const VideoContent = ({ url }) => {
   const [player, setPlayer] = useState<LibYoutubePlayer | null>(null);
 
   return (
-    <div className="flex justify-center">
-      <YoutubePlayer
-        videoUrl={url}
-        setPlayer={setPlayer}
-        fallbackMessage="Não há vídeo :/"
-      />
-    </div>
+    <YoutubePlayer
+      videoUrl={url}
+      setPlayer={setPlayer}
+      fallbackMessage="Não há vídeo :/"
+    />
   );
 };

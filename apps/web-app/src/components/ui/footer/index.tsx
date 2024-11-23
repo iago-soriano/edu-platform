@@ -64,9 +64,17 @@ export const Footer = async () => {
           </p>
         </div>
       </div>
-      <div className="flex justify-between p-4">
-        <p className="text-text2">Copyright</p>
-        <FooterLink href="/privacy-policy">Política de Privacidade</FooterLink>
+      <div className="flex justify-center p-4">
+        <p className="text-text2">
+          Made with love by{" "}
+          <a href="https://www.linkedin.com/in/iago-soriano-roque-monteiro-03ba237a/">
+            Iago Soriano
+          </a>{" "}
+          and{" "}
+          <a href="linkedin.com/in/patricia-rangel-sacramento">
+            Patrícia Sacramento
+          </a>
+        </p>
       </div>
     </footer>
   );

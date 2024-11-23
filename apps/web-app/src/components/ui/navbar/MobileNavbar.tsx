@@ -17,7 +17,7 @@ export async function MobileNavbar() {
   const navButtons = getNavButtons(session);
 
   return (
-    <div className="z-[999] fixed top-0 left-0 w-full bg-gray-50 flex items-center justify-between container h-16 border-b md:hidden  dark:bg-background">
+    <div className="fixed top-0 left-0 w-full bg-gray-50 flex items-center justify-between container h-16 border-b md:hidden  dark:bg-background">
       <Link href="/home">
         <Logo />
       </Link>
@@ -26,7 +26,7 @@ export async function MobileNavbar() {
         <SheetTrigger asChild>
           <HamburguerButton />
         </SheetTrigger>
-        <SheetContent className="pt-20">
+        <SheetContent className="pt-20 z-[1000]">
           <span className="absolute top-4 left-6 m-2">
             <Logo />
           </span>

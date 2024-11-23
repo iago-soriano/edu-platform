@@ -19,7 +19,8 @@ export const getNavButtons = (session) => {
   if (!session)
     navButtons.left.push(
       { header: "How it works", route: "/home#how-it-works" },
-      { header: "Features", route: "/home#features" }
+      { header: "FAQ", route: "/home#faqs" },
+      { header: "Pricing", route: "/home#pricing" }
     );
   // }
 

@@ -2,14 +2,13 @@ import { CheckCheck } from "lucide-react";
 
 export const FeatureItem = ({ featureName, featureDescription }) => {
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-[#c2470a]">
+    <div className="flex flex-row items-center justify-start gap-3">
+      <span className="text-primary">
         <CheckCheck size={25} />
       </span>
-      <b>
-        <p>{featureName}</p>
-      </b>
-      <p>{featureDescription}</p>
+      <p>
+        <b>{featureName}</b> {featureDescription}
+      </p>
     </div>
   );
 };

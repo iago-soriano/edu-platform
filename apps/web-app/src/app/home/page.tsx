@@ -1,62 +1,49 @@
-import Image from "next/image";
+import { Button } from "@components/ui/Button";
+import { VideoContent } from "@components/Video/video";
 import {
+  ListChecks,
   NotebookPen,
   Sparkle,
   SquareUserRound,
-  ListChecks,
 } from "lucide-react";
-import { Button } from "@components/ui/Button";
-import { VideoContent } from "@components/Video/video";
-import { ScrollArea, ScrollBar } from "@components/ui/ScrollArea";
+import Image from "next/image";
 import { BenefitsCard } from "./BenefitsCard";
-import { TestimonialCard } from "./TestimonialCard";
-import { FeatureItem } from "./FeatureItem";
 import { FAQQuestion } from "./FAQQuestion";
-import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
-import AutoScroll from "embla-carousel-auto-scroll";
-import {
-  Carousel,
-  CarouselMainContainer,
-  SliderMainItem,
-} from "@components/ui/Carousel";
+import { FeatureItem } from "./FeatureItem";
+import { TestimonialCard } from "./TestimonialCard";
+import { EmblaCarousel } from "./TestimonialCard/Carousel";
 
-const benefitsIcons = {
-  Notebook: <NotebookPen size={100} />,
-  Teacher: <SquareUserRound size={100} />,
-  Activity: <ListChecks size={100} />,
+const HeroBulletPoint = ({ children }) => {
+  return (
+    <p className="m-1 rounded-md flex items-center gap-1">
+      <Sparkle size={20} />
+      {children}
+    </p>
+  );
 };
-
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col w-[90%] gap-10 mx-10">
+    <div className="flex flex-col">
       <section
         id="hero"
-        className="grid ml-10 lg:grid-cols-2 grid-cols-1  w-[100%] min-h-[calc(100vh-6.7rem)]"
+        className="grid container mx-auto lg:grid-cols-2 grid-cols-1 h-[calc(100vh-4rem)]"
       >
-        <div className="h-full flex flex-col justify-center items-start w-full">
-          <h1 className="my-5 text-6xl font-medium w-full">
+        <div className="h-full flex flex-col justify-center items-start mt-5 ">
+          <h1 className="text-7xl font-medium w-full">
             O problema que resolvemos
           </h1>
-          <p className="text-3xl font-normal mt-5 w-full">
+          <p className="mt-8 text-2xl font-normal w-full">
             Uma breve descrição de como resolvemos o problema
           </p>
-          <Button variant="primary" className="mt-10">
+          <Button variant="primary" className="mt-8">
             Botãozin Bonitin
           </Button>
           <div className="flex flex-col justify-between items-start mt-8 self-start">
-            <p className="p-3 m-3 rounded-md flex items-center gap-3">
-              {" "}
-              <Sparkle size={20} />
-              Bullet point
-            </p>
-            <p className="p-3 m-3 rounded-md flex items-center gap-3">
-              {" "}
-              <Sparkle size={20} />
-              Bullet point
-            </p>
+            <HeroBulletPoint>Plataforma muito legal</HeroBulletPoint>
+            <HeroBulletPoint>Legal mesmo</HeroBulletPoint>
           </div>
         </div>
-        <div className="hidden justify-center items-center mt-10 ml-5 lg:block  lg:self-center lg:justify-self-center">
+        <div className="hidden justify-center items-center lg:block lg:self-center lg:justify-self-end">
           <Image
             src="https://picsum.photos/400/400"
             alt="imagem"
@@ -66,129 +53,71 @@ export default function Home() {
           />
         </div>
       </section>
-      <section
-        id="solution"
-        className="grid lg:grid-cols-2 grid-cols-1 items-center w-full h-[100%] mt-10 gap-10"
-      >
-        <div className="flex flex-col justify-center items-center">
-          <VideoContent url="https://www.youtube.com/watch?v=P-WNLRsLlvE&ab_channel=DarrenMcGrady" />
-        </div>
-        <div className="lg:w-[90%] ml-10 mt-5 mx-auto flex flex-col md:justify-around items-center md:[&>:nth-child(even)>img]:order-none [&>:nth-child(even)>img]:order-first">
-          <p className="mb-10 text-xl">
+      <div id="how-it-works" />
+      <section className="grid lg:grid-cols-2 grid-cols-1 items-center container mx-auto gap-8 place-content-center my-36">
+        <VideoContent url="https://www.youtube.com/watch?v=P-WNLRsLlvE&ab_channel=DarrenMcGrady" />
+        <div className="lg:w-[90%] mx-auto flex flex-col md:justify-around items-center">
+          <p className="text-xl">
             <b>Lorem ipsum dolor sit amet consectetur adipisicing elit.</b>{" "}
-            Molestiae ipsam esse omnis iste id accusantium libero, commodi cum
-            obcaecati, ut nesciunt consequuntur facilis impedit ex excepturi
-            necessitatibus consectetur? Numquam, hic! Lorem ipsum dolor sit amet
-            consectetur adipisicing elit.
+            Molestiae ipsam esse omnis i
           </p>
 
-          <p className="mb-5 text-base">
+          <p className="mt-10 text-base">
             <b>Lorem ipsum dolor sit amet consectetur adipisicing elit.</b>{" "}
             Molestiae ipsam esse omnis iste id accusantium libero, commodi cum
-            obcaecati, ut nesciunt consequuntur facilis impedit ex excepturi
-            necessitatibus consectetur? Numquam, hic! Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Quidem, deleniti omnis fuga animi sit
-            commodi autem architecto perspiciatis rerum temporibus accusamus
-            ipsum impedit quisquam! Impedit laudantium sequi rerum laboriosam.
-            Quia!
+            obcaecati,
           </p>
-          <p className="mb-5 text-base">
+          <p className="mt-10 text-base">
             <b>Lorem ipsum dolor sit amet consectetur adipisicing elit.</b>{" "}
             Molestiae ipsam esse omnis iste id accusantium libero, commodi cum
-            obcaecati, ut nesciunt consequuntur facilis impedit ex excepturi
-            necessitatibus consectet ur? Numquam, hic! Lorem ipsum dolor sit
-            amet consectetur adipisicing elit. Quidem, deleniti omnis fuga animi
-            sit commodi autem architecto perspiciatis rerum temporibus accusamus
-            ipsum impedit quisquam! Impedit laudantium sequi rerum laboriosam.
-            Quia!
+            obcaecati, ut n
           </p>
         </div>
       </section>
-      <section id="how-it-works" className="h-[100%] w-full mt-10 flex">
+      <section className="my-36 flex md:flex-row flex-col container mx-auto gap-8">
         <BenefitsCard
-          icon={benefitsIcons.Teacher}
+          icon={<SquareUserRound size={100} />}
           title="título"
-          description="descrição"
+          description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia
+          minus soluta beatae commodi rerum incidunt nobis sit et perspiciatis
+          temporibus quas, quaerat consectetur vel? Accusamus error ratione nam
+          autem magnam?"
         />
         <BenefitsCard
-          icon={benefitsIcons.Notebook}
+          icon={<NotebookPen size={100} />}
           title="título"
-          description="descrição"
+          description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia
+          minus soluta beatae commodi rerum incidunt nobis sit et perspiciatis
+          temporibus quas, quaerat consectetur vel? Accusamus error ratione nam
+          autem magnam?"
         />
         <BenefitsCard
-          icon={benefitsIcons.Activity}
+          icon={<ListChecks size={100} />}
           title="título"
-          description="descrição"
+          description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia
+          minus soluta beatae commodi rerum incidunt nobis sit et perspiciatis
+          temporibus quas, quaerat consectetur vel? Accusamus error ratione nam
+          autem magnam?"
         />
       </section>
-      <section id="testimonials" className="min-h-[70vh] w-full mt-15 mx-10">
-        <div className="flex flex-col justify-center items-center gap-5 w-[90%] h-[90%] mt-10">
-          <h3 className="text-2xl text-[#c2470a] font-semibold">
-            Testimonials
-          </h3>
-          <Carousel
-            plugins={[
-              AutoScroll({
-                speed: 1,
-              }),
-            ]}
-            carouselOptions={{
-              loop: true,
-            }}
-          >
-            <CarouselMainContainer className="h-60">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <SliderMainItem key={index} className="bg-transparent">
-                  <div className="outline outline-1 outline-border size-full flex items-center justify-center rounded-xl bg-background">
-                    Slide {index + 1}
-                  </div>
-                </SliderMainItem>
-              ))}
-            </CarouselMainContainer>
-          </Carousel>
-
-          {/* <ScrollAreaPrimitive.Root
-            type="always"
-            style={{ height: "50%", overflow: "hidden", width: "100%" }}
-          >
-            <ScrollAreaPrimitive.Viewport
-              style={{ overflowX: "auto", height: "100%", width: "100%" }}
-            >
-              <div className=" flex w-[250%] h-[70%] gap-10 flex-row justify-center items-center">
-                <TestimonialCard />
-                <TestimonialCard />
-                <TestimonialCard />
-                <TestimonialCard />
-                <TestimonialCard />
-                <TestimonialCard />
-                <TestimonialCard />
-                <TestimonialCard />
-                <TestimonialCard />
-              </div>
-            </ScrollAreaPrimitive.Viewport>
-            <ScrollAreaPrimitive.Scrollbar
-              orientation="horizontal"
-              className="ScrollAreaScrollbar"
-              style={{ height: "20px", marginTop: "20px" }}
-            >
-              <ScrollAreaPrimitive.Thumb
-                className="ScrollAreaThumb"
-                style={{
-                  backgroundColor: "#888",
-                  borderRadius: "4px",
-                  height: "10px",
-                }}
-              />
-            </ScrollAreaPrimitive.Scrollbar>
-            <ScrollAreaPrimitive.Corner />
-          </ScrollAreaPrimitive.Root> */}
-        </div>
+      <section className="my-36 flex flex-col">
+        {/* <h2 className="text-2xl text-[#c2470a] font-semibold mb-14 text-center">
+          Testimonials
+        </h2> */}
+        <EmblaCarousel
+          slides={[
+            <TestimonialCard />,
+            <TestimonialCard />,
+            <TestimonialCard />,
+            <TestimonialCard />,
+          ]}
+        />
       </section>
-      <section id="features" className="min-h-[50vh] w-full mt-10 mx-8">
-        <h3 className="text-2xl text-[#c2470a] font-semibold text-center mb-6">
+      <section className="my-36 container mx-auto px-16">
+        {/* <h2 className="text-2xl text-[#c2470a] font-semibold mb-14 text-center">
           Features{" "}
-        </h3>{" "}
-        <div className="flex flex-col gap-3">
+        </h2>{" "} */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <FeatureItem
             featureName="fazer atividade"
             featureDescription="pipipipopopopipipipopopo"
@@ -219,11 +148,12 @@ export default function Home() {
           />
         </div>
       </section>
-      <section id="faqs" className="min-h-[70vh] w-full mt-15 mx-8">
-        <h3 className="text-2xl text-[#c2470a] font-semibold text-center mb-6">
-          FAQs{" "}
-        </h3>{" "}
-        <div className="flex flex-col gap-3">
+      <div id="faqs" />
+      <section className="my-36 container mx-auto">
+        <h2 className="text-2xl text-primary font-semibold mb-14 text-center">
+          Frequently asked questions{" "}
+        </h2>{" "}
+        <div className="flex flex-col gap-3 font-body">
           <FAQQuestion question="Como fazer atividade?" answer="pipipipopopo" />
           <FAQQuestion
             question="Como se cadastrar na plataforma?"
@@ -247,6 +177,8 @@ export default function Home() {
           />
         </div>
       </section>
-    </main>
+      <div id="pricing" />
+      <section></section>
+    </div>
   );
 }
