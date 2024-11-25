@@ -3,12 +3,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { Router } from "@infrastructure";
 import { Icons } from "../icons";
+import { SignInButton } from "../navbar/SignInButton";
 
-const FooterLink = ({ href, children }) => (
-  <Link className="hover:opacity-70 p-1 w-max" href={href}>
+const FooterLink = ({
+  children,
+  href,
+  ...props
+}: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+  <Link className="hover:opacity-70 p-1 w-max" href={href as any} {...props}>
     {children}
   </Link>
 );
+
 const FooterHeading = ({ children }) => (
   <h6 className="p-1 font-bold">{children}</h6>
 );
@@ -37,27 +43,21 @@ export const Footer = async () => {
           </p>
         </div>
         <div className="[&>a]:block lg:col-span-3 lg:col-start-7 md:col-span-5 md:col-start-12 col-span-8">
-          <FooterHeading>Navegação</FooterHeading>
-          <FooterLink href="/home">Home</FooterLink>
-          {isAuthenticated && (
-            <FooterLink href={Router.teacherActivities}>Minha área</FooterLink>
-          )}
-          <FooterLink href="/faq">Como funciona</FooterLink>
-          {!isAuthenticated && (
-            <>
-              <FooterLink href="/auth/sign-in">Entrar</FooterLink>
-              <FooterLink href="/auth/sign-up">Cadastrar</FooterLink>
-            </>
-          )}
+          <FooterHeading>Browse</FooterHeading>
+          <FooterLink href="/home#hero">Home</FooterLink>
+          <FooterLink href="/home#how-it-works">How it works</FooterLink>
+          <FooterLink href="/home#faqs">FAQ</FooterLink>
         </div>
         <div className="[&>a]:block lg:col-span-3 md:col-span-7 md:col-start-1 col-span-8">
-          <FooterHeading>Comece a usar</FooterHeading>
-          <FooterLink href={Router.teacherActivities}>
-            Criar atividade
-          </FooterLink>
+          <FooterHeading>Get started</FooterHeading>
+          {isAuthenticated ? (
+            <FooterLink href={Router.teacherActivities}>Dashboard</FooterLink>
+          ) : (
+            <SignInButton />
+          )}
         </div>
         <div className="[&>a]:block lg:col-span-3 md:col-span-7 md:col-start-10 col-span-8">
-          <FooterHeading>Contato</FooterHeading>
+          <FooterHeading>Contact us</FooterHeading>
           <p className="text-text2">
             <Icons.EMAIL size={24} style={{ display: "inline" }} />
             <span className="px-2 inline-block">iago.srm.is@gmail.com</span>
@@ -66,14 +66,20 @@ export const Footer = async () => {
       </div>
       <div className="flex justify-center p-4">
         <p className="text-text2">
-          Made with love by{" "}
-          <a href="https://www.linkedin.com/in/iago-soriano-roque-monteiro-03ba237a/">
+          Made with <span title="love">❤️</span> by{" "}
+          <FooterLink
+            href="https://www.linkedin.com/in/iago-soriano-roque-monteiro-03ba237a/"
+            target="_blank"
+          >
             Iago Soriano
-          </a>{" "}
+          </FooterLink>{" "}
           and{" "}
-          <a href="linkedin.com/in/patricia-rangel-sacramento">
+          <FooterLink
+            href="https://www.linkedin.com/in/patricia-rangel-sacramento"
+            target="_blank"
+          >
             Patrícia Sacramento
-          </a>
+          </FooterLink>
         </p>
       </div>
     </footer>

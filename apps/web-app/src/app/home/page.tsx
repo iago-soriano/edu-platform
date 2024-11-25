@@ -12,6 +12,7 @@ import { FAQQuestion } from "./FAQQuestion";
 import { FeatureItem } from "./FeatureItem";
 import { TestimonialCard } from "./TestimonialCard";
 import { EmblaCarousel } from "./TestimonialCard/Carousel";
+import "./page.css";
 
 const HeroBulletPoint = ({ children }) => {
   return (
@@ -32,9 +33,9 @@ export default function Home() {
           <h1 className="text-7xl font-medium w-full">
             O problema que resolvemos
           </h1>
-          <p className="mt-8 text-2xl font-normal w-full">
+          <h2 className="mt-8 font-normal w-full">
             Uma breve descrição de como resolvemos o problema
-          </p>
+          </h2>
           <Button variant="primary" className="mt-8">
             Botãozin Bonitin
           </Button>
@@ -54,26 +55,28 @@ export default function Home() {
         </div>
       </section>
       <div id="how-it-works" />
-      <section className="grid lg:grid-cols-2 grid-cols-1 items-center container mx-auto gap-8 place-content-center my-36">
-        <VideoContent url="https://www.youtube.com/watch?v=P-WNLRsLlvE&ab_channel=DarrenMcGrady" />
-        <div className="lg:w-[90%] mx-auto flex flex-col md:justify-around items-center">
-          <p className="text-xl">
-            <b>Lorem ipsum dolor sit amet consectetur adipisicing elit.</b>{" "}
-            Molestiae ipsam esse omnis i
-          </p>
+      <div>
+        <section className="grid lg:grid-cols-2 grid-cols-1 items-center container mx-auto gap-8 place-content-center py-36">
+          <VideoContent url="https://www.youtube.com/watch?v=P-WNLRsLlvE&ab_channel=DarrenMcGrady" />
+          <div className="lg:w-[90%] mx-auto flex flex-col md:justify-around items-center">
+            <p className="text-lg">
+              <b>Lorem ipsum dolor sit amet consectetur adipisicing elit.</b>{" "}
+              Molestiae ipsam esse omnis i
+            </p>
 
-          <p className="mt-10 text-base">
-            <b>Lorem ipsum dolor sit amet consectetur adipisicing elit.</b>{" "}
-            Molestiae ipsam esse omnis iste id accusantium libero, commodi cum
-            obcaecati,
-          </p>
-          <p className="mt-10 text-base">
-            <b>Lorem ipsum dolor sit amet consectetur adipisicing elit.</b>{" "}
-            Molestiae ipsam esse omnis iste id accusantium libero, commodi cum
-            obcaecati, ut n
-          </p>
-        </div>
-      </section>
+            <p className="mt-10">
+              <b>Lorem ipsum dolor sit amet consectetur adipisicing elit.</b>{" "}
+              Molestiae ipsam esse omnis iste id accusantium libero, commodi cum
+              obcaecati,
+            </p>
+            <p className="mt-10">
+              <b>Lorem ipsum dolor sit amet consectetur adipisicing elit.</b>{" "}
+              Molestiae ipsam esse omnis iste id accusantium libero, commodi cum
+              obcaecati, ut n
+            </p>
+          </div>
+        </section>
+      </div>
       <section className="my-36 flex md:flex-row flex-col container mx-auto gap-8">
         <BenefitsCard
           icon={<SquareUserRound size={100} />}
@@ -101,9 +104,6 @@ export default function Home() {
         />
       </section>
       <section className="my-36 flex flex-col">
-        {/* <h2 className="text-2xl text-[#c2470a] font-semibold mb-14 text-center">
-          Testimonials
-        </h2> */}
         <EmblaCarousel
           slides={[
             <TestimonialCard />,
@@ -114,9 +114,6 @@ export default function Home() {
         />
       </section>
       <section className="my-36 container mx-auto px-16">
-        {/* <h2 className="text-2xl text-[#c2470a] font-semibold mb-14 text-center">
-          Features{" "}
-        </h2>{" "} */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <FeatureItem
             featureName="fazer atividade"
@@ -150,9 +147,9 @@ export default function Home() {
       </section>
       <div id="faqs" />
       <section className="my-36 container mx-auto">
-        <h2 className="text-2xl text-primary font-semibold mb-14 text-center">
+        <h3 className="text-primary font-semibold mb-14 text-center">
           Frequently asked questions{" "}
-        </h2>{" "}
+        </h3>{" "}
         <div className="flex flex-col gap-3">
           <FAQQuestion question="Como fazer atividade?" answer="pipipipopopo" />
           <FAQQuestion
