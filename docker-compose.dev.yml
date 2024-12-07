@@ -45,7 +45,7 @@ services:
       - KC_DB_DRIVER=postgres
       - KC_DB_URL=jdbc:postgresql://keycloak_db:5432/keycloak?user=keycloak&password=password
       - DB_USER=keycloak
-      - DB_PASSWORD=password
+      - DB_PASSWORD=
     ports:
       - 8080:8080
     volumes:
@@ -62,7 +62,7 @@ services:
     environment:
       POSTGRES_DB: keycloak # Specify the name of the initial database
       POSTGRES_USER: keycloak # Specify the username for PostgreSQL
-      POSTGRES_PASSWORD: password # Specify the password for PostgreSQL
+      POSTGRES_PASSWORD: "" # Specify the password for PostgreSQL''
     ports:
       - "5433:5432" # Map container port 5432 to host port 5432 (adjust as needed)
     volumes:
@@ -77,7 +77,7 @@ services:
     environment:
       POSTGRES_DB: edu-platform # Specify the name of the initial database
       POSTGRES_USER: isrm # Specify the username for PostgreSQL
-      POSTGRES_PASSWORD: isrm2303 # Specify the password for PostgreSQL
+      POSTGRES_PASSWORD: ""
     ports:
       - "5432:5432" # Map container port 5432 to host port 5432 (adjust as needed)
     volumes:
@@ -89,7 +89,7 @@ services:
     container_name: pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_PASSWORD: ""
     ports:
       - "80:80"
     depends_on:
