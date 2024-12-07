@@ -1,0 +1,11 @@
+.section {
+  /* background-color: #FFFFFF; */
+  background-image: url('data:image/svg+xml,<svg width="900" height="450" xmlns="http://www.w3.org/2000/svg"><defs><filter id="a" x="-10%" y="-10%" width="120%" height="120%"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="149" result="effect1_foregroundBlur"/></filter></defs><path fill="%2360F" d="M0 0h900v450H0z"/><g filter="url(%23a)"><circle cx="546" cy="156" fill="%230C9" r="332"/><circle cx="510" cy="442" fill="%2360F" r="332"/><circle cx="301" cy="407" fill="%230C9" r="332"/><circle cx="19" cy="443" fill="%230C9" r="332"/><circle cx="334" cy="123" fill="%2360F" r="332"/><circle cx="413" cy="285" fill="%230C9" r="332"/></g></svg>');
+  /* background-attachment: fixed | scroll; */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* background-origin: border-box | padding-box | content-box; */
+  /* background-clip: border-box | padding-box | content-box; */
+  /* background-blend-mode: multiply | screen | overlay; */
+}

@@ -3,6 +3,9 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
+      // fontSize: {
+
+      // },
       fontFamily: {
         headings: ['var(--font-roboto)'],
         body: ['var(--font-mulish)'],

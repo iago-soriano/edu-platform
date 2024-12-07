@@ -7,43 +7,37 @@ ink: text 1 L #365463 D #d3dbde
 background: surface 2 L #fcfdfd D #17242b
 accent: D #c2470a L #c40
 
+// THIS ONE https://www.realtimecolors.com/?colors=0a0501-fef9f5-F4A261-264653-8590b1&fonts=Inter-Inter
+// https://coolors.co/palette/264653-2a9d8f-e9c46a-f4a261-e76f51
+//https://mdigi.tools/color-shades/#f4a261
 fonte poppins bold, poppins light
 */
 
 @layer base {
   :root {
-    /* white */
-    --background: 0 0 100%;
-
-    /* gray-50 */
-    --foreground: 210 20% 98%;
-
     /* orange */
     --primary: 20 90% 40%;
-
-    /* gray-950 */
-    --primary-foreground: 224 71.4% 4.1%;
 
     /* gray-100 */
     --secondary: 220 14.3% 95.9%;
 
-    /* gray-300 */
-    --secondary-foreground: 216 12.2% 83.9%;
+    /* neutral bright 1 */
+    --background: 24 100% 98;
+
+    /* neutral bright 2 */
+    --foreground: 210 20% 98%;
+
+    /* neutral dark 1 */
+    --primary-foreground: 224 71.4% 4.1%;
+
+    /* neutral dark 2 */
+    --primary-foreground: 224 71.4% 4.1%;
 
     /* green-700 */
-    --tertiary: 142.4 71.8% 29.2%;
+    --success: 142.4 71.8% 29.2%;
 
     /* rose-600 */
     --destructive: 346.8 77.2% 49.8%;
-
-    /* white */
-    --card: 0 0 100%;
-
-    /* gray-900 */
-    --card-foreground: 220.9 39.3% 11%;
-
-    /* gray-800 */
-    --accent: 215 27.9% 16.9%;
 
     /* gray-300 */
     --muted: 216 12.2% 83.9%;

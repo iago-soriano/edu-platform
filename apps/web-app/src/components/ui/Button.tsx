@@ -43,13 +43,13 @@ const buttonVariants = tv({
       ],
       outline: [
         // border
-        "border-secondary-foreground",
+        "border-foreground",
         // text color
         "text-primary-foreground",
         // background color
         "bg-transparent",
         // hover color
-        "hover:bg-secondary-foreground dark:hover:bg-foreground",
+        "hover:bg-foreground dark:hover:bg-foreground",
         // disabled
         "disabled:text-primary-foreground/50 disabled:bg-secondary",
       ],
@@ -61,7 +61,7 @@ const buttonVariants = tv({
         // background color
         "bg-transparent",
         // hover color
-        "hover:bg-green-500 hover:text-card dark:hover:bg-green-800 dark:hover:text-card",
+        "hover:bg-green-500 hover:text-background dark:hover:bg-green-800 dark:hover:text-background",
         // disabled
         "disabled:text-primary/50 disabled:bg-transparent",
       ],
