@@ -38,7 +38,6 @@ next-env.d.ts
 credentials
 .terraform
 build.zip
-production.tf
 plan.tf
 nodejs
 *.zip
