@@ -1,35 +1,4 @@
 services:
-  # keycloak:
-  #   container_name: keycloak
-  #   image: quay.io/keycloak/keycloak:latest
-  #   restart: always
-  #   command: start-dev
-  #   environment:
-  #     - KEYCLOAK_ADMIN=admin
-  #     - KEYCLOAK_ADMIN_PASSWORD=password
-  #     - DB_VENDOR=mysql
-  #     - DB_ADDR=db
-  #     - KC_HTTP_ENABLED=true
-  #     - KC_HOSTNAME_STRICT=false
-  #     - DB_USER=keycloak
-  #     - DB_PASSWORD=password
-
-  #   ports:
-  #     - 8080:8080
-  #   depends_on:
-  #     - keycloak_db
-  # labels:
-  #   - "traefik.enable=true"
-  #   - "traefik.http.routers.keycloak.entrypoints=http"
-  #   - "traefik.http.routers.keycloak.rule=Host(`keycloak.yourdomain.com`)"
-  #   - "traefik.http.middlewares.keycloak-https-redirect.redirectscheme.scheme=https"
-  #   - "traefik.http.routers.keycloak.middlewares=keycloak-https-redirect"
-  #   - "traefik.http.routers.keycloak-secure.entrypoints=https"
-  #   - "traefik.http.routers.keycloak-secure.rule=Host(`keycloak.yourdomain.com`)"
-  #   - "traefik.http.routers.keycloak-secure.tls=true"
-  #   - "traefik.http.routers.keycloak-secure.service=keycloak"
-  #   - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
-  #   - "traefik.docker.network=proxy"
   keycloak_p2:
     container_name: keycloak_p2
     image: quay.io/phasetwo/phasetwo-keycloak
@@ -43,59 +12,51 @@ services:
       - KC_HTTP_ENABLED=true
       - KC_HOSTNAME_STRICT=false
       - KC_DB_DRIVER=postgres
-      - KC_DB_URL=jdbc:postgresql://keycloak_db:5432/keycloak?user=keycloak&password=password
+      - KC_DB_URL=jdbc:postgresql://keycloak_postgres:5432/keycloak?user=keycloak&password=keycloak
       - DB_USER=keycloak
-      - DB_PASSWORD=
+      - DB_PASSWORD=keycloak
     ports:
-      - 8080:8080
+      - 8070:8080
     volumes:
       - ./keycloak:/opt/keycloak/data/import
     depends_on:
-      - keycloak_db
+      - keycloak_postgres
     networks:
       - my_bridge_network
 
-  keycloak_db:
+  keycloak_postgres:
     image: postgres:latest # Use the latest PostgreSQL image from Docker Hub
     restart: always # Restart policy
-    container_name: keycloak_db
+    container_name: keycloak_postgres
     environment:
       POSTGRES_DB: keycloak # Specify the name of the initial database
       POSTGRES_USER: keycloak # Specify the username for PostgreSQL
-      POSTGRES_PASSWORD: "" # Specify the password for PostgreSQL''
+      POSTGRES_PASSWORD: keycloak # Specify the password for PostgreSQL''
     ports:
       - "5433:5432" # HOST:CONTAINER
     volumes:
       - postgres_data_keycloak:/var/lib/postgresql/data # Mount a volume for persistent data storage
     networks:
       - my_bridge_network # Connect to custom bridge network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "keycloak", "-d", "keycloak"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
 
-  postgres:
+  api-postgres:
     image: postgres:latest # Use the latest PostgreSQL image from Docker Hub
-    container_name: postgres # Give your container a name
+    container_name: api-postgres # Give your container a name
     restart: always # Restart policy
     environment:
       POSTGRES_DB: edu-platform # Specify the name of the initial database
       POSTGRES_USER: isrm # Specify the username for PostgreSQL
-      POSTGRES_PASSWORD: ""
+      POSTGRES_PASSWORD: "password"
     ports:
       - "5434:5432" 
     volumes:
       - postgres_data:/var/lib/postgresql/data # Mount a volume for persistent data storage
-
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   restart: always # Restart policy
-  #   container_name: pgadmin
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@example.com
-  #     PGADMIN_DEFAULT_PASSWORD: ""
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - postgres
-  #   networks:
-  #     - my_network
 
 volumes:
   postgres_data_keycloak:
