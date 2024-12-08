@@ -14,6 +14,7 @@ import { TestimonialCard } from "./TestimonialCard";
 import { EmblaCarousel } from "./TestimonialCard/Carousel";
 import "./page.css";
 
+
 const HeroBulletPoint = ({ children }) => {
   return (
     <p className="m-1 rounded-md flex items-center gap-1">
