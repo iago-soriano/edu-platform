@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config(); // call this before importing main, because that will use env variables
-import { registerDependencies as registereApiDependencies } from "./main/api.register-dependencies";
+import { registerDependencies as registereApiDependencies } from "./main/register-dependencies";
 import { pgClient as modulePgClient } from "./adapters/infrastructure/persistence/schema/db-client";
 
 import * as awilix from "awilix";

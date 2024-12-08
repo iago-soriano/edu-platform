@@ -8,7 +8,7 @@ import * as awilix from "awilix";
 
 import { registerServer } from "@edu-platform/common/platform";
 
-import { registerDependencies as registereApiDependencies } from "./main/api.register-dependencies";
+import { registerDependencies as registereApiDependencies } from "./main/register-dependencies";
 
 import { pgClient as modulePgClient } from "./adapters/infrastructure/persistence/schema/db-client";
 
