@@ -8,12 +8,12 @@ if (!process.env.DATABASE_URL)
   throw new Error("Please provide a 'DATABASE_URL'");
 
 export default {
+  dialect: "postgresql",
   schema: "./src/adapters/infrastructure/persistence/schema/index.ts",
-  out: "./drizzle",
-  driver: "pg",
+  out: "./migrations",
   strict: true,
   verbose: true,
   dbCredentials: {
-    connectionString: `${process.env.DATABASE_URL}`,
+    url: `${process.env.DATABASE_URL}`,
   },
 } satisfies Config;
