@@ -64,7 +64,7 @@ services:
       POSTGRES_USER: keycloak # Specify the username for PostgreSQL
       POSTGRES_PASSWORD: "" # Specify the password for PostgreSQL''
     ports:
-      - "5433:5432" # Map container port 5432 to host port 5432 (adjust as needed)
+      - "5433:5432" # HOST:CONTAINER
     volumes:
       - postgres_data_keycloak:/var/lib/postgresql/data # Mount a volume for persistent data storage
     networks:
@@ -79,23 +79,23 @@ services:
       POSTGRES_USER: isrm # Specify the username for PostgreSQL
       POSTGRES_PASSWORD: ""
     ports:
-      - "5432:5432" # Map container port 5432 to host port 5432 (adjust as needed)
+      - "5434:5432" 
     volumes:
       - postgres_data:/var/lib/postgresql/data # Mount a volume for persistent data storage
 
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always # Restart policy
-    container_name: pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: ""
-    ports:
-      - "80:80"
-    depends_on:
-      - postgres
-    networks:
-      - my_network
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   restart: always # Restart policy
+  #   container_name: pgadmin
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@example.com
+  #     PGADMIN_DEFAULT_PASSWORD: ""
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - my_network
 
 volumes:
   postgres_data_keycloak:

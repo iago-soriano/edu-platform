@@ -11,63 +11,9 @@ importers:
       '@dotenv-run/esbuild':
         specifier: ^1.3.5
         version: 1.4.0(esbuild@0.20.2)
-      '@faker-js/faker':
-        specifier: ^8.0.2
-        version: 8.4.1
       '@s3pweb/keycloak-admin-client-cjs':
         specifier: ^25.0.6
         version: 25.0.6
-      '@stylistic/eslint-plugin-js':
-        specifier: ^2.6.1
-        version: 2.8.0(eslint@8.57.1)
-      '@stylistic/eslint-plugin-ts':
-        specifier: ^2.6.1
-        version: 2.8.0(eslint@8.57.1)(typescript@5.6.2)
-      '@types/aws-lambda':
-        specifier: ^8.10.137
-        version: 8.10.145
-      '@types/bcryptjs':
-        specifier: ^2.4.2
-        version: 2.4.6
-      '@types/body-parser':
-        specifier: ^1.19.5
-        version: 1.19.5
-      '@types/cors':
-        specifier: ^2.8.13
-        version: 2.8.17
-      '@types/express':
-        specifier: ^4.17.17
-        version: 4.17.21
-      '@types/function-bind':
-        specifier: ^1.1.6
-        version: 1.1.10
-      '@types/jest':
-        specifier: ^29.5.4
-        version: 29.5.13
-      '@types/jsonwebtoken':
-        specifier: ^9.0.2
-        version: 9.0.7
-      '@types/node':
-        specifier: ^17.0.45
-        version: 17.0.45
-      '@types/nodemailer':
-        specifier: ^6.4.11
-        version: 6.4.16
-      '@types/pg':
-        specifier: ^8.10.7
-        version: 8.11.10
-      '@types/supertest':
-        specifier: ^2.0.10
-        version: 2.0.16
-      '@types/uuid':
-        specifier: ^9.0.2
-        version: 9.0.8
-      '@typescript-eslint/eslint-plugin':
-        specifier: 8.0.0-alpha.62
-        version: 8.0.0-alpha.62(@typescript-eslint/parser@8.0.0-alpha.62(eslint@8.57.1)(typescript@5.6.2))(eslint@8.57.1)(typescript@5.6.2)
-      '@typescript-eslint/parser':
-        specifier: 8.0.0-alpha.62
-        version: 8.0.0-alpha.62(eslint@8.57.1)(typescript@5.6.2)
       body-parser:
         specifier: ^1.20.3
         version: 1.20.3
@@ -108,9 +54,63 @@ importers:
       '@eslint/js':
         specifier: ^9.8.0
         version: 9.11.1
+      '@faker-js/faker':
+        specifier: ^8.0.2
+        version: 8.4.1
+      '@stylistic/eslint-plugin-js':
+        specifier: ^2.6.1
+        version: 2.8.0(eslint@8.57.1)
+      '@stylistic/eslint-plugin-ts':
+        specifier: ^2.6.1
+        version: 2.8.0(eslint@8.57.1)(typescript@5.6.2)
+      '@types/aws-lambda':
+        specifier: ^8.10.137
+        version: 8.10.145
+      '@types/bcryptjs':
+        specifier: ^2.4.2
+        version: 2.4.6
+      '@types/body-parser':
+        specifier: ^1.19.5
+        version: 1.19.5
+      '@types/cors':
+        specifier: ^2.8.13
+        version: 2.8.17
+      '@types/express':
+        specifier: ^4.17.17
+        version: 4.17.21
+      '@types/function-bind':
+        specifier: ^1.1.6
+        version: 1.1.10
+      '@types/jest':
+        specifier: ^29.5.4
+        version: 29.5.13
+      '@types/jsonwebtoken':
+        specifier: ^9.0.2
+        version: 9.0.7
       '@types/multer':
         specifier: ^1.4.11
         version: 1.4.12
+      '@types/node':
+        specifier: ^17.0.45
+        version: 17.0.45
+      '@types/nodemailer':
+        specifier: ^6.4.11
+        version: 6.4.16
+      '@types/pg':
+        specifier: ^8.10.7
+        version: 8.11.10
+      '@types/supertest':
+        specifier: ^2.0.10
+        version: 2.0.16
+      '@types/uuid':
+        specifier: ^9.0.2
+        version: 9.0.8
+      '@typescript-eslint/eslint-plugin':
+        specifier: 8.0.0-alpha.62
+        version: 8.0.0-alpha.62(@typescript-eslint/parser@8.0.0-alpha.62(eslint@8.57.1)(typescript@5.6.2))(eslint@8.57.1)(typescript@5.6.2)
+      '@typescript-eslint/parser':
+        specifier: 8.0.0-alpha.62
+        version: 8.0.0-alpha.62(eslint@8.57.1)(typescript@5.6.2)
       esbuild:
         specifier: ^0.20.2
         version: 0.20.2
@@ -133,7 +133,74 @@ importers:
         specifier: ^8.0.0
         version: 8.8.0(eslint@8.57.1)(typescript@5.6.2)
 
-  apps/poc:
+  packages/common:
+    dependencies:
+      '@aws-sdk/client-s3':
+        specifier: ^3.461.0
+        version: 3.663.0
+      '@aws-sdk/client-sns':
+        specifier: ^3.552.0
+        version: 3.662.0
+      '@aws-sdk/client-sqs':
+        specifier: ^3.669.0
+        version: 3.669.0
+      '@types/pg':
+        specifier: ^8.11.10
+        version: 8.11.10
+      awilix:
+        specifier: ^12.0.0
+        version: 12.0.0
+      bcryptjs:
+        specifier: ^2.4.3
+        version: 2.4.3
+      cors:
+        specifier: ^2.8.5
+        version: 2.8.5
+      drizzle-kit:
+        specifier: ^0.20.14
+        version: 0.20.18
+      drizzle-orm:
+        specifier: ^0.30.1
+        version: 0.30.10(@types/pg@8.11.10)(@types/react@18.3.11)(pg@8.13.0)(react@18.3.1)
+      express:
+        specifier: ^4.18.2
+        version: 4.21.0
+      express-async-errors:
+        specifier: ^3.1.1
+        version: 3.1.1(express@4.21.0)
+      helmet:
+        specifier: ^7.0.0
+        version: 7.2.0
+      jsonwebtoken:
+        specifier: ^9.0.1
+        version: 9.0.2
+      multer:
+        specifier: ^1.4.5-lts.1
+        version: 1.4.5-lts.1
+      nodemailer:
+        specifier: ^6.9.5
+        version: 6.9.15
+      pg:
+        specifier: ^8.11.3
+        version: 8.13.0
+      reflect-metadata:
+        specifier: ^0.1.14
+        version: 0.1.14
+      serverless-http:
+        specifier: ^3.2.0
+        version: 3.2.0
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.1
+      zod:
+        specifier: ^3.22.4
+        version: 3.23.8
+    devDependencies:
+      '@types/node':
+        specifier: ^22.7.4
+        version: 22.7.4
+
+  packages/poc:
     dependencies:
       dotenv:
         specifier: ^16.0.1
@@ -167,14 +234,14 @@ importers:
         specifier: ^4.6.4
         version: 4.9.5
 
-  apps/web-api:
+  packages/web-api:
     dependencies:
       '@aws-sdk/client-sqs':
         specifier: ^3.669.0
         version: 3.669.0
       '@edu-platform/common':
         specifier: workspace:*
-        version: link:../../packages/common
+        version: link:../common
       '@keycloak/keycloak-admin-client':
         specifier: ^26.0.0
         version: 26.0.0
@@ -291,11 +358,11 @@ importers:
         specifier: ^5.3.3
         version: 5.6.2
 
-  apps/web-app:
+  packages/web-app:
     dependencies:
       '@edu-platform/common':
         specifier: workspace:*
-        version: link:../../packages/common
+        version: link:../common
       '@fortawesome/fontawesome-svg-core':
         specifier: ^6.4.2
         version: 6.6.0
@@ -510,73 +577,6 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.6.2
-
-  packages/common:
-    dependencies:
-      '@aws-sdk/client-s3':
-        specifier: ^3.461.0
-        version: 3.663.0
-      '@aws-sdk/client-sns':
-        specifier: ^3.552.0
-        version: 3.662.0
-      '@aws-sdk/client-sqs':
-        specifier: ^3.669.0
-        version: 3.669.0
-      '@types/pg':
-        specifier: ^8.11.10
-        version: 8.11.10
-      awilix:
-        specifier: ^12.0.0
-        version: 12.0.0
-      bcryptjs:
-        specifier: ^2.4.3
-        version: 2.4.3
-      cors:
-        specifier: ^2.8.5
-        version: 2.8.5
-      drizzle-kit:
-        specifier: ^0.20.14
-        version: 0.20.18
-      drizzle-orm:
-        specifier: ^0.30.1
-        version: 0.30.10(@types/pg@8.11.10)(@types/react@18.3.11)(pg@8.13.0)(react@18.3.1)
-      express:
-        specifier: ^4.18.2
-        version: 4.21.0
-      express-async-errors:
-        specifier: ^3.1.1
-        version: 3.1.1(express@4.21.0)
-      helmet:
-        specifier: ^7.0.0
-        version: 7.2.0
-      jsonwebtoken:
-        specifier: ^9.0.1
-        version: 9.0.2
-      multer:
-        specifier: ^1.4.5-lts.1
-        version: 1.4.5-lts.1
-      nodemailer:
-        specifier: ^6.9.5
-        version: 6.9.15
-      pg:
-        specifier: ^8.11.3
-        version: 8.13.0
-      reflect-metadata:
-        specifier: ^0.1.14
-        version: 0.1.14
-      serverless-http:
-        specifier: ^3.2.0
-        version: 3.2.0
-      uuid:
-        specifier: ^9.0.0
-        version: 9.0.1
-      zod:
-        specifier: ^3.22.4
-        version: 3.23.8
-    devDependencies:
-      '@types/node':
-        specifier: ^22.7.4
-        version: 22.7.4
 
 packages:
 
@@ -4438,8 +4438,8 @@ packages:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
     engines: {node: '>= 8.10.0'}
 
-  chromedriver@131.0.1:
-    resolution: {integrity: sha512-LHRh+oaNU1WowJjAkWsviN8pTzQYJDbv/FvJyrQ7XhjKdIzVh/s3GV1iU7IjMTsxIQnBsTjx+9jWjzCWIXC7ug==}
+  chromedriver@131.0.2:
+    resolution: {integrity: sha512-Z3oZmleJP3UEBKCz7XLZoZSbYRnApFmUL4GGmLHxw/NJqcZpEnCNFlwdVKuRlntCPxgdfvYInQCPmZxXyrGE+w==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -13358,7 +13358,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  chromedriver@131.0.1:
+  chromedriver@131.0.2:
     dependencies:
       '@testim/chrome-version': 1.1.4
       axios: 1.7.7
@@ -14090,7 +14090,7 @@ snapshots:
       debug: 4.3.7
       enhanced-resolve: 5.17.1
       eslint: 8.57.1
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1)
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.30.0)(eslint@8.57.1))(eslint@8.57.1)
       fast-glob: 3.3.2
       get-tsconfig: 4.8.1
       is-bun-module: 1.2.1
@@ -14103,7 +14103,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1):
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.30.0)(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -15608,7 +15608,7 @@ snapshots:
     dependencies:
       jwk-to-pem: 2.0.6
     optionalDependencies:
-      chromedriver: 131.0.1
+      chromedriver: 131.0.2
     transitivePeerDependencies:
       - debug
       - supports-color
