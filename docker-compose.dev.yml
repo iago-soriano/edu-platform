@@ -45,18 +45,30 @@ services:
       start_period: 10s
       timeout: 5s
 
-  api-postgres:
+  api_postgres:
     image: postgres:latest # Use the latest PostgreSQL image from Docker Hub
-    container_name: api-postgres # Give your container a name
+    container_name: api_postgres # Give your container a name
     restart: always # Restart policy
     environment:
       POSTGRES_DB: edu-platform # Specify the name of the initial database
       POSTGRES_USER: isrm # Specify the username for PostgreSQL
-      POSTGRES_PASSWORD: "password"
+      POSTGRES_PASSWORD: password
     ports:
-      - "5434:5432" 
+      - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data # Mount a volume for persistent data storage
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always # Restart policy
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - "80:80"
+    networks:
+      - my_network
 
 volumes:
   postgres_data_keycloak:

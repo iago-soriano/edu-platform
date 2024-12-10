@@ -1,4 +1,5 @@
-import { db, activitiesGenerated, activitiesBlocks } from "../schema";
+import { db } from "../schema/db-client";
+import { activitiesGenerated, activitiesBlocks } from "../schema/tables";
 import {
   IActivitiesGeneratedRepository,
   IActivitiesRepository,
