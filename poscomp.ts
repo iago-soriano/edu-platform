@@ -1223,17 +1223,36 @@ async function fetchVideos(subtopic: string): Promise<string[]> {
   }
 }
 
-// Function to generate and save an image
-async function generateImage(names: string[], id: string): Promise<string> {
+async function generateImage(entity: {
+  name: string;
+  id: string;
+  type: "area" | "topic" | "subtopic";
+  areaName?: string;
+  topicName?: string;
+}): Promise<string> {
   const openai = new OpenAI();
+  const { name, id, type, areaName, topicName } = entity;
+
+  let prompt = "";
+
+  if (type === "area") {
+    prompt = `Generate a visually captivating, high-quality image that represents the concept of ${name}. 
+    This image should serve as a background or cover image for a website explaining this area. 
+    It should visually embody the essence of the subject matter, incorporating abstract or metaphorical elements if applicable. 
+    The image should be vibrant and creative. Avoid including text or specific logos in the image.`;
+  } else if (type === "topic") {
+    prompt = `Create a stunning, high-resolution image that captures the essence of the topic '${name}' 
+    within the broader area of '${areaName}'. The image should visually reflect key themes, ideas, or symbolism associated with this topic, 
+    while maintaining a professional and aesthetic appeal. Avoid including any text or logos in the image.`;
+  } else if (type === "subtopic") {
+    prompt = `Generate a high-quality, visually engaging image that represents the subtopic '${name}', 
+    which is part of the topic '${topicName}' in the area of '${areaName}'. The image should focus on the specific nuances or themes 
+    of this subtopic, with a clean, modern design. Avoid including text or logos in the image.`;
+  }
 
   const response = await openai.images.generate({
     model: "dall-e-3",
-    prompt: `Generate a visually captivating, high-quality image that represents the concept of ${names.join(", ")}. 
-    This image should serve as a background or cover image for a website explaining this area. 
-    It should visually embody the essence of the subject matter, 
-    incorporating abstract or metaphorical elements if applicable. 
-    The image should be vibrant and creative. Avoid including text or specific logos in the image.`,
+    prompt,
     n: 1,
     size: "1792x1024",
   });
@@ -1241,7 +1260,7 @@ async function generateImage(names: string[], id: string): Promise<string> {
   const imageUrl = response.data[0].url;
   const filePath = path.resolve("images", `${id}.jpg`); // Save as a .jpg file
 
-  // Simulate downloading and saving the image locally
+  // Fetch and save the image locally
   const imageResponse = await fetch(imageUrl);
   const imageBuffer = await imageResponse.arrayBuffer();
   await fs.writeFile(filePath, Buffer.from(imageBuffer));
@@ -1270,7 +1289,11 @@ async function insertContentsSummaries(areasArray: any[]) {
   for (const area of areasArray) {
     // Generate and insert the area summary and image
     const areaSummary = await generateSummary(area, null, null);
-    const areaImage = await generateImage([area.name], area.id);
+    const areaImage = await generateImage({
+      name: area.name,
+      id: area.id,
+      type: "area",
+    });
     // Update the area with the cover image URL
     await db
       .update(areasTable)
@@ -1288,7 +1311,12 @@ async function insertContentsSummaries(areasArray: any[]) {
     for (const topic of area.topics) {
       // Generate and insert the topic summary and image
       const topicSummary = await generateSummary(area, topic, null);
-      const topicImage = await generateImage([area.name, topic.name], topic.id);
+      const topicImage = await generateImage({
+        name: topic.name,
+        id: topic.id,
+        type: "topic",
+        areaName: area.name,
+      });
       // Update the topic with the cover image URL
       await db
         .update(topicsTable)
@@ -1317,10 +1345,13 @@ async function insertContentsSummaries(areasArray: any[]) {
 
       for (const subtopic of topic.subtopics) {
         // Generate and save the subtopic image
-        const subtopicImage = await generateImage(
-          [area.name, topic.name, subtopic.name],
-          subtopic.id
-        );
+        const subtopicImage = await generateImage({
+          name: subtopic.name,
+          id: subtopic.id,
+          type: "subtopic",
+          areaName: area.name,
+          topicName: topic.name,
+        });
 
         // Update the subtopic with the cover image URL
         await db
