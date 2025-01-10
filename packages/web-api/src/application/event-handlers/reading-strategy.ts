@@ -32,6 +32,7 @@ class GenerateReadingActivity implements IActivityGenerator {
     const multipleChoiceQuestionCount = multiple_choice_question_count[level];
     const wordCount = 800;
 
+    // TODO: add this to system_prompt (role = system)
     const promptIntro = `You are a language teacher writing a comprehension actiity. Fill activity_format in ${language.toLocaleLowerCase()}.`;
     const step1 = `Step 1: 'text' is a text of ${wordCount} words on the topics ${topics.map((t) => t.toLocaleLowerCase()).join(", ")} and vocabulary dificulty of ${level.toLocaleLowerCase()}. Structure the text into 3 separate paragraphs, being: introduction, text body and conclusion.`;
     const step2 = `Step 2: openQuestions is ${openQuestionsCount} comprehension questions regarding the text you've made, between ${DomainRules.ACTIVITY_BLOCKS.OPEN_QUESTION.MIN_LENGTH_CHARACTERS} and ${DomainRules.ACTIVITY_BLOCKS.OPEN_QUESTION.MAX_LENGTH_CHARACTERS} characters.`;
